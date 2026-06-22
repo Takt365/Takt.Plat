@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Dtos.Logistics.Materials
+// 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePrice 生成，请按需审阅）
 // 
@@ -14,9 +14,8 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
-namespace Takt.Application.Dtos.Logistics.Materials;
+namespace Takt.Application.Dtos.Logistics.Procurement;
 
 // ========================================
 // PurchasePrice 响应 DTO
@@ -52,7 +51,7 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
+    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
     /// </summary>
     public int PriceType { get; set; } = 0;
 
@@ -69,7 +68,7 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public int PriceStatus { get; set; }
+    public int PriceStatus { get; set; } = 0;
 
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）
@@ -121,7 +120,7 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
+    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
     /// </summary>
     public int? PriceType { get; set; }
 
@@ -163,7 +162,7 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -214,7 +213,7 @@ public class TaktPurchasePriceCreateDto
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
+    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
     /// </summary>
     public int PriceType { get; set; } = 0;
 
@@ -231,7 +230,7 @@ public class TaktPurchasePriceCreateDto
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public int PriceStatus { get; set; }
+    public int PriceStatus { get; set; } = 0;
 
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
@@ -246,7 +245,7 @@ public class TaktPurchasePriceCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -296,7 +295,7 @@ public class TaktPurchasePriceStatusDto
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "价格状态（1=启用，0=禁用）不能为空")]
-    public int PriceStatus { get; set; }
+    public int PriceStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -334,7 +333,7 @@ public class TaktPurchasePriceTemplateDto
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
+    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
     /// </summary>
     public int? PriceType { get; set; }
 
@@ -346,7 +345,7 @@ public class TaktPurchasePriceTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -391,7 +390,7 @@ public class TaktPurchasePriceImportDto
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
+    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
     /// </summary>
     public int? PriceType { get; set; }
 
@@ -403,7 +402,7 @@ public class TaktPurchasePriceImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -449,7 +448,7 @@ public class TaktPurchasePriceExportDto
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
+    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
     /// </summary>
     public int PriceType { get; set; } = 0;
 
@@ -466,12 +465,12 @@ public class TaktPurchasePriceExportDto
     /// <summary>
     /// 价格状态（1=启用，0=禁用）
     /// </summary>
-    public int PriceStatus { get; set; }
+    public int PriceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

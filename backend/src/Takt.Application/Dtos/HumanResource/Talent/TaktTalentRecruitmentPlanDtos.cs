@@ -211,7 +211,7 @@ public class TaktTalentRecruitmentPlanQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -288,7 +288,7 @@ public class TaktTalentRecruitmentPlanCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -360,7 +360,7 @@ public class TaktTalentRecruitmentPlanTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -413,7 +413,7 @@ public class TaktTalentRecruitmentPlanImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -477,7 +477,7 @@ public class TaktTalentRecruitmentPlanExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

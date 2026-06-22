@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：countersign.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -52,16 +52,6 @@ export interface Countersign extends ApprovalDtoBase {
    * 总经室 JSON
    */
   executiveOffice?: string;
-
-  /**
-   * 流程实例 ID
-   */
-  flowInstanceId?: string;
-
-  /**
-   * 流程实例 名称（填充字段）
-   */
-  flowInstanceName?: string;
 
   /**
    * 申请人（员工 ID）
@@ -174,11 +164,6 @@ export interface CountersignQuery extends TaktPagedQuery {
   executiveOffice?: string;
 
   /**
-   * 流程实例 ID
-   */
-  flowInstanceId?: string;
-
-  /**
    * 申请人（员工 ID）
    */
   applicantBy?: string;
@@ -279,6 +264,11 @@ export interface CountersignQuery extends TaktPagedQuery {
   approvedAtEnd?: string;
 
   /**
+   * 流程实例 ID
+   */
+  flowInstanceId?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -291,7 +281,7 @@ export interface CountersignQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -346,11 +336,6 @@ export interface CountersignCreate {
    * 总经室 JSON
    */
   executiveOffice?: string;
-
-  /**
-   * 流程实例 ID
-   */
-  flowInstanceId?: string;
 
   /**
    * 申请人（员工 ID）
@@ -420,7 +405,7 @@ export interface CountersignCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -506,11 +491,6 @@ export interface CountersignTemplate {
   executiveOffice?: string;
 
   /**
-   * 流程实例 ID
-   */
-  flowInstanceId?: string;
-
-  /**
    * 申请人（员工 ID）
    */
   applicantBy?: string;
@@ -541,9 +521,14 @@ export interface CountersignTemplate {
   countersignTitle?: string;
 
   /**
+   * 申请原因
+   */
+  applicationReason?: string;
+
+  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -600,11 +585,6 @@ export interface CountersignImport {
   executiveOffice?: string;
 
   /**
-   * 流程实例 ID
-   */
-  flowInstanceId?: string;
-
-  /**
    * 申请人（员工 ID）
    */
   applicantBy?: string;
@@ -635,9 +615,14 @@ export interface CountersignImport {
   countersignTitle?: string;
 
   /**
+   * 申请原因
+   */
+  applicationReason?: string;
+
+  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -682,11 +667,6 @@ export interface CountersignExport {
    * 总经室 JSON
    */
   executiveOffice?: string;
-
-  /**
-   * 流程实例 ID
-   */
-  flowInstanceId?: string;
 
   /**
    * 申请人（员工 ID）
@@ -756,7 +736,7 @@ export interface CountersignExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

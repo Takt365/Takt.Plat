@@ -26,8 +26,8 @@ public class TaktInspectionStandard : TaktCompanyEntityBase
     /// <summary>
     /// 工厂代码
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
-    public string? PlantCode { get; set; }
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验标准编码（唯一索引）

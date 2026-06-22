@@ -56,7 +56,7 @@ public class TaktSalaryItemDto : TaktCompanyDtoBase
     public int ItemType { get; set; } = 0;
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
     /// </summary>
     public int CalcMethod { get; set; } = 0;
 
@@ -92,22 +92,22 @@ public class TaktSalaryItemDto : TaktCompanyDtoBase
     public int VestingYears { get; set; } = 0;
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no）
+    /// 是否扣款项（字典 sys_yes_no_type）
     /// </summary>
     public int IsDeduction { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no）
+    /// 是否计入应税所得（字典 sys_yes_no_type）
     /// </summary>
     public int IsTaxable { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no）
+    /// 是否计入社保基数（字典 sys_yes_no_type）
     /// </summary>
     public int IncludeSocialSecurityBase { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no）
+    /// 是否计入公积金基数（字典 sys_yes_no_type）
     /// </summary>
     public int IncludeHousingFundBase { get; set; } = 0;
 
@@ -117,7 +117,7 @@ public class TaktSalaryItemDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
@@ -169,7 +169,7 @@ public class TaktSalaryItemQueryDto : TaktPagedQuery
     public int? ItemType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -200,22 +200,22 @@ public class TaktSalaryItemQueryDto : TaktPagedQuery
     public int? VestingYears { get; set; }
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no）
+    /// 是否扣款项（字典 sys_yes_no_type）
     /// </summary>
     public int? IsDeduction { get; set; }
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no）
+    /// 是否计入应税所得（字典 sys_yes_no_type）
     /// </summary>
     public int? IsTaxable { get; set; }
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no）
+    /// 是否计入社保基数（字典 sys_yes_no_type）
     /// </summary>
     public int? IncludeSocialSecurityBase { get; set; }
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no）
+    /// 是否计入公积金基数（字典 sys_yes_no_type）
     /// </summary>
     public int? IncludeHousingFundBase { get; set; }
 
@@ -225,7 +225,7 @@ public class TaktSalaryItemQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ItemStatus { get; set; }
 
@@ -247,7 +247,7 @@ public class TaktSalaryItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -302,7 +302,7 @@ public class TaktSalaryItemCreateDto
     public int ItemType { get; set; } = 0;
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
     /// </summary>
     public int CalcMethod { get; set; } = 0;
 
@@ -333,22 +333,22 @@ public class TaktSalaryItemCreateDto
     public int VestingYears { get; set; } = 0;
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no）
+    /// 是否扣款项（字典 sys_yes_no_type）
     /// </summary>
     public int IsDeduction { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no）
+    /// 是否计入应税所得（字典 sys_yes_no_type）
     /// </summary>
     public int IsTaxable { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no）
+    /// 是否计入社保基数（字典 sys_yes_no_type）
     /// </summary>
     public int IncludeSocialSecurityBase { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no）
+    /// 是否计入公积金基数（字典 sys_yes_no_type）
     /// </summary>
     public int IncludeHousingFundBase { get; set; } = 0;
 
@@ -358,7 +358,7 @@ public class TaktSalaryItemCreateDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
@@ -370,7 +370,7 @@ public class TaktSalaryItemCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -417,9 +417,9 @@ public class TaktSalaryItemStatusDto
     public long SalaryItemId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
     public int ItemStatus { get; set; } = 0;
 }
 
@@ -487,7 +487,7 @@ public class TaktSalaryItemTemplateDto
     public int? ItemType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -503,22 +503,22 @@ public class TaktSalaryItemTemplateDto
     public int? VestingYears { get; set; }
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no）
+    /// 是否扣款项（字典 sys_yes_no_type）
     /// </summary>
     public int? IsDeduction { get; set; }
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no）
+    /// 是否计入应税所得（字典 sys_yes_no_type）
     /// </summary>
     public int? IsTaxable { get; set; }
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no）
+    /// 是否计入社保基数（字典 sys_yes_no_type）
     /// </summary>
     public int? IncludeSocialSecurityBase { get; set; }
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no）
+    /// 是否计入公积金基数（字典 sys_yes_no_type）
     /// </summary>
     public int? IncludeHousingFundBase { get; set; }
 
@@ -530,7 +530,7 @@ public class TaktSalaryItemTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -580,7 +580,7 @@ public class TaktSalaryItemImportDto
     public int? ItemType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -596,22 +596,22 @@ public class TaktSalaryItemImportDto
     public int? VestingYears { get; set; }
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no）
+    /// 是否扣款项（字典 sys_yes_no_type）
     /// </summary>
     public int? IsDeduction { get; set; }
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no）
+    /// 是否计入应税所得（字典 sys_yes_no_type）
     /// </summary>
     public int? IsTaxable { get; set; }
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no）
+    /// 是否计入社保基数（字典 sys_yes_no_type）
     /// </summary>
     public int? IncludeSocialSecurityBase { get; set; }
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no）
+    /// 是否计入公积金基数（字典 sys_yes_no_type）
     /// </summary>
     public int? IncludeHousingFundBase { get; set; }
 
@@ -623,7 +623,7 @@ public class TaktSalaryItemImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -674,7 +674,7 @@ public class TaktSalaryItemExportDto
     public int ItemType { get; set; } = 0;
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
     /// </summary>
     public int CalcMethod { get; set; } = 0;
 
@@ -705,22 +705,22 @@ public class TaktSalaryItemExportDto
     public int VestingYears { get; set; } = 0;
 
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no）
+    /// 是否扣款项（字典 sys_yes_no_type）
     /// </summary>
     public int IsDeduction { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no）
+    /// 是否计入应税所得（字典 sys_yes_no_type）
     /// </summary>
     public int IsTaxable { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no）
+    /// 是否计入社保基数（字典 sys_yes_no_type）
     /// </summary>
     public int IncludeSocialSecurityBase { get; set; } = 0;
 
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no）
+    /// 是否计入公积金基数（字典 sys_yes_no_type）
     /// </summary>
     public int IncludeHousingFundBase { get; set; } = 0;
 
@@ -730,7 +730,7 @@ public class TaktSalaryItemExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
@@ -742,7 +742,7 @@ public class TaktSalaryItemExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

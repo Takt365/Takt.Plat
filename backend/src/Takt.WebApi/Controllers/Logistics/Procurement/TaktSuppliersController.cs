@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.WebApi.Controllers.Logistics.Materials
+// 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktSuppliersController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供货商信息控制器
 // 
@@ -11,11 +11,11 @@
 // ========================================
 
 using Microsoft.AspNetCore.Mvc;
-using Takt.Application.Dtos.Logistics.Materials;
-using Takt.Application.Services.Logistics.Materials;
+using Takt.Application.Dtos.Logistics.Procurement;
+using Takt.Application.Services.Logistics.Procurement;
 using Takt.Shared.Constants;
 
-namespace Takt.WebApi.Controllers.Logistics.Materials;
+namespace Takt.WebApi.Controllers.Logistics.Procurement;
 
 /// <summary>
 /// 供货商信息控制器
@@ -41,7 +41,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:supplier:list", "供货商信息列表")]
+    [TaktPermission("logistics:procurement:supplier:list", "供货商信息列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSupplierListAsync([FromQuery] TaktSupplierQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// </summary>
     /// <param name="id">供货商信息ID</param>
     /// <returns>供货商信息DTO</returns>
-    [TaktPermission("logistics:materials:supplier:query", "供货商信息详情")]
+    [TaktPermission("logistics:procurement:supplier:query", "供货商信息详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSupplierByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// 获取供货商信息选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:supplier:query", "供货商信息选项")]
+    [TaktPermission("logistics:procurement:supplier:query", "供货商信息选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSupplierOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>供货商信息DTO</returns>
-    [TaktPermission("logistics:materials:supplier:create", "创建供货商信息")]
+    [TaktPermission("logistics:procurement:supplier:create", "创建供货商信息")]
     [HttpPost]
     public async Task<IActionResult> CreateSupplierAsync([FromBody] TaktSupplierCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// <param name="id">供货商信息ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>供货商信息DTO</returns>
-    [TaktPermission("logistics:materials:supplier:update", "更新供货商信息")]
+    [TaktPermission("logistics:procurement:supplier:update", "更新供货商信息")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSupplierAsync(long id, [FromBody] TaktSupplierUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// </summary>
     /// <param name="id">供货商信息ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:supplier:delete", "删除供货商信息")]
+    [TaktPermission("logistics:procurement:supplier:delete", "删除供货商信息")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSupplierByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:supplier:delete", "批量删除供货商信息")]
+    [TaktPermission("logistics:procurement:supplier:delete", "批量删除供货商信息")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSupplierBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -183,9 +183,9 @@ public class TaktSuppliersController : TaktControllerBase
     /// <summary>
     /// 更新供货商信息状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>供货商信息DTO</returns>
-    [TaktPermission("logistics:materials:supplier:update", "更新供货商信息状态")]
+    [TaktPermission("logistics:procurement:supplier:update", "更新供货商信息状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateSupplierStatusAsync([FromBody] TaktSupplierStatusDto dto)
     {
@@ -205,7 +205,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>供货商信息DTO</returns>
-    [TaktPermission("logistics:materials:supplier:update", "更新供货商信息排序")]
+    [TaktPermission("logistics:procurement:supplier:update", "更新供货商信息排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateSupplierSortAsync([FromBody] TaktSupplierSortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:supplier:import", "获取供货商信息导入模板")]
+    [TaktPermission("logistics:procurement:supplier:import", "获取供货商信息导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSupplierTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +244,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:materials:supplier:import", "导入供货商信息")]
+    [TaktPermission("logistics:procurement:supplier:import", "导入供货商信息")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSupplierAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +274,7 @@ public class TaktSuppliersController : TaktControllerBase
     /// 导出供货商信息
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:supplier:export", "导出供货商信息")]
+    [TaktPermission("logistics:procurement:supplier:export", "导出供货商信息")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSupplierAsync([FromQuery] TaktSupplierQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

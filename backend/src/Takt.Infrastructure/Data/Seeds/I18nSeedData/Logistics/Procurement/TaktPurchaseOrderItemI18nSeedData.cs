@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
+// 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderItemI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseOrderItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -17,7 +17,7 @@ using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Helpers;
 
-namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials;
+namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement;
 
 /// <summary>
 /// TaktPurchaseOrderItem 实体国际化翻译种子（键前缀 entity.purchaseorderitem.*）
@@ -75,182 +75,182 @@ public class TaktPurchaseOrderItemI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktPurchaseOrderItem 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.purchaseorderitem._self / entity.purchaseorderitem.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.purchaseorderitem._self / entity.purchaseorderitem.{{field}}；ResourceGroup=Procurement；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetPurchaseOrderItemTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.purchaseorderitem._self
-            new TranslationSeedItem("entity.purchaseorderitem._self", "en-US", "Purchase Order Item Information", "实体名称"),
+            new TranslationSeedItem("entity.purchaseorderitem._self", "en-US", "Purchase Order Item Information_us", "实体名称"),
             // entity.purchaseorderitem._self
-            new TranslationSeedItem("entity.purchaseorderitem._self", "ja-JP", "Takt采购订单明细信息", "实体名称"),
+            new TranslationSeedItem("entity.purchaseorderitem._self", "ja-JP", "Takt采购订单明细信息_jp", "实体名称"),
             // entity.purchaseorderitem._self
             new TranslationSeedItem("entity.purchaseorderitem._self", "zh-CN", "Takt采购订单明细信息", "实体名称"),
             // entity.purchaseorderitem._self
-            new TranslationSeedItem("entity.purchaseorderitem._self", "zh-HK", "Takt采购订单明细信息", "实体名称"),
+            new TranslationSeedItem("entity.purchaseorderitem._self", "zh-HK", "Takt采购订单明细信息_hk", "实体名称"),
 
             // entity.purchaseorderitem.purchaseorderid
-            new TranslationSeedItem("entity.purchaseorderitem.purchaseorderid", "en-US", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseorderid", "en-US", "采购订单ID_us", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.purchaseorderitem.purchaseorderid
-            new TranslationSeedItem("entity.purchaseorderitem.purchaseorderid", "ja-JP", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseorderid", "ja-JP", "采购订单ID_jp", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.purchaseorderitem.purchaseorderid
             new TranslationSeedItem("entity.purchaseorderitem.purchaseorderid", "zh-CN", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.purchaseorderitem.purchaseorderid
-            new TranslationSeedItem("entity.purchaseorderitem.purchaseorderid", "zh-HK", "采购订单ID", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseorderid", "zh-HK", "采购订单ID_hk", "采购订单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
             // entity.purchaseorderitem.purchaseordercode
-            new TranslationSeedItem("entity.purchaseorderitem.purchaseordercode", "en-US", "采购订单编码", "采购订单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseordercode", "en-US", "采购订单编码_us", "采购订单编码（冗余字段，便于查询）"),
             // entity.purchaseorderitem.purchaseordercode
-            new TranslationSeedItem("entity.purchaseorderitem.purchaseordercode", "ja-JP", "采购订单编码", "采购订单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseordercode", "ja-JP", "采购订单编码_jp", "采购订单编码（冗余字段，便于查询）"),
             // entity.purchaseorderitem.purchaseordercode
             new TranslationSeedItem("entity.purchaseorderitem.purchaseordercode", "zh-CN", "采购订单编码", "采购订单编码（冗余字段，便于查询）"),
             // entity.purchaseorderitem.purchaseordercode
-            new TranslationSeedItem("entity.purchaseorderitem.purchaseordercode", "zh-HK", "采购订单编码", "采购订单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseordercode", "zh-HK", "采购订单编码_hk", "采购订单编码（冗余字段，便于查询）"),
 
             // entity.purchaseorderitem.linenumber
-            new TranslationSeedItem("entity.purchaseorderitem.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.purchaseorderitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
             // entity.purchaseorderitem.linenumber
-            new TranslationSeedItem("entity.purchaseorderitem.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.purchaseorderitem.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
             // entity.purchaseorderitem.linenumber
             new TranslationSeedItem("entity.purchaseorderitem.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
             // entity.purchaseorderitem.linenumber
-            new TranslationSeedItem("entity.purchaseorderitem.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.purchaseorderitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.purchaseorderitem.requestcode
-            new TranslationSeedItem("entity.purchaseorderitem.requestcode", "en-US", "来源请购编码", "来源请购编码"),
+            new TranslationSeedItem("entity.purchaseorderitem.requestcode", "en-US", "来源请购编码_us", "来源请购编码"),
             // entity.purchaseorderitem.requestcode
-            new TranslationSeedItem("entity.purchaseorderitem.requestcode", "ja-JP", "来源请购编码", "来源请购编码"),
+            new TranslationSeedItem("entity.purchaseorderitem.requestcode", "ja-JP", "来源请购编码_jp", "来源请购编码"),
             // entity.purchaseorderitem.requestcode
             new TranslationSeedItem("entity.purchaseorderitem.requestcode", "zh-CN", "来源请购编码", "来源请购编码"),
             // entity.purchaseorderitem.requestcode
-            new TranslationSeedItem("entity.purchaseorderitem.requestcode", "zh-HK", "来源请购编码", "来源请购编码"),
+            new TranslationSeedItem("entity.purchaseorderitem.requestcode", "zh-HK", "来源请购编码_hk", "来源请购编码"),
 
             // entity.purchaseorderitem.requestlinenumber
-            new TranslationSeedItem("entity.purchaseorderitem.requestlinenumber", "en-US", "来源请购行号", "来源请购行号"),
+            new TranslationSeedItem("entity.purchaseorderitem.requestlinenumber", "en-US", "来源请购行号_us", "来源请购行号"),
             // entity.purchaseorderitem.requestlinenumber
-            new TranslationSeedItem("entity.purchaseorderitem.requestlinenumber", "ja-JP", "来源请购行号", "来源请购行号"),
+            new TranslationSeedItem("entity.purchaseorderitem.requestlinenumber", "ja-JP", "来源请购行号_jp", "来源请购行号"),
             // entity.purchaseorderitem.requestlinenumber
             new TranslationSeedItem("entity.purchaseorderitem.requestlinenumber", "zh-CN", "来源请购行号", "来源请购行号"),
             // entity.purchaseorderitem.requestlinenumber
-            new TranslationSeedItem("entity.purchaseorderitem.requestlinenumber", "zh-HK", "来源请购行号", "来源请购行号"),
+            new TranslationSeedItem("entity.purchaseorderitem.requestlinenumber", "zh-HK", "来源请购行号_hk", "来源请购行号"),
 
             // entity.purchaseorderitem.materialcode
-            new TranslationSeedItem("entity.purchaseorderitem.materialcode", "en-US", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.purchaseorderitem.materialcode", "en-US", "物料编码_us", "物料编码"),
             // entity.purchaseorderitem.materialcode
-            new TranslationSeedItem("entity.purchaseorderitem.materialcode", "ja-JP", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.purchaseorderitem.materialcode", "ja-JP", "物料编码_jp", "物料编码"),
             // entity.purchaseorderitem.materialcode
             new TranslationSeedItem("entity.purchaseorderitem.materialcode", "zh-CN", "物料编码", "物料编码"),
             // entity.purchaseorderitem.materialcode
-            new TranslationSeedItem("entity.purchaseorderitem.materialcode", "zh-HK", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.purchaseorderitem.materialcode", "zh-HK", "物料编码_hk", "物料编码"),
 
             // entity.purchaseorderitem.materialname
-            new TranslationSeedItem("entity.purchaseorderitem.materialname", "en-US", "物料名称", "物料名称"),
+            new TranslationSeedItem("entity.purchaseorderitem.materialname", "en-US", "物料名称_us", "物料名称"),
             // entity.purchaseorderitem.materialname
-            new TranslationSeedItem("entity.purchaseorderitem.materialname", "ja-JP", "物料名称", "物料名称"),
+            new TranslationSeedItem("entity.purchaseorderitem.materialname", "ja-JP", "物料名称_jp", "物料名称"),
             // entity.purchaseorderitem.materialname
             new TranslationSeedItem("entity.purchaseorderitem.materialname", "zh-CN", "物料名称", "物料名称"),
             // entity.purchaseorderitem.materialname
-            new TranslationSeedItem("entity.purchaseorderitem.materialname", "zh-HK", "物料名称", "物料名称"),
+            new TranslationSeedItem("entity.purchaseorderitem.materialname", "zh-HK", "物料名称_hk", "物料名称"),
 
             // entity.purchaseorderitem.materialspecification
-            new TranslationSeedItem("entity.purchaseorderitem.materialspecification", "en-US", "物料规格", "物料规格"),
+            new TranslationSeedItem("entity.purchaseorderitem.materialspecification", "en-US", "物料规格_us", "物料规格"),
             // entity.purchaseorderitem.materialspecification
-            new TranslationSeedItem("entity.purchaseorderitem.materialspecification", "ja-JP", "物料规格", "物料规格"),
+            new TranslationSeedItem("entity.purchaseorderitem.materialspecification", "ja-JP", "物料规格_jp", "物料规格"),
             // entity.purchaseorderitem.materialspecification
             new TranslationSeedItem("entity.purchaseorderitem.materialspecification", "zh-CN", "物料规格", "物料规格"),
             // entity.purchaseorderitem.materialspecification
-            new TranslationSeedItem("entity.purchaseorderitem.materialspecification", "zh-HK", "物料规格", "物料规格"),
+            new TranslationSeedItem("entity.purchaseorderitem.materialspecification", "zh-HK", "物料规格_hk", "物料规格"),
 
             // entity.purchaseorderitem.purchaseunit
-            new TranslationSeedItem("entity.purchaseorderitem.purchaseunit", "en-US", "采购单位", "采购单位"),
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseunit", "en-US", "采购单位_us", "采购单位"),
             // entity.purchaseorderitem.purchaseunit
-            new TranslationSeedItem("entity.purchaseorderitem.purchaseunit", "ja-JP", "采购单位", "采购单位"),
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseunit", "ja-JP", "采购单位_jp", "采购单位"),
             // entity.purchaseorderitem.purchaseunit
             new TranslationSeedItem("entity.purchaseorderitem.purchaseunit", "zh-CN", "采购单位", "采购单位"),
             // entity.purchaseorderitem.purchaseunit
-            new TranslationSeedItem("entity.purchaseorderitem.purchaseunit", "zh-HK", "采购单位", "采购单位"),
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseunit", "zh-HK", "采购单位_hk", "采购单位"),
 
             // entity.purchaseorderitem.orderquantity
-            new TranslationSeedItem("entity.purchaseorderitem.orderquantity", "en-US", "订购数量", "订购数量（基本单位数量）"),
+            new TranslationSeedItem("entity.purchaseorderitem.orderquantity", "en-US", "订购数量_us", "订购数量（基本单位数量）"),
             // entity.purchaseorderitem.orderquantity
-            new TranslationSeedItem("entity.purchaseorderitem.orderquantity", "ja-JP", "订购数量", "订购数量（基本单位数量）"),
+            new TranslationSeedItem("entity.purchaseorderitem.orderquantity", "ja-JP", "订购数量_jp", "订购数量（基本单位数量）"),
             // entity.purchaseorderitem.orderquantity
             new TranslationSeedItem("entity.purchaseorderitem.orderquantity", "zh-CN", "订购数量", "订购数量（基本单位数量）"),
             // entity.purchaseorderitem.orderquantity
-            new TranslationSeedItem("entity.purchaseorderitem.orderquantity", "zh-HK", "订购数量", "订购数量（基本单位数量）"),
+            new TranslationSeedItem("entity.purchaseorderitem.orderquantity", "zh-HK", "订购数量_hk", "订购数量（基本单位数量）"),
 
             // entity.purchaseorderitem.receivedquantity
-            new TranslationSeedItem("entity.purchaseorderitem.receivedquantity", "en-US", "已入库数量", "已入库数量（基本单位数量）"),
+            new TranslationSeedItem("entity.purchaseorderitem.receivedquantity", "en-US", "已入库数量_us", "已入库数量（基本单位数量）"),
             // entity.purchaseorderitem.receivedquantity
-            new TranslationSeedItem("entity.purchaseorderitem.receivedquantity", "ja-JP", "已入库数量", "已入库数量（基本单位数量）"),
+            new TranslationSeedItem("entity.purchaseorderitem.receivedquantity", "ja-JP", "已入库数量_jp", "已入库数量（基本单位数量）"),
             // entity.purchaseorderitem.receivedquantity
             new TranslationSeedItem("entity.purchaseorderitem.receivedquantity", "zh-CN", "已入库数量", "已入库数量（基本单位数量）"),
             // entity.purchaseorderitem.receivedquantity
-            new TranslationSeedItem("entity.purchaseorderitem.receivedquantity", "zh-HK", "已入库数量", "已入库数量（基本单位数量）"),
+            new TranslationSeedItem("entity.purchaseorderitem.receivedquantity", "zh-HK", "已入库数量_hk", "已入库数量（基本单位数量）"),
 
             // entity.purchaseorderitem.unitprice
-            new TranslationSeedItem("entity.purchaseorderitem.unitprice", "en-US", "单价", "单价（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.unitprice", "en-US", "单价_us", "单价（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.unitprice
-            new TranslationSeedItem("entity.purchaseorderitem.unitprice", "ja-JP", "单价", "单价（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.unitprice", "ja-JP", "单价_jp", "单价（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.unitprice
             new TranslationSeedItem("entity.purchaseorderitem.unitprice", "zh-CN", "单价", "单价（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.unitprice
-            new TranslationSeedItem("entity.purchaseorderitem.unitprice", "zh-HK", "单价", "单价（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.unitprice", "zh-HK", "单价_hk", "单价（精确到分，存储为整数，单位为分）"),
 
             // entity.purchaseorderitem.discountrate
-            new TranslationSeedItem("entity.purchaseorderitem.discountrate", "en-US", "折扣率", "折扣率（0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.purchaseorderitem.discountrate", "en-US", "折扣率_us", "折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
             // entity.purchaseorderitem.discountrate
-            new TranslationSeedItem("entity.purchaseorderitem.discountrate", "ja-JP", "折扣率", "折扣率（0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.purchaseorderitem.discountrate", "ja-JP", "折扣率_jp", "折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
             // entity.purchaseorderitem.discountrate
-            new TranslationSeedItem("entity.purchaseorderitem.discountrate", "zh-CN", "折扣率", "折扣率（0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.purchaseorderitem.discountrate", "zh-CN", "折扣率", "折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
             // entity.purchaseorderitem.discountrate
-            new TranslationSeedItem("entity.purchaseorderitem.discountrate", "zh-HK", "折扣率", "折扣率（0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.purchaseorderitem.discountrate", "zh-HK", "折扣率_hk", "折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
 
             // entity.purchaseorderitem.discountamount
-            new TranslationSeedItem("entity.purchaseorderitem.discountamount", "en-US", "折扣金额", "折扣金额（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.discountamount", "en-US", "折扣金额_us", "折扣金额（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.discountamount
-            new TranslationSeedItem("entity.purchaseorderitem.discountamount", "ja-JP", "折扣金额", "折扣金额（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.discountamount", "ja-JP", "折扣金额_jp", "折扣金额（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.discountamount
             new TranslationSeedItem("entity.purchaseorderitem.discountamount", "zh-CN", "折扣金额", "折扣金额（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.discountamount
-            new TranslationSeedItem("entity.purchaseorderitem.discountamount", "zh-HK", "折扣金额", "折扣金额（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.discountamount", "zh-HK", "折扣金额_hk", "折扣金额（精确到分，存储为整数，单位为分）"),
 
             // entity.purchaseorderitem.taxrate
-            new TranslationSeedItem("entity.purchaseorderitem.taxrate", "en-US", "税费率", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.purchaseorderitem.taxrate", "en-US", "税费率_us", "税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
             // entity.purchaseorderitem.taxrate
-            new TranslationSeedItem("entity.purchaseorderitem.taxrate", "ja-JP", "税费率", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.purchaseorderitem.taxrate", "ja-JP", "税费率_jp", "税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
             // entity.purchaseorderitem.taxrate
-            new TranslationSeedItem("entity.purchaseorderitem.taxrate", "zh-CN", "税费率", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.purchaseorderitem.taxrate", "zh-CN", "税费率", "税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
             // entity.purchaseorderitem.taxrate
-            new TranslationSeedItem("entity.purchaseorderitem.taxrate", "zh-HK", "税费率", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.purchaseorderitem.taxrate", "zh-HK", "税费率_hk", "税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）"),
 
             // entity.purchaseorderitem.taxamount
-            new TranslationSeedItem("entity.purchaseorderitem.taxamount", "en-US", "税费", "税费（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.taxamount", "en-US", "税费_us", "税费（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.taxamount
-            new TranslationSeedItem("entity.purchaseorderitem.taxamount", "ja-JP", "税费", "税费（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.taxamount", "ja-JP", "税费_jp", "税费（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.taxamount
             new TranslationSeedItem("entity.purchaseorderitem.taxamount", "zh-CN", "税费", "税费（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.taxamount
-            new TranslationSeedItem("entity.purchaseorderitem.taxamount", "zh-HK", "税费", "税费（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.taxamount", "zh-HK", "税费_hk", "税费（精确到分，存储为整数，单位为分）"),
 
             // entity.purchaseorderitem.subtotalamount
-            new TranslationSeedItem("entity.purchaseorderitem.subtotalamount", "en-US", "小计金额", "小计金额（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.subtotalamount", "en-US", "小计金额_us", "小计金额（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.subtotalamount
-            new TranslationSeedItem("entity.purchaseorderitem.subtotalamount", "ja-JP", "小计金额", "小计金额（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.subtotalamount", "ja-JP", "小计金额_jp", "小计金额（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.subtotalamount
             new TranslationSeedItem("entity.purchaseorderitem.subtotalamount", "zh-CN", "小计金额", "小计金额（精确到分，存储为整数，单位为分）"),
             // entity.purchaseorderitem.subtotalamount
-            new TranslationSeedItem("entity.purchaseorderitem.subtotalamount", "zh-HK", "小计金额", "小计金额（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.purchaseorderitem.subtotalamount", "zh-HK", "小计金额_hk", "小计金额（精确到分，存储为整数，单位为分）"),
 
             // entity.purchaseorderitem.deliverystatus
-            new TranslationSeedItem("entity.purchaseorderitem.deliverystatus", "en-US", "行交货状态", "行交货状态（0=未交货，1=部分交货，2=全部交货）"),
+            new TranslationSeedItem("entity.purchaseorderitem.deliverystatus", "en-US", "行交货状态_us", "行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
             // entity.purchaseorderitem.deliverystatus
-            new TranslationSeedItem("entity.purchaseorderitem.deliverystatus", "ja-JP", "行交货状态", "行交货状态（0=未交货，1=部分交货，2=全部交货）"),
+            new TranslationSeedItem("entity.purchaseorderitem.deliverystatus", "ja-JP", "行交货状态_jp", "行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
             // entity.purchaseorderitem.deliverystatus
-            new TranslationSeedItem("entity.purchaseorderitem.deliverystatus", "zh-CN", "行交货状态", "行交货状态（0=未交货，1=部分交货，2=全部交货）"),
+            new TranslationSeedItem("entity.purchaseorderitem.deliverystatus", "zh-CN", "行交货状态", "行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
             // entity.purchaseorderitem.deliverystatus
-            new TranslationSeedItem("entity.purchaseorderitem.deliverystatus", "zh-HK", "行交货状态", "行交货状态（0=未交货，1=部分交货，2=全部交货）"),
+            new TranslationSeedItem("entity.purchaseorderitem.deliverystatus", "zh-HK", "行交货状态_hk", "行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）"),
         };
     }
 
@@ -268,10 +268,10 @@ public class TaktPurchaseOrderItemI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Procurement";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

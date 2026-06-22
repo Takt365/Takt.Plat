@@ -12,6 +12,7 @@
 
 using IP2Region.Net.Abstractions;
 using IP2Region.Net.XDB;
+using Microsoft.AspNetCore.Http;
 using System.Net;
 
 namespace Takt.Shared.Helpers;
@@ -280,6 +281,64 @@ public static class TaktLocationHelper
     public static async Task<Dictionary<string, IpLocationResult?>> BatchSearchAsync(IEnumerable<string> ips)
     {
         return await Task.Run(() => BatchSearch(ips));
+    }
+
+    /// <summary>
+    /// 解析客户端 IP（优先 X-Forwarded-For 首段，否则 RemoteIpAddress；与操作/差异日志一致）
+    /// </summary>
+    /// <param name="context">HTTP 上下文</param>
+    /// <returns>客户端 IP；无法解析时为 null</returns>
+    public static string? ResolveClientIp(HttpContext? context)
+    {
+        if (context == null)
+        {
+            return null;
+        }
+
+        var forwarded = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(forwarded))
+        {
+            var ip = forwarded.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+                .FirstOrDefault();
+            if (!string.IsNullOrWhiteSpace(ip))
+            {
+                return ip.Trim();
+            }
+        }
+
+        return context.Connection.RemoteIpAddress?.ToString();
+    }
+
+    /// <summary>
+    /// 由 IP 解析日志/业务落库用的 IP 与地理位置（已有地点则保留）
+    /// </summary>
+    /// <param name="ip">IP 地址</param>
+    /// <param name="existingLocation">已有地点</param>
+    /// <param name="maxLength">地点字段最大长度</param>
+    /// <returns>IP 与地点；地点无法解析时为 null</returns>
+    public static (string? Ip, string? Location) ResolveIpAndLocationForLog(
+        string? ip,
+        string? existingLocation = null,
+        int maxLength = 200)
+    {
+        var location = ResolveIpLocationForLogOrKeep(ip, existingLocation, maxLength);
+        return (ip, location);
+    }
+
+    /// <summary>
+    /// 由 HTTP 上下文解析客户端 IP 与日志/业务落库用的地理位置
+    /// </summary>
+    /// <param name="context">HTTP 上下文</param>
+    /// <param name="existingLocation">已有地点</param>
+    /// <param name="maxLength">地点字段最大长度</param>
+    /// <returns>客户端 IP 与地点；无法解析时对应项为 null</returns>
+    public static (string? Ip, string? Location) ResolveClientIpAndLocationForLog(
+        HttpContext? context,
+        string? existingLocation = null,
+        int maxLength = 200)
+    {
+        var ip = ResolveClientIp(context);
+        return ResolveIpAndLocationForLog(ip, existingLocation, maxLength);
     }
 
     /// <summary>

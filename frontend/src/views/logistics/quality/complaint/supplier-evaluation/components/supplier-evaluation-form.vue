@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/quality/complaint/supplier-evaluation/components -->
 <!-- 文件名称：supplier-evaluation-form.vue -->
-<!-- 功能描述：供应商评价考核主表实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：供应商评价考核主表实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form supplier-evaluation-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="supplier-evaluation-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,99 +63,103 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.code')"
+                :label="t('entity.supplierevaluation.code')"
                 name="supplierEvaluationCode"
               >
                 <a-input
                   v-model:value="formState.supplierEvaluationCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.code') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.code') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.supplierEvaluationId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.supplierid')"
+                :label="t('entity.supplierevaluation.supplierid')"
                 name="supplierId"
               >
                 <a-input
                   v-model:value="formState.supplierId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.supplierid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.supplierid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.suppliername')"
+                :label="t('entity.supplierevaluation.suppliername')"
                 name="supplierName"
               >
                 <a-input
                   v-model:value="formState.supplierName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.suppliername') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.suppliername') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.suppliercode')"
+                :label="t('entity.supplierevaluation.suppliercode')"
                 name="supplierCode"
               >
                 <a-input
                   v-model:value="formState.supplierCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.suppliercode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.suppliercode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.supplierEvaluationId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.evaluationdate')"
+                :label="t('entity.supplierevaluation.evaluationdate')"
                 name="evaluationDate"
               >
                 <a-date-picker
                   v-model:value="formState.evaluationDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplierEvaluation.evaluationdate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.evaluationperiod')"
+                :label="t('entity.supplierevaluation.evaluationperiod')"
                 name="evaluationPeriod"
               >
                 <a-input-number
                   v-model:value="formState.evaluationPeriod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.evaluationperiod') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluationperiod') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.evaluationtype')"
+                :label="t('entity.supplierevaluation.evaluationtype')"
                 name="evaluationType"
               >
                 <a-input-number
                   v-model:value="formState.evaluationType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.evaluationtype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluationtype') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -170,130 +176,126 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.evaluatorby')"
+                :label="t('entity.supplierevaluation.evaluatorby')"
                 name="evaluatorBy"
               >
                 <a-input
                   v-model:value="formState.evaluatorBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.evaluatorby') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluatorby') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.evaluationdept')"
+                :label="t('entity.supplierevaluation.evaluationdept')"
                 name="evaluationDept"
               >
                 <a-input
                   v-model:value="formState.evaluationDept"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.evaluationdept') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluationdept') })"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.overallrating')"
+                :label="t('entity.supplierevaluation.overallrating')"
                 name="overallRating"
               >
                 <a-input-number
                   v-model:value="formState.overallRating"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.overallrating') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.overallrating') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.totalscore')"
+                :label="t('entity.supplierevaluation.totalscore')"
                 name="totalScore"
               >
                 <a-input-number
                   v-model:value="formState.totalScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.totalscore') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.totalscore') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.qualityscore')"
+                :label="t('entity.supplierevaluation.qualityscore')"
                 name="qualityScore"
               >
                 <a-input-number
                   v-model:value="formState.qualityScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.qualityscore') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.qualityscore') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.deliveryscore')"
+                :label="t('entity.supplierevaluation.deliveryscore')"
                 name="deliveryScore"
               >
                 <a-input-number
                   v-model:value="formState.deliveryScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.deliveryscore') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.deliveryscore') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.pricescore')"
+                :label="t('entity.supplierevaluation.pricescore')"
                 name="priceScore"
               >
                 <a-input-number
                   v-model:value="formState.priceScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.pricescore') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.pricescore') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.servicescore')"
+                :label="t('entity.supplierevaluation.servicescore')"
                 name="serviceScore"
               >
                 <a-input-number
                   v-model:value="formState.serviceScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.servicescore') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.servicescore') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.technicalscore')"
+                :label="t('entity.supplierevaluation.technicalscore')"
                 name="technicalScore"
               >
                 <a-input-number
                   v-model:value="formState.technicalScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.technicalscore') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.technicalscore') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierEvaluation.mainstrengths')"
+                :label="t('entity.supplierevaluation.mainstrengths')"
                 name="mainStrengths"
               >
                 <a-input
                   v-model:value="formState.mainStrengths"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.mainstrengths') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.mainstrengths') })"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
@@ -308,119 +310,120 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.supplierEvaluation.mainissues')"
+                :label="t('entity.supplierevaluation.mainissues')"
                 name="mainIssues"
               >
                 <a-input
                   v-model:value="formState.mainIssues"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.mainissues') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.mainissues') })"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.supplierEvaluation.improvementrequirements')"
+                :label="t('entity.supplierevaluation.improvementrequirements')"
                 name="improvementRequirements"
               >
                 <a-input
                   v-model:value="formState.improvementRequirements"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.improvementrequirements') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.improvementrequirements') })"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.supplierEvaluation.evaluationconclusion')"
+                :label="t('entity.supplierevaluation.evaluationconclusion')"
                 name="evaluationConclusion"
               >
                 <a-input-number
                   v-model:value="formState.evaluationConclusion"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.evaluationconclusion') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluationconclusion') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.supplierEvaluation.rectificationdeadline')"
+                :label="t('entity.supplierevaluation.rectificationdeadline')"
                 name="rectificationDeadline"
               >
                 <a-input
                   v-model:value="formState.rectificationDeadline"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.rectificationdeadline') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.rectificationdeadline') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.supplierEvaluation.evaluationstatus')"
+                :label="t('entity.supplierevaluation.evaluationstatus')"
                 name="evaluationStatus"
               >
                 <a-input-number
                   v-model:value="formState.evaluationStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.evaluationstatus') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluationstatus') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.supplierEvaluation.rectificationstatus')"
+                :label="t('entity.supplierevaluation.rectificationstatus')"
                 name="rectificationStatus"
               >
                 <a-input-number
                   v-model:value="formState.rectificationStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.rectificationstatus') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.rectificationstatus') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.supplierEvaluation.relatedplant')"
+                :label="t('entity.supplierevaluation.relatedplant')"
                 name="relatedPlant"
               >
                 <a-input
                   v-model:value="formState.relatedPlant"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.relatedplant') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.relatedplant') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.supplierEvaluation.sortorder')"
-                name="sortOrder"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.sortorder') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
-              >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -433,131 +436,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：supplierEvaluationItem -->
-      <a-tab-pane
-        key="child-items"
-        :tab="t('entity.supplierEvaluationItem._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddSupplierEvaluationItemRow">
-            {{ t('common.page.button.create') }}{{ t('entity.supplierEvaluationItem._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="supplierEvaluationItemFormColumns"
-          :data-source="childSupplierEvaluationItemRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'evaluationId'">
-              <a-input
-                v-model:value="record.evaluationId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.evaluationid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'categoryType'">
-              <a-input-number
-                v-model:value="record.categoryType"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.categorytype') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'itemName'">
-              <a-input
-                v-model:value="record.itemName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.itemname') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'itemDescription'">
-              <a-textarea
-                v-model:value="record.itemDescription"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.supplierEvaluationItem.itemdescription') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === 'weight'">
-              <a-input-number
-                v-model:value="record.weight"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.weight') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'scoringStandard'">
-              <a-input
-                v-model:value="record.scoringStandard"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.scoringstandard') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'score'">
-              <a-input-number
-                v-model:value="record.score"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluationItem.score') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveSupplierEvaluationItemRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 items -->
+    <TaktEditableTable
+      ref="supplierEvaluationItemTableRef"
+      v-model="childSupplierEvaluationItemRows"
+      :columns="supplierEvaluationItemFormColumns"
+      :title="t('entity.supplierevaluationitem._self')"
+      :add-button-entity="t('entity.supplierevaluationitem._self')"
+      id-field="supplierEvaluationItemId"
+      :default-row="createDefaultSupplierEvaluationItemRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -569,7 +470,8 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { SupplierEvaluationCreate, SupplierEvaluationItemCreate, SupplierEvaluationItem } from '@/types/logistics/quality/complaint/supplier-evaluation'
+import type { SupplierEvaluationCreate } from '@/types/logistics/quality/complaint/supplier-evaluation'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -602,123 +504,101 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","supplierEvaluationCode","supplierId","supplierName","supplierCode","evaluationDate","evaluationPeriod","evaluationType","evaluatorBy","evaluationDept","overallRating","totalScore","qualityScore","deliveryScore","priceScore","serviceScore","technicalScore","mainStrengths","mainIssues","improvementRequirements","evaluationConclusion","rectificationDeadline","evaluationStatus","rectificationStatus","relatedPlant","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","supplierEvaluationCode","supplierId","supplierName","supplierCode","evaluationDate","evaluationPeriod","evaluationType","evaluatorBy","evaluationDept","overallRating","totalScore","qualityScore","deliveryScore","priceScore","serviceScore","technicalScore","mainStrengths","mainIssues","improvementRequirements","evaluationConclusion","rectificationDeadline","evaluationStatus","rectificationStatus","relatedPlant","extField","remark"]
 
-/** supplierEvaluationItem 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childSupplierEvaluationItemRows = ref<Record<string, unknown>[]>([])
+const supplierEvaluationItemTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 supplierEvaluationItem 表单列定义 */
-const supplierEvaluationItemFormColumns = computed(() => [
+/** 子表 supplierEvaluationItem 可编辑列 */
+const supplierEvaluationItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.supplierEvaluationItem.evaluationid'),
-    dataIndex: 'evaluationId',
-    key: 'evaluationId',
-    width: 140,
-  },
-  {
-    title: t('entity.supplierEvaluationItem.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.supplierevaluationitem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.supplierEvaluationItem.categorytype'),
-    dataIndex: 'categoryType',
     key: 'categoryType',
+    title: t('entity.supplierevaluationitem.categorytype'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.supplierEvaluationItem.itemname'),
-    dataIndex: 'itemName',
     key: 'itemName',
+    title: t('entity.supplierevaluationitem.itemname'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.supplierEvaluationItem.itemdescription'),
-    dataIndex: 'itemDescription',
     key: 'itemDescription',
+    title: t('entity.supplierevaluationitem.itemdescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.supplierevaluationitem.itemdescription') }),
     width: 140,
   },
   {
-    title: t('entity.supplierEvaluationItem.weight'),
-    dataIndex: 'weight',
     key: 'weight',
+    title: t('entity.supplierevaluationitem.weight'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.supplierEvaluationItem.scoringstandard'),
-    dataIndex: 'scoringStandard',
     key: 'scoringStandard',
-    width: 140,
+    title: t('entity.supplierevaluationitem.scoringstandard'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.supplierevaluationitem.scoringstandard') }),
   },
   {
-    title: t('entity.supplierEvaluationItem.score'),
-    dataIndex: 'score',
     key: 'score',
+    title: t('entity.supplierevaluationitem.score'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
+    key: 'ratingLevel',
+    title: t('entity.supplierevaluationitem.ratinglevel'),
+    editor: 'inputNumber',
+    width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SupplierEvaluationCreate & { supplierEvaluationId?: string }> | null | undefined) {
-  childSupplierEvaluationItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.supplierEvaluationItemId ?? `new-${index}`,
-  }))
+  childSupplierEvaluationItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 supplierEvaluationItem 行 */
-function handleAddSupplierEvaluationItemRow() {
-  childSupplierEvaluationItemRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      evaluationId: '',
-      lineNumber: 0,
-      categoryType: 0,
-      itemName: '',
-      itemDescription: '',
-      weight: 0,
-      scoringStandard: '',
-      score: 0,
-  })
-}
-
-/** 表单 Tab 内删除 supplierEvaluationItem 行 */
-function handleRemoveSupplierEvaluationItemRow(index: number) {
-  childSupplierEvaluationItemRows.value.splice(index, 1)
+function createDefaultSupplierEvaluationItemRow(): Record<string, unknown> {
+  return {
+    lineNumber: (childSupplierEvaluationItemRows.value.length + 1) * 10,
+    categoryType: 0,
+    itemName: '',
+    itemDescription: '',
+    weight: 0,
+    scoringStandard: '',
+    score: 0,
+    ratingLevel: 0,
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.supplierEvaluationId ?? ''
   return {
     ...formState,
-    items: childSupplierEvaluationItemRows.value.map(({ __rowKey, ...rest }) => rest),
+    items: supplierEvaluationItemTableRef.value?.getRows?.() ?? childSupplierEvaluationItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      evaluationId: masterId,
+    })),
   }
 }
 
@@ -730,7 +610,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -738,19 +618,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 supplierEvaluationId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.supplierEvaluationId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).items
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -769,99 +665,185 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   supplierEvaluationCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.code') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.code') }),
       trigger: 'blur'
     }
   ],
   supplierId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.supplierid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.supplierid') }),
       trigger: 'blur'
     }
   ],
   supplierName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.supplierEvaluation.suppliername') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.suppliername') }),
       trigger: 'blur'
     }
   ],
   evaluationDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.supplierEvaluation.evaluationdate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationdate') }),
       trigger: 'change'
     }
   ],
-  evaluationPeriod: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.supplierEvaluation.evaluationperiod') }),
-      trigger: 'change'
-    }
-  ],
-  evaluationType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.supplierEvaluation.evaluationtype') }),
-      trigger: 'change'
-    }
-  ],
-  overallRating: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.supplierEvaluation.overallrating') }),
-      trigger: 'change'
-    }
-  ],
-  evaluationConclusion: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.supplierEvaluation.evaluationconclusion') }),
-      trigger: 'change'
-    }
-  ],
-  evaluationStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.supplierEvaluation.evaluationstatus') }),
-      trigger: 'change'
-    }
-  ],
-  rectificationStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.supplierEvaluation.rectificationstatus') }),
-      trigger: 'change'
-    }
-  ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.supplierEvaluation.sortorder') }),
-      trigger: 'change'
-    }
-  ],
+  evaluationPeriod: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationperiod') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationperiod') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  evaluationType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationtype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationtype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  overallRating: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.overallrating') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.overallrating') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  evaluationConclusion: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationconclusion') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationconclusion') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  evaluationStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  rectificationStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.rectificationstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.rectificationstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await supplierEvaluationItemTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('evaluationPeriod' in payload) {
+    const rawevaluationPeriod = payload.evaluationPeriod
+    payload.evaluationPeriod = typeof rawevaluationPeriod === 'number' ? rawevaluationPeriod : Number(rawevaluationPeriod)
+  }
+  if ('evaluationType' in payload) {
+    const rawevaluationType = payload.evaluationType
+    payload.evaluationType = typeof rawevaluationType === 'number' ? rawevaluationType : Number(rawevaluationType)
+  }
+  if ('overallRating' in payload) {
+    const rawoverallRating = payload.overallRating
+    payload.overallRating = typeof rawoverallRating === 'number' ? rawoverallRating : Number(rawoverallRating)
+  }
+  if ('totalScore' in payload) {
+    const rawtotalScore = payload.totalScore
+    payload.totalScore = typeof rawtotalScore === 'number' ? rawtotalScore : Number(rawtotalScore)
+  }
+  if ('qualityScore' in payload) {
+    const rawqualityScore = payload.qualityScore
+    payload.qualityScore = typeof rawqualityScore === 'number' ? rawqualityScore : Number(rawqualityScore)
+  }
+  if ('deliveryScore' in payload) {
+    const rawdeliveryScore = payload.deliveryScore
+    payload.deliveryScore = typeof rawdeliveryScore === 'number' ? rawdeliveryScore : Number(rawdeliveryScore)
+  }
+  if ('priceScore' in payload) {
+    const rawpriceScore = payload.priceScore
+    payload.priceScore = typeof rawpriceScore === 'number' ? rawpriceScore : Number(rawpriceScore)
+  }
+  if ('serviceScore' in payload) {
+    const rawserviceScore = payload.serviceScore
+    payload.serviceScore = typeof rawserviceScore === 'number' ? rawserviceScore : Number(rawserviceScore)
+  }
+  if ('technicalScore' in payload) {
+    const rawtechnicalScore = payload.technicalScore
+    payload.technicalScore = typeof rawtechnicalScore === 'number' ? rawtechnicalScore : Number(rawtechnicalScore)
+  }
+  if ('evaluationConclusion' in payload) {
+    const rawevaluationConclusion = payload.evaluationConclusion
+    payload.evaluationConclusion = typeof rawevaluationConclusion === 'number' ? rawevaluationConclusion : Number(rawevaluationConclusion)
+  }
+  if ('evaluationStatus' in payload) {
+    const rawevaluationStatus = payload.evaluationStatus
+    payload.evaluationStatus = typeof rawevaluationStatus === 'number' ? rawevaluationStatus : Number(rawevaluationStatus)
+  }
+  if ('rectificationStatus' in payload) {
+    const rawrectificationStatus = payload.rectificationStatus
+    payload.rectificationStatus = typeof rawrectificationStatus === 'number' ? rawrectificationStatus : Number(rawrectificationStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.supplierEvaluationId)
   childSupplierEvaluationItemRows.value = []
+  supplierEvaluationItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

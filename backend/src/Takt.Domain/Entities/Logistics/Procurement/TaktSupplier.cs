@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Materials
+// 命名空间：Takt.Domain.Entities.Logistics.Procurement
 // 文件名称：TaktSupplier.cs
 // 创建时间：2026-05-12
 // 创建人：Takt365(Cursor AI)
@@ -22,7 +22,7 @@
 using SqlSugar;
 using Takt.Domain.Entities;
 
-namespace Takt.Domain.Entities.Logistics.Materials;
+namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
 /// Takt供货商实体
@@ -59,7 +59,7 @@ public class TaktSupplier : TaktCompanyEntityBase
     public string? SupplierShortName { get; set; }
 
     /// <summary>
-    /// 供货商类型（0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+    /// 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_type", ColumnDescription = "供货商类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SupplierType { get; set; } = 0;
@@ -149,13 +149,13 @@ public class TaktSupplier : TaktCompanyEntityBase
     public string CurrencyCode { get; set; } = "CNY";
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "payment_terms", ColumnDescription = "付款条件", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PaymentTerms { get; set; } = 1;
 
     /// <summary>
-    /// 供货商等级（0=普通，1=优选，2=战略，3=临时）
+    /// 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_level", ColumnDescription = "供货商等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SupplierLevel { get; set; } = 0;

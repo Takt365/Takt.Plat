@@ -38,6 +38,27 @@ public class TaktApsScheduleItem : TaktCompanyEntityBase
     public string ApsScheduleCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// APS 订单 ID（关联 TaktApsOrder，可选）
+    /// </summary>
+    [SugarColumn(ColumnName = "aps_order_id", ColumnDescription = "APS订单ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApsOrderId { get; set; }
+
+    /// <summary>
+    /// APS 工序排程 ID（关联 TaktApsOperation，可选）
+    /// </summary>
+    [SugarColumn(ColumnName = "aps_operation_id", ColumnDescription = "APS工序排程ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApsOperationId { get; set; }
+
+    /// <summary>
+    /// 工艺路线工序 ID（关联 TaktRoutingItem，可选）
+    /// </summary>
+    [SugarColumn(ColumnName = "routing_item_id", ColumnDescription = "工艺路线工序ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? RoutingItemId { get; set; }
+
+    /// <summary>
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]

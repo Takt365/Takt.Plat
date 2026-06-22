@@ -67,7 +67,7 @@ public class TaktExceptionMiddleware
         {
             case TaktBusinessException businessEx:
                 statusCode = HttpStatusCode.BadRequest;
-                errorCode = businessEx.ErrorCode;
+                errorCode = businessEx.ErrorCode ?? errorCode;
                 message = businessEx.Message;
                 logContext.Action = "business";
                 TaktLogger.Warning(

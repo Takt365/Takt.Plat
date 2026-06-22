@@ -94,7 +94,7 @@ public class TaktFlowVariableService : TaktServiceBase, ITaktFlowVariableService
         EnsureThreeLayerContext();
         var list = await _flowVariableRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.VariableName,
+            x => x.VariableName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -292,7 +292,7 @@ public class TaktFlowVariableService : TaktServiceBase, ITaktFlowVariableService
                 || (x.TextValue != null && x.TextValue.Contains(keywords))
                 || SqlFunc.ToString(x.LongValue).Contains(keywords)
                 || SqlFunc.ToString(x.DoubleValue).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -328,9 +328,9 @@ public class TaktFlowVariableService : TaktServiceBase, ITaktFlowVariableService
             exp = exp.And(x => x.LongValue == queryDto.LongValue);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

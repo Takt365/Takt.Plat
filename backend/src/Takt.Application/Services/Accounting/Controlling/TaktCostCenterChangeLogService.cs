@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostCenterChangeLogService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本中心变更记录应用服务实现
 // 
@@ -30,23 +30,27 @@ namespace Takt.Application.Services.Accounting.Controlling;
 public class TaktCostCenterChangeLogService : TaktServiceBase, ITaktCostCenterChangeLogService
 {
     private readonly ITaktCompanyRepository<TaktCostCenterChangeLog> _costCenterChangeLogRepository;
+    private readonly ITaktCompanyRepository<TaktCostCenter> _costCenterRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="costCenterChangeLogRepository">成本中心变更记录仓储</param>
+    /// <param name="costCenterRepository">成本中心仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktCostCenterChangeLogService(
         ITaktCompanyRepository<TaktCostCenterChangeLog> costCenterChangeLogRepository,
+        ITaktCompanyRepository<TaktCostCenter> costCenterRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _costCenterChangeLogRepository = costCenterChangeLogRepository;
+        _costCenterRepository = costCenterRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -93,7 +97,7 @@ public class TaktCostCenterChangeLogService : TaktServiceBase, ITaktCostCenterCh
         EnsureThreeLayerContext();
         var list = await _costCenterChangeLogRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.CostCenterCode,
+            x => x.CostCenterCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -110,6 +114,7 @@ public class TaktCostCenterChangeLogService : TaktServiceBase, ITaktCostCenterCh
     public async Task<TaktCostCenterChangeLogDto> CreateCostCenterChangeLogAsync(TaktCostCenterChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktCostCenterChangeLog>();
+        await StampCostCenterChangeLogCostCenterAsync(entity, dto);
         entity = await _costCenterChangeLogRepository.CreateAsync(entity);
         return await GetCostCenterChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktCostCenterChangeLogDto>();
     }
@@ -128,6 +133,7 @@ public class TaktCostCenterChangeLogService : TaktServiceBase, ITaktCostCenterCh
             throw new TaktBusinessException("成本中心变更记录不存在");
         }
         dto.Adapt(entity);
+        await StampCostCenterChangeLogCostCenterAsync(entity, dto);
         await _costCenterChangeLogRepository.UpdateAsync(entity);
         return await GetCostCenterChangeLogByIdAsync(id) ?? throw new TaktBusinessException("成本中心变更记录不存在");
     }
@@ -190,6 +196,29 @@ public class TaktCostCenterChangeLogService : TaktServiceBase, ITaktCostCenterCh
     }
 
     // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步成本中心变更记录主表外键（ManyToOne → 成本中心）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampCostCenterChangeLogCostCenterAsync(TaktCostCenterChangeLog entity, TaktCostCenterChangeLogCreateDto dto)
+    {
+        if (dto.CostCenterId <= 0)
+        {
+            return;
+        }
+        var master = await _costCenterRepository.GetByIdAsync(dto.CostCenterId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("成本中心不存在");
+        }
+        entity.CostCenterId = master.Id;
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -211,7 +240,7 @@ public class TaktCostCenterChangeLogService : TaktServiceBase, ITaktCostCenterCh
                 || (x.ChangeFields != null && x.ChangeFields.Contains(keywords))
                 || (x.ChangeBy != null && x.ChangeBy.Contains(keywords))
                 || (x.ChangeReason != null && x.ChangeReason.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ChangeTime).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -243,9 +272,9 @@ public class TaktCostCenterChangeLogService : TaktServiceBase, ITaktCostCenterCh
             exp = exp.And(x => x.ChangeReason != null && x.ChangeReason.Contains(queryDto.ChangeReason));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

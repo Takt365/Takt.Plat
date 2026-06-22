@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
 // 文件名称：TaktConfigurableFieldI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConfigurableField 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,101 +75,101 @@ public class TaktConfigurableFieldI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktConfigurableField 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.configurablefield._self / entity.configurablefield.{{field}}；ResourceGroup=9；ResourceType=0
+    /// I18nKey：entity.configurablefield._self / entity.configurablefield.{{field}}；ResourceGroup=Report；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetConfigurableFieldTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.configurablefield._self
-            new TranslationSeedItem("entity.configurablefield._self", "en-US", "Configurable Field Information", "实体名称"),
+            new TranslationSeedItem("entity.configurablefield._self", "en-US", "Configurable Field Information_us", "实体名称"),
             // entity.configurablefield._self
-            new TranslationSeedItem("entity.configurablefield._self", "ja-JP", "自定义报表输出字段定义信息", "实体名称"),
+            new TranslationSeedItem("entity.configurablefield._self", "ja-JP", "自定义报表输出字段定义信息_jp", "实体名称"),
             // entity.configurablefield._self
             new TranslationSeedItem("entity.configurablefield._self", "zh-CN", "自定义报表输出字段定义信息", "实体名称"),
             // entity.configurablefield._self
-            new TranslationSeedItem("entity.configurablefield._self", "zh-HK", "自定义报表输出字段定义信息", "实体名称"),
+            new TranslationSeedItem("entity.configurablefield._self", "zh-HK", "自定义报表输出字段定义信息_hk", "实体名称"),
 
             // entity.configurablefield.configurableid
-            new TranslationSeedItem("entity.configurablefield.configurableid", "en-US", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablefield.configurableid", "en-US", "报表主表ID_us", "关联报表主表 ID（主子表关系）"),
             // entity.configurablefield.configurableid
-            new TranslationSeedItem("entity.configurablefield.configurableid", "ja-JP", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablefield.configurableid", "ja-JP", "报表主表ID_jp", "关联报表主表 ID（主子表关系）"),
             // entity.configurablefield.configurableid
             new TranslationSeedItem("entity.configurablefield.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（主子表关系）"),
             // entity.configurablefield.configurableid
-            new TranslationSeedItem("entity.configurablefield.configurableid", "zh-HK", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablefield.configurableid", "zh-HK", "报表主表ID_hk", "关联报表主表 ID（主子表关系）"),
 
             // entity.configurablefield.sourcealias
-            new TranslationSeedItem("entity.configurablefield.sourcealias", "en-US", "数据源别名", "数据源别名"),
+            new TranslationSeedItem("entity.configurablefield.sourcealias", "en-US", "数据源别名_us", "数据源别名"),
             // entity.configurablefield.sourcealias
-            new TranslationSeedItem("entity.configurablefield.sourcealias", "ja-JP", "数据源别名", "数据源别名"),
+            new TranslationSeedItem("entity.configurablefield.sourcealias", "ja-JP", "数据源别名_jp", "数据源别名"),
             // entity.configurablefield.sourcealias
             new TranslationSeedItem("entity.configurablefield.sourcealias", "zh-CN", "数据源别名", "数据源别名"),
             // entity.configurablefield.sourcealias
-            new TranslationSeedItem("entity.configurablefield.sourcealias", "zh-HK", "数据源别名", "数据源别名"),
+            new TranslationSeedItem("entity.configurablefield.sourcealias", "zh-HK", "数据源别名_hk", "数据源别名"),
 
             // entity.configurablefield.columnname
-            new TranslationSeedItem("entity.configurablefield.columnname", "en-US", "列名", "列名"),
+            new TranslationSeedItem("entity.configurablefield.columnname", "en-US", "列名_us", "列名"),
             // entity.configurablefield.columnname
-            new TranslationSeedItem("entity.configurablefield.columnname", "ja-JP", "列名", "列名"),
+            new TranslationSeedItem("entity.configurablefield.columnname", "ja-JP", "列名_jp", "列名"),
             // entity.configurablefield.columnname
             new TranslationSeedItem("entity.configurablefield.columnname", "zh-CN", "列名", "列名"),
             // entity.configurablefield.columnname
-            new TranslationSeedItem("entity.configurablefield.columnname", "zh-HK", "列名", "列名"),
+            new TranslationSeedItem("entity.configurablefield.columnname", "zh-HK", "列名_hk", "列名"),
 
             // entity.configurablefield.displayname
-            new TranslationSeedItem("entity.configurablefield.displayname", "en-US", "显示名称", "显示名称（表头/Excel 列标题）"),
+            new TranslationSeedItem("entity.configurablefield.displayname", "en-US", "显示名称_us", "显示名称（表头/Excel 列标题）"),
             // entity.configurablefield.displayname
-            new TranslationSeedItem("entity.configurablefield.displayname", "ja-JP", "显示名称", "显示名称（表头/Excel 列标题）"),
+            new TranslationSeedItem("entity.configurablefield.displayname", "ja-JP", "显示名称_jp", "显示名称（表头/Excel 列标题）"),
             // entity.configurablefield.displayname
             new TranslationSeedItem("entity.configurablefield.displayname", "zh-CN", "显示名称", "显示名称（表头/Excel 列标题）"),
             // entity.configurablefield.displayname
-            new TranslationSeedItem("entity.configurablefield.displayname", "zh-HK", "显示名称", "显示名称（表头/Excel 列标题）"),
+            new TranslationSeedItem("entity.configurablefield.displayname", "zh-HK", "显示名称_hk", "显示名称（表头/Excel 列标题）"),
 
             // entity.configurablefield.outputalias
-            new TranslationSeedItem("entity.configurablefield.outputalias", "en-US", "输出别名", "输出别名（SELECT AS，为空时使用 display_name）"),
+            new TranslationSeedItem("entity.configurablefield.outputalias", "en-US", "输出别名_us", "输出别名（SELECT AS，为空时使用 display_name）"),
             // entity.configurablefield.outputalias
-            new TranslationSeedItem("entity.configurablefield.outputalias", "ja-JP", "输出别名", "输出别名（SELECT AS，为空时使用 display_name）"),
+            new TranslationSeedItem("entity.configurablefield.outputalias", "ja-JP", "输出别名_jp", "输出别名（SELECT AS，为空时使用 display_name）"),
             // entity.configurablefield.outputalias
             new TranslationSeedItem("entity.configurablefield.outputalias", "zh-CN", "输出别名", "输出别名（SELECT AS，为空时使用 display_name）"),
             // entity.configurablefield.outputalias
-            new TranslationSeedItem("entity.configurablefield.outputalias", "zh-HK", "输出别名", "输出别名（SELECT AS，为空时使用 display_name）"),
+            new TranslationSeedItem("entity.configurablefield.outputalias", "zh-HK", "输出别名_hk", "输出别名（SELECT AS，为空时使用 display_name）"),
 
             // entity.configurablefield.aggregatefunc
-            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "en-US", "聚合函数", "聚合函数（无分组时为 None）"),
+            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "en-US", "聚合函数_us", "聚合函数（无分组时为 None）"),
             // entity.configurablefield.aggregatefunc
-            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "ja-JP", "聚合函数", "聚合函数（无分组时为 None）"),
+            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "ja-JP", "聚合函数_jp", "聚合函数（无分组时为 None）"),
             // entity.configurablefield.aggregatefunc
             new TranslationSeedItem("entity.configurablefield.aggregatefunc", "zh-CN", "聚合函数", "聚合函数（无分组时为 None）"),
             // entity.configurablefield.aggregatefunc
-            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "zh-HK", "聚合函数", "聚合函数（无分组时为 None）"),
+            new TranslationSeedItem("entity.configurablefield.aggregatefunc", "zh-HK", "聚合函数_hk", "聚合函数（无分组时为 None）"),
 
             // entity.configurablefield.isvisible
-            new TranslationSeedItem("entity.configurablefield.isvisible", "en-US", "是否输出", "是否输出（0=隐藏 1=显示）"),
+            new TranslationSeedItem("entity.configurablefield.isvisible", "en-US", "是否输出_us", "是否输出（0=隐藏 1=显示）"),
             // entity.configurablefield.isvisible
-            new TranslationSeedItem("entity.configurablefield.isvisible", "ja-JP", "是否输出", "是否输出（0=隐藏 1=显示）"),
+            new TranslationSeedItem("entity.configurablefield.isvisible", "ja-JP", "是否输出_jp", "是否输出（0=隐藏 1=显示）"),
             // entity.configurablefield.isvisible
             new TranslationSeedItem("entity.configurablefield.isvisible", "zh-CN", "是否输出", "是否输出（0=隐藏 1=显示）"),
             // entity.configurablefield.isvisible
-            new TranslationSeedItem("entity.configurablefield.isvisible", "zh-HK", "是否输出", "是否输出（0=隐藏 1=显示）"),
+            new TranslationSeedItem("entity.configurablefield.isvisible", "zh-HK", "是否输出_hk", "是否输出（0=隐藏 1=显示）"),
 
             // entity.configurablefield.sortorder
-            new TranslationSeedItem("entity.configurablefield.sortorder", "en-US", "排序号", "排序号（SELECT 列顺序）"),
+            new TranslationSeedItem("entity.configurablefield.sortorder", "en-US", "排序号_us", "排序号（SELECT 列顺序）"),
             // entity.configurablefield.sortorder
-            new TranslationSeedItem("entity.configurablefield.sortorder", "ja-JP", "排序号", "排序号（SELECT 列顺序）"),
+            new TranslationSeedItem("entity.configurablefield.sortorder", "ja-JP", "排序号_jp", "排序号（SELECT 列顺序）"),
             // entity.configurablefield.sortorder
             new TranslationSeedItem("entity.configurablefield.sortorder", "zh-CN", "排序号", "排序号（SELECT 列顺序）"),
             // entity.configurablefield.sortorder
-            new TranslationSeedItem("entity.configurablefield.sortorder", "zh-HK", "排序号", "排序号（SELECT 列顺序）"),
+            new TranslationSeedItem("entity.configurablefield.sortorder", "zh-HK", "排序号_hk", "排序号（SELECT 列顺序）"),
 
             // entity.configurablefield.configurable
-            new TranslationSeedItem("entity.configurablefield.configurable", "en-US", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablefield.configurable", "en-US", "关联的报表主表_us", "关联的报表主表"),
             // entity.configurablefield.configurable
-            new TranslationSeedItem("entity.configurablefield.configurable", "ja-JP", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablefield.configurable", "ja-JP", "关联的报表主表_jp", "关联的报表主表"),
             // entity.configurablefield.configurable
             new TranslationSeedItem("entity.configurablefield.configurable", "zh-CN", "关联的报表主表", "关联的报表主表"),
             // entity.configurablefield.configurable
-            new TranslationSeedItem("entity.configurablefield.configurable", "zh-HK", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablefield.configurable", "zh-HK", "关联的报表主表_hk", "关联的报表主表"),
         };
     }
 
@@ -187,10 +187,10 @@ public class TaktConfigurableFieldI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 9;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Report";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

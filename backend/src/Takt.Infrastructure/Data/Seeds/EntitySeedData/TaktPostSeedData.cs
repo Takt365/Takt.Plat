@@ -89,7 +89,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                     company.CompanyCode,
                     postData.PostCode,
                     postData.PostName,
-                    postData.PostType,
+                    postData.PostCategory,
                     postData.PostLevel,
                     postData.SortOrder,
                     postData.DeptCode);
@@ -143,67 +143,56 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 获取标准岗位配置
     /// </summary>
-    private static IEnumerable<(string PostCode, string PostName, int PostType, int PostLevel, int SortOrder, string DeptCode)> GetStandardPosts(string tenantCode, string companyCode)
+    private static IEnumerable<(string PostCode, string PostName, string PostCategory, string PostLevel, int SortOrder, string DeptCode)> GetStandardPosts(string tenantCode, string companyCode)
     {
         // 所有公司使用统一的岗位清单，统一归属于公司级部门 D0000
+        // PostCategory：字典 sys_post_category（MGT/PRO/TEC/SUP/OPS）；PostLevel：字典 sys_post_level_category（P1~P4 / M1~M5）
         return new[]
         {
-            // ===== 总经理室 =====
-            // 高层管理（管理/决策层）
-            ("CHAIRMAN", "董事长", 0, 2, 1, "D0000"),
-            ("VICE_CHAIRMAN", "副董事长", 0, 2, 2, "D0000"),
-            ("GENERAL_MANAGER", "总经理", 0, 2, 3, "D0000"),
-            ("VICE_GENERAL_MANAGER", "副总经理", 0, 2, 4, "D0000"),
-            ("FACTORY_DIRECTOR", "厂长", 0, 2, 5, "D0000"),
-            ("BU_HEAD", "本部长", 0, 2, 6, "D0000"),
-            ("DEPUTY_BU_HEAD", "副本部长", 0, 2, 7, "D0000"),
-            ("DEPARTMENT_HEAD", "部长", 0, 2, 8, "D0000"),
-            ("DEPUTY_DEPARTMENT_HEAD", "副部长", 0, 2, 9, "D0000"),
-            
-            // 中层管理（管理/决策层）
-            ("MANAGER", "经理", 0, 2, 10, "D0000"),
-            ("DEPUTY_MANAGER", "副经理", 0, 2, 11, "D0000"),
-            ("SECTION_CHIEF", "课长", 0, 2, 12, "D0000"),
-            ("DEPUTY_SECTION_CHIEF", "副课长", 0, 2, 13, "D0000"),
-            ("SUBSECTION_CHIEF", "股长", 0, 2, 14, "D0000"),
-            ("TEAM_LEADER", "班长", 0, 2, 15, "D0000"),
-            ("DEPUTY_TEAM_LEADER", "副班长", 0, 2, 16, "D0000"),
-            
-            // ===== IT部 =====
-            // 专业技术（技术/骨干层）
-            ("LEVEL4_ENGINEER", "四级工程师", 1, 1, 20, "D0000"),
-            ("LEVEL3_ENGINEER", "三级工程师", 1, 1, 21, "D0000"),
-            ("LEVEL3_TECH_ENGINEER", "三级技术工程师", 1, 1, 22, "D0000"),
-            ("LEVEL2_ENGINEER", "二级工程师", 1, 1, 23, "D0000"),
-            ("LEVEL1_TECHNICIAN", "一级技术员", 1, 1, 24, "D0000"),
-            
-            // ===== 总务部 =====
-            // 专业职能（专员：技术/骨干层，多能工/检查员/仓管员：一线/基层）
-            ("LEVEL4_SPECIALIST", "四级专员", 3, 1, 30, "D0000"),
-            ("LEVEL3_SPECIALIST", "三级专员", 3, 1, 31, "D0000"),
-            ("LEVEL2_SPECIALIST", "二级专员", 3, 1, 32, "D0000"),
-            ("LEVEL1_SPECIALIST", "一级专员", 3, 0, 33, "D0000"),
-            ("LEVEL1_CLERK", "一级事务员", 3, 0, 34, "D0000"),
-            
-            // ===== 生产部 =====
-            ("SENIOR_MULTI_SKILL_WORKER", "资深多能工", 3, 0, 35, "D0000"),
-            ("LEVEL1_MULTI_SKILL_WORKER", "一级多能工", 3, 0, 36, "D0000"),
-            ("LEVEL2_MULTI_SKILL_WORKER", "二级多能工", 3, 0, 37, "D0000"),
-            ("LEVEL3_MULTI_SKILL_WORKER", "三级多能工", 3, 0, 38, "D0000"),
-            ("OPERATOR", "作业员", 4, 0, 60, "D0000"),
-            
-            // ===== 品保部 =====
-            ("INSPECTOR", "质检员", 3, 0, 39, "D0000"),
-            
-            // ===== 资材部 =====
-            ("WAREHOUSE_KEEPER", "仓管员", 3, 0, 40, "D0000"),
-            
-            // ===== 管理部 =====
-            // 后勤保障（一线/基层）
-            ("SECURITY_CAPTAIN", "保安队长", 7, 0, 50, "D0000"),
-            ("SECURITY_DEPUTY_CAPTAIN", "保安副队长", 7, 0, 51, "D0000"),
-            ("LEVEL1_SECURITY_GUARD", "一级保安员", 7, 0, 52, "D0000"),
-            ("CLEANER", "清洁工", 7, 0, 53, "D0000"),
+            // ===== 总经理室（管理岗）=====
+            ("CHAIRMAN", "董事长", "MGT", "M5", 1, "D0000"),
+            ("VICE_CHAIRMAN", "副董事长", "MGT", "M4", 2, "D0000"),
+            ("GENERAL_MANAGER", "总经理", "MGT", "M5", 3, "D0000"),
+            ("VICE_GENERAL_MANAGER", "副总经理", "MGT", "M4", 4, "D0000"),
+            ("FACTORY_DIRECTOR", "厂长", "MGT", "M4", 5, "D0000"),
+            ("BU_HEAD", "本部长", "MGT", "M4", 6, "D0000"),
+            ("DEPUTY_BU_HEAD", "副本部长", "MGT", "M3", 7, "D0000"),
+            ("DEPARTMENT_HEAD", "部长", "MGT", "M3", 8, "D0000"),
+            ("DEPUTY_DEPARTMENT_HEAD", "副部长", "MGT", "M3", 9, "D0000"),
+            ("MANAGER", "经理", "MGT", "M2", 10, "D0000"),
+            ("DEPUTY_MANAGER", "副经理", "MGT", "M2", 11, "D0000"),
+            ("SECTION_CHIEF", "课长", "MGT", "M1", 12, "D0000"),
+            ("DEPUTY_SECTION_CHIEF", "副课长", "MGT", "M1", 13, "D0000"),
+            ("SUBSECTION_CHIEF", "股长", "MGT", "M1", 14, "D0000"),
+            ("TEAM_LEADER", "班长", "MGT", "M1", 15, "D0000"),
+            ("DEPUTY_TEAM_LEADER", "副班长", "MGT", "M1", 16, "D0000"),
+            // ===== IT部（技术岗）=====
+            ("LEVEL4_ENGINEER", "四级工程师", "TEC", "P4", 20, "D0000"),
+            ("LEVEL3_ENGINEER", "三级工程师", "TEC", "P3", 21, "D0000"),
+            ("LEVEL3_TECH_ENGINEER", "三级技术工程师", "TEC", "P3", 22, "D0000"),
+            ("LEVEL2_ENGINEER", "二级工程师", "TEC", "P2", 23, "D0000"),
+            ("LEVEL1_TECHNICIAN", "一级技术员", "TEC", "P1", 24, "D0000"),
+            // ===== 总务部（专业岗 / 支持岗）=====
+            ("LEVEL4_SPECIALIST", "四级专员", "PRO", "P4", 30, "D0000"),
+            ("LEVEL3_SPECIALIST", "三级专员", "PRO", "P3", 31, "D0000"),
+            ("LEVEL2_SPECIALIST", "二级专员", "PRO", "P2", 32, "D0000"),
+            ("LEVEL1_SPECIALIST", "一级专员", "PRO", "P1", 33, "D0000"),
+            ("LEVEL1_CLERK", "一级事务员", "SUP", "P1", 34, "D0000"),
+            // ===== 生产部（操作岗）=====
+            ("SENIOR_MULTI_SKILL_WORKER", "资深多能工", "OPS", "P4", 35, "D0000"),
+            ("LEVEL1_MULTI_SKILL_WORKER", "一级多能工", "OPS", "P1", 36, "D0000"),
+            ("LEVEL2_MULTI_SKILL_WORKER", "二级多能工", "OPS", "P2", 37, "D0000"),
+            ("LEVEL3_MULTI_SKILL_WORKER", "三级多能工", "OPS", "P3", 38, "D0000"),
+            ("OPERATOR", "作业员", "OPS", "P1", 60, "D0000"),
+            // ===== 品保部（操作岗）=====
+            ("INSPECTOR", "质检员", "OPS", "P2", 39, "D0000"),
+            // ===== 资材部（操作岗）=====
+            ("WAREHOUSE_KEEPER", "仓管员", "OPS", "P2", 40, "D0000"),
+            // ===== 管理部（支持岗）=====
+            ("SECURITY_CAPTAIN", "保安队长", "SUP", "M1", 50, "D0000"),
+            ("SECURITY_DEPUTY_CAPTAIN", "保安副队长", "SUP", "M1", 51, "D0000"),
+            ("LEVEL1_SECURITY_GUARD", "一级保安员", "SUP", "P1", 52, "D0000"),
+            ("CLEANER", "清洁工", "SUP", "P1", 53, "D0000"),
         };
     }
 
@@ -216,7 +205,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
     /// <param name="companyCode">公司代码</param>
     /// <param name="postCode">岗位编码</param>
     /// <param name="postName">岗位名称</param>
-    /// <param name="postType">岗位类型</param>
+    /// <param name="postCategory">岗位类别</param>
     /// <param name="postLevel">岗位职级</param>
     /// <param name="sortOrder">排序</param>
     /// <param name="deptCode">所属部门编码</param>
@@ -228,8 +217,8 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
         string companyCode,
         string postCode,
         string postName,
-        int postType,
-        int postLevel,
+        string postCategory,
+        string postLevel,
         int sortOrder,
         string deptCode)
     {
@@ -254,8 +243,12 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                 DeptId = dept.Id,
                 PostCode = postCode,
                 PostName = postName,
-                PostType = postType,
+                PostCategory = postCategory,
                 PostLevel = postLevel,
+                Responsibilities = "待完善",
+                Requirements = "待完善",
+                EducationRequired = 1,
+                ExperienceYears = 1,
                 PostStatus = 1,
                 SortOrder = sortOrder,
                 IsBuiltIn = 1
@@ -274,12 +267,12 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                 needUpdate = true;
             }
             
-            if (post.PostType != postType)
+            if (post.PostCategory != postCategory)
             {
-                post.PostType = postType;
+                post.PostCategory = postCategory;
                 needUpdate = true;
             }
-            
+
             if (post.PostLevel != postLevel)
             {
                 post.PostLevel = postLevel;

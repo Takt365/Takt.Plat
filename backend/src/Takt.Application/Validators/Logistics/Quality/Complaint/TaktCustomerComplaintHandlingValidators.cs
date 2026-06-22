@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintHandlingValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerComplaintHandling 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCustomerComplaintHandling 生成，请按需审阅）
 // 
@@ -31,13 +31,13 @@ public class TaktCustomerComplaintHandlingCreateValidator : AbstractValidator<Ta
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.ComplaintHandlingCode)
             .NotEmpty().WithMessage("客诉处理记录编码不能为空")
-            .MaximumLength(40).WithMessage("客诉处理记录编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("客诉处理记录编码长度不能超过50个字符");
         RuleFor(x => x.ComplaintId)
             .GreaterThanOrEqualTo(0).WithMessage("客诉ID不能为负数");
         RuleFor(x => x.ComplaintNo)
@@ -64,7 +64,7 @@ public class TaktCustomerComplaintHandlingCreateValidator : AbstractValidator<Ta
             .MaximumLength(1000).WithMessage("客户反馈长度不能超过1000个字符");
         RuleFor(x => x.AttachmentPaths)
             .MaximumLength(2000).WithMessage("附件路径长度不能超过2000个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -105,12 +105,12 @@ public class TaktCustomerComplaintHandlingImportValidator : AbstractValidator<Ta
     public TaktCustomerComplaintHandlingImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.ComplaintHandlingCode)
             .NotEmpty().WithMessage("客诉处理记录编码不能为空")
-            .MaximumLength(40).WithMessage("客诉处理记录编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("客诉处理记录编码长度不能超过50个字符");
         RuleFor(x => x.ComplaintId)
             .GreaterThanOrEqualTo(0).WithMessage("客诉ID不能为负数");
         RuleFor(x => x.ComplaintNo)
@@ -131,8 +131,8 @@ public class TaktCustomerComplaintHandlingImportValidator : AbstractValidator<Ta
             .MaximumLength(100).WithMessage("责任部门长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.ResponsibleDept));
         RuleFor(x => x.ResponsibleBy)
             .MaximumLength(50).WithMessage("责任人长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ResponsibleBy));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

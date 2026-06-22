@@ -13,6 +13,8 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import Antd from 'ant-design-vue';
+import formCreate from '@form-create/ant-design-vue';
+import { install as installFcDesigner } from '@form-create/antd-designer';
 import App from './App.vue';
 import router from './router';
 import { setRuntimeRouter } from '@/utils/runtime-context';
@@ -28,6 +30,7 @@ import { initEventBus } from '@/utils/event-bus';
 import { initLogger } from '@/utils/logger';
 import { initTaktThemeDom } from '@/utils/theme';
 import { applySettings } from '@/utils/apply-settings';
+import { ensureTaktPaginationConfigAsync } from '@/config/takt-pagination';
 import { useSettingStore } from '@/stores/common/setting';
 import { useLocaleStore } from '@/stores/foundation/locale';
 import 'ant-design-vue/dist/reset.css';
@@ -67,11 +70,16 @@ const app = createApp(App);
 const pinia = createPinia();
 
 app.use(pinia);
+
 useSettingStore();
 applySettings();
 const userStore = useUserStore();
+const tenantStore = useTenantStore();
 if (userStore.isLoggedIn) {
-  useTenantStore().restoreTenantCodeFromStorage();
+  tenantStore.restoreTenantCodeFromStorage();
+}
+if (tenantStore.tenantCode?.trim()) {
+  await ensureTaktPaginationConfigAsync();
 }
 const isLoginEntryPath =
   typeof window !== 'undefined'
@@ -82,6 +90,8 @@ if (!isLoginEntryPath) {
 app.use(router);
 app.use(i18n);
 app.use(Antd);
+app.use(formCreate);
+installFcDesigner(app);
 
 registerTaktEventHandlers();
 initTaktIdleSession();

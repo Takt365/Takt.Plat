@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktQuartzTaskI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQuartzTask 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,227 +75,227 @@ public class TaktQuartzTaskI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktQuartzTask 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.quartztask._self / entity.quartztask.{{field}}；ResourceGroup=8；ResourceType=0
+    /// I18nKey：entity.quartztask._self / entity.quartztask.{{field}}；ResourceGroup=Foundation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetQuartzTaskTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.quartztask._self
-            new TranslationSeedItem("entity.quartztask._self", "en-US", "Quartz Task Information", "实体名称"),
+            new TranslationSeedItem("entity.quartztask._self", "en-US", "Quartz Task Information_us", "实体名称"),
             // entity.quartztask._self
-            new TranslationSeedItem("entity.quartztask._self", "ja-JP", "Quartz 定时任务信息", "实体名称"),
+            new TranslationSeedItem("entity.quartztask._self", "ja-JP", "Quartz 定时任务信息_jp", "实体名称"),
             // entity.quartztask._self
             new TranslationSeedItem("entity.quartztask._self", "zh-CN", "Quartz 定时任务信息", "实体名称"),
             // entity.quartztask._self
-            new TranslationSeedItem("entity.quartztask._self", "zh-HK", "Quartz 定时任务信息", "实体名称"),
+            new TranslationSeedItem("entity.quartztask._self", "zh-HK", "Quartz 定时任务信息_hk", "实体名称"),
 
             // entity.quartztask.taskcode
-            new TranslationSeedItem("entity.quartztask.taskcode", "en-US", "任务编码", "任务编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.quartztask.taskcode", "en-US", "任务编码_us", "任务编码（租户+公司内唯一）"),
             // entity.quartztask.taskcode
-            new TranslationSeedItem("entity.quartztask.taskcode", "ja-JP", "任务编码", "任务编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.quartztask.taskcode", "ja-JP", "任务编码_jp", "任务编码（租户+公司内唯一）"),
             // entity.quartztask.taskcode
             new TranslationSeedItem("entity.quartztask.taskcode", "zh-CN", "任务编码", "任务编码（租户+公司内唯一）"),
             // entity.quartztask.taskcode
-            new TranslationSeedItem("entity.quartztask.taskcode", "zh-HK", "任务编码", "任务编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.quartztask.taskcode", "zh-HK", "任务编码_hk", "任务编码（租户+公司内唯一）"),
 
             // entity.quartztask.taskname
-            new TranslationSeedItem("entity.quartztask.taskname", "en-US", "任务名称", "任务名称"),
+            new TranslationSeedItem("entity.quartztask.taskname", "en-US", "任务名称_us", "任务名称"),
             // entity.quartztask.taskname
-            new TranslationSeedItem("entity.quartztask.taskname", "ja-JP", "任务名称", "任务名称"),
+            new TranslationSeedItem("entity.quartztask.taskname", "ja-JP", "任务名称_jp", "任务名称"),
             // entity.quartztask.taskname
             new TranslationSeedItem("entity.quartztask.taskname", "zh-CN", "任务名称", "任务名称"),
             // entity.quartztask.taskname
-            new TranslationSeedItem("entity.quartztask.taskname", "zh-HK", "任务名称", "任务名称"),
+            new TranslationSeedItem("entity.quartztask.taskname", "zh-HK", "任务名称_hk", "任务名称"),
 
             // entity.quartztask.jobname
-            new TranslationSeedItem("entity.quartztask.jobname", "en-US", "Job名称", "Quartz Job 名称"),
+            new TranslationSeedItem("entity.quartztask.jobname", "en-US", "Job名称_us", "Quartz Job 名称"),
             // entity.quartztask.jobname
-            new TranslationSeedItem("entity.quartztask.jobname", "ja-JP", "Job名称", "Quartz Job 名称"),
+            new TranslationSeedItem("entity.quartztask.jobname", "ja-JP", "Job名称_jp", "Quartz Job 名称"),
             // entity.quartztask.jobname
             new TranslationSeedItem("entity.quartztask.jobname", "zh-CN", "Job名称", "Quartz Job 名称"),
             // entity.quartztask.jobname
-            new TranslationSeedItem("entity.quartztask.jobname", "zh-HK", "Job名称", "Quartz Job 名称"),
+            new TranslationSeedItem("entity.quartztask.jobname", "zh-HK", "Job名称_hk", "Quartz Job 名称"),
 
             // entity.quartztask.jobgroup
-            new TranslationSeedItem("entity.quartztask.jobgroup", "en-US", "Job分组", "Quartz Job 分组"),
+            new TranslationSeedItem("entity.quartztask.jobgroup", "en-US", "Job分组_us", "Quartz Job 分组"),
             // entity.quartztask.jobgroup
-            new TranslationSeedItem("entity.quartztask.jobgroup", "ja-JP", "Job分组", "Quartz Job 分组"),
+            new TranslationSeedItem("entity.quartztask.jobgroup", "ja-JP", "Job分组_jp", "Quartz Job 分组"),
             // entity.quartztask.jobgroup
             new TranslationSeedItem("entity.quartztask.jobgroup", "zh-CN", "Job分组", "Quartz Job 分组"),
             // entity.quartztask.jobgroup
-            new TranslationSeedItem("entity.quartztask.jobgroup", "zh-HK", "Job分组", "Quartz Job 分组"),
+            new TranslationSeedItem("entity.quartztask.jobgroup", "zh-HK", "Job分组_hk", "Quartz Job 分组"),
 
             // entity.quartztask.tasktype
-            new TranslationSeedItem("entity.quartztask.tasktype", "en-US", "任务类型", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
+            new TranslationSeedItem("entity.quartztask.tasktype", "en-US", "任务类型_us", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
             // entity.quartztask.tasktype
-            new TranslationSeedItem("entity.quartztask.tasktype", "ja-JP", "任务类型", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
+            new TranslationSeedItem("entity.quartztask.tasktype", "ja-JP", "任务类型_jp", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
             // entity.quartztask.tasktype
             new TranslationSeedItem("entity.quartztask.tasktype", "zh-CN", "任务类型", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
             // entity.quartztask.tasktype
-            new TranslationSeedItem("entity.quartztask.tasktype", "zh-HK", "任务类型", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
+            new TranslationSeedItem("entity.quartztask.tasktype", "zh-HK", "任务类型_hk", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
 
             // entity.quartztask.assemblyname
-            new TranslationSeedItem("entity.quartztask.assemblyname", "en-US", "程序集名称", "程序集名称（任务类型为程序集时使用）"),
+            new TranslationSeedItem("entity.quartztask.assemblyname", "en-US", "程序集名称_us", "程序集名称（任务类型为程序集时使用）"),
             // entity.quartztask.assemblyname
-            new TranslationSeedItem("entity.quartztask.assemblyname", "ja-JP", "程序集名称", "程序集名称（任务类型为程序集时使用）"),
+            new TranslationSeedItem("entity.quartztask.assemblyname", "ja-JP", "程序集名称_jp", "程序集名称（任务类型为程序集时使用）"),
             // entity.quartztask.assemblyname
             new TranslationSeedItem("entity.quartztask.assemblyname", "zh-CN", "程序集名称", "程序集名称（任务类型为程序集时使用）"),
             // entity.quartztask.assemblyname
-            new TranslationSeedItem("entity.quartztask.assemblyname", "zh-HK", "程序集名称", "程序集名称（任务类型为程序集时使用）"),
+            new TranslationSeedItem("entity.quartztask.assemblyname", "zh-HK", "程序集名称_hk", "程序集名称（任务类型为程序集时使用）"),
 
             // entity.quartztask.classname
-            new TranslationSeedItem("entity.quartztask.classname", "en-US", "任务类名", "任务类名（任务类型为程序集时使用）"),
+            new TranslationSeedItem("entity.quartztask.classname", "en-US", "任务类名_us", "任务类名（任务类型为程序集时使用）"),
             // entity.quartztask.classname
-            new TranslationSeedItem("entity.quartztask.classname", "ja-JP", "任务类名", "任务类名（任务类型为程序集时使用）"),
+            new TranslationSeedItem("entity.quartztask.classname", "ja-JP", "任务类名_jp", "任务类名（任务类型为程序集时使用）"),
             // entity.quartztask.classname
             new TranslationSeedItem("entity.quartztask.classname", "zh-CN", "任务类名", "任务类名（任务类型为程序集时使用）"),
             // entity.quartztask.classname
-            new TranslationSeedItem("entity.quartztask.classname", "zh-HK", "任务类名", "任务类名（任务类型为程序集时使用）"),
+            new TranslationSeedItem("entity.quartztask.classname", "zh-HK", "任务类名_hk", "任务类名（任务类型为程序集时使用）"),
 
             // entity.quartztask.apiurl
-            new TranslationSeedItem("entity.quartztask.apiurl", "en-US", "API执行地址", "API 执行地址（任务类型为网络请求时使用）"),
+            new TranslationSeedItem("entity.quartztask.apiurl", "en-US", "API执行地址_us", "API 执行地址（任务类型为网络请求时使用）"),
             // entity.quartztask.apiurl
-            new TranslationSeedItem("entity.quartztask.apiurl", "ja-JP", "API执行地址", "API 执行地址（任务类型为网络请求时使用）"),
+            new TranslationSeedItem("entity.quartztask.apiurl", "ja-JP", "API执行地址_jp", "API 执行地址（任务类型为网络请求时使用）"),
             // entity.quartztask.apiurl
             new TranslationSeedItem("entity.quartztask.apiurl", "zh-CN", "API执行地址", "API 执行地址（任务类型为网络请求时使用）"),
             // entity.quartztask.apiurl
-            new TranslationSeedItem("entity.quartztask.apiurl", "zh-HK", "API执行地址", "API 执行地址（任务类型为网络请求时使用）"),
+            new TranslationSeedItem("entity.quartztask.apiurl", "zh-HK", "API执行地址_hk", "API 执行地址（任务类型为网络请求时使用）"),
 
             // entity.quartztask.requestmethod
-            new TranslationSeedItem("entity.quartztask.requestmethod", "en-US", "网络请求方式", "网络请求方式（GET/POST 等）"),
+            new TranslationSeedItem("entity.quartztask.requestmethod", "en-US", "网络请求方式_us", "网络请求方式（GET/POST 等）"),
             // entity.quartztask.requestmethod
-            new TranslationSeedItem("entity.quartztask.requestmethod", "ja-JP", "网络请求方式", "网络请求方式（GET/POST 等）"),
+            new TranslationSeedItem("entity.quartztask.requestmethod", "ja-JP", "网络请求方式_jp", "网络请求方式（GET/POST 等）"),
             // entity.quartztask.requestmethod
             new TranslationSeedItem("entity.quartztask.requestmethod", "zh-CN", "网络请求方式", "网络请求方式（GET/POST 等）"),
             // entity.quartztask.requestmethod
-            new TranslationSeedItem("entity.quartztask.requestmethod", "zh-HK", "网络请求方式", "网络请求方式（GET/POST 等）"),
+            new TranslationSeedItem("entity.quartztask.requestmethod", "zh-HK", "网络请求方式_hk", "网络请求方式（GET/POST 等）"),
 
             // entity.quartztask.sqlscript
-            new TranslationSeedItem("entity.quartztask.sqlscript", "en-US", "SQL语句", "SQL 语句（任务类型为 SQL 时使用）"),
+            new TranslationSeedItem("entity.quartztask.sqlscript", "en-US", "SQL语句_us", "SQL 语句（任务类型为 SQL 时使用）"),
             // entity.quartztask.sqlscript
-            new TranslationSeedItem("entity.quartztask.sqlscript", "ja-JP", "SQL语句", "SQL 语句（任务类型为 SQL 时使用）"),
+            new TranslationSeedItem("entity.quartztask.sqlscript", "ja-JP", "SQL语句_jp", "SQL 语句（任务类型为 SQL 时使用）"),
             // entity.quartztask.sqlscript
             new TranslationSeedItem("entity.quartztask.sqlscript", "zh-CN", "SQL语句", "SQL 语句（任务类型为 SQL 时使用）"),
             // entity.quartztask.sqlscript
-            new TranslationSeedItem("entity.quartztask.sqlscript", "zh-HK", "SQL语句", "SQL 语句（任务类型为 SQL 时使用）"),
+            new TranslationSeedItem("entity.quartztask.sqlscript", "zh-HK", "SQL语句_hk", "SQL 语句（任务类型为 SQL 时使用）"),
 
             // entity.quartztask.triggertype
-            new TranslationSeedItem("entity.quartztask.triggertype", "en-US", "触发器类型", "触发器类型（0=Simple 1=Cron）"),
+            new TranslationSeedItem("entity.quartztask.triggertype", "en-US", "触发器类型_us", "触发器类型（0=Simple 1=Cron）"),
             // entity.quartztask.triggertype
-            new TranslationSeedItem("entity.quartztask.triggertype", "ja-JP", "触发器类型", "触发器类型（0=Simple 1=Cron）"),
+            new TranslationSeedItem("entity.quartztask.triggertype", "ja-JP", "触发器类型_jp", "触发器类型（0=Simple 1=Cron）"),
             // entity.quartztask.triggertype
             new TranslationSeedItem("entity.quartztask.triggertype", "zh-CN", "触发器类型", "触发器类型（0=Simple 1=Cron）"),
             // entity.quartztask.triggertype
-            new TranslationSeedItem("entity.quartztask.triggertype", "zh-HK", "触发器类型", "触发器类型（0=Simple 1=Cron）"),
+            new TranslationSeedItem("entity.quartztask.triggertype", "zh-HK", "触发器类型_hk", "触发器类型（0=Simple 1=Cron）"),
 
             // entity.quartztask.cronexpression
-            new TranslationSeedItem("entity.quartztask.cronexpression", "en-US", "Cron表达式", "Cron 表达式（触发器类型为 Cron 时使用）"),
+            new TranslationSeedItem("entity.quartztask.cronexpression", "en-US", "Cron表达式_us", "Cron 表达式（触发器类型为 Cron 时使用）"),
             // entity.quartztask.cronexpression
-            new TranslationSeedItem("entity.quartztask.cronexpression", "ja-JP", "Cron表达式", "Cron 表达式（触发器类型为 Cron 时使用）"),
+            new TranslationSeedItem("entity.quartztask.cronexpression", "ja-JP", "Cron表达式_jp", "Cron 表达式（触发器类型为 Cron 时使用）"),
             // entity.quartztask.cronexpression
             new TranslationSeedItem("entity.quartztask.cronexpression", "zh-CN", "Cron表达式", "Cron 表达式（触发器类型为 Cron 时使用）"),
             // entity.quartztask.cronexpression
-            new TranslationSeedItem("entity.quartztask.cronexpression", "zh-HK", "Cron表达式", "Cron 表达式（触发器类型为 Cron 时使用）"),
+            new TranslationSeedItem("entity.quartztask.cronexpression", "zh-HK", "Cron表达式_hk", "Cron 表达式（触发器类型为 Cron 时使用）"),
 
             // entity.quartztask.intervalseconds
-            new TranslationSeedItem("entity.quartztask.intervalseconds", "en-US", "执行间隔时间（秒）", "执行间隔时间（秒，触发器类型为 Simple 时使用）"),
+            new TranslationSeedItem("entity.quartztask.intervalseconds", "en-US", "执行间隔时间（秒）_us", "执行间隔时间（秒，触发器类型为 Simple 时使用）"),
             // entity.quartztask.intervalseconds
-            new TranslationSeedItem("entity.quartztask.intervalseconds", "ja-JP", "执行间隔时间（秒）", "执行间隔时间（秒，触发器类型为 Simple 时使用）"),
+            new TranslationSeedItem("entity.quartztask.intervalseconds", "ja-JP", "执行间隔时间（秒）_jp", "执行间隔时间（秒，触发器类型为 Simple 时使用）"),
             // entity.quartztask.intervalseconds
             new TranslationSeedItem("entity.quartztask.intervalseconds", "zh-CN", "执行间隔时间（秒）", "执行间隔时间（秒，触发器类型为 Simple 时使用）"),
             // entity.quartztask.intervalseconds
-            new TranslationSeedItem("entity.quartztask.intervalseconds", "zh-HK", "执行间隔时间（秒）", "执行间隔时间（秒，触发器类型为 Simple 时使用）"),
+            new TranslationSeedItem("entity.quartztask.intervalseconds", "zh-HK", "执行间隔时间（秒）_hk", "执行间隔时间（秒，触发器类型为 Simple 时使用）"),
 
             // entity.quartztask.executeparams
-            new TranslationSeedItem("entity.quartztask.executeparams", "en-US", "执行参数", "执行参数"),
+            new TranslationSeedItem("entity.quartztask.executeparams", "en-US", "执行参数_us", "执行参数"),
             // entity.quartztask.executeparams
-            new TranslationSeedItem("entity.quartztask.executeparams", "ja-JP", "执行参数", "执行参数"),
+            new TranslationSeedItem("entity.quartztask.executeparams", "ja-JP", "执行参数_jp", "执行参数"),
             // entity.quartztask.executeparams
             new TranslationSeedItem("entity.quartztask.executeparams", "zh-CN", "执行参数", "执行参数"),
             // entity.quartztask.executeparams
-            new TranslationSeedItem("entity.quartztask.executeparams", "zh-HK", "执行参数", "执行参数"),
+            new TranslationSeedItem("entity.quartztask.executeparams", "zh-HK", "执行参数_hk", "执行参数"),
 
             // entity.quartztask.taskstatus
-            new TranslationSeedItem("entity.quartztask.taskstatus", "en-US", "任务状态", "任务状态（0=正常 1=暂停）"),
+            new TranslationSeedItem("entity.quartztask.taskstatus", "en-US", "任务状态_us", "任务状态（0=正常 1=暂停）"),
             // entity.quartztask.taskstatus
-            new TranslationSeedItem("entity.quartztask.taskstatus", "ja-JP", "任务状态", "任务状态（0=正常 1=暂停）"),
+            new TranslationSeedItem("entity.quartztask.taskstatus", "ja-JP", "任务状态_jp", "任务状态（0=正常 1=暂停）"),
             // entity.quartztask.taskstatus
             new TranslationSeedItem("entity.quartztask.taskstatus", "zh-CN", "任务状态", "任务状态（0=正常 1=暂停）"),
             // entity.quartztask.taskstatus
-            new TranslationSeedItem("entity.quartztask.taskstatus", "zh-HK", "任务状态", "任务状态（0=正常 1=暂停）"),
+            new TranslationSeedItem("entity.quartztask.taskstatus", "zh-HK", "任务状态_hk", "任务状态（0=正常 1=暂停）"),
 
             // entity.quartztask.concurrent
-            new TranslationSeedItem("entity.quartztask.concurrent", "en-US", "是否并发", "是否允许并发执行（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.quartztask.concurrent", "en-US", "是否并发_us", "是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.quartztask.concurrent
-            new TranslationSeedItem("entity.quartztask.concurrent", "ja-JP", "是否并发", "是否允许并发执行（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.quartztask.concurrent", "ja-JP", "是否并发_jp", "是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.quartztask.concurrent
-            new TranslationSeedItem("entity.quartztask.concurrent", "zh-CN", "是否并发", "是否允许并发执行（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.quartztask.concurrent", "zh-CN", "是否并发", "是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.quartztask.concurrent
-            new TranslationSeedItem("entity.quartztask.concurrent", "zh-HK", "是否并发", "是否允许并发执行（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.quartztask.concurrent", "zh-HK", "是否并发_hk", "是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）"),
 
             // entity.quartztask.misfirepolicy
-            new TranslationSeedItem("entity.quartztask.misfirepolicy", "en-US", "Misfire策略", "Misfire 策略（0=默认 1=忽略 2=立即触发 3=不触发）"),
+            new TranslationSeedItem("entity.quartztask.misfirepolicy", "en-US", "Misfire策略_us", "Misfire 策略（0=默认 1=忽略 2=立即触发 3=不触发）"),
             // entity.quartztask.misfirepolicy
-            new TranslationSeedItem("entity.quartztask.misfirepolicy", "ja-JP", "Misfire策略", "Misfire 策略（0=默认 1=忽略 2=立即触发 3=不触发）"),
+            new TranslationSeedItem("entity.quartztask.misfirepolicy", "ja-JP", "Misfire策略_jp", "Misfire 策略（0=默认 1=忽略 2=立即触发 3=不触发）"),
             // entity.quartztask.misfirepolicy
             new TranslationSeedItem("entity.quartztask.misfirepolicy", "zh-CN", "Misfire策略", "Misfire 策略（0=默认 1=忽略 2=立即触发 3=不触发）"),
             // entity.quartztask.misfirepolicy
-            new TranslationSeedItem("entity.quartztask.misfirepolicy", "zh-HK", "Misfire策略", "Misfire 策略（0=默认 1=忽略 2=立即触发 3=不触发）"),
+            new TranslationSeedItem("entity.quartztask.misfirepolicy", "zh-HK", "Misfire策略_hk", "Misfire 策略（0=默认 1=忽略 2=立即触发 3=不触发）"),
 
             // entity.quartztask.firstrunat
-            new TranslationSeedItem("entity.quartztask.firstrunat", "en-US", "首次执行时间", "首次执行时间（调度生效开始时间）"),
+            new TranslationSeedItem("entity.quartztask.firstrunat", "en-US", "首次执行时间_us", "首次执行时间（调度生效开始时间）"),
             // entity.quartztask.firstrunat
-            new TranslationSeedItem("entity.quartztask.firstrunat", "ja-JP", "首次执行时间", "首次执行时间（调度生效开始时间）"),
+            new TranslationSeedItem("entity.quartztask.firstrunat", "ja-JP", "首次执行时间_jp", "首次执行时间（调度生效开始时间）"),
             // entity.quartztask.firstrunat
             new TranslationSeedItem("entity.quartztask.firstrunat", "zh-CN", "首次执行时间", "首次执行时间（调度生效开始时间）"),
             // entity.quartztask.firstrunat
-            new TranslationSeedItem("entity.quartztask.firstrunat", "zh-HK", "首次执行时间", "首次执行时间（调度生效开始时间）"),
+            new TranslationSeedItem("entity.quartztask.firstrunat", "zh-HK", "首次执行时间_hk", "首次执行时间（调度生效开始时间）"),
 
             // entity.quartztask.executecount
-            new TranslationSeedItem("entity.quartztask.executecount", "en-US", "执行次数", "执行次数"),
+            new TranslationSeedItem("entity.quartztask.executecount", "en-US", "执行次数_us", "执行次数"),
             // entity.quartztask.executecount
-            new TranslationSeedItem("entity.quartztask.executecount", "ja-JP", "执行次数", "执行次数"),
+            new TranslationSeedItem("entity.quartztask.executecount", "ja-JP", "执行次数_jp", "执行次数"),
             // entity.quartztask.executecount
             new TranslationSeedItem("entity.quartztask.executecount", "zh-CN", "执行次数", "执行次数"),
             // entity.quartztask.executecount
-            new TranslationSeedItem("entity.quartztask.executecount", "zh-HK", "执行次数", "执行次数"),
+            new TranslationSeedItem("entity.quartztask.executecount", "zh-HK", "执行次数_hk", "执行次数"),
 
             // entity.quartztask.lastrunat
-            new TranslationSeedItem("entity.quartztask.lastrunat", "en-US", "上次执行时间", "上次执行时间"),
+            new TranslationSeedItem("entity.quartztask.lastrunat", "en-US", "上次执行时间_us", "上次执行时间"),
             // entity.quartztask.lastrunat
-            new TranslationSeedItem("entity.quartztask.lastrunat", "ja-JP", "上次执行时间", "上次执行时间"),
+            new TranslationSeedItem("entity.quartztask.lastrunat", "ja-JP", "上次执行时间_jp", "上次执行时间"),
             // entity.quartztask.lastrunat
             new TranslationSeedItem("entity.quartztask.lastrunat", "zh-CN", "上次执行时间", "上次执行时间"),
             // entity.quartztask.lastrunat
-            new TranslationSeedItem("entity.quartztask.lastrunat", "zh-HK", "上次执行时间", "上次执行时间"),
+            new TranslationSeedItem("entity.quartztask.lastrunat", "zh-HK", "上次执行时间_hk", "上次执行时间"),
 
             // entity.quartztask.nextrunat
-            new TranslationSeedItem("entity.quartztask.nextrunat", "en-US", "下次执行时间", "下次执行时间"),
+            new TranslationSeedItem("entity.quartztask.nextrunat", "en-US", "下次执行时间_us", "下次执行时间"),
             // entity.quartztask.nextrunat
-            new TranslationSeedItem("entity.quartztask.nextrunat", "ja-JP", "下次执行时间", "下次执行时间"),
+            new TranslationSeedItem("entity.quartztask.nextrunat", "ja-JP", "下次执行时间_jp", "下次执行时间"),
             // entity.quartztask.nextrunat
             new TranslationSeedItem("entity.quartztask.nextrunat", "zh-CN", "下次执行时间", "下次执行时间"),
             // entity.quartztask.nextrunat
-            new TranslationSeedItem("entity.quartztask.nextrunat", "zh-HK", "下次执行时间", "下次执行时间"),
+            new TranslationSeedItem("entity.quartztask.nextrunat", "zh-HK", "下次执行时间_hk", "下次执行时间"),
 
             // entity.quartztask.description
-            new TranslationSeedItem("entity.quartztask.description", "en-US", "任务描述", "任务描述"),
+            new TranslationSeedItem("entity.quartztask.description", "en-US", "任务描述_us", "任务描述"),
             // entity.quartztask.description
-            new TranslationSeedItem("entity.quartztask.description", "ja-JP", "任务描述", "任务描述"),
+            new TranslationSeedItem("entity.quartztask.description", "ja-JP", "任务描述_jp", "任务描述"),
             // entity.quartztask.description
             new TranslationSeedItem("entity.quartztask.description", "zh-CN", "任务描述", "任务描述"),
             // entity.quartztask.description
-            new TranslationSeedItem("entity.quartztask.description", "zh-HK", "任务描述", "任务描述"),
+            new TranslationSeedItem("entity.quartztask.description", "zh-HK", "任务描述_hk", "任务描述"),
 
             // entity.quartztask.quartzlogs
-            new TranslationSeedItem("entity.quartztask.quartzlogs", "en-US", "关联的任务执行日志列表", "关联的任务执行日志列表（主子表关系：QuartzTaskId）"),
+            new TranslationSeedItem("entity.quartztask.quartzlogs", "en-US", "关联的任务执行日志列表_us", "关联的任务执行日志列表（主子表关系：QuartzTaskId）"),
             // entity.quartztask.quartzlogs
-            new TranslationSeedItem("entity.quartztask.quartzlogs", "ja-JP", "关联的任务执行日志列表", "关联的任务执行日志列表（主子表关系：QuartzTaskId）"),
+            new TranslationSeedItem("entity.quartztask.quartzlogs", "ja-JP", "关联的任务执行日志列表_jp", "关联的任务执行日志列表（主子表关系：QuartzTaskId）"),
             // entity.quartztask.quartzlogs
             new TranslationSeedItem("entity.quartztask.quartzlogs", "zh-CN", "关联的任务执行日志列表", "关联的任务执行日志列表（主子表关系：QuartzTaskId）"),
             // entity.quartztask.quartzlogs
-            new TranslationSeedItem("entity.quartztask.quartzlogs", "zh-HK", "关联的任务执行日志列表", "关联的任务执行日志列表（主子表关系：QuartzTaskId）"),
+            new TranslationSeedItem("entity.quartztask.quartzlogs", "zh-HK", "关联的任务执行日志列表_hk", "关联的任务执行日志列表（主子表关系：QuartzTaskId）"),
         };
     }
 
@@ -313,10 +313,10 @@ public class TaktQuartzTaskI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 8;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Foundation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -272,7 +272,7 @@ public class TaktPerfObjectiveQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -383,7 +383,7 @@ public class TaktPerfObjectiveCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -500,7 +500,7 @@ public class TaktPerfObjectiveTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -574,7 +574,7 @@ public class TaktPerfObjectiveImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -674,7 +674,7 @@ public class TaktPerfObjectiveExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

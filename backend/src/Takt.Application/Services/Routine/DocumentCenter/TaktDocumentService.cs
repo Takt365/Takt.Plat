@@ -107,7 +107,7 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
         EnsureThreeLayerContext();
         var list = await _documentRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.FileName,
+            x => x.FileName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -465,7 +465,7 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
                 || (x.TargetScope != null && x.TargetScope.Contains(keywords))
                 || (x.TargetDepartments != null && x.TargetDepartments.Contains(keywords))
                 || (x.TargetUsers != null && x.TargetUsers.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EffectiveTime).Contains(keywords)
                 || SqlFunc.ToString(x.ExpireTime).Contains(keywords)
@@ -604,9 +604,9 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
             exp = exp.And(x => x.TargetUsers != null && x.TargetUsers.Contains(queryDto.TargetUsers));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

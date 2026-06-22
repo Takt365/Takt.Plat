@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/service/service-contract/components -->
 <!-- 文件名称：service-contract-form.vue -->
-<!-- 功能描述：服务合同实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：服务合同实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form service-contract-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="service-contract-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,98 +63,107 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.plantcode')"
+                :label="t('entity.servicecontract.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.plantcode') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.serviceContractId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.code')"
+                :label="t('entity.servicecontract.code')"
                 name="serviceContractCode"
               >
                 <a-input
                   v-model:value="formState.serviceContractCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.code') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.code') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.serviceContractId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.contractname')"
+                :label="t('entity.servicecontract.contractname')"
                 name="contractName"
               >
                 <a-input
                   v-model:value="formState.contractName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.contractname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.contractname') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.clientid')"
+                :label="t('entity.servicecontract.clientid')"
                 name="clientId"
               >
                 <a-input
                   v-model:value="formState.clientId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.clientid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.clientid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.clientcode')"
+                :label="t('entity.servicecontract.clientcode')"
                 name="clientCode"
               >
                 <a-input
                   v-model:value="formState.clientCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.clientcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.clientcode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.serviceContractId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.clientname')"
+                :label="t('entity.servicecontract.clientname')"
                 name="clientName"
               >
                 <a-input
                   v-model:value="formState.clientName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.clientname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.clientname') })"
+                  show-count
+                  :maxlength="80"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.contracttype')"
+                :label="t('entity.servicecontract.contracttype')"
                 name="contractType"
               >
                 <a-input-number
                   v-model:value="formState.contractType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.contracttype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.contracttype') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -169,133 +180,126 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.contractstatus')"
+                :label="t('entity.servicecontract.contractstatus')"
                 name="contractStatus"
               >
                 <a-input-number
                   v-model:value="formState.contractStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.contractstatus') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.contractstatus') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.signdate')"
+                :label="t('entity.servicecontract.signdate')"
                 name="signDate"
               >
                 <a-date-picker
                   v-model:value="formState.signDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceContract.signdate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicecontract.signdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.effectivedate')"
+                :label="t('entity.servicecontract.effectivedate')"
                 name="effectiveDate"
               >
                 <a-date-picker
                   v-model:value="formState.effectiveDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceContract.effectivedate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicecontract.effectivedate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.expirydate')"
+                :label="t('entity.servicecontract.expirydate')"
                 name="expiryDate"
               >
                 <a-date-picker
                   v-model:value="formState.expiryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceContract.expirydate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicecontract.expirydate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.contractamount')"
+                :label="t('entity.servicecontract.contractamount')"
                 name="contractAmount"
               >
                 <a-input-number
                   v-model:value="formState.contractAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.contractamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.contractamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.currencycode')"
+                :label="t('entity.servicecontract.currencycode')"
                 name="currencyCode"
               >
                 <a-input
                   v-model:value="formState.currencyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.currencycode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.currencycode') })"
+                  show-count
+                  :maxlength="10"
                   allow-clear
+                  :disabled="!!formData?.serviceContractId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.paymentterms')"
+                :label="t('entity.servicecontract.paymentterms')"
                 name="paymentTerms"
               >
                 <a-input-number
                   v-model:value="formState.paymentTerms"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.paymentterms') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.paymentterms') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceContract.servicescope')"
+                :label="t('entity.servicecontract.servicescope')"
                 name="serviceScope"
               >
                 <a-textarea
                   v-model:value="formState.serviceScope"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.serviceContract.servicescope') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.servicecontract.servicescope') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.slaresponsehours')"
+                :label="t('entity.servicecontract.slaresponsehours')"
                 name="slaResponseHours"
               >
                 <a-input-number
                   v-model:value="formState.slaResponseHours"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.slaresponsehours') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.slaresponsehours') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceContract.slaresolvehours')"
+                :label="t('entity.servicecontract.slaresolvehours')"
                 name="slaResolveHours"
               >
                 <a-input-number
                   v-model:value="formState.slaResolveHours"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.slaresolvehours') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.slaresolvehours') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -310,41 +314,42 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceContract.accountmanager')"
+                :label="t('entity.servicecontract.accountmanager')"
                 name="accountManager"
               >
                 <a-input
                   v-model:value="formState.accountManager"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.accountmanager') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.accountmanager') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceContract.sortorder')"
-                name="sortOrder"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.sortorder') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
-              >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -357,250 +362,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：serviceOrder -->
-      <a-tab-pane
-        key="child-serviceOrders"
-        :tab="t('entity.serviceOrder._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddServiceOrderRow">
-            {{ t('common.page.button.create') }}{{ t('entity.serviceOrder._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="serviceOrderFormColumns"
-          :data-source="childServiceOrderRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'plantCode'">
-              <a-input
-                v-model:value="record.plantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceOrder.plantcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'serviceOrderCode'">
-              <a-input
-                v-model:value="record.serviceOrderCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceOrder.code') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'clientId'">
-              <a-input
-                v-model:value="record.clientId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceOrder.clientid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'clientCode'">
-              <a-input
-                v-model:value="record.clientCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceOrder.clientcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'clientName'">
-              <a-input
-                v-model:value="record.clientName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceOrder.clientname') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'serviceRequestId'">
-              <a-input
-                v-model:value="record.serviceRequestId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceOrder.servicerequestid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'serviceRequestCode'">
-              <a-input
-                v-model:value="record.serviceRequestCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceOrder.servicerequestcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'orderDate'">
-              <a-date-picker
-                v-model:value="record.orderDate"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceOrder.orderdate') })"
-                value-format="YYYY-MM-DD"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveServiceOrderRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：serviceRequest -->
-      <a-tab-pane
-        key="child-serviceRequests"
-        :tab="t('entity.serviceRequest._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddServiceRequestRow">
-            {{ t('common.page.button.create') }}{{ t('entity.serviceRequest._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="serviceRequestFormColumns"
-          :data-source="childServiceRequestRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'plantCode'">
-              <a-input
-                v-model:value="record.plantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceRequest.plantcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'serviceRequestCode'">
-              <a-input
-                v-model:value="record.serviceRequestCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceRequest.code') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'clientId'">
-              <a-input
-                v-model:value="record.clientId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceRequest.clientid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'clientCode'">
-              <a-input
-                v-model:value="record.clientCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceRequest.clientcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'clientName'">
-              <a-input
-                v-model:value="record.clientName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceRequest.clientname') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'requestDate'">
-              <a-date-picker
-                v-model:value="record.requestDate"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceRequest.requestdate') })"
-                value-format="YYYY-MM-DD"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'expectedServiceDate'">
-              <a-date-picker
-                v-model:value="record.expectedServiceDate"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceRequest.expectedservicedate') })"
-                value-format="YYYY-MM-DD"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'requestType'">
-              <a-input-number
-                v-model:value="record.requestType"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceRequest.requesttype') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveServiceRequestRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 serviceOrders -->
+    <TaktEditableTable
+      ref="serviceOrderTableRef"
+      v-model="childServiceOrderRows"
+      :columns="serviceOrderFormColumns"
+      :title="t('entity.serviceorder._self')"
+      :add-button-entity="t('entity.serviceorder._self')"
+      id-field="serviceOrderId"
+      :default-row="createDefaultServiceOrderRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -612,7 +396,8 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { ServiceContractCreate, ServiceOrderCreate, ServiceOrder, ServiceRequestCreate, ServiceRequest } from '@/types/logistics/customer-service/service-contract'
+import type { ServiceContractCreate } from '@/types/logistics/customer-service/service-contract'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -645,229 +430,100 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","serviceContractCode","contractName","clientId","clientCode","clientName","contractType","contractStatus","signDate","effectiveDate","expiryDate","contractAmount","currencyCode","paymentTerms","serviceScope","slaResponseHours","slaResolveHours","accountManager","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","serviceContractCode","contractName","clientId","clientCode","clientName","contractType","contractStatus","signDate","effectiveDate","expiryDate","contractAmount","currencyCode","paymentTerms","serviceScope","slaResponseHours","slaResolveHours","accountManager","extField","remark"]
 
-/** serviceOrder 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childServiceOrderRows = ref<Record<string, unknown>[]>([])
-/** serviceRequest 子表行（表单 Tab 内嵌） */
-const childServiceRequestRows = ref<Record<string, unknown>[]>([])
+const serviceOrderTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 serviceOrder 表单列定义 */
-const serviceOrderFormColumns = computed(() => [
+/** 子表 serviceOrder 可编辑列 */
+const serviceOrderFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.serviceOrder.plantcode'),
-    dataIndex: 'plantCode',
     key: 'plantCode',
+    title: t('entity.serviceorder.plantcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.serviceOrder.code'),
-    dataIndex: 'serviceOrderCode',
     key: 'serviceOrderCode',
+    title: t('entity.serviceorder.code'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.serviceOrder.clientid'),
-    dataIndex: 'clientId',
     key: 'clientId',
+    title: t('entity.serviceorder.clientid'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.serviceOrder.clientcode'),
-    dataIndex: 'clientCode',
     key: 'clientCode',
+    title: t('entity.serviceorder.clientcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.serviceOrder.clientname'),
-    dataIndex: 'clientName',
     key: 'clientName',
+    title: t('entity.serviceorder.clientname'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.serviceOrder.servicerequestid'),
-    dataIndex: 'serviceRequestId',
     key: 'serviceRequestId',
-    width: 140,
+    title: t('entity.serviceorder.servicerequestid'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.serviceorder.servicerequestid') }),
   },
   {
-    title: t('entity.serviceOrder.servicerequestcode'),
-    dataIndex: 'serviceRequestCode',
     key: 'serviceRequestCode',
-    width: 140,
+    title: t('entity.serviceorder.servicerequestcode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.serviceorder.servicerequestcode') }),
   },
   {
-    title: t('entity.serviceOrder.orderdate'),
-    dataIndex: 'orderDate',
     key: 'orderDate',
+    title: t('entity.serviceorder.orderdate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 serviceRequest 表单列定义 */
-const serviceRequestFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.serviceRequest.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 140,
-  },
-  {
-    title: t('entity.serviceRequest.code'),
-    dataIndex: 'serviceRequestCode',
-    key: 'serviceRequestCode',
-    width: 140,
-  },
-  {
-    title: t('entity.serviceRequest.clientid'),
-    dataIndex: 'clientId',
-    key: 'clientId',
-    width: 140,
-  },
-  {
-    title: t('entity.serviceRequest.clientcode'),
-    dataIndex: 'clientCode',
-    key: 'clientCode',
-    width: 140,
-  },
-  {
-    title: t('entity.serviceRequest.clientname'),
-    dataIndex: 'clientName',
-    key: 'clientName',
-    width: 140,
-  },
-  {
-    title: t('entity.serviceRequest.requestdate'),
-    dataIndex: 'requestDate',
-    key: 'requestDate',
-    width: 140,
-  },
-  {
-    title: t('entity.serviceRequest.expectedservicedate'),
-    dataIndex: 'expectedServiceDate',
-    key: 'expectedServiceDate',
-    width: 140,
-  },
-  {
-    title: t('entity.serviceRequest.requesttype'),
-    dataIndex: 'requestType',
-    key: 'requestType',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<ServiceContractCreate & { serviceContractId?: string }> | null | undefined) {
-  childServiceOrderRows.value = ((val as any)?.serviceOrders ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.serviceOrderId ?? `new-${index}`,
-  }))
-  childServiceRequestRows.value = ((val as any)?.serviceRequests ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.serviceRequestId ?? `new-${index}`,
-  }))
+  childServiceOrderRows.value = ((val as any)?.serviceOrders ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 serviceOrder 行 */
-function handleAddServiceOrderRow() {
-  childServiceOrderRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      plantCode: '',
-      serviceOrderCode: '',
-      clientId: '',
-      clientCode: '',
-      clientName: '',
-      serviceRequestId: '',
-      serviceRequestCode: '',
-      orderDate: '',
-  })
-}
-
-/** 表单 Tab 内删除 serviceOrder 行 */
-function handleRemoveServiceOrderRow(index: number) {
-  childServiceOrderRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 serviceRequest 行 */
-function handleAddServiceRequestRow() {
-  childServiceRequestRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      plantCode: '',
-      serviceRequestCode: '',
-      clientId: '',
-      clientCode: '',
-      clientName: '',
-      requestDate: '',
-      expectedServiceDate: '',
-      requestType: 0,
-  })
-}
-
-/** 表单 Tab 内删除 serviceRequest 行 */
-function handleRemoveServiceRequestRow(index: number) {
-  childServiceRequestRows.value.splice(index, 1)
+function createDefaultServiceOrderRow(): Record<string, unknown> {
+  return {
+    plantCode: '',
+    serviceOrderCode: '',
+    clientId: '',
+    clientCode: '',
+    clientName: '',
+    serviceRequestId: '',
+    serviceRequestCode: '',
+    orderDate: '',
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.serviceContractId ?? ''
   return {
     ...formState,
-    serviceOrders: childServiceOrderRows.value.map(({ __rowKey, ...rest }) => rest),
-    serviceRequests: childServiceRequestRows.value.map(({ __rowKey, ...rest }) => rest),
+    serviceOrders: serviceOrderTableRef.value?.getRows?.() ?? childServiceOrderRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      serviceContractId: masterId,
+    })),
   }
 }
 
@@ -879,7 +535,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -887,20 +543,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 serviceContractId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.serviceContractId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).serviceOrders
-    delete (next as any).serviceRequests
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -919,128 +590,189 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceContract.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.servicecontract.plantcode') }),
       trigger: 'blur'
     }
   ],
   serviceContractCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceContract.code') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.servicecontract.code') }),
       trigger: 'blur'
     }
   ],
   contractName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceContract.contractname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.servicecontract.contractname') }),
       trigger: 'blur'
     }
   ],
   clientId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceContract.clientid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.servicecontract.clientid') }),
       trigger: 'blur'
     }
   ],
   clientCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceContract.clientcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.servicecontract.clientcode') }),
       trigger: 'blur'
     }
   ],
   clientName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceContract.clientname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.servicecontract.clientname') }),
       trigger: 'blur'
     }
   ],
-  contractType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serviceContract.contracttype') }),
-      trigger: 'change'
-    }
-  ],
-  contractStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serviceContract.contractstatus') }),
-      trigger: 'change'
-    }
-  ],
+  contractType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.contracttype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.contracttype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  contractStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.contractstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.contractstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   effectiveDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serviceContract.effectivedate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.servicecontract.effectivedate') }),
       trigger: 'change'
     }
   ],
-  contractAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serviceContract.contractamount') }),
-      trigger: 'change'
-    }
-  ],
+  contractAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.contractamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.contractamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   currencyCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceContract.currencycode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.servicecontract.currencycode') }),
       trigger: 'blur'
     }
   ],
-  paymentTerms: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serviceContract.paymentterms') }),
-      trigger: 'change'
-    }
-  ],
-  slaResponseHours: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serviceContract.slaresponsehours') }),
-      trigger: 'change'
-    }
-  ],
-  slaResolveHours: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serviceContract.slaresolvehours') }),
-      trigger: 'change'
-    }
-  ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serviceContract.sortorder') }),
-      trigger: 'change'
-    }
-  ],
+  paymentTerms: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.paymentterms') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.paymentterms') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  slaResponseHours: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.slaresponsehours') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.slaresponsehours') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  slaResolveHours: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.slaresolvehours') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.servicecontract.slaresolvehours') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await serviceOrderTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('contractType' in payload) {
+    const rawcontractType = payload.contractType
+    payload.contractType = typeof rawcontractType === 'number' ? rawcontractType : Number(rawcontractType)
+  }
+  if ('contractStatus' in payload) {
+    const rawcontractStatus = payload.contractStatus
+    payload.contractStatus = typeof rawcontractStatus === 'number' ? rawcontractStatus : Number(rawcontractStatus)
+  }
+  if ('contractAmount' in payload) {
+    const rawcontractAmount = payload.contractAmount
+    payload.contractAmount = typeof rawcontractAmount === 'number' ? rawcontractAmount : Number(rawcontractAmount)
+  }
+  if ('paymentTerms' in payload) {
+    const rawpaymentTerms = payload.paymentTerms
+    payload.paymentTerms = typeof rawpaymentTerms === 'number' ? rawpaymentTerms : Number(rawpaymentTerms)
+  }
+  if ('slaResponseHours' in payload) {
+    const rawslaResponseHours = payload.slaResponseHours
+    payload.slaResponseHours = typeof rawslaResponseHours === 'number' ? rawslaResponseHours : Number(rawslaResponseHours)
+  }
+  if ('slaResolveHours' in payload) {
+    const rawslaResolveHours = payload.slaResolveHours
+    payload.slaResolveHours = typeof rawslaResolveHours === 'number' ? rawslaResolveHours : Number(rawslaResolveHours)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.serviceContractId)
   childServiceOrderRows.value = []
-  childServiceRequestRows.value = []
+  serviceOrderTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

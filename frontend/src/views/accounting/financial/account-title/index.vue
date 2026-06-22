@@ -32,11 +32,11 @@
         @search="loadFullAccountTitleTree"
       />
       <TaktTreeRightToolsBar
-        create-permission="accounting:financial:accounttitle:create"
-        update-permission="accounting:financial:accounttitle:update"
-        delete-permission="accounting:financial:accounttitle:delete"
-        import-permission="accounting:financial:accounttitle:import"
-        export-permission="accounting:financial:accounttitle:export"
+        create-permission="accounting:financial:account:title:create"
+        update-permission="accounting:financial:account:title:update"
+        delete-permission="accounting:financial:account:title:delete"
+        import-permission="accounting:financial:account:title:import"
+        export-permission="accounting:financial:account:title:export"
         :show-create="true"
         :show-update="true"
         :show-delete="true"
@@ -109,12 +109,14 @@
               {{ getAccountTitleField(record, 'accountTitleId') }}
             </span>
           </template>
-          <template v-if="column.key === 'titleStatus'">
-            <TaktDictTag
-              :value="getAccountTitleDictValue(record, 'titleStatus')"
-              dict-type="sys_normal_disable"
-            />
-          </template>
+        <template v-else-if="column.key === 'titleStatus'">
+          <a-switch
+            :checked="getAccountTitleField(record, 'titleStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleTitleStatusChange(record, Boolean(checked))"
+          />
+        </template>
+
         </template>
       </TaktTreeRightTable>
     </div>
@@ -130,6 +132,7 @@
       @cancel="handleFormCancel"
     >
       <AccountTitleForm
+        :key="formData?.accountTitleId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -147,204 +150,185 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('titleCode')">
-      <a-form-item :label="t('entity.accountTitle.titlecode')">
+      <a-form-item :label="t('entity.accounttitle.titlecode')">
         <a-input
           v-model:value="advancedQueryForm.titleCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titlecode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlecode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('titleName')">
-      <a-form-item :label="t('entity.accountTitle.titlename')">
+      <a-form-item :label="t('entity.accounttitle.titlename')">
         <a-input
           v-model:value="advancedQueryForm.titleName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titlename') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('shortName')">
-      <a-form-item :label="t('entity.accountTitle.shortname')">
-        <a-input
-          v-model:value="advancedQueryForm.shortName"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.accountTitle.shortname') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('titleDesc')">
-      <a-form-item :label="t('entity.accountTitle.titledesc')">
-        <a-input
-          v-model:value="advancedQueryForm.titleDesc"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.accountTitle.titledesc') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlename') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('parentId')">
-      <a-form-item :label="t('entity.accountTitle.parentid')">
+      <a-form-item :label="t('entity.accounttitle.parentid')">
         <a-input
           v-model:value="advancedQueryForm.parentId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.parentid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.parentid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('titleType')">
-      <a-form-item :label="t('entity.accountTitle.titletype')">
+      <a-form-item :label="t('entity.accounttitle.titletype')">
         <a-input-number
           v-model:value="advancedQueryForm.titleType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titletype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titletype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('balanceDirection')">
-      <a-form-item :label="t('entity.accountTitle.balancedirection')">
+      <a-form-item :label="t('entity.accounttitle.balancedirection')">
         <a-input-number
           v-model:value="advancedQueryForm.balanceDirection"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.balancedirection') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.balancedirection') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('titleLevel')">
-      <a-form-item :label="t('entity.accountTitle.titlelevel')">
+      <a-form-item :label="t('entity.accounttitle.titlelevel')">
         <a-input-number
           v-model:value="advancedQueryForm.titleLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titlelevel') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlelevel') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isLeaf')">
-      <a-form-item :label="t('entity.accountTitle.isleaf')">
+      <a-form-item :label="t('entity.accounttitle.isleaf')">
         <a-input-number
           v-model:value="advancedQueryForm.isLeaf"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isleaf') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.isleaf') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isAuxiliary')">
-      <a-form-item :label="t('entity.accountTitle.isauxiliary')">
+      <a-form-item :label="t('entity.accounttitle.isauxiliary')">
         <a-input-number
           v-model:value="advancedQueryForm.isAuxiliary"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isauxiliary') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.isauxiliary') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('auxiliaryType')">
-      <a-form-item :label="t('entity.accountTitle.auxiliarytype')">
+      <a-form-item :label="t('entity.accounttitle.auxiliarytype')">
         <a-input-number
           v-model:value="advancedQueryForm.auxiliaryType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.auxiliarytype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.auxiliarytype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isQuantity')">
-      <a-form-item :label="t('entity.accountTitle.isquantity')">
+      <a-form-item :label="t('entity.accounttitle.isquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.isQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isquantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.isquantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isCurrency')">
-      <a-form-item :label="t('entity.accountTitle.iscurrency')">
+      <a-form-item :label="t('entity.accounttitle.iscurrency')">
         <a-input-number
           v-model:value="advancedQueryForm.isCurrency"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.iscurrency') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.iscurrency') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isCash')">
-      <a-form-item :label="t('entity.accountTitle.iscash')">
+      <a-form-item :label="t('entity.accounttitle.iscash')">
         <a-input-number
           v-model:value="advancedQueryForm.isCash"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.iscash') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.iscash') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isBank')">
-      <a-form-item :label="t('entity.accountTitle.isbank')">
+      <a-form-item :label="t('entity.accounttitle.isbank')">
         <a-input-number
           v-model:value="advancedQueryForm.isBank"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isbank') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.isbank') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="t('entity.accountTitle.relatedplant')">
+      <a-form-item :label="t('entity.accounttitle.relatedplant')">
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.relatedplant') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('titleStatus')">
-      <a-form-item :label="t('entity.accountTitle.titlestatus')">
+      <a-form-item :label="t('entity.accounttitle.titlestatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.titleStatus"
-          dict-type="sys_normal_disable"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.titlestatus') })"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.titlestatus') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validFromStart')">
-      <a-form-item :label="t('entity.accountTitle.validfromstart')">
+      <a-form-item :label="t('entity.accounttitle.validfromstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.validFromStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.validfromstart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validfromstart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validFromEnd')">
-      <a-form-item :label="t('entity.accountTitle.validfromend')">
+      <a-form-item :label="t('entity.accounttitle.validfromend')">
         <a-date-picker
           v-model:value="advancedQueryForm.validFromEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.validfromend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validfromend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validToStart')">
-      <a-form-item :label="t('entity.accountTitle.validtostart')">
+      <a-form-item :label="t('entity.accounttitle.validtostart')">
         <a-date-picker
           v-model:value="advancedQueryForm.validToStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.validtostart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validtostart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validToEnd')">
-      <a-form-item :label="t('entity.accountTitle.validtoend')">
+      <a-form-item :label="t('entity.accounttitle.validtoend')">
         <a-date-picker
           v-model:value="advancedQueryForm.validToEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.validtoend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validtoend') })"
           value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.accountTitle.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.sortorder') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -355,7 +339,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -366,17 +350,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -385,8 +388,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -396,14 +401,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.accountTitle._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.accounttitle._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.accountTitle._self"
+        entity-i18n-key="entity.accounttitle._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -440,13 +445,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import AccountTitleForm from './components/account-title-form.vue'
-import { getAccountTitleTree, getAccountTitleById, createAccountTitle, updateAccountTitle, deleteAccountTitleById, deleteAccountTitleBatch, getAccountTitleTemplate, importAccountTitle, exportAccountTitle } from '@/api/accounting/financial/account-title'
+import { getAccountTitleTree, getAccountTitleById, createAccountTitle, updateAccountTitle, deleteAccountTitleById, deleteAccountTitleBatch, getAccountTitleTemplate, importAccountTitle, exportAccountTitle, updateAccountTitleStatus } from '@/api/accounting/financial/account-title'
 import type { AccountTitle, AccountTitleTree, AccountTitleUpdate } from '@/types/accounting/financial/account-title'
 import type { TreeDropPayload } from '@/components/business/takt-tree-left-table/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
@@ -458,7 +465,7 @@ const excelNames = taktExcelEntityNames('TaktAccountTitle')
 /** 右侧树表快捷查询占位文案 */
 const tableSearchPlaceholder = computed(() =>
   t('common.page.form.placeholder.search', {
-    keyword: [t('entity.accountTitle.id')].join(' / '),
+    keyword: [t('entity.accounttitle.id')].join(' / '),
   })
 )
 
@@ -473,9 +480,9 @@ const treeExpandedKeys = ref<(string | number)[]>([])
 /** 右侧表格展开状态（预留） */
 const tableExpanded = ref(false)
 /** 右侧拍平列表当前页码 */
-const tableCurrentPage = ref(1)
+const tableCurrentPage = ref(getTaktDefaultPageIndex())
 /** 右侧拍平列表每页条数 */
-const tablePageSize = ref(20)
+const tablePageSize = ref(getTaktDefaultPageSize())
 /** 页面 loading（树加载、提交、导出等） */
 const loading = ref(false)
 /** 全量树表节点（左侧树与右侧表共用，不受右侧查询过滤） */
@@ -496,19 +503,18 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<AccountTitle>>({})
+const formData = ref<Partial<AccountTitle> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   titleCode: '',
   titleName: '',
-  shortName: '',
-  titleDesc: '',
   parentId: '',
   titleType: undefined as number | undefined,
   balanceDirection: undefined as number | undefined,
@@ -526,39 +532,35 @@ const advancedQueryForm = ref({
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'titleCode', label: t('entity.accountTitle.titlecode') },
-  { key: 'titleName', label: t('entity.accountTitle.titlename') },
-  { key: 'shortName', label: t('entity.accountTitle.shortname') },
-  { key: 'titleDesc', label: t('entity.accountTitle.titledesc') },
-  { key: 'parentId', label: t('entity.accountTitle.parentid') },
-  { key: 'titleType', label: t('entity.accountTitle.titletype') },
-  { key: 'balanceDirection', label: t('entity.accountTitle.balancedirection') },
-  { key: 'titleLevel', label: t('entity.accountTitle.titlelevel') },
-  { key: 'isLeaf', label: t('entity.accountTitle.isleaf') },
-  { key: 'isAuxiliary', label: t('entity.accountTitle.isauxiliary') },
-  { key: 'auxiliaryType', label: t('entity.accountTitle.auxiliarytype') },
-  { key: 'isQuantity', label: t('entity.accountTitle.isquantity') },
-  { key: 'isCurrency', label: t('entity.accountTitle.iscurrency') },
-  { key: 'isCash', label: t('entity.accountTitle.iscash') },
-  { key: 'isBank', label: t('entity.accountTitle.isbank') },
-  { key: 'relatedPlant', label: t('entity.accountTitle.relatedplant') },
-  { key: 'titleStatus', label: t('entity.accountTitle.titlestatus') },
-  { key: 'validFromStart', label: t('entity.accountTitle.validfromstart') },
-  { key: 'validFromEnd', label: t('entity.accountTitle.validfromend') },
-  { key: 'validToStart', label: t('entity.accountTitle.validtostart') },
-  { key: 'validToEnd', label: t('entity.accountTitle.validtoend') },
-  { key: 'sortOrder', label: t('entity.accountTitle.sortorder') },
+  { key: 'titleCode', label: t('entity.accounttitle.titlecode') },
+  { key: 'titleName', label: t('entity.accounttitle.titlename') },
+  { key: 'parentId', label: t('entity.accounttitle.parentid') },
+  { key: 'titleType', label: t('entity.accounttitle.titletype') },
+  { key: 'balanceDirection', label: t('entity.accounttitle.balancedirection') },
+  { key: 'titleLevel', label: t('entity.accounttitle.titlelevel') },
+  { key: 'isLeaf', label: t('entity.accounttitle.isleaf') },
+  { key: 'isAuxiliary', label: t('entity.accounttitle.isauxiliary') },
+  { key: 'auxiliaryType', label: t('entity.accounttitle.auxiliarytype') },
+  { key: 'isQuantity', label: t('entity.accounttitle.isquantity') },
+  { key: 'isCurrency', label: t('entity.accounttitle.iscurrency') },
+  { key: 'isCash', label: t('entity.accounttitle.iscash') },
+  { key: 'isBank', label: t('entity.accounttitle.isbank') },
+  { key: 'relatedPlant', label: t('entity.accounttitle.relatedplant') },
+  { key: 'titleStatus', label: t('entity.accounttitle.titlestatus') },
+  { key: 'validFromStart', label: t('entity.accounttitle.validfromstart') },
+  { key: 'validFromEnd', label: t('entity.accounttitle.validfromend') },
+  { key: 'validToStart', label: t('entity.accounttitle.validtostart') },
+  { key: 'validToEnd', label: t('entity.accounttitle.validtoend') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -573,6 +575,9 @@ const visibleColumnKeys = ref<string[]>([])
 const entityIdName = 'accountTitleId'
 /** 树节点标题字段名（左侧树 title 与缩进列） */
 const treeTitleField = 'accountTitleId'
+
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
 /** 解析树节点 key（与列表 accountTitleId、左侧树 key 一致） */
 function resolveAccountTitleNodeKey(node: Record<string, unknown>): string {
@@ -732,8 +737,6 @@ function matchesAccountTitleRightQuery(record: Record<string, unknown>): boolean
   }
   if (advancedQueryForm.value.titleCode && !String(record.titleCode ?? '').includes(String(advancedQueryForm.value.titleCode))) return false
   if (advancedQueryForm.value.titleName && !String(record.titleName ?? '').includes(String(advancedQueryForm.value.titleName))) return false
-  if (advancedQueryForm.value.shortName && !String(record.shortName ?? '').includes(String(advancedQueryForm.value.shortName))) return false
-  if (advancedQueryForm.value.titleDesc && !String(record.titleDesc ?? '').includes(String(advancedQueryForm.value.titleDesc))) return false
   if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
   if (advancedQueryForm.value.titleType !== undefined && record.titleType !== advancedQueryForm.value.titleType) return false
   if (advancedQueryForm.value.balanceDirection !== undefined && record.balanceDirection !== advancedQueryForm.value.balanceDirection) return false
@@ -751,10 +754,9 @@ function matchesAccountTitleRightQuery(record: Record<string, unknown>): boolean
   if (advancedQueryForm.value.validFromEnd && !String(record.validFromEnd ?? '').includes(String(advancedQueryForm.value.validFromEnd))) return false
   if (advancedQueryForm.value.validToStart && !String(record.validToStart ?? '').includes(String(advancedQueryForm.value.validToStart))) return false
   if (advancedQueryForm.value.validToEnd && !String(record.validToEnd ?? '').includes(String(advancedQueryForm.value.validToEnd))) return false
-  if (advancedQueryForm.value.sortOrder !== undefined && record.sortOrder !== advancedQueryForm.value.sortOrder) return false
   if (advancedQueryForm.value.createdAtStart && !String(record.createdAtStart ?? '').includes(String(advancedQueryForm.value.createdAtStart))) return false
   if (advancedQueryForm.value.createdAtEnd && !String(record.createdAtEnd ?? '').includes(String(advancedQueryForm.value.createdAtEnd))) return false
-  if (advancedQueryForm.value.extFieldJson && !String(record.extFieldJson ?? '').includes(String(advancedQueryForm.value.extFieldJson))) return false
+  if (advancedQueryForm.value.extField && !String(record.extField ?? '').includes(String(advancedQueryForm.value.extField))) return false
   if (advancedQueryForm.value.remark && !String(record.remark ?? '').includes(String(advancedQueryForm.value.remark))) return false
   return true
 }
@@ -773,13 +775,13 @@ const paginatedFlatTableRows = computed(() => {
 
 /** 左侧选中节点或查询变化时，右侧拍平列表重置到第一页 */
 watch(tableTreeData, () => {
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 })
 
 /** 左侧树选中：重置右侧分页到第一页 */
 const handleTreeSelect = (selectedKeys: (string | number)[]) => {
   selectedTreeKeys.value = selectedKeys
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /**
@@ -799,8 +801,6 @@ function buildAccountTitleUpdateDto(
     companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
     titleCode: accountTitle.titleCode,
     titleName: accountTitle.titleName,
-    shortName: accountTitle.shortName,
-    titleDesc: accountTitle.titleDesc,
     parentId: overrides.parentId,
     titleType: accountTitle.titleType,
     balanceDirection: accountTitle.balanceDirection,
@@ -815,8 +815,8 @@ function buildAccountTitleUpdateDto(
     titleStatus: accountTitle.titleStatus,
     validFrom: accountTitle.validFrom,
     validTo: accountTitle.validTo,
-    sortOrder: overrides.sortOrder,
-    extFieldJson: accountTitle.extFieldJson,
+    changeLogs: accountTitle.changeLogs,
+    extField: accountTitle.extField,
     remark: accountTitle.remark,
   }
 }
@@ -859,10 +859,10 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
       parentId: pos.parentId,
       sortOrder: pos.sortOrder,
     }))
-    message.success(t('common.feedback.updated', { target: t('entity.accountTitle._self') }))
+    message.success(t('common.feedback.updated', { target: t('entity.accounttitle._self') }))
     await loadData()
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: t('entity.accountTitle._self') })))
+    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: t('entity.accounttitle._self') })))
     await loadFullAccountTitleTree().catch(() => undefined)
   } finally {
     loading.value = false
@@ -919,6 +919,7 @@ const getAccountTitleDictValue = (
   return String(value)
 }
 
+
 /** 从异常对象提取用户可见消息 */
 const getErrorMessage = (error: unknown, fallback: string): string => {
   if (typeof error === 'object' && error !== null && 'message' in error) {
@@ -944,7 +945,7 @@ watchEffect(() => {
       getAccountTitleField(record, 'accountTitleId') ?? getAccountTitleField(record, 'id') ?? '',
   },
   {
-    title: t('entity.accountTitle.titlecode'),
+    title: t('entity.accounttitle.titlecode'),
     dataIndex: 'titleCode',
     key: 'titleCode',
     width: 120,
@@ -953,7 +954,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleCode') ?? ''
   },
   {
-    title: t('entity.accountTitle.titlename'),
+    title: t('entity.accounttitle.titlename'),
     dataIndex: 'titleName',
     key: 'titleName',
     width: 120,
@@ -962,25 +963,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleName') ?? ''
   },
   {
-    title: t('entity.accountTitle.shortname'),
-    dataIndex: 'shortName',
-    key: 'shortName',
-    width: 100,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'shortName') ?? ''
-  },
-  {
-    title: t('entity.accountTitle.titledesc'),
-    dataIndex: 'titleDesc',
-    key: 'titleDesc',
-    width: 160,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleDesc') ?? ''
-  },
-  {
-    title: t('entity.accountTitle.parentid'),
+    title: t('entity.accounttitle.parentid'),
     dataIndex: 'parentId',
     key: 'parentId',
     width: 120,
@@ -989,7 +972,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'parentId') ?? ''
   },
   {
-    title: t('entity.accountTitle.titletype'),
+    title: t('entity.accounttitle.titletype'),
     dataIndex: 'titleType',
     key: 'titleType',
     width: 120,
@@ -998,7 +981,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleType') ?? ''
   },
   {
-    title: t('entity.accountTitle.balancedirection'),
+    title: t('entity.accounttitle.balancedirection'),
     dataIndex: 'balanceDirection',
     key: 'balanceDirection',
     width: 120,
@@ -1007,7 +990,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'balanceDirection') ?? ''
   },
   {
-    title: t('entity.accountTitle.titlelevel'),
+    title: t('entity.accounttitle.titlelevel'),
     dataIndex: 'titleLevel',
     key: 'titleLevel',
     width: 120,
@@ -1016,7 +999,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'titleLevel') ?? ''
   },
   {
-    title: t('entity.accountTitle.isleaf'),
+    title: t('entity.accounttitle.isleaf'),
     dataIndex: 'isLeaf',
     key: 'isLeaf',
     width: 120,
@@ -1025,7 +1008,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isLeaf') ?? ''
   },
   {
-    title: t('entity.accountTitle.isauxiliary'),
+    title: t('entity.accounttitle.isauxiliary'),
     dataIndex: 'isAuxiliary',
     key: 'isAuxiliary',
     width: 120,
@@ -1034,7 +1017,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isAuxiliary') ?? ''
   },
   {
-    title: t('entity.accountTitle.auxiliarytype'),
+    title: t('entity.accounttitle.auxiliarytype'),
     dataIndex: 'auxiliaryType',
     key: 'auxiliaryType',
     width: 120,
@@ -1043,7 +1026,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'auxiliaryType') ?? ''
   },
   {
-    title: t('entity.accountTitle.isquantity'),
+    title: t('entity.accounttitle.isquantity'),
     dataIndex: 'isQuantity',
     key: 'isQuantity',
     width: 120,
@@ -1052,7 +1035,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isQuantity') ?? ''
   },
   {
-    title: t('entity.accountTitle.iscurrency'),
+    title: t('entity.accounttitle.iscurrency'),
     dataIndex: 'isCurrency',
     key: 'isCurrency',
     width: 120,
@@ -1061,7 +1044,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isCurrency') ?? ''
   },
   {
-    title: t('entity.accountTitle.iscash'),
+    title: t('entity.accounttitle.iscash'),
     dataIndex: 'isCash',
     key: 'isCash',
     width: 120,
@@ -1070,7 +1053,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isCash') ?? ''
   },
   {
-    title: t('entity.accountTitle.isbank'),
+    title: t('entity.accounttitle.isbank'),
     dataIndex: 'isBank',
     key: 'isBank',
     width: 120,
@@ -1079,7 +1062,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'isBank') ?? ''
   },
   {
-    title: t('entity.accountTitle.relatedplant'),
+    title: t('entity.accounttitle.relatedplant'),
     dataIndex: 'relatedPlant',
     key: 'relatedPlant',
     width: 120,
@@ -1088,7 +1071,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'relatedPlant') ?? ''
   },
   {
-    title: t('entity.accountTitle.titlestatus'),
+    title: t('entity.accounttitle.titlestatus'),
     dataIndex: 'titleStatus',
     key: 'titleStatus',
     width: 120,
@@ -1096,7 +1079,7 @@ watchEffect(() => {
     ellipsis: true,
   },
   {
-    title: t('entity.accountTitle.validfrom'),
+    title: t('entity.accounttitle.validfrom'),
     dataIndex: 'validFrom',
     key: 'validFrom',
     width: 120,
@@ -1105,7 +1088,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'validFrom') ?? ''
   },
   {
-    title: t('entity.accountTitle.validto'),
+    title: t('entity.accounttitle.validto'),
     dataIndex: 'validTo',
     key: 'validTo',
     width: 120,
@@ -1120,7 +1103,7 @@ watchEffect(() => {
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'accounting:financial:accounttitle:update',
+        permission: 'accounting:financial:account:title:update',
         onClick: (record: AccountTitle) => handleEdit(record)
       },
       {
@@ -1128,7 +1111,7 @@ watchEffect(() => {
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'accounting:financial:accounttitle:delete',
+        permission: 'accounting:financial:account:title:delete',
         onClick: (record: AccountTitle) => handleDeleteOne(record)
       }
     ],
@@ -1181,10 +1164,9 @@ async function loadData() {
   }
 }
 
-/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
-useTableRefresh(loadData)
+/** 右侧查询（客户端过滤，不请求接口） */
 const handleSearch = () => {
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /** 右侧重置（不影响左侧树与 fullTableTree） */
@@ -1193,8 +1175,6 @@ const handleReset = () => {
   advancedQueryForm.value = {
   titleCode: '',
   titleName: '',
-  shortName: '',
-  titleDesc: '',
   parentId: '',
   titleType: undefined as number | undefined,
   balanceDirection: undefined as number | undefined,
@@ -1212,28 +1192,54 @@ const handleReset = () => {
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
+}
+
+
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleTitleStatusChange(record: AccountTitleRowRecord, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getAccountTitleField(record, 'titleStatus')
+  const id = getAccountTitleId(record)
+  const row = null
+  if (row) {
+    row.titleStatus = newVal
+  }
+  try {
+    await updateAccountTitleStatus({ accountTitleId: id, titleStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    await loadData()
+  } catch (error: unknown) {
+    if (row) {
+      row.titleStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
 }
 
 /** 新增：默认 parentId 为当前左侧选中节点 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.accountTitle._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.accounttitle._self') })
   const keys = selectedTreeKeys.value
   formData.value = {
     parentId: keys.length > 0 ? String(keys[keys.length - 1]) : '0',
   }
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 
 /** 打开编辑弹窗 */
 function handleEdit(record: AccountTitle) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.accountTitle._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.accounttitle._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -1243,7 +1249,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.accountTitle._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.accounttitle._self') }))
   }
 }
 
@@ -1262,12 +1268,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateAccountTitle(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.accountTitle._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.accounttitle._self') }))
     } else {
       await createAccountTitle(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.accountTitle._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.accounttitle._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     await loadData()
   } finally {
     formLoading.value = false
@@ -1277,18 +1285,20 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 
 /** 删除单行 */
 async function handleDeleteOne(record: AccountTitle) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.accountTitle._self'), name: t('common.tip.this.target', { target: t('entity.accountTitle._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.accounttitle._self'), name: t('common.tip.this.target', { target: t('entity.accounttitle._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteAccountTitleById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.accountTitle._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.accounttitle._self') }))
       await loadData()
     }
   })
@@ -1297,18 +1307,18 @@ async function handleDeleteOne(record: AccountTitle) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.accountTitle._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.accounttitle._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.accountTitle._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.accounttitle._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteAccountTitleBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.accountTitle._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.accounttitle._self') }))
       await loadData()
     }
   })
@@ -1364,10 +1374,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.accountTitle._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.accounttitle._self') }))
   } catch (error: unknown) {
     logger.error('[AccountTitle] 导出失败', undefined, error)
-    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: t('entity.accountTitle._self') })))
+    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: t('entity.accounttitle._self') })))
   } finally {
     loading.value = false
   }
@@ -1381,7 +1391,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置右侧分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /** 重置高级查询表单（不自动查询） */
@@ -1389,8 +1399,6 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   titleCode: '',
   titleName: '',
-  shortName: '',
-  titleDesc: '',
   parentId: '',
   titleType: undefined as number | undefined,
   balanceDirection: undefined as number | undefined,
@@ -1408,10 +1416,9 @@ function handleAdvancedQueryReset() {
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1441,8 +1448,10 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 
-/** 页面挂载后加载树数据 */
-onMounted(() => {
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉树数据 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   void loadData()
 })
 </script>

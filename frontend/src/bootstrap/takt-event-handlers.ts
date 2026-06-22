@@ -25,18 +25,16 @@ import { useWorkflowTodoCountStore } from '@/stores/workflow/todo-count';
 import { useHeaderNotificationStore } from '@/stores/navigation/header-notification';
 import { EventBus, type NotificationType } from '@/utils/event-bus';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
+import { ensureTaktPaginationConfigAsync, resetTaktPaginationConfig } from '@/config/takt-pagination';
 import {
   isLogoutInProgress,
+  performHardLogoutRedirect,
   runServerSignOutIfLoggedInAsync,
+  TAKT_LOGOUT_FLASH_STORAGE_KEY,
   withLogoutInProgress,
 } from '@/bootstrap/takt-logout-flow';
-import {
-  STORE_I18N_TIP_SESSION_EXPIRED,
-  STORE_I18N_TIP_SESSION_IDLE_LOGOUT,
-} from '@/utils/takt-store-i18n';
 
-/** 登出后硬跳转登录页时，在登录页展示一次性提示（sessionStorage） */
-export const TAKT_LOGOUT_FLASH_STORAGE_KEY = 'takt.logout.flash';
+export { TAKT_LOGOUT_FLASH_STORAGE_KEY };
 
 /** 登出跳转选项 */
 interface PerformLogoutOptions {
@@ -81,6 +79,11 @@ function performLogout(
   toastType: NotificationType = 'error',
   options?: PerformLogoutOptions,
 ): void {
+  if (options?.hardRedirect === true) {
+    performHardLogoutRedirect(toastMessage, toastType);
+    return;
+  }
+
   /** 用户身份与令牌 Store */
   const userStore = useUserStore();
   /** 当前租户/公司上下文 Store */
@@ -92,6 +95,7 @@ function performLogout(
   userStore.logout();
   // 清除租户/公司选择与请求头上下文
   tenantStore.clearTenant();
+  resetTaktPaginationConfig();
 
   // 重置依赖登录/租户的全局缓存（字典、翻译、菜单、权限）
   // 清空字典缓存，避免下一用户看到旧租户数据
@@ -113,18 +117,9 @@ function performLogout(
 
   resetRouterDynamicRoutes();
 
-  const hardRedirect = options?.hardRedirect === true;
+  redirectToLoginPage(false);
 
-  if (toastMessage && hardRedirect && typeof sessionStorage !== 'undefined') {
-    sessionStorage.setItem(
-      TAKT_LOGOUT_FLASH_STORAGE_KEY,
-      JSON.stringify({ type: toastType, message: toastMessage }),
-    );
-  }
-
-  redirectToLoginPage(hardRedirect);
-
-  if (toastMessage && !hardRedirect) {
+  if (toastMessage) {
     showAntdMessage(toastType, toastMessage);
   }
 }
@@ -167,7 +162,7 @@ function showAntdMessage(type: NotificationType, content: string, description?: 
  */
 export async function executeIdleLogoutAsync(message?: string): Promise<void> {
   await withLogoutInProgress(async () => {
-    const logoutMessage = message ?? translateLocaleMessage(STORE_I18N_TIP_SESSION_IDLE_LOGOUT);
+    const logoutMessage = message ?? translateLocaleMessage('common.tip.session.idle.logout');
     await runServerSignOutIfLoggedInAsync();
     performLogout(logoutMessage, 'warning', { hardRedirect: true });
   });
@@ -186,7 +181,7 @@ export function registerTaktEventHandlers(): void {
       return;
     }
 
-    const logoutMessage = payload?.message ?? translateLocaleMessage(STORE_I18N_TIP_SESSION_EXPIRED);
+    const logoutMessage = payload?.message ?? translateLocaleMessage('common.tip.session.expired');
     const userStore = useUserStore();
     if (!userStore.isLoggedIn && router.currentRoute.value.path === '/login') {
       if (logoutMessage) {
@@ -204,10 +199,18 @@ export function registerTaktEventHandlers(): void {
     void executeIdleLogoutAsync(payload?.message);
   });
 
-  EventBus.on('user:logout', () => {
+  EventBus.on('user:logout', (payload) => {
     void withLogoutInProgress(async () => {
-      await runServerSignOutIfLoggedInAsync();
-      performLogout();
+      const hardRedirect = payload?.hardRedirect === true;
+      if (!hardRedirect) {
+        await runServerSignOutIfLoggedInAsync();
+      }
+      const message = payload?.message;
+      performLogout(
+        message,
+        message ? 'warning' : 'error',
+        hardRedirect ? { hardRedirect: true } : undefined,
+      );
     });
   });
 
@@ -244,6 +247,8 @@ export function registerTaktEventHandlers(): void {
 
   // 租户切换：翻译与菜单按新租户重建，并通知各列表页刷新
   EventBus.on('tenant:change', () => {
+    resetTaktPaginationConfig();
+    void ensureTaktPaginationConfigAsync().catch(() => undefined);
     // 清空旧租户翻译
     useTranslationStore().resetTranslationMessages();
     // 按新租户重建菜单
@@ -270,6 +275,8 @@ export function registerTaktEventHandlers(): void {
     void useTranslationStore().loadTranslationMessagesAsync();
     // 强制刷新菜单
     void useMenuStore().loadMenuListAsync(true).catch(() => undefined);
+    // 按当前公司与租户同步当日假日主题色
+    void useUserStore().loadHolidayThemeForCurrentSession().catch(() => undefined);
     // 重载字典（公司级隔离）
     void useDictDataStore().loadAllDictDataAsync();
     // 按新公司上下文重连 SignalR

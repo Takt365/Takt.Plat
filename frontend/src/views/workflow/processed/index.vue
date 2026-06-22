@@ -14,7 +14,7 @@
   <div class="workflow-processed">
     <TaktQueryBar
       v-model="queryKeyword"
-      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowInstance.instancecode'), t('entity.flowInstance.processkey')].join(t('common.tip.or')) })"
+      :placeholder="searchPlaceholder"
       :loading="loading"
       @search="handleSearch"
       @reset="handleReset"
@@ -63,7 +63,7 @@
     />
     <TaktModal
       v-model:open="detailVisible"
-      :title="t('common.dialog.title.detail', { entity: t('entity.flowInstance._self') })"
+      :title="t('common.dialog.title.detail', { entity: t('entity.flowinstance._self') })"
       width="640px"
       :footer="null"
       :cancel-text="t('common.page.button.cancel')"
@@ -82,25 +82,25 @@
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
-      <a-form-item :label="t('entity.flowInstance.instancecode')">
+      <a-form-item :label="t('entity.flowinstance.instancecode')">
         <a-input v-model:value="advancedQueryForm.instanceCode" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.processkey')">
+      <a-form-item :label="t('entity.flowinstance.processkey')">
         <a-input v-model:value="advancedQueryForm.processKey" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.processname')">
+      <a-form-item :label="t('entity.flowinstance.processname')">
         <a-input v-model:value="advancedQueryForm.processName" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.processtitle')">
+      <a-form-item :label="t('entity.flowinstance.processtitle')">
         <a-input v-model:value="advancedQueryForm.processTitle" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.currentactivityname')">
+      <a-form-item :label="t('entity.flowinstance.currentactivityname')">
         <a-input v-model:value="advancedQueryForm.taskName" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.startusername')">
+      <a-form-item :label="t('entity.flowinstance.startusername')">
         <a-input v-model:value="advancedQueryForm.startUserName" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.starttime')">
+      <a-form-item :label="t('entity.flowinstance.starttime')">
         <a-range-picker
           v-model:value="startTimeRange"
           value-format="YYYY-MM-DD HH:mm:ss"
@@ -140,8 +140,13 @@ import {
 import FlowInstanceDetailForm from '@/views/workflow/processed/components/flow-instance-detail-form.vue'
 import type { FlowInstanceListItem, FlowInstanceDetail, FlowTodoQuery } from '@/types/workflow/flow-engine'
 import { useWorkflowSignalRRefresh, WORKFLOW_TABLE_NAMES } from '@/composables/use-workflow-signalr-refresh'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 
 const { t } = useI18n()
+/** 列表快捷查询占位文案 */
+const searchPlaceholder = computed(
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.flowinstance._self') })
+)
 
 /** 与 `TaktSingleTable` 的 `@resize-column` 第二参数一致（`ResizableColumn`） */
 type TaktResizeColumn = { width?: string | number } & Record<string, unknown>
@@ -161,8 +166,8 @@ const advancedQueryForm = ref({
 /** 发起时间范围（高级查询） */
 const startTimeRange = ref<[string, string] | undefined>(undefined)
 const dataSource = ref<FlowInstanceListItem[]>([])
-const currentPage = ref(1)
-const pageSize = ref(10)
+const currentPage = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const detailVisible = ref(false)
 const detail = ref<FlowInstanceDetail | null>(null)
@@ -170,12 +175,12 @@ const detail = ref<FlowInstanceDetail | null>(null)
 const visibleColumnKeys = ref<string[]>([])
 
 const columns = computed<TableColumnsType>(() => [
-  { title: t('entity.flowInstance.instancecode'), dataIndex: 'instanceCode', key: 'instanceCode', width: 200, resizable: true, ellipsis: true },
-  { title: t('entity.flowInstance.processname'), dataIndex: 'processName', key: 'processName', width: 120, resizable: true, ellipsis: true },
-  { title: t('entity.flowInstance.processtitle'), dataIndex: 'processTitle', key: 'processTitle', ellipsis: true, resizable: true },
-  { title: t('entity.flowInstance.instancestatus'), dataIndex: 'instanceStatus', key: 'instanceStatus', width: 90 },
-  { title: t('entity.flowInstance.startusername'), dataIndex: 'startUserName', key: 'startUserName', width: 90, resizable: true },
-  { title: t('entity.flowInstance.starttime'), dataIndex: 'startTime', key: 'startTime', width: 170, resizable: true },
+  { title: t('entity.flowinstance.instancecode'), dataIndex: 'instanceCode', key: 'instanceCode', width: 200, resizable: true, ellipsis: true },
+  { title: t('entity.flowinstance.processname'), dataIndex: 'processName', key: 'processName', width: 120, resizable: true, ellipsis: true },
+  { title: t('entity.flowinstance.processtitle'), dataIndex: 'processTitle', key: 'processTitle', ellipsis: true, resizable: true },
+  { title: t('entity.flowinstance.instancestatus'), dataIndex: 'instanceStatus', key: 'instanceStatus', width: 90 },
+  { title: t('entity.flowinstance.startusername'), dataIndex: 'startUserName', key: 'startUserName', width: 90, resizable: true },
+  { title: t('entity.flowinstance.starttime'), dataIndex: 'startTime', key: 'startTime', width: 170, resizable: true },
   CreateActionColumn<FlowInstanceListItem>({
     width: 80,
     actions: [

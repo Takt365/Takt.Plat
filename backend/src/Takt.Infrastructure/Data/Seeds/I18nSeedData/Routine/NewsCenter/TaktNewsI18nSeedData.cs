@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNews 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,299 +75,290 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktNews 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.news._self / entity.news.{{field}}；ResourceGroup=2；ResourceType=0
+    /// I18nKey：entity.news._self / entity.news.{{field}}；ResourceGroup=NewsCenter；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetNewsTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.news._self
-            new TranslationSeedItem("entity.news._self", "en-US", "News Information", "实体名称"),
+            new TranslationSeedItem("entity.news._self", "en-US", "News Information_us", "实体名称"),
             // entity.news._self
-            new TranslationSeedItem("entity.news._self", "ja-JP", "新闻中心主信息", "实体名称"),
+            new TranslationSeedItem("entity.news._self", "ja-JP", "新闻中心主信息_jp", "实体名称"),
             // entity.news._self
             new TranslationSeedItem("entity.news._self", "zh-CN", "新闻中心主信息", "实体名称"),
             // entity.news._self
-            new TranslationSeedItem("entity.news._self", "zh-HK", "新闻中心主信息", "实体名称"),
+            new TranslationSeedItem("entity.news._self", "zh-HK", "新闻中心主信息_hk", "实体名称"),
 
             // entity.news.code
-            new TranslationSeedItem("entity.news.code", "en-US", "新闻编码", "新闻编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.news.code", "en-US", "新闻编码_us", "新闻编码（租户+公司内唯一）"),
             // entity.news.code
-            new TranslationSeedItem("entity.news.code", "ja-JP", "新闻编码", "新闻编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.news.code", "ja-JP", "新闻编码_jp", "新闻编码（租户+公司内唯一）"),
             // entity.news.code
             new TranslationSeedItem("entity.news.code", "zh-CN", "新闻编码", "新闻编码（租户+公司内唯一）"),
             // entity.news.code
-            new TranslationSeedItem("entity.news.code", "zh-HK", "新闻编码", "新闻编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.news.code", "zh-HK", "新闻编码_hk", "新闻编码（租户+公司内唯一）"),
 
             // entity.news.category
-            new TranslationSeedItem("entity.news.category", "en-US", "新闻分类", "新闻分类"),
+            new TranslationSeedItem("entity.news.category", "en-US", "新闻分类_us", "新闻分类"),
             // entity.news.category
-            new TranslationSeedItem("entity.news.category", "ja-JP", "新闻分类", "新闻分类"),
+            new TranslationSeedItem("entity.news.category", "ja-JP", "新闻分类_jp", "新闻分类"),
             // entity.news.category
             new TranslationSeedItem("entity.news.category", "zh-CN", "新闻分类", "新闻分类"),
             // entity.news.category
-            new TranslationSeedItem("entity.news.category", "zh-HK", "新闻分类", "新闻分类"),
+            new TranslationSeedItem("entity.news.category", "zh-HK", "新闻分类_hk", "新闻分类"),
 
             // entity.news.title
-            new TranslationSeedItem("entity.news.title", "en-US", "新闻标题", "新闻标题"),
+            new TranslationSeedItem("entity.news.title", "en-US", "新闻标题_us", "新闻标题"),
             // entity.news.title
-            new TranslationSeedItem("entity.news.title", "ja-JP", "新闻标题", "新闻标题"),
+            new TranslationSeedItem("entity.news.title", "ja-JP", "新闻标题_jp", "新闻标题"),
             // entity.news.title
             new TranslationSeedItem("entity.news.title", "zh-CN", "新闻标题", "新闻标题"),
             // entity.news.title
-            new TranslationSeedItem("entity.news.title", "zh-HK", "新闻标题", "新闻标题"),
+            new TranslationSeedItem("entity.news.title", "zh-HK", "新闻标题_hk", "新闻标题"),
 
             // entity.news.summary
-            new TranslationSeedItem("entity.news.summary", "en-US", "新闻摘要", "新闻摘要（用于列表展示）"),
+            new TranslationSeedItem("entity.news.summary", "en-US", "新闻摘要_us", "新闻摘要（用于列表展示）"),
             // entity.news.summary
-            new TranslationSeedItem("entity.news.summary", "ja-JP", "新闻摘要", "新闻摘要（用于列表展示）"),
+            new TranslationSeedItem("entity.news.summary", "ja-JP", "新闻摘要_jp", "新闻摘要（用于列表展示）"),
             // entity.news.summary
             new TranslationSeedItem("entity.news.summary", "zh-CN", "新闻摘要", "新闻摘要（用于列表展示）"),
             // entity.news.summary
-            new TranslationSeedItem("entity.news.summary", "zh-HK", "新闻摘要", "新闻摘要（用于列表展示）"),
+            new TranslationSeedItem("entity.news.summary", "zh-HK", "新闻摘要_hk", "新闻摘要（用于列表展示）"),
 
             // entity.news.tags
-            new TranslationSeedItem("entity.news.tags", "en-US", "标签", "标签（逗号分隔或 JSON 数组存储）"),
+            new TranslationSeedItem("entity.news.tags", "en-US", "标签_us", "标签（逗号分隔或 JSON 数组存储）"),
             // entity.news.tags
-            new TranslationSeedItem("entity.news.tags", "ja-JP", "标签", "标签（逗号分隔或 JSON 数组存储）"),
+            new TranslationSeedItem("entity.news.tags", "ja-JP", "标签_jp", "标签（逗号分隔或 JSON 数组存储）"),
             // entity.news.tags
             new TranslationSeedItem("entity.news.tags", "zh-CN", "标签", "标签（逗号分隔或 JSON 数组存储）"),
             // entity.news.tags
-            new TranslationSeedItem("entity.news.tags", "zh-HK", "标签", "标签（逗号分隔或 JSON 数组存储）"),
+            new TranslationSeedItem("entity.news.tags", "zh-HK", "标签_hk", "标签（逗号分隔或 JSON 数组存储）"),
 
             // entity.news.content
-            new TranslationSeedItem("entity.news.content", "en-US", "新闻内容", "新闻内容"),
+            new TranslationSeedItem("entity.news.content", "en-US", "新闻内容_us", "新闻内容"),
             // entity.news.content
-            new TranslationSeedItem("entity.news.content", "ja-JP", "新闻内容", "新闻内容"),
+            new TranslationSeedItem("entity.news.content", "ja-JP", "新闻内容_jp", "新闻内容"),
             // entity.news.content
             new TranslationSeedItem("entity.news.content", "zh-CN", "新闻内容", "新闻内容"),
             // entity.news.content
-            new TranslationSeedItem("entity.news.content", "zh-HK", "新闻内容", "新闻内容"),
+            new TranslationSeedItem("entity.news.content", "zh-HK", "新闻内容_hk", "新闻内容"),
 
             // entity.news.coverimage
-            new TranslationSeedItem("entity.news.coverimage", "en-US", "新闻封面图片URL", "新闻封面图片 URL"),
+            new TranslationSeedItem("entity.news.coverimage", "en-US", "新闻封面图片URL_us", "新闻封面图片 URL"),
             // entity.news.coverimage
-            new TranslationSeedItem("entity.news.coverimage", "ja-JP", "新闻封面图片URL", "新闻封面图片 URL"),
+            new TranslationSeedItem("entity.news.coverimage", "ja-JP", "新闻封面图片URL_jp", "新闻封面图片 URL"),
             // entity.news.coverimage
             new TranslationSeedItem("entity.news.coverimage", "zh-CN", "新闻封面图片URL", "新闻封面图片 URL"),
             // entity.news.coverimage
-            new TranslationSeedItem("entity.news.coverimage", "zh-HK", "新闻封面图片URL", "新闻封面图片 URL"),
+            new TranslationSeedItem("entity.news.coverimage", "zh-HK", "新闻封面图片URL_hk", "新闻封面图片 URL"),
 
             // entity.news.istop
-            new TranslationSeedItem("entity.news.istop", "en-US", "是否置顶", "是否置顶"),
+            new TranslationSeedItem("entity.news.istop", "en-US", "是否置顶_us", "是否置顶"),
             // entity.news.istop
-            new TranslationSeedItem("entity.news.istop", "ja-JP", "是否置顶", "是否置顶"),
+            new TranslationSeedItem("entity.news.istop", "ja-JP", "是否置顶_jp", "是否置顶"),
             // entity.news.istop
             new TranslationSeedItem("entity.news.istop", "zh-CN", "是否置顶", "是否置顶"),
             // entity.news.istop
-            new TranslationSeedItem("entity.news.istop", "zh-HK", "是否置顶", "是否置顶"),
+            new TranslationSeedItem("entity.news.istop", "zh-HK", "是否置顶_hk", "是否置顶"),
 
             // entity.news.isrecommended
-            new TranslationSeedItem("entity.news.isrecommended", "en-US", "是否推荐", "是否推荐"),
+            new TranslationSeedItem("entity.news.isrecommended", "en-US", "是否推荐_us", "是否推荐"),
             // entity.news.isrecommended
-            new TranslationSeedItem("entity.news.isrecommended", "ja-JP", "是否推荐", "是否推荐"),
+            new TranslationSeedItem("entity.news.isrecommended", "ja-JP", "是否推荐_jp", "是否推荐"),
             // entity.news.isrecommended
             new TranslationSeedItem("entity.news.isrecommended", "zh-CN", "是否推荐", "是否推荐"),
             // entity.news.isrecommended
-            new TranslationSeedItem("entity.news.isrecommended", "zh-HK", "是否推荐", "是否推荐"),
+            new TranslationSeedItem("entity.news.isrecommended", "zh-HK", "是否推荐_hk", "是否推荐"),
 
             // entity.news.effectivetime
-            new TranslationSeedItem("entity.news.effectivetime", "en-US", "生效时间", "生效时间"),
+            new TranslationSeedItem("entity.news.effectivetime", "en-US", "生效时间_us", "生效时间"),
             // entity.news.effectivetime
-            new TranslationSeedItem("entity.news.effectivetime", "ja-JP", "生效时间", "生效时间"),
+            new TranslationSeedItem("entity.news.effectivetime", "ja-JP", "生效时间_jp", "生效时间"),
             // entity.news.effectivetime
             new TranslationSeedItem("entity.news.effectivetime", "zh-CN", "生效时间", "生效时间"),
             // entity.news.effectivetime
-            new TranslationSeedItem("entity.news.effectivetime", "zh-HK", "生效时间", "生效时间"),
+            new TranslationSeedItem("entity.news.effectivetime", "zh-HK", "生效时间_hk", "生效时间"),
 
             // entity.news.expiretime
-            new TranslationSeedItem("entity.news.expiretime", "en-US", "失效时间", "失效时间"),
+            new TranslationSeedItem("entity.news.expiretime", "en-US", "失效时间_us", "失效时间"),
             // entity.news.expiretime
-            new TranslationSeedItem("entity.news.expiretime", "ja-JP", "失效时间", "失效时间"),
+            new TranslationSeedItem("entity.news.expiretime", "ja-JP", "失效时间_jp", "失效时间"),
             // entity.news.expiretime
             new TranslationSeedItem("entity.news.expiretime", "zh-CN", "失效时间", "失效时间"),
             // entity.news.expiretime
-            new TranslationSeedItem("entity.news.expiretime", "zh-HK", "失效时间", "失效时间"),
+            new TranslationSeedItem("entity.news.expiretime", "zh-HK", "失效时间_hk", "失效时间"),
 
             // entity.news.readcount
-            new TranslationSeedItem("entity.news.readcount", "en-US", "阅读次数", "阅读次数"),
+            new TranslationSeedItem("entity.news.readcount", "en-US", "阅读次数_us", "阅读次数"),
             // entity.news.readcount
-            new TranslationSeedItem("entity.news.readcount", "ja-JP", "阅读次数", "阅读次数"),
+            new TranslationSeedItem("entity.news.readcount", "ja-JP", "阅读次数_jp", "阅读次数"),
             // entity.news.readcount
             new TranslationSeedItem("entity.news.readcount", "zh-CN", "阅读次数", "阅读次数"),
             // entity.news.readcount
-            new TranslationSeedItem("entity.news.readcount", "zh-HK", "阅读次数", "阅读次数"),
+            new TranslationSeedItem("entity.news.readcount", "zh-HK", "阅读次数_hk", "阅读次数"),
 
             // entity.news.likecount
-            new TranslationSeedItem("entity.news.likecount", "en-US", "点赞次数", "点赞次数"),
+            new TranslationSeedItem("entity.news.likecount", "en-US", "点赞次数_us", "点赞次数"),
             // entity.news.likecount
-            new TranslationSeedItem("entity.news.likecount", "ja-JP", "点赞次数", "点赞次数"),
+            new TranslationSeedItem("entity.news.likecount", "ja-JP", "点赞次数_jp", "点赞次数"),
             // entity.news.likecount
             new TranslationSeedItem("entity.news.likecount", "zh-CN", "点赞次数", "点赞次数"),
             // entity.news.likecount
-            new TranslationSeedItem("entity.news.likecount", "zh-HK", "点赞次数", "点赞次数"),
+            new TranslationSeedItem("entity.news.likecount", "zh-HK", "点赞次数_hk", "点赞次数"),
 
             // entity.news.commentcount
-            new TranslationSeedItem("entity.news.commentcount", "en-US", "评论次数", "评论次数"),
+            new TranslationSeedItem("entity.news.commentcount", "en-US", "评论次数_us", "评论次数"),
             // entity.news.commentcount
-            new TranslationSeedItem("entity.news.commentcount", "ja-JP", "评论次数", "评论次数"),
+            new TranslationSeedItem("entity.news.commentcount", "ja-JP", "评论次数_jp", "评论次数"),
             // entity.news.commentcount
             new TranslationSeedItem("entity.news.commentcount", "zh-CN", "评论次数", "评论次数"),
             // entity.news.commentcount
-            new TranslationSeedItem("entity.news.commentcount", "zh-HK", "评论次数", "评论次数"),
+            new TranslationSeedItem("entity.news.commentcount", "zh-HK", "评论次数_hk", "评论次数"),
 
             // entity.news.favoritecount
-            new TranslationSeedItem("entity.news.favoritecount", "en-US", "收藏次数", "收藏次数"),
+            new TranslationSeedItem("entity.news.favoritecount", "en-US", "收藏次数_us", "收藏次数"),
             // entity.news.favoritecount
-            new TranslationSeedItem("entity.news.favoritecount", "ja-JP", "收藏次数", "收藏次数"),
+            new TranslationSeedItem("entity.news.favoritecount", "ja-JP", "收藏次数_jp", "收藏次数"),
             // entity.news.favoritecount
             new TranslationSeedItem("entity.news.favoritecount", "zh-CN", "收藏次数", "收藏次数"),
             // entity.news.favoritecount
-            new TranslationSeedItem("entity.news.favoritecount", "zh-HK", "收藏次数", "收藏次数"),
+            new TranslationSeedItem("entity.news.favoritecount", "zh-HK", "收藏次数_hk", "收藏次数"),
 
             // entity.news.sharecount
-            new TranslationSeedItem("entity.news.sharecount", "en-US", "分享次数", "分享次数"),
+            new TranslationSeedItem("entity.news.sharecount", "en-US", "分享次数_us", "分享次数"),
             // entity.news.sharecount
-            new TranslationSeedItem("entity.news.sharecount", "ja-JP", "分享次数", "分享次数"),
+            new TranslationSeedItem("entity.news.sharecount", "ja-JP", "分享次数_jp", "分享次数"),
             // entity.news.sharecount
             new TranslationSeedItem("entity.news.sharecount", "zh-CN", "分享次数", "分享次数"),
             // entity.news.sharecount
-            new TranslationSeedItem("entity.news.sharecount", "zh-HK", "分享次数", "分享次数"),
+            new TranslationSeedItem("entity.news.sharecount", "zh-HK", "分享次数_hk", "分享次数"),
 
             // entity.news.attachmentcount
-            new TranslationSeedItem("entity.news.attachmentcount", "en-US", "附件数量", "附件数量"),
+            new TranslationSeedItem("entity.news.attachmentcount", "en-US", "附件数量_us", "附件数量"),
             // entity.news.attachmentcount
-            new TranslationSeedItem("entity.news.attachmentcount", "ja-JP", "附件数量", "附件数量"),
+            new TranslationSeedItem("entity.news.attachmentcount", "ja-JP", "附件数量_jp", "附件数量"),
             // entity.news.attachmentcount
             new TranslationSeedItem("entity.news.attachmentcount", "zh-CN", "附件数量", "附件数量"),
             // entity.news.attachmentcount
-            new TranslationSeedItem("entity.news.attachmentcount", "zh-HK", "附件数量", "附件数量"),
-
-            // entity.news.flowinstanceid
-            new TranslationSeedItem("entity.news.flowinstanceid", "en-US", "流程实例ID", "流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）"),
-            // entity.news.flowinstanceid
-            new TranslationSeedItem("entity.news.flowinstanceid", "ja-JP", "流程实例ID", "流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）"),
-            // entity.news.flowinstanceid
-            new TranslationSeedItem("entity.news.flowinstanceid", "zh-CN", "流程实例ID", "流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）"),
-            // entity.news.flowinstanceid
-            new TranslationSeedItem("entity.news.flowinstanceid", "zh-HK", "流程实例ID", "流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）"),
+            new TranslationSeedItem("entity.news.attachmentcount", "zh-HK", "附件数量_hk", "附件数量"),
 
             // entity.news.deptid
-            new TranslationSeedItem("entity.news.deptid", "en-US", "发布部门ID", "发布部门 ID"),
+            new TranslationSeedItem("entity.news.deptid", "en-US", "发布部门ID_us", "发布部门 ID"),
             // entity.news.deptid
-            new TranslationSeedItem("entity.news.deptid", "ja-JP", "发布部门ID", "发布部门 ID"),
+            new TranslationSeedItem("entity.news.deptid", "ja-JP", "发布部门ID_jp", "发布部门 ID"),
             // entity.news.deptid
             new TranslationSeedItem("entity.news.deptid", "zh-CN", "发布部门ID", "发布部门 ID"),
             // entity.news.deptid
-            new TranslationSeedItem("entity.news.deptid", "zh-HK", "发布部门ID", "发布部门 ID"),
+            new TranslationSeedItem("entity.news.deptid", "zh-HK", "发布部门ID_hk", "发布部门 ID"),
 
             // entity.news.deptname
-            new TranslationSeedItem("entity.news.deptname", "en-US", "发布部门名称", "发布部门名称"),
+            new TranslationSeedItem("entity.news.deptname", "en-US", "发布部门名称_us", "发布部门名称"),
             // entity.news.deptname
-            new TranslationSeedItem("entity.news.deptname", "ja-JP", "发布部门名称", "发布部门名称"),
+            new TranslationSeedItem("entity.news.deptname", "ja-JP", "发布部门名称_jp", "发布部门名称"),
             // entity.news.deptname
             new TranslationSeedItem("entity.news.deptname", "zh-CN", "发布部门名称", "发布部门名称"),
             // entity.news.deptname
-            new TranslationSeedItem("entity.news.deptname", "zh-HK", "发布部门名称", "发布部门名称"),
+            new TranslationSeedItem("entity.news.deptname", "zh-HK", "发布部门名称_hk", "发布部门名称"),
 
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "en-US", "发布人ID", "发布人 ID"),
+            new TranslationSeedItem("entity.news.publisherid", "en-US", "发布人ID_us", "发布人 ID"),
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "ja-JP", "发布人ID", "发布人 ID"),
+            new TranslationSeedItem("entity.news.publisherid", "ja-JP", "发布人ID_jp", "发布人 ID"),
             // entity.news.publisherid
             new TranslationSeedItem("entity.news.publisherid", "zh-CN", "发布人ID", "发布人 ID"),
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "zh-HK", "发布人ID", "发布人 ID"),
+            new TranslationSeedItem("entity.news.publisherid", "zh-HK", "发布人ID_hk", "发布人 ID"),
 
             // entity.news.publishername
-            new TranslationSeedItem("entity.news.publishername", "en-US", "发布人姓名", "发布人姓名"),
+            new TranslationSeedItem("entity.news.publishername", "en-US", "发布人姓名_us", "发布人姓名"),
             // entity.news.publishername
-            new TranslationSeedItem("entity.news.publishername", "ja-JP", "发布人姓名", "发布人姓名"),
+            new TranslationSeedItem("entity.news.publishername", "ja-JP", "发布人姓名_jp", "发布人姓名"),
             // entity.news.publishername
             new TranslationSeedItem("entity.news.publishername", "zh-CN", "发布人姓名", "发布人姓名"),
             // entity.news.publishername
-            new TranslationSeedItem("entity.news.publishername", "zh-HK", "发布人姓名", "发布人姓名"),
+            new TranslationSeedItem("entity.news.publishername", "zh-HK", "发布人姓名_hk", "发布人姓名"),
 
             // entity.news.publishtime
-            new TranslationSeedItem("entity.news.publishtime", "en-US", "发布时间", "发布时间"),
+            new TranslationSeedItem("entity.news.publishtime", "en-US", "发布时间_us", "发布时间"),
             // entity.news.publishtime
-            new TranslationSeedItem("entity.news.publishtime", "ja-JP", "发布时间", "发布时间"),
+            new TranslationSeedItem("entity.news.publishtime", "ja-JP", "发布时间_jp", "发布时间"),
             // entity.news.publishtime
             new TranslationSeedItem("entity.news.publishtime", "zh-CN", "发布时间", "发布时间"),
             // entity.news.publishtime
-            new TranslationSeedItem("entity.news.publishtime", "zh-HK", "发布时间", "发布时间"),
+            new TranslationSeedItem("entity.news.publishtime", "zh-HK", "发布时间_hk", "发布时间"),
 
             // entity.news.sortorder
-            new TranslationSeedItem("entity.news.sortorder", "en-US", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.news.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
             // entity.news.sortorder
-            new TranslationSeedItem("entity.news.sortorder", "ja-JP", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.news.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
             // entity.news.sortorder
             new TranslationSeedItem("entity.news.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.news.sortorder
-            new TranslationSeedItem("entity.news.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.news.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
 
             // entity.news.status
-            new TranslationSeedItem("entity.news.status", "en-US", "新闻状态", "新闻状态"),
+            new TranslationSeedItem("entity.news.status", "en-US", "新闻状态_us", "新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
             // entity.news.status
-            new TranslationSeedItem("entity.news.status", "ja-JP", "新闻状态", "新闻状态"),
+            new TranslationSeedItem("entity.news.status", "ja-JP", "新闻状态_jp", "新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
             // entity.news.status
-            new TranslationSeedItem("entity.news.status", "zh-CN", "新闻状态", "新闻状态"),
+            new TranslationSeedItem("entity.news.status", "zh-CN", "新闻状态", "新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
             // entity.news.status
-            new TranslationSeedItem("entity.news.status", "zh-HK", "新闻状态", "新闻状态"),
+            new TranslationSeedItem("entity.news.status", "zh-HK", "新闻状态_hk", "新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
 
             // entity.news.attachments
-            new TranslationSeedItem("entity.news.attachments", "en-US", "新闻附件列表", "新闻附件列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.attachments", "en-US", "新闻附件列表_us", "新闻附件列表（主子表关系）"),
             // entity.news.attachments
-            new TranslationSeedItem("entity.news.attachments", "ja-JP", "新闻附件列表", "新闻附件列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.attachments", "ja-JP", "新闻附件列表_jp", "新闻附件列表（主子表关系）"),
             // entity.news.attachments
             new TranslationSeedItem("entity.news.attachments", "zh-CN", "新闻附件列表", "新闻附件列表（主子表关系）"),
             // entity.news.attachments
-            new TranslationSeedItem("entity.news.attachments", "zh-HK", "新闻附件列表", "新闻附件列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.attachments", "zh-HK", "新闻附件列表_hk", "新闻附件列表（主子表关系）"),
 
             // entity.news.comments
-            new TranslationSeedItem("entity.news.comments", "en-US", "新闻评论列表", "新闻评论列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.comments", "en-US", "新闻评论列表_us", "新闻评论列表（主子表关系）"),
             // entity.news.comments
-            new TranslationSeedItem("entity.news.comments", "ja-JP", "新闻评论列表", "新闻评论列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.comments", "ja-JP", "新闻评论列表_jp", "新闻评论列表（主子表关系）"),
             // entity.news.comments
             new TranslationSeedItem("entity.news.comments", "zh-CN", "新闻评论列表", "新闻评论列表（主子表关系）"),
             // entity.news.comments
-            new TranslationSeedItem("entity.news.comments", "zh-HK", "新闻评论列表", "新闻评论列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.comments", "zh-HK", "新闻评论列表_hk", "新闻评论列表（主子表关系）"),
 
             // entity.news.likes
-            new TranslationSeedItem("entity.news.likes", "en-US", "新闻点赞记录列表", "新闻点赞记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.likes", "en-US", "新闻点赞记录列表_us", "新闻点赞记录列表（主子表关系）"),
             // entity.news.likes
-            new TranslationSeedItem("entity.news.likes", "ja-JP", "新闻点赞记录列表", "新闻点赞记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.likes", "ja-JP", "新闻点赞记录列表_jp", "新闻点赞记录列表（主子表关系）"),
             // entity.news.likes
             new TranslationSeedItem("entity.news.likes", "zh-CN", "新闻点赞记录列表", "新闻点赞记录列表（主子表关系）"),
             // entity.news.likes
-            new TranslationSeedItem("entity.news.likes", "zh-HK", "新闻点赞记录列表", "新闻点赞记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.likes", "zh-HK", "新闻点赞记录列表_hk", "新闻点赞记录列表（主子表关系）"),
 
             // entity.news.reads
-            new TranslationSeedItem("entity.news.reads", "en-US", "新闻阅读记录列表", "新闻阅读记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.reads", "en-US", "新闻阅读记录列表_us", "新闻阅读记录列表（主子表关系）"),
             // entity.news.reads
-            new TranslationSeedItem("entity.news.reads", "ja-JP", "新闻阅读记录列表", "新闻阅读记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.reads", "ja-JP", "新闻阅读记录列表_jp", "新闻阅读记录列表（主子表关系）"),
             // entity.news.reads
             new TranslationSeedItem("entity.news.reads", "zh-CN", "新闻阅读记录列表", "新闻阅读记录列表（主子表关系）"),
             // entity.news.reads
-            new TranslationSeedItem("entity.news.reads", "zh-HK", "新闻阅读记录列表", "新闻阅读记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.reads", "zh-HK", "新闻阅读记录列表_hk", "新闻阅读记录列表（主子表关系）"),
 
             // entity.news.favorites
-            new TranslationSeedItem("entity.news.favorites", "en-US", "新闻收藏记录列表", "新闻收藏记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.favorites", "en-US", "新闻收藏记录列表_us", "新闻收藏记录列表（主子表关系）"),
             // entity.news.favorites
-            new TranslationSeedItem("entity.news.favorites", "ja-JP", "新闻收藏记录列表", "新闻收藏记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.favorites", "ja-JP", "新闻收藏记录列表_jp", "新闻收藏记录列表（主子表关系）"),
             // entity.news.favorites
             new TranslationSeedItem("entity.news.favorites", "zh-CN", "新闻收藏记录列表", "新闻收藏记录列表（主子表关系）"),
             // entity.news.favorites
-            new TranslationSeedItem("entity.news.favorites", "zh-HK", "新闻收藏记录列表", "新闻收藏记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.favorites", "zh-HK", "新闻收藏记录列表_hk", "新闻收藏记录列表（主子表关系）"),
 
             // entity.news.shares
-            new TranslationSeedItem("entity.news.shares", "en-US", "新闻分享记录列表", "新闻分享记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.shares", "en-US", "新闻分享记录列表_us", "新闻分享记录列表（主子表关系）"),
             // entity.news.shares
-            new TranslationSeedItem("entity.news.shares", "ja-JP", "新闻分享记录列表", "新闻分享记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.shares", "ja-JP", "新闻分享记录列表_jp", "新闻分享记录列表（主子表关系）"),
             // entity.news.shares
             new TranslationSeedItem("entity.news.shares", "zh-CN", "新闻分享记录列表", "新闻分享记录列表（主子表关系）"),
             // entity.news.shares
-            new TranslationSeedItem("entity.news.shares", "zh-HK", "新闻分享记录列表", "新闻分享记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.news.shares", "zh-HK", "新闻分享记录列表_hk", "新闻分享记录列表（主子表关系）"),
         };
     }
 
@@ -385,10 +376,10 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 2;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "NewsCenter";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

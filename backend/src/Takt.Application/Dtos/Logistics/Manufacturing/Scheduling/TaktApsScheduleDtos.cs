@@ -326,7 +326,7 @@ public class TaktApsScheduleQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -486,7 +486,7 @@ public class TaktApsScheduleCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -561,7 +561,7 @@ public class TaktApsScheduleTemplateDto
     /// <summary>
     /// 工厂编码（不可空）
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排程编码（唯一索引）
@@ -621,7 +621,7 @@ public class TaktApsScheduleTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -653,7 +653,7 @@ public class TaktApsScheduleImportDto
     /// <summary>
     /// 工厂编码（不可空）
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排程编码（唯一索引）
@@ -713,7 +713,7 @@ public class TaktApsScheduleImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -858,7 +858,7 @@ public class TaktApsScheduleExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

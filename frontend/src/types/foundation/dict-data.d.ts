@@ -173,7 +173,7 @@ export interface DictDataQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -247,7 +247,7 @@ export interface DictDataCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -355,7 +355,7 @@ export interface DictDataTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -429,7 +429,7 @@ export interface DictDataImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -508,7 +508,7 @@ export interface DictDataExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

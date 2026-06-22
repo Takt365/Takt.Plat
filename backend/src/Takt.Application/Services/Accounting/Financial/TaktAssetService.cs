@@ -93,7 +93,7 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
         EnsureThreeLayerContext();
         var list = await _assetRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.AssetName,
+            x => x.AssetName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -318,7 +318,7 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
                 || SqlFunc.ToString(x.MonthlyDepreciation).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || SqlFunc.ToString(x.AssetStatus).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || SqlFunc.ToString(x.PurchaseDate).Contains(keywords)
                 || SqlFunc.ToString(x.StartDate).Contains(keywords)
                 || SqlFunc.ToString(x.ScrapDate).Contains(keywords)
@@ -432,9 +432,9 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
             exp = exp.And(x => x.AssetStatus == queryDto.AssetStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

@@ -25,7 +25,7 @@
               {{ t('workflow.designer.page.assigneeassignee') }}
             </a-radio>
             <a-radio :value="2">
-              直接主管
+              {{ t('workflow.designer.page.directorleveldirect') }}
             </a-radio>
             <a-radio :value="3">
               {{ t('workflow.designer.page.assigneerole') }}
@@ -103,20 +103,20 @@
         </a-form-item>
         <a-form-item
           v-if="form.setType === 2"
-          label="主管层级"
+          :label="t('workflow.designer.page.directorlevel')"
         >
           <a-select
             v-model:value="form.directorLevel"
             style="width: 100%"
           >
             <a-select-option :value="1">
-              直接主管
+              {{ t('workflow.designer.page.directorleveldirect') }}
             </a-select-option>
             <a-select-option :value="2">
-              第2级主管
+              {{ t('workflow.designer.page.directorlevelsecond') }}
             </a-select-option>
             <a-select-option :value="3">
-              第3级主管
+              {{ t('workflow.designer.page.directorlevelthird') }}
             </a-select-option>
           </a-select>
         </a-form-item>
@@ -127,13 +127,13 @@
         style="margin-right: 8px"
         @click="handleClose"
       >
-        取消
+        {{ t('common.page.button.cancel') }}
       </a-button>
       <a-button
         type="primary"
         @click="handleSave"
       >
-        确定
+        {{ t('common.page.button.ok') }}
       </a-button>
     </template>
     <TaktFlowSelectUserDialog

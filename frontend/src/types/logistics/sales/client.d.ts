@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：client.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,7 +49,7 @@ export interface Client extends CompanyDtoBase {
   clientShortName?: string;
 
   /**
-   * 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
    */
   clientType: number;
 
@@ -124,12 +124,12 @@ export interface Client extends CompanyDtoBase {
   currencyCode: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms: number;
 
   /**
-   * 销售渠道（0=直销，1=经销，2=代销，3=电商，4=其他）
+   * 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
    */
   salesChannel: number;
 
@@ -144,7 +144,7 @@ export interface Client extends CompanyDtoBase {
   storeName?: string;
 
   /**
-   * 客户端等级（0=普通，1=重要，2=VIP，3=战略）
+   * 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
    */
   clientLevel: number;
 
@@ -209,7 +209,7 @@ export interface ClientQuery extends TaktPagedQuery {
   clientShortName?: string;
 
   /**
-   * 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
    */
   clientType?: number;
 
@@ -284,12 +284,12 @@ export interface ClientQuery extends TaktPagedQuery {
   currencyCode?: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms?: number;
 
   /**
-   * 销售渠道（0=直销，1=经销，2=代销，3=电商，4=其他）
+   * 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
    */
   salesChannel?: number;
 
@@ -304,7 +304,7 @@ export interface ClientQuery extends TaktPagedQuery {
   storeName?: string;
 
   /**
-   * 客户端等级（0=普通，1=重要，2=VIP，3=战略）
+   * 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
    */
   clientLevel?: number;
 
@@ -341,7 +341,7 @@ export interface ClientQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -393,7 +393,7 @@ export interface ClientCreate {
   clientShortName?: string;
 
   /**
-   * 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
    */
   clientType: number;
 
@@ -468,12 +468,12 @@ export interface ClientCreate {
   currencyCode: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms: number;
 
   /**
-   * 销售渠道（0=直销，1=经销，2=代销，3=电商，4=其他）
+   * 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
    */
   salesChannel: number;
 
@@ -488,7 +488,7 @@ export interface ClientCreate {
   storeName?: string;
 
   /**
-   * 客户端等级（0=普通，1=重要，2=VIP，3=战略）
+   * 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
    */
   clientLevel: number;
 
@@ -508,14 +508,9 @@ export interface ClientCreate {
   clientStatus: number;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -615,7 +610,7 @@ export interface ClientTemplate {
   clientShortName?: string;
 
   /**
-   * 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
    */
   clientType?: number;
 
@@ -657,7 +652,7 @@ export interface ClientTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -709,7 +704,7 @@ export interface ClientImport {
   clientShortName?: string;
 
   /**
-   * 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
    */
   clientType?: number;
 
@@ -751,7 +746,7 @@ export interface ClientImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -798,7 +793,7 @@ export interface ClientExport {
   clientShortName?: string;
 
   /**
-   * 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+   * 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
    */
   clientType: number;
 
@@ -873,12 +868,12 @@ export interface ClientExport {
   currencyCode: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms: number;
 
   /**
-   * 销售渠道（0=直销，1=经销，2=代销，3=电商，4=其他）
+   * 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
    */
   salesChannel: number;
 
@@ -893,7 +888,7 @@ export interface ClientExport {
   storeName?: string;
 
   /**
-   * 客户端等级（0=普通，1=重要，2=VIP，3=战略）
+   * 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
    */
   clientLevel: number;
 
@@ -920,7 +915,7 @@ export interface ClientExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

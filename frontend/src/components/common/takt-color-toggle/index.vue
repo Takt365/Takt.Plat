@@ -1,4 +1,4 @@
-﻿<!-- ======================================== -->
+<!-- ======================================== -->
 <!-- 项目名称：节拍工厂·Takt Plat -->
 <!-- 命名空间：frontend/src/components/common/takt-color-toggle -->
 <!-- 文件名称：index.vue -->
@@ -32,7 +32,7 @@
       <a-tooltip
         v-for="presetKey in themeColorPresetKeys"
         :key="presetKey"
-        :title="t(`common.page.color.${presetKey}`)"
+        :title="t(`common.page.color.${themeColorPresetI18nKeyMap[presetKey]}`)"
         placement="top"
       >
         <button
@@ -40,7 +40,7 @@
           class="color-circle-button"
           :class="{ active: themeColorStore.preset === presetKey }"
           :style="{ backgroundColor: themeColorMap[presetKey] }"
-          :aria-label="t(`common.page.color.${presetKey}`)"
+          :aria-label="t(`common.page.color.${themeColorPresetI18nKeyMap[presetKey]}`)"
           @click.stop="selectPreset(presetKey)"
         >
           <ri-check-line v-if="themeColorStore.preset === presetKey" class="text-white takt-remix-icon" />
@@ -68,7 +68,7 @@
         <a-menu-item v-for="presetKey in themeColorPresetKeys" :key="presetKey">
           <span class="color-item">
             <span class="color-dot" :style="{ backgroundColor: themeColorMap[presetKey] }" />
-            {{ t(`common.page.color.${presetKey}`) }}
+            {{ t(`common.page.color.${themeColorPresetI18nKeyMap[presetKey]}`) }}
           </span>
         </a-menu-item>
       </a-menu>
@@ -83,16 +83,16 @@
     @change="handleRadioChange"
   >
     <a-radio-button v-for="presetKey in themeColorPresetKeys" :key="presetKey" :value="presetKey">
-      <a-tooltip :title="t(`common.page.color.${presetKey}`)">
+      <a-tooltip :title="t(`common.page.color.${themeColorPresetI18nKeyMap[presetKey]}`)">
         <span
           v-if="type === 'radio-icon'"
           class="takt-toggle-radio-item color-dot-only"
           :style="{ backgroundColor: themeColorMap[presetKey] }"
-          :aria-label="t(`common.page.color.${presetKey}`)"
+          :aria-label="t(`common.page.color.${themeColorPresetI18nKeyMap[presetKey]}`)"
         />
         <span v-else class="color-item">
           <span class="color-dot" :style="{ backgroundColor: themeColorMap[presetKey] }" />
-          {{ t(`common.page.color.${presetKey}`) }}
+          {{ t(`common.page.color.${themeColorPresetI18nKeyMap[presetKey]}`) }}
         </span>
       </a-tooltip>
     </a-radio-button>
@@ -100,16 +100,16 @@
 
   <template v-else-if="type === 'radio-item'">
     <a-radio-button v-for="presetKey in themeColorPresetKeys" :key="presetKey" :value="presetKey">
-      <a-tooltip :title="t(`common.page.color.${presetKey}`)">
+      <a-tooltip :title="t(`common.page.color.${themeColorPresetI18nKeyMap[presetKey]}`)">
         <span
           v-if="radioVariant === 'icon'"
           class="takt-toggle-radio-item color-dot-only"
           :style="{ backgroundColor: themeColorMap[presetKey] }"
-          :aria-label="t(`common.page.color.${presetKey}`)"
+          :aria-label="t(`common.page.color.${themeColorPresetI18nKeyMap[presetKey]}`)"
         />
         <span v-else class="color-item">
           <span class="color-dot" :style="{ backgroundColor: themeColorMap[presetKey] }" />
-          {{ t(`common.page.color.${presetKey}`) }}
+          {{ t(`common.page.color.${themeColorPresetI18nKeyMap[presetKey]}`) }}
         </span>
       </a-tooltip>
     </a-radio-button>
@@ -125,7 +125,7 @@ import type { MenuProps } from 'ant-design-vue';
 import type { RadioChangeEvent } from 'ant-design-vue/es/radio';
 import { RiPaletteLine, RiCheckLine } from '@remixicon/vue';
 import { useThemeColorStore } from '@/stores/common/theme-color';
-import { themeColorMap, themeColorPresetKeys, type TaktThemeColorPreset } from '@/utils/theme';
+import { themeColorMap, themeColorPresetKeys, themeColorPresetI18nKeyMap, type TaktThemeColorPreset } from '@/utils/theme';
 
 /** 组件展示形态 */
 type TaktColorToggleType = 'button' | 'icon' | 'dropdown' | 'radio' | 'radio-icon' | 'radio-item';

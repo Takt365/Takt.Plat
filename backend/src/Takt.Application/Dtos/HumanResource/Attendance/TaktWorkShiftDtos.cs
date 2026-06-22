@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktWorkShiftDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：WorkShift 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktWorkShift 生成，请按需审阅）
 // 
@@ -140,7 +140,7 @@ public class TaktWorkShiftQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -202,11 +202,6 @@ public class TaktWorkShiftCreateDto
     public int CrossMidnight { get; set; } = 0;
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
@@ -214,7 +209,7 @@ public class TaktWorkShiftCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -312,11 +307,6 @@ public class TaktWorkShiftTemplateDto
     public int? CrossMidnight { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
@@ -324,7 +314,7 @@ public class TaktWorkShiftTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -379,11 +369,6 @@ public class TaktWorkShiftImportDto
     public int? CrossMidnight { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 关联工厂
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
@@ -391,7 +376,7 @@ public class TaktWorkShiftImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -459,7 +444,7 @@ public class TaktWorkShiftExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

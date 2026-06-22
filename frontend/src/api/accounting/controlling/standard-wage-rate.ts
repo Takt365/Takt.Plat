@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/controlling
 // 文件名称：standard-wage-rate.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -40,9 +40,7 @@ export function getStandardWageRateList(queryDto: any): Promise<TaktPagedResult<
   return request<TaktPagedResult<StandardWageRate>>({
     url: `${STANDARD_WAGE_RATE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportStandardWageRate(
     url: `${STANDARD_WAGE_RATE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

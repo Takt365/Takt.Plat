@@ -256,7 +256,7 @@ export interface FlowTaskQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -370,7 +370,7 @@ export interface FlowTaskCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -512,7 +512,7 @@ export interface FlowTaskTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -606,7 +606,7 @@ export interface FlowTaskImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -715,7 +715,7 @@ export interface FlowTaskExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

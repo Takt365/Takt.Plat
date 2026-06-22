@@ -31,7 +31,7 @@ const props = withDefaults(
 .antdv-form {
   min-height: 120px;
   &__empty {
-    color: rgba(0, 0, 0, 0.45);
+    color: var(--ant-color-text-tertiary);
     font-size: 13px;
   }
 }

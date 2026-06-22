@@ -116,4 +116,10 @@ public class TaktAccountTitle : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
+
+    /// <summary>
+    /// 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktAccountTitleChangeLog.AccountTitleId))]
+    public List<TaktAccountTitleChangeLog>? ChangeLogs { get; set; }
 }

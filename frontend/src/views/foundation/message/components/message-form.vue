@@ -100,7 +100,7 @@
               {{ t('foundation.message.page.recipient.all') }}
             </a-radio>
             <a-radio value="list">
-              {{ t('foundation.message.page.recipient.list') }}
+              {{ t('foundation.message.page.recipient.list.label') }}
             </a-radio>
           </a-radio-group>
         </a-form-item>
@@ -110,14 +110,14 @@
         :span="24"
       >
         <a-form-item
-          :label="t('foundation.message.page.recipient.listSelect')"
+          :label="t('foundation.message.page.recipient.list.select')"
           name="toUserIds"
         >
           <TaktSelect
             v-model="formState.toUserIds"
             api-url="TaktUsers/options"
             :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-            :placeholder="t('foundation.message.page.recipient.listPlaceholder')"
+            :placeholder="t('foundation.message.page.recipient.list.placeholder')"
             size="small"
             show-search
             multiple
@@ -164,7 +164,7 @@
         >
           <TaktSelect
             v-model:value="formState.isCc"
-            dict-type="sys_yes_no"
+            dict-type="sys_yes_no_type"
             size="small"
             disabled
           />
@@ -238,7 +238,7 @@
         >
           <TaktSelect
             v-model:value="formState.messageGroup"
-            dict-type="sys_message_group"
+            dict-type="sys_message_group_category"
             :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.group') })"
             size="small"
           />
@@ -304,7 +304,7 @@ interface MessageRecipientItem {
 
 /** sys_message_type 字典「文本」对应 dictValue（种子 TaktDictDataSeedData） */
 const DEFAULT_MESSAGE_TYPE = 'text'
-/** sys_message_group 字典「协同」对应 dictValue */
+/** sys_message_group_category 字典「协同」对应 dictValue */
 const DEFAULT_MESSAGE_GROUP = 'collaboration'
 
 /** 列表模式最多可选接收者数 */
@@ -336,7 +336,7 @@ const MESSAGE_TYPE_API_TO_DICT: Record<number, string> = {
   6: 'voice',
 }
 
-/** 字典 dictValue → 后端 TaktMessageGroup 枚举（与 sys_message_group 一致） */
+/** 字典 dictValue → 后端 TaktMessageGroup 枚举（与 sys_message_group_category 一致） */
 const MESSAGE_GROUP_DICT_TO_API: Record<string, number> = {
   collaboration: 1,
   officialdoc: 2,
@@ -523,20 +523,20 @@ const uploadListType = computed<UploadProps['listType']>(() => (
 const uploadHintText = computed(() => {
   switch (messageTypeDictValue.value) {
     case 'image':
-      return t('foundation.message.page.upload.imageHint')
+      return t('foundation.message.page.upload.image.hint')
     case 'video':
-      return t('foundation.message.page.upload.videoHint')
+      return t('foundation.message.page.upload.video.hint')
     case 'voice':
-      return t('foundation.message.page.upload.voiceHint')
+      return t('foundation.message.page.upload.voice.hint')
     default:
-      return t('foundation.message.page.upload.fileHint')
+      return t('foundation.message.page.upload.file.hint')
   }
 })
 
 /** 消息内容占位：附件类型可为选填说明 */
 const messageContentPlaceholder = computed(() => {
   if (needsFileUpload.value) {
-    return t('foundation.message.page.upload.contentOptional')
+    return t('foundation.message.page.upload.content.optional')
   }
   return t('common.page.form.placeholder.required', { field: t('entity.message.content') })
 })
@@ -640,7 +640,7 @@ function handleToUserListChange(
       : []
   if (ids.length > MAX_RECIPIENT_LIST_SIZE) {
     ids = ids.slice(0, MAX_RECIPIENT_LIST_SIZE)
-    message.warning(t('foundation.message.page.recipient.listMax', { max: MAX_RECIPIENT_LIST_SIZE }))
+    message.warning(t('foundation.message.page.recipient.list.max', { max: MAX_RECIPIENT_LIST_SIZE }))
   }
   formState.toUserIds = ids
   const options = Array.isArray(option) ? option : option != null ? [option] : []
@@ -816,10 +816,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         }
         const ids = Array.isArray(formState.toUserIds) ? formState.toUserIds : []
         if (ids.length === 0) {
-          return Promise.reject(t('foundation.message.page.recipient.listRequired'))
+          return Promise.reject(t('foundation.message.page.recipient.list.required'))
         }
         if (ids.length > MAX_RECIPIENT_LIST_SIZE) {
-          return Promise.reject(t('foundation.message.page.recipient.listMax', { max: MAX_RECIPIENT_LIST_SIZE }))
+          return Promise.reject(t('foundation.message.page.recipient.list.max', { max: MAX_RECIPIENT_LIST_SIZE }))
         }
         return Promise.resolve()
       },
@@ -938,7 +938,7 @@ async function submitCreateAndPushAsync(): Promise<MessageFormCreateResult> {
   await validate()
   const mode = formState.recipientMode as MessageRecipientMode
   if (mode === 'all' && !canUseSendToAll.value) {
-    throw new Error(t('foundation.message.page.recipient.sendToAllForbidden'))
+    throw new Error(t('foundation.message.page.recipient.send.to.all.forbidden'))
   }
   const body = getMessageBody()
   const payload: MessageBatchCreate = {
@@ -949,7 +949,7 @@ async function submitCreateAndPushAsync(): Promise<MessageFormCreateResult> {
       : [],
   }
   if (!payload.sendToAll && (!payload.toUserIds || payload.toUserIds.length === 0)) {
-    throw new Error(t('foundation.message.page.recipient.listRequired'))
+    throw new Error(t('foundation.message.page.recipient.list.required'))
   }
   if (!permissionStore.hasPermission('foundation:message:send')) {
     return { createdList: [], pushed: false, pushFailed: true }

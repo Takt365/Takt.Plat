@@ -411,7 +411,7 @@ export interface DocumentQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -600,7 +600,7 @@ export interface DocumentCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -742,7 +742,7 @@ export interface DocumentTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -836,7 +836,7 @@ export interface DocumentImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -1005,7 +1005,7 @@ export interface DocumentExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

@@ -216,7 +216,7 @@ export interface FlowSchemeQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -320,7 +320,7 @@ export interface FlowSchemeCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -462,7 +462,7 @@ export interface FlowSchemeTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -556,7 +556,7 @@ export interface FlowSchemeImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -655,7 +655,7 @@ export interface FlowSchemeExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

@@ -41,9 +41,7 @@ export function getConfigurableJoinList(queryDto: any): Promise<TaktPagedResult<
   return request<TaktPagedResult<ConfigurableJoin>>({
     url: `${CONFIGURABLE_JOIN_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportConfigurableJoin(
     url: `${CONFIGURABLE_JOIN_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

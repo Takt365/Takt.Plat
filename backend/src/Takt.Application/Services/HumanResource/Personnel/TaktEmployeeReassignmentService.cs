@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Personnel;
+using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -28,26 +29,30 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 /// <summary>
 /// 员工调动应用服务
 /// </summary>
-public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeReassignmentService
+public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeReassignmentService, ITaktApprovalFlowCompletedContributor
 {
     private readonly ITaktApprovalRepository<TaktEmployeeReassignment> _employeeReassignmentRepository;
+    private readonly ITaktEmployeeService _employeeService;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeReassignmentRepository">员工调动仓储</param>
+    /// <param name="employeeService">员工应用服务</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeReassignmentService(
         ITaktApprovalRepository<TaktEmployeeReassignment> employeeReassignmentRepository,
+        ITaktEmployeeService employeeService,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeReassignmentRepository = employeeReassignmentRepository;
+        _employeeService = employeeService;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -94,7 +99,7 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
         EnsureThreeLayerContext();
         var list = await _employeeReassignmentRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.FromDeptName,
+            x => x.FromDeptName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -265,7 +270,7 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
                 || SqlFunc.ToString(x.ToPostId).Contains(keywords)
                 || (x.ToPostName != null && x.ToPostName.Contains(keywords))
                 || (x.Reason != null && x.Reason.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -327,9 +332,9 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
             exp = exp.And(x => x.Reason != null && x.Reason.Contains(queryDto.Reason));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))
@@ -358,5 +363,38 @@ public class TaktEmployeeReassignmentService : TaktServiceBase, ITaktEmployeeRea
         }
 
         return exp.ToExpression();
+    }
+
+    /// <inheritdoc />
+    public string RelatedTableName => TaktApprovalEntityTableNames.Of<TaktEmployeeReassignment>();
+
+    /// <inheritdoc />
+    public Task OnApprovalFlowCompletedAsync(TaktApprovalFlowCompletedContext context) =>
+        OnEmployeeReassignmentFlowCompletedAsync(context);
+
+    /// <summary>
+    /// 调动审批通过后回写员工主档任职投影
+    /// </summary>
+    /// <param name="context">回写上下文</param>
+    /// <returns>异步任务</returns>
+    private async Task OnEmployeeReassignmentFlowCompletedAsync(TaktApprovalFlowCompletedContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        if (context.EntityId <= 0)
+        {
+            return;
+        }
+        var reassignment = await _employeeReassignmentRepository.GetByIdAsync(context.EntityId);
+        if (reassignment == null
+            || reassignment.EmployeeId <= 0
+            || reassignment.TenantCode != context.TenantCode
+            || reassignment.CompanyCode != context.CompanyCode)
+        {
+            return;
+        }
+        await _employeeService.RefreshEmployeePrimaryAssignmentAsync(
+            reassignment.EmployeeId,
+            context.TenantCode,
+            context.CompanyCode);
     }
 }

@@ -11,15 +11,16 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Shared.Constants;
 
 namespace Takt.Domain.Entities.Statistics.Report;
 
 /// <summary>
-/// 自定义报表主实体（对标 SAP QuickViewer / SQVI 查询定义）
+/// 自定义报表主实体（SQVI 查询定义）
 /// </summary>
 /// <remarks>
-/// 主子表结构承载多表 JOIN、Selection Screen 筛选、分组与排序定义；
-/// 运行时由应用服务编译为只读 SELECT 并通过 <c>ITaktSqlExecutor</c> 执行，Excel 导出走 <c>TaktExcelHelper</c>。
+/// 主子表结构承载多表 JOIN、SQVI 筛选条件、分组与排序定义；
+/// 运行时由应用服务编译为 SqlSugar Queryable 并通过 <c>ITaktStatQueryExecutor</c> 执行，Excel 导出走 <c>TaktExcelHelper</c>。
 /// </remarks>
 [SugarTable("takt_statistics_report_configurable", "自定义报表主表")]
 [SugarIndex("ix_configurable_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -41,10 +42,10 @@ public class TaktConfigurable : TaktCompanyEntityBase
     public string ReportName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报表业务域（财务/人力/后勤等）
+    /// 报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）
     /// </summary>
-    [SugarColumn(ColumnName = "report_domain", ColumnDescription = "报表业务域", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ReportDomain { get; set; } = 0;
+    [SugarColumn(ColumnName = "report_domain", ColumnDescription = "报表业务域", ColumnDataType = "int", IsNullable = false, DefaultValue = "9")]
+    public int ReportDomain { get; set; } = 9;
 
     /// <summary>
     /// 报表子分类（与菜单末级路由段对齐，如 management、controlling、material）
@@ -61,27 +62,20 @@ public class TaktConfigurable : TaktCompanyEntityBase
     /// <summary>
     /// 单次导出最大行数（Excel 上限，防止 OOM）
     /// </summary>
-    [SugarColumn(ColumnName = "max_export_rows", ColumnDescription = "导出最大行数", ColumnDataType = "int", IsNullable = false, DefaultValue = "50000")]
-    public int MaxExportRows { get; set; } = 50000;
+    [SugarColumn(ColumnName = "max_export_rows", ColumnDescription = "导出最大行数", ColumnDataType = "int", IsNullable = false, DefaultValue = "500")]
+    public int MaxExportRows { get; set; } = TaktConfigurableConstants.DefaultRowLimit;
 
     /// <summary>
     /// 单次查询最大行数（预览/分页上限）
     /// </summary>
-    [SugarColumn(ColumnName = "max_query_rows", ColumnDescription = "查询最大行数", ColumnDataType = "int", IsNullable = false, DefaultValue = "5000")]
-    public int MaxQueryRows { get; set; } = 5000;
+    [SugarColumn(ColumnName = "max_query_rows", ColumnDescription = "查询最大行数", ColumnDataType = "int", IsNullable = false, DefaultValue = "500")]
+    public int MaxQueryRows { get; set; } = TaktConfigurableConstants.DefaultRowLimit;
 
     /// <summary>
-    /// 归属用户 ID（为空表示公司级共享报表）
+    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
     /// </summary>
-    [SugarColumn(ColumnName = "owner_user_id", ColumnDescription = "归属用户ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OwnerUserId { get; set; }
-
-    /// <summary>
-    /// 是否内置（内置报表禁止删除）
-    /// </summary>
-    [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsBuiltIn { get; set; } = 0;
+    [SugarColumn(ColumnName = "is_public", ColumnDescription = "公开", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsPublic { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -127,7 +121,7 @@ public class TaktConfigurable : TaktCompanyEntityBase
     public List<TaktConfigurableField>? Fields { get; set; }
 
     /// <summary>
-    /// 筛选条件列表（Selection Screen / WHERE）
+    /// 筛选条件列表（SQVI WHERE）
     /// </summary>
     [SugarColumn(IsIgnore = true)]
     [Navigate(NavigateType.OneToMany, nameof(TaktConfigurableSelection.ConfigurableId))]

@@ -110,7 +110,7 @@ public interface ITaktNumberingService
     Task<TaktNumberingPreviewResultDto> PreviewNumberingAsync(TaktNumberingPreviewRequestDto request);
 
     /// <summary>
-    /// 生成下一个业务编号（递增 CurrentSequence 并写回规则）
+    /// 生成下一个业务编号（服务核心：递增流水、写回 ExampleCode，供业务单据取号）
     /// </summary>
     /// <param name="request">生成参数</param>
     /// <returns>生成结果</returns>

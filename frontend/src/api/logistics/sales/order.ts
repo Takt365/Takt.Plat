@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
-// 文件名称：sales-order.ts
-// 创建时间：2026-06-09
+// 文件名称：order.ts
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -20,7 +20,7 @@ import type {
   SalesOrderCreate,
   SalesOrderStatus,
   SalesOrderUpdate
-} from '@/types/logistics/sales/sales-order';
+} from '@/types/logistics/sales/order';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -41,9 +41,7 @@ export function getSalesOrderList(queryDto: any): Promise<TaktPagedResult<SalesO
   return request<TaktPagedResult<SalesOrder>>({
     url: `${SALES_ORDER_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -113,7 +111,7 @@ export function deleteSalesOrderBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新销售订单状态
- * @param {SalesOrderStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {SalesOrderStatus} dto 状态 DTO
  * @returns {Promise<SalesOrder>} 销售订单DTO
  */
 export function updateSalesOrderStatus(dto: SalesOrderStatus): Promise<SalesOrder> {
@@ -200,7 +198,7 @@ export function exportSalesOrder(
     url: `${SALES_ORDER_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

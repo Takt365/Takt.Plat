@@ -41,9 +41,7 @@ export function getTranslationTransposedList(queryDto: any): Promise<Translation
   return request<TranslationTransposedResult>({
     url: `${TRANSLATION_API_BASE}/transposed`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -72,9 +70,7 @@ export function getTranslationList(queryDto: any): Promise<TaktPagedResult<Trans
   return request<TaktPagedResult<Translation>>({
     url: `${TRANSLATION_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -218,7 +214,7 @@ export function exportTranslation(
     url: `${TRANSLATION_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

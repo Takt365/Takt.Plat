@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Personnel;
+using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -28,26 +29,30 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 /// <summary>
 /// 员工入职上岗应用服务
 /// </summary>
-public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedService
+public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedService, ITaktApprovalFlowCompletedContributor
 {
     private readonly ITaktApprovalRepository<TaktEmployeeJoined> _employeeJoinedRepository;
+    private readonly ITaktEmployeeService _employeeService;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeJoinedRepository">员工入职上岗仓储</param>
+    /// <param name="employeeService">员工应用服务</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeJoinedService(
         ITaktApprovalRepository<TaktEmployeeJoined> employeeJoinedRepository,
+        ITaktEmployeeService employeeService,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeJoinedRepository = employeeJoinedRepository;
+        _employeeService = employeeService;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -94,7 +99,7 @@ public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedSer
         EnsureThreeLayerContext();
         var list = await _employeeJoinedRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.DeptName,
+            x => x.DeptName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -265,7 +270,7 @@ public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedSer
                 || SqlFunc.ToString(x.EmploymentType).Contains(keywords)
                 || SqlFunc.ToString(x.DirectManagerId).Contains(keywords)
                 || (x.DirectManagerName != null && x.DirectManagerName.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.JoinedDate).Contains(keywords)
                 || SqlFunc.ToString(x.ProbationEndDate).Contains(keywords)
@@ -329,9 +334,9 @@ public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedSer
             exp = exp.And(x => x.DirectManagerName != null && x.DirectManagerName.Contains(queryDto.DirectManagerName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))
@@ -380,5 +385,38 @@ public class TaktEmployeeJoinedService : TaktServiceBase, ITaktEmployeeJoinedSer
         }
 
         return exp.ToExpression();
+    }
+
+    /// <inheritdoc />
+    public string RelatedTableName => TaktApprovalEntityTableNames.Of<TaktEmployeeJoined>();
+
+    /// <inheritdoc />
+    public Task OnApprovalFlowCompletedAsync(TaktApprovalFlowCompletedContext context) =>
+        OnEmployeeJoinedFlowCompletedAsync(context);
+
+    /// <summary>
+    /// 上岗审批通过后回写员工主档任职投影
+    /// </summary>
+    /// <param name="context">回写上下文</param>
+    /// <returns>异步任务</returns>
+    private async Task OnEmployeeJoinedFlowCompletedAsync(TaktApprovalFlowCompletedContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        if (context.EntityId <= 0)
+        {
+            return;
+        }
+        var joined = await _employeeJoinedRepository.GetByIdAsync(context.EntityId);
+        if (joined == null
+            || joined.EmployeeId <= 0
+            || joined.TenantCode != context.TenantCode
+            || joined.CompanyCode != context.CompanyCode)
+        {
+            return;
+        }
+        await _employeeService.RefreshEmployeePrimaryAssignmentAsync(
+            joined.EmployeeId,
+            context.TenantCode,
+            context.CompanyCode);
     }
 }

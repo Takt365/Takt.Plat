@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -73,8 +77,10 @@
                 <a-input
                   v-model:value="formState.countersignCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.code') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.countersignId"
                 />
               </a-form-item>
             </a-col>
@@ -86,7 +92,8 @@
                 <a-input
                   v-model:value="formState.countersignDepts"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.depts') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -99,7 +106,8 @@
                 <a-input
                   v-model:value="formState.financeDept"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.financedept') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -112,7 +120,8 @@
                 <a-input
                   v-model:value="formState.budgetReviewComment"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.budgetreviewcomment') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -125,20 +134,8 @@
                 <a-input
                   v-model:value="formState.executiveOffice"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.executiveoffice') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.countersign.flowinstanceid')"
-                name="flowInstanceId"
-              >
-                <a-input
-                  v-model:value="formState.flowInstanceId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.flowinstanceid') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -151,7 +148,22 @@
                 <a-input
                   v-model:value="formState.applicantBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicantby') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.countersign.applicationdept')"
+                name="applicationDept"
+              >
+                <a-input
+                  v-model:value="formState.applicationDept"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicationdept') })"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -168,26 +180,14 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.countersign.applicationdept')"
-                name="applicationDept"
-              >
-                <a-input
-                  v-model:value="formState.applicationDept"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicationdept') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.countersign.costbearerdept')"
                 name="costBearerDept"
               >
                 <a-input
                   v-model:value="formState.costBearerDept"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.costbearerdept') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -200,7 +200,6 @@
                 <a-input-number
                   v-model:value="formState.isBudget"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.isbudget') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -213,7 +212,8 @@
                 <a-input
                   v-model:value="formState.budgetItem"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.budgetitem') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -226,7 +226,6 @@
                 <a-input-number
                   v-model:value="formState.budgetAmount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.budgetamount') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -239,7 +238,6 @@
                 <a-input-number
                   v-model:value="formState.applicationAmount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicationamount') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -252,7 +250,8 @@
                 <a-input
                   v-model:value="formState.countersignTitle"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.title') })"
-                  size="small"
+                  show-count
+                  :maxlength="500"
                   allow-clear
                 />
               </a-form-item>
@@ -265,7 +264,8 @@
                 <a-input
                   v-model:value="formState.applicationReason"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicationreason') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -279,7 +279,6 @@
                   v-model:value="formState.budgetUsageDescription"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.countersign.budgetusagedescription') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -291,7 +290,22 @@
                 <a-input
                   v-model:value="formState.targetAndExpectedBenefit"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.targetandexpectedbenefit') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.countersign.attachments')"
+                name="attachments"
+              >
+                <a-input
+                  v-model:value="formState.attachments"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.attachments') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -306,20 +320,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.countersign.attachments')"
-                name="attachments"
-              >
-                <a-input
-                  v-model:value="formState.attachments"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.attachments') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.countersign.status')"
                 name="countersignStatus"
@@ -327,20 +328,32 @@
                 <a-input-number
                   v-model:value="formState.countersignStatus"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.status') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -353,15 +366,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -375,6 +389,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { CountersignCreate } from '@/types/accounting/financial/countersign'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -407,7 +422,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","countersignCode","countersignDepts","financeDept","budgetReviewComment","executiveOffice","flowInstanceId","applicantBy","applicationDept","costBearerDept","isBudget","budgetItem","budgetAmount","applicationAmount","countersignTitle","applicationReason","budgetUsageDescription","targetAndExpectedBenefit","attachments","countersignStatus","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","countersignCode","countersignDepts","financeDept","budgetReviewComment","executiveOffice","applicantBy","applicationDept","costBearerDept","isBudget","budgetItem","budgetAmount","applicationAmount","countersignTitle","applicationReason","budgetUsageDescription","targetAndExpectedBenefit","attachments","countersignStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -418,7 +433,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -426,18 +441,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 countersignId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.countersignId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -467,34 +498,58 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  isBudget: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.countersign.isbudget') }),
-      trigger: 'change'
-    }
-  ],
-  budgetAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.countersign.budgetamount') }),
-      trigger: 'change'
-    }
-  ],
-  applicationAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.countersign.applicationamount') }),
-      trigger: 'change'
-    }
-  ],
-  countersignStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.countersign.status') }),
-      trigger: 'change'
-    }
-  ],
+  isBudget: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.isbudget') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.isbudget') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  budgetAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.budgetamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.budgetamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  applicationAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.applicationamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.applicationamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  countersignStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.countersign.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -505,15 +560,38 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('isBudget' in payload) {
+    const rawisBudget = payload.isBudget
+    payload.isBudget = typeof rawisBudget === 'number' ? rawisBudget : Number(rawisBudget)
+  }
+  if ('budgetAmount' in payload) {
+    const rawbudgetAmount = payload.budgetAmount
+    payload.budgetAmount = typeof rawbudgetAmount === 'number' ? rawbudgetAmount : Number(rawbudgetAmount)
+  }
+  if ('applicationAmount' in payload) {
+    const rawapplicationAmount = payload.applicationAmount
+    payload.applicationAmount = typeof rawapplicationAmount === 'number' ? rawapplicationAmount : Number(rawapplicationAmount)
+  }
+  if ('countersignStatus' in payload) {
+    const rawcountersignStatus = payload.countersignStatus
+    payload.countersignStatus = typeof rawcountersignStatus === 'number' ? rawcountersignStatus : Number(rawcountersignStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.countersignId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

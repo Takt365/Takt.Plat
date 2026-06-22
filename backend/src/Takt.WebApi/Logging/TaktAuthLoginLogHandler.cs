@@ -151,7 +151,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     {
         var userAgent = httpContext.Request.Headers.UserAgent.ToString();
         var (browser, os) = ParseUserAgent(userAgent);
-        var clientIp = GetClientIp(httpContext);
+        var (clientIp, loginLocation) = TaktLocationHelper.ResolveClientIpAndLocationForLog(httpContext);
         var requestId = httpContext.Items["RequestId"] as string;
         var path = httpContext.Request.Path.Value;
         var isSuccess = request.LoginResult == TaktLoginResult.Success;
@@ -235,7 +235,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
                             LoginResult = request.LoginResult,
                             LoginMessage = BuildPersistMessage(request),
                             LoginIp = clientIp,
-                            LoginLocation = TaktLocationHelper.ResolveIpLocationForLog(clientIp),
+                            LoginLocation = loginLocation,
                             UserAgent = Truncate(userAgent, 500),
                             Browser = browser,
                             Os = os,
@@ -335,7 +335,7 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
     {
         var requestId = httpContext.Items["RequestId"] as string;
         var path = httpContext.Request.Path.Value;
-        var clientIp = GetClientIp(httpContext);
+        var clientIp = TaktLocationHelper.ResolveClientIp(httpContext);
 
         var logContext = new TaktLogContext
         {
@@ -420,27 +420,6 @@ public sealed class TaktAuthLoginLogHandler : ITaktAuthLoginLogHandler
         }
 
         return $"[{request.Phase}] {message}";
-    }
-
-    /// <summary>
-    /// 解析客户端 IP（优先 X-Forwarded-For 首段，否则 RemoteIpAddress）
-    /// </summary>
-    /// <param name="context">HTTP 上下文</param>
-    /// <returns>IP 字符串；无法解析时为 unknown</returns>
-    private static string GetClientIp(HttpContext context)
-    {
-        var forwarded = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(forwarded))
-        {
-            var ip = forwarded.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-                .FirstOrDefault();
-            if (!string.IsNullOrWhiteSpace(ip))
-            {
-                return ip;
-            }
-        }
-
-        return context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
     }
 
     /// <summary>

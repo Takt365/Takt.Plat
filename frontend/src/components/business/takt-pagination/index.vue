@@ -21,6 +21,11 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import {
+  getTaktDefaultPageIndex,
+  getTaktDefaultPageSize,
+  getTaktPageSizeOptions,
+} from '@/utils/takt-paged'
 
 const { t } = useI18n()
 
@@ -49,13 +54,13 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   show: true,
-  current: 1,
-  pageSize: 10,
+  current: () => getTaktDefaultPageIndex(),
+  pageSize: () => getTaktDefaultPageSize(),
   total: 0,
   showSizeChanger: true,
   showTotal: true,
   showJumper: true,
-  pageSizeOptions: () => ['10', '20', '50', '100'],
+  pageSizeOptions: () => [...getTaktPageSizeOptions()],
   size: 'small',
   simple: false
 })

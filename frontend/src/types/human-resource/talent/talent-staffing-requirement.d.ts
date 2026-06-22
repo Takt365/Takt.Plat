@@ -286,7 +286,7 @@ export interface TalentStaffingRequirementQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -395,7 +395,7 @@ export interface TalentStaffingRequirementCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -499,7 +499,7 @@ export interface TalentStaffingRequirementTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -593,7 +593,7 @@ export interface TalentStaffingRequirementImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -687,7 +687,7 @@ export interface TalentStaffingRequirementExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

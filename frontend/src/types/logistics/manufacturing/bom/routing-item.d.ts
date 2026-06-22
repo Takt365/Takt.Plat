@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：routing-item.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-15
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -114,9 +114,24 @@ export interface RoutingItem extends CompanyDtoBase {
   processDescription?: string;
 
   /**
+   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   */
+  processSegmentType: number;
+
+  /**
+   * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+   */
+  extJson?: string;
+
+  /**
    * 工艺路线主表（主表） （主表：TaktRouting）
    */
   routing?: Routing;
+
+  /**
+   * 工序参数定义 （子表：TaktRoutingItemArgument）
+   */
+  arguments?: RoutingItemArgument[];
 
 }
 
@@ -219,6 +234,16 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   processDescription?: string;
 
   /**
+   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   */
+  processSegmentType?: number;
+
+  /**
+   * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+   */
+  extJson?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -231,7 +256,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -333,19 +358,29 @@ export interface RoutingItemCreate {
   isQualityCheck: boolean;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 工序说明
    */
   processDescription?: string;
 
   /**
+   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   */
+  processSegmentType: number;
+
+  /**
+   * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+   */
+  extJson?: string;
+
+  /**
+   * 工序参数定义（子表，级联保存）
+   */
+  arguments?: RoutingItemArgumentCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -441,19 +476,24 @@ export interface RoutingItemTemplate {
   pointsUnit?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 工序说明
    */
   processDescription?: string;
 
   /**
+   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   */
+  processSegmentType?: number;
+
+  /**
+   * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+   */
+  extJson?: string;
+
+  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -520,19 +560,24 @@ export interface RoutingItemImport {
   pointsUnit?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 工序说明
    */
   processDescription?: string;
 
   /**
+   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   */
+  processSegmentType?: number;
+
+  /**
+   * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+   */
+  extJson?: string;
+
+  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -639,9 +684,19 @@ export interface RoutingItemExport {
   processDescription?: string;
 
   /**
+   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   */
+  processSegmentType: number;
+
+  /**
+   * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+   */
+  extJson?: string;
+
+  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailurePcbaReworkDtos.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityIssuePcbaReworkDtos.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
-// 功能描述：QualityFailurePcbaRework 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityFailurePcbaRework 生成，请按需审阅）
+// 功能描述：QualityIssuePcbaRework 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityIssuePcbaRework 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,38 +18,38 @@ using Takt.Shared.Models;
 namespace Takt.Application.Dtos.Logistics.Quality.Cost;
 
 // ========================================
-// QualityFailurePcbaRework 响应 DTO
+// QualityIssuePcbaRework 响应 DTO
 // ========================================
 
 /// <summary>
 /// 品质问题应对明细 - PCBA不良改修应对(PCBA选别・改修费用)
-/// 对应前端 TaktQualityFailurePcbaReworkDto
+/// 对应前端 TaktQualityIssuePcbaReworkDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
-public class TaktQualityFailurePcbaReworkDto : TaktCompanyDtoBase
+public class TaktQualityIssuePcbaReworkDto : TaktCompanyDtoBase
 {
     /// <summary>
-    /// QualityFailurePcbaReworkID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// QualityIssuePcbaReworkID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailurePcbaReworkId { get; set; }
+    public long QualityIssuePcbaReworkId { get; set; }
 
     /// <summary>
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureId { get; set; }
+    public long QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题主表名称（填充字段）
     /// </summary>
-    public string? QualityFailureName { get; set; }
+    public string? QualityIssueName { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    public string QualityFailureCode { get; set; } = string.Empty;
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -128,21 +128,21 @@ public class TaktQualityFailurePcbaReworkDto : TaktCompanyDtoBase
 
     /// <summary>
     /// 质量问题主表（导航属性）
-    /// （主表：TaktQualityFailure）
+    /// （主表：TaktQualityIssue）
     /// </summary>
-    public TaktQualityFailureDto? Issue { get; set; }
+    public TaktQualityIssueDto? Issue { get; set; }
 
 }
 
 // ========================================
-// QualityFailurePcbaRework 查询 DTO
+// QualityIssuePcbaRework 查询 DTO
 // ========================================
 
 /// <summary>
-/// QualityFailurePcbaRework 分页查询 DTO
+/// QualityIssuePcbaRework 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
-public class TaktQualityFailurePcbaReworkQueryDto : TaktPagedQuery
+public class TaktQualityIssuePcbaReworkQueryDto : TaktPagedQuery
 {
     /// <summary>
     /// 租户编码
@@ -158,12 +158,12 @@ public class TaktQualityFailurePcbaReworkQueryDto : TaktPagedQuery
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityFailureId { get; set; }
+    public long? QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    public string? QualityFailureCode { get; set; } = string.Empty;
+    public string? QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -253,7 +253,7 @@ public class TaktQualityFailurePcbaReworkQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -262,13 +262,13 @@ public class TaktQualityFailurePcbaReworkQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建QualityFailurePcbaRework DTO
+// 创建QualityIssuePcbaRework DTO
 // ========================================
 
 /// <summary>
-/// 创建QualityFailurePcbaRework DTO
+/// 创建QualityIssuePcbaRework DTO
 /// </summary>
-public class TaktQualityFailurePcbaReworkCreateDto
+public class TaktQualityIssuePcbaReworkCreateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -289,13 +289,13 @@ public class TaktQualityFailurePcbaReworkCreateDto
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureId { get; set; }
+    public long QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
     [Required(ErrorMessage = "品质问题编码（冗余字段，便于查询）不能为空")]
-    public string QualityFailureCode { get; set; } = string.Empty;
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -375,7 +375,7 @@ public class TaktQualityFailurePcbaReworkCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -385,22 +385,22 @@ public class TaktQualityFailurePcbaReworkCreateDto
 }
 
 // ========================================
-// 更新QualityFailurePcbaRework DTO
+// 更新QualityIssuePcbaRework DTO
 // ========================================
 
 /// <summary>
-/// 更新QualityFailurePcbaRework DTO
-/// 继承 TaktQualityFailurePcbaReworkCreateDto，添加 QualityFailurePcbaReworkId 字段
+/// 更新QualityIssuePcbaRework DTO
+/// 继承 TaktQualityIssuePcbaReworkCreateDto，添加 QualityIssuePcbaReworkId 字段
 /// </summary>
-public class TaktQualityFailurePcbaReworkUpdateDto : TaktQualityFailurePcbaReworkCreateDto
+public class TaktQualityIssuePcbaReworkUpdateDto : TaktQualityIssuePcbaReworkCreateDto
 {
     /// <summary>
-    /// QualityFailurePcbaReworkID（标识要更新的实体）
+    /// QualityIssuePcbaReworkID（标识要更新的实体）
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailurePcbaReworkId { get; set; }
+    public long QualityIssuePcbaReworkId { get; set; }
 
 }
 
@@ -409,9 +409,9 @@ public class TaktQualityFailurePcbaReworkUpdateDto : TaktQualityFailurePcbaRewor
 // ========================================
 
 /// <summary>
-/// QualityFailurePcbaRework 导入模板行 DTO
+/// QualityIssuePcbaRework 导入模板行 DTO
 /// </summary>
-public class TaktQualityFailurePcbaReworkTemplateDto
+public class TaktQualityIssuePcbaReworkTemplateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -427,12 +427,12 @@ public class TaktQualityFailurePcbaReworkTemplateDto
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityFailureId { get; set; }
+    public long? QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    public string? QualityFailureCode { get; set; } = string.Empty;
+    public string? QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -482,7 +482,7 @@ public class TaktQualityFailurePcbaReworkTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -492,9 +492,9 @@ public class TaktQualityFailurePcbaReworkTemplateDto
 }
 
 /// <summary>
-/// QualityFailurePcbaRework 导入 DTO（独立实现，不继承 TemplateDto）
+/// QualityIssuePcbaRework 导入 DTO（独立实现，不继承 TemplateDto）
 /// </summary>
-public class TaktQualityFailurePcbaReworkImportDto
+public class TaktQualityIssuePcbaReworkImportDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -515,12 +515,12 @@ public class TaktQualityFailurePcbaReworkImportDto
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityFailureId { get; set; }
+    public long? QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    public string? QualityFailureCode { get; set; } = string.Empty;
+    public string? QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -570,7 +570,7 @@ public class TaktQualityFailurePcbaReworkImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -584,16 +584,16 @@ public class TaktQualityFailurePcbaReworkImportDto
 // ========================================
 
 /// <summary>
-/// QualityFailurePcbaRework 导出 DTO（独立实现，不继承响应 Dto）
+/// QualityIssuePcbaRework 导出 DTO（独立实现，不继承响应 Dto）
 /// </summary>
-public class TaktQualityFailurePcbaReworkExportDto
+public class TaktQualityIssuePcbaReworkExportDto
 {
     /// <summary>
-    /// QualityFailurePcbaReworkID
+    /// QualityIssuePcbaReworkID
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailurePcbaReworkId { get; set; }
+    public long QualityIssuePcbaReworkId { get; set; }
 
     /// <summary>
     /// 公司代码
@@ -604,12 +604,12 @@ public class TaktQualityFailurePcbaReworkExportDto
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureId { get; set; }
+    public long QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    public string QualityFailureCode { get; set; } = string.Empty;
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -689,7 +689,7 @@ public class TaktQualityFailurePcbaReworkExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

@@ -97,7 +97,7 @@ public class TaktTicketChangeLogService : TaktServiceBase, ITaktTicketChangeLogS
         EnsureThreeLayerContext();
         var list = await _ticketChangeLogRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.TicketNo,
+            x => x.TicketNo ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -241,7 +241,7 @@ public class TaktTicketChangeLogService : TaktServiceBase, ITaktTicketChangeLogS
                 || (x.ChangeSummary != null && x.ChangeSummary.Contains(keywords))
                 || (x.ChangeFields != null && x.ChangeFields.Contains(keywords))
                 || (x.ChangeReason != null && x.ChangeReason.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -277,9 +277,9 @@ public class TaktTicketChangeLogService : TaktServiceBase, ITaktTicketChangeLogS
             exp = exp.And(x => x.ChangeReason != null && x.ChangeReason.Contains(queryDto.ChangeReason));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

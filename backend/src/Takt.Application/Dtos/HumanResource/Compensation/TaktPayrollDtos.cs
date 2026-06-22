@@ -72,7 +72,7 @@ public class TaktPayrollDto : TaktCompanyDtoBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int PayrollStatus { get; set; } = 0;
 
@@ -150,7 +150,7 @@ public class TaktPayrollQueryDto : TaktPagedQuery
     public DateTime? ExpiryDateEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? PayrollStatus { get; set; }
 
@@ -177,7 +177,7 @@ public class TaktPayrollQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -243,7 +243,7 @@ public class TaktPayrollCreateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int PayrollStatus { get; set; } = 0;
 
@@ -260,7 +260,7 @@ public class TaktPayrollCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -307,9 +307,9 @@ public class TaktPayrollStatusDto
     public long PayrollId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
     public int PayrollStatus { get; set; } = 0;
 }
 
@@ -354,7 +354,7 @@ public class TaktPayrollTemplateDto
     public string? FormulaSetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? PayrollStatus { get; set; }
 
@@ -371,7 +371,7 @@ public class TaktPayrollTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -422,7 +422,7 @@ public class TaktPayrollImportDto
     public string? FormulaSetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? PayrollStatus { get; set; }
 
@@ -439,7 +439,7 @@ public class TaktPayrollImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -501,7 +501,7 @@ public class TaktPayrollExportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int PayrollStatus { get; set; } = 0;
 
@@ -518,7 +518,7 @@ public class TaktPayrollExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

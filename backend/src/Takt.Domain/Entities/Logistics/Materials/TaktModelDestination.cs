@@ -1,6 +1,6 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Manufacturing
+// 命名空间：Takt.Domain.Entities.Logistics.Materials
 // 文件名称：TaktModelDestination.cs
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
@@ -13,22 +13,22 @@
 using SqlSugar;
 using Takt.Domain.Entities;
 
-namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
+namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
-/// Takt型号目的地实体（物料名称、机种名称、仕向地名称）
+/// Takt型号目的地实体（租户级；物料编码/名称、机种编码/名称、仕向地编码/名称）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_model_destination", "型号目的地表")]
-[SugarIndex("ix_model_destination_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_model_destination_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_model_destination_order_num", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SortOrder), OrderByType.Asc, false)]
-public class TaktModelDestination : TaktCompanyEntityBase
+[SugarTable("takt_logistics_materials_model_destination", "型号目的地表")]
+[SugarIndex("ix_model_destination_tenant", nameof(TenantCode), OrderByType.Asc, false)]
+[SugarIndex("ix_model_destination_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_materials_model_destination_order_num", nameof(TenantCode), OrderByType.Asc, nameof(SortOrder), OrderByType.Asc, false)]
+public class TaktModelDestination : TaktTenantEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 物料编码
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? PlantCode { get; set; }
+    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -37,10 +37,22 @@ public class TaktModelDestination : TaktCompanyEntityBase
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 机种编码
+    /// </summary>
+    [SugarColumn(ColumnName = "model_code", ColumnDescription = "机种编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 机种名称
     /// </summary>
     [SugarColumn(ColumnName = "model_name", ColumnDescription = "机种名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string ModelName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仕向地编码
+    /// </summary>
+    [SugarColumn(ColumnName = "destination_code", ColumnDescription = "仕向地编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仕向地名称

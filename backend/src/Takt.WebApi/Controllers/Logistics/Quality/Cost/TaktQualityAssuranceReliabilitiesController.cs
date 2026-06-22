@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Cost
-// 文件名称：TaktQualityOperationReliabilitiesController.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityAssuranceReliabilitiesController.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务信赖性评价ORT费用明细控制器
 // 
@@ -23,17 +23,17 @@ namespace Takt.WebApi.Controllers.Logistics.Quality.Cost;
 /// </summary>
 [ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "品质业务信赖性评价ORT费用明细")]
-public class TaktQualityOperationReliabilitiesController : TaktControllerBase
+public class TaktQualityAssuranceReliabilitiesController : TaktControllerBase
 {
-    private readonly ITaktQualityOperationReliabilityService _qualityOperationReliabilityService;
+    private readonly ITaktQualityAssuranceReliabilityService _qualityAssuranceReliabilityService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="qualityOperationReliabilityService">品质业务信赖性评价ORT费用明细服务</param>
-    public TaktQualityOperationReliabilitiesController(ITaktQualityOperationReliabilityService qualityOperationReliabilityService)
+    /// <param name="qualityAssuranceReliabilityService">品质业务信赖性评价ORT费用明细服务</param>
+    public TaktQualityAssuranceReliabilitiesController(ITaktQualityAssuranceReliabilityService qualityAssuranceReliabilityService)
     {
-        _qualityOperationReliabilityService = qualityOperationReliabilityService;
+        _qualityAssuranceReliabilityService = qualityAssuranceReliabilityService;
     }
 
     /// <summary>
@@ -41,13 +41,13 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationreliability:list", "品质业务信赖性评价ORT费用明细列表")]
+    [TaktPermission("logistics:quality:cost:assurance:list", "品质业务信赖性评价ORT费用明细列表")]
     [HttpGet("list")]
-    public async Task<IActionResult> GetQualityOperationReliabilityListAsync([FromQuery] TaktQualityOperationReliabilityQueryDto queryDto)
+    public async Task<IActionResult> GetQualityAssuranceReliabilityListAsync([FromQuery] TaktQualityAssuranceReliabilityQueryDto queryDto)
     {
         try
         {
-            var result = await _qualityOperationReliabilityService.GetQualityOperationReliabilityListAsync(queryDto);
+            var result = await _qualityAssuranceReliabilityService.GetQualityAssuranceReliabilityListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
         }
         catch (Exception ex)
@@ -61,13 +61,13 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
     /// </summary>
     /// <param name="id">品质业务信赖性评价ORT费用明细ID</param>
     /// <returns>品质业务信赖性评价ORT费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationreliability:query", "品质业务信赖性评价ORT费用明细详情")]
+    [TaktPermission("logistics:quality:cost:assurance:query", "品质业务信赖性评价ORT费用明细详情")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetQualityOperationReliabilityByIdAsync(long id)
+    public async Task<IActionResult> GetQualityAssuranceReliabilityByIdAsync(long id)
     {
         try
         {
-            var result = await _qualityOperationReliabilityService.GetQualityOperationReliabilityByIdAsync(id);
+            var result = await _qualityAssuranceReliabilityService.GetQualityAssuranceReliabilityByIdAsync(id);
             if (result == null)
             {
                 return NotFound("品质业务信赖性评价ORT费用明细不存在");
@@ -84,13 +84,13 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
     /// 获取品质业务信赖性评价ORT费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationreliability:query", "品质业务信赖性评价ORT费用明细选项")]
+    [TaktPermission("logistics:quality:cost:assurance:query", "品质业务信赖性评价ORT费用明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQualityOperationReliabilityOptionsAsync()
+    public async Task<IActionResult> GetQualityAssuranceReliabilityOptionsAsync()
     {
         try
         {
-            var result = await _qualityOperationReliabilityService.GetQualityOperationReliabilityOptionsAsync();
+            var result = await _qualityAssuranceReliabilityService.GetQualityAssuranceReliabilityOptionsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -104,13 +104,13 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>品质业务信赖性评价ORT费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationreliability:create", "创建品质业务信赖性评价ORT费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:create", "创建品质业务信赖性评价ORT费用明细")]
     [HttpPost]
-    public async Task<IActionResult> CreateQualityOperationReliabilityAsync([FromBody] TaktQualityOperationReliabilityCreateDto dto)
+    public async Task<IActionResult> CreateQualityAssuranceReliabilityAsync([FromBody] TaktQualityAssuranceReliabilityCreateDto dto)
     {
         try
         {
-            var result = await _qualityOperationReliabilityService.CreateQualityOperationReliabilityAsync(dto);
+            var result = await _qualityAssuranceReliabilityService.CreateQualityAssuranceReliabilityAsync(dto);
             return Success(result, "创建成功");
         }
         catch (Exception ex)
@@ -125,13 +125,13 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
     /// <param name="id">品质业务信赖性评价ORT费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>品质业务信赖性评价ORT费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationreliability:update", "更新品质业务信赖性评价ORT费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:update", "更新品质业务信赖性评价ORT费用明细")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateQualityOperationReliabilityAsync(long id, [FromBody] TaktQualityOperationReliabilityUpdateDto dto)
+    public async Task<IActionResult> UpdateQualityAssuranceReliabilityAsync(long id, [FromBody] TaktQualityAssuranceReliabilityUpdateDto dto)
     {
         try
         {
-            var result = await _qualityOperationReliabilityService.UpdateQualityOperationReliabilityAsync(id, dto);
+            var result = await _qualityAssuranceReliabilityService.UpdateQualityAssuranceReliabilityAsync(id, dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)
@@ -145,13 +145,13 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
     /// </summary>
     /// <param name="id">品质业务信赖性评价ORT费用明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationreliability:delete", "删除品质业务信赖性评价ORT费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:delete", "删除品质业务信赖性评价ORT费用明细")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteQualityOperationReliabilityByIdAsync(long id)
+    public async Task<IActionResult> DeleteQualityAssuranceReliabilityByIdAsync(long id)
     {
         try
         {
-            await _qualityOperationReliabilityService.DeleteQualityOperationReliabilityByIdAsync(id);
+            await _qualityAssuranceReliabilityService.DeleteQualityAssuranceReliabilityByIdAsync(id);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -165,13 +165,13 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationreliability:delete", "批量删除品质业务信赖性评价ORT费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:delete", "批量删除品质业务信赖性评价ORT费用明细")]
     [HttpDelete("batch")]
-    public async Task<IActionResult> DeleteQualityOperationReliabilityBatchAsync([FromBody] IEnumerable<long> ids)
+    public async Task<IActionResult> DeleteQualityAssuranceReliabilityBatchAsync([FromBody] IEnumerable<long> ids)
     {
         try
         {
-            await _qualityOperationReliabilityService.DeleteQualityOperationReliabilityBatchAsync(ids);
+            await _qualityAssuranceReliabilityService.DeleteQualityAssuranceReliabilityBatchAsync(ids);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -184,13 +184,13 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationreliability:import", "获取品质业务信赖性评价ORT费用明细导入模板")]
+    [TaktPermission("logistics:quality:cost:assurance:import", "获取品质业务信赖性评价ORT费用明细导入模板")]
     [HttpGet("template")]
-    public async Task<IActionResult> GetQualityOperationReliabilityTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    public async Task<IActionResult> GetQualityAssuranceReliabilityTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
         try
         {
-            var (resultFileName, content) = await _qualityOperationReliabilityService.GetQualityOperationReliabilityTemplateAsync(sheetName, templateName);
+            var (resultFileName, content) = await _qualityAssuranceReliabilityService.GetQualityAssuranceReliabilityTemplateAsync(sheetName, templateName);
             return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)
@@ -204,9 +204,9 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationreliability:import", "导入品质业务信赖性评价ORT费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:import", "导入品质业务信赖性评价ORT费用明细")]
     [HttpPost("import")]
-    public async Task<IActionResult> ImportQualityOperationReliabilityAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    public async Task<IActionResult> ImportQualityAssuranceReliabilityAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
         try
         {
@@ -216,7 +216,7 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
             }
 
             await using var stream = file.OpenReadStream();
-            var (success, fail, errors) = await _qualityOperationReliabilityService.ImportQualityOperationReliabilityAsync(stream, sheetName);
+            var (success, fail, errors) = await _qualityAssuranceReliabilityService.ImportQualityAssuranceReliabilityAsync(stream, sheetName);
             return Success(new
             {
                 SuccessCount = success,
@@ -234,13 +234,13 @@ public class TaktQualityOperationReliabilitiesController : TaktControllerBase
     /// 导出品质业务信赖性评价ORT费用明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationreliability:export", "导出品质业务信赖性评价ORT费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:export", "导出品质业务信赖性评价ORT费用明细")]
     [HttpGet("export")]
-    public async Task<IActionResult> ExportQualityOperationReliabilityAsync([FromQuery] TaktQualityOperationReliabilityQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    public async Task<IActionResult> ExportQualityAssuranceReliabilityAsync([FromQuery] TaktQualityAssuranceReliabilityQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {
         try
         {
-            var (resultFileName, fileContent) = await _qualityOperationReliabilityService.ExportQualityOperationReliabilityAsync(query, sheetName, exportName);
+            var (resultFileName, fileContent) = await _qualityAssuranceReliabilityService.ExportQualityAssuranceReliabilityAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

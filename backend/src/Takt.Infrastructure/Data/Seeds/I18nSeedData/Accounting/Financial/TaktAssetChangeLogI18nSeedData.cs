@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktAssetChangeLogI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssetChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,74 +75,83 @@ public class TaktAssetChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktAssetChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.assetchangelog._self / entity.assetchangelog.{{field}}；ResourceGroup=3；ResourceType=0
+    /// I18nKey：entity.assetchangelog._self / entity.assetchangelog.{{field}}；ResourceGroup=Financial；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetAssetChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.assetchangelog._self
-            new TranslationSeedItem("entity.assetchangelog._self", "en-US", "Asset Change Log Information", "实体名称"),
+            new TranslationSeedItem("entity.assetchangelog._self", "en-US", "Asset Change Log Information_us", "实体名称"),
             // entity.assetchangelog._self
-            new TranslationSeedItem("entity.assetchangelog._self", "ja-JP", "资产变更记录信息", "实体名称"),
+            new TranslationSeedItem("entity.assetchangelog._self", "ja-JP", "资产变更记录信息_jp", "实体名称"),
             // entity.assetchangelog._self
             new TranslationSeedItem("entity.assetchangelog._self", "zh-CN", "资产变更记录信息", "实体名称"),
             // entity.assetchangelog._self
-            new TranslationSeedItem("entity.assetchangelog._self", "zh-HK", "资产变更记录信息", "实体名称"),
+            new TranslationSeedItem("entity.assetchangelog._self", "zh-HK", "资产变更记录信息_hk", "实体名称"),
 
             // entity.assetchangelog.assetid
-            new TranslationSeedItem("entity.assetchangelog.assetid", "en-US", "资产ID", "资产 ID"),
+            new TranslationSeedItem("entity.assetchangelog.assetid", "en-US", "资产ID_us", "资产 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
             // entity.assetchangelog.assetid
-            new TranslationSeedItem("entity.assetchangelog.assetid", "ja-JP", "资产ID", "资产 ID"),
+            new TranslationSeedItem("entity.assetchangelog.assetid", "ja-JP", "资产ID_jp", "资产 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
             // entity.assetchangelog.assetid
-            new TranslationSeedItem("entity.assetchangelog.assetid", "zh-CN", "资产ID", "资产 ID"),
+            new TranslationSeedItem("entity.assetchangelog.assetid", "zh-CN", "资产ID", "资产 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
             // entity.assetchangelog.assetid
-            new TranslationSeedItem("entity.assetchangelog.assetid", "zh-HK", "资产ID", "资产 ID"),
+            new TranslationSeedItem("entity.assetchangelog.assetid", "zh-HK", "资产ID_hk", "资产 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
 
             // entity.assetchangelog.assetcode
-            new TranslationSeedItem("entity.assetchangelog.assetcode", "en-US", "资产编码", "资产编码（冗余）"),
+            new TranslationSeedItem("entity.assetchangelog.assetcode", "en-US", "资产编码_us", "资产编码（冗余）"),
             // entity.assetchangelog.assetcode
-            new TranslationSeedItem("entity.assetchangelog.assetcode", "ja-JP", "资产编码", "资产编码（冗余）"),
+            new TranslationSeedItem("entity.assetchangelog.assetcode", "ja-JP", "资产编码_jp", "资产编码（冗余）"),
             // entity.assetchangelog.assetcode
             new TranslationSeedItem("entity.assetchangelog.assetcode", "zh-CN", "资产编码", "资产编码（冗余）"),
             // entity.assetchangelog.assetcode
-            new TranslationSeedItem("entity.assetchangelog.assetcode", "zh-HK", "资产编码", "资产编码（冗余）"),
+            new TranslationSeedItem("entity.assetchangelog.assetcode", "zh-HK", "资产编码_hk", "资产编码（冗余）"),
 
             // entity.assetchangelog.changefields
-            new TranslationSeedItem("entity.assetchangelog.changefields", "en-US", "变更字段列表", "变更字段列表 JSON"),
+            new TranslationSeedItem("entity.assetchangelog.changefields", "en-US", "变更字段列表_us", "变更字段列表 JSON"),
             // entity.assetchangelog.changefields
-            new TranslationSeedItem("entity.assetchangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表 JSON"),
+            new TranslationSeedItem("entity.assetchangelog.changefields", "ja-JP", "变更字段列表_jp", "变更字段列表 JSON"),
             // entity.assetchangelog.changefields
             new TranslationSeedItem("entity.assetchangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表 JSON"),
             // entity.assetchangelog.changefields
-            new TranslationSeedItem("entity.assetchangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表 JSON"),
+            new TranslationSeedItem("entity.assetchangelog.changefields", "zh-HK", "变更字段列表_hk", "变更字段列表 JSON"),
 
             // entity.assetchangelog.changetime
-            new TranslationSeedItem("entity.assetchangelog.changetime", "en-US", "变更时间", "变更时间"),
+            new TranslationSeedItem("entity.assetchangelog.changetime", "en-US", "变更时间_us", "变更时间"),
             // entity.assetchangelog.changetime
-            new TranslationSeedItem("entity.assetchangelog.changetime", "ja-JP", "变更时间", "变更时间"),
+            new TranslationSeedItem("entity.assetchangelog.changetime", "ja-JP", "变更时间_jp", "变更时间"),
             // entity.assetchangelog.changetime
             new TranslationSeedItem("entity.assetchangelog.changetime", "zh-CN", "变更时间", "变更时间"),
             // entity.assetchangelog.changetime
-            new TranslationSeedItem("entity.assetchangelog.changetime", "zh-HK", "变更时间", "变更时间"),
+            new TranslationSeedItem("entity.assetchangelog.changetime", "zh-HK", "变更时间_hk", "变更时间"),
 
             // entity.assetchangelog.changeby
-            new TranslationSeedItem("entity.assetchangelog.changeby", "en-US", "变更人", "变更人"),
+            new TranslationSeedItem("entity.assetchangelog.changeby", "en-US", "变更人_us", "变更人"),
             // entity.assetchangelog.changeby
-            new TranslationSeedItem("entity.assetchangelog.changeby", "ja-JP", "变更人", "变更人"),
+            new TranslationSeedItem("entity.assetchangelog.changeby", "ja-JP", "变更人_jp", "变更人"),
             // entity.assetchangelog.changeby
             new TranslationSeedItem("entity.assetchangelog.changeby", "zh-CN", "变更人", "变更人"),
             // entity.assetchangelog.changeby
-            new TranslationSeedItem("entity.assetchangelog.changeby", "zh-HK", "变更人", "变更人"),
+            new TranslationSeedItem("entity.assetchangelog.changeby", "zh-HK", "变更人_hk", "变更人"),
 
             // entity.assetchangelog.changereason
-            new TranslationSeedItem("entity.assetchangelog.changereason", "en-US", "变更原因", "变更原因"),
+            new TranslationSeedItem("entity.assetchangelog.changereason", "en-US", "变更原因_us", "变更原因"),
             // entity.assetchangelog.changereason
-            new TranslationSeedItem("entity.assetchangelog.changereason", "ja-JP", "变更原因", "变更原因"),
+            new TranslationSeedItem("entity.assetchangelog.changereason", "ja-JP", "变更原因_jp", "变更原因"),
             // entity.assetchangelog.changereason
             new TranslationSeedItem("entity.assetchangelog.changereason", "zh-CN", "变更原因", "变更原因"),
             // entity.assetchangelog.changereason
-            new TranslationSeedItem("entity.assetchangelog.changereason", "zh-HK", "变更原因", "变更原因"),
+            new TranslationSeedItem("entity.assetchangelog.changereason", "zh-HK", "变更原因_hk", "变更原因"),
+
+            // entity.assetchangelog.asset
+            new TranslationSeedItem("entity.assetchangelog.asset", "en-US", "资产主表_us", "资产主表"),
+            // entity.assetchangelog.asset
+            new TranslationSeedItem("entity.assetchangelog.asset", "ja-JP", "资产主表_jp", "资产主表"),
+            // entity.assetchangelog.asset
+            new TranslationSeedItem("entity.assetchangelog.asset", "zh-CN", "资产主表", "资产主表"),
+            // entity.assetchangelog.asset
+            new TranslationSeedItem("entity.assetchangelog.asset", "zh-HK", "资产主表_hk", "资产主表"),
         };
     }
 
@@ -160,10 +169,10 @@ public class TaktAssetChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 3;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Financial";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -16,7 +16,7 @@
       <!-- 主表：字典类型信息 -->
       <a-tab-pane
         key="main"
-        :tab="t('routine.dict.type.page.tabmain')"
+        :tab="t('common.page.form.tabs.basicinfo')"
       >
         <a-form
           ref="mainFormRef"
@@ -26,82 +26,83 @@
           label-align="right"
         >
           <a-form-item
-            :label="t('entity.dictType.code')"
+            :label="t('entity.dicttype.code')"
             name="dictTypeCode"
           >
             <a-input
               v-model:value="mainFormState.dictTypeCode"
-              :placeholder="t('routine.dict.type.placeholders.dictTypeCode')"
+              :maxlength="80"
+              :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dicttype.code') })"
               :disabled="!!props.formData?.dictTypeId"
             />
           </a-form-item>
 
           <a-form-item
-            :label="t('entity.dictType.name')"
+            :label="t('entity.dicttype.name')"
             name="dictTypeName"
           >
             <a-input
               v-model:value="mainFormState.dictTypeName"
-              :placeholder="t('routine.dict.type.placeholders.dictTypeName')"
+              :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dicttype.name') })"
             />
           </a-form-item>
 
           <a-form-item
-            :label="t('entity.dictType.datasource')"
+            :label="t('entity.dicttype.datasource')"
             name="dataSource"
           >
             <TaktSelect
               v-model:value="mainFormState.dataSource"
-              dict-type="sys_data_source"
-              :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dictType.datasource') })"
+              dict-type="sys_data_source_type"
+              :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dicttype.datasource') })"
               allow-clear
             />
           </a-form-item>
 
           <a-form-item
             v-if="mainFormState.dataSource === 1"
-            :label="t('entity.dictType.dictscript')"
+            :label="t('entity.dicttype.dictscript')"
             name="dictScript"
           >
             <a-textarea
               v-model:value="mainFormState.dictScript"
-              :placeholder="t('routine.dict.type.placeholders.dictScript')"
+              :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dicttype.dictscript') })"
               :rows="4"
             />
           </a-form-item>
 
           <a-form-item
-            :label="t('entity.dictType.isbuiltin')"
+            :label="t('entity.dicttype.isbuiltin')"
             name="isBuiltIn"
           >
             <TaktSelect
               v-model:value="mainFormState.isBuiltIn"
-              dict-type="sys_yes_no"
-              :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dictType.isbuiltin') })"
+              dict-type="sys_yes_no_type"
+              :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dicttype.isbuiltin') })"
               allow-clear
             />
           </a-form-item>
 
           <a-form-item
-            :label="t('entity.dictType.sortorder')"
+            :label="t('entity.dicttype.sortorder')"
             name="sortOrder"
           >
             <a-input-number
               v-model:value="mainFormState.sortOrder"
               :min="0"
-              :placeholder="t('routine.dict.type.placeholders.sortOrder')"
+              :placeholder="t('common.page.form.placeholder.input', { field: t('entity.dicttype.sortorder') })"
               style="width: 100%"
             />
           </a-form-item>
 
           <a-form-item
-            :label="t('entity.dictType.dictstatus')"
+            :label="t('entity.dicttype.dictstatus')"
             name="dictStatus"
           >
             <TaktSelect
               v-model:value="mainFormState.dictStatus"
-              dict-type="sys_status"
-              :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dictType.dictstatus') })"
+              dict-type="sys_normal_disable_status"
+              :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dicttype.dictstatus') })"
               allow-clear
             />
           </a-form-item>
@@ -112,7 +113,7 @@
           >
             <a-textarea
               v-model:value="mainFormState.remark"
-              :placeholder="t('routine.dict.type.placeholders.remark')"
+              :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
               :rows="3"
             />
           </a-form-item>
@@ -122,7 +123,7 @@
       <!-- 子表：字典数据列表 -->
       <a-tab-pane
         key="data"
-        :tab="t('routine.dict.type.page.tabdata')"
+        :tab="t('entity.dicttype.dictdatalist')"
       >
         <div class="dict-data-toolbar">
           <a-button
@@ -132,7 +133,7 @@
             <template #icon>
               <PlusOutlined />
             </template>
-            {{ t('routine.dict.type.typeForm.addDictData') }}
+            {{ t('common.page.button.createrow') }}
           </a-button>
         </div>
 
@@ -427,19 +428,19 @@ const mainFormState = reactive<DictTypeMainFormState>({
 
 const mainFormRules = computed<Record<string, Rule[]>>(() => ({
   dictTypeCode: [
-    { required: true, message: t('routine.dict.type.rules.dictTypeCodeRequired'), trigger: 'blur' }
+    { required: true, message: t('common.page.form.placeholder.required', { field: t('entity.dicttype.code') }), trigger: 'blur' }
   ],
   dictTypeName: [
-    { required: true, message: t('routine.dict.type.rules.dictTypeNameRequired'), trigger: 'blur' }
+    { required: true, message: t('common.page.form.placeholder.required', { field: t('entity.dicttype.name') }), trigger: 'blur' }
   ],
   dataSource: [
-    { required: true, message: t('routine.dict.type.rules.dataSourceRequired'), trigger: 'change' }
+    { required: true, message: t('common.page.form.placeholder.select', { field: t('entity.dicttype.datasource') }), trigger: 'change' }
   ],
   dictScript: [
     {
       validator: (_rule, value) => {
         if (mainFormState.dataSource === 1 && !value) {
-          return Promise.reject(t('routine.dict.type.rules.dictScriptRequired'))
+          return Promise.reject(t('common.page.form.placeholder.required', { field: t('entity.dicttype.dictscript') }))
         }
         return Promise.resolve()
       },
@@ -448,73 +449,73 @@ const mainFormRules = computed<Record<string, Rule[]>>(() => ({
   ]
 }))
 
-// 字典数据子表列定义（与 DictData 接口字段顺序一致；列标题与后端 entity.dictData 种子对齐）
+// 字典数据子表列定义（与 DictData 接口字段顺序一致；列标题与后端 entity.dictdata 种子对齐）
 const dictDataColumns = computed<TableColumnsType>(() => [
   {
-    title: t('entity.dictData.dicttypeid'),
+    title: t('entity.dictdata.dicttypeid'),
     dataIndex: 'dictTypeId',
     key: 'dictTypeId',
     width: 120
   },
   {
-    title: t('entity.dictData.dicttypecode'),
+    title: t('entity.dictdata.dicttypecode'),
     dataIndex: 'dictTypeCode',
     key: 'dictTypeCode',
     width: 150
   },
   {
-    title: t('entity.dictData.dictlabel'),
+    title: t('entity.dictdata.dictlabel'),
     dataIndex: 'dictLabel',
     key: 'dictLabel',
     width: 150
   },
   {
-    title: t('entity.dictData.i18nkey'),
+    title: t('entity.dictdata.i18nkey'),
     dataIndex: 'i18nKey',
     key: 'i18nKey',
     width: 200,
     ellipsis: true
   },
   {
-    title: t('entity.dictData.dictvalue'),
+    title: t('entity.dictdata.dictvalue'),
     dataIndex: 'dictValue',
     key: 'dictValue',
     width: 150
   },
   {
-    title: t('entity.dictData.cssclass'),
+    title: t('entity.dictdata.cssclass'),
     dataIndex: 'cssClass',
     key: 'cssClass',
     width: 100
   },
   {
-    title: t('entity.dictData.listclass'),
+    title: t('entity.dictdata.listclass'),
     dataIndex: 'listClass',
     key: 'listClass',
     width: 100
   },
   {
-    title: t('entity.dictData.extlabel'),
+    title: t('entity.dictdata.extlabel'),
     dataIndex: 'extLabel',
     key: 'extLabel',
     width: 150,
     ellipsis: true
   },
   {
-    title: t('entity.dictData.extvalue'),
+    title: t('entity.dictdata.extvalue'),
     dataIndex: 'extValue',
     key: 'extValue',
     width: 150,
     ellipsis: true
   },
   {
-    title: t('entity.dictData.sortorder'),
+    title: t('entity.dictdata.sortorder'),
     dataIndex: 'sortOrder',
     key: 'sortOrder',
     width: 100
   },
   {
-    title: t('common.page.action.operation'),
+    title: t('common.action.operation'),
     key: 'action',
     width: 80,
     fixed: 'right'
@@ -596,7 +597,12 @@ const validate = async () => {
     const item = dictDataList.value[i]
     if (!item) continue
     if (!item.dictLabel || !item.dictValue) {
-      throw new Error(t('routine.dict.type.rules.dictRowRequired', { row: i + 1 }))
+      throw new Error(
+        t('common.data.invalid.row', {
+          row: i + 1,
+          reason: t('common.validation.required', { field: t('entity.dictdata.dictlabel') + t('common.tip.or') + t('entity.dictdata.dictvalue') })
+        })
+      )
     }
   }
 }

@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,98 +63,100 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.plantcode')"
+                :label="t('entity.samplingscheme.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.plantcode') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.samplingSchemeId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.code')"
+                :label="t('entity.samplingscheme.code')"
                 name="samplingSchemeCode"
               >
                 <a-input
                   v-model:value="formState.samplingSchemeCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.code') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.code') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.samplingSchemeId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.name')"
+                :label="t('entity.samplingscheme.name')"
                 name="samplingSchemeName"
               >
                 <a-input
                   v-model:value="formState.samplingSchemeName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.name') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.name') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.type')"
+                :label="t('entity.samplingscheme.type')"
                 name="samplingSchemeType"
               >
                 <a-input-number
                   v-model:value="formState.samplingSchemeType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.type') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.type') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.samplingstandard')"
+                :label="t('entity.samplingscheme.samplingstandard')"
                 name="samplingStandard"
               >
                 <a-input-number
                   v-model:value="formState.samplingStandard"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.samplingstandard') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.samplingstandard') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.inspectionlevel')"
+                :label="t('entity.samplingscheme.inspectionlevel')"
                 name="inspectionLevel"
               >
                 <a-input-number
                   v-model:value="formState.inspectionLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.inspectionlevel') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.inspectionlevel') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.aqlvalue')"
+                :label="t('entity.samplingscheme.aqlvalue')"
                 name="aqlValue"
               >
                 <a-input-number
                   v-model:value="formState.aqlValue"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.aqlvalue') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.aqlvalue') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -168,131 +173,123 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.lotsizemin')"
+                :label="t('entity.samplingscheme.lotsizemin')"
                 name="lotSizeMin"
               >
                 <a-input-number
                   v-model:value="formState.lotSizeMin"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.lotsizemin') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.lotsizemin') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.lotsizemax')"
+                :label="t('entity.samplingscheme.lotsizemax')"
                 name="lotSizeMax"
               >
                 <a-input-number
                   v-model:value="formState.lotSizeMax"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.lotsizemax') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.lotsizemax') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.samplesize')"
+                :label="t('entity.samplingscheme.samplesize')"
                 name="sampleSize"
               >
                 <a-input-number
                   v-model:value="formState.sampleSize"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.samplesize') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.samplesize') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.acceptancenumber')"
+                :label="t('entity.samplingscheme.acceptancenumber')"
                 name="acceptanceNumber"
               >
                 <a-input-number
                   v-model:value="formState.acceptanceNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.acceptancenumber') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.acceptancenumber') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.rejectionnumber')"
+                :label="t('entity.samplingscheme.rejectionnumber')"
                 name="rejectionNumber"
               >
                 <a-input-number
                   v-model:value="formState.rejectionNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.rejectionnumber') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.rejectionnumber') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.inspectionstrictness')"
+                :label="t('entity.samplingscheme.inspectionstrictness')"
                 name="inspectionStrictness"
               >
                 <a-input-number
                   v-model:value="formState.inspectionStrictness"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.inspectionstrictness') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.inspectionstrictness') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.istransferruleenabled')"
+                :label="t('entity.samplingscheme.istransferruleenabled')"
                 name="isTransferRuleEnabled"
               >
                 <a-input-number
                   v-model:value="formState.isTransferRuleEnabled"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.istransferruleenabled') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.istransferruleenabled') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.transferruleconfig')"
+                :label="t('entity.samplingscheme.transferruleconfig')"
                 name="transferRuleConfig"
               >
                 <a-input
                   v-model:value="formState.transferRuleConfig"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.transferruleconfig') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.transferruleconfig') })"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.samplingScheme.status')"
+                :label="t('entity.samplingscheme.status')"
                 name="samplingSchemeStatus"
               >
                 <a-input-number
                   v-model:value="formState.samplingSchemeStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.status') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.status') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.samplingScheme.schemedescription')"
+                :label="t('entity.samplingscheme.schemedescription')"
                 name="schemeDescription"
               >
                 <a-textarea
                   v-model:value="formState.schemeDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.samplingScheme.schemedescription') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.samplingscheme.schemedescription') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -306,15 +303,28 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -327,15 +337,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -349,6 +360,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { SamplingSchemeCreate } from '@/types/logistics/quality/operation/sampling-scheme'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -381,7 +393,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","samplingSchemeCode","samplingSchemeName","samplingSchemeType","samplingStandard","inspectionLevel","aqlValue","lotSizeMin","lotSizeMax","sampleSize","acceptanceNumber","rejectionNumber","inspectionStrictness","isTransferRuleEnabled","transferRuleConfig","samplingSchemeStatus","schemeDescription","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","samplingSchemeCode","samplingSchemeName","samplingSchemeType","samplingStandard","inspectionLevel","aqlValue","lotSizeMin","lotSizeMax","sampleSize","acceptanceNumber","rejectionNumber","inspectionStrictness","isTransferRuleEnabled","transferRuleConfig","samplingSchemeStatus","schemeDescription","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -392,7 +404,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -400,18 +412,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 samplingSchemeId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.samplingSchemeId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -430,108 +458,180 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.plantcode') }),
       trigger: 'blur'
     }
   ],
   samplingSchemeCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.code') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.code') }),
       trigger: 'blur'
     }
   ],
   samplingSchemeName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.name') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.name') }),
       trigger: 'blur'
     }
   ],
-  samplingSchemeType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.type') }),
-      trigger: 'change'
-    }
-  ],
-  samplingStandard: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.samplingstandard') }),
-      trigger: 'change'
-    }
-  ],
-  inspectionLevel: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.inspectionlevel') }),
-      trigger: 'change'
-    }
-  ],
-  aqlValue: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.aqlvalue') }),
-      trigger: 'change'
-    }
-  ],
-  lotSizeMin: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.lotsizemin') }),
-      trigger: 'change'
-    }
-  ],
-  lotSizeMax: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.lotsizemax') }),
-      trigger: 'change'
-    }
-  ],
-  sampleSize: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.samplesize') }),
-      trigger: 'change'
-    }
-  ],
-  acceptanceNumber: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.acceptancenumber') }),
-      trigger: 'change'
-    }
-  ],
-  rejectionNumber: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.rejectionnumber') }),
-      trigger: 'change'
-    }
-  ],
-  inspectionStrictness: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.inspectionstrictness') }),
-      trigger: 'change'
-    }
-  ],
-  isTransferRuleEnabled: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.istransferruleenabled') }),
-      trigger: 'change'
-    }
-  ],
-  samplingSchemeStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.samplingScheme.status') }),
-      trigger: 'change'
-    }
-  ],
+  samplingSchemeType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.type') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.type') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  samplingStandard: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.samplingstandard') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.samplingstandard') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  inspectionLevel: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.inspectionlevel') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.inspectionlevel') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  aqlValue: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.aqlvalue') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.aqlvalue') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  lotSizeMin: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.lotsizemin') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.lotsizemin') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  lotSizeMax: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.lotsizemax') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.lotsizemax') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  sampleSize: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.samplesize') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.samplesize') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  acceptanceNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.acceptancenumber') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.acceptancenumber') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  rejectionNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.rejectionnumber') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.rejectionnumber') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  inspectionStrictness: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.inspectionstrictness') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.inspectionstrictness') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isTransferRuleEnabled: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.istransferruleenabled') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.istransferruleenabled') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  samplingSchemeStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.samplingscheme.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -542,15 +642,70 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('samplingSchemeType' in payload) {
+    const rawsamplingSchemeType = payload.samplingSchemeType
+    payload.samplingSchemeType = typeof rawsamplingSchemeType === 'number' ? rawsamplingSchemeType : Number(rawsamplingSchemeType)
+  }
+  if ('samplingStandard' in payload) {
+    const rawsamplingStandard = payload.samplingStandard
+    payload.samplingStandard = typeof rawsamplingStandard === 'number' ? rawsamplingStandard : Number(rawsamplingStandard)
+  }
+  if ('inspectionLevel' in payload) {
+    const rawinspectionLevel = payload.inspectionLevel
+    payload.inspectionLevel = typeof rawinspectionLevel === 'number' ? rawinspectionLevel : Number(rawinspectionLevel)
+  }
+  if ('aqlValue' in payload) {
+    const rawaqlValue = payload.aqlValue
+    payload.aqlValue = typeof rawaqlValue === 'number' ? rawaqlValue : Number(rawaqlValue)
+  }
+  if ('lotSizeMin' in payload) {
+    const rawlotSizeMin = payload.lotSizeMin
+    payload.lotSizeMin = typeof rawlotSizeMin === 'number' ? rawlotSizeMin : Number(rawlotSizeMin)
+  }
+  if ('lotSizeMax' in payload) {
+    const rawlotSizeMax = payload.lotSizeMax
+    payload.lotSizeMax = typeof rawlotSizeMax === 'number' ? rawlotSizeMax : Number(rawlotSizeMax)
+  }
+  if ('sampleSize' in payload) {
+    const rawsampleSize = payload.sampleSize
+    payload.sampleSize = typeof rawsampleSize === 'number' ? rawsampleSize : Number(rawsampleSize)
+  }
+  if ('acceptanceNumber' in payload) {
+    const rawacceptanceNumber = payload.acceptanceNumber
+    payload.acceptanceNumber = typeof rawacceptanceNumber === 'number' ? rawacceptanceNumber : Number(rawacceptanceNumber)
+  }
+  if ('rejectionNumber' in payload) {
+    const rawrejectionNumber = payload.rejectionNumber
+    payload.rejectionNumber = typeof rawrejectionNumber === 'number' ? rawrejectionNumber : Number(rawrejectionNumber)
+  }
+  if ('inspectionStrictness' in payload) {
+    const rawinspectionStrictness = payload.inspectionStrictness
+    payload.inspectionStrictness = typeof rawinspectionStrictness === 'number' ? rawinspectionStrictness : Number(rawinspectionStrictness)
+  }
+  if ('isTransferRuleEnabled' in payload) {
+    const rawisTransferRuleEnabled = payload.isTransferRuleEnabled
+    payload.isTransferRuleEnabled = typeof rawisTransferRuleEnabled === 'number' ? rawisTransferRuleEnabled : Number(rawisTransferRuleEnabled)
+  }
+  if ('samplingSchemeStatus' in payload) {
+    const rawsamplingSchemeStatus = payload.samplingSchemeStatus
+    payload.samplingSchemeStatus = typeof rawsamplingSchemeStatus === 'number' ? rawsamplingSchemeStatus : Number(rawsamplingSchemeStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.samplingSchemeId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

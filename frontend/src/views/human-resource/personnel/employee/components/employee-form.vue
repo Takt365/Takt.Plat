@@ -111,7 +111,7 @@
               >
                 <a-date-picker
                   v-model:value="formState.birthDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employee.birthdate') })"
+                  :placeholder="requiredPlaceholder('entity.employee.birthdate')"
                   value-format="YYYY-MM-DD"
                   size="small"
                   style="width: 100%"
@@ -125,7 +125,7 @@
               >
                 <a-input
                   v-model:value="formState.idCardNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.idcardno') })"
+                  :placeholder="requiredPlaceholder('entity.employee.idcardno')"
                   size="small"
                   allow-clear
                 />
@@ -138,7 +138,7 @@
               >
                 <a-input
                   v-model:value="formState.mobile"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.mobile') })"
+                  :placeholder="requiredPlaceholder('entity.employee.mobile')"
                   size="small"
                   allow-clear
                 />
@@ -151,7 +151,7 @@
               >
                 <a-input
                   v-model:value="formState.email"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.email') })"
+                  :placeholder="optionalPlaceholder('entity.employee.email')"
                   size="small"
                   allow-clear
                 />
@@ -174,8 +174,8 @@
               >
                 <TaktSelect
                   v-model:value="formState.nativePlace"
-                  dict-type="hr_native_place"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employee.nativeplace') })"
+                  dict-type="hr_native_place_code"
+                  :placeholder="requiredSelectPlaceholder('entity.employee.nativeplace')"
                   size="small"
                 />
               </a-form-item>
@@ -187,8 +187,8 @@
               >
                 <TaktSelect
                   v-model:value="formState.ethnicity"
-                  dict-type="hr_ethnic_group"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employee.ethnicity') })"
+                  dict-type="hr_ethnic_code"
+                  :placeholder="requiredSelectPlaceholder('entity.employee.ethnicity')"
                   size="small"
                 />
               </a-form-item>
@@ -201,7 +201,7 @@
                 <TaktSelect
                   v-model:value="formState.politicalStatus"
                   dict-type="hr_political_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employee.politicalstatus') })"
+                  :placeholder="requiredSelectPlaceholder('entity.employee.politicalstatus')"
                   size="small"
                 />
               </a-form-item>
@@ -239,7 +239,7 @@
               >
                 <a-input
                   v-model:value="formState.graduateSchool"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.graduateschool') })"
+                  :placeholder="optionalPlaceholder('entity.employee.graduateschool')"
                   size="small"
                   allow-clear
                 />
@@ -252,7 +252,7 @@
               >
                 <a-input
                   v-model:value="formState.major"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.major') })"
+                  :placeholder="optionalPlaceholder('entity.employee.major')"
                   size="small"
                   allow-clear
                 />
@@ -269,6 +269,7 @@
                   value-format="YYYY-MM-DD"
                   size="small"
                   style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -283,6 +284,7 @@
                   value-format="YYYY-MM-DD"
                   size="small"
                   style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -297,6 +299,7 @@
                   value-format="YYYY-MM-DD"
                   size="small"
                   style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -321,6 +324,7 @@
                   value-format="YYYY-MM-DD"
                   size="small"
                   style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -335,6 +339,7 @@
                   value-format="YYYY-MM-DD"
                   size="small"
                   style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -345,9 +350,10 @@
               >
                 <a-input-number
                   v-model:value="formState.resignationType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.resignationtype') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employee.resignationtype') })"
                   size="small"
                   style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -358,9 +364,10 @@
               >
                 <a-input
                   v-model:value="formState.resignationReason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.resignationreason') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employee.resignationreason') })"
                   size="small"
                   allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -384,9 +391,10 @@
               >
                 <a-input
                   v-model:value="formState.primaryDeptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.primarydeptid') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employee.primarydeptid') })"
                   size="small"
                   allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -397,9 +405,10 @@
               >
                 <a-input
                   v-model:value="formState.primaryPostId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.primarypostid') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employee.primarypostid') })"
                   size="small"
                   allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -423,7 +432,7 @@
               >
                 <a-input
                   v-model:value="formState.emergencyContactName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.emergencycontactname') })"
+                  :placeholder="requiredPlaceholder('entity.employee.emergencycontactname')"
                   size="small"
                   allow-clear
                 />
@@ -436,7 +445,7 @@
               >
                 <a-input
                   v-model:value="formState.emergencyContactPhone"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.emergencycontactphone') })"
+                  :placeholder="requiredPlaceholder('entity.employee.emergencycontactphone')"
                   size="small"
                   allow-clear
                 />
@@ -459,7 +468,7 @@
               >
                 <a-textarea
                   v-model:value="formState.homeAddress"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.employee.homeaddress') })"
+                  :placeholder="requiredPlaceholder('entity.employee.homeaddress')"
                   :rows="2"
                   size="small"
                 />
@@ -472,7 +481,7 @@
               >
                 <a-input
                   v-model:value="formState.photoUrl"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.photourl') })"
+                  :placeholder="optionalPlaceholder('entity.employee.photourl')"
                   size="small"
                   allow-clear
                 />
@@ -485,7 +494,7 @@
               >
                 <a-input
                   v-model:value="formState.employeeDeptIds"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.deptids') })"
+                  :placeholder="optionalPlaceholder('entity.employee.deptids')"
                   size="small"
                   allow-clear
                 />
@@ -498,7 +507,7 @@
               >
                 <a-input
                   v-model:value="formState.employeePostIds"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employee.postids') })"
+                  :placeholder="optionalPlaceholder('entity.employee.postids')"
                   size="small"
                   allow-clear
                 />
@@ -506,12 +515,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('common.page.entity.ExtField')"
+                name="ExtField"
               >
                 <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
                   size="small"
                   allow-clear
                 />
@@ -550,6 +559,7 @@ import type { EmployeeCreate } from '@/types/human-resource/personnel/employee'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { isValidIdCard, isValidPhone } from '@/utils/regex'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -558,6 +568,46 @@ const { t } = useI18n()
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
+
+/** 任职/离职投影字段（只读，由上岗/调动/离职审批回写） */
+const projectionManagedFields = [
+  'joinedDate',
+  'probationEndDate',
+  'regularDate',
+  'terminationDate',
+  'lastWorkDate',
+  'resignationType',
+  'resignationReason',
+  'primaryDeptId',
+  'primaryPostId',
+] as const
+
+/**
+ * 选填字段占位文案
+ * @param entityKey entity.* 翻译键
+ * @returns {string} 占位符
+ */
+function optionalPlaceholder(entityKey: string) {
+  return t('common.page.form.placeholder.optional', { field: t(entityKey) })
+}
+
+/**
+ * 必填字段占位文案
+ * @param entityKey entity.* 翻译键
+ * @returns {string} 占位符
+ */
+function requiredPlaceholder(entityKey: string) {
+  return t('common.page.form.placeholder.required', { field: t(entityKey) })
+}
+
+/**
+ * 必填字典选择占位文案
+ * @param entityKey entity.* 翻译键
+ * @returns {string} 占位符
+ */
+function requiredSelectPlaceholder(entityKey: string) {
+  return t('common.page.form.placeholder.select', { field: t(entityKey) })
+}
 
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
@@ -580,7 +630,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeNo","name","gender","birthDate","idCardNo","mobile","email","nativePlace","ethnicity","politicalStatus","maritalStatus","education","graduateSchool","major","joinedDate","probationEndDate","regularDate","terminationDate","lastWorkDate","resignationType","resignationReason","employeeStatus","primaryDeptId","primaryPostId","isBuiltIn","emergencyContactName","emergencyContactPhone","homeAddress","photoUrl","employeeDeptIds","employeePostIds","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeNo","name","gender","birthDate","idCardNo","mobile","email","nativePlace","ethnicity","politicalStatus","maritalStatus","education","graduateSchool","major","joinedDate","probationEndDate","regularDate","terminationDate","lastWorkDate","resignationType","resignationReason","employeeStatus","primaryDeptId","primaryPostId","isBuiltIn","emergencyContactName","emergencyContactPhone","homeAddress","photoUrl","employeeDeptIds","employeePostIds","ExtField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -629,35 +679,132 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   employeeNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employee.no') }),
+      message: t('common.validation.required', { field: t('entity.employee.no') }),
       trigger: 'blur'
     }
   ],
   name: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employee.name') }),
+      message: t('common.validation.required', { field: t('entity.employee.name') }),
       trigger: 'blur'
     }
   ],
   gender: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.employee.gender') }),
+      message: t('common.validation.required', { field: t('entity.employee.gender') }),
       trigger: 'change'
+    }
+  ],
+  birthDate: [
+    {
+      required: true,
+      message: t('common.validation.required', { field: t('entity.employee.birthdate') }),
+      trigger: 'change'
+    }
+  ],
+  idCardNo: [
+    {
+      required: true,
+      message: t('common.validation.required', { field: t('entity.employee.idcardno') }),
+      trigger: 'blur'
+    },
+    {
+      validator: async (_rule, value: string) => {
+        if (!value || isValidIdCard(value)) return
+        return Promise.reject(t('common.validation.invalidformat', { field: t('entity.employee.idcardno') }))
+      },
+      trigger: 'blur'
+    }
+  ],
+  mobile: [
+    {
+      required: true,
+      message: t('common.validation.required', { field: t('entity.employee.mobile') }),
+      trigger: 'blur'
+    },
+    {
+      validator: async (_rule, value: string) => {
+        if (!value || isValidPhone(value, formState.companyDefaultCulture as string)) return
+        return Promise.reject(t('common.validation.invalidformat', { field: t('entity.employee.mobile') }))
+      },
+      trigger: 'blur'
+    }
+  ],
+  nativePlace: [
+    {
+      required: true,
+      message: t('common.validation.required', { field: t('entity.employee.nativeplace') }),
+      trigger: 'change'
+    },
+    {
+      validator: async (_rule, value: string) => {
+        if (!value || /^\d{6}$/.test(value)) return
+        return Promise.reject(t('common.validation.invalidformat', { field: t('entity.employee.nativeplace') }))
+      },
+      trigger: 'change'
+    }
+  ],
+  ethnicity: [
+    {
+      required: true,
+      message: t('common.validation.required', { field: t('entity.employee.ethnicity') }),
+      trigger: 'change'
+    }
+  ],
+  politicalStatus: [
+    {
+      validator: async (_rule, value: number | null | undefined) => {
+        if (value === undefined || value === null) {
+          return Promise.reject(t('common.validation.required', { field: t('entity.employee.politicalstatus') }))
+        }
+      },
+      trigger: 'change'
+    }
+  ],
+  maritalStatus: [
+    {
+      validator: async (_rule, value: number | null | undefined) => {
+        if (value === undefined || value === null) {
+          return Promise.reject(t('common.validation.required', { field: t('entity.employee.maritalstatus') }))
+        }
+      },
+      trigger: 'change'
+    }
+  ],
+  emergencyContactName: [
+    {
+      required: true,
+      message: t('common.validation.required', { field: t('entity.employee.emergencycontactname') }),
+      trigger: 'blur'
+    }
+  ],
+  emergencyContactPhone: [
+    {
+      required: true,
+      message: t('common.validation.required', { field: t('entity.employee.emergencycontactphone') }),
+      trigger: 'blur'
+    }
+  ],
+  homeAddress: [
+    {
+      required: true,
+      message: t('common.validation.required', { field: t('entity.employee.homeaddress') }),
+      trigger: 'blur'
     }
   ],
   employeeStatus: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.employee.status') }),
+      message: t('common.validation.required', { field: t('entity.employee.status') }),
       trigger: 'change'
     }
   ],
   isBuiltIn: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.employee.isbuiltin') }),
+      message: t('common.validation.required', { field: t('entity.employee.isbuiltin') }),
       trigger: 'change'
     }
   ],
@@ -669,9 +816,19 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO */
+/** 映射为 Create/Update DTO（剔除投影只读字段，字典整型字段转 number） */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const result = { ...formState }
+  for (const key of projectionManagedFields) {
+    delete result[key]
+  }
+  for (const key of ['gender', 'ethnicity', 'politicalStatus', 'maritalStatus', 'education', 'employeeStatus', 'isBuiltIn', 'resignationType']) {
+    const value = result[key]
+    if (value !== undefined && value !== null && value !== '') {
+      result[key] = Number(value)
+    }
+  }
+  return result
 }
 
 /** 重置表单与子表行 */

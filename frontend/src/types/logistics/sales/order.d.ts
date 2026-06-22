@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
-// 文件名称：sales-order.d.ts
-// 创建时间：2026-06-09
+// 文件名称：order.d.ts
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -31,7 +31,7 @@ export interface SalesOrder extends CompanyDtoBase {
   /**
    * 工厂代码
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售订单编码（唯一索引）
@@ -114,17 +114,17 @@ export interface SalesOrder extends CompanyDtoBase {
   orderStatus: number;
 
   /**
-   * 交货状态（0=未交货，1=部分交货，2=全部交货）
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus: number;
 
   /**
-   * 交货方式（0=自提，1=送货上门，2=物流配送，3=快递）
+   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
    */
   deliveryMethod: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -264,17 +264,17 @@ export interface SalesOrderQuery extends TaktPagedQuery {
   orderStatus?: number;
 
   /**
-   * 交货状态（0=未交货，1=部分交货，2=全部交货）
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus?: number;
 
   /**
-   * 交货方式（0=自提，1=送货上门，2=物流配送，3=快递）
+   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
    */
   deliveryMethod?: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -296,7 +296,7 @@ export interface SalesOrderQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -330,7 +330,7 @@ export interface SalesOrderCreate {
   /**
    * 工厂代码
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售订单编码（唯一索引）
@@ -413,17 +413,17 @@ export interface SalesOrderCreate {
   orderStatus: number;
 
   /**
-   * 交货状态（0=未交货，1=部分交货，2=全部交货）
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus: number;
 
   /**
-   * 交货方式（0=自提，1=送货上门，2=物流配送，3=快递）
+   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
    */
   deliveryMethod: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -445,7 +445,7 @@ export interface SalesOrderCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -536,17 +536,17 @@ export interface SalesOrderTemplate {
   orderStatus?: number;
 
   /**
-   * 交货状态（0=未交货，1=部分交货，2=全部交货）
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus?: number;
 
   /**
-   * 交货方式（0=自提，1=送货上门，2=物流配送，3=快递）
+   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
    */
   deliveryMethod?: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -558,7 +558,7 @@ export interface SalesOrderTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -620,17 +620,17 @@ export interface SalesOrderImport {
   orderStatus?: number;
 
   /**
-   * 交货状态（0=未交货，1=部分交货，2=全部交货）
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus?: number;
 
   /**
-   * 交货方式（0=自提，1=送货上门，2=物流配送，3=快递）
+   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
    */
   deliveryMethod?: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -642,7 +642,7 @@ export interface SalesOrderImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -671,7 +671,7 @@ export interface SalesOrderExport {
   /**
    * 工厂代码
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售订单编码（唯一索引）
@@ -754,17 +754,17 @@ export interface SalesOrderExport {
   orderStatus: number;
 
   /**
-   * 交货状态（0=未交货，1=部分交货，2=全部交货）
+   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus: number;
 
   /**
-   * 交货方式（0=自提，1=送货上门，2=物流配送，3=快递）
+   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
    */
   deliveryMethod: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -776,7 +776,7 @@ export interface SalesOrderExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

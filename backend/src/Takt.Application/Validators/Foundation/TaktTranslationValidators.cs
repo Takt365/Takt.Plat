@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktTranslationValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Translation 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTranslation 生成，请按需审阅）
 // 
@@ -12,7 +12,6 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Foundation;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Foundation;
 
@@ -45,10 +44,12 @@ public class TaktTranslationCreateValidator : AbstractValidator<TaktTranslationC
             .NotEmpty().WithMessage("翻译文本不能为空")
             .MaximumLength(2000).WithMessage("翻译文本长度不能超过2000个字符");
         RuleFor(x => x.ResourceGroup)
-            .IsInEnum().WithMessage("资源分组无效");
+            .NotEmpty().WithMessage("资源分组不能为空")
+            .MaximumLength(40).WithMessage("资源分组长度不能超过40个字符");
         RuleFor(x => x.ResourceType)
-            .IsInEnum().WithMessage("资源类别无效");
-        RuleFor(x => x.ExtFieldJson)
+            .NotEmpty().WithMessage("资源类别不能为空")
+            .MaximumLength(40).WithMessage("资源类别长度不能超过40个字符");
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -102,11 +103,13 @@ public class TaktTranslationImportValidator : AbstractValidator<TaktTranslationI
             .NotEmpty().WithMessage("翻译文本不能为空")
             .MaximumLength(2000).WithMessage("翻译文本长度不能超过2000个字符");
         RuleFor(x => x.ResourceGroup)
-            .IsInEnum().WithMessage("资源分组无效");
+            .NotEmpty().WithMessage("资源分组不能为空")
+            .MaximumLength(40).WithMessage("资源分组长度不能超过40个字符");
         RuleFor(x => x.ResourceType)
-            .IsInEnum().WithMessage("资源类别无效");
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+            .NotEmpty().WithMessage("资源类别不能为空")
+            .MaximumLength(40).WithMessage("资源类别长度不能超过40个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

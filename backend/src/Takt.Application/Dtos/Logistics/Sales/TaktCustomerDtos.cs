@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktCustomerDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Customer 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomer 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Sales;
 
@@ -57,7 +56,7 @@ public class TaktCustomerDto : TaktCompanyDtoBase
     public string? CustomerShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+    /// 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
     /// </summary>
     public int CustomerType { get; set; } = 0;
 
@@ -132,12 +131,12 @@ public class TaktCustomerDto : TaktCompanyDtoBase
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int CreditLevel { get; set; } = 0;
 
@@ -147,7 +146,7 @@ public class TaktCustomerDto : TaktCompanyDtoBase
     public decimal CreditAmount { get; set; }
 
     /// <summary>
-    /// 折扣率（百分比，如：5.5表示5.5%折扣）
+    /// 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
     /// </summary>
     public decimal DiscountRate { get; set; }
 
@@ -157,7 +156,7 @@ public class TaktCustomerDto : TaktCompanyDtoBase
     public string? SalesBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户等级（0=普通，1=重要，2=VIP，3=战略）
+    /// 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
     /// </summary>
     public int CustomerLevel { get; set; } = 0;
 
@@ -174,7 +173,7 @@ public class TaktCustomerDto : TaktCompanyDtoBase
     /// <summary>
     /// 客户状态（1=启用，0=禁用）
     /// </summary>
-    public int CustomerStatus { get; set; }
+    public int CustomerStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -224,7 +223,7 @@ public class TaktCustomerQueryDto : TaktPagedQuery
     public string? CustomerShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+    /// 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
     /// </summary>
     public int? CustomerType { get; set; }
 
@@ -299,12 +298,12 @@ public class TaktCustomerQueryDto : TaktPagedQuery
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int? PaymentTerms { get; set; }
 
     /// <summary>
-    /// 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int? CreditLevel { get; set; }
 
@@ -314,7 +313,7 @@ public class TaktCustomerQueryDto : TaktPagedQuery
     public decimal? CreditAmount { get; set; }
 
     /// <summary>
-    /// 折扣率（百分比，如：5.5表示5.5%折扣）
+    /// 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
     /// </summary>
     public decimal? DiscountRate { get; set; }
 
@@ -324,7 +323,7 @@ public class TaktCustomerQueryDto : TaktPagedQuery
     public string? SalesBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户等级（0=普通，1=重要，2=VIP，3=战略）
+    /// 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
     /// </summary>
     public int? CustomerLevel { get; set; }
 
@@ -361,7 +360,7 @@ public class TaktCustomerQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -417,7 +416,7 @@ public class TaktCustomerCreateDto
     public string? CustomerShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+    /// 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
     /// </summary>
     public int CustomerType { get; set; } = 0;
 
@@ -493,12 +492,12 @@ public class TaktCustomerCreateDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int CreditLevel { get; set; } = 0;
 
@@ -508,7 +507,7 @@ public class TaktCustomerCreateDto
     public decimal CreditAmount { get; set; }
 
     /// <summary>
-    /// 折扣率（百分比，如：5.5表示5.5%折扣）
+    /// 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
     /// </summary>
     public decimal DiscountRate { get; set; }
 
@@ -518,7 +517,7 @@ public class TaktCustomerCreateDto
     public string? SalesBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户等级（0=普通，1=重要，2=VIP，3=战略）
+    /// 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
     /// </summary>
     public int CustomerLevel { get; set; } = 0;
 
@@ -535,17 +534,12 @@ public class TaktCustomerCreateDto
     /// <summary>
     /// 客户状态（1=启用，0=禁用）
     /// </summary>
-    public int CustomerStatus { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int CustomerStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -595,7 +589,7 @@ public class TaktCustomerStatusDto
     /// 客户状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "客户状态（1=启用，0=禁用）不能为空")]
-    public int CustomerStatus { get; set; }
+    public int CustomerStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -662,7 +656,7 @@ public class TaktCustomerTemplateDto
     public string? CustomerShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+    /// 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
     /// </summary>
     public int? CustomerType { get; set; }
 
@@ -704,7 +698,7 @@ public class TaktCustomerTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -754,7 +748,7 @@ public class TaktCustomerImportDto
     public string? CustomerShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+    /// 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
     /// </summary>
     public int? CustomerType { get; set; }
 
@@ -796,7 +790,7 @@ public class TaktCustomerImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -847,7 +841,7 @@ public class TaktCustomerExportDto
     public string? CustomerShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+    /// 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
     /// </summary>
     public int CustomerType { get; set; } = 0;
 
@@ -922,12 +916,12 @@ public class TaktCustomerExportDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int CreditLevel { get; set; } = 0;
 
@@ -937,7 +931,7 @@ public class TaktCustomerExportDto
     public decimal CreditAmount { get; set; }
 
     /// <summary>
-    /// 折扣率（百分比，如：5.5表示5.5%折扣）
+    /// 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
     /// </summary>
     public decimal DiscountRate { get; set; }
 
@@ -947,7 +941,7 @@ public class TaktCustomerExportDto
     public string? SalesBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户等级（0=普通，1=重要，2=VIP，3=战略）
+    /// 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
     /// </summary>
     public int CustomerLevel { get; set; } = 0;
 
@@ -964,7 +958,7 @@ public class TaktCustomerExportDto
     /// <summary>
     /// 客户状态（1=启用，0=禁用）
     /// </summary>
-    public int CustomerStatus { get; set; }
+    public int CustomerStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -974,7 +968,7 @@ public class TaktCustomerExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

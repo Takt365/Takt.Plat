@@ -98,7 +98,7 @@ async function loadTenantOptionsWithNotifyAsync(loginMode: boolean): Promise<voi
   try {
     await tenantStore.loadTenantOptionsAsync(loginMode);
   } catch (error) {
-    message.error(resolveHttpErrorMessage(error) || t('login.page.message.tenantOptionsFail'));
+    message.error(resolveHttpErrorMessage(error) || t('login.page.message.tenant.options.fail'));
   }
 }
 

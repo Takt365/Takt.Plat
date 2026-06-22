@@ -111,6 +111,17 @@ try
         excelOptions.Export.MaxRowsPerSheet,
         excelOptions.Export.MaxSheetsPerFile);
 
+    var pagedOptions = builder.Configuration.RequirePaged();
+    builder.Services.Configure<TaktPagedOptions>(
+        builder.Configuration.GetSection(TaktPagedOptions.SectionName));
+    TaktPagedClamp.Configure(pagedOptions);
+    TaktLogger.Information(
+        "  ✓ 分页配置已加载 - 默认: {DefaultPageIndex}/{DefaultPageSize}, 上限: {MaxPageSize}, 可选项: {PageSizeOptions}",
+        pagedOptions.DefaultPageIndex,
+        pagedOptions.DefaultPageSize,
+        pagedOptions.MaxPageSize,
+        string.Join(',', pagedOptions.PageSizeOptions));
+
     builder.Services.Configure<TaktFileUploadOptions>(
         builder.Configuration.GetSection(TaktFileUploadOptions.SectionName));
     var authenticationOptions = builder.Configuration.RequireAuthentication();
@@ -171,6 +182,10 @@ try
     TaktLogger.Information("[4/6] 注册业务服务和扩展...");
     
     builder.Services.AddTaktCache(builder.Configuration);
+    builder.Services.Configure<Takt.Shared.Options.TaktGenEngineOptions>(opts =>
+    {
+        opts.ContentRootPath = builder.Environment.ContentRootPath;
+    });
     builder.Services.AddTaktCaptcha(builder.Configuration);
     builder.Services.AddTaktSecurity(builder.Configuration);
     builder.Services.AddControllers(options =>

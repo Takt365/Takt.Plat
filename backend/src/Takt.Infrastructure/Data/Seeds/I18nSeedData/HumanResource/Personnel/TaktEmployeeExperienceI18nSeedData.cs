@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeExperienceI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeExperience 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,92 +75,92 @@ public class TaktEmployeeExperienceI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeExperience 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeeexperience._self / entity.employeeexperience.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.employeeexperience._self / entity.employeeexperience.{{field}}；ResourceGroup=Personnel；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeExperienceTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.employeeexperience._self
-            new TranslationSeedItem("entity.employeeexperience._self", "en-US", "Employee Experience Information", "实体名称"),
+            new TranslationSeedItem("entity.employeeexperience._self", "en-US", "Employee Experience Information_us", "实体名称"),
             // entity.employeeexperience._self
-            new TranslationSeedItem("entity.employeeexperience._self", "ja-JP", "员工外部工作经历信息", "实体名称"),
+            new TranslationSeedItem("entity.employeeexperience._self", "ja-JP", "员工外部工作经历信息_jp", "实体名称"),
             // entity.employeeexperience._self
             new TranslationSeedItem("entity.employeeexperience._self", "zh-CN", "员工外部工作经历信息", "实体名称"),
             // entity.employeeexperience._self
-            new TranslationSeedItem("entity.employeeexperience._self", "zh-HK", "员工外部工作经历信息", "实体名称"),
+            new TranslationSeedItem("entity.employeeexperience._self", "zh-HK", "员工外部工作经历信息_hk", "实体名称"),
 
             // entity.employeeexperience.employeeid
-            new TranslationSeedItem("entity.employeeexperience.employeeid", "en-US", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeeexperience.employeeid", "en-US", "员工ID_us", "员工ID"),
             // entity.employeeexperience.employeeid
-            new TranslationSeedItem("entity.employeeexperience.employeeid", "ja-JP", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeeexperience.employeeid", "ja-JP", "员工ID_jp", "员工ID"),
             // entity.employeeexperience.employeeid
             new TranslationSeedItem("entity.employeeexperience.employeeid", "zh-CN", "员工ID", "员工ID"),
             // entity.employeeexperience.employeeid
-            new TranslationSeedItem("entity.employeeexperience.employeeid", "zh-HK", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeeexperience.employeeid", "zh-HK", "员工ID_hk", "员工ID"),
 
             // entity.employeeexperience.companyname
-            new TranslationSeedItem("entity.employeeexperience.companyname", "en-US", "工作单位", "工作单位名称"),
+            new TranslationSeedItem("entity.employeeexperience.companyname", "en-US", "工作单位_us", "工作单位名称"),
             // entity.employeeexperience.companyname
-            new TranslationSeedItem("entity.employeeexperience.companyname", "ja-JP", "工作单位", "工作单位名称"),
+            new TranslationSeedItem("entity.employeeexperience.companyname", "ja-JP", "工作单位_jp", "工作单位名称"),
             // entity.employeeexperience.companyname
             new TranslationSeedItem("entity.employeeexperience.companyname", "zh-CN", "工作单位", "工作单位名称"),
             // entity.employeeexperience.companyname
-            new TranslationSeedItem("entity.employeeexperience.companyname", "zh-HK", "工作单位", "工作单位名称"),
+            new TranslationSeedItem("entity.employeeexperience.companyname", "zh-HK", "工作单位_hk", "工作单位名称"),
 
             // entity.employeeexperience.positionname
-            new TranslationSeedItem("entity.employeeexperience.positionname", "en-US", "职位名称", "职位名称"),
+            new TranslationSeedItem("entity.employeeexperience.positionname", "en-US", "职位名称_us", "职位名称"),
             // entity.employeeexperience.positionname
-            new TranslationSeedItem("entity.employeeexperience.positionname", "ja-JP", "职位名称", "职位名称"),
+            new TranslationSeedItem("entity.employeeexperience.positionname", "ja-JP", "职位名称_jp", "职位名称"),
             // entity.employeeexperience.positionname
             new TranslationSeedItem("entity.employeeexperience.positionname", "zh-CN", "职位名称", "职位名称"),
             // entity.employeeexperience.positionname
-            new TranslationSeedItem("entity.employeeexperience.positionname", "zh-HK", "职位名称", "职位名称"),
+            new TranslationSeedItem("entity.employeeexperience.positionname", "zh-HK", "职位名称_hk", "职位名称"),
 
             // entity.employeeexperience.jobcontent
-            new TranslationSeedItem("entity.employeeexperience.jobcontent", "en-US", "工作内容", "工作内容"),
+            new TranslationSeedItem("entity.employeeexperience.jobcontent", "en-US", "工作内容_us", "工作内容"),
             // entity.employeeexperience.jobcontent
-            new TranslationSeedItem("entity.employeeexperience.jobcontent", "ja-JP", "工作内容", "工作内容"),
+            new TranslationSeedItem("entity.employeeexperience.jobcontent", "ja-JP", "工作内容_jp", "工作内容"),
             // entity.employeeexperience.jobcontent
             new TranslationSeedItem("entity.employeeexperience.jobcontent", "zh-CN", "工作内容", "工作内容"),
             // entity.employeeexperience.jobcontent
-            new TranslationSeedItem("entity.employeeexperience.jobcontent", "zh-HK", "工作内容", "工作内容"),
+            new TranslationSeedItem("entity.employeeexperience.jobcontent", "zh-HK", "工作内容_hk", "工作内容"),
 
             // entity.employeeexperience.startdate
-            new TranslationSeedItem("entity.employeeexperience.startdate", "en-US", "开始日期", "开始日期"),
+            new TranslationSeedItem("entity.employeeexperience.startdate", "en-US", "开始日期_us", "开始日期"),
             // entity.employeeexperience.startdate
-            new TranslationSeedItem("entity.employeeexperience.startdate", "ja-JP", "开始日期", "开始日期"),
+            new TranslationSeedItem("entity.employeeexperience.startdate", "ja-JP", "开始日期_jp", "开始日期"),
             // entity.employeeexperience.startdate
             new TranslationSeedItem("entity.employeeexperience.startdate", "zh-CN", "开始日期", "开始日期"),
             // entity.employeeexperience.startdate
-            new TranslationSeedItem("entity.employeeexperience.startdate", "zh-HK", "开始日期", "开始日期"),
+            new TranslationSeedItem("entity.employeeexperience.startdate", "zh-HK", "开始日期_hk", "开始日期"),
 
             // entity.employeeexperience.enddate
-            new TranslationSeedItem("entity.employeeexperience.enddate", "en-US", "结束日期", "结束日期"),
+            new TranslationSeedItem("entity.employeeexperience.enddate", "en-US", "结束日期_us", "结束日期"),
             // entity.employeeexperience.enddate
-            new TranslationSeedItem("entity.employeeexperience.enddate", "ja-JP", "结束日期", "结束日期"),
+            new TranslationSeedItem("entity.employeeexperience.enddate", "ja-JP", "结束日期_jp", "结束日期"),
             // entity.employeeexperience.enddate
             new TranslationSeedItem("entity.employeeexperience.enddate", "zh-CN", "结束日期", "结束日期"),
             // entity.employeeexperience.enddate
-            new TranslationSeedItem("entity.employeeexperience.enddate", "zh-HK", "结束日期", "结束日期"),
+            new TranslationSeedItem("entity.employeeexperience.enddate", "zh-HK", "结束日期_hk", "结束日期"),
 
             // entity.employeeexperience.witnessname
-            new TranslationSeedItem("entity.employeeexperience.witnessname", "en-US", "证明人姓名", "证明人姓名"),
+            new TranslationSeedItem("entity.employeeexperience.witnessname", "en-US", "证明人姓名_us", "证明人姓名"),
             // entity.employeeexperience.witnessname
-            new TranslationSeedItem("entity.employeeexperience.witnessname", "ja-JP", "证明人姓名", "证明人姓名"),
+            new TranslationSeedItem("entity.employeeexperience.witnessname", "ja-JP", "证明人姓名_jp", "证明人姓名"),
             // entity.employeeexperience.witnessname
             new TranslationSeedItem("entity.employeeexperience.witnessname", "zh-CN", "证明人姓名", "证明人姓名"),
             // entity.employeeexperience.witnessname
-            new TranslationSeedItem("entity.employeeexperience.witnessname", "zh-HK", "证明人姓名", "证明人姓名"),
+            new TranslationSeedItem("entity.employeeexperience.witnessname", "zh-HK", "证明人姓名_hk", "证明人姓名"),
 
             // entity.employeeexperience.witnessphone
-            new TranslationSeedItem("entity.employeeexperience.witnessphone", "en-US", "证明人电话", "证明人电话"),
+            new TranslationSeedItem("entity.employeeexperience.witnessphone", "en-US", "证明人电话_us", "证明人电话"),
             // entity.employeeexperience.witnessphone
-            new TranslationSeedItem("entity.employeeexperience.witnessphone", "ja-JP", "证明人电话", "证明人电话"),
+            new TranslationSeedItem("entity.employeeexperience.witnessphone", "ja-JP", "证明人电话_jp", "证明人电话"),
             // entity.employeeexperience.witnessphone
             new TranslationSeedItem("entity.employeeexperience.witnessphone", "zh-CN", "证明人电话", "证明人电话"),
             // entity.employeeexperience.witnessphone
-            new TranslationSeedItem("entity.employeeexperience.witnessphone", "zh-HK", "证明人电话", "证明人电话"),
+            new TranslationSeedItem("entity.employeeexperience.witnessphone", "zh-HK", "证明人电话_hk", "证明人电话"),
         };
     }
 
@@ -178,10 +178,10 @@ public class TaktEmployeeExperienceI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Personnel";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

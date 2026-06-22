@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Benefits
 // 文件名称：TaktBenefitItemI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBenefitItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,137 +75,137 @@ public class TaktBenefitItemI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktBenefitItem 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.benefititem._self / entity.benefititem.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.benefititem._self / entity.benefititem.{{field}}；ResourceGroup=Benefits；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetBenefitItemTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.benefititem._self
-            new TranslationSeedItem("entity.benefititem._self", "en-US", "Benefit Item Information", "实体名称"),
+            new TranslationSeedItem("entity.benefititem._self", "en-US", "Benefit Item Information_us", "实体名称"),
             // entity.benefititem._self
-            new TranslationSeedItem("entity.benefititem._self", "ja-JP", "福利项目信息", "实体名称"),
+            new TranslationSeedItem("entity.benefititem._self", "ja-JP", "福利项目信息_jp", "实体名称"),
             // entity.benefititem._self
             new TranslationSeedItem("entity.benefititem._self", "zh-CN", "福利项目信息", "实体名称"),
             // entity.benefititem._self
-            new TranslationSeedItem("entity.benefititem._self", "zh-HK", "福利项目信息", "实体名称"),
+            new TranslationSeedItem("entity.benefititem._self", "zh-HK", "福利项目信息_hk", "实体名称"),
 
             // entity.benefititem.itemcode
-            new TranslationSeedItem("entity.benefititem.itemcode", "en-US", "福利项目编码", "福利项目编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.benefititem.itemcode", "en-US", "福利项目编码_us", "福利项目编码（租户+公司内唯一）"),
             // entity.benefititem.itemcode
-            new TranslationSeedItem("entity.benefititem.itemcode", "ja-JP", "福利项目编码", "福利项目编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.benefititem.itemcode", "ja-JP", "福利项目编码_jp", "福利项目编码（租户+公司内唯一）"),
             // entity.benefititem.itemcode
             new TranslationSeedItem("entity.benefititem.itemcode", "zh-CN", "福利项目编码", "福利项目编码（租户+公司内唯一）"),
             // entity.benefititem.itemcode
-            new TranslationSeedItem("entity.benefititem.itemcode", "zh-HK", "福利项目编码", "福利项目编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.benefititem.itemcode", "zh-HK", "福利项目编码_hk", "福利项目编码（租户+公司内唯一）"),
 
             // entity.benefititem.itemname
-            new TranslationSeedItem("entity.benefititem.itemname", "en-US", "福利项目名称", "福利项目名称"),
+            new TranslationSeedItem("entity.benefititem.itemname", "en-US", "福利项目名称_us", "福利项目名称"),
             // entity.benefititem.itemname
-            new TranslationSeedItem("entity.benefititem.itemname", "ja-JP", "福利项目名称", "福利项目名称"),
+            new TranslationSeedItem("entity.benefititem.itemname", "ja-JP", "福利项目名称_jp", "福利项目名称"),
             // entity.benefititem.itemname
             new TranslationSeedItem("entity.benefititem.itemname", "zh-CN", "福利项目名称", "福利项目名称"),
             // entity.benefititem.itemname
-            new TranslationSeedItem("entity.benefititem.itemname", "zh-HK", "福利项目名称", "福利项目名称"),
+            new TranslationSeedItem("entity.benefititem.itemname", "zh-HK", "福利项目名称_hk", "福利项目名称"),
 
             // entity.benefititem.benefitcategory
-            new TranslationSeedItem("entity.benefititem.benefitcategory", "en-US", "福利大类", "福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）"),
+            new TranslationSeedItem("entity.benefititem.benefitcategory", "en-US", "福利大类_us", "福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）"),
             // entity.benefititem.benefitcategory
-            new TranslationSeedItem("entity.benefititem.benefitcategory", "ja-JP", "福利大类", "福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）"),
+            new TranslationSeedItem("entity.benefititem.benefitcategory", "ja-JP", "福利大类_jp", "福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）"),
             // entity.benefititem.benefitcategory
             new TranslationSeedItem("entity.benefititem.benefitcategory", "zh-CN", "福利大类", "福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）"),
             // entity.benefititem.benefitcategory
-            new TranslationSeedItem("entity.benefititem.benefitcategory", "zh-HK", "福利大类", "福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）"),
+            new TranslationSeedItem("entity.benefititem.benefitcategory", "zh-HK", "福利大类_hk", "福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）"),
 
             // entity.benefititem.benefittype
-            new TranslationSeedItem("entity.benefititem.benefittype", "en-US", "福利类型", "福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）"),
+            new TranslationSeedItem("entity.benefititem.benefittype", "en-US", "福利类型_us", "福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）"),
             // entity.benefititem.benefittype
-            new TranslationSeedItem("entity.benefititem.benefittype", "ja-JP", "福利类型", "福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）"),
+            new TranslationSeedItem("entity.benefititem.benefittype", "ja-JP", "福利类型_jp", "福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）"),
             // entity.benefititem.benefittype
             new TranslationSeedItem("entity.benefititem.benefittype", "zh-CN", "福利类型", "福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）"),
             // entity.benefititem.benefittype
-            new TranslationSeedItem("entity.benefititem.benefittype", "zh-HK", "福利类型", "福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）"),
+            new TranslationSeedItem("entity.benefititem.benefittype", "zh-HK", "福利类型_hk", "福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）"),
 
             // entity.benefititem.paymentcycle
-            new TranslationSeedItem("entity.benefititem.paymentcycle", "en-US", "发放周期", "发放周期（字典 hr_benefit_payment_cycle）"),
+            new TranslationSeedItem("entity.benefititem.paymentcycle", "en-US", "发放周期_us", "发放周期（字典 hr_benefit_payment_cycle_type）"),
             // entity.benefititem.paymentcycle
-            new TranslationSeedItem("entity.benefititem.paymentcycle", "ja-JP", "发放周期", "发放周期（字典 hr_benefit_payment_cycle）"),
+            new TranslationSeedItem("entity.benefititem.paymentcycle", "ja-JP", "发放周期_jp", "发放周期（字典 hr_benefit_payment_cycle_type）"),
             // entity.benefititem.paymentcycle
-            new TranslationSeedItem("entity.benefititem.paymentcycle", "zh-CN", "发放周期", "发放周期（字典 hr_benefit_payment_cycle）"),
+            new TranslationSeedItem("entity.benefititem.paymentcycle", "zh-CN", "发放周期", "发放周期（字典 hr_benefit_payment_cycle_type）"),
             // entity.benefititem.paymentcycle
-            new TranslationSeedItem("entity.benefititem.paymentcycle", "zh-HK", "发放周期", "发放周期（字典 hr_benefit_payment_cycle）"),
+            new TranslationSeedItem("entity.benefititem.paymentcycle", "zh-HK", "发放周期_hk", "发放周期（字典 hr_benefit_payment_cycle_type）"),
 
             // entity.benefititem.defaultamount
-            new TranslationSeedItem("entity.benefititem.defaultamount", "en-US", "默认金额", "默认金额或补贴标准（元）"),
+            new TranslationSeedItem("entity.benefititem.defaultamount", "en-US", "默认金额_us", "默认金额或补贴标准（元）"),
             // entity.benefititem.defaultamount
-            new TranslationSeedItem("entity.benefititem.defaultamount", "ja-JP", "默认金额", "默认金额或补贴标准（元）"),
+            new TranslationSeedItem("entity.benefititem.defaultamount", "ja-JP", "默认金额_jp", "默认金额或补贴标准（元）"),
             // entity.benefititem.defaultamount
             new TranslationSeedItem("entity.benefititem.defaultamount", "zh-CN", "默认金额", "默认金额或补贴标准（元）"),
             // entity.benefititem.defaultamount
-            new TranslationSeedItem("entity.benefititem.defaultamount", "zh-HK", "默认金额", "默认金额或补贴标准（元）"),
+            new TranslationSeedItem("entity.benefititem.defaultamount", "zh-HK", "默认金额_hk", "默认金额或补贴标准（元）"),
 
             // entity.benefititem.maxamount
-            new TranslationSeedItem("entity.benefititem.maxamount", "en-US", "金额上限", "金额上限（元，0 表示不限制）"),
+            new TranslationSeedItem("entity.benefititem.maxamount", "en-US", "金额上限_us", "金额上限（元，0 表示不限制）"),
             // entity.benefititem.maxamount
-            new TranslationSeedItem("entity.benefititem.maxamount", "ja-JP", "金额上限", "金额上限（元，0 表示不限制）"),
+            new TranslationSeedItem("entity.benefititem.maxamount", "ja-JP", "金额上限_jp", "金额上限（元，0 表示不限制）"),
             // entity.benefititem.maxamount
             new TranslationSeedItem("entity.benefititem.maxamount", "zh-CN", "金额上限", "金额上限（元，0 表示不限制）"),
             // entity.benefititem.maxamount
-            new TranslationSeedItem("entity.benefititem.maxamount", "zh-HK", "金额上限", "金额上限（元，0 表示不限制）"),
+            new TranslationSeedItem("entity.benefititem.maxamount", "zh-HK", "金额上限_hk", "金额上限（元，0 表示不限制）"),
 
             // entity.benefititem.employerratio
-            new TranslationSeedItem("entity.benefititem.employerratio", "en-US", "公司承担比例", "公司承担比例（%，如公积金单位缴存比例）"),
+            new TranslationSeedItem("entity.benefititem.employerratio", "en-US", "公司承担比例_us", "公司承担比例（%，如公积金单位缴存比例）"),
             // entity.benefititem.employerratio
-            new TranslationSeedItem("entity.benefititem.employerratio", "ja-JP", "公司承担比例", "公司承担比例（%，如公积金单位缴存比例）"),
+            new TranslationSeedItem("entity.benefititem.employerratio", "ja-JP", "公司承担比例_jp", "公司承担比例（%，如公积金单位缴存比例）"),
             // entity.benefititem.employerratio
             new TranslationSeedItem("entity.benefititem.employerratio", "zh-CN", "公司承担比例", "公司承担比例（%，如公积金单位缴存比例）"),
             // entity.benefititem.employerratio
-            new TranslationSeedItem("entity.benefititem.employerratio", "zh-HK", "公司承担比例", "公司承担比例（%，如公积金单位缴存比例）"),
+            new TranslationSeedItem("entity.benefititem.employerratio", "zh-HK", "公司承担比例_hk", "公司承担比例（%，如公积金单位缴存比例）"),
 
             // entity.benefititem.employeeratio
-            new TranslationSeedItem("entity.benefititem.employeeratio", "en-US", "个人承担比例", "个人承担比例（%，如公积金个人缴存比例）"),
+            new TranslationSeedItem("entity.benefititem.employeeratio", "en-US", "个人承担比例_us", "个人承担比例（%，如公积金个人缴存比例）"),
             // entity.benefititem.employeeratio
-            new TranslationSeedItem("entity.benefititem.employeeratio", "ja-JP", "个人承担比例", "个人承担比例（%，如公积金个人缴存比例）"),
+            new TranslationSeedItem("entity.benefititem.employeeratio", "ja-JP", "个人承担比例_jp", "个人承担比例（%，如公积金个人缴存比例）"),
             // entity.benefititem.employeeratio
             new TranslationSeedItem("entity.benefititem.employeeratio", "zh-CN", "个人承担比例", "个人承担比例（%，如公积金个人缴存比例）"),
             // entity.benefititem.employeeratio
-            new TranslationSeedItem("entity.benefititem.employeeratio", "zh-HK", "个人承担比例", "个人承担比例（%，如公积金个人缴存比例）"),
+            new TranslationSeedItem("entity.benefititem.employeeratio", "zh-HK", "个人承担比例_hk", "个人承担比例（%，如公积金个人缴存比例）"),
 
             // entity.benefititem.ismandatory
-            new TranslationSeedItem("entity.benefititem.ismandatory", "en-US", "是否强制福利", "是否强制福利（字典 sys_yes_no）"),
+            new TranslationSeedItem("entity.benefititem.ismandatory", "en-US", "是否强制福利_us", "是否强制福利（字典 sys_yes_no_type）"),
             // entity.benefititem.ismandatory
-            new TranslationSeedItem("entity.benefititem.ismandatory", "ja-JP", "是否强制福利", "是否强制福利（字典 sys_yes_no）"),
+            new TranslationSeedItem("entity.benefititem.ismandatory", "ja-JP", "是否强制福利_jp", "是否强制福利（字典 sys_yes_no_type）"),
             // entity.benefititem.ismandatory
-            new TranslationSeedItem("entity.benefititem.ismandatory", "zh-CN", "是否强制福利", "是否强制福利（字典 sys_yes_no）"),
+            new TranslationSeedItem("entity.benefititem.ismandatory", "zh-CN", "是否强制福利", "是否强制福利（字典 sys_yes_no_type）"),
             // entity.benefititem.ismandatory
-            new TranslationSeedItem("entity.benefititem.ismandatory", "zh-HK", "是否强制福利", "是否强制福利（字典 sys_yes_no）"),
+            new TranslationSeedItem("entity.benefititem.ismandatory", "zh-HK", "是否强制福利_hk", "是否强制福利（字典 sys_yes_no_type）"),
 
             // entity.benefititem.sortorder
-            new TranslationSeedItem("entity.benefititem.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.benefititem.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.benefititem.sortorder
-            new TranslationSeedItem("entity.benefititem.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.benefititem.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.benefititem.sortorder
             new TranslationSeedItem("entity.benefititem.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.benefititem.sortorder
-            new TranslationSeedItem("entity.benefititem.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.benefititem.sortorder", "zh-HK", "排序号_hk", "排序号"),
 
             // entity.benefititem.itemstatus
-            new TranslationSeedItem("entity.benefititem.itemstatus", "en-US", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.benefititem.itemstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
             // entity.benefititem.itemstatus
-            new TranslationSeedItem("entity.benefititem.itemstatus", "ja-JP", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.benefititem.itemstatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
             // entity.benefititem.itemstatus
-            new TranslationSeedItem("entity.benefititem.itemstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.benefititem.itemstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
             // entity.benefititem.itemstatus
-            new TranslationSeedItem("entity.benefititem.itemstatus", "zh-HK", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.benefititem.itemstatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
 
             // entity.benefititem.relatedplant
-            new TranslationSeedItem("entity.benefititem.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.benefititem.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.benefititem.relatedplant
-            new TranslationSeedItem("entity.benefititem.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.benefititem.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.benefititem.relatedplant
             new TranslationSeedItem("entity.benefititem.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.benefititem.relatedplant
-            new TranslationSeedItem("entity.benefititem.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.benefititem.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -223,10 +223,10 @@ public class TaktBenefitItemI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Benefits";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

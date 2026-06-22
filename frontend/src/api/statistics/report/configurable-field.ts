@@ -41,9 +41,7 @@ export function getConfigurableFieldList(queryDto: any): Promise<TaktPagedResult
   return request<TaktPagedResult<ConfigurableField>>({
     url: `${CONFIGURABLE_FIELD_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportConfigurableField(
     url: `${CONFIGURABLE_FIELD_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

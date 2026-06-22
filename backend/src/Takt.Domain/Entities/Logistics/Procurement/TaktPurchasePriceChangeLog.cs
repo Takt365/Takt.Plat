@@ -1,6 +1,6 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Materials
+// 命名空间：Takt.Domain.Entities.Logistics.Procurement
 // 文件名称：TaktPurchasePriceChangeLog.cs
 // 功能描述：采购价格变更记录实体（变更记录表，非历史表）
 //
@@ -11,7 +11,7 @@
 using SqlSugar;
 using Takt.Domain.Entities;
 
-namespace Takt.Domain.Entities.Logistics.Materials;
+namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
 /// 采购价格变更记录实体

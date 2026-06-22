@@ -116,7 +116,10 @@ public sealed class TaktPermissionFilter : IAsyncAuthorizationFilter
         {
             context.Result = new ObjectResult(
                 TaktApiResult.Fail(
-                    _localizationService.Translate(TaktValidationI18nKeys.PermissionDeniedWithAction, permissionAttribute.DisplayName),
+                    _localizationService.Translate(
+                        TaktValidationI18nKeys.PermissionDeniedWithAction,
+                        culture: null,
+                        permissionAttribute.DisplayName),
                     TaktResultCode.Forbidden))
             {
                 StatusCode = StatusCodes.Status403Forbidden

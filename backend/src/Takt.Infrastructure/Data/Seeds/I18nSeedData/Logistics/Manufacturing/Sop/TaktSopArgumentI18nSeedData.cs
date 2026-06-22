@@ -1,0 +1,223 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
+// 文件名称：TaktSopArgumentI18nSeedData.cs
+// 创建时间：2026-06-22
+// 创建人：Takt365(Auto Generated)
+// 功能描述：TaktSopArgument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using Takt.Domain.Entities.Foundation;
+using Takt.Domain.Interfaces;
+using Takt.Domain.Repositories;
+using Takt.Shared.Helpers;
+
+namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop;
+
+/// <summary>
+/// TaktSopArgument 实体国际化翻译种子（键前缀 entity.sopargument.*）
+/// 幂等性：存在则更新，不存在则创建
+/// </summary>
+public class TaktSopArgumentI18nSeedData : ITaktSeedDataCoordinator
+{
+    /// <summary>
+    /// 执行顺序（实体翻译种子，位于部门翻译之后）
+    /// </summary>
+    public int Order => 52;
+
+    /// <summary>
+    /// 初始化实体字段翻译种子
+    /// </summary>
+    public async Task<(int InsertCount, int UpdateCount)> SeedAsync(IServiceProvider serviceProvider, string? tenantCode = null)
+    {
+        TaktLogger.Information("开始初始化 TaktSopArgument 实体国际化翻译种子...");
+
+        if (string.IsNullOrEmpty(tenantCode))
+        {
+            TaktLogger.Warning("租户编码为空，跳过实体国际化翻译种子初始化");
+            return (0, 0);
+        }
+
+        var repository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktTranslation>>();
+        var cultureRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCulture>>();
+        var cultureIdByCode = (await cultureRepository.GetListAsync(c => c.TenantCode == tenantCode))
+            .ToDictionary(c => c.CultureCode, c => c.Id);
+        int insertCount = 0;
+        int updateCount = 0;
+
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 sopargument 实体翻译...", tenantCode);
+
+        foreach (var item in GetSopArgumentTranslations())
+        {
+            if (!cultureIdByCode.TryGetValue(item.CultureCode, out var cultureId))
+            {
+                TaktLogger.Warning("未找到区域文化 {CultureCode}，跳过翻译 {I18nKey}", item.CultureCode, item.I18nKey);
+                continue;
+            }
+
+            var (translation, i, u) = await CreateOrUpdateTranslationAsync(
+                repository,
+                tenantCode,
+                cultureId,
+                item);
+            insertCount += i;
+            updateCount += u;
+        }
+
+        TaktLogger.Information("TaktSopArgument 实体翻译种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
+        return (insertCount, updateCount);
+    }
+
+    /// <summary>
+    /// TaktSopArgument 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
+    /// I18nKey：entity.sopargument._self / entity.sopargument.{{field}}；ResourceGroup=Sop；ResourceType=frontend
+    /// </summary>
+    private static List<TranslationSeedItem> GetSopArgumentTranslations()
+    {
+        return new List<TranslationSeedItem>
+        {
+            // entity.sopargument._self
+            new TranslationSeedItem("entity.sopargument._self", "en-US", "Sop Argument Information_us", "实体名称"),
+            // entity.sopargument._self
+            new TranslationSeedItem("entity.sopargument._self", "ja-JP", "SOP 作业参数信息_jp", "实体名称"),
+            // entity.sopargument._self
+            new TranslationSeedItem("entity.sopargument._self", "zh-CN", "SOP 作业参数信息", "实体名称"),
+            // entity.sopargument._self
+            new TranslationSeedItem("entity.sopargument._self", "zh-HK", "SOP 作业参数信息_hk", "实体名称"),
+
+            // entity.sopargument.execid
+            new TranslationSeedItem("entity.sopargument.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            // entity.sopargument.execid
+            new TranslationSeedItem("entity.sopargument.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            // entity.sopargument.execid
+            new TranslationSeedItem("entity.sopargument.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            // entity.sopargument.execid
+            new TranslationSeedItem("entity.sopargument.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）"),
+
+            // entity.sopargument.execstepid
+            new TranslationSeedItem("entity.sopargument.execstepid", "en-US", "工步执行明细ID_us", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            // entity.sopargument.execstepid
+            new TranslationSeedItem("entity.sopargument.execstepid", "ja-JP", "工步执行明细ID_jp", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            // entity.sopargument.execstepid
+            new TranslationSeedItem("entity.sopargument.execstepid", "zh-CN", "工步执行明细ID", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+            // entity.sopargument.execstepid
+            new TranslationSeedItem("entity.sopargument.execstepid", "zh-HK", "工步执行明细ID_hk", "工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）"),
+
+            // entity.sopargument.routingitemparameterid
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "en-US", "工序参数定义ID_us", "工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）"),
+            // entity.sopargument.routingitemparameterid
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "ja-JP", "工序参数定义ID_jp", "工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）"),
+            // entity.sopargument.routingitemparameterid
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "zh-CN", "工序参数定义ID", "工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）"),
+            // entity.sopargument.routingitemparameterid
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "zh-HK", "工序参数定义ID_hk", "工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）"),
+
+            // entity.sopargument.paramcode
+            new TranslationSeedItem("entity.sopargument.paramcode", "en-US", "参数编码_us", "参数编码"),
+            // entity.sopargument.paramcode
+            new TranslationSeedItem("entity.sopargument.paramcode", "ja-JP", "参数编码_jp", "参数编码"),
+            // entity.sopargument.paramcode
+            new TranslationSeedItem("entity.sopargument.paramcode", "zh-CN", "参数编码", "参数编码"),
+            // entity.sopargument.paramcode
+            new TranslationSeedItem("entity.sopargument.paramcode", "zh-HK", "参数编码_hk", "参数编码"),
+
+            // entity.sopargument.actualvalue
+            new TranslationSeedItem("entity.sopargument.actualvalue", "en-US", "实际值_us", "实际值"),
+            // entity.sopargument.actualvalue
+            new TranslationSeedItem("entity.sopargument.actualvalue", "ja-JP", "实际值_jp", "实际值"),
+            // entity.sopargument.actualvalue
+            new TranslationSeedItem("entity.sopargument.actualvalue", "zh-CN", "实际值", "实际值"),
+            // entity.sopargument.actualvalue
+            new TranslationSeedItem("entity.sopargument.actualvalue", "zh-HK", "实际值_hk", "实际值"),
+
+            // entity.sopargument.isoutofrange
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "en-US", "是否超差_us", "是否超差（字典 sys_yes_no_type，0=否，1=是）"),
+            // entity.sopargument.isoutofrange
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "ja-JP", "是否超差_jp", "是否超差（字典 sys_yes_no_type，0=否，1=是）"),
+            // entity.sopargument.isoutofrange
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "zh-CN", "是否超差", "是否超差（字典 sys_yes_no_type，0=否，1=是）"),
+            // entity.sopargument.isoutofrange
+            new TranslationSeedItem("entity.sopargument.isoutofrange", "zh-HK", "是否超差_hk", "是否超差（字典 sys_yes_no_type，0=否，1=是）"),
+
+            // entity.sopargument.recordedat
+            new TranslationSeedItem("entity.sopargument.recordedat", "en-US", "记录时间_us", "记录时间"),
+            // entity.sopargument.recordedat
+            new TranslationSeedItem("entity.sopargument.recordedat", "ja-JP", "记录时间_jp", "记录时间"),
+            // entity.sopargument.recordedat
+            new TranslationSeedItem("entity.sopargument.recordedat", "zh-CN", "记录时间", "记录时间"),
+            // entity.sopargument.recordedat
+            new TranslationSeedItem("entity.sopargument.recordedat", "zh-HK", "记录时间_hk", "记录时间"),
+
+            // entity.sopargument.exec
+            new TranslationSeedItem("entity.sopargument.exec", "en-US", "执行追溯_us", "执行追溯"),
+            // entity.sopargument.exec
+            new TranslationSeedItem("entity.sopargument.exec", "ja-JP", "执行追溯_jp", "执行追溯"),
+            // entity.sopargument.exec
+            new TranslationSeedItem("entity.sopargument.exec", "zh-CN", "执行追溯", "执行追溯"),
+            // entity.sopargument.exec
+            new TranslationSeedItem("entity.sopargument.exec", "zh-HK", "执行追溯_hk", "执行追溯"),
+        };
+    }
+
+    /// <summary>
+    /// 填充 TaktTranslation 全部业务字段（含租户基类字段）
+    /// </summary>
+    private static void ApplyTranslationFields(
+        TaktTranslation translation,
+        string tenantCode,
+        long cultureId,
+        TranslationSeedItem item)
+    {
+        translation.TenantCode = tenantCode;
+        translation.CultureId = cultureId;
+        translation.CultureCode = item.CultureCode;
+        translation.I18nKey = item.I18nKey;
+        translation.TranslationText = item.TranslationText;
+        translation.ResourceGroup = "Sop";
+        translation.ResourceType = "frontend";
+        translation.ContextNote = item.ContextNote;
+        translation.ExtField = null;
+        translation.Remark = null;
+        translation.IsDeleted = 0;
+        translation.DeletedBy = null;
+        translation.DeletedAt = null;
+    }
+
+    private static async Task<(TaktTranslation Translation, int InsertCount, int UpdateCount)> CreateOrUpdateTranslationAsync(
+        ITaktTenantSeedRepository<TaktTranslation> repository,
+        string tenantCode,
+        long cultureId,
+        TranslationSeedItem item)
+    {
+        var translation = await repository.FirstAsync(t =>
+            t.TenantCode == tenantCode &&
+            t.I18nKey == item.I18nKey &&
+            t.CultureCode == item.CultureCode);
+
+        if (translation == null)
+        {
+            translation = new TaktTranslation();
+            ApplyTranslationFields(translation, tenantCode, cultureId, item);
+            translation = await repository.CreateAsync(translation);
+            return (translation, 1, 0);
+        }
+
+        ApplyTranslationFields(translation, tenantCode, cultureId, item);
+        await repository.UpdateAsync(translation);
+        return (translation, 0, 1);
+    }
+
+    /// <summary>
+    /// 翻译种子项（对应 TaktTranslation 全部可写字段，CultureId 由 SeedAsync 解析）
+    /// </summary>
+    private sealed record TranslationSeedItem(
+        string I18nKey,
+        string CultureCode,
+        string TranslationText,
+        string? ContextNote);
+}

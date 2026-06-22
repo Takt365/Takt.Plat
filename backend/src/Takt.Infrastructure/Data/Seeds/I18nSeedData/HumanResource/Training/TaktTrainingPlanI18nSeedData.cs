@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingPlanI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,137 +75,137 @@ public class TaktTrainingPlanI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktTrainingPlan 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.trainingplan._self / entity.trainingplan.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.trainingplan._self / entity.trainingplan.{{field}}；ResourceGroup=Training；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetTrainingPlanTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.trainingplan._self
-            new TranslationSeedItem("entity.trainingplan._self", "en-US", "Training Plan Information", "实体名称"),
+            new TranslationSeedItem("entity.trainingplan._self", "en-US", "Training Plan Information_us", "实体名称"),
             // entity.trainingplan._self
-            new TranslationSeedItem("entity.trainingplan._self", "ja-JP", "培训计划信息", "实体名称"),
+            new TranslationSeedItem("entity.trainingplan._self", "ja-JP", "培训计划信息_jp", "实体名称"),
             // entity.trainingplan._self
             new TranslationSeedItem("entity.trainingplan._self", "zh-CN", "培训计划信息", "实体名称"),
             // entity.trainingplan._self
-            new TranslationSeedItem("entity.trainingplan._self", "zh-HK", "培训计划信息", "实体名称"),
+            new TranslationSeedItem("entity.trainingplan._self", "zh-HK", "培训计划信息_hk", "实体名称"),
 
             // entity.trainingplan.plancode
-            new TranslationSeedItem("entity.trainingplan.plancode", "en-US", "计划编码", "计划编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.trainingplan.plancode", "en-US", "计划编码_us", "计划编码（租户+公司内唯一）"),
             // entity.trainingplan.plancode
-            new TranslationSeedItem("entity.trainingplan.plancode", "ja-JP", "计划编码", "计划编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.trainingplan.plancode", "ja-JP", "计划编码_jp", "计划编码（租户+公司内唯一）"),
             // entity.trainingplan.plancode
             new TranslationSeedItem("entity.trainingplan.plancode", "zh-CN", "计划编码", "计划编码（租户+公司内唯一）"),
             // entity.trainingplan.plancode
-            new TranslationSeedItem("entity.trainingplan.plancode", "zh-HK", "计划编码", "计划编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.trainingplan.plancode", "zh-HK", "计划编码_hk", "计划编码（租户+公司内唯一）"),
 
             // entity.trainingplan.planname
-            new TranslationSeedItem("entity.trainingplan.planname", "en-US", "计划名称", "计划名称"),
+            new TranslationSeedItem("entity.trainingplan.planname", "en-US", "计划名称_us", "计划名称"),
             // entity.trainingplan.planname
-            new TranslationSeedItem("entity.trainingplan.planname", "ja-JP", "计划名称", "计划名称"),
+            new TranslationSeedItem("entity.trainingplan.planname", "ja-JP", "计划名称_jp", "计划名称"),
             // entity.trainingplan.planname
             new TranslationSeedItem("entity.trainingplan.planname", "zh-CN", "计划名称", "计划名称"),
             // entity.trainingplan.planname
-            new TranslationSeedItem("entity.trainingplan.planname", "zh-HK", "计划名称", "计划名称"),
+            new TranslationSeedItem("entity.trainingplan.planname", "zh-HK", "计划名称_hk", "计划名称"),
 
             // entity.trainingplan.planyear
-            new TranslationSeedItem("entity.trainingplan.planyear", "en-US", "计划年度", "计划年度"),
+            new TranslationSeedItem("entity.trainingplan.planyear", "en-US", "计划年度_us", "计划年度"),
             // entity.trainingplan.planyear
-            new TranslationSeedItem("entity.trainingplan.planyear", "ja-JP", "计划年度", "计划年度"),
+            new TranslationSeedItem("entity.trainingplan.planyear", "ja-JP", "计划年度_jp", "计划年度"),
             // entity.trainingplan.planyear
             new TranslationSeedItem("entity.trainingplan.planyear", "zh-CN", "计划年度", "计划年度"),
             // entity.trainingplan.planyear
-            new TranslationSeedItem("entity.trainingplan.planyear", "zh-HK", "计划年度", "计划年度"),
+            new TranslationSeedItem("entity.trainingplan.planyear", "zh-HK", "计划年度_hk", "计划年度"),
 
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "en-US", "计划类型", "计划类型（年度/季度/月度/专项）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "en-US", "计划类型_us", "计划类型（年度/季度/月度/专项）"),
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "ja-JP", "计划类型", "计划类型（年度/季度/月度/专项）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "ja-JP", "计划类型_jp", "计划类型（年度/季度/月度/专项）"),
             // entity.trainingplan.plantype
             new TranslationSeedItem("entity.trainingplan.plantype", "zh-CN", "计划类型", "计划类型（年度/季度/月度/专项）"),
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "zh-HK", "计划类型", "计划类型（年度/季度/月度/专项）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "zh-HK", "计划类型_hk", "计划类型（年度/季度/月度/专项）"),
 
             // entity.trainingplan.applicabledepartment
-            new TranslationSeedItem("entity.trainingplan.applicabledepartment", "en-US", "适用部门", "适用部门"),
+            new TranslationSeedItem("entity.trainingplan.applicabledepartment", "en-US", "适用部门_us", "适用部门"),
             // entity.trainingplan.applicabledepartment
-            new TranslationSeedItem("entity.trainingplan.applicabledepartment", "ja-JP", "适用部门", "适用部门"),
+            new TranslationSeedItem("entity.trainingplan.applicabledepartment", "ja-JP", "适用部门_jp", "适用部门"),
             // entity.trainingplan.applicabledepartment
             new TranslationSeedItem("entity.trainingplan.applicabledepartment", "zh-CN", "适用部门", "适用部门"),
             // entity.trainingplan.applicabledepartment
-            new TranslationSeedItem("entity.trainingplan.applicabledepartment", "zh-HK", "适用部门", "适用部门"),
+            new TranslationSeedItem("entity.trainingplan.applicabledepartment", "zh-HK", "适用部门_hk", "适用部门"),
 
             // entity.trainingplan.startdate
-            new TranslationSeedItem("entity.trainingplan.startdate", "en-US", "计划开始日期", "计划开始日期"),
+            new TranslationSeedItem("entity.trainingplan.startdate", "en-US", "计划开始日期_us", "计划开始日期"),
             // entity.trainingplan.startdate
-            new TranslationSeedItem("entity.trainingplan.startdate", "ja-JP", "计划开始日期", "计划开始日期"),
+            new TranslationSeedItem("entity.trainingplan.startdate", "ja-JP", "计划开始日期_jp", "计划开始日期"),
             // entity.trainingplan.startdate
             new TranslationSeedItem("entity.trainingplan.startdate", "zh-CN", "计划开始日期", "计划开始日期"),
             // entity.trainingplan.startdate
-            new TranslationSeedItem("entity.trainingplan.startdate", "zh-HK", "计划开始日期", "计划开始日期"),
+            new TranslationSeedItem("entity.trainingplan.startdate", "zh-HK", "计划开始日期_hk", "计划开始日期"),
 
             // entity.trainingplan.enddate
-            new TranslationSeedItem("entity.trainingplan.enddate", "en-US", "计划结束日期", "计划结束日期"),
+            new TranslationSeedItem("entity.trainingplan.enddate", "en-US", "计划结束日期_us", "计划结束日期"),
             // entity.trainingplan.enddate
-            new TranslationSeedItem("entity.trainingplan.enddate", "ja-JP", "计划结束日期", "计划结束日期"),
+            new TranslationSeedItem("entity.trainingplan.enddate", "ja-JP", "计划结束日期_jp", "计划结束日期"),
             // entity.trainingplan.enddate
             new TranslationSeedItem("entity.trainingplan.enddate", "zh-CN", "计划结束日期", "计划结束日期"),
             // entity.trainingplan.enddate
-            new TranslationSeedItem("entity.trainingplan.enddate", "zh-HK", "计划结束日期", "计划结束日期"),
+            new TranslationSeedItem("entity.trainingplan.enddate", "zh-HK", "计划结束日期_hk", "计划结束日期"),
 
             // entity.trainingplan.trainingobjectives
-            new TranslationSeedItem("entity.trainingplan.trainingobjectives", "en-US", "培训目标", "培训目标"),
+            new TranslationSeedItem("entity.trainingplan.trainingobjectives", "en-US", "培训目标_us", "培训目标"),
             // entity.trainingplan.trainingobjectives
-            new TranslationSeedItem("entity.trainingplan.trainingobjectives", "ja-JP", "培训目标", "培训目标"),
+            new TranslationSeedItem("entity.trainingplan.trainingobjectives", "ja-JP", "培训目标_jp", "培训目标"),
             // entity.trainingplan.trainingobjectives
             new TranslationSeedItem("entity.trainingplan.trainingobjectives", "zh-CN", "培训目标", "培训目标"),
             // entity.trainingplan.trainingobjectives
-            new TranslationSeedItem("entity.trainingplan.trainingobjectives", "zh-HK", "培训目标", "培训目标"),
+            new TranslationSeedItem("entity.trainingplan.trainingobjectives", "zh-HK", "培训目标_hk", "培训目标"),
 
             // entity.trainingplan.plannedheadcount
-            new TranslationSeedItem("entity.trainingplan.plannedheadcount", "en-US", "计划培训人数", "计划培训人数"),
+            new TranslationSeedItem("entity.trainingplan.plannedheadcount", "en-US", "计划培训人数_us", "计划培训人数"),
             // entity.trainingplan.plannedheadcount
-            new TranslationSeedItem("entity.trainingplan.plannedheadcount", "ja-JP", "计划培训人数", "计划培训人数"),
+            new TranslationSeedItem("entity.trainingplan.plannedheadcount", "ja-JP", "计划培训人数_jp", "计划培训人数"),
             // entity.trainingplan.plannedheadcount
             new TranslationSeedItem("entity.trainingplan.plannedheadcount", "zh-CN", "计划培训人数", "计划培训人数"),
             // entity.trainingplan.plannedheadcount
-            new TranslationSeedItem("entity.trainingplan.plannedheadcount", "zh-HK", "计划培训人数", "计划培训人数"),
+            new TranslationSeedItem("entity.trainingplan.plannedheadcount", "zh-HK", "计划培训人数_hk", "计划培训人数"),
 
             // entity.trainingplan.trainingbudget
-            new TranslationSeedItem("entity.trainingplan.trainingbudget", "en-US", "培训预算", "培训预算（元）"),
+            new TranslationSeedItem("entity.trainingplan.trainingbudget", "en-US", "培训预算_us", "培训预算（元）"),
             // entity.trainingplan.trainingbudget
-            new TranslationSeedItem("entity.trainingplan.trainingbudget", "ja-JP", "培训预算", "培训预算（元）"),
+            new TranslationSeedItem("entity.trainingplan.trainingbudget", "ja-JP", "培训预算_jp", "培训预算（元）"),
             // entity.trainingplan.trainingbudget
             new TranslationSeedItem("entity.trainingplan.trainingbudget", "zh-CN", "培训预算", "培训预算（元）"),
             // entity.trainingplan.trainingbudget
-            new TranslationSeedItem("entity.trainingplan.trainingbudget", "zh-HK", "培训预算", "培训预算（元）"),
+            new TranslationSeedItem("entity.trainingplan.trainingbudget", "zh-HK", "培训预算_hk", "培训预算（元）"),
 
             // entity.trainingplan.description
-            new TranslationSeedItem("entity.trainingplan.description", "en-US", "计划说明", "计划说明"),
+            new TranslationSeedItem("entity.trainingplan.description", "en-US", "计划说明_us", "计划说明"),
             // entity.trainingplan.description
-            new TranslationSeedItem("entity.trainingplan.description", "ja-JP", "计划说明", "计划说明"),
+            new TranslationSeedItem("entity.trainingplan.description", "ja-JP", "计划说明_jp", "计划说明"),
             // entity.trainingplan.description
             new TranslationSeedItem("entity.trainingplan.description", "zh-CN", "计划说明", "计划说明"),
             // entity.trainingplan.description
-            new TranslationSeedItem("entity.trainingplan.description", "zh-HK", "计划说明", "计划说明"),
+            new TranslationSeedItem("entity.trainingplan.description", "zh-HK", "计划说明_hk", "计划说明"),
 
             // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "en-US", "业务状态", "业务状态（1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.trainingplan.status", "en-US", "业务状态_us", "业务状态（1=启用 0=禁用）"),
             // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "ja-JP", "业务状态", "业务状态（1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.trainingplan.status", "ja-JP", "业务状态_jp", "业务状态（1=启用 0=禁用）"),
             // entity.trainingplan.status
             new TranslationSeedItem("entity.trainingplan.status", "zh-CN", "业务状态", "业务状态（1=启用 0=禁用）"),
             // entity.trainingplan.status
-            new TranslationSeedItem("entity.trainingplan.status", "zh-HK", "业务状态", "业务状态（1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.trainingplan.status", "zh-HK", "业务状态_hk", "业务状态（1=启用 0=禁用）"),
 
             // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.trainingplan.relatedplant
             new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -223,10 +223,10 @@ public class TaktTrainingPlanI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Training";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

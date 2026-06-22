@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktUserCompanyI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktUserCompany 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,56 +75,56 @@ public class TaktUserCompanyI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktUserCompany 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.usercompany._self / entity.usercompany.{{field}}；ResourceGroup=1；ResourceType=0
+    /// I18nKey：entity.usercompany._self / entity.usercompany.{{field}}；ResourceGroup=Identity；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetUserCompanyTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.usercompany._self
-            new TranslationSeedItem("entity.usercompany._self", "en-US", "User Company Information", "实体名称"),
+            new TranslationSeedItem("entity.usercompany._self", "en-US", "User Company Information_us", "实体名称"),
             // entity.usercompany._self
-            new TranslationSeedItem("entity.usercompany._self", "ja-JP", "用户公司关联信息", "实体名称"),
+            new TranslationSeedItem("entity.usercompany._self", "ja-JP", "用户公司关联信息_jp", "实体名称"),
             // entity.usercompany._self
             new TranslationSeedItem("entity.usercompany._self", "zh-CN", "用户公司关联信息", "实体名称"),
             // entity.usercompany._self
-            new TranslationSeedItem("entity.usercompany._self", "zh-HK", "用户公司关联信息", "实体名称"),
+            new TranslationSeedItem("entity.usercompany._self", "zh-HK", "用户公司关联信息_hk", "实体名称"),
 
             // entity.usercompany.userid
-            new TranslationSeedItem("entity.usercompany.userid", "en-US", "用户ID", "用户ID"),
+            new TranslationSeedItem("entity.usercompany.userid", "en-US", "用户ID_us", "用户ID"),
             // entity.usercompany.userid
-            new TranslationSeedItem("entity.usercompany.userid", "ja-JP", "用户ID", "用户ID"),
+            new TranslationSeedItem("entity.usercompany.userid", "ja-JP", "用户ID_jp", "用户ID"),
             // entity.usercompany.userid
             new TranslationSeedItem("entity.usercompany.userid", "zh-CN", "用户ID", "用户ID"),
             // entity.usercompany.userid
-            new TranslationSeedItem("entity.usercompany.userid", "zh-HK", "用户ID", "用户ID"),
+            new TranslationSeedItem("entity.usercompany.userid", "zh-HK", "用户ID_hk", "用户ID"),
 
             // entity.usercompany.isdefault
-            new TranslationSeedItem("entity.usercompany.isdefault", "en-US", "是否默认公司", "是否默认登录公司（字典 sys_yes_no；同一用户在同一租户下仅应有一条为是）"),
+            new TranslationSeedItem("entity.usercompany.isdefault", "en-US", "是否默认公司_us", "是否默认登录公司（字典 sys_yes_no_type；同一用户在同一租户下仅应有一条为是）"),
             // entity.usercompany.isdefault
-            new TranslationSeedItem("entity.usercompany.isdefault", "ja-JP", "是否默认公司", "是否默认登录公司（字典 sys_yes_no；同一用户在同一租户下仅应有一条为是）"),
+            new TranslationSeedItem("entity.usercompany.isdefault", "ja-JP", "是否默认公司_jp", "是否默认登录公司（字典 sys_yes_no_type；同一用户在同一租户下仅应有一条为是）"),
             // entity.usercompany.isdefault
-            new TranslationSeedItem("entity.usercompany.isdefault", "zh-CN", "是否默认公司", "是否默认登录公司（字典 sys_yes_no；同一用户在同一租户下仅应有一条为是）"),
+            new TranslationSeedItem("entity.usercompany.isdefault", "zh-CN", "是否默认公司", "是否默认登录公司（字典 sys_yes_no_type；同一用户在同一租户下仅应有一条为是）"),
             // entity.usercompany.isdefault
-            new TranslationSeedItem("entity.usercompany.isdefault", "zh-HK", "是否默认公司", "是否默认登录公司（字典 sys_yes_no；同一用户在同一租户下仅应有一条为是）"),
+            new TranslationSeedItem("entity.usercompany.isdefault", "zh-HK", "是否默认公司_hk", "是否默认登录公司（字典 sys_yes_no_type；同一用户在同一租户下仅应有一条为是）"),
 
             // entity.usercompany.user
-            new TranslationSeedItem("entity.usercompany.user", "en-US", "用户", "用户（多对一）"),
+            new TranslationSeedItem("entity.usercompany.user", "en-US", "用户_us", "用户（多对一）"),
             // entity.usercompany.user
-            new TranslationSeedItem("entity.usercompany.user", "ja-JP", "用户", "用户（多对一）"),
+            new TranslationSeedItem("entity.usercompany.user", "ja-JP", "用户_jp", "用户（多对一）"),
             // entity.usercompany.user
             new TranslationSeedItem("entity.usercompany.user", "zh-CN", "用户", "用户（多对一）"),
             // entity.usercompany.user
-            new TranslationSeedItem("entity.usercompany.user", "zh-HK", "用户", "用户（多对一）"),
+            new TranslationSeedItem("entity.usercompany.user", "zh-HK", "用户_hk", "用户（多对一）"),
 
             // entity.usercompany.company
-            new TranslationSeedItem("entity.usercompany.company", "en-US", "可访问公司", "可访问公司（多对一，按 CompanyCode 关联）"),
+            new TranslationSeedItem("entity.usercompany.company", "en-US", "可访问公司_us", "可访问公司（多对一，按 CompanyCode 关联）"),
             // entity.usercompany.company
-            new TranslationSeedItem("entity.usercompany.company", "ja-JP", "可访问公司", "可访问公司（多对一，按 CompanyCode 关联）"),
+            new TranslationSeedItem("entity.usercompany.company", "ja-JP", "可访问公司_jp", "可访问公司（多对一，按 CompanyCode 关联）"),
             // entity.usercompany.company
             new TranslationSeedItem("entity.usercompany.company", "zh-CN", "可访问公司", "可访问公司（多对一，按 CompanyCode 关联）"),
             // entity.usercompany.company
-            new TranslationSeedItem("entity.usercompany.company", "zh-HK", "可访问公司", "可访问公司（多对一，按 CompanyCode 关联）"),
+            new TranslationSeedItem("entity.usercompany.company", "zh-HK", "可访问公司_hk", "可访问公司（多对一，按 CompanyCode 关联）"),
         };
     }
 
@@ -142,10 +142,10 @@ public class TaktUserCompanyI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 1;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Identity";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -41,9 +41,7 @@ export function getIqcOrderItemList(queryDto: any): Promise<TaktPagedResult<IqcO
   return request<TaktPagedResult<IqcOrderItem>>({
     url: `${IQC_ORDER_ITEM_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportIqcOrderItem(
     url: `${IQC_ORDER_ITEM_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

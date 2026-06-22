@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktPayslipI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPayslip 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,182 +75,182 @@ public class TaktPayslipI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktPayslip 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.payslip._self / entity.payslip.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.payslip._self / entity.payslip.{{field}}；ResourceGroup=Compensation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetPayslipTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.payslip._self
-            new TranslationSeedItem("entity.payslip._self", "en-US", "Payslip Information", "实体名称"),
+            new TranslationSeedItem("entity.payslip._self", "en-US", "Payslip Information_us", "实体名称"),
             // entity.payslip._self
-            new TranslationSeedItem("entity.payslip._self", "ja-JP", "员工工资条信息", "实体名称"),
+            new TranslationSeedItem("entity.payslip._self", "ja-JP", "员工工资条信息_jp", "实体名称"),
             // entity.payslip._self
             new TranslationSeedItem("entity.payslip._self", "zh-CN", "员工工资条信息", "实体名称"),
             // entity.payslip._self
-            new TranslationSeedItem("entity.payslip._self", "zh-HK", "员工工资条信息", "实体名称"),
+            new TranslationSeedItem("entity.payslip._self", "zh-HK", "员工工资条信息_hk", "实体名称"),
 
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "en-US", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.payslip.employeeid", "en-US", "员工ID_us", "员工 ID"),
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "ja-JP", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.payslip.employeeid", "ja-JP", "员工ID_jp", "员工 ID"),
             // entity.payslip.employeeid
             new TranslationSeedItem("entity.payslip.employeeid", "zh-CN", "员工ID", "员工 ID"),
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "zh-HK", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.payslip.employeeid", "zh-HK", "员工ID_hk", "员工 ID"),
 
             // entity.payslip.employeename
-            new TranslationSeedItem("entity.payslip.employeename", "en-US", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.payslip.employeename", "en-US", "员工姓名_us", "员工姓名"),
             // entity.payslip.employeename
-            new TranslationSeedItem("entity.payslip.employeename", "ja-JP", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.payslip.employeename", "ja-JP", "员工姓名_jp", "员工姓名"),
             // entity.payslip.employeename
             new TranslationSeedItem("entity.payslip.employeename", "zh-CN", "员工姓名", "员工姓名"),
             // entity.payslip.employeename
-            new TranslationSeedItem("entity.payslip.employeename", "zh-HK", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.payslip.employeename", "zh-HK", "员工姓名_hk", "员工姓名"),
 
             // entity.payslip.payperiod
-            new TranslationSeedItem("entity.payslip.payperiod", "en-US", "发薪期间", "发薪期间（如 2026-06）"),
+            new TranslationSeedItem("entity.payslip.payperiod", "en-US", "发薪期间_us", "发薪期间（如 2026-06）"),
             // entity.payslip.payperiod
-            new TranslationSeedItem("entity.payslip.payperiod", "ja-JP", "发薪期间", "发薪期间（如 2026-06）"),
+            new TranslationSeedItem("entity.payslip.payperiod", "ja-JP", "发薪期间_jp", "发薪期间（如 2026-06）"),
             // entity.payslip.payperiod
             new TranslationSeedItem("entity.payslip.payperiod", "zh-CN", "发薪期间", "发薪期间（如 2026-06）"),
             // entity.payslip.payperiod
-            new TranslationSeedItem("entity.payslip.payperiod", "zh-HK", "发薪期间", "发薪期间（如 2026-06）"),
+            new TranslationSeedItem("entity.payslip.payperiod", "zh-HK", "发薪期间_hk", "发薪期间（如 2026-06）"),
 
             // entity.payslip.basesalary
-            new TranslationSeedItem("entity.payslip.basesalary", "en-US", "基本工资", "基本工资（元）"),
+            new TranslationSeedItem("entity.payslip.basesalary", "en-US", "基本工资_us", "基本工资（元）"),
             // entity.payslip.basesalary
-            new TranslationSeedItem("entity.payslip.basesalary", "ja-JP", "基本工资", "基本工资（元）"),
+            new TranslationSeedItem("entity.payslip.basesalary", "ja-JP", "基本工资_jp", "基本工资（元）"),
             // entity.payslip.basesalary
             new TranslationSeedItem("entity.payslip.basesalary", "zh-CN", "基本工资", "基本工资（元）"),
             // entity.payslip.basesalary
-            new TranslationSeedItem("entity.payslip.basesalary", "zh-HK", "基本工资", "基本工资（元）"),
+            new TranslationSeedItem("entity.payslip.basesalary", "zh-HK", "基本工资_hk", "基本工资（元）"),
 
             // entity.payslip.positionsalary
-            new TranslationSeedItem("entity.payslip.positionsalary", "en-US", "岗位工资", "岗位工资（元）"),
+            new TranslationSeedItem("entity.payslip.positionsalary", "en-US", "岗位工资_us", "岗位工资（元）"),
             // entity.payslip.positionsalary
-            new TranslationSeedItem("entity.payslip.positionsalary", "ja-JP", "岗位工资", "岗位工资（元）"),
+            new TranslationSeedItem("entity.payslip.positionsalary", "ja-JP", "岗位工资_jp", "岗位工资（元）"),
             // entity.payslip.positionsalary
             new TranslationSeedItem("entity.payslip.positionsalary", "zh-CN", "岗位工资", "岗位工资（元）"),
             // entity.payslip.positionsalary
-            new TranslationSeedItem("entity.payslip.positionsalary", "zh-HK", "岗位工资", "岗位工资（元）"),
+            new TranslationSeedItem("entity.payslip.positionsalary", "zh-HK", "岗位工资_hk", "岗位工资（元）"),
 
             // entity.payslip.bonusamount
-            new TranslationSeedItem("entity.payslip.bonusamount", "en-US", "绩效奖金", "绩效/奖金（元）"),
+            new TranslationSeedItem("entity.payslip.bonusamount", "en-US", "绩效奖金_us", "绩效/奖金（元）"),
             // entity.payslip.bonusamount
-            new TranslationSeedItem("entity.payslip.bonusamount", "ja-JP", "绩效奖金", "绩效/奖金（元）"),
+            new TranslationSeedItem("entity.payslip.bonusamount", "ja-JP", "绩效奖金_jp", "绩效/奖金（元）"),
             // entity.payslip.bonusamount
             new TranslationSeedItem("entity.payslip.bonusamount", "zh-CN", "绩效奖金", "绩效/奖金（元）"),
             // entity.payslip.bonusamount
-            new TranslationSeedItem("entity.payslip.bonusamount", "zh-HK", "绩效奖金", "绩效/奖金（元）"),
+            new TranslationSeedItem("entity.payslip.bonusamount", "zh-HK", "绩效奖金_hk", "绩效/奖金（元）"),
 
             // entity.payslip.overtimepay
-            new TranslationSeedItem("entity.payslip.overtimepay", "en-US", "加班费", "加班费（元）"),
+            new TranslationSeedItem("entity.payslip.overtimepay", "en-US", "加班费_us", "加班费（元）"),
             // entity.payslip.overtimepay
-            new TranslationSeedItem("entity.payslip.overtimepay", "ja-JP", "加班费", "加班费（元）"),
+            new TranslationSeedItem("entity.payslip.overtimepay", "ja-JP", "加班费_jp", "加班费（元）"),
             // entity.payslip.overtimepay
             new TranslationSeedItem("entity.payslip.overtimepay", "zh-CN", "加班费", "加班费（元）"),
             // entity.payslip.overtimepay
-            new TranslationSeedItem("entity.payslip.overtimepay", "zh-HK", "加班费", "加班费（元）"),
+            new TranslationSeedItem("entity.payslip.overtimepay", "zh-HK", "加班费_hk", "加班费（元）"),
 
             // entity.payslip.allowancetotal
-            new TranslationSeedItem("entity.payslip.allowancetotal", "en-US", "津贴合计", "津贴合计（元）"),
+            new TranslationSeedItem("entity.payslip.allowancetotal", "en-US", "津贴合计_us", "津贴合计（元）"),
             // entity.payslip.allowancetotal
-            new TranslationSeedItem("entity.payslip.allowancetotal", "ja-JP", "津贴合计", "津贴合计（元）"),
+            new TranslationSeedItem("entity.payslip.allowancetotal", "ja-JP", "津贴合计_jp", "津贴合计（元）"),
             // entity.payslip.allowancetotal
             new TranslationSeedItem("entity.payslip.allowancetotal", "zh-CN", "津贴合计", "津贴合计（元）"),
             // entity.payslip.allowancetotal
-            new TranslationSeedItem("entity.payslip.allowancetotal", "zh-HK", "津贴合计", "津贴合计（元）"),
+            new TranslationSeedItem("entity.payslip.allowancetotal", "zh-HK", "津贴合计_hk", "津贴合计（元）"),
 
             // entity.payslip.grossamount
-            new TranslationSeedItem("entity.payslip.grossamount", "en-US", "应发合计", "应发合计（元）"),
+            new TranslationSeedItem("entity.payslip.grossamount", "en-US", "应发合计_us", "应发合计（元）"),
             // entity.payslip.grossamount
-            new TranslationSeedItem("entity.payslip.grossamount", "ja-JP", "应发合计", "应发合计（元）"),
+            new TranslationSeedItem("entity.payslip.grossamount", "ja-JP", "应发合计_jp", "应发合计（元）"),
             // entity.payslip.grossamount
             new TranslationSeedItem("entity.payslip.grossamount", "zh-CN", "应发合计", "应发合计（元）"),
             // entity.payslip.grossamount
-            new TranslationSeedItem("entity.payslip.grossamount", "zh-HK", "应发合计", "应发合计（元）"),
+            new TranslationSeedItem("entity.payslip.grossamount", "zh-HK", "应发合计_hk", "应发合计（元）"),
 
             // entity.payslip.socialsecuritydeduction
-            new TranslationSeedItem("entity.payslip.socialsecuritydeduction", "en-US", "社保扣款", "社保扣款（元）"),
+            new TranslationSeedItem("entity.payslip.socialsecuritydeduction", "en-US", "社保扣款_us", "社保扣款（元）"),
             // entity.payslip.socialsecuritydeduction
-            new TranslationSeedItem("entity.payslip.socialsecuritydeduction", "ja-JP", "社保扣款", "社保扣款（元）"),
+            new TranslationSeedItem("entity.payslip.socialsecuritydeduction", "ja-JP", "社保扣款_jp", "社保扣款（元）"),
             // entity.payslip.socialsecuritydeduction
             new TranslationSeedItem("entity.payslip.socialsecuritydeduction", "zh-CN", "社保扣款", "社保扣款（元）"),
             // entity.payslip.socialsecuritydeduction
-            new TranslationSeedItem("entity.payslip.socialsecuritydeduction", "zh-HK", "社保扣款", "社保扣款（元）"),
+            new TranslationSeedItem("entity.payslip.socialsecuritydeduction", "zh-HK", "社保扣款_hk", "社保扣款（元）"),
 
             // entity.payslip.housingfunddeduction
-            new TranslationSeedItem("entity.payslip.housingfunddeduction", "en-US", "公积金扣款", "公积金扣款（元）"),
+            new TranslationSeedItem("entity.payslip.housingfunddeduction", "en-US", "公积金扣款_us", "公积金扣款（元）"),
             // entity.payslip.housingfunddeduction
-            new TranslationSeedItem("entity.payslip.housingfunddeduction", "ja-JP", "公积金扣款", "公积金扣款（元）"),
+            new TranslationSeedItem("entity.payslip.housingfunddeduction", "ja-JP", "公积金扣款_jp", "公积金扣款（元）"),
             // entity.payslip.housingfunddeduction
             new TranslationSeedItem("entity.payslip.housingfunddeduction", "zh-CN", "公积金扣款", "公积金扣款（元）"),
             // entity.payslip.housingfunddeduction
-            new TranslationSeedItem("entity.payslip.housingfunddeduction", "zh-HK", "公积金扣款", "公积金扣款（元）"),
+            new TranslationSeedItem("entity.payslip.housingfunddeduction", "zh-HK", "公积金扣款_hk", "公积金扣款（元）"),
 
             // entity.payslip.taxdeduction
-            new TranslationSeedItem("entity.payslip.taxdeduction", "en-US", "个税扣款", "个税扣款（元）"),
+            new TranslationSeedItem("entity.payslip.taxdeduction", "en-US", "个税扣款_us", "个税扣款（元）"),
             // entity.payslip.taxdeduction
-            new TranslationSeedItem("entity.payslip.taxdeduction", "ja-JP", "个税扣款", "个税扣款（元）"),
+            new TranslationSeedItem("entity.payslip.taxdeduction", "ja-JP", "个税扣款_jp", "个税扣款（元）"),
             // entity.payslip.taxdeduction
             new TranslationSeedItem("entity.payslip.taxdeduction", "zh-CN", "个税扣款", "个税扣款（元）"),
             // entity.payslip.taxdeduction
-            new TranslationSeedItem("entity.payslip.taxdeduction", "zh-HK", "个税扣款", "个税扣款（元）"),
+            new TranslationSeedItem("entity.payslip.taxdeduction", "zh-HK", "个税扣款_hk", "个税扣款（元）"),
 
             // entity.payslip.otherdeduction
-            new TranslationSeedItem("entity.payslip.otherdeduction", "en-US", "其他扣款", "其他扣款（元）"),
+            new TranslationSeedItem("entity.payslip.otherdeduction", "en-US", "其他扣款_us", "其他扣款（元）"),
             // entity.payslip.otherdeduction
-            new TranslationSeedItem("entity.payslip.otherdeduction", "ja-JP", "其他扣款", "其他扣款（元）"),
+            new TranslationSeedItem("entity.payslip.otherdeduction", "ja-JP", "其他扣款_jp", "其他扣款（元）"),
             // entity.payslip.otherdeduction
             new TranslationSeedItem("entity.payslip.otherdeduction", "zh-CN", "其他扣款", "其他扣款（元）"),
             // entity.payslip.otherdeduction
-            new TranslationSeedItem("entity.payslip.otherdeduction", "zh-HK", "其他扣款", "其他扣款（元）"),
+            new TranslationSeedItem("entity.payslip.otherdeduction", "zh-HK", "其他扣款_hk", "其他扣款（元）"),
 
             // entity.payslip.netamount
-            new TranslationSeedItem("entity.payslip.netamount", "en-US", "实发金额", "实发金额（元）"),
+            new TranslationSeedItem("entity.payslip.netamount", "en-US", "实发金额_us", "实发金额（元）"),
             // entity.payslip.netamount
-            new TranslationSeedItem("entity.payslip.netamount", "ja-JP", "实发金额", "实发金额（元）"),
+            new TranslationSeedItem("entity.payslip.netamount", "ja-JP", "实发金额_jp", "实发金额（元）"),
             // entity.payslip.netamount
             new TranslationSeedItem("entity.payslip.netamount", "zh-CN", "实发金额", "实发金额（元）"),
             // entity.payslip.netamount
-            new TranslationSeedItem("entity.payslip.netamount", "zh-HK", "实发金额", "实发金额（元）"),
+            new TranslationSeedItem("entity.payslip.netamount", "zh-HK", "实发金额_hk", "实发金额（元）"),
 
             // entity.payslip.formulasetcode
-            new TranslationSeedItem("entity.payslip.formulasetcode", "en-US", "公式方案编码", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
+            new TranslationSeedItem("entity.payslip.formulasetcode", "en-US", "公式方案编码_us", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
             // entity.payslip.formulasetcode
-            new TranslationSeedItem("entity.payslip.formulasetcode", "ja-JP", "公式方案编码", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
+            new TranslationSeedItem("entity.payslip.formulasetcode", "ja-JP", "公式方案编码_jp", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
             // entity.payslip.formulasetcode
             new TranslationSeedItem("entity.payslip.formulasetcode", "zh-CN", "公式方案编码", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
             // entity.payslip.formulasetcode
-            new TranslationSeedItem("entity.payslip.formulasetcode", "zh-HK", "公式方案编码", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
+            new TranslationSeedItem("entity.payslip.formulasetcode", "zh-HK", "公式方案编码_hk", "关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）"),
 
             // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "en-US", "发放状态", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
+            new TranslationSeedItem("entity.payslip.issuestatus", "en-US", "发放状态_us", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
             // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "ja-JP", "发放状态", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
+            new TranslationSeedItem("entity.payslip.issuestatus", "ja-JP", "发放状态_jp", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
             // entity.payslip.issuestatus
             new TranslationSeedItem("entity.payslip.issuestatus", "zh-CN", "发放状态", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
             // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "zh-HK", "发放状态", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
+            new TranslationSeedItem("entity.payslip.issuestatus", "zh-HK", "发放状态_hk", "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）"),
 
             // entity.payslip.issuedate
-            new TranslationSeedItem("entity.payslip.issuedate", "en-US", "发放日期", "发放日期"),
+            new TranslationSeedItem("entity.payslip.issuedate", "en-US", "发放日期_us", "发放日期"),
             // entity.payslip.issuedate
-            new TranslationSeedItem("entity.payslip.issuedate", "ja-JP", "发放日期", "发放日期"),
+            new TranslationSeedItem("entity.payslip.issuedate", "ja-JP", "发放日期_jp", "发放日期"),
             // entity.payslip.issuedate
             new TranslationSeedItem("entity.payslip.issuedate", "zh-CN", "发放日期", "发放日期"),
             // entity.payslip.issuedate
-            new TranslationSeedItem("entity.payslip.issuedate", "zh-HK", "发放日期", "发放日期"),
+            new TranslationSeedItem("entity.payslip.issuedate", "zh-HK", "发放日期_hk", "发放日期"),
 
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.payslip.relatedplant
             new TranslationSeedItem("entity.payslip.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -268,10 +268,10 @@ public class TaktPayslipI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Compensation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

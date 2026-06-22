@@ -41,9 +41,7 @@ export function getEmployeeList(queryDto: any): Promise<TaktPagedResult<Employee
   return request<TaktPagedResult<Employee>>({
     url: `${EMPLOYEE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportEmployee(
     url: `${EMPLOYEE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

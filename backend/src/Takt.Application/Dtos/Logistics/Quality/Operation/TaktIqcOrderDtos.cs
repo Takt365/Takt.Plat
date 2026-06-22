@@ -232,7 +232,7 @@ public class TaktIqcOrderQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -351,7 +351,7 @@ public class TaktIqcOrderCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -426,7 +426,7 @@ public class TaktIqcOrderTemplateDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 来源单号（采购订单编码）
@@ -476,7 +476,7 @@ public class TaktIqcOrderTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -508,7 +508,7 @@ public class TaktIqcOrderImportDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 来源单号（采购订单编码）
@@ -558,7 +558,7 @@ public class TaktIqcOrderImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -661,7 +661,7 @@ public class TaktIqcOrderExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

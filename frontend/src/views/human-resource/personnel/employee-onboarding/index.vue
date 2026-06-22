@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-personnel-employee-onboarding">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -223,11 +223,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -282,6 +282,7 @@
 </template>
 
 <script setup lang="ts">
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 入职待办管理页 · 由 generate-vue-from-api 根据 types/api 生成
  * @module views/human-resource/personnel/employee-onboarding
@@ -307,8 +308,8 @@ const searchPlaceholder = computed(
 const queryKeyword = ref('')
 const loading = ref(false)
 const dataSource = ref<EmployeeOnboarding[]>([])
-const currentPage = ref(1)
-const pageSize = ref(20)
+const currentPage = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const selectedRow = ref<EmployeeOnboarding | null>(null)
 const selectedRows = ref<EmployeeOnboarding[]>([])
@@ -333,7 +334,7 @@ const advancedQueryForm = ref({
   reason: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（显隐配置） */
@@ -350,7 +351,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'reason', label: t('entity.employeeOnboarding.reason') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -361,7 +362,65 @@ const entityIdName = 'employeeOnboardingId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-onMounted(() => {
+type EmployeeOnboardingQueryTrimmedKey =
+  | 'offerId'
+  | 'todoNo'
+  | 'plannedJoinedDateStart'
+  | 'plannedJoinedDateEnd'
+  | 'candidateName'
+  | 'mobile'
+  | 'employeeId'
+  | 'employeeJoinedId'
+  | 'reason'
+  | 'createdAtStart'
+  | 'createdAtEnd'
+  | 'ExtField'
+  | 'remark'
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {EmployeeOnboardingQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<EmployeeOnboardingQuery>): EmployeeOnboardingQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: EmployeeOnboardingQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: EmployeeOnboardingQueryTrimmedKey, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v
+    }
+  }
+  assignTrimmed('offerId', form.offerId)
+  assignTrimmed('todoNo', form.todoNo)
+  assignTrimmed('plannedJoinedDateStart', form.plannedJoinedDateStart)
+  assignTrimmed('plannedJoinedDateEnd', form.plannedJoinedDateEnd)
+  assignTrimmed('candidateName', form.candidateName)
+  assignTrimmed('mobile', form.mobile)
+  assignTrimmed('employeeId', form.employeeId)
+  assignTrimmed('employeeJoinedId', form.employeeJoinedId)
+  assignTrimmed('reason', form.reason)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  if (form.todoStatus !== undefined && form.todoStatus !== null) {
+    query.todoStatus = form.todoStatus
+  }
+  return query
+}
+
+/** 页面挂载：加载分页配置后拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
@@ -571,16 +630,7 @@ const onClickRow = (record: EmployeeOnboarding) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: EmployeeOnboardingQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getEmployeeOnboardingList(params)
+    const res = await getEmployeeOnboardingList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -598,7 +648,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -617,10 +667,10 @@ function handleReset() {
   reason: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -695,16 +745,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: EmployeeOnboardingQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportEmployeeOnboarding(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportEmployeeOnboarding(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -768,7 +813,7 @@ function handleAdvancedQuery() {
 
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -786,7 +831,7 @@ function handleAdvancedQueryReset() {
   reason: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -814,17 +859,8 @@ function handlePaginationChange(page: number) {
   loadData()
 }
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-personnel-employee-onboarding {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

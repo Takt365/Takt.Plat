@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-personnel-employee-contract">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -255,11 +255,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -314,6 +314,7 @@
 </template>
 
 <script setup lang="ts">
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 员工劳动合同管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee-contract
@@ -346,9 +347,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<EmployeeContract[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -367,7 +368,8 @@ const formData = ref<Partial<EmployeeContract>>({})
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -386,7 +388,7 @@ const advancedQueryForm = ref({
   signCompany: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -406,7 +408,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'signCompany', label: t('entity.employeeContract.signcompany') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -424,9 +426,72 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+type EmployeeContractQueryTrimmedKey =
+  | 'employeeId'
+  | 'contractNo'
+  | 'startDateStart'
+  | 'startDateEnd'
+  | 'endDateStart'
+  | 'endDateEnd'
+  | 'probationEndDateStart'
+  | 'probationEndDateEnd'
+  | 'signDateStart'
+  | 'signDateEnd'
+  | 'signCompany'
+  | 'createdAtStart'
+  | 'createdAtEnd'
+  | 'ExtField'
+  | 'remark'
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {EmployeeContractQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<EmployeeContractQuery>): EmployeeContractQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: EmployeeContractQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: EmployeeContractQueryTrimmedKey, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v
+    }
+  }
+  assignTrimmed('employeeId', form.employeeId)
+  assignTrimmed('contractNo', form.contractNo)
+  assignTrimmed('startDateStart', form.startDateStart)
+  assignTrimmed('startDateEnd', form.startDateEnd)
+  assignTrimmed('endDateStart', form.endDateStart)
+  assignTrimmed('endDateEnd', form.endDateEnd)
+  assignTrimmed('probationEndDateStart', form.probationEndDateStart)
+  assignTrimmed('probationEndDateEnd', form.probationEndDateEnd)
+  assignTrimmed('signDateStart', form.signDateStart)
+  assignTrimmed('signDateEnd', form.signDateEnd)
+  assignTrimmed('signCompany', form.signCompany)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  if (form.contractType !== undefined && form.contractType !== null) {
+    query.contractType = form.contractType
+  }
+  if (form.contractStatus !== undefined && form.contractStatus !== null) {
+    query.contractStatus = form.contractStatus
+  }
+  return query
+}
+
+/** 页面挂载：加载分页配置后拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
@@ -610,16 +675,7 @@ const onClickRow = (record: EmployeeContract) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: EmployeeContractQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getEmployeeContractList(params)
+    const res = await getEmployeeContractList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -637,7 +693,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -660,10 +716,10 @@ function handleReset() {
   signCompany: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -749,16 +805,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: EmployeeContractQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportEmployeeContract(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportEmployeeContract(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -826,7 +877,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -847,7 +898,7 @@ function handleAdvancedQueryReset() {
   signCompany: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -883,17 +934,8 @@ function handlePaginationChange(page: number) {
 }
 /** 分页每页条数变更 */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-personnel-employee-contract {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

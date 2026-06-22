@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-15
 // 创建人：Takt365(Auto Generated)
 // 功能描述：RoutingItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktRoutingItem 生成，请按需审阅）
 // 
@@ -122,10 +122,26 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// </summary>
+    public int ProcessSegmentType { get; set; } = 0;
+
+    /// <summary>
+    /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+    /// </summary>
+    public string? ExtJson { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工艺路线主表（主表）
     /// （主表：TaktRouting）
     /// </summary>
     public TaktRoutingDto? Routing { get; set; }
+
+    /// <summary>
+    /// 工序参数定义
+    /// （子表：TaktRoutingItemArgument）
+    /// </summary>
+    public List<TaktRoutingItemArgumentDto>? Arguments { get; set; }
 
 }
 
@@ -231,6 +247,16 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// </summary>
+    public int? ProcessSegmentType { get; set; }
+
+    /// <summary>
+    /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+    /// </summary>
+    public string? ExtJson { get; set; } = string.Empty;
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -243,7 +269,7 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -351,19 +377,29 @@ public class TaktRoutingItemCreateDto
     public bool IsQualityCheck { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 工序说明
     /// </summary>
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// </summary>
+    public int ProcessSegmentType { get; set; } = 0;
+
+    /// <summary>
+    /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+    /// </summary>
+    public string? ExtJson { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工序参数定义（子表，级联保存）
+    /// </summary>
+    public List<TaktRoutingItemArgumentCreateDto>? Arguments { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -472,19 +508,24 @@ public class TaktRoutingItemTemplateDto
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 工序说明
     /// </summary>
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// </summary>
+    public int? ProcessSegmentType { get; set; }
+
+    /// <summary>
+    /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+    /// </summary>
+    public string? ExtJson { get; set; } = string.Empty;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -550,19 +591,24 @@ public class TaktRoutingItemImportDto
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 工序说明
     /// </summary>
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// </summary>
+    public int? ProcessSegmentType { get; set; }
+
+    /// <summary>
+    /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+    /// </summary>
+    public string? ExtJson { get; set; } = string.Empty;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -674,9 +720,19 @@ public class TaktRoutingItemExportDto
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// </summary>
+    public int ProcessSegmentType { get; set; } = 0;
+
+    /// <summary>
+    /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+    /// </summary>
+    public string? ExtJson { get; set; } = string.Empty;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

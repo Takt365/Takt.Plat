@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktCostCenterChangeLogI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCostCenterChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,74 +75,83 @@ public class TaktCostCenterChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktCostCenterChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.costcenterchangelog._self / entity.costcenterchangelog.{{field}}；ResourceGroup=3；ResourceType=0
+    /// I18nKey：entity.costcenterchangelog._self / entity.costcenterchangelog.{{field}}；ResourceGroup=Controlling；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetCostCenterChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.costcenterchangelog._self
-            new TranslationSeedItem("entity.costcenterchangelog._self", "en-US", "Cost Center Change Log Information", "实体名称"),
+            new TranslationSeedItem("entity.costcenterchangelog._self", "en-US", "Cost Center Change Log Information_us", "实体名称"),
             // entity.costcenterchangelog._self
-            new TranslationSeedItem("entity.costcenterchangelog._self", "ja-JP", "成本中心变更记录信息", "实体名称"),
+            new TranslationSeedItem("entity.costcenterchangelog._self", "ja-JP", "成本中心变更记录信息_jp", "实体名称"),
             // entity.costcenterchangelog._self
             new TranslationSeedItem("entity.costcenterchangelog._self", "zh-CN", "成本中心变更记录信息", "实体名称"),
             // entity.costcenterchangelog._self
-            new TranslationSeedItem("entity.costcenterchangelog._self", "zh-HK", "成本中心变更记录信息", "实体名称"),
+            new TranslationSeedItem("entity.costcenterchangelog._self", "zh-HK", "成本中心变更记录信息_hk", "实体名称"),
 
             // entity.costcenterchangelog.costcenterid
-            new TranslationSeedItem("entity.costcenterchangelog.costcenterid", "en-US", "成本中心ID", "成本中心 ID"),
+            new TranslationSeedItem("entity.costcenterchangelog.costcenterid", "en-US", "成本中心ID_us", "成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
             // entity.costcenterchangelog.costcenterid
-            new TranslationSeedItem("entity.costcenterchangelog.costcenterid", "ja-JP", "成本中心ID", "成本中心 ID"),
+            new TranslationSeedItem("entity.costcenterchangelog.costcenterid", "ja-JP", "成本中心ID_jp", "成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
             // entity.costcenterchangelog.costcenterid
-            new TranslationSeedItem("entity.costcenterchangelog.costcenterid", "zh-CN", "成本中心ID", "成本中心 ID"),
+            new TranslationSeedItem("entity.costcenterchangelog.costcenterid", "zh-CN", "成本中心ID", "成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
             // entity.costcenterchangelog.costcenterid
-            new TranslationSeedItem("entity.costcenterchangelog.costcenterid", "zh-HK", "成本中心ID", "成本中心 ID"),
+            new TranslationSeedItem("entity.costcenterchangelog.costcenterid", "zh-HK", "成本中心ID_hk", "成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
 
             // entity.costcenterchangelog.costcentercode
-            new TranslationSeedItem("entity.costcenterchangelog.costcentercode", "en-US", "成本中心编码", "成本中心编码（冗余）"),
+            new TranslationSeedItem("entity.costcenterchangelog.costcentercode", "en-US", "成本中心编码_us", "成本中心编码（冗余）"),
             // entity.costcenterchangelog.costcentercode
-            new TranslationSeedItem("entity.costcenterchangelog.costcentercode", "ja-JP", "成本中心编码", "成本中心编码（冗余）"),
+            new TranslationSeedItem("entity.costcenterchangelog.costcentercode", "ja-JP", "成本中心编码_jp", "成本中心编码（冗余）"),
             // entity.costcenterchangelog.costcentercode
             new TranslationSeedItem("entity.costcenterchangelog.costcentercode", "zh-CN", "成本中心编码", "成本中心编码（冗余）"),
             // entity.costcenterchangelog.costcentercode
-            new TranslationSeedItem("entity.costcenterchangelog.costcentercode", "zh-HK", "成本中心编码", "成本中心编码（冗余）"),
+            new TranslationSeedItem("entity.costcenterchangelog.costcentercode", "zh-HK", "成本中心编码_hk", "成本中心编码（冗余）"),
 
             // entity.costcenterchangelog.changefields
-            new TranslationSeedItem("entity.costcenterchangelog.changefields", "en-US", "变更字段列表", "变更字段列表 JSON"),
+            new TranslationSeedItem("entity.costcenterchangelog.changefields", "en-US", "变更字段列表_us", "变更字段列表 JSON"),
             // entity.costcenterchangelog.changefields
-            new TranslationSeedItem("entity.costcenterchangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表 JSON"),
+            new TranslationSeedItem("entity.costcenterchangelog.changefields", "ja-JP", "变更字段列表_jp", "变更字段列表 JSON"),
             // entity.costcenterchangelog.changefields
             new TranslationSeedItem("entity.costcenterchangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表 JSON"),
             // entity.costcenterchangelog.changefields
-            new TranslationSeedItem("entity.costcenterchangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表 JSON"),
+            new TranslationSeedItem("entity.costcenterchangelog.changefields", "zh-HK", "变更字段列表_hk", "变更字段列表 JSON"),
 
             // entity.costcenterchangelog.changetime
-            new TranslationSeedItem("entity.costcenterchangelog.changetime", "en-US", "变更时间", "变更时间"),
+            new TranslationSeedItem("entity.costcenterchangelog.changetime", "en-US", "变更时间_us", "变更时间"),
             // entity.costcenterchangelog.changetime
-            new TranslationSeedItem("entity.costcenterchangelog.changetime", "ja-JP", "变更时间", "变更时间"),
+            new TranslationSeedItem("entity.costcenterchangelog.changetime", "ja-JP", "变更时间_jp", "变更时间"),
             // entity.costcenterchangelog.changetime
             new TranslationSeedItem("entity.costcenterchangelog.changetime", "zh-CN", "变更时间", "变更时间"),
             // entity.costcenterchangelog.changetime
-            new TranslationSeedItem("entity.costcenterchangelog.changetime", "zh-HK", "变更时间", "变更时间"),
+            new TranslationSeedItem("entity.costcenterchangelog.changetime", "zh-HK", "变更时间_hk", "变更时间"),
 
             // entity.costcenterchangelog.changeby
-            new TranslationSeedItem("entity.costcenterchangelog.changeby", "en-US", "变更人", "变更人"),
+            new TranslationSeedItem("entity.costcenterchangelog.changeby", "en-US", "变更人_us", "变更人"),
             // entity.costcenterchangelog.changeby
-            new TranslationSeedItem("entity.costcenterchangelog.changeby", "ja-JP", "变更人", "变更人"),
+            new TranslationSeedItem("entity.costcenterchangelog.changeby", "ja-JP", "变更人_jp", "变更人"),
             // entity.costcenterchangelog.changeby
             new TranslationSeedItem("entity.costcenterchangelog.changeby", "zh-CN", "变更人", "变更人"),
             // entity.costcenterchangelog.changeby
-            new TranslationSeedItem("entity.costcenterchangelog.changeby", "zh-HK", "变更人", "变更人"),
+            new TranslationSeedItem("entity.costcenterchangelog.changeby", "zh-HK", "变更人_hk", "变更人"),
 
             // entity.costcenterchangelog.changereason
-            new TranslationSeedItem("entity.costcenterchangelog.changereason", "en-US", "变更原因", "变更原因"),
+            new TranslationSeedItem("entity.costcenterchangelog.changereason", "en-US", "变更原因_us", "变更原因"),
             // entity.costcenterchangelog.changereason
-            new TranslationSeedItem("entity.costcenterchangelog.changereason", "ja-JP", "变更原因", "变更原因"),
+            new TranslationSeedItem("entity.costcenterchangelog.changereason", "ja-JP", "变更原因_jp", "变更原因"),
             // entity.costcenterchangelog.changereason
             new TranslationSeedItem("entity.costcenterchangelog.changereason", "zh-CN", "变更原因", "变更原因"),
             // entity.costcenterchangelog.changereason
-            new TranslationSeedItem("entity.costcenterchangelog.changereason", "zh-HK", "变更原因", "变更原因"),
+            new TranslationSeedItem("entity.costcenterchangelog.changereason", "zh-HK", "变更原因_hk", "变更原因"),
+
+            // entity.costcenterchangelog.costcenter
+            new TranslationSeedItem("entity.costcenterchangelog.costcenter", "en-US", "成本中心主表_us", "成本中心主表"),
+            // entity.costcenterchangelog.costcenter
+            new TranslationSeedItem("entity.costcenterchangelog.costcenter", "ja-JP", "成本中心主表_jp", "成本中心主表"),
+            // entity.costcenterchangelog.costcenter
+            new TranslationSeedItem("entity.costcenterchangelog.costcenter", "zh-CN", "成本中心主表", "成本中心主表"),
+            // entity.costcenterchangelog.costcenter
+            new TranslationSeedItem("entity.costcenterchangelog.costcenter", "zh-HK", "成本中心主表_hk", "成本中心主表"),
         };
     }
 
@@ -160,10 +169,10 @@ public class TaktCostCenterChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 3;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Controlling";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

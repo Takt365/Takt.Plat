@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
 // 文件名称：TaktConfigurableI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktConfigurable 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktConfigurable 实体字段国际化种子（已对齐前端 locales：src/locales/statistics/report/configurable）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -75,182 +75,173 @@ public class TaktConfigurableI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktConfigurable 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.configurable._self / entity.configurable.{{field}}；ResourceGroup=9；ResourceType=0
+    /// I18nKey：entity.configurable._self / entity.configurable.{{field}}；ResourceGroup=Report；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetConfigurableTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.configurable._self
-            new TranslationSeedItem("entity.configurable._self", "en-US", "Configurable Information", "实体名称"),
+            new TranslationSeedItem("entity.configurable._self", "en-US", "Configurable Information_us", "实体名称"),
             // entity.configurable._self
-            new TranslationSeedItem("entity.configurable._self", "ja-JP", "自定义报表主信息", "实体名称"),
+            new TranslationSeedItem("entity.configurable._self", "ja-JP", "自定义报表主信息_jp", "实体名称"),
             // entity.configurable._self
             new TranslationSeedItem("entity.configurable._self", "zh-CN", "自定义报表主信息", "实体名称"),
             // entity.configurable._self
-            new TranslationSeedItem("entity.configurable._self", "zh-HK", "自定义报表主信息", "实体名称"),
+            new TranslationSeedItem("entity.configurable._self", "zh-HK", "自定义报表主信息_hk", "实体名称"),
 
             // entity.configurable.reportcode
-            new TranslationSeedItem("entity.configurable.reportcode", "en-US", "报表编码", "报表编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.configurable.reportcode", "en-US", "报表编码_us", "报表编码（租户+公司内唯一）"),
             // entity.configurable.reportcode
-            new TranslationSeedItem("entity.configurable.reportcode", "ja-JP", "报表编码", "报表编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.configurable.reportcode", "ja-JP", "报表编码_jp", "报表编码（租户+公司内唯一）"),
             // entity.configurable.reportcode
             new TranslationSeedItem("entity.configurable.reportcode", "zh-CN", "报表编码", "报表编码（租户+公司内唯一）"),
             // entity.configurable.reportcode
-            new TranslationSeedItem("entity.configurable.reportcode", "zh-HK", "报表编码", "报表编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.configurable.reportcode", "zh-HK", "报表编码_hk", "报表编码（租户+公司内唯一）"),
 
             // entity.configurable.reportname
-            new TranslationSeedItem("entity.configurable.reportname", "en-US", "报表名称", "报表名称"),
+            new TranslationSeedItem("entity.configurable.reportname", "en-US", "报表名称_us", "报表名称"),
             // entity.configurable.reportname
-            new TranslationSeedItem("entity.configurable.reportname", "ja-JP", "报表名称", "报表名称"),
+            new TranslationSeedItem("entity.configurable.reportname", "ja-JP", "报表名称_jp", "报表名称"),
             // entity.configurable.reportname
             new TranslationSeedItem("entity.configurable.reportname", "zh-CN", "报表名称", "报表名称"),
             // entity.configurable.reportname
-            new TranslationSeedItem("entity.configurable.reportname", "zh-HK", "报表名称", "报表名称"),
+            new TranslationSeedItem("entity.configurable.reportname", "zh-HK", "报表名称_hk", "报表名称"),
 
             // entity.configurable.reportdomain
-            new TranslationSeedItem("entity.configurable.reportdomain", "en-US", "报表业务域", "报表业务域（财务/人力/后勤等）"),
+            new TranslationSeedItem("entity.configurable.reportdomain", "en-US", "报表业务域_us", "报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）"),
             // entity.configurable.reportdomain
-            new TranslationSeedItem("entity.configurable.reportdomain", "ja-JP", "报表业务域", "报表业务域（财务/人力/后勤等）"),
+            new TranslationSeedItem("entity.configurable.reportdomain", "ja-JP", "报表业务域_jp", "报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）"),
             // entity.configurable.reportdomain
-            new TranslationSeedItem("entity.configurable.reportdomain", "zh-CN", "报表业务域", "报表业务域（财务/人力/后勤等）"),
+            new TranslationSeedItem("entity.configurable.reportdomain", "zh-CN", "报表业务域", "报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）"),
             // entity.configurable.reportdomain
-            new TranslationSeedItem("entity.configurable.reportdomain", "zh-HK", "报表业务域", "报表业务域（财务/人力/后勤等）"),
+            new TranslationSeedItem("entity.configurable.reportdomain", "zh-HK", "报表业务域_hk", "报表业务域（TaktModule 整型，与一级目录菜单 MenuCode 映射；展示名取自菜单 i18n）"),
 
             // entity.configurable.reportsubcategory
-            new TranslationSeedItem("entity.configurable.reportsubcategory", "en-US", "报表子分类", "报表子分类（与菜单末级路由段对齐，如 management、controlling、material）"),
+            new TranslationSeedItem("entity.configurable.reportsubcategory", "en-US", "报表子分类_us", "报表子分类（与菜单末级路由段对齐，如 management、controlling、material）"),
             // entity.configurable.reportsubcategory
-            new TranslationSeedItem("entity.configurable.reportsubcategory", "ja-JP", "报表子分类", "报表子分类（与菜单末级路由段对齐，如 management、controlling、material）"),
+            new TranslationSeedItem("entity.configurable.reportsubcategory", "ja-JP", "报表子分类_jp", "报表子分类（与菜单末级路由段对齐，如 management、controlling、material）"),
             // entity.configurable.reportsubcategory
             new TranslationSeedItem("entity.configurable.reportsubcategory", "zh-CN", "报表子分类", "报表子分类（与菜单末级路由段对齐，如 management、controlling、material）"),
             // entity.configurable.reportsubcategory
-            new TranslationSeedItem("entity.configurable.reportsubcategory", "zh-HK", "报表子分类", "报表子分类（与菜单末级路由段对齐，如 management、controlling、material）"),
+            new TranslationSeedItem("entity.configurable.reportsubcategory", "zh-HK", "报表子分类_hk", "报表子分类（与菜单末级路由段对齐，如 management、controlling、material）"),
 
             // entity.configurable.distinctrows
-            new TranslationSeedItem("entity.configurable.distinctrows", "en-US", "是否去重", "是否去重行（SELECT DISTINCT）"),
+            new TranslationSeedItem("entity.configurable.distinctrows", "en-US", "是否去重_us", "是否去重行（SELECT DISTINCT）"),
             // entity.configurable.distinctrows
-            new TranslationSeedItem("entity.configurable.distinctrows", "ja-JP", "是否去重", "是否去重行（SELECT DISTINCT）"),
+            new TranslationSeedItem("entity.configurable.distinctrows", "ja-JP", "是否去重_jp", "是否去重行（SELECT DISTINCT）"),
             // entity.configurable.distinctrows
             new TranslationSeedItem("entity.configurable.distinctrows", "zh-CN", "是否去重", "是否去重行（SELECT DISTINCT）"),
             // entity.configurable.distinctrows
-            new TranslationSeedItem("entity.configurable.distinctrows", "zh-HK", "是否去重", "是否去重行（SELECT DISTINCT）"),
+            new TranslationSeedItem("entity.configurable.distinctrows", "zh-HK", "是否去重_hk", "是否去重行（SELECT DISTINCT）"),
 
             // entity.configurable.maxexportrows
-            new TranslationSeedItem("entity.configurable.maxexportrows", "en-US", "导出最大行数", "单次导出最大行数（Excel 上限，防止 OOM）"),
+            new TranslationSeedItem("entity.configurable.maxexportrows", "en-US", "导出最大行数_us", "单次导出最大行数（Excel 上限，防止 OOM）"),
             // entity.configurable.maxexportrows
-            new TranslationSeedItem("entity.configurable.maxexportrows", "ja-JP", "导出最大行数", "单次导出最大行数（Excel 上限，防止 OOM）"),
+            new TranslationSeedItem("entity.configurable.maxexportrows", "ja-JP", "导出最大行数_jp", "单次导出最大行数（Excel 上限，防止 OOM）"),
             // entity.configurable.maxexportrows
             new TranslationSeedItem("entity.configurable.maxexportrows", "zh-CN", "导出最大行数", "单次导出最大行数（Excel 上限，防止 OOM）"),
             // entity.configurable.maxexportrows
-            new TranslationSeedItem("entity.configurable.maxexportrows", "zh-HK", "导出最大行数", "单次导出最大行数（Excel 上限，防止 OOM）"),
+            new TranslationSeedItem("entity.configurable.maxexportrows", "zh-HK", "导出最大行数_hk", "单次导出最大行数（Excel 上限，防止 OOM）"),
 
             // entity.configurable.maxqueryrows
-            new TranslationSeedItem("entity.configurable.maxqueryrows", "en-US", "查询最大行数", "单次查询最大行数（预览/分页上限）"),
+            new TranslationSeedItem("entity.configurable.maxqueryrows", "en-US", "查询最大行数_us", "单次查询最大行数（预览/分页上限）"),
             // entity.configurable.maxqueryrows
-            new TranslationSeedItem("entity.configurable.maxqueryrows", "ja-JP", "查询最大行数", "单次查询最大行数（预览/分页上限）"),
+            new TranslationSeedItem("entity.configurable.maxqueryrows", "ja-JP", "查询最大行数_jp", "单次查询最大行数（预览/分页上限）"),
             // entity.configurable.maxqueryrows
             new TranslationSeedItem("entity.configurable.maxqueryrows", "zh-CN", "查询最大行数", "单次查询最大行数（预览/分页上限）"),
             // entity.configurable.maxqueryrows
-            new TranslationSeedItem("entity.configurable.maxqueryrows", "zh-HK", "查询最大行数", "单次查询最大行数（预览/分页上限）"),
+            new TranslationSeedItem("entity.configurable.maxqueryrows", "zh-HK", "查询最大行数_hk", "单次查询最大行数（预览/分页上限）"),
 
-            // entity.configurable.owneruserid
-            new TranslationSeedItem("entity.configurable.owneruserid", "en-US", "归属用户ID", "归属用户 ID（为空表示公司级共享报表）"),
-            // entity.configurable.owneruserid
-            new TranslationSeedItem("entity.configurable.owneruserid", "ja-JP", "归属用户ID", "归属用户 ID（为空表示公司级共享报表）"),
-            // entity.configurable.owneruserid
-            new TranslationSeedItem("entity.configurable.owneruserid", "zh-CN", "归属用户ID", "归属用户 ID（为空表示公司级共享报表）"),
-            // entity.configurable.owneruserid
-            new TranslationSeedItem("entity.configurable.owneruserid", "zh-HK", "归属用户ID", "归属用户 ID（为空表示公司级共享报表）"),
-
-            // entity.configurable.isbuiltin
-            new TranslationSeedItem("entity.configurable.isbuiltin", "en-US", "是否内置", "是否内置（内置报表禁止删除）"),
-            // entity.configurable.isbuiltin
-            new TranslationSeedItem("entity.configurable.isbuiltin", "ja-JP", "是否内置", "是否内置（内置报表禁止删除）"),
-            // entity.configurable.isbuiltin
-            new TranslationSeedItem("entity.configurable.isbuiltin", "zh-CN", "是否内置", "是否内置（内置报表禁止删除）"),
-            // entity.configurable.isbuiltin
-            new TranslationSeedItem("entity.configurable.isbuiltin", "zh-HK", "是否内置", "是否内置（内置报表禁止删除）"),
+            // entity.configurable.ispublic
+            new TranslationSeedItem("entity.configurable.ispublic", "en-US", "公开_us", "公开（字典 sys_is_public_type；0=公开，1=私有）"),
+            // entity.configurable.ispublic
+            new TranslationSeedItem("entity.configurable.ispublic", "ja-JP", "公开_jp", "公开（字典 sys_is_public_type；0=公开，1=私有）"),
+            // entity.configurable.ispublic
+            new TranslationSeedItem("entity.configurable.ispublic", "zh-CN", "公开", "公开（字典 sys_is_public_type；0=公开，1=私有）"),
+            // entity.configurable.ispublic
+            new TranslationSeedItem("entity.configurable.ispublic", "zh-HK", "公开_hk", "公开（字典 sys_is_public_type；0=公开，1=私有）"),
 
             // entity.configurable.sortorder
-            new TranslationSeedItem("entity.configurable.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.configurable.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.configurable.sortorder
-            new TranslationSeedItem("entity.configurable.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.configurable.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.configurable.sortorder
             new TranslationSeedItem("entity.configurable.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.configurable.sortorder
-            new TranslationSeedItem("entity.configurable.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.configurable.sortorder", "zh-HK", "排序号_hk", "排序号"),
 
             // entity.configurable.reportstatus
-            new TranslationSeedItem("entity.configurable.reportstatus", "en-US", "报表状态", "报表状态（0=禁用 1=启用）"),
+            new TranslationSeedItem("entity.configurable.reportstatus", "en-US", "报表状态_us", "报表状态（0=禁用 1=启用）"),
             // entity.configurable.reportstatus
-            new TranslationSeedItem("entity.configurable.reportstatus", "ja-JP", "报表状态", "报表状态（0=禁用 1=启用）"),
+            new TranslationSeedItem("entity.configurable.reportstatus", "ja-JP", "报表状态_jp", "报表状态（0=禁用 1=启用）"),
             // entity.configurable.reportstatus
             new TranslationSeedItem("entity.configurable.reportstatus", "zh-CN", "报表状态", "报表状态（0=禁用 1=启用）"),
             // entity.configurable.reportstatus
-            new TranslationSeedItem("entity.configurable.reportstatus", "zh-HK", "报表状态", "报表状态（0=禁用 1=启用）"),
+            new TranslationSeedItem("entity.configurable.reportstatus", "zh-HK", "报表状态_hk", "报表状态（0=禁用 1=启用）"),
 
             // entity.configurable.description
-            new TranslationSeedItem("entity.configurable.description", "en-US", "报表描述", "报表描述"),
+            new TranslationSeedItem("entity.configurable.description", "en-US", "报表描述_us", "报表描述"),
             // entity.configurable.description
-            new TranslationSeedItem("entity.configurable.description", "ja-JP", "报表描述", "报表描述"),
+            new TranslationSeedItem("entity.configurable.description", "ja-JP", "报表描述_jp", "报表描述"),
             // entity.configurable.description
             new TranslationSeedItem("entity.configurable.description", "zh-CN", "报表描述", "报表描述"),
             // entity.configurable.description
-            new TranslationSeedItem("entity.configurable.description", "zh-HK", "报表描述", "报表描述"),
+            new TranslationSeedItem("entity.configurable.description", "zh-HK", "报表描述_hk", "报表描述"),
 
             // entity.configurable.sources
-            new TranslationSeedItem("entity.configurable.sources", "en-US", "数据源表列表", "数据源表列表（FROM）"),
+            new TranslationSeedItem("entity.configurable.sources", "en-US", "数据源表列表_us", "数据源表列表（FROM）"),
             // entity.configurable.sources
-            new TranslationSeedItem("entity.configurable.sources", "ja-JP", "数据源表列表", "数据源表列表（FROM）"),
+            new TranslationSeedItem("entity.configurable.sources", "ja-JP", "数据源表列表_jp", "数据源表列表（FROM）"),
             // entity.configurable.sources
             new TranslationSeedItem("entity.configurable.sources", "zh-CN", "数据源表列表", "数据源表列表（FROM）"),
             // entity.configurable.sources
-            new TranslationSeedItem("entity.configurable.sources", "zh-HK", "数据源表列表", "数据源表列表（FROM）"),
+            new TranslationSeedItem("entity.configurable.sources", "zh-HK", "数据源表列表_hk", "数据源表列表（FROM）"),
 
             // entity.configurable.joins
-            new TranslationSeedItem("entity.configurable.joins", "en-US", "多表关联列表", "多表关联列表（JOIN）"),
+            new TranslationSeedItem("entity.configurable.joins", "en-US", "多表关联列表_us", "多表关联列表（JOIN）"),
             // entity.configurable.joins
-            new TranslationSeedItem("entity.configurable.joins", "ja-JP", "多表关联列表", "多表关联列表（JOIN）"),
+            new TranslationSeedItem("entity.configurable.joins", "ja-JP", "多表关联列表_jp", "多表关联列表（JOIN）"),
             // entity.configurable.joins
             new TranslationSeedItem("entity.configurable.joins", "zh-CN", "多表关联列表", "多表关联列表（JOIN）"),
             // entity.configurable.joins
-            new TranslationSeedItem("entity.configurable.joins", "zh-HK", "多表关联列表", "多表关联列表（JOIN）"),
+            new TranslationSeedItem("entity.configurable.joins", "zh-HK", "多表关联列表_hk", "多表关联列表（JOIN）"),
 
             // entity.configurable.fields
-            new TranslationSeedItem("entity.configurable.fields", "en-US", "输出字段列表", "输出字段列表（SELECT）"),
+            new TranslationSeedItem("entity.configurable.fields", "en-US", "输出字段列表_us", "输出字段列表（SELECT）"),
             // entity.configurable.fields
-            new TranslationSeedItem("entity.configurable.fields", "ja-JP", "输出字段列表", "输出字段列表（SELECT）"),
+            new TranslationSeedItem("entity.configurable.fields", "ja-JP", "输出字段列表_jp", "输出字段列表（SELECT）"),
             // entity.configurable.fields
             new TranslationSeedItem("entity.configurable.fields", "zh-CN", "输出字段列表", "输出字段列表（SELECT）"),
             // entity.configurable.fields
-            new TranslationSeedItem("entity.configurable.fields", "zh-HK", "输出字段列表", "输出字段列表（SELECT）"),
+            new TranslationSeedItem("entity.configurable.fields", "zh-HK", "输出字段列表_hk", "输出字段列表（SELECT）"),
 
             // entity.configurable.selections
-            new TranslationSeedItem("entity.configurable.selections", "en-US", "筛选条件列表", "筛选条件列表（Selection Screen / WHERE）"),
+            new TranslationSeedItem("entity.configurable.selections", "en-US", "筛选条件列表_us", "筛选条件列表（SQVI WHERE）"),
             // entity.configurable.selections
-            new TranslationSeedItem("entity.configurable.selections", "ja-JP", "筛选条件列表", "筛选条件列表（Selection Screen / WHERE）"),
+            new TranslationSeedItem("entity.configurable.selections", "ja-JP", "筛选条件列表_jp", "筛选条件列表（SQVI WHERE）"),
             // entity.configurable.selections
-            new TranslationSeedItem("entity.configurable.selections", "zh-CN", "筛选条件列表", "筛选条件列表（Selection Screen / WHERE）"),
+            new TranslationSeedItem("entity.configurable.selections", "zh-CN", "筛选条件列表", "筛选条件列表（SQVI WHERE）"),
             // entity.configurable.selections
-            new TranslationSeedItem("entity.configurable.selections", "zh-HK", "筛选条件列表", "筛选条件列表（Selection Screen / WHERE）"),
+            new TranslationSeedItem("entity.configurable.selections", "zh-HK", "筛选条件列表_hk", "筛选条件列表（SQVI WHERE）"),
 
             // entity.configurable.groupbys
-            new TranslationSeedItem("entity.configurable.groupbys", "en-US", "分组字段列表", "分组字段列表（GROUP BY）"),
+            new TranslationSeedItem("entity.configurable.groupbys", "en-US", "分组字段列表_us", "分组字段列表（GROUP BY）"),
             // entity.configurable.groupbys
-            new TranslationSeedItem("entity.configurable.groupbys", "ja-JP", "分组字段列表", "分组字段列表（GROUP BY）"),
+            new TranslationSeedItem("entity.configurable.groupbys", "ja-JP", "分组字段列表_jp", "分组字段列表（GROUP BY）"),
             // entity.configurable.groupbys
             new TranslationSeedItem("entity.configurable.groupbys", "zh-CN", "分组字段列表", "分组字段列表（GROUP BY）"),
             // entity.configurable.groupbys
-            new TranslationSeedItem("entity.configurable.groupbys", "zh-HK", "分组字段列表", "分组字段列表（GROUP BY）"),
+            new TranslationSeedItem("entity.configurable.groupbys", "zh-HK", "分组字段列表_hk", "分组字段列表（GROUP BY）"),
 
             // entity.configurable.orderbys
-            new TranslationSeedItem("entity.configurable.orderbys", "en-US", "排序字段列表", "排序字段列表（ORDER BY）"),
+            new TranslationSeedItem("entity.configurable.orderbys", "en-US", "排序字段列表_us", "排序字段列表（ORDER BY）"),
             // entity.configurable.orderbys
-            new TranslationSeedItem("entity.configurable.orderbys", "ja-JP", "排序字段列表", "排序字段列表（ORDER BY）"),
+            new TranslationSeedItem("entity.configurable.orderbys", "ja-JP", "排序字段列表_jp", "排序字段列表（ORDER BY）"),
             // entity.configurable.orderbys
             new TranslationSeedItem("entity.configurable.orderbys", "zh-CN", "排序字段列表", "排序字段列表（ORDER BY）"),
             // entity.configurable.orderbys
-            new TranslationSeedItem("entity.configurable.orderbys", "zh-HK", "排序字段列表", "排序字段列表（ORDER BY）"),
+            new TranslationSeedItem("entity.configurable.orderbys", "zh-HK", "排序字段列表_hk", "排序字段列表（ORDER BY）"),
         };
     }
 
@@ -268,10 +259,10 @@ public class TaktConfigurableI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 9;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Report";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

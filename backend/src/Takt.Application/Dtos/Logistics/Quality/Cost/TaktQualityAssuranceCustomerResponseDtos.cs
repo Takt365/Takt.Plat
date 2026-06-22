@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
-// 文件名称：TaktQualityOperationCustomerResponseDtos.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityAssuranceCustomerResponseDtos.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
-// 功能描述：QualityOperationCustomerResponse 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityOperationCustomerResponse 生成，请按需审阅）
+// 功能描述：QualityAssuranceCustomerResponse 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityAssuranceCustomerResponse 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,38 +18,38 @@ using Takt.Shared.Models;
 namespace Takt.Application.Dtos.Logistics.Quality.Cost;
 
 // ========================================
-// QualityOperationCustomerResponse 响应 DTO
+// QualityAssuranceCustomerResponse 响应 DTO
 // ========================================
 
 /// <summary>
 /// 品质业务明细 - 顾客品质要求对应业务费用
-/// 对应前端 TaktQualityOperationCustomerResponseDto
+/// 对应前端 TaktQualityAssuranceCustomerResponseDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
-public class TaktQualityOperationCustomerResponseDto : TaktCompanyDtoBase
+public class TaktQualityAssuranceCustomerResponseDto : TaktCompanyDtoBase
 {
     /// <summary>
-    /// QualityOperationCustomerResponseID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// QualityAssuranceCustomerResponseID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationCustomerResponseId { get; set; }
+    public long QualityAssuranceCustomerResponseId { get; set; }
 
     /// <summary>
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationId { get; set; }
+    public long QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务主表名称（填充字段）
     /// </summary>
-    public string? QualityOperationName { get; set; }
+    public string? QualityAssuranceName { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    public string QualityOperationCode { get; set; } = string.Empty;
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -78,21 +78,21 @@ public class TaktQualityOperationCustomerResponseDto : TaktCompanyDtoBase
 
     /// <summary>
     /// 品质业务主表(导航属性)
-    /// （主表：TaktQualityOperation）
+    /// （主表：TaktQualityAssurance）
     /// </summary>
-    public TaktQualityOperationDto? Operation { get; set; }
+    public TaktQualityAssuranceDto? Operation { get; set; }
 
 }
 
 // ========================================
-// QualityOperationCustomerResponse 查询 DTO
+// QualityAssuranceCustomerResponse 查询 DTO
 // ========================================
 
 /// <summary>
-/// QualityOperationCustomerResponse 分页查询 DTO
+/// QualityAssuranceCustomerResponse 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
-public class TaktQualityOperationCustomerResponseQueryDto : TaktPagedQuery
+public class TaktQualityAssuranceCustomerResponseQueryDto : TaktPagedQuery
 {
     /// <summary>
     /// 租户编码
@@ -108,12 +108,12 @@ public class TaktQualityOperationCustomerResponseQueryDto : TaktPagedQuery
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityOperationId { get; set; }
+    public long? QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    public string? QualityOperationCode { get; set; } = string.Empty;
+    public string? QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -153,7 +153,7 @@ public class TaktQualityOperationCustomerResponseQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -162,13 +162,13 @@ public class TaktQualityOperationCustomerResponseQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建QualityOperationCustomerResponse DTO
+// 创建QualityAssuranceCustomerResponse DTO
 // ========================================
 
 /// <summary>
-/// 创建QualityOperationCustomerResponse DTO
+/// 创建QualityAssuranceCustomerResponse DTO
 /// </summary>
-public class TaktQualityOperationCustomerResponseCreateDto
+public class TaktQualityAssuranceCustomerResponseCreateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -189,13 +189,13 @@ public class TaktQualityOperationCustomerResponseCreateDto
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationId { get; set; }
+    public long QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
     [Required(ErrorMessage = "品质业务编码（冗余字段,便于查询）不能为空")]
-    public string QualityOperationCode { get; set; } = string.Empty;
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -225,7 +225,7 @@ public class TaktQualityOperationCustomerResponseCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -235,22 +235,22 @@ public class TaktQualityOperationCustomerResponseCreateDto
 }
 
 // ========================================
-// 更新QualityOperationCustomerResponse DTO
+// 更新QualityAssuranceCustomerResponse DTO
 // ========================================
 
 /// <summary>
-/// 更新QualityOperationCustomerResponse DTO
-/// 继承 TaktQualityOperationCustomerResponseCreateDto，添加 QualityOperationCustomerResponseId 字段
+/// 更新QualityAssuranceCustomerResponse DTO
+/// 继承 TaktQualityAssuranceCustomerResponseCreateDto，添加 QualityAssuranceCustomerResponseId 字段
 /// </summary>
-public class TaktQualityOperationCustomerResponseUpdateDto : TaktQualityOperationCustomerResponseCreateDto
+public class TaktQualityAssuranceCustomerResponseUpdateDto : TaktQualityAssuranceCustomerResponseCreateDto
 {
     /// <summary>
-    /// QualityOperationCustomerResponseID（标识要更新的实体）
+    /// QualityAssuranceCustomerResponseID（标识要更新的实体）
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationCustomerResponseId { get; set; }
+    public long QualityAssuranceCustomerResponseId { get; set; }
 
 }
 
@@ -259,9 +259,9 @@ public class TaktQualityOperationCustomerResponseUpdateDto : TaktQualityOperatio
 // ========================================
 
 /// <summary>
-/// QualityOperationCustomerResponse 导入模板行 DTO
+/// QualityAssuranceCustomerResponse 导入模板行 DTO
 /// </summary>
-public class TaktQualityOperationCustomerResponseTemplateDto
+public class TaktQualityAssuranceCustomerResponseTemplateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -277,12 +277,12 @@ public class TaktQualityOperationCustomerResponseTemplateDto
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityOperationId { get; set; }
+    public long? QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    public string? QualityOperationCode { get; set; } = string.Empty;
+    public string? QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -302,7 +302,7 @@ public class TaktQualityOperationCustomerResponseTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -312,9 +312,9 @@ public class TaktQualityOperationCustomerResponseTemplateDto
 }
 
 /// <summary>
-/// QualityOperationCustomerResponse 导入 DTO（独立实现，不继承 TemplateDto）
+/// QualityAssuranceCustomerResponse 导入 DTO（独立实现，不继承 TemplateDto）
 /// </summary>
-public class TaktQualityOperationCustomerResponseImportDto
+public class TaktQualityAssuranceCustomerResponseImportDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -335,12 +335,12 @@ public class TaktQualityOperationCustomerResponseImportDto
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityOperationId { get; set; }
+    public long? QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    public string? QualityOperationCode { get; set; } = string.Empty;
+    public string? QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -360,7 +360,7 @@ public class TaktQualityOperationCustomerResponseImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -374,16 +374,16 @@ public class TaktQualityOperationCustomerResponseImportDto
 // ========================================
 
 /// <summary>
-/// QualityOperationCustomerResponse 导出 DTO（独立实现，不继承响应 Dto）
+/// QualityAssuranceCustomerResponse 导出 DTO（独立实现，不继承响应 Dto）
 /// </summary>
-public class TaktQualityOperationCustomerResponseExportDto
+public class TaktQualityAssuranceCustomerResponseExportDto
 {
     /// <summary>
-    /// QualityOperationCustomerResponseID
+    /// QualityAssuranceCustomerResponseID
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationCustomerResponseId { get; set; }
+    public long QualityAssuranceCustomerResponseId { get; set; }
 
     /// <summary>
     /// 公司代码
@@ -394,12 +394,12 @@ public class TaktQualityOperationCustomerResponseExportDto
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationId { get; set; }
+    public long QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    public string QualityOperationCode { get; set; } = string.Empty;
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -429,7 +429,7 @@ public class TaktQualityOperationCustomerResponseExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

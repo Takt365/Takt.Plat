@@ -74,10 +74,10 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
     {
         return
         [
-            new TaktCultureSeedItem("en-US", "English", "English", "fi-us", 1, true),
+            new TaktCultureSeedItem("en-US", "English(US)", "English (US)", "fi-us", 1, true),
             new TaktCultureSeedItem("ja-JP", "日本語", "日本語", "fi-jp", 2, false),
-            new TaktCultureSeedItem("zh-HK", "香港繁體", "香港繁體", "fi-hk", 3, false),
-            new TaktCultureSeedItem("zh-CN", "简体中文", "简体中文", "fi-cn", 4, false),
+            new TaktCultureSeedItem("zh-HK", "中文(香港)", "中文(香港)", "fi-hk", 3, false),
+            new TaktCultureSeedItem("zh-CN", "中文(简体)", "中文 (简体)", "fi-cn", 4, false),
         ];
     }
 

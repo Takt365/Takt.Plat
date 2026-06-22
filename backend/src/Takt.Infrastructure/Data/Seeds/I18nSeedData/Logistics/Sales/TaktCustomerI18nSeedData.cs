@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktCustomerI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomer 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,281 +75,281 @@ public class TaktCustomerI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktCustomer 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.customer._self / entity.customer.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.customer._self / entity.customer.{{field}}；ResourceGroup=Sales；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetCustomerTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.customer._self
-            new TranslationSeedItem("entity.customer._self", "en-US", "Customer Information", "实体名称"),
+            new TranslationSeedItem("entity.customer._self", "en-US", "Customer Information_us", "实体名称"),
             // entity.customer._self
-            new TranslationSeedItem("entity.customer._self", "ja-JP", "Takt客户信息信息", "实体名称"),
+            new TranslationSeedItem("entity.customer._self", "ja-JP", "Takt客户信息信息_jp", "实体名称"),
             // entity.customer._self
             new TranslationSeedItem("entity.customer._self", "zh-CN", "Takt客户信息信息", "实体名称"),
             // entity.customer._self
-            new TranslationSeedItem("entity.customer._self", "zh-HK", "Takt客户信息信息", "实体名称"),
+            new TranslationSeedItem("entity.customer._self", "zh-HK", "Takt客户信息信息_hk", "实体名称"),
 
             // entity.customer.plantcode
-            new TranslationSeedItem("entity.customer.plantcode", "en-US", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.customer.plantcode", "en-US", "工厂代码_us", "工厂代码"),
             // entity.customer.plantcode
-            new TranslationSeedItem("entity.customer.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.customer.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
             // entity.customer.plantcode
             new TranslationSeedItem("entity.customer.plantcode", "zh-CN", "工厂代码", "工厂代码"),
             // entity.customer.plantcode
-            new TranslationSeedItem("entity.customer.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.customer.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
 
             // entity.customer.code
-            new TranslationSeedItem("entity.customer.code", "en-US", "客户编码", "客户编码（唯一索引）"),
+            new TranslationSeedItem("entity.customer.code", "en-US", "客户编码_us", "客户编码（唯一索引）"),
             // entity.customer.code
-            new TranslationSeedItem("entity.customer.code", "ja-JP", "客户编码", "客户编码（唯一索引）"),
+            new TranslationSeedItem("entity.customer.code", "ja-JP", "客户编码_jp", "客户编码（唯一索引）"),
             // entity.customer.code
             new TranslationSeedItem("entity.customer.code", "zh-CN", "客户编码", "客户编码（唯一索引）"),
             // entity.customer.code
-            new TranslationSeedItem("entity.customer.code", "zh-HK", "客户编码", "客户编码（唯一索引）"),
+            new TranslationSeedItem("entity.customer.code", "zh-HK", "客户编码_hk", "客户编码（唯一索引）"),
 
             // entity.customer.name
-            new TranslationSeedItem("entity.customer.name", "en-US", "客户名称", "客户名称"),
+            new TranslationSeedItem("entity.customer.name", "en-US", "客户名称_us", "客户名称"),
             // entity.customer.name
-            new TranslationSeedItem("entity.customer.name", "ja-JP", "客户名称", "客户名称"),
+            new TranslationSeedItem("entity.customer.name", "ja-JP", "客户名称_jp", "客户名称"),
             // entity.customer.name
             new TranslationSeedItem("entity.customer.name", "zh-CN", "客户名称", "客户名称"),
             // entity.customer.name
-            new TranslationSeedItem("entity.customer.name", "zh-HK", "客户名称", "客户名称"),
+            new TranslationSeedItem("entity.customer.name", "zh-HK", "客户名称_hk", "客户名称"),
 
             // entity.customer.shortname
-            new TranslationSeedItem("entity.customer.shortname", "en-US", "客户简称", "客户简称"),
+            new TranslationSeedItem("entity.customer.shortname", "en-US", "客户简称_us", "客户简称"),
             // entity.customer.shortname
-            new TranslationSeedItem("entity.customer.shortname", "ja-JP", "客户简称", "客户简称"),
+            new TranslationSeedItem("entity.customer.shortname", "ja-JP", "客户简称_jp", "客户简称"),
             // entity.customer.shortname
             new TranslationSeedItem("entity.customer.shortname", "zh-CN", "客户简称", "客户简称"),
             // entity.customer.shortname
-            new TranslationSeedItem("entity.customer.shortname", "zh-HK", "客户简称", "客户简称"),
+            new TranslationSeedItem("entity.customer.shortname", "zh-HK", "客户简称_hk", "客户简称"),
 
             // entity.customer.type
-            new TranslationSeedItem("entity.customer.type", "en-US", "客户类型", "客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）"),
+            new TranslationSeedItem("entity.customer.type", "en-US", "客户类型_us", "客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）"),
             // entity.customer.type
-            new TranslationSeedItem("entity.customer.type", "ja-JP", "客户类型", "客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）"),
+            new TranslationSeedItem("entity.customer.type", "ja-JP", "客户类型_jp", "客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）"),
             // entity.customer.type
-            new TranslationSeedItem("entity.customer.type", "zh-CN", "客户类型", "客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）"),
+            new TranslationSeedItem("entity.customer.type", "zh-CN", "客户类型", "客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）"),
             // entity.customer.type
-            new TranslationSeedItem("entity.customer.type", "zh-HK", "客户类型", "客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）"),
+            new TranslationSeedItem("entity.customer.type", "zh-HK", "客户类型_hk", "客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）"),
 
             // entity.customer.industrysector
-            new TranslationSeedItem("entity.customer.industrysector", "en-US", "行业领域", "行业领域"),
+            new TranslationSeedItem("entity.customer.industrysector", "en-US", "行业领域_us", "行业领域"),
             // entity.customer.industrysector
-            new TranslationSeedItem("entity.customer.industrysector", "ja-JP", "行业领域", "行业领域"),
+            new TranslationSeedItem("entity.customer.industrysector", "ja-JP", "行业领域_jp", "行业领域"),
             // entity.customer.industrysector
             new TranslationSeedItem("entity.customer.industrysector", "zh-CN", "行业领域", "行业领域"),
             // entity.customer.industrysector
-            new TranslationSeedItem("entity.customer.industrysector", "zh-HK", "行业领域", "行业领域"),
+            new TranslationSeedItem("entity.customer.industrysector", "zh-HK", "行业领域_hk", "行业领域"),
 
             // entity.customer.taxnumber
-            new TranslationSeedItem("entity.customer.taxnumber", "en-US", "客户标识", "客户标识（税务登记证号/统一社会信用代码）"),
+            new TranslationSeedItem("entity.customer.taxnumber", "en-US", "客户标识_us", "客户标识（税务登记证号/统一社会信用代码）"),
             // entity.customer.taxnumber
-            new TranslationSeedItem("entity.customer.taxnumber", "ja-JP", "客户标识", "客户标识（税务登记证号/统一社会信用代码）"),
+            new TranslationSeedItem("entity.customer.taxnumber", "ja-JP", "客户标识_jp", "客户标识（税务登记证号/统一社会信用代码）"),
             // entity.customer.taxnumber
             new TranslationSeedItem("entity.customer.taxnumber", "zh-CN", "客户标识", "客户标识（税务登记证号/统一社会信用代码）"),
             // entity.customer.taxnumber
-            new TranslationSeedItem("entity.customer.taxnumber", "zh-HK", "客户标识", "客户标识（税务登记证号/统一社会信用代码）"),
+            new TranslationSeedItem("entity.customer.taxnumber", "zh-HK", "客户标识_hk", "客户标识（税务登记证号/统一社会信用代码）"),
 
             // entity.customer.registrationcountry
-            new TranslationSeedItem("entity.customer.registrationcountry", "en-US", "注册国家", "注册国家（ISO 3166-1 alpha-2两位代码）"),
+            new TranslationSeedItem("entity.customer.registrationcountry", "en-US", "注册国家_us", "注册国家（ISO 3166-1 alpha-2两位代码）"),
             // entity.customer.registrationcountry
-            new TranslationSeedItem("entity.customer.registrationcountry", "ja-JP", "注册国家", "注册国家（ISO 3166-1 alpha-2两位代码）"),
+            new TranslationSeedItem("entity.customer.registrationcountry", "ja-JP", "注册国家_jp", "注册国家（ISO 3166-1 alpha-2两位代码）"),
             // entity.customer.registrationcountry
             new TranslationSeedItem("entity.customer.registrationcountry", "zh-CN", "注册国家", "注册国家（ISO 3166-1 alpha-2两位代码）"),
             // entity.customer.registrationcountry
-            new TranslationSeedItem("entity.customer.registrationcountry", "zh-HK", "注册国家", "注册国家（ISO 3166-1 alpha-2两位代码）"),
+            new TranslationSeedItem("entity.customer.registrationcountry", "zh-HK", "注册国家_hk", "注册国家（ISO 3166-1 alpha-2两位代码）"),
 
             // entity.customer.registrationaddress1
-            new TranslationSeedItem("entity.customer.registrationaddress1", "en-US", "注册地址1", "注册地址1"),
+            new TranslationSeedItem("entity.customer.registrationaddress1", "en-US", "注册地址1_us", "注册地址1"),
             // entity.customer.registrationaddress1
-            new TranslationSeedItem("entity.customer.registrationaddress1", "ja-JP", "注册地址1", "注册地址1"),
+            new TranslationSeedItem("entity.customer.registrationaddress1", "ja-JP", "注册地址1_jp", "注册地址1"),
             // entity.customer.registrationaddress1
             new TranslationSeedItem("entity.customer.registrationaddress1", "zh-CN", "注册地址1", "注册地址1"),
             // entity.customer.registrationaddress1
-            new TranslationSeedItem("entity.customer.registrationaddress1", "zh-HK", "注册地址1", "注册地址1"),
+            new TranslationSeedItem("entity.customer.registrationaddress1", "zh-HK", "注册地址1_hk", "注册地址1"),
 
             // entity.customer.registrationaddress2
-            new TranslationSeedItem("entity.customer.registrationaddress2", "en-US", "注册地址2", "注册地址2"),
+            new TranslationSeedItem("entity.customer.registrationaddress2", "en-US", "注册地址2_us", "注册地址2"),
             // entity.customer.registrationaddress2
-            new TranslationSeedItem("entity.customer.registrationaddress2", "ja-JP", "注册地址2", "注册地址2"),
+            new TranslationSeedItem("entity.customer.registrationaddress2", "ja-JP", "注册地址2_jp", "注册地址2"),
             // entity.customer.registrationaddress2
             new TranslationSeedItem("entity.customer.registrationaddress2", "zh-CN", "注册地址2", "注册地址2"),
             // entity.customer.registrationaddress2
-            new TranslationSeedItem("entity.customer.registrationaddress2", "zh-HK", "注册地址2", "注册地址2"),
+            new TranslationSeedItem("entity.customer.registrationaddress2", "zh-HK", "注册地址2_hk", "注册地址2"),
 
             // entity.customer.registrationaddress3
-            new TranslationSeedItem("entity.customer.registrationaddress3", "en-US", "注册地址3", "注册地址3"),
+            new TranslationSeedItem("entity.customer.registrationaddress3", "en-US", "注册地址3_us", "注册地址3"),
             // entity.customer.registrationaddress3
-            new TranslationSeedItem("entity.customer.registrationaddress3", "ja-JP", "注册地址3", "注册地址3"),
+            new TranslationSeedItem("entity.customer.registrationaddress3", "ja-JP", "注册地址3_jp", "注册地址3"),
             // entity.customer.registrationaddress3
             new TranslationSeedItem("entity.customer.registrationaddress3", "zh-CN", "注册地址3", "注册地址3"),
             // entity.customer.registrationaddress3
-            new TranslationSeedItem("entity.customer.registrationaddress3", "zh-HK", "注册地址3", "注册地址3"),
+            new TranslationSeedItem("entity.customer.registrationaddress3", "zh-HK", "注册地址3_hk", "注册地址3"),
 
             // entity.customer.phone
-            new TranslationSeedItem("entity.customer.phone", "en-US", "客户电话", "客户电话"),
+            new TranslationSeedItem("entity.customer.phone", "en-US", "客户电话_us", "客户电话"),
             // entity.customer.phone
-            new TranslationSeedItem("entity.customer.phone", "ja-JP", "客户电话", "客户电话"),
+            new TranslationSeedItem("entity.customer.phone", "ja-JP", "客户电话_jp", "客户电话"),
             // entity.customer.phone
             new TranslationSeedItem("entity.customer.phone", "zh-CN", "客户电话", "客户电话"),
             // entity.customer.phone
-            new TranslationSeedItem("entity.customer.phone", "zh-HK", "客户电话", "客户电话"),
+            new TranslationSeedItem("entity.customer.phone", "zh-HK", "客户电话_hk", "客户电话"),
 
             // entity.customer.fax
-            new TranslationSeedItem("entity.customer.fax", "en-US", "客户传真", "客户传真"),
+            new TranslationSeedItem("entity.customer.fax", "en-US", "客户传真_us", "客户传真"),
             // entity.customer.fax
-            new TranslationSeedItem("entity.customer.fax", "ja-JP", "客户传真", "客户传真"),
+            new TranslationSeedItem("entity.customer.fax", "ja-JP", "客户传真_jp", "客户传真"),
             // entity.customer.fax
             new TranslationSeedItem("entity.customer.fax", "zh-CN", "客户传真", "客户传真"),
             // entity.customer.fax
-            new TranslationSeedItem("entity.customer.fax", "zh-HK", "客户传真", "客户传真"),
+            new TranslationSeedItem("entity.customer.fax", "zh-HK", "客户传真_hk", "客户传真"),
 
             // entity.customer.email
-            new TranslationSeedItem("entity.customer.email", "en-US", "客户邮箱", "客户邮箱"),
+            new TranslationSeedItem("entity.customer.email", "en-US", "客户邮箱_us", "客户邮箱"),
             // entity.customer.email
-            new TranslationSeedItem("entity.customer.email", "ja-JP", "客户邮箱", "客户邮箱"),
+            new TranslationSeedItem("entity.customer.email", "ja-JP", "客户邮箱_jp", "客户邮箱"),
             // entity.customer.email
             new TranslationSeedItem("entity.customer.email", "zh-CN", "客户邮箱", "客户邮箱"),
             // entity.customer.email
-            new TranslationSeedItem("entity.customer.email", "zh-HK", "客户邮箱", "客户邮箱"),
+            new TranslationSeedItem("entity.customer.email", "zh-HK", "客户邮箱_hk", "客户邮箱"),
 
             // entity.customer.website
-            new TranslationSeedItem("entity.customer.website", "en-US", "客户网站", "客户网站"),
+            new TranslationSeedItem("entity.customer.website", "en-US", "客户网站_us", "客户网站"),
             // entity.customer.website
-            new TranslationSeedItem("entity.customer.website", "ja-JP", "客户网站", "客户网站"),
+            new TranslationSeedItem("entity.customer.website", "ja-JP", "客户网站_jp", "客户网站"),
             // entity.customer.website
             new TranslationSeedItem("entity.customer.website", "zh-CN", "客户网站", "客户网站"),
             // entity.customer.website
-            new TranslationSeedItem("entity.customer.website", "zh-HK", "客户网站", "客户网站"),
+            new TranslationSeedItem("entity.customer.website", "zh-HK", "客户网站_hk", "客户网站"),
 
             // entity.customer.contactperson
-            new TranslationSeedItem("entity.customer.contactperson", "en-US", "联系人", "联系人"),
+            new TranslationSeedItem("entity.customer.contactperson", "en-US", "联系人_us", "联系人"),
             // entity.customer.contactperson
-            new TranslationSeedItem("entity.customer.contactperson", "ja-JP", "联系人", "联系人"),
+            new TranslationSeedItem("entity.customer.contactperson", "ja-JP", "联系人_jp", "联系人"),
             // entity.customer.contactperson
             new TranslationSeedItem("entity.customer.contactperson", "zh-CN", "联系人", "联系人"),
             // entity.customer.contactperson
-            new TranslationSeedItem("entity.customer.contactperson", "zh-HK", "联系人", "联系人"),
+            new TranslationSeedItem("entity.customer.contactperson", "zh-HK", "联系人_hk", "联系人"),
 
             // entity.customer.contactphone
-            new TranslationSeedItem("entity.customer.contactphone", "en-US", "联系人电话", "联系人电话"),
+            new TranslationSeedItem("entity.customer.contactphone", "en-US", "联系人电话_us", "联系人电话"),
             // entity.customer.contactphone
-            new TranslationSeedItem("entity.customer.contactphone", "ja-JP", "联系人电话", "联系人电话"),
+            new TranslationSeedItem("entity.customer.contactphone", "ja-JP", "联系人电话_jp", "联系人电话"),
             // entity.customer.contactphone
             new TranslationSeedItem("entity.customer.contactphone", "zh-CN", "联系人电话", "联系人电话"),
             // entity.customer.contactphone
-            new TranslationSeedItem("entity.customer.contactphone", "zh-HK", "联系人电话", "联系人电话"),
+            new TranslationSeedItem("entity.customer.contactphone", "zh-HK", "联系人电话_hk", "联系人电话"),
 
             // entity.customer.contactemail
-            new TranslationSeedItem("entity.customer.contactemail", "en-US", "联系人邮箱", "联系人邮箱"),
+            new TranslationSeedItem("entity.customer.contactemail", "en-US", "联系人邮箱_us", "联系人邮箱"),
             // entity.customer.contactemail
-            new TranslationSeedItem("entity.customer.contactemail", "ja-JP", "联系人邮箱", "联系人邮箱"),
+            new TranslationSeedItem("entity.customer.contactemail", "ja-JP", "联系人邮箱_jp", "联系人邮箱"),
             // entity.customer.contactemail
             new TranslationSeedItem("entity.customer.contactemail", "zh-CN", "联系人邮箱", "联系人邮箱"),
             // entity.customer.contactemail
-            new TranslationSeedItem("entity.customer.contactemail", "zh-HK", "联系人邮箱", "联系人邮箱"),
+            new TranslationSeedItem("entity.customer.contactemail", "zh-HK", "联系人邮箱_hk", "联系人邮箱"),
 
             // entity.customer.currencycode
-            new TranslationSeedItem("entity.customer.currencycode", "en-US", "结算币种代码", "结算币种代码"),
+            new TranslationSeedItem("entity.customer.currencycode", "en-US", "结算币种代码_us", "结算币种代码"),
             // entity.customer.currencycode
-            new TranslationSeedItem("entity.customer.currencycode", "ja-JP", "结算币种代码", "结算币种代码"),
+            new TranslationSeedItem("entity.customer.currencycode", "ja-JP", "结算币种代码_jp", "结算币种代码"),
             // entity.customer.currencycode
             new TranslationSeedItem("entity.customer.currencycode", "zh-CN", "结算币种代码", "结算币种代码"),
             // entity.customer.currencycode
-            new TranslationSeedItem("entity.customer.currencycode", "zh-HK", "结算币种代码", "结算币种代码"),
+            new TranslationSeedItem("entity.customer.currencycode", "zh-HK", "结算币种代码_hk", "结算币种代码"),
 
             // entity.customer.paymentterms
-            new TranslationSeedItem("entity.customer.paymentterms", "en-US", "付款条件", "付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
+            new TranslationSeedItem("entity.customer.paymentterms", "en-US", "付款条件_us", "付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
             // entity.customer.paymentterms
-            new TranslationSeedItem("entity.customer.paymentterms", "ja-JP", "付款条件", "付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
+            new TranslationSeedItem("entity.customer.paymentterms", "ja-JP", "付款条件_jp", "付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
             // entity.customer.paymentterms
-            new TranslationSeedItem("entity.customer.paymentterms", "zh-CN", "付款条件", "付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
+            new TranslationSeedItem("entity.customer.paymentterms", "zh-CN", "付款条件", "付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
             // entity.customer.paymentterms
-            new TranslationSeedItem("entity.customer.paymentterms", "zh-HK", "付款条件", "付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
+            new TranslationSeedItem("entity.customer.paymentterms", "zh-HK", "付款条件_hk", "付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）"),
 
             // entity.customer.creditlevel
-            new TranslationSeedItem("entity.customer.creditlevel", "en-US", "信用等级", "信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）"),
+            new TranslationSeedItem("entity.customer.creditlevel", "en-US", "信用等级_us", "信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）"),
             // entity.customer.creditlevel
-            new TranslationSeedItem("entity.customer.creditlevel", "ja-JP", "信用等级", "信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）"),
+            new TranslationSeedItem("entity.customer.creditlevel", "ja-JP", "信用等级_jp", "信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）"),
             // entity.customer.creditlevel
-            new TranslationSeedItem("entity.customer.creditlevel", "zh-CN", "信用等级", "信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）"),
+            new TranslationSeedItem("entity.customer.creditlevel", "zh-CN", "信用等级", "信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）"),
             // entity.customer.creditlevel
-            new TranslationSeedItem("entity.customer.creditlevel", "zh-HK", "信用等级", "信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）"),
+            new TranslationSeedItem("entity.customer.creditlevel", "zh-HK", "信用等级_hk", "信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）"),
 
             // entity.customer.creditamount
-            new TranslationSeedItem("entity.customer.creditamount", "en-US", "信用额度", "信用额度（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.customer.creditamount", "en-US", "信用额度_us", "信用额度（精确到分，存储为整数，单位为分）"),
             // entity.customer.creditamount
-            new TranslationSeedItem("entity.customer.creditamount", "ja-JP", "信用额度", "信用额度（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.customer.creditamount", "ja-JP", "信用额度_jp", "信用额度（精确到分，存储为整数，单位为分）"),
             // entity.customer.creditamount
             new TranslationSeedItem("entity.customer.creditamount", "zh-CN", "信用额度", "信用额度（精确到分，存储为整数，单位为分）"),
             // entity.customer.creditamount
-            new TranslationSeedItem("entity.customer.creditamount", "zh-HK", "信用额度", "信用额度（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.customer.creditamount", "zh-HK", "信用额度_hk", "信用额度（精确到分，存储为整数，单位为分）"),
 
             // entity.customer.discountrate
-            new TranslationSeedItem("entity.customer.discountrate", "en-US", "折扣率", "折扣率（百分比，如：5.5表示5.5%折扣）"),
+            new TranslationSeedItem("entity.customer.discountrate", "en-US", "折扣率_us", "折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）"),
             // entity.customer.discountrate
-            new TranslationSeedItem("entity.customer.discountrate", "ja-JP", "折扣率", "折扣率（百分比，如：5.5表示5.5%折扣）"),
+            new TranslationSeedItem("entity.customer.discountrate", "ja-JP", "折扣率_jp", "折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）"),
             // entity.customer.discountrate
-            new TranslationSeedItem("entity.customer.discountrate", "zh-CN", "折扣率", "折扣率（百分比，如：5.5表示5.5%折扣）"),
+            new TranslationSeedItem("entity.customer.discountrate", "zh-CN", "折扣率", "折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）"),
             // entity.customer.discountrate
-            new TranslationSeedItem("entity.customer.discountrate", "zh-HK", "折扣率", "折扣率（百分比，如：5.5表示5.5%折扣）"),
+            new TranslationSeedItem("entity.customer.discountrate", "zh-HK", "折扣率_hk", "折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）"),
 
             // entity.customer.salesby
-            new TranslationSeedItem("entity.customer.salesby", "en-US", "销售员", "销售员（人员代码）"),
+            new TranslationSeedItem("entity.customer.salesby", "en-US", "销售员_us", "销售员（人员代码）"),
             // entity.customer.salesby
-            new TranslationSeedItem("entity.customer.salesby", "ja-JP", "销售员", "销售员（人员代码）"),
+            new TranslationSeedItem("entity.customer.salesby", "ja-JP", "销售员_jp", "销售员（人员代码）"),
             // entity.customer.salesby
             new TranslationSeedItem("entity.customer.salesby", "zh-CN", "销售员", "销售员（人员代码）"),
             // entity.customer.salesby
-            new TranslationSeedItem("entity.customer.salesby", "zh-HK", "销售员", "销售员（人员代码）"),
+            new TranslationSeedItem("entity.customer.salesby", "zh-HK", "销售员_hk", "销售员（人员代码）"),
 
             // entity.customer.level
-            new TranslationSeedItem("entity.customer.level", "en-US", "客户等级", "客户等级（0=普通，1=重要，2=VIP，3=战略）"),
+            new TranslationSeedItem("entity.customer.level", "en-US", "客户等级_us", "客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）"),
             // entity.customer.level
-            new TranslationSeedItem("entity.customer.level", "ja-JP", "客户等级", "客户等级（0=普通，1=重要，2=VIP，3=战略）"),
+            new TranslationSeedItem("entity.customer.level", "ja-JP", "客户等级_jp", "客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）"),
             // entity.customer.level
-            new TranslationSeedItem("entity.customer.level", "zh-CN", "客户等级", "客户等级（0=普通，1=重要，2=VIP，3=战略）"),
+            new TranslationSeedItem("entity.customer.level", "zh-CN", "客户等级", "客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）"),
             // entity.customer.level
-            new TranslationSeedItem("entity.customer.level", "zh-HK", "客户等级", "客户等级（0=普通，1=重要，2=VIP，3=战略）"),
+            new TranslationSeedItem("entity.customer.level", "zh-HK", "客户等级_hk", "客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）"),
 
             // entity.customer.evaluationscore
-            new TranslationSeedItem("entity.customer.evaluationscore", "en-US", "评价分数", "评价分数（0-100分）"),
+            new TranslationSeedItem("entity.customer.evaluationscore", "en-US", "评价分数_us", "评价分数（0-100分）"),
             // entity.customer.evaluationscore
-            new TranslationSeedItem("entity.customer.evaluationscore", "ja-JP", "评价分数", "评价分数（0-100分）"),
+            new TranslationSeedItem("entity.customer.evaluationscore", "ja-JP", "评价分数_jp", "评价分数（0-100分）"),
             // entity.customer.evaluationscore
             new TranslationSeedItem("entity.customer.evaluationscore", "zh-CN", "评价分数", "评价分数（0-100分）"),
             // entity.customer.evaluationscore
-            new TranslationSeedItem("entity.customer.evaluationscore", "zh-HK", "评价分数", "评价分数（0-100分）"),
+            new TranslationSeedItem("entity.customer.evaluationscore", "zh-HK", "评价分数_hk", "评价分数（0-100分）"),
 
             // entity.customer.isqualified
-            new TranslationSeedItem("entity.customer.isqualified", "en-US", "是否合格客户", "是否合格客户（0=否，1=是）"),
+            new TranslationSeedItem("entity.customer.isqualified", "en-US", "是否合格客户_us", "是否合格客户（0=否，1=是）"),
             // entity.customer.isqualified
-            new TranslationSeedItem("entity.customer.isqualified", "ja-JP", "是否合格客户", "是否合格客户（0=否，1=是）"),
+            new TranslationSeedItem("entity.customer.isqualified", "ja-JP", "是否合格客户_jp", "是否合格客户（0=否，1=是）"),
             // entity.customer.isqualified
             new TranslationSeedItem("entity.customer.isqualified", "zh-CN", "是否合格客户", "是否合格客户（0=否，1=是）"),
             // entity.customer.isqualified
-            new TranslationSeedItem("entity.customer.isqualified", "zh-HK", "是否合格客户", "是否合格客户（0=否，1=是）"),
+            new TranslationSeedItem("entity.customer.isqualified", "zh-HK", "是否合格客户_hk", "是否合格客户（0=否，1=是）"),
 
             // entity.customer.status
-            new TranslationSeedItem("entity.customer.status", "en-US", "客户状态", "客户状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.customer.status", "en-US", "客户状态_us", "客户状态（1=启用，0=禁用）"),
             // entity.customer.status
-            new TranslationSeedItem("entity.customer.status", "ja-JP", "客户状态", "客户状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.customer.status", "ja-JP", "客户状态_jp", "客户状态（1=启用，0=禁用）"),
             // entity.customer.status
             new TranslationSeedItem("entity.customer.status", "zh-CN", "客户状态", "客户状态（1=启用，0=禁用）"),
             // entity.customer.status
-            new TranslationSeedItem("entity.customer.status", "zh-HK", "客户状态", "客户状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.customer.status", "zh-HK", "客户状态_hk", "客户状态（1=启用，0=禁用）"),
 
             // entity.customer.sortorder
-            new TranslationSeedItem("entity.customer.sortorder", "en-US", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customer.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
             // entity.customer.sortorder
-            new TranslationSeedItem("entity.customer.sortorder", "ja-JP", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customer.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
             // entity.customer.sortorder
             new TranslationSeedItem("entity.customer.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.customer.sortorder
-            new TranslationSeedItem("entity.customer.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.customer.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
         };
     }
 
@@ -367,10 +367,10 @@ public class TaktCustomerI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Sales";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

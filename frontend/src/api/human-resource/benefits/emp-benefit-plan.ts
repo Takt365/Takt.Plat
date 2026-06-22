@@ -41,9 +41,7 @@ export function getEmpBenefitPlanList(queryDto: any): Promise<TaktPagedResult<Em
   return request<TaktPagedResult<EmpBenefitPlan>>({
     url: `${EMP_BENEFIT_PLAN_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportEmpBenefitPlan(
     url: `${EMP_BENEFIT_PLAN_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

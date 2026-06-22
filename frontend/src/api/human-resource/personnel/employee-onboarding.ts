@@ -41,9 +41,7 @@ export function getEmployeeOnboardingList(queryDto: any): Promise<TaktPagedResul
   return request<TaktPagedResult<EmployeeOnboarding>>({
     url: `${EMPLOYEE_ONBOARDING_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportEmployeeOnboarding(
     url: `${EMPLOYEE_ONBOARDING_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

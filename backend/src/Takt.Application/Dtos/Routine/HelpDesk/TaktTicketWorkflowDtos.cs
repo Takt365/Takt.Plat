@@ -39,9 +39,14 @@ public class TaktTicketSubmitDto
     public string? AttachmentsJson { get; set; }
 
     /// <summary>
-    /// 优先级
+    /// 紧急度（字典 sys_urgency_level_category）
     /// </summary>
-    public int Priority { get; set; } = 1;
+    public int Urgency { get; set; } = 3;
+
+    /// <summary>
+    /// 影响范围（字典 sys_impact_level_category）
+    /// </summary>
+    public int Impact { get; set; } = 3;
 
     /// <summary>
     /// 分类编码

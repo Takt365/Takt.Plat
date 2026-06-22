@@ -36,7 +36,7 @@ export const DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT: Record<TaktTableLayoutMode, n
 export const ENTITY_BASE_FIELDS = {
   tenant: [
     'tenantCode',
-    'extFieldJson',
+    'ExtField',
     'remark',
     'createdBy',
     'createdAt',
@@ -49,7 +49,7 @@ export const ENTITY_BASE_FIELDS = {
   company: [
     'tenantCode',
     'companyCode',
-    'extFieldJson',
+    'ExtField',
     'remark',
     'createdBy',
     'createdAt',
@@ -62,7 +62,7 @@ export const ENTITY_BASE_FIELDS = {
   approval: [
     'tenantCode',
     'companyCode',
-    'extFieldJson',
+    'ExtField',
     'remark',
     'approvalStatus',
     'initiatorId',
@@ -165,7 +165,7 @@ function buildBaseFieldColumn(field: string, t: (key: string) => string): Column
       sorter: (a: RowRecord, b: RowRecord) => Number(a[field] ?? 0) - Number(b[field] ?? 0),
     };
   }
-  const width = field === 'tenantCode' || field === 'companyCode' ? 100 : field === 'remark' || field === 'extFieldJson' || field === 'approvalOpinion' ? 150 : 120;
+  const width = field === 'tenantCode' || field === 'companyCode' ? 100 : field === 'remark' || field === 'ExtField' || field === 'approvalOpinion' ? 150 : 120;
   return { key: field, dataIndex: field, title, width, ellipsis: true };
 }
 

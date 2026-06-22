@@ -1,19 +1,30 @@
 <template>
   <div class="takt-form-designer">
-    <fc-designer
+    <FcDesigner
       ref="designerRef"
       :height="height"
       :config="designerConfig"
-      :locale="zhLocale"
+      :locale="designerLocale"
       v-bind="designerAttrsRest"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import zhLocale from '@form-create/antd-designer/locale/zh-cn.js'
+import FcDesigner from '@form-create/antd-designer'
+import fcDesignerLocaleEn from '@form-create/antd-designer/locale/en.js'
+import fcDesignerLocaleZhCn from '@form-create/antd-designer/locale/zh-cn.js'
+import { useI18n } from 'vue-i18n'
 
 export type FormDesignerRule = Record<string, unknown>[]
+
+const { locale } = useI18n()
+
+/** FcDesigner 仅提供 zh-cn / en；zh-HK 与 zh-CN 共用简体包 */
+const designerLocale = computed(() => {
+  const code = String(locale.value)
+  return code === 'zh-CN' || code === 'zh-HK' ? fcDesignerLocaleZhCn : fcDesignerLocaleEn
+})
 
 const props = withDefaults(
   defineProps<{
@@ -61,29 +72,36 @@ const designerAttrsRest = computed(() => {
   return rest
 })
 
+/** 将 modelValue JSON 灌入设计器（须等 FcDesigner 挂载并完成内部初始化） */
+function applyModelToDesigner(): void {
+  const designer = designerRef.value
+  if (!designer?.setRule) return
+
+  const v = String(props.modelValue ?? '').trim()
+  if (!v) {
+    designer.setRule([])
+    return
+  }
+
+  try {
+    const rule = JSON.parse(v) as unknown
+    if (Array.isArray(rule)) designer.setRule(rule as FormDesignerRule)
+    else designer.setRule([])
+  } catch {
+    designer.setRule([])
+  }
+}
+
 watch(
   () => props.modelValue,
-  (json) => {
-    nextTick(() => {
-      if (!designerRef.value) return
-
-      const v = String(json ?? '').trim()
-      if (!v) {
-        designerRef.value.setRule([])
-        return
-      }
-
-      try {
-        const rule = JSON.parse(v) as unknown
-        if (Array.isArray(rule)) designerRef.value.setRule(rule as FormDesignerRule)
-        else designerRef.value.setRule([])
-      } catch {
-        designerRef.value.setRule([])
-      }
-    })
-  },
-  { immediate: true }
+  () => {
+    nextTick(applyModelToDesigner)
+  }
 )
+
+onMounted(() => {
+  nextTick(applyModelToDesigner)
+})
 
 function syncToModel() {
   emit('update:modelValue', JSON.stringify(getRule()))
@@ -105,4 +123,4 @@ defineExpose({
 }
 </style>
 
-
+<style src="./form-designer-theme.css"></style>

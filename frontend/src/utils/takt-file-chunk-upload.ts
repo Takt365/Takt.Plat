@@ -4,7 +4,7 @@
 // 文件名称：takt-file-chunk-upload.ts
 // 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Foundation 文件分片上传/断点续传（对接 api/TaktFiles check/chunk/merge/chunk-list）
+// 功能描述：Foundation 文件分片上传/断点续传（策略与分片计划由 api/TaktFiles/upload-policy 驱动）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,6 +13,7 @@
 import {
   cancelFileChunks,
   checkFileChunk,
+  getFileUploadPolicy,
   listFileChunks,
   mergeFileChunks,
   uploadFile,
@@ -21,20 +22,15 @@ import {
 import type {
   FileChunkMerge,
   FileUploadMeta,
+  FileUploadPolicy,
   FileUploadResult,
-} from '@/types/foundation/file';
+} from '@/types/foundation/file-upload';
 import { generateFileIdentifier } from '@/utils/upload';
 
-/** 默认分片大小：2MB */
-export const TAKT_FILE_DEFAULT_CHUNK_SIZE = 2 * 1024 * 1024;
-
-/** 超过此大小走分片上传（5MB） */
-export const TAKT_FILE_CHUNK_THRESHOLD = 5 * 1024 * 1024;
-
-/** 默认最大并发分片数 */
+/** 默认最大并发分片数（前端传输辅助参数） */
 export const TAKT_FILE_DEFAULT_CONCURRENCY = 3;
 
-/** 默认分片重试次数 */
+/** 默认分片重试次数（前端传输辅助参数） */
 export const TAKT_FILE_DEFAULT_MAX_RETRIES = 3;
 
 /**
@@ -79,14 +75,14 @@ export interface TaktFileChunkUploadProgress {
  * 分片上传选项
  */
 export interface TaktFileChunkUploadOptions {
-  /** 分片大小（字节） */
-  chunkSize?: number;
   /** 并发数 */
   concurrency?: number;
   /** 分片最大重试次数 */
   maxRetries?: number;
   /** 业务元数据（合并时写入） */
   meta?: FileUploadMeta;
+  /** 后端返回的分片计划（未传则在 start 时拉取 upload-policy） */
+  uploadPolicy?: FileUploadPolicy;
   /** 进度回调 */
   onProgress?: (progress: TaktFileChunkUploadProgress) => void;
 }
@@ -101,15 +97,16 @@ interface InternalChunkState {
 }
 
 /**
- * 是否应使用分片上传
+ * 是否应使用分片上传（以后端 upload-policy 为准）
  * @param fileSize 文件大小（字节）
  * @returns 是否分片
  */
-export function shouldUseTaktFileChunkUpload(fileSize: number): boolean {
+export async function shouldUseTaktFileChunkUpload(fileSize: number): Promise<boolean> {
   if (!Number.isFinite(fileSize) || fileSize <= 0) {
     return false;
   }
-  return fileSize > TAKT_FILE_CHUNK_THRESHOLD;
+  const policy = await getFileUploadPolicy(fileSize);
+  return policy.useChunkUpload === true;
 }
 
 /** 分片上传暂停信号（非错误，用于 UI 保持弹窗） */
@@ -128,9 +125,10 @@ export class TaktFileChunkUploadPausedError extends Error {
  */
 export class TaktFileChunkUploader {
   private readonly file: globalThis.File;
-  private readonly options: Required<Pick<TaktFileChunkUploadOptions, 'chunkSize' | 'concurrency' | 'maxRetries'>> &
-    Pick<TaktFileChunkUploadOptions, 'meta' | 'onProgress'>;
+  private readonly options: Required<Pick<TaktFileChunkUploadOptions, 'concurrency' | 'maxRetries'>> &
+    Pick<TaktFileChunkUploadOptions, 'meta' | 'onProgress' | 'uploadPolicy'>;
   private chunks: InternalChunkState[] = [];
+  private uploadPolicy: FileUploadPolicy | null = null;
   private identifier = '';
   private status: TaktFileChunkUploadStatus = TaktFileChunkUploadStatus.Waiting;
   private paused = false;
@@ -147,13 +145,13 @@ export class TaktFileChunkUploader {
     }
     this.file = file;
     this.options = {
-      chunkSize: options.chunkSize ?? TAKT_FILE_DEFAULT_CHUNK_SIZE,
       concurrency: options.concurrency ?? TAKT_FILE_DEFAULT_CONCURRENCY,
       maxRetries: options.maxRetries ?? TAKT_FILE_DEFAULT_MAX_RETRIES,
       meta: options.meta,
+      uploadPolicy: options.uploadPolicy,
       onProgress: options.onProgress,
     };
-    this.chunks = this.createChunks();
+    this.uploadPolicy = options.uploadPolicy ?? null;
   }
 
   /**
@@ -217,18 +215,36 @@ export class TaktFileChunkUploader {
   }
 
   /**
+   * 拉取并缓存后端分片计划
+   * @returns 分片计划
+   */
+  private async ensureUploadPolicy(): Promise<FileUploadPolicy> {
+    if (this.uploadPolicy) {
+      return this.uploadPolicy;
+    }
+    const policy = await getFileUploadPolicy(this.file.size);
+    if (!policy.useChunkUpload || !policy.chunkSizeBytes || !policy.totalChunks) {
+      throw new Error('当前文件不需要或不允许分片上传');
+    }
+    this.uploadPolicy = policy;
+    this.chunks = this.createChunksFromPolicy(policy);
+    return policy;
+  }
+
+  /**
    * 执行上传主流程
    * @returns 上传结果
    */
   private async runUpload(): Promise<FileUploadResult> {
     try {
       this.setStatus(TaktFileChunkUploadStatus.Hashing);
+      const policy = await this.ensureUploadPolicy();
       if (!this.identifier) {
         this.identifier = await generateFileIdentifier(this.file);
       }
-      await this.restoreUploadedChunks();
+      await this.restoreUploadedChunks(policy);
       this.setStatus(TaktFileChunkUploadStatus.Uploading);
-      const allUploaded = await this.uploadAllChunks();
+      const allUploaded = await this.uploadAllChunks(policy);
       if (this.cancelled) {
         throw new Error('上传已取消');
       }
@@ -239,13 +255,18 @@ export class TaktFileChunkUploader {
       const mergeDto: FileChunkMerge = {
         identifier: this.identifier,
         fileName: this.file.name,
-        totalChunks: this.chunks.length,
+        totalChunks: policy.totalChunks!,
         totalSize: String(this.file.size),
         fileDescription: this.options.meta?.fileDescription,
         fileTags: this.options.meta?.fileTags,
         isPublic: this.options.meta?.isPublic,
         fileUploadType: this.options.meta?.fileUploadType,
         targetFileName: this.options.meta?.targetFileName,
+        categoryPath: this.options.meta?.categoryPath,
+        storageType: this.options.meta?.storageType,
+        storageConfig: this.options.meta?.storageConfig,
+        storageNaming: this.options.meta?.storageNaming,
+        fileStatus: this.options.meta?.fileStatus,
       };
       const result = await mergeFileChunks(mergeDto);
       this.setStatus(TaktFileChunkUploadStatus.Success);
@@ -269,11 +290,13 @@ export class TaktFileChunkUploader {
 
   /**
    * 从服务端恢复已上传分片（断点续传）
+   * @param policy 分片计划
    */
-  private async restoreUploadedChunks(): Promise<void> {
+  private async restoreUploadedChunks(policy: FileUploadPolicy): Promise<void> {
     const listResult = await listFileChunks({
       identifier: this.identifier,
-      totalChunks: this.chunks.length,
+      totalChunks: policy.totalChunks,
+      totalSize: String(this.file.size),
     });
     const uploadedSet = new Set(listResult.uploadedChunkNumbers ?? []);
     this.chunks.forEach((chunk) => {
@@ -287,9 +310,10 @@ export class TaktFileChunkUploader {
 
   /**
    * 并发上传未完成分片
+   * @param policy 分片计划
    * @returns 是否全部分片已上传
    */
-  private async uploadAllChunks(): Promise<boolean> {
+  private async uploadAllChunks(policy: FileUploadPolicy): Promise<boolean> {
     const pending = (): InternalChunkState | undefined =>
       this.chunks.find((c) => !c.uploaded && !c.uploading && !this.paused && !this.cancelled);
 
@@ -300,7 +324,7 @@ export class TaktFileChunkUploader {
         if (!chunk) {
           break;
         }
-        await this.uploadSingleChunk(chunk);
+        await this.uploadSingleChunk(chunk, policy);
       }
     };
     const concurrency = Math.max(1, Math.min(this.options.concurrency, this.chunks.length));
@@ -320,8 +344,9 @@ export class TaktFileChunkUploader {
   /**
    * 上传单个分片（含重试与断点检查）
    * @param chunk 分片状态
+   * @param policy 分片计划
    */
-  private async uploadSingleChunk(chunk: InternalChunkState): Promise<void> {
+  private async uploadSingleChunk(chunk: InternalChunkState, policy: FileUploadPolicy): Promise<void> {
     if (chunk.uploaded || chunk.uploading || this.paused || this.cancelled) {
       return;
     }
@@ -331,6 +356,7 @@ export class TaktFileChunkUploader {
       chunkNumber,
       chunkSize: String(chunk.blob.size),
       totalSize: String(this.file.size),
+      totalChunks: policy.totalChunks,
       fileName: this.file.name,
     });
     if (checkResult.exists) {
@@ -345,7 +371,7 @@ export class TaktFileChunkUploader {
       await uploadFileChunk(chunkFile, {
         identifier: this.identifier,
         chunkNumber,
-        totalChunks: this.chunks.length,
+        totalChunks: policy.totalChunks!,
         chunkSize: String(chunk.blob.size),
         totalSize: String(this.file.size),
         fileName: this.file.name,
@@ -360,7 +386,7 @@ export class TaktFileChunkUploader {
       if (chunk.retries < this.options.maxRetries) {
         chunk.retries += 1;
         chunk.uploading = false;
-        await this.uploadSingleChunk(chunk);
+        await this.uploadSingleChunk(chunk, policy);
         return;
       }
       throw error;
@@ -371,16 +397,20 @@ export class TaktFileChunkUploader {
   }
 
   /**
-   * 切分文件为分片
+   * 按后端分片计划切分文件
+   * @param policy 分片计划
    * @returns 分片状态列表
    */
-  private createChunks(): InternalChunkState[] {
-    const size = this.options.chunkSize;
-    const total = Math.ceil(this.file.size / size);
+  private createChunksFromPolicy(policy: FileUploadPolicy): InternalChunkState[] {
+    const chunkSize = Number(policy.chunkSizeBytes);
+    const totalChunks = policy.totalChunks ?? 0;
+    if (!Number.isFinite(chunkSize) || chunkSize <= 0 || totalChunks <= 0) {
+      throw new Error('分片计划无效');
+    }
     const chunks: InternalChunkState[] = [];
-    for (let i = 0; i < total; i++) {
-      const start = i * size;
-      const end = Math.min(start + size, this.file.size);
+    for (let i = 0; i < totalChunks; i++) {
+      const start = i * chunkSize;
+      const end = i === totalChunks - 1 ? this.file.size : Math.min(start + chunkSize, this.file.size);
       chunks.push({
         index: i,
         blob: this.file.slice(start, end),
@@ -429,7 +459,7 @@ export class TaktFileChunkUploader {
 }
 
 /**
- * 智能上传：小文件整传，大文件分片+断点续传
+ * 智能上传：小文件整传，大文件分片+断点续传（策略以后端为准）
  * @param file 文件
  * @param meta 业务元数据
  * @param options 分片选项
@@ -440,10 +470,11 @@ export async function uploadTaktFileSmart(
   meta?: FileUploadMeta,
   options?: TaktFileChunkUploadOptions
 ): Promise<FileUploadResult> {
-  if (!shouldUseTaktFileChunkUpload(file.size)) {
+  const policy = await getFileUploadPolicy(file.size);
+  if (!policy.useChunkUpload) {
     return uploadFile(file, meta);
   }
-  const uploader = new TaktFileChunkUploader(file, { ...options, meta });
+  const uploader = new TaktFileChunkUploader(file, { ...options, meta, uploadPolicy: policy });
   return uploader.start();
 }
 
@@ -459,6 +490,7 @@ export async function uploadTaktFileWithChunks(
   meta?: FileUploadMeta,
   options?: TaktFileChunkUploadOptions
 ): Promise<FileUploadResult> {
-  const uploader = new TaktFileChunkUploader(file, { ...options, meta });
+  const policy = await getFileUploadPolicy(file.size);
+  const uploader = new TaktFileChunkUploader(file, { ...options, meta, uploadPolicy: policy });
   return uploader.start();
 }

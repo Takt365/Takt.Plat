@@ -51,16 +51,16 @@ public class TaktTranslation : TaktTenantEntityBase
     public string TranslationText { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源分组（用于分类管理翻译）
+    /// 资源分组（用于分类管理翻译，如 page、menu、模块编号字符串）
     /// </summary>
-    [SugarColumn(ColumnName = "resource_group", ColumnDescription = "资源分组", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ResourceGroup { get; set; } = 1;
+    [SugarColumn(ColumnName = "resource_group", ColumnDescription = "资源分组", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "")]
+    public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源类别（0=前端，1=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
     /// </summary>
-    [SugarColumn(ColumnName = "resource_type", ColumnDescription = "资源类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ResourceType { get; set; } = 0;
+    [SugarColumn(ColumnName = "resource_type", ColumnDescription = "资源类别", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "frontend")]
+    public string ResourceType { get; set; } = "frontend";
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）

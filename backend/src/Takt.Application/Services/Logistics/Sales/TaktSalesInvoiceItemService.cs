@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票明细应用服务实现
 // 
@@ -30,6 +30,7 @@ namespace Takt.Application.Services.Logistics.Sales;
 public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceItemService
 {
     private readonly ITaktCompanyRepository<TaktSalesInvoiceItem> _salesInvoiceItemRepository;
+    private readonly ITaktCompanyRepository<TaktSalesInvoice> _salesInvoiceRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -37,12 +38,14 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
     /// 构造函数
     /// </summary>
     /// <param name="salesInvoiceItemRepository">销售发票明细仓储</param>
+    /// <param name="salesInvoiceRepository">销售发票仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktSalesInvoiceItemService(
         ITaktCompanyRepository<TaktSalesInvoiceItem> salesInvoiceItemRepository,
+        ITaktCompanyRepository<TaktSalesInvoice> salesInvoiceRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -50,6 +53,7 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
         : base(userContext, localizationService)
     {
         _salesInvoiceItemRepository = salesInvoiceItemRepository;
+        _salesInvoiceRepository = salesInvoiceRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -97,7 +101,7 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
         EnsureThreeLayerContext();
         var list = await _salesInvoiceItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MaterialName,
+            x => x.MaterialName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -114,6 +118,7 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
     public async Task<TaktSalesInvoiceItemDto> CreateSalesInvoiceItemAsync(TaktSalesInvoiceItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesInvoiceItem>();
+        await StampSalesInvoiceItemSalesInvoiceAsync(entity, dto);
         var isUnique_ix_takt_logistics_sales_invoice_item_invoice_line_unique = await _uniqueValidator.IsUniqueAsync(
             _salesInvoiceItemRepository,
             x => x.SalesInvoiceId == entity.SalesInvoiceId
@@ -148,6 +153,7 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             throw new TaktBusinessException("销售发票明细不存在");
         }
         dto.Adapt(entity);
+        await StampSalesInvoiceItemSalesInvoiceAsync(entity, dto);
         var isUnique_ix_takt_logistics_sales_invoice_item_invoice_line_unique = await _uniqueValidator.IsUniqueAsync(
             _salesInvoiceItemRepository,
             x => x.SalesInvoiceId == entity.SalesInvoiceId
@@ -229,6 +235,8 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             try
             {
                 var entity = rows[i].Adapt<TaktSalesInvoiceItem>();
+                var importDto = rows[i].Adapt<TaktSalesInvoiceItemCreateDto>();
+                await StampSalesInvoiceItemSalesInvoiceAsync(entity, importDto);
                 var importKey = $"{entity.SalesInvoiceId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -288,6 +296,29 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
     }
 
     // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步销售发票明细主表外键（ManyToOne → 销售发票）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampSalesInvoiceItemSalesInvoiceAsync(TaktSalesInvoiceItem entity, TaktSalesInvoiceItemCreateDto dto)
+    {
+        if (dto.SalesInvoiceId <= 0)
+        {
+            return;
+        }
+        var master = await _salesInvoiceRepository.GetByIdAsync(dto.SalesInvoiceId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("销售发票不存在");
+        }
+        entity.SalesInvoiceId = master.Id;
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -318,7 +349,7 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
                 || SqlFunc.ToString(x.TaxRate).Contains(keywords)
                 || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
                 || SqlFunc.ToString(x.SubtotalAmount).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -394,9 +425,9 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             exp = exp.And(x => x.SubtotalAmount == queryDto.SubtotalAmount);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

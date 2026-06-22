@@ -21,12 +21,11 @@ import type {
 import { useUserStore } from '@/stores/identity/user';
 import { useTenantStore } from '@/stores/identity/tenant';
 import { resolveRequestLocale } from '@/stores/foundation/locale';
-import type { TaktApiResult } from '@/types/common';
+import type { TaktApiResult, TaktBinaryDownload } from '@/types/common';
 import { TaktResultCode } from '@/utils/common';
 import { createLogger } from '@/utils/logger';
 import { resolveHttpErrorMessage } from '@/utils/takt-http-error-message';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
-import { STORE_I18N_TIP_SESSION_EXPIRED } from '@/utils/takt-store-i18n';
 import { EventBus, emitNotification } from '@/utils/event-bus';
 import { ensureValidAccessToken, refreshOAuthTokens } from '@/utils/oauth';
 import { isLogoutInProgress } from '@/bootstrap/takt-logout-flow';
@@ -98,6 +97,26 @@ function isBinaryResponse(response: AxiosResponse): boolean {
 }
 
 /**
+ * 解包二进制下载响应（可选携带 Content-Disposition / Content-Type）
+ * @template T Blob 或 TaktBinaryDownload
+ * @param {AxiosResponse} response Axios 原始响应
+ * @returns {T} 二进制载荷
+ */
+function unwrapBinaryResponse<T>(response: AxiosResponse): T {
+  const data = response.data;
+  if (response.config.returnBinaryMeta && data instanceof Blob) {
+    const headers = response.headers as Record<string, string | undefined>;
+    const binary: TaktBinaryDownload = {
+      blob: data,
+      contentDisposition: headers['content-disposition'] ?? null,
+      contentType: headers['content-type'] ?? null,
+    };
+    return binary as T;
+  }
+  return data as T;
+}
+
+/**
  * 解包成功响应：返回 TaktApiResult.data；业务失败时提示并抛出 TaktApiError
  * @template T 业务数据类型
  * @param {AxiosResponse} response Axios 原始响应
@@ -106,7 +125,7 @@ function isBinaryResponse(response: AxiosResponse): boolean {
  */
 function unwrapTaktApiResult<T>(response: AxiosResponse): T {
   if (isBinaryResponse(response)) {
-    return response.data as T;
+    return unwrapBinaryResponse<T>(response);
   }
 
   const body = response.data;
@@ -143,7 +162,7 @@ function toAxiosError(error: unknown): AxiosError | null {
  * @param message 业务或 HTTP 附带文案
  */
 function resolveSessionExpiredMessage(message?: string): string {
-  return message?.trim() || translateLocaleMessage(STORE_I18N_TIP_SESSION_EXPIRED);
+  return message?.trim() || translateLocaleMessage('common.tip.session.expired');
 }
 
 /**

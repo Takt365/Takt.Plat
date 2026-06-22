@@ -1,37 +1,37 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/src/types/logistics/manufacturing/bom
+// 命名空间：frontend/src/types/logistics/materials
 // 文件名称：model-destination.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
-// 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
 import type {
-  CompanyDtoBase,
-  TaktPagedQuery
+  TaktPagedQuery,
+  TenantDtoBase
 } from '@/types/common';
 
 /**
- * Takt型号目的地实体（物料名称、机种名称、仕向地名称）
+ * Takt型号目的地实体（租户级；物料编码/名称、机种编码/名称、仕向地编码/名称）
  * 对应前端 TaktModelDestinationDto
- * 继承 TaktCompanyDtoBase
+ * 继承 TaktTenantDtoBase
  * 对应前端 ModelDestination
  * @description 对应后端 TaktModelDestinationDto
  */
-export interface ModelDestination extends CompanyDtoBase {
+export interface ModelDestination extends TenantDtoBase {
   /**
    * ModelDestinationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   modelDestinationId: string;
 
   /**
-   * 工厂代码
+   * 物料编码
    */
-  plantCode?: string;
+  materialCode: string;
 
   /**
    * 物料名称
@@ -39,9 +39,19 @@ export interface ModelDestination extends CompanyDtoBase {
   materialName: string;
 
   /**
+   * 机种编码
+   */
+  modelCode: string;
+
+  /**
    * 机种名称
    */
   modelName: string;
+
+  /**
+   * 仕向地编码
+   */
+  destinationCode: string;
 
   /**
    * 仕向地名称
@@ -69,14 +79,9 @@ export interface ModelDestinationQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 物料编码
    */
-  companyCode?: string;
-
-  /**
-   * 工厂代码
-   */
-  plantCode?: string;
+  materialCode?: string;
 
   /**
    * 物料名称
@@ -84,9 +89,19 @@ export interface ModelDestinationQuery extends TaktPagedQuery {
   materialName?: string;
 
   /**
+   * 机种编码
+   */
+  modelCode?: string;
+
+  /**
    * 机种名称
    */
   modelName?: string;
+
+  /**
+   * 仕向地编码
+   */
+  destinationCode?: string;
 
   /**
    * 仕向地名称
@@ -111,7 +126,7 @@ export interface ModelDestinationQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -133,19 +148,9 @@ export interface ModelDestinationCreate {
   tenantCode: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 物料编码
    */
-  companyCode: string;
-
-  /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture: string;
-
-  /**
-   * 工厂代码
-   */
-  plantCode?: string;
+  materialCode: string;
 
   /**
    * 物料名称
@@ -153,9 +158,19 @@ export interface ModelDestinationCreate {
   materialName: string;
 
   /**
+   * 机种编码
+   */
+  modelCode: string;
+
+  /**
    * 机种名称
    */
   modelName: string;
+
+  /**
+   * 仕向地编码
+   */
+  destinationCode: string;
 
   /**
    * 仕向地名称
@@ -163,14 +178,9 @@ export interface ModelDestinationCreate {
   destinationName: string;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -226,14 +236,9 @@ export interface ModelDestinationTemplate {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 物料编码
    */
-  companyCode?: string;
-
-  /**
-   * 工厂代码
-   */
-  plantCode?: string;
+  materialCode?: string;
 
   /**
    * 物料名称
@@ -241,9 +246,19 @@ export interface ModelDestinationTemplate {
   materialName?: string;
 
   /**
+   * 机种编码
+   */
+  modelCode?: string;
+
+  /**
    * 机种名称
    */
   modelName?: string;
+
+  /**
+   * 仕向地编码
+   */
+  destinationCode?: string;
 
   /**
    * 仕向地名称
@@ -251,14 +266,9 @@ export interface ModelDestinationTemplate {
   destinationName?: string;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder?: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -280,19 +290,9 @@ export interface ModelDestinationImport {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 物料编码
    */
-  companyCode?: string;
-
-  /**
-   * 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 工厂代码
-   */
-  plantCode?: string;
+  materialCode?: string;
 
   /**
    * 物料名称
@@ -300,9 +300,19 @@ export interface ModelDestinationImport {
   materialName?: string;
 
   /**
+   * 机种编码
+   */
+  modelCode?: string;
+
+  /**
    * 机种名称
    */
   modelName?: string;
+
+  /**
+   * 仕向地编码
+   */
+  destinationCode?: string;
 
   /**
    * 仕向地名称
@@ -310,14 +320,9 @@ export interface ModelDestinationImport {
   destinationName?: string;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder?: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -339,14 +344,9 @@ export interface ModelDestinationExport {
   modelDestinationId: string;
 
   /**
-   * 公司代码
+   * 物料编码
    */
-  companyCode: string;
-
-  /**
-   * 工厂代码
-   */
-  plantCode?: string;
+  materialCode: string;
 
   /**
    * 物料名称
@@ -354,9 +354,19 @@ export interface ModelDestinationExport {
   materialName: string;
 
   /**
+   * 机种编码
+   */
+  modelCode: string;
+
+  /**
    * 机种名称
    */
   modelName: string;
+
+  /**
+   * 仕向地编码
+   */
+  destinationCode: string;
 
   /**
    * 仕向地名称
@@ -371,7 +381,7 @@ export interface ModelDestinationExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

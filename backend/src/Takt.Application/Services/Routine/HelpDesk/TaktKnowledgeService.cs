@@ -102,7 +102,7 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
         EnsureThreeLayerContext();
         var list = await _knowledgeRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.CategoryCode,
+            x => x.CategoryCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -379,7 +379,7 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
                 || SqlFunc.ToString(x.UnhelpfulCount).Contains(keywords)
                 || SqlFunc.ToString(x.IsPublished).Contains(keywords)
                 || SqlFunc.ToString(x.Version).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PublishedAt).Contains(keywords)
                 || SqlFunc.ToString(x.RevisedAt).Contains(keywords)
@@ -447,9 +447,9 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
             exp = exp.And(x => x.Version == queryDto.Version);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

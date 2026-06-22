@@ -537,7 +537,7 @@ internal static class TaktSqlSugarAuditAop
 
         try
         {
-            var operIp = ResolveClientIp(httpContext);
+            var (operIp, operLocation) = TaktLocationHelper.ResolveClientIpAndLocationForLog(httpContext);
             var operLog = new TaktOperLog
             {
                 TenantCode = httpContext.Request.Headers["X-Tenant-Code"].FirstOrDefault()?.Trim() ?? string.Empty,
@@ -551,7 +551,7 @@ internal static class TaktSqlSugarAuditAop
                 RequestParam = MaskSensitiveJson(requestBody),
                 OperStatus = statusCode >= 400 ? TaktExecuteStatus.Failed : TaktExecuteStatus.Success,
                 OperIp = operIp,
-                OperLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(operIp, null),
+                OperLocation = operLocation,
                 OperTime = DateTime.Now,
                 ElapsedTime = (int)Math.Min(int.MaxValue, elapsedMs),
                 CreatedAt = DateTime.Now,
@@ -607,7 +607,7 @@ internal static class TaktSqlSugarAuditAop
 
         try
         {
-            var operIp = ResolveClientIp(httpContext);
+            var (operIp, operLocation) = TaktLocationHelper.ResolveClientIpAndLocationForLog(httpContext);
             var beforeJson = SerializeDiffTables(diff.BeforeData);
             var afterJson = SerializeDiffTables(diff.AfterData);
             var deltaLog = new TaktDeltaLog
@@ -621,10 +621,10 @@ internal static class TaktSqlSugarAuditAop
                 BeforeData = beforeJson,
                 AfterData = afterJson,
                 DiffData = BuildDiffJson(diff),
-                ExtFieldJson = SerializeBusinessData(diff.BusinessData),
+                ExtField = SerializeBusinessData(diff.BusinessData),
                 SqlStatement = diff.Sql,
                 OperIp = operIp,
-                OperLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(operIp, null),
+                OperLocation = operLocation,
                 OperTime = DateTime.Now,
                 ElapsedTime = (int)Math.Min(
                     int.MaxValue,
@@ -917,27 +917,6 @@ internal static class TaktSqlSugarAuditAop
         var path = context.Request.Path.Value ?? string.Empty;
         var query = context.Request.QueryString.Value;
         return string.IsNullOrEmpty(query) ? path : path + query;
-    }
-
-    /// <summary>
-    /// 解析客户端 IP（优先 X-Forwarded-For，回退连接远程地址）
-    /// </summary>
-    /// <param name="context">HTTP 上下文</param>
-    /// <returns>客户端 IP；无法解析时为 null</returns>
-    private static string? ResolveClientIp(HttpContext context)
-    {
-        var forwarded = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(forwarded))
-        {
-            var ip = forwarded.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-                .FirstOrDefault();
-            if (!string.IsNullOrWhiteSpace(ip))
-            {
-                return ip.Trim();
-            }
-        }
-
-        return context.Connection.RemoteIpAddress?.ToString();
     }
 
     /// <summary>

@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Dtos.Logistics.Materials
+// 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseOrder 生成，请按需审阅）
 // 
@@ -14,9 +14,8 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
-namespace Takt.Application.Dtos.Logistics.Materials;
+namespace Takt.Application.Dtos.Logistics.Procurement;
 
 // ========================================
 // PurchaseOrder 响应 DTO
@@ -72,7 +71,7 @@ public class TaktPurchaseOrderDto : TaktCompanyDtoBase
     public DateTime? ActualArrivalDate { get; set; }
 
     /// <summary>
-    /// 采购组代码
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -119,20 +118,20 @@ public class TaktPurchaseOrderDto : TaktCompanyDtoBase
     /// <summary>
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
-    public int OrderStatus { get; set; }
+    public int OrderStatus { get; set; } = 0;
 
     /// <summary>
-    /// 交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
-    /// 支付方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
     /// <summary>
-    /// 交货方式（0=自提，1=供应商送货，2=物流配送，3=快递）
+    /// 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
     /// </summary>
     public int DeliveryMethod { get; set; } = 0;
 
@@ -226,7 +225,7 @@ public class TaktPurchaseOrderQueryDto : TaktPagedQuery
     public DateTime? ActualArrivalDateEnd { get; set; }
 
     /// <summary>
-    /// 采购组代码
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -276,17 +275,17 @@ public class TaktPurchaseOrderQueryDto : TaktPagedQuery
     public int? OrderStatus { get; set; }
 
     /// <summary>
-    /// 交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
     /// <summary>
-    /// 支付方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
     /// <summary>
-    /// 交货方式（0=自提，1=供应商送货，2=物流配送，3=快递）
+    /// 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
     /// </summary>
     public int? DeliveryMethod { get; set; }
 
@@ -308,7 +307,7 @@ public class TaktPurchaseOrderQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -380,7 +379,7 @@ public class TaktPurchaseOrderCreateDto
     public DateTime? ActualArrivalDate { get; set; }
 
     /// <summary>
-    /// 采购组代码
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -427,20 +426,20 @@ public class TaktPurchaseOrderCreateDto
     /// <summary>
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
-    public int OrderStatus { get; set; }
+    public int OrderStatus { get; set; } = 0;
 
     /// <summary>
-    /// 交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
-    /// 支付方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
     /// <summary>
-    /// 交货方式（0=自提，1=供应商送货，2=物流配送，3=快递）
+    /// 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
     /// </summary>
     public int DeliveryMethod { get; set; } = 0;
 
@@ -462,7 +461,7 @@ public class TaktPurchaseOrderCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -512,7 +511,7 @@ public class TaktPurchaseOrderStatusDto
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "订单状态（1=启用，0=禁用）不能为空")]
-    public int OrderStatus { get; set; }
+    public int OrderStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -555,7 +554,7 @@ public class TaktPurchaseOrderTemplateDto
     public string? SupplierName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组代码
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -565,17 +564,17 @@ public class TaktPurchaseOrderTemplateDto
     public int? OrderStatus { get; set; }
 
     /// <summary>
-    /// 交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
     /// <summary>
-    /// 支付方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
     /// <summary>
-    /// 交货方式（0=自提，1=供应商送货，2=物流配送，3=快递）
+    /// 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
     /// </summary>
     public int? DeliveryMethod { get; set; }
 
@@ -587,7 +586,7 @@ public class TaktPurchaseOrderTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -637,7 +636,7 @@ public class TaktPurchaseOrderImportDto
     public string? SupplierName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组代码
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -647,17 +646,17 @@ public class TaktPurchaseOrderImportDto
     public int? OrderStatus { get; set; }
 
     /// <summary>
-    /// 交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
     /// <summary>
-    /// 支付方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
     /// <summary>
-    /// 交货方式（0=自提，1=供应商送货，2=物流配送，3=快递）
+    /// 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
     /// </summary>
     public int? DeliveryMethod { get; set; }
 
@@ -669,7 +668,7 @@ public class TaktPurchaseOrderImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -735,7 +734,7 @@ public class TaktPurchaseOrderExportDto
     public DateTime? ActualArrivalDate { get; set; }
 
     /// <summary>
-    /// 采购组代码
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -782,20 +781,20 @@ public class TaktPurchaseOrderExportDto
     /// <summary>
     /// 订单状态（1=启用，0=禁用）
     /// </summary>
-    public int OrderStatus { get; set; }
+    public int OrderStatus { get; set; } = 0;
 
     /// <summary>
-    /// 交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
-    /// 支付方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
     /// <summary>
-    /// 交货方式（0=自提，1=供应商送货，2=物流配送，3=快递）
+    /// 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
     /// </summary>
     public int DeliveryMethod { get; set; } = 0;
 
@@ -807,7 +806,7 @@ public class TaktPurchaseOrderExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

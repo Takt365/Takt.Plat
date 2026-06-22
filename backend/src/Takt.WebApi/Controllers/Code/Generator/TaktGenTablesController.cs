@@ -131,6 +131,7 @@ public class TaktGenTablesController : TaktControllerBase
     {
         try
         {
+            dto.GenTableId = id;
             var result = await _genTableService.UpdateGenTableAsync(id, dto);
             return Success(result, "更新成功");
         }

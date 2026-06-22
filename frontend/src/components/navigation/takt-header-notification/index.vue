@@ -96,6 +96,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { RiNotificationLine } from '@remixicon/vue'
 
 const { t } = useI18n()
@@ -137,7 +138,7 @@ const count = computed(() => {
 })
 
 const pagination = computed(() => ({
-  pageSize: 10,
+  pageSize: getTaktDefaultPageSize(),
   showSizeChanger: false,
   showTotal: (total: number) => t('common.table.total', { total })
 }))

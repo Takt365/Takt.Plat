@@ -251,7 +251,7 @@ export interface DeptQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -360,7 +360,7 @@ export interface DeptCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -400,6 +400,25 @@ export interface DeptStatus {
    * 状态（1=启用，0=禁用）
    */
   deptStatus: number;
+
+}
+
+
+/**
+ * Dept 是否内置更新 DTO
+ * 对应前端 DeptBuiltIn
+ * @description 对应后端 TaktDeptBuiltInDto
+ */
+export interface DeptBuiltIn {
+  /**
+   * DeptID
+   */
+  deptId: string;
+
+  /**
+   * 是否内置（字典 sys_yes_no_type；1=是，0=否）
+   */
+  isBuiltIn: number;
 
 }
 
@@ -502,7 +521,7 @@ export interface DeptTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -596,7 +615,7 @@ export interface DeptImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -705,7 +724,7 @@ export interface DeptExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

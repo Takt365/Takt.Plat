@@ -78,6 +78,13 @@ public interface ITaktRoleService
     Task<TaktRoleDto> UpdateRoleStatusAsync(TaktRoleStatusDto dto);
 
     /// <summary>
+    /// 更新角色是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktRoleDto> UpdateRoleBuiltInAsync(TaktRoleBuiltInDto dto);
+
+    /// <summary>
     /// 更新角色排序
     /// </summary>
     /// <param name="dto">排序DTO</param>

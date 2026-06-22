@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Controlling
 // 文件名称：TaktCostCentersController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本中心控制器
 // 
@@ -13,6 +13,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Accounting.Controlling;
 using Takt.Application.Services.Accounting.Controlling;
+using Takt.Shared.Constants;
 
 namespace Takt.WebApi.Controllers.Accounting.Controlling;
 
@@ -40,7 +41,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("accounting:controlling:costcenter:list", "成本中心列表")]
+    [TaktPermission("accounting:controlling:cost:center:list", "成本中心列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetCostCenterListAsync([FromQuery] TaktCostCenterQueryDto queryDto)
     {
@@ -60,7 +61,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// </summary>
     /// <param name="id">成本中心ID</param>
     /// <returns>成本中心DTO</returns>
-    [TaktPermission("accounting:controlling:costcenter:query", "成本中心详情")]
+    [TaktPermission("accounting:controlling:cost:center:query", "成本中心详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCostCenterByIdAsync(long id)
     {
@@ -83,7 +84,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// 获取成本中心树形选项列表
     /// </summary>
     /// <returns>树形选项</returns>
-    [TaktPermission("accounting:controlling:costcenter:query", "成本中心树形选项")]
+    [TaktPermission("accounting:controlling:cost:center:query", "成本中心树形选项")]
     [HttpGet("tree-options")]
     public async Task<IActionResult> GetCostCenterTreeOptionsAsync()
     {
@@ -101,9 +102,9 @@ public class TaktCostCentersController : TaktControllerBase
     /// <summary>
     /// 获取成本中心树形列表
     /// </summary>
-    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 1）</param>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
     /// <returns>树形数据</returns>
-    [TaktPermission("accounting:controlling:costcenter:query", "成本中心树")]
+    [TaktPermission("accounting:controlling:cost:center:query", "成本中心树")]
     [HttpGet("tree")]
     public async Task<IActionResult> GetCostCenterTreeAsync([FromQuery] long parentId = 0, [FromQuery] bool includeDisabled = false)
     {
@@ -123,7 +124,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>成本中心DTO</returns>
-    [TaktPermission("accounting:controlling:costcenter:create", "创建成本中心")]
+    [TaktPermission("accounting:controlling:cost:center:create", "创建成本中心")]
     [HttpPost]
     public async Task<IActionResult> CreateCostCenterAsync([FromBody] TaktCostCenterCreateDto dto)
     {
@@ -144,7 +145,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// <param name="id">成本中心ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>成本中心DTO</returns>
-    [TaktPermission("accounting:controlling:costcenter:update", "更新成本中心")]
+    [TaktPermission("accounting:controlling:cost:center:update", "更新成本中心")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCostCenterAsync(long id, [FromBody] TaktCostCenterUpdateDto dto)
     {
@@ -164,7 +165,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// </summary>
     /// <param name="id">成本中心ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:costcenter:delete", "删除成本中心")]
+    [TaktPermission("accounting:controlling:cost:center:delete", "删除成本中心")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCostCenterByIdAsync(long id)
     {
@@ -184,7 +185,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:costcenter:delete", "批量删除成本中心")]
+    [TaktPermission("accounting:controlling:cost:center:delete", "批量删除成本中心")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteCostCenterBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -202,9 +203,9 @@ public class TaktCostCentersController : TaktControllerBase
     /// <summary>
     /// 更新成本中心状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>成本中心DTO</returns>
-    [TaktPermission("accounting:controlling:costcenter:update", "更新成本中心状态")]
+    [TaktPermission("accounting:controlling:cost:center:update", "更新成本中心状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateCostCenterStatusAsync([FromBody] TaktCostCenterStatusDto dto)
     {
@@ -224,7 +225,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>成本中心DTO</returns>
-    [TaktPermission("accounting:controlling:costcenter:update", "更新成本中心排序")]
+    [TaktPermission("accounting:controlling:cost:center:update", "更新成本中心排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateCostCenterSortAsync([FromBody] TaktCostCenterSortDto dto)
     {
@@ -243,7 +244,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:controlling:costcenter:import", "获取成本中心导入模板")]
+    [TaktPermission("accounting:controlling:cost:center:import", "获取成本中心导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetCostCenterTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -263,7 +264,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("accounting:controlling:costcenter:import", "导入成本中心")]
+    [TaktPermission("accounting:controlling:cost:center:import", "导入成本中心")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportCostCenterAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -293,7 +294,7 @@ public class TaktCostCentersController : TaktControllerBase
     /// 导出成本中心
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:controlling:costcenter:export", "导出成本中心")]
+    [TaktPermission("accounting:controlling:cost:center:export", "导出成本中心")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportCostCenterAsync([FromQuery] TaktCostCenterQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/conference-center
 // 文件名称：conference-participant.ts
-// 创建时间：2026-06-11
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -41,9 +41,7 @@ export function getConferenceParticipantList(queryDto: any): Promise<TaktPagedRe
   return request<TaktPagedResult<ConferenceParticipant>>({
     url: `${CONFERENCE_PARTICIPANT_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -113,7 +111,7 @@ export function deleteConferenceParticipantBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新会议参与人状态
- * @param {ConferenceParticipantStatus} dto 状态 DTO（TaktConferenceAttendanceStatus 枚举）
+ * @param {ConferenceParticipantStatus} dto 状态 DTO
  * @returns {Promise<ConferenceParticipant>} 会议参与人DTO
  */
 export function updateConferenceParticipantStatus(dto: ConferenceParticipantStatus): Promise<ConferenceParticipant> {
@@ -200,7 +198,7 @@ export function exportConferenceParticipant(
     url: `${CONFERENCE_PARTICIPANT_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

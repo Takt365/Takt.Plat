@@ -146,7 +146,7 @@ export interface RoleQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -220,7 +220,7 @@ export interface RoleCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -260,6 +260,25 @@ export interface RoleStatus {
    * 状态（1=启用，0=禁用）
    */
   roleStatus: number;
+
+}
+
+
+/**
+ * Role 是否内置更新 DTO
+ * 对应前端 RoleBuiltIn
+ * @description 对应后端 TaktRoleBuiltInDto
+ */
+export interface RoleBuiltIn {
+  /**
+   * RoleID
+   */
+  roleId: string;
+
+  /**
+   * 是否内置（字典 sys_yes_no_type；1=是，0=否）
+   */
+  isBuiltIn: number;
 
 }
 
@@ -332,7 +351,7 @@ export interface RoleTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -391,7 +410,7 @@ export interface RoleImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -450,7 +469,7 @@ export interface RoleExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

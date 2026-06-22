@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-attendance-leave">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -25,13 +25,11 @@
       delete-permission="humanresource:attendance:leave:delete"
       import-permission="humanresource:attendance:leave:import"
       export-permission="humanresource:attendance:leave:export"
-      start-flow-permission="humanresource:attendance:leave:update"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-start-flow="true"
       :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
@@ -43,13 +41,10 @@
       :update-loading="loading"
       :delete-disabled="deleteDisabled"
       :delete-loading="loading"
-      :start-flow-disabled="submitApprovalDisabled"
-      :start-flow-loading="submitApprovalLoading"
       :refresh-loading="loading"
       @create="handleCreate"
       @update="handleUpdate"
       @delete="handleDelete"
-      @start-flow="handleSubmitApproval"
       @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
@@ -59,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="approval"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'leaveId'"
       table-mode="single"
@@ -74,25 +69,25 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'leaveType'">
           <TaktDictTag
             :value="getLeaveField(record, 'leaveType')"
-            dict-type="sys_leave_category"
+            dict-type="sys_leave_type"
           />
         </template>
         <template v-else-if="column.key === 'leaveStatus'">
           <TaktDictTag
             :value="getLeaveField(record, 'leaveStatus')"
-            dict-type="hr_leave_status"
+            dict-type="sys_approval_status"
           />
         </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -112,6 +107,7 @@
       @cancel="handleFormCancel"
     >
       <LeaveForm
+        :key="formData?.leaveId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -133,6 +129,8 @@
         <a-input
           v-model:value="advancedQueryForm.employeeId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.employeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -142,6 +140,8 @@
         <a-input
           v-model:value="advancedQueryForm.employeeName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.employeename') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -151,6 +151,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.deptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -160,6 +162,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.deptname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -168,7 +172,7 @@
       <a-form-item :label="t('entity.leave.type')">
         <TaktSelect
           v-model:value="advancedQueryForm.leaveType"
-          dict-type="sys_leave_category"
+          dict-type="sys_leave_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.leave.type') })"
           allow-clear
         />
@@ -219,6 +223,8 @@
         <a-input
           v-model:value="advancedQueryForm.reason"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.reason') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
@@ -228,6 +234,8 @@
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -237,15 +245,8 @@
         <a-input
           v-model:value="advancedQueryForm.proofAttachmentsJson"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.proofattachmentsjson') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.leave.flowinstanceid')">
-        <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.flowinstanceid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -255,6 +256,8 @@
         <a-input
           v-model:value="advancedQueryForm.handlingBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.handlingby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -264,6 +267,8 @@
         <a-input
           v-model:value="advancedQueryForm.handlingAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.handlingatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -273,6 +278,8 @@
         <a-input
           v-model:value="advancedQueryForm.handlingAtEnd"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.handlingatend') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -282,6 +289,8 @@
         <a-input
           v-model:value="advancedQueryForm.handlingComment"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.handlingcomment') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
@@ -290,7 +299,7 @@
       <a-form-item :label="t('entity.leave.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.leaveStatus"
-          dict-type="hr_leave_status"
+          dict-type="sys_approval_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.leave.status') })"
           allow-clear
         />
@@ -310,6 +319,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.initiatorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -319,6 +330,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.initiatedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -338,6 +351,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.approvedby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -347,6 +362,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.approvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -358,6 +375,17 @@
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.leave.approvedatend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('flowInstanceId')">
+      <a-form-item :label="t('entity.leave.flowinstanceid')">
+        <a-input
+          v-model:value="advancedQueryForm.flowInstanceId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.flowinstanceid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -383,12 +411,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -397,8 +444,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -451,12 +500,14 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import LeaveForm from './components/leave-form.vue'
-import { getLeaveList, getLeaveById, createLeave, updateLeave, deleteLeaveById, deleteLeaveBatch, getLeaveTemplate, importLeave, exportLeave, submitLeaveForApproval } from '@/api/human-resource/attendance/leave'
-import type { Leave, LeaveQuery, LeaveCreate, LeaveUpdate } from '@/types/human-resource/attendance/leave'
+import { getLeaveList, getLeaveById, createLeave, updateLeave, deleteLeaveById, deleteLeaveBatch, getLeaveTemplate, importLeave, exportLeave, updateLeaveStatus } from '@/api/human-resource/attendance/leave'
+import type { Leave, LeaveQuery } from '@/types/human-resource/attendance/leave'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -474,9 +525,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Leave[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -491,13 +542,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Leave>>({})
+const formData = ref<Partial<Leave> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
-/** 提交审批 loading */
-const submitApprovalLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -513,7 +564,6 @@ const advancedQueryForm = ref({
   reason: '',
   relatedPlant: '',
   proofAttachmentsJson: '',
-  flowInstanceId: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
@@ -526,9 +576,10 @@ const advancedQueryForm = ref({
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -545,7 +596,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'reason', label: t('entity.leave.reason') },
   { key: 'relatedPlant', label: t('entity.leave.relatedplant') },
   { key: 'proofAttachmentsJson', label: t('entity.leave.proofattachmentsjson') },
-  { key: 'flowInstanceId', label: t('entity.leave.flowinstanceid') },
   { key: 'handlingBy', label: t('entity.leave.handlingby') },
   { key: 'handlingAtStart', label: t('entity.leave.handlingatstart') },
   { key: 'handlingAtEnd', label: t('entity.leave.handlingatend') },
@@ -558,9 +608,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'approvedBy', label: t('entity.leave.approvedby') },
   { key: 'approvedAtStart', label: t('entity.leave.approvedatstart') },
   { key: 'approvedAtEnd', label: t('entity.leave.approvedatend') },
+  { key: 'flowInstanceId', label: t('entity.leave.flowinstanceid') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -577,20 +628,75 @@ const entityIdName = 'leaveId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
-/** 提交审批：须单行且状态为草稿或已驳回 */
-const submitApprovalDisabled = computed(() => {
-  if (selectedRows.value.length !== 1) {
-    return true
+
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {LeaveQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<LeaveQuery>): LeaveQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: LeaveQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
   }
-  const status = Number(getLeaveField(selectedRows.value[0], 'leaveStatus'))
-  return status !== 0 && status !== 3
-})
-
-
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof LeaveQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('employeeId', form.employeeId)
+  assignTrimmed('employeeName', form.employeeName)
+  assignTrimmed('deptId', form.deptId)
+  assignTrimmed('deptName', form.deptName)
+  assignTrimmed('leaveType', form.leaveType)
+  assignTrimmed('startDateStart', form.startDateStart)
+  assignTrimmed('startDateEnd', form.startDateEnd)
+  assignTrimmed('endDateStart', form.endDateStart)
+  assignTrimmed('endDateEnd', form.endDateEnd)
+  assignTrimmed('reason', form.reason)
+  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('proofAttachmentsJson', form.proofAttachmentsJson)
+  assignTrimmed('handlingBy', form.handlingBy)
+  assignTrimmed('handlingAtStart', form.handlingAtStart)
+  assignTrimmed('handlingAtEnd', form.handlingAtEnd)
+  assignTrimmed('handlingComment', form.handlingComment)
+  if (form.leaveStatus !== undefined && form.leaveStatus !== null) {
+    query.leaveStatus = form.leaveStatus
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  assignTrimmed('initiatorId', form.initiatorId)
+  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
+  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
+  assignTrimmed('approvedBy', form.approvedBy)
+  assignTrimmed('approvedAtStart', form.approvedAtStart)
+  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('flowInstanceId', form.flowInstanceId)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -699,24 +805,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getLeaveField(record, 'proofAttachmentsJson') ?? ''
   },
   {
-    title: t('entity.leave.flowinstanceid'),
-    dataIndex: 'flowInstanceId',
-    key: 'flowInstanceId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getLeaveField(record, 'flowInstanceId') ?? ''
-  },
-  {
-    title: t('entity.leave.flowinstancename'),
-    dataIndex: 'flowInstanceName',
-    key: 'flowInstanceName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getLeaveField(record, 'flowInstanceName') ?? ''
-  },
-  {
     title: t('entity.leave.handlingby'),
     dataIndex: 'handlingBy',
     key: 'handlingBy',
@@ -782,6 +870,7 @@ const getLeaveId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getLeaveField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -824,16 +913,7 @@ const onClickRow = (record: Leave) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: LeaveQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getLeaveList(params)
+    const res = await getLeaveList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -851,7 +931,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -871,7 +951,6 @@ function handleReset() {
   reason: '',
   relatedPlant: '',
   proofAttachmentsJson: '',
-  flowInstanceId: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
@@ -884,20 +963,22 @@ function handleReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.leave._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: Leave) {
@@ -935,6 +1016,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.leave._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -944,6 +1027,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -975,16 +1060,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: LeaveQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportLeave(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportLeave(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1025,28 +1105,6 @@ async function handleDeleteOne(record: Leave) {
     }
   })
 }
-/** 提交请假审批（发起工作流） */
-async function handleSubmitApproval() {
-  if (submitApprovalDisabled.value || selectedRows.value.length !== 1) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.startflow'), entity: t('entity.leave._self') }))
-    return
-  }
-  const id = getLeaveId(selectedRows.value[0])
-  if (!id) {
-    return
-  }
-  submitApprovalLoading.value = true
-  try {
-    await submitLeaveForApproval(id)
-    message.success(t('common.feedback.updated', { target: t('entity.leave._self') }))
-    await loadData()
-  } catch (err: unknown) {
-    message.error(err instanceof Error ? err.message : t('common.feedback.failed'))
-  } finally {
-    submitApprovalLoading.value = false
-  }
-}
-
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
@@ -1074,7 +1132,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1092,7 +1150,6 @@ function handleAdvancedQueryReset() {
   reason: '',
   relatedPlant: '',
   proofAttachmentsJson: '',
-  flowInstanceId: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
@@ -1105,9 +1162,10 @@ function handleAdvancedQueryReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1137,23 +1195,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-attendance-leave {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

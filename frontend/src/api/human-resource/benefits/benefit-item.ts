@@ -42,9 +42,7 @@ export function getBenefitItemList(queryDto: any): Promise<TaktPagedResult<Benef
   return request<TaktPagedResult<BenefitItem>>({
     url: `${BENEFIT_ITEM_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportBenefitItem(
     url: `${BENEFIT_ITEM_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

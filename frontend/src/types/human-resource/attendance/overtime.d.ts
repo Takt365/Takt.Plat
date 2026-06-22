@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：overtime.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -84,16 +84,6 @@ export interface Overtime extends ApprovalDtoBase {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-   */
-  flowInstanceId?: string;
-
-  /**
-   * 流程实例 名称（填充字段）
-   */
-  flowInstanceName?: string;
-
-  /**
    * 经办人（关联 TaktEmployee）
    */
   handlingBy: string;
@@ -109,7 +99,7 @@ export interface Overtime extends ApprovalDtoBase {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+   * 加班状态（字典 sys_approval_status）
    */
   overtimeStatus: number;
 
@@ -209,11 +199,6 @@ export interface OvertimeQuery extends TaktPagedQuery {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-   */
-  flowInstanceId?: string;
-
-  /**
    * 经办人（关联 TaktEmployee）
    */
   handlingBy?: string;
@@ -234,7 +219,7 @@ export interface OvertimeQuery extends TaktPagedQuery {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+   * 加班状态（字典 sys_approval_status）
    */
   overtimeStatus?: number;
 
@@ -274,6 +259,11 @@ export interface OvertimeQuery extends TaktPagedQuery {
   approvedAtEnd?: string;
 
   /**
+   * 流程实例 ID
+   */
+  flowInstanceId?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -286,7 +276,7 @@ export interface OvertimeQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -373,11 +363,6 @@ export interface OvertimeCreate {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-   */
-  flowInstanceId?: string;
-
-  /**
    * 经办人（关联 TaktEmployee）
    */
   handlingBy: string;
@@ -393,7 +378,7 @@ export interface OvertimeCreate {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+   * 加班状态（字典 sys_approval_status）
    */
   overtimeStatus: number;
 
@@ -405,7 +390,7 @@ export interface OvertimeCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -442,7 +427,7 @@ export interface OvertimeStatus {
   overtimeId: string;
 
   /**
-   * 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+   * 加班状态（字典 sys_approval_status）
    */
   overtimeStatus: number;
 
@@ -496,11 +481,6 @@ export interface OvertimeTemplate {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-   */
-  flowInstanceId?: string;
-
-  /**
    * 经办人（关联 TaktEmployee）
    */
   handlingBy?: string;
@@ -511,14 +491,14 @@ export interface OvertimeTemplate {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+   * 加班状态（字典 sys_approval_status）
    */
   overtimeStatus?: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -580,11 +560,6 @@ export interface OvertimeImport {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-   */
-  flowInstanceId?: string;
-
-  /**
    * 经办人（关联 TaktEmployee）
    */
   handlingBy?: string;
@@ -595,14 +570,14 @@ export interface OvertimeImport {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+   * 加班状态（字典 sys_approval_status）
    */
   overtimeStatus?: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -679,11 +654,6 @@ export interface OvertimeExport {
   relatedPlant?: string;
 
   /**
-   * 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-   */
-  flowInstanceId?: string;
-
-  /**
    * 经办人（关联 TaktEmployee）
    */
   handlingBy: string;
@@ -699,14 +669,14 @@ export interface OvertimeExport {
   handlingComment?: string;
 
   /**
-   * 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+   * 加班状态（字典 sys_approval_status）
    */
   overtimeStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2024",
+    "checkJs": false
+  },
+  "include": ["*.cjs"]
+}

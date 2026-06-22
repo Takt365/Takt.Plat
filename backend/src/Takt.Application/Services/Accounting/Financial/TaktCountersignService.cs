@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktCountersignService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会签单应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Accounting.Financial;
 
@@ -93,8 +92,8 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
     {
         EnsureThreeLayerContext();
         var list = await _countersignRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.CountersignCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CountersignStatus == 1,
+            x => x.CountersignCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -304,7 +303,6 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
                 || (x.FinanceDept != null && x.FinanceDept.Contains(keywords))
                 || (x.BudgetReviewComment != null && x.BudgetReviewComment.Contains(keywords))
                 || (x.ExecutiveOffice != null && x.ExecutiveOffice.Contains(keywords))
-                || SqlFunc.ToString(x.FlowInstanceId).Contains(keywords)
                 || SqlFunc.ToString(x.ApplicantBy).Contains(keywords)
                 || (x.ApplicationDept != null && x.ApplicationDept.Contains(keywords))
                 || (x.CostBearerDept != null && x.CostBearerDept.Contains(keywords))
@@ -318,7 +316,7 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
                 || (x.TargetAndExpectedBenefit != null && x.TargetAndExpectedBenefit.Contains(keywords))
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || SqlFunc.ToString(x.CountersignStatus).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -347,11 +345,6 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
         if (!string.IsNullOrEmpty(queryDto?.ExecutiveOffice))
         {
             exp = exp.And(x => x.ExecutiveOffice != null && x.ExecutiveOffice.Contains(queryDto.ExecutiveOffice));
-        }
-
-        if (queryDto?.FlowInstanceId.HasValue == true)
-        {
-            exp = exp.And(x => x.FlowInstanceId == queryDto.FlowInstanceId);
         }
 
         if (queryDto?.ApplicantBy.HasValue == true)
@@ -419,9 +412,9 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
             exp = exp.And(x => x.CountersignStatus == queryDto.CountersignStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

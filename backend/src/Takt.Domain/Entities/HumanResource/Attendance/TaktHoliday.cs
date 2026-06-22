@@ -16,7 +16,7 @@ namespace Takt.Domain.Entities.HumanResource.Attendance;
 
 /// <summary>
 /// 假日实体
-/// 假日条目，用于考勤日历、排班与薪资计算；字典 hr_holiday_type、hr_holiday_is_working_day 与字段取值一致
+/// 假日条目，用于考勤日历、排班与薪资计算；字典 hr_holiday_category、hr_holiday_working_day_type 与字段取值一致
 /// 公司级实体：按 TenantCode + CompanyCode 隔离；同一公司内以开始日期+结束日期+假日类型唯一
 /// </summary>
 [SugarTable("takt_human_resource_attendance_holiday", "假日信息表")]
@@ -35,7 +35,7 @@ public class TaktHoliday : TaktCompanyEntityBase
     public string HolidayName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 假日类型（字典 hr_holiday_type）
+    /// 假日类型（字典 hr_holiday_category）
     /// </summary>
     [SugarColumn(ColumnName = "holiday_type", ColumnDescription = "假日类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int HolidayType { get; set; } = 0;
@@ -53,7 +53,7 @@ public class TaktHoliday : TaktCompanyEntityBase
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_is_working_day）
+    /// 是否工作日（字典 hr_holiday_working_day_type）
     /// </summary>
     [SugarColumn(ColumnName = "is_working_day", ColumnDescription = "是否工作日", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsWorkingDay { get; set; } = 0;

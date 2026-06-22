@@ -81,8 +81,7 @@ public class TaktConnectHub : Hub
                 _authService,
                 userId,
                 userName);
-            var connectIp = ResolveHubClientIp(httpContext);
-            var connectLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(connectIp, null);
+            var (connectIp, connectLocation) = TaktLocationHelper.ResolveClientIpAndLocationForLog(httpContext);
             var userAgent = httpContext?.Request.Headers["User-Agent"].ToString();
             var connectTime = DateTime.Now;
             var deviceType = ParseDeviceType(userAgent);
@@ -171,7 +170,7 @@ public class TaktConnectHub : Hub
                 userName);
 
             var httpContext = Context.GetHttpContext();
-            var disconnectIp = ResolveHubClientIp(httpContext);
+            var disconnectIp = TaktLocationHelper.ResolveClientIp(httpContext);
 
             var online = await _onlineRepository.FirstAsync(o => o.ConnectionId == connectionId);
             string? disconnectLocation = null;
@@ -183,9 +182,9 @@ public class TaktConnectHub : Hub
                     online.ConnectIp = disconnectIp;
                 }
 
-                online.ConnectLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(
+                online.ConnectLocation = TaktLocationHelper.ResolveIpAndLocationForLog(
                     online.ConnectIp,
-                    online.ConnectLocation);
+                    online.ConnectLocation).Location;
                 disconnectLocation = online.ConnectLocation;
                 online.DisconnectTime = disconnectTime;
                 online.ConnectionDuration = (int)(disconnectTime - online.ConnectTime).TotalSeconds;
@@ -275,34 +274,8 @@ public class TaktConnectHub : Hub
             ConnectTime = u.ConnectTime,
             LastActiveTime = u.LastActiveTime,
             ConnectIp = u.ConnectIp,
-            ConnectLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(u.ConnectIp, u.ConnectLocation),
+            ConnectLocation = TaktLocationHelper.ResolveIpAndLocationForLog(u.ConnectIp, u.ConnectLocation).Location,
         }).ToList();
-    }
-
-    /// <summary>
-    /// 从 Hub HTTP 上下文解析客户端 IP（优先 X-Forwarded-For）
-    /// </summary>
-    /// <param name="httpContext">HTTP 上下文</param>
-    /// <returns>客户端 IP</returns>
-    private static string? ResolveHubClientIp(HttpContext? httpContext)
-    {
-        if (httpContext == null)
-        {
-            return null;
-        }
-
-        var forwarded = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(forwarded))
-        {
-            var ip = forwarded.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-                .FirstOrDefault();
-            if (!string.IsNullOrWhiteSpace(ip))
-            {
-                return ip.Trim();
-            }
-        }
-
-        return httpContext.Connection.RemoteIpAddress?.ToString();
     }
 
     /// <summary>

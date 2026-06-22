@@ -40,9 +40,7 @@ export function getNewsCommentLikeList(queryDto: any): Promise<TaktPagedResult<N
   return request<TaktPagedResult<NewsCommentLike>>({
     url: `${NEWS_COMMENT_LIKE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportNewsCommentLike(
     url: `${NEWS_COMMENT_LIKE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

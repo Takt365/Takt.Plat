@@ -76,19 +76,31 @@
         <template v-if="column.key === 'ticketStatus'">
           <TaktDictTag
             :value="getTicketField(record, 'ticketStatus')"
-            dict-type="helpdesk_ticket_status"
+            dict-type="sys_ticket_status"
           />
         </template>
         <template v-else-if="column.key === 'priority'">
           <TaktDictTag
             :value="getTicketField(record, 'priority')"
-            dict-type="sys_priority"
+            dict-type="sys_priority_level_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'urgency'">
+          <TaktDictTag
+            :value="getTicketField(record, 'urgency')"
+            dict-type="sys_urgency_level_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'impact'">
+          <TaktDictTag
+            :value="getTicketField(record, 'impact')"
+            dict-type="sys_impact_level_category"
           />
         </template>
         <template v-else-if="column.key === 'ticketSource'">
           <TaktDictTag
             :value="getTicketField(record, 'ticketSource')"
-            dict-type="helpdesk_ticket_source"
+            dict-type="routine_ticket_source_type"
           />
         </template>
       </template>
@@ -188,7 +200,7 @@
       <a-form-item :label="t('entity.ticket.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.ticketStatus"
-          dict-type="helpdesk_ticket_status"
+          dict-type="sys_ticket_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.status') })"
           allow-clear
         />
@@ -198,7 +210,7 @@
       <a-form-item :label="t('entity.ticket.priority')">
         <TaktSelect
           v-model:value="advancedQueryForm.priority"
-          dict-type="sys_priority"
+          dict-type="sys_priority_level_category"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.priority') })"
           allow-clear
         />
@@ -217,7 +229,7 @@
       <a-form-item :label="t('entity.ticket.source')">
         <TaktSelect
           v-model:value="advancedQueryForm.ticketSource"
-          dict-type="helpdesk_ticket_source"
+          dict-type="routine_ticket_source_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.source') })"
           allow-clear
         />
@@ -427,11 +439,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -492,6 +504,7 @@
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * Takt工单实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/routine/help-desk/ticket
@@ -529,9 +542,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Ticket[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -589,7 +602,7 @@ const advancedQueryForm = ref({
   applicantBy: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -599,6 +612,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'content', label: t('entity.ticket.content') },
   { key: 'attachmentsJson', label: t('entity.ticket.attachmentsjson') },
   { key: 'ticketStatus', label: t('entity.ticket.status') },
+  { key: 'urgency', label: t('entity.ticket.urgency') },
+  { key: 'impact', label: t('entity.ticket.impact') },
   { key: 'priority', label: t('entity.ticket.priority') },
   { key: 'categoryCode', label: t('entity.ticket.categorycode') },
   { key: 'ticketSource', label: t('entity.ticket.source') },
@@ -624,7 +639,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'applicantBy', label: t('entity.ticket.applicantby') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -829,6 +844,22 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
+    title: t('entity.ticket.urgency'),
+    dataIndex: 'urgency',
+    key: 'urgency',
+    width: 100,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: t('entity.ticket.impact'),
+    dataIndex: 'impact',
+    key: 'impact',
+    width: 100,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
     title: t('entity.ticket.priority'),
     dataIndex: 'priority',
     key: 'priority',
@@ -1028,7 +1059,7 @@ const columns = computed<TableColumnsType>(() => [
     actions: [
       {
         key: 'workflow',
-        label: t('routine.help-desk.ticket.page.workflowTitle'),
+        label: t('routine.help-desk.ticket.page.workflow.title'),
         shape: 'plain',
         icon: RiCustomerService2Line,
         permission: 'routine:helpdesk:ticket:query',
@@ -1170,7 +1201,7 @@ function handleReset() {
   applicantBy: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
   currentPage.value = 1
@@ -1193,7 +1224,7 @@ function handleOpenWorkflow(record: Ticket): void {
 const toolbarLeftActions = computed<ToolBarAction[]>(() => [
   {
     key: 'workflow',
-    label: t('routine.help-desk.ticket.page.workflowTitle'),
+    label: t('routine.help-desk.ticket.page.workflow.title'),
     shape: 'plain',
     icon: RiCustomerService2Line,
     permission: 'routine:helpdesk:ticket:query',
@@ -1409,7 +1440,7 @@ function handleAdvancedQueryReset() {
   applicantBy: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentRecruitmentPlanI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentRecruitmentPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,101 +75,101 @@ public class TaktTalentRecruitmentPlanI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktTalentRecruitmentPlan 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.talentrecruitmentplan._self / entity.talentrecruitmentplan.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.talentrecruitmentplan._self / entity.talentrecruitmentplan.{{field}}；ResourceGroup=Talent；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetTalentRecruitmentPlanTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.talentrecruitmentplan._self
-            new TranslationSeedItem("entity.talentrecruitmentplan._self", "en-US", "Talent Recruitment Plan Information", "实体名称"),
+            new TranslationSeedItem("entity.talentrecruitmentplan._self", "en-US", "Talent Recruitment Plan Information_us", "实体名称"),
             // entity.talentrecruitmentplan._self
-            new TranslationSeedItem("entity.talentrecruitmentplan._self", "ja-JP", "招聘计划信息", "实体名称"),
+            new TranslationSeedItem("entity.talentrecruitmentplan._self", "ja-JP", "招聘计划信息_jp", "实体名称"),
             // entity.talentrecruitmentplan._self
             new TranslationSeedItem("entity.talentrecruitmentplan._self", "zh-CN", "招聘计划信息", "实体名称"),
             // entity.talentrecruitmentplan._self
-            new TranslationSeedItem("entity.talentrecruitmentplan._self", "zh-HK", "招聘计划信息", "实体名称"),
+            new TranslationSeedItem("entity.talentrecruitmentplan._self", "zh-HK", "招聘计划信息_hk", "实体名称"),
 
             // entity.talentrecruitmentplan.staffingrequirementid
-            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirementid", "en-US", "用人需求ID", "用人需求ID"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirementid", "en-US", "用人需求ID_us", "用人需求ID"),
             // entity.talentrecruitmentplan.staffingrequirementid
-            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirementid", "ja-JP", "用人需求ID", "用人需求ID"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirementid", "ja-JP", "用人需求ID_jp", "用人需求ID"),
             // entity.talentrecruitmentplan.staffingrequirementid
             new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirementid", "zh-CN", "用人需求ID", "用人需求ID"),
             // entity.talentrecruitmentplan.staffingrequirementid
-            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirementid", "zh-HK", "用人需求ID", "用人需求ID"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirementid", "zh-HK", "用人需求ID_hk", "用人需求ID"),
 
             // entity.talentrecruitmentplan.planno
-            new TranslationSeedItem("entity.talentrecruitmentplan.planno", "en-US", "计划单号", "计划单号（租户+公司内业务编号）"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planno", "en-US", "计划单号_us", "计划单号（租户+公司内业务编号）"),
             // entity.talentrecruitmentplan.planno
-            new TranslationSeedItem("entity.talentrecruitmentplan.planno", "ja-JP", "计划单号", "计划单号（租户+公司内业务编号）"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planno", "ja-JP", "计划单号_jp", "计划单号（租户+公司内业务编号）"),
             // entity.talentrecruitmentplan.planno
             new TranslationSeedItem("entity.talentrecruitmentplan.planno", "zh-CN", "计划单号", "计划单号（租户+公司内业务编号）"),
             // entity.talentrecruitmentplan.planno
-            new TranslationSeedItem("entity.talentrecruitmentplan.planno", "zh-HK", "计划单号", "计划单号（租户+公司内业务编号）"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planno", "zh-HK", "计划单号_hk", "计划单号（租户+公司内业务编号）"),
 
             // entity.talentrecruitmentplan.plandate
-            new TranslationSeedItem("entity.talentrecruitmentplan.plandate", "en-US", "计划制定日期", "计划制定日期"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.plandate", "en-US", "计划制定日期_us", "计划制定日期"),
             // entity.talentrecruitmentplan.plandate
-            new TranslationSeedItem("entity.talentrecruitmentplan.plandate", "ja-JP", "计划制定日期", "计划制定日期"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.plandate", "ja-JP", "计划制定日期_jp", "计划制定日期"),
             // entity.talentrecruitmentplan.plandate
             new TranslationSeedItem("entity.talentrecruitmentplan.plandate", "zh-CN", "计划制定日期", "计划制定日期"),
             // entity.talentrecruitmentplan.plandate
-            new TranslationSeedItem("entity.talentrecruitmentplan.plandate", "zh-HK", "计划制定日期", "计划制定日期"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.plandate", "zh-HK", "计划制定日期_hk", "计划制定日期"),
 
             // entity.talentrecruitmentplan.planstartdate
-            new TranslationSeedItem("entity.talentrecruitmentplan.planstartdate", "en-US", "计划招聘开始日期", "计划招聘开始日期"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planstartdate", "en-US", "计划招聘开始日期_us", "计划招聘开始日期"),
             // entity.talentrecruitmentplan.planstartdate
-            new TranslationSeedItem("entity.talentrecruitmentplan.planstartdate", "ja-JP", "计划招聘开始日期", "计划招聘开始日期"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planstartdate", "ja-JP", "计划招聘开始日期_jp", "计划招聘开始日期"),
             // entity.talentrecruitmentplan.planstartdate
             new TranslationSeedItem("entity.talentrecruitmentplan.planstartdate", "zh-CN", "计划招聘开始日期", "计划招聘开始日期"),
             // entity.talentrecruitmentplan.planstartdate
-            new TranslationSeedItem("entity.talentrecruitmentplan.planstartdate", "zh-HK", "计划招聘开始日期", "计划招聘开始日期"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planstartdate", "zh-HK", "计划招聘开始日期_hk", "计划招聘开始日期"),
 
             // entity.talentrecruitmentplan.planenddate
-            new TranslationSeedItem("entity.talentrecruitmentplan.planenddate", "en-US", "计划招聘结束日期", "计划招聘结束日期"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planenddate", "en-US", "计划招聘结束日期_us", "计划招聘结束日期"),
             // entity.talentrecruitmentplan.planenddate
-            new TranslationSeedItem("entity.talentrecruitmentplan.planenddate", "ja-JP", "计划招聘结束日期", "计划招聘结束日期"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planenddate", "ja-JP", "计划招聘结束日期_jp", "计划招聘结束日期"),
             // entity.talentrecruitmentplan.planenddate
             new TranslationSeedItem("entity.talentrecruitmentplan.planenddate", "zh-CN", "计划招聘结束日期", "计划招聘结束日期"),
             // entity.talentrecruitmentplan.planenddate
-            new TranslationSeedItem("entity.talentrecruitmentplan.planenddate", "zh-HK", "计划招聘结束日期", "计划招聘结束日期"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planenddate", "zh-HK", "计划招聘结束日期_hk", "计划招聘结束日期"),
 
             // entity.talentrecruitmentplan.planheadcount
-            new TranslationSeedItem("entity.talentrecruitmentplan.planheadcount", "en-US", "计划招聘人数", "计划招聘人数"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planheadcount", "en-US", "计划招聘人数_us", "计划招聘人数"),
             // entity.talentrecruitmentplan.planheadcount
-            new TranslationSeedItem("entity.talentrecruitmentplan.planheadcount", "ja-JP", "计划招聘人数", "计划招聘人数"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planheadcount", "ja-JP", "计划招聘人数_jp", "计划招聘人数"),
             // entity.talentrecruitmentplan.planheadcount
             new TranslationSeedItem("entity.talentrecruitmentplan.planheadcount", "zh-CN", "计划招聘人数", "计划招聘人数"),
             // entity.talentrecruitmentplan.planheadcount
-            new TranslationSeedItem("entity.talentrecruitmentplan.planheadcount", "zh-HK", "计划招聘人数", "计划招聘人数"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.planheadcount", "zh-HK", "计划招聘人数_hk", "计划招聘人数"),
 
             // entity.talentrecruitmentplan.reason
-            new TranslationSeedItem("entity.talentrecruitmentplan.reason", "en-US", "计划说明", "计划说明"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.reason", "en-US", "计划说明_us", "计划说明"),
             // entity.talentrecruitmentplan.reason
-            new TranslationSeedItem("entity.talentrecruitmentplan.reason", "ja-JP", "计划说明", "计划说明"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.reason", "ja-JP", "计划说明_jp", "计划说明"),
             // entity.talentrecruitmentplan.reason
             new TranslationSeedItem("entity.talentrecruitmentplan.reason", "zh-CN", "计划说明", "计划说明"),
             // entity.talentrecruitmentplan.reason
-            new TranslationSeedItem("entity.talentrecruitmentplan.reason", "zh-HK", "计划说明", "计划说明"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.reason", "zh-HK", "计划说明_hk", "计划说明"),
 
             // entity.talentrecruitmentplan.staffingrequirement
-            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirement", "en-US", "用人需求", "用人需求"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirement", "en-US", "用人需求_us", "用人需求"),
             // entity.talentrecruitmentplan.staffingrequirement
-            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirement", "ja-JP", "用人需求", "用人需求"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirement", "ja-JP", "用人需求_jp", "用人需求"),
             // entity.talentrecruitmentplan.staffingrequirement
             new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirement", "zh-CN", "用人需求", "用人需求"),
             // entity.talentrecruitmentplan.staffingrequirement
-            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirement", "zh-HK", "用人需求", "用人需求"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.staffingrequirement", "zh-HK", "用人需求_hk", "用人需求"),
 
             // entity.talentrecruitmentplan.talentjobpostings
-            new TranslationSeedItem("entity.talentrecruitmentplan.talentjobpostings", "en-US", "职位发布", "职位发布"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.talentjobpostings", "en-US", "职位发布_us", "职位发布"),
             // entity.talentrecruitmentplan.talentjobpostings
-            new TranslationSeedItem("entity.talentrecruitmentplan.talentjobpostings", "ja-JP", "职位发布", "职位发布"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.talentjobpostings", "ja-JP", "职位发布_jp", "职位发布"),
             // entity.talentrecruitmentplan.talentjobpostings
             new TranslationSeedItem("entity.talentrecruitmentplan.talentjobpostings", "zh-CN", "职位发布", "职位发布"),
             // entity.talentrecruitmentplan.talentjobpostings
-            new TranslationSeedItem("entity.talentrecruitmentplan.talentjobpostings", "zh-HK", "职位发布", "职位发布"),
+            new TranslationSeedItem("entity.talentrecruitmentplan.talentjobpostings", "zh-HK", "职位发布_hk", "职位发布"),
         };
     }
 
@@ -187,10 +187,10 @@ public class TaktTalentRecruitmentPlanI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Talent";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

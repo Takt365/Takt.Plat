@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
-// 文件名称：ITaktQualityOperationCalibrationService.cs
-// 创建时间：2026-06-09
+// 文件名称：ITaktQualityAssuranceCalibrationService.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务设备校正费用明细应用服务接口
 // 
@@ -19,34 +19,34 @@ namespace Takt.Application.Services.Logistics.Quality.Cost;
 /// <summary>
 /// 品质业务设备校正费用明细应用服务接口
 /// </summary>
-public interface ITaktQualityOperationCalibrationService
+public interface ITaktQualityAssuranceCalibrationService
 {
     /// <summary>
     /// 获取品质业务设备校正费用明细列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    Task<TaktPagedResult<TaktQualityOperationCalibrationDto>> GetQualityOperationCalibrationListAsync(TaktQualityOperationCalibrationQueryDto queryDto);
+    Task<TaktPagedResult<TaktQualityAssuranceCalibrationDto>> GetQualityAssuranceCalibrationListAsync(TaktQualityAssuranceCalibrationQueryDto queryDto);
 
     /// <summary>
     /// 根据ID获取品质业务设备校正费用明细
     /// </summary>
     /// <param name="id">品质业务设备校正费用明细ID</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationCalibrationDto?> GetQualityOperationCalibrationByIdAsync(long id);
+    Task<TaktQualityAssuranceCalibrationDto?> GetQualityAssuranceCalibrationByIdAsync(long id);
 
     /// <summary>
     /// 获取品质业务设备校正费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetQualityOperationCalibrationOptionsAsync();
+    Task<List<TaktSelectOption>> GetQualityAssuranceCalibrationOptionsAsync();
 
     /// <summary>
     /// 创建品质业务设备校正费用明细
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationCalibrationDto> CreateQualityOperationCalibrationAsync(TaktQualityOperationCalibrationCreateDto dto);
+    Task<TaktQualityAssuranceCalibrationDto> CreateQualityAssuranceCalibrationAsync(TaktQualityAssuranceCalibrationCreateDto dto);
 
     /// <summary>
     /// 更新品质业务设备校正费用明细
@@ -54,21 +54,21 @@ public interface ITaktQualityOperationCalibrationService
     /// <param name="id">品质业务设备校正费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationCalibrationDto> UpdateQualityOperationCalibrationAsync(long id, TaktQualityOperationCalibrationUpdateDto dto);
+    Task<TaktQualityAssuranceCalibrationDto> UpdateQualityAssuranceCalibrationAsync(long id, TaktQualityAssuranceCalibrationUpdateDto dto);
 
     /// <summary>
     /// 删除品质业务设备校正费用明细
     /// </summary>
     /// <param name="id">品质业务设备校正费用明细ID</param>
     /// <returns>任务</returns>
-    Task DeleteQualityOperationCalibrationByIdAsync(long id);
+    Task DeleteQualityAssuranceCalibrationByIdAsync(long id);
 
     /// <summary>
     /// 批量删除品质业务设备校正费用明细
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    Task DeleteQualityOperationCalibrationBatchAsync(IEnumerable<long> ids);
+    Task DeleteQualityAssuranceCalibrationBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
     /// 获取导入模板
@@ -76,7 +76,7 @@ public interface ITaktQualityOperationCalibrationService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] content)> GetQualityOperationCalibrationTemplateAsync(string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] content)> GetQualityAssuranceCalibrationTemplateAsync(string? sheetName = null, string? fileName = null);
 
     /// <summary>
     /// 导入品质业务设备校正费用明细
@@ -84,7 +84,7 @@ public interface ITaktQualityOperationCalibrationService
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    Task<(int success, int fail, List<string> errors)> ImportQualityOperationCalibrationAsync(Stream fileStream, string? sheetName = null);
+    Task<(int success, int fail, List<string> errors)> ImportQualityAssuranceCalibrationAsync(Stream fileStream, string? sheetName = null);
 
     /// <summary>
     /// 导出品质业务设备校正费用明细
@@ -93,6 +93,6 @@ public interface ITaktQualityOperationCalibrationService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] fileContent)> ExportQualityOperationCalibrationAsync(TaktQualityOperationCalibrationQueryDto? query = null, string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] fileContent)> ExportQualityAssuranceCalibrationAsync(TaktQualityAssuranceCalibrationQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
 }

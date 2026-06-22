@@ -1,8 +1,8 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/sales/sales-quotation/components -->
-<!-- 文件名称：sales-quotation-form.vue -->
-<!-- 功能描述：Takt销售报价实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 命名空间：@/views/logistics/sales/quotation/components -->
+<!-- 文件名称：quotation-form.vue -->
+<!-- 功能描述：Takt销售报价实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form quotation-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -17,9 +18,8 @@
   >
     <a-tabs
       v-model:active-key="activeTab"
-      class="sales-quotation-form-tabs"
+      class="quotation-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,100 +63,107 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesQuotation.plantcode')"
+                :label="t('entity.salesquotation.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.plantcode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.salesQuotationId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesQuotation.code')"
+                :label="t('entity.salesquotation.code')"
                 name="salesQuotationCode"
               >
                 <a-input
                   v-model:value="formState.salesQuotationCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.code') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.code') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.salesQuotationId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesQuotation.customercode')"
+                :label="t('entity.salesquotation.customercode')"
                 name="customerCode"
               >
                 <a-input
                   v-model:value="formState.customerCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.customercode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.customercode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.salesQuotationId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesQuotation.customername')"
+                :label="t('entity.salesquotation.customername')"
                 name="customerName"
               >
                 <a-input
                   v-model:value="formState.customerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.customername') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.customername') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesQuotation.quotationdate')"
+                :label="t('entity.salesquotation.quotationdate')"
                 name="quotationDate"
               >
                 <a-date-picker
                   v-model:value="formState.quotationDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesQuotation.quotationdate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesquotation.quotationdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesQuotation.validuntildate')"
+                :label="t('entity.salesquotation.validuntildate')"
                 name="validUntilDate"
               >
                 <a-date-picker
                   v-model:value="formState.validUntilDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesQuotation.validuntildate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesquotation.validuntildate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesQuotation.salesby')"
+                :label="t('entity.salesquotation.salesby')"
                 name="salesBy"
               >
                 <a-input
                   v-model:value="formState.salesBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.salesby') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.salesby') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -169,107 +178,102 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesQuotation.totalquantity')"
+                :label="t('entity.salesquotation.totalquantity')"
                 name="totalQuantity"
               >
                 <a-input-number
                   v-model:value="formState.totalQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.totalquantity') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.totalquantity') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesQuotation.totalamount')"
+                :label="t('entity.salesquotation.totalamount')"
                 name="totalAmount"
               >
                 <a-input-number
                   v-model:value="formState.totalAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.totalamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.totalamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesQuotation.discountamount')"
+                :label="t('entity.salesquotation.discountamount')"
                 name="discountAmount"
               >
                 <a-input-number
                   v-model:value="formState.discountAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.discountamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.discountamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesQuotation.taxamount')"
+                :label="t('entity.salesquotation.taxamount')"
                 name="taxAmount"
               >
                 <a-input-number
                   v-model:value="formState.taxAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.taxamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.taxamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesQuotation.actualamount')"
+                :label="t('entity.salesquotation.actualamount')"
                 name="actualAmount"
               >
                 <a-input-number
                   v-model:value="formState.actualAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.actualamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.actualamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesQuotation.quotationstatus')"
+                :label="t('entity.salesquotation.quotationstatus')"
                 name="quotationStatus"
               >
                 <a-input-number
                   v-model:value="formState.quotationStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.quotationstatus') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.quotationstatus') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesQuotation.salesordercode')"
+                :label="t('entity.salesquotation.salesordercode')"
                 name="salesOrderCode"
               >
                 <a-input
                   v-model:value="formState.salesOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.salesordercode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesquotation.salesordercode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.salesQuotationId"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('entity.salesquotation.extfield')"
+                name="ExtField"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
-                  allow-clear
+                <a-textarea
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.salesquotation.extfield') })"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -281,143 +285,41 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：salesQuotationItem -->
-      <a-tab-pane
-        key="child-items"
-        :tab="t('entity.salesQuotationItem._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddSalesQuotationItemRow">
-            {{ t('common.page.button.create') }}{{ t('entity.salesQuotationItem._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="salesQuotationItemFormColumns"
-          :data-source="childSalesQuotationItemRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotationItem.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'materialCode'">
-              <a-input
-                v-model:value="record.materialCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotationItem.materialcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'materialName'">
-              <a-input
-                v-model:value="record.materialName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotationItem.materialname') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'materialSpecification'">
-              <a-input
-                v-model:value="record.materialSpecification"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotationItem.materialspecification') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'salesUnit'">
-              <a-input
-                v-model:value="record.salesUnit"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotationItem.salesunit') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'quotationQuantity'">
-              <a-input-number
-                v-model:value="record.quotationQuantity"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotationItem.quotationquantity') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'unitPrice'">
-              <a-input-number
-                v-model:value="record.unitPrice"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotationItem.unitprice') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'discountRate'">
-              <a-input-number
-                v-model:value="record.discountRate"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesQuotationItem.discountrate') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveSalesQuotationItemRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 items -->
+    <TaktEditableTable
+      ref="salesQuotationItemTableRef"
+      v-model="childSalesQuotationItemRows"
+      :columns="salesQuotationItemFormColumns"
+      :title="t('entity.salesquotationitem._self')"
+      :add-button-entity="t('entity.salesquotationitem._self')"
+      id-field="salesQuotationItemId"
+      :default-row="createDefaultSalesQuotationItemRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
  * Takt销售报价实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
- * @module views/logistics/sales/sales-quotation/components
+ * @module views/logistics/sales/quotation/components
  */
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { SalesQuotationCreate, SalesQuotationItemCreate, SalesQuotationItem } from '@/types/logistics/sales/sales-quotation'
+import type { SalesQuotationCreate } from '@/types/logistics/sales/quotation'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -450,123 +352,99 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesQuotationCode","customerCode","customerName","quotationDate","validUntilDate","salesBy","totalQuantity","totalAmount","discountAmount","taxAmount","actualAmount","quotationStatus","salesOrderCode","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesQuotationCode","customerCode","customerName","quotationDate","validUntilDate","salesBy","totalQuantity","totalAmount","discountAmount","taxAmount","actualAmount","quotationStatus","salesOrderCode","ExtField","remark"]
 
-/** salesQuotationItem 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childSalesQuotationItemRows = ref<Record<string, unknown>[]>([])
+const salesQuotationItemTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 salesQuotationItem 表单列定义 */
-const salesQuotationItemFormColumns = computed(() => [
+/** 子表 salesQuotationItem 可编辑列 */
+const salesQuotationItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.salesQuotationItem.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.salesquotationitem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.salesQuotationItem.materialcode'),
-    dataIndex: 'materialCode',
     key: 'materialCode',
+    title: t('entity.salesquotationitem.materialcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.salesQuotationItem.materialname'),
-    dataIndex: 'materialName',
     key: 'materialName',
+    title: t('entity.salesquotationitem.materialname'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.salesQuotationItem.materialspecification'),
-    dataIndex: 'materialSpecification',
     key: 'materialSpecification',
-    width: 140,
+    title: t('entity.salesquotationitem.materialspecification'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.salesquotationitem.materialspecification') }),
   },
   {
-    title: t('entity.salesQuotationItem.salesunit'),
-    dataIndex: 'salesUnit',
     key: 'salesUnit',
+    title: t('entity.salesquotationitem.salesunit'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.salesQuotationItem.quotationquantity'),
-    dataIndex: 'quotationQuantity',
     key: 'quotationQuantity',
+    title: t('entity.salesquotationitem.quotationquantity'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.salesQuotationItem.unitprice'),
-    dataIndex: 'unitPrice',
     key: 'unitPrice',
+    title: t('entity.salesquotationitem.unitprice'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.salesQuotationItem.discountrate'),
-    dataIndex: 'discountRate',
     key: 'discountRate',
+    title: t('entity.salesquotationitem.discountrate'),
+    editor: 'inputNumber',
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SalesQuotationCreate & { salesQuotationId?: string }> | null | undefined) {
-  childSalesQuotationItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.salesQuotationItemId ?? `new-${index}`,
-  }))
+  childSalesQuotationItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 salesQuotationItem 行 */
-function handleAddSalesQuotationItemRow() {
-  childSalesQuotationItemRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      lineNumber: 0,
-      materialCode: '',
-      materialName: '',
-      materialSpecification: '',
-      salesUnit: '',
-      quotationQuantity: 0,
-      unitPrice: 0,
-      discountRate: 0,
-  })
-}
-
-/** 表单 Tab 内删除 salesQuotationItem 行 */
-function handleRemoveSalesQuotationItemRow(index: number) {
-  childSalesQuotationItemRows.value.splice(index, 1)
+function createDefaultSalesQuotationItemRow(): Record<string, unknown> {
+  return {
+    lineNumber: (childSalesQuotationItemRows.value.length + 1) * 10,
+    materialCode: '',
+    materialName: '',
+    materialSpecification: '',
+    salesUnit: '',
+    quotationQuantity: 0,
+    unitPrice: 0,
+    discountRate: 0,
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.salesQuotationId ?? ''
   return {
     ...formState,
-    items: childSalesQuotationItemRows.value.map(({ __rowKey, ...rest }) => rest),
+    items: salesQuotationItemTableRef.value?.getRows?.() ?? childSalesQuotationItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      salesQuotationId: masterId,
+    })),
   }
 }
 
@@ -578,7 +456,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -586,19 +464,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 salesQuotationId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.salesQuotationId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).items
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -617,92 +511,161 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   salesQuotationCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.code') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.salesquotation.code') }),
       trigger: 'blur'
     }
   ],
   customerCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.customercode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.salesquotation.customercode') }),
       trigger: 'blur'
     }
   ],
   customerName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesQuotation.customername') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.salesquotation.customername') }),
       trigger: 'blur'
     }
   ],
   quotationDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesQuotation.quotationdate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.salesquotation.quotationdate') }),
       trigger: 'change'
     }
   ],
-  totalQuantity: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesQuotation.totalquantity') }),
-      trigger: 'change'
-    }
-  ],
-  totalAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesQuotation.totalamount') }),
-      trigger: 'change'
-    }
-  ],
-  discountAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesQuotation.discountamount') }),
-      trigger: 'change'
-    }
-  ],
-  taxAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesQuotation.taxamount') }),
-      trigger: 'change'
-    }
-  ],
-  actualAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesQuotation.actualamount') }),
-      trigger: 'change'
-    }
-  ],
-  quotationStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesQuotation.quotationstatus') }),
-      trigger: 'change'
-    }
-  ],
+  totalQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.totalquantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.totalquantity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  totalAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.totalamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.totalamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  discountAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.discountamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.discountamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.taxamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.taxamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  actualAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.actualamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.actualamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  quotationStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.quotationstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesquotation.quotationstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await salesQuotationItemTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('totalQuantity' in payload) {
+    const rawtotalQuantity = payload.totalQuantity
+    payload.totalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
+  }
+  if ('totalAmount' in payload) {
+    const rawtotalAmount = payload.totalAmount
+    payload.totalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
+  }
+  if ('discountAmount' in payload) {
+    const rawdiscountAmount = payload.discountAmount
+    payload.discountAmount = typeof rawdiscountAmount === 'number' ? rawdiscountAmount : Number(rawdiscountAmount)
+  }
+  if ('taxAmount' in payload) {
+    const rawtaxAmount = payload.taxAmount
+    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  }
+  if ('actualAmount' in payload) {
+    const rawactualAmount = payload.actualAmount
+    payload.actualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
+  }
+  if ('quotationStatus' in payload) {
+    const rawquotationStatus = payload.quotationStatus
+    payload.quotationStatus = typeof rawquotationStatus === 'number' ? rawquotationStatus : Number(rawquotationStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.salesQuotationId)
   childSalesQuotationItemRows.value = []
+  salesQuotationItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

@@ -98,7 +98,7 @@ public class TaktConfigurableJoinService : TaktServiceBase, ITaktConfigurableJoi
         EnsureThreeLayerContext();
         var list = await _configurableJoinRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.LeftColumnName,
+            x => x.LeftColumnName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -296,7 +296,7 @@ public class TaktConfigurableJoinService : TaktServiceBase, ITaktConfigurableJoi
                 || (x.RightSourceAlias != null && x.RightSourceAlias.Contains(keywords))
                 || (x.RightColumnName != null && x.RightColumnName.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -337,9 +337,9 @@ public class TaktConfigurableJoinService : TaktServiceBase, ITaktConfigurableJoi
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

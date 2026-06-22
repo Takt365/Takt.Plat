@@ -62,19 +62,19 @@ public class TaktSetting : TaktCompanyEntityBase
     public int ValueType { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（字典 sys_yes_no；0=否 1=是）
+    /// 是否内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 是否只读（字典 sys_yes_no；0=否 1=是）
+    /// 是否只读（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_readonly", ColumnDescription = "是否只读", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsReadonly { get; set; } = 0;
 
     /// <summary>
-    /// 是否加密存储（字典 sys_yes_no；0=否 1=是）
+    /// 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_encrypted", ColumnDescription = "是否加密存储", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsEncrypted { get; set; } = 0;

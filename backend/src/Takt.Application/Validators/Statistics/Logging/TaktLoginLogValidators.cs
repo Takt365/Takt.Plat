@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Statistics.Logging
 // 文件名称：TaktLoginLogValidators.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：LoginLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktLoginLog 生成，请按需审阅）
 // 
@@ -55,7 +55,7 @@ public class TaktLoginLogCreateValidator : AbstractValidator<TaktLoginLogCreateD
             .MaximumLength(50).WithMessage("登录IP地址长度不能超过50个字符");
         RuleFor(x => x.LoginLocation)
             .MaximumLength(200).WithMessage("登录地点长度不能超过200个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");

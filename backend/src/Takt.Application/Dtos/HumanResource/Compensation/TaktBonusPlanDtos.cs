@@ -51,7 +51,7 @@ public class TaktBonusPlanDto : TaktCompanyDtoBase
     public int BonusType { get; set; } = 0;
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method）
+    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
     /// </summary>
     public int CalcMethod { get; set; } = 0;
 
@@ -77,7 +77,7 @@ public class TaktBonusPlanDto : TaktCompanyDtoBase
     public DateTime EffectiveDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
@@ -129,7 +129,7 @@ public class TaktBonusPlanQueryDto : TaktPagedQuery
     public int? BonusType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method）
+    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -155,7 +155,7 @@ public class TaktBonusPlanQueryDto : TaktPagedQuery
     public DateTime? EffectiveDateEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? PlanStatus { get; set; }
 
@@ -182,7 +182,7 @@ public class TaktBonusPlanQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -232,7 +232,7 @@ public class TaktBonusPlanCreateDto
     public int BonusType { get; set; } = 0;
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method）
+    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
     /// </summary>
     public int CalcMethod { get; set; } = 0;
 
@@ -253,7 +253,7 @@ public class TaktBonusPlanCreateDto
     public DateTime EffectiveDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
@@ -270,7 +270,7 @@ public class TaktBonusPlanCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -317,9 +317,9 @@ public class TaktBonusPlanStatusDto
     public long BonusPlanId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
     public int PlanStatus { get; set; } = 0;
 }
 
@@ -358,7 +358,7 @@ public class TaktBonusPlanTemplateDto
     public int? BonusType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method）
+    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -369,7 +369,7 @@ public class TaktBonusPlanTemplateDto
     public long? SalaryFormulaId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? PlanStatus { get; set; }
 
@@ -386,7 +386,7 @@ public class TaktBonusPlanTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -431,7 +431,7 @@ public class TaktBonusPlanImportDto
     public int? BonusType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method）
+    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -442,7 +442,7 @@ public class TaktBonusPlanImportDto
     public long? SalaryFormulaId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? PlanStatus { get; set; }
 
@@ -459,7 +459,7 @@ public class TaktBonusPlanImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -505,7 +505,7 @@ public class TaktBonusPlanExportDto
     public int BonusType { get; set; } = 0;
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method）
+    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
     /// </summary>
     public int CalcMethod { get; set; } = 0;
 
@@ -526,7 +526,7 @@ public class TaktBonusPlanExportDto
     public DateTime EffectiveDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
@@ -543,7 +543,7 @@ public class TaktBonusPlanExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

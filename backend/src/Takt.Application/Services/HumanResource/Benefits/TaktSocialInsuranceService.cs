@@ -93,7 +93,7 @@ public class TaktSocialInsuranceService : TaktServiceBase, ITaktSocialInsuranceS
         EnsureThreeLayerContext();
         var list = await _socialInsuranceRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PayStatus == 1,
-            x => x.EmployeeName,
+            x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -285,7 +285,7 @@ public class TaktSocialInsuranceService : TaktServiceBase, ITaktSocialInsuranceS
                 || SqlFunc.ToString(x.TotalAmount).Contains(keywords)
                 || SqlFunc.ToString(x.PayStatus).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -366,9 +366,9 @@ public class TaktSocialInsuranceService : TaktServiceBase, ITaktSocialInsuranceS
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

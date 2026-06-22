@@ -74,7 +74,7 @@
         <template v-if="column.key === 'selfServiceStatus'">
           <TaktDictTag
             :value="getSelfServiceField(record, 'selfServiceStatus')"
-            dict-type="sys_normal_disable"
+            dict-type="sys_normal_disable_status"
           />
         </template>
       </template>
@@ -167,7 +167,7 @@
       <a-form-item :label="t('entity.selfService.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.selfServiceStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.selfService.status') })"
           allow-clear
         />
@@ -204,11 +204,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -263,6 +263,7 @@
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 服务台自助服务项实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/help-desk/self-service
@@ -295,9 +296,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<SelfService[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -329,7 +330,7 @@ const advancedQueryForm = ref({
   sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -343,7 +344,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'sortOrder', label: t('entity.selfService.sortorder') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -554,7 +555,7 @@ function handleReset() {
   sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
   currentPage.value = 1
@@ -735,7 +736,7 @@ function handleAdvancedQueryReset() {
   sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }

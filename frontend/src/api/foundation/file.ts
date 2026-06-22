@@ -2,10 +2,10 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/foundation
 // 文件名称：file.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-13
 // 创建人：Takt365(Auto Generated)
-// 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
-// 
+// 功能描述：Foundation 文件模块 API（CRUD + 上传/分片；路由常量由 generate-from-backend 生成，上传段见 api-fragments）
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -17,20 +17,23 @@ import type {
 } from '@/types/common';
 import type {
   File as TaktFile,
+  FileCreate,
+  FilePublic,
+  FileStatus,
+  FileUpdate
+} from '@/types/foundation/file';
+import type {
+  FileChunkCancel,
   FileChunkCheck,
   FileChunkCheckResult,
-  FileChunkCancel,
   FileChunkList,
   FileChunkListResult,
   FileChunkMerge,
   FileChunkUpload,
-  FileCreate,
-  FilePublicAccess,
-  FileStatus,
-  FileUpdate,
   FileUploadMeta,
+  FileUploadPolicy,
   FileUploadResult,
-} from '@/types/foundation/file';
+} from '@/types/foundation/file-upload';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -51,9 +54,7 @@ export function getFileList(queryDto: any): Promise<TaktPagedResult<TaktFile>> {
   return request<TaktPagedResult<TaktFile>>({
     url: `${FILE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -66,6 +67,19 @@ export function getFileById(id: string): Promise<TaktFile> {
   return request<TaktFile>({
     url: `${FILE_API_BASE}/${id}`,
     method: 'get',
+  });
+}
+
+/**
+ * 按文件ID下载物理文件
+ * @param {string} id 文件ID
+ * @returns {Promise<Blob>} 文件二进制
+ */
+export function downloadFileById(id: string): Promise<Blob> {
+  return request<Blob>({
+    url: `${FILE_API_BASE}/${id}/download`,
+    method: 'get',
+    responseType: 'blob',
   });
 }
 
@@ -123,7 +137,7 @@ export function deleteFileBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新文件状态
- * @param {FileStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {FileStatus} dto 状态 DTO
  * @returns {Promise<TaktFile>} 文件DTO
  */
 export function updateFileStatus(dto: FileStatus): Promise<TaktFile> {
@@ -131,6 +145,161 @@ export function updateFileStatus(dto: FileStatus): Promise<TaktFile> {
     url: `${FILE_API_BASE}/status`,
     method: 'put',
     data: dto,
+  });
+}
+
+/**
+ * 更新文件公开
+ * @param {FilePublic} dto 公开范围 DTO
+ * @returns {Promise<TaktFile>} 文件DTO
+ */
+export function updateFilePublic(dto: FilePublic): Promise<TaktFile> {
+  return request<TaktFile>({
+    url: `${FILE_API_BASE}/public`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+// ========================================
+// 上传与分片
+// ========================================
+
+/**
+ * 将上传元数据写入 FormData（camelCase 字段名）
+ * @param formData 表单数据
+ * @param meta 业务元数据
+ */
+function appendFileUploadMeta(formData: FormData, meta?: FileUploadMeta): void {
+  if (!meta) {
+    return;
+  }
+  const entries: Array<[string, string | number | undefined]> = [
+    ['fileDescription', meta.fileDescription],
+    ['fileTags', meta.fileTags],
+    ['isPublic', meta.isPublic],
+    ['fileStatus', meta.fileStatus],
+    ['fileUploadType', meta.fileUploadType],
+    ['targetFileName', meta.targetFileName],
+    ['categoryPath', meta.categoryPath],
+    ['storageType', meta.storageType],
+    ['storageNaming', meta.storageNaming],
+    ['storageConfig', meta.storageConfig],
+  ];
+  for (const [key, value] of entries) {
+    if (value !== undefined && value !== null && value !== '') {
+      formData.append(key, String(value));
+    }
+  }
+}
+
+/**
+ * 获取上传策略（可选 totalSizeBytes 计算分片计划）
+ * @param totalSizeBytes 文件总大小（字节）
+ * @returns 上传策略
+ */
+export function getFileUploadPolicy(totalSizeBytes?: number): Promise<FileUploadPolicy> {
+  return request<FileUploadPolicy>({
+    url: `${FILE_API_BASE}/upload-policy`,
+    method: 'get',
+    params: totalSizeBytes != null && totalSizeBytes > 0 ? { totalSizeBytes } : undefined,
+  });
+}
+
+/**
+ * 整文件上传
+ * @param file 浏览器 File 对象
+ * @param meta 业务元数据
+ * @returns 上传结果
+ */
+export function uploadFile(file: globalThis.File, meta?: FileUploadMeta): Promise<FileUploadResult> {
+  const formData = new FormData();
+  formData.append('file', file);
+  appendFileUploadMeta(formData, meta);
+  return request<FileUploadResult>({
+    url: `${FILE_API_BASE}/upload`,
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
+
+/**
+ * 检查分片是否已上传
+ * @param dto 检查参数
+ * @returns 是否存在
+ */
+export function checkFileChunk(dto: FileChunkCheck): Promise<FileChunkCheckResult> {
+  return request<FileChunkCheckResult>({
+    url: `${FILE_API_BASE}/chunks/check`,
+    method: 'post',
+    data: dto,
+  });
+}
+
+/**
+ * 列出已上传分片序号
+ * @param dto 查询参数
+ * @returns 已上传分片序号列表
+ */
+export function listFileChunks(dto: FileChunkList): Promise<FileChunkListResult> {
+  return request<FileChunkListResult>({
+    url: `${FILE_API_BASE}/chunks/list`,
+    method: 'post',
+    data: dto,
+  });
+}
+
+/**
+ * 上传单个分片
+ * @param chunkFile 分片文件
+ * @param dto 分片元数据
+ * @returns 操作结果
+ */
+export function uploadFileChunk(chunkFile: globalThis.File, dto: FileChunkUpload): Promise<void> {
+  const formData = new FormData();
+  formData.append('file', chunkFile);
+  formData.append('identifier', dto.identifier);
+  formData.append('chunkNumber', String(dto.chunkNumber));
+  formData.append('totalChunks', String(dto.totalChunks));
+  formData.append('chunkSize', String(dto.chunkSize));
+  formData.append('totalSize', String(dto.totalSize));
+  formData.append('fileName', dto.fileName);
+  return request({
+    url: `${FILE_API_BASE}/chunks`,
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
+
+/**
+ * 合并分片并完成上传
+ * @param dto 合并参数
+ * @returns 上传结果
+ */
+export function mergeFileChunks(dto: FileChunkMerge): Promise<FileUploadResult> {
+  return request<FileUploadResult>({
+    url: `${FILE_API_BASE}/chunks/merge`,
+    method: 'post',
+    data: dto,
+  });
+}
+
+/**
+ * 取消分片上传并清理临时分片
+ * @param dto 取消参数
+ * @returns 操作结果
+ */
+export function cancelFileChunks(dto: FileChunkCancel): Promise<void> {
+  return request({
+    url: `${FILE_API_BASE}/chunks/cancel`,
+    method: 'delete',
+    params: { identifier: dto.identifier },
   });
 }
 
@@ -150,140 +319,48 @@ export function getFileOptions(): Promise<TaktSelectOption[]> {
 }
 
 // ========================================
-// 上传 / 下载
+// 导入导出
 // ========================================
 
 /**
- * 整文件上传
- * @param {globalThis.File} file 文件
- * @param {FileUploadMeta} [meta] 可选元数据（描述、标签、公开范围、上传类型、目标文件名）
- * @returns {Promise<FileUploadResult>} 上传结果
+ * 获取导入模板
+ * @param {string} sheetName sheetName
+ * @param {string} templateName templateName
+ * @returns {Promise<Blob>} Excel文件
  */
-export function uploadFile(
-  file: globalThis.File,
-  meta?: FileUploadMeta
-): Promise<FileUploadResult> {
-  const formData = new FormData();
-  formData.append('file', file);
-  if (meta?.fileDescription != null) formData.append('fileDescription', meta.fileDescription);
-  if (meta?.fileTags != null) formData.append('fileTags', meta.fileTags);
-  if (meta?.isPublic != null) formData.append('isPublic', String(meta.isPublic));
-  if (meta?.fileUploadType != null) formData.append('fileUploadType', String(meta.fileUploadType));
-  if (meta?.targetFileName != null) formData.append('targetFileName', meta.targetFileName);
-  return request<FileUploadResult>({
-    url: `${FILE_API_BASE}/upload`,
-    method: 'post',
-    data: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-}
-
-/**
- * 检查分片是否已上传
- * @param {FileChunkCheck} dto 检查参数
- * @returns {Promise<FileChunkCheckResult>} 是否存在
- */
-export function checkFileChunk(dto: FileChunkCheck): Promise<FileChunkCheckResult> {
-  return request<FileChunkCheckResult>({
-    url: `${FILE_API_BASE}/check`,
-    method: 'post',
-    data: dto,
-  });
-}
-
-/**
- * 列出已上传分片（断点续传）
- * @param {FileChunkList} dto 查询参数
- * @returns {Promise<FileChunkListResult>} 已上传分片序号
- */
-export function listFileChunks(dto: FileChunkList): Promise<FileChunkListResult> {
-  return request<FileChunkListResult>({
-    url: `${FILE_API_BASE}/chunk-list`,
-    method: 'post',
-    data: dto,
-  });
-}
-
-/**
- * 取消分片上传并清理临时文件
- * @param {FileChunkCancel} dto 取消参数
- * @returns {Promise<void>} 操作结果
- */
-export function cancelFileChunks(dto: FileChunkCancel): Promise<void> {
-  return request({
-    url: `${FILE_API_BASE}/chunk`,
-    method: 'delete',
-    data: dto,
-  });
-}
-
-/**
- * 上传分片
- * @param {globalThis.File} file 分片数据
- * @param {FileChunkUpload} dto 分片元数据
- * @returns {Promise<void>} 操作结果
- */
-export function uploadFileChunk(file: globalThis.File, dto: FileChunkUpload): Promise<void> {
-  const formData = new FormData();
-  formData.append('file', file);
-  Object.entries(dto).forEach(([key, value]) => {
-    if (value != null) formData.append(key, String(value));
-  });
-  return request({
-    url: `${FILE_API_BASE}/chunk`,
-    method: 'post',
-    data: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-}
-
-/**
- * 合并分片
- * @param {FileChunkMerge} dto 合并参数
- * @returns {Promise<FileUploadResult>} 上传结果
- */
-export function mergeFileChunks(dto: FileChunkMerge): Promise<FileUploadResult> {
-  return request<FileUploadResult>({
-    url: `${FILE_API_BASE}/merge`,
-    method: 'post',
-    data: dto,
-  });
-}
-
-/**
- * 下载文件
- * @param {string} id 文件 ID
- * @returns {Promise<Blob>} 文件流
- */
-export function downloadFile(id: string): Promise<Blob> {
+export function getFileTemplate(sheetName?: string, templateName?: string): Promise<Blob> {
   return request<Blob>({
-    url: `${FILE_API_BASE}/${id}/download`,
+    url: `${FILE_API_BASE}/template`,
     method: 'get',
+    params: {
+      sheetName,
+      templateName
+    },
     responseType: 'blob',
   });
 }
 
 /**
- * 更新文件公开范围
- * @param {string} id 文件 ID
- * @param {FilePublicAccess} dto 公开范围
- * @returns {Promise<TaktFile>} 文件 DTO
+ * 导入文件
+ * @param {globalThis.File} file Excel文件
+ * @param {string} sheetName sheetName
+ * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function changeFilePublicAccess(id: string, dto: FilePublicAccess): Promise<TaktFile> {
-  return request<TaktFile>({
-    url: `${FILE_API_BASE}/${id}/is-public`,
-    method: 'put',
-    data: dto,
+export function importFile(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+  const formData = new FormData();
+  formData.append('file', file);
+  return request({
+    url: `${FILE_API_BASE}/import`,
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    params: {
+      sheetName
+    },
   });
 }
-
-// ========================================
-// 导出
-// ========================================
 
 /**
  * 导出文件
@@ -301,7 +378,7 @@ export function exportFile(
     url: `${FILE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

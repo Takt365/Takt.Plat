@@ -16,7 +16,7 @@
 import { createI18n } from 'vue-i18n';
 import { TAKT_SUPPORTED_LOCALES } from '@/utils/common';
 import { readStoredLocale } from '@/utils/takt-locale-sync';
-import { buildNestedLocaleMessages } from '@/utils/takt-i18n-message';
+import { buildNestedLocaleMessages, resolveLocaleMessageFromTree } from '@/utils/takt-i18n-message';
 import {
   deepMergeLocaleMessages,
   nestLocalePayloadUnderNamespace,
@@ -101,7 +101,17 @@ const i18n = createI18n({
   fallbackLocale: false,
   fallbackWarn: false,
   missingWarn: false,
-  missing: (_locale, key) => key,
+  missing: (locale, key) => {
+    const messages = (i18n.global as { messages: { value: Record<string, TaktLocaleMessageTree> } }).messages.value;
+    const tree = messages[locale];
+    if (tree) {
+      const text = resolveLocaleMessageFromTree(tree, key);
+      if (text !== undefined) {
+        return text;
+      }
+    }
+    return key;
+  },
   // glob 合并结果为运行时对象，与 vue-i18n 泛型 LocaleMessage 对齐
   messages: staticMessages as never,
 });

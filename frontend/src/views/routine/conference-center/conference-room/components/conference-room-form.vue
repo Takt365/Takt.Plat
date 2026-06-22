@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,98 +63,105 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.conferenceRoom.roomcode')"
+                :label="t('entity.conferenceroom.roomcode')"
                 name="roomCode"
               >
                 <a-input
                   v-model:value="formState.roomCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.roomcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceroom.roomcode') })"
+                  show-count
+                  :maxlength="40"
                   allow-clear
+                  :disabled="!!formData?.conferenceRoomId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.conferenceRoom.roomname')"
+                :label="t('entity.conferenceroom.roomname')"
                 name="roomName"
               >
                 <a-input
                   v-model:value="formState.roomName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.roomname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceroom.roomname') })"
+                  show-count
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.conferenceRoom.building')"
+                :label="t('entity.conferenceroom.building')"
                 name="building"
               >
                 <a-input
                   v-model:value="formState.building"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.building') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceroom.building') })"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.conferenceRoom.floor')"
+                :label="t('entity.conferenceroom.floor')"
                 name="floor"
               >
                 <a-input
                   v-model:value="formState.floor"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.floor') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceroom.floor') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.conferenceRoom.locationdetail')"
+                :label="t('entity.conferenceroom.locationdetail')"
                 name="locationDetail"
               >
                 <a-input
                   v-model:value="formState.locationDetail"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.locationdetail') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceroom.locationdetail') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.conferenceRoom.capacity')"
+                :label="t('entity.conferenceroom.capacity')"
                 name="capacity"
               >
                 <a-input-number
                   v-model:value="formState.capacity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.capacity') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceroom.capacity') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.conferenceRoom.facilities')"
+                :label="t('entity.conferenceroom.facilities')"
                 name="facilities"
               >
                 <a-input
                   v-model:value="formState.facilities"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.facilities') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceroom.facilities') })"
+                  show-count
+                  :maxlength="500"
                   allow-clear
                 />
               </a-form-item>
@@ -166,41 +176,40 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.conferenceRoom.roomstatus')"
+                :label="t('entity.conferenceroom.roomstatus')"
                 name="roomStatus"
               >
                 <a-input-number
                   v-model:value="formState.roomStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.roomstatus') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceroom.roomstatus') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.conferenceRoom.sortorder')"
-                name="sortOrder"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.sortorder') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
-              >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -213,15 +222,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -235,6 +245,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { ConferenceRoomCreate } from '@/types/routine/conference-center/conference-room'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -267,7 +278,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","roomCode","roomName","building","floor","locationDetail","capacity","facilities","roomStatus","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","roomCode","roomName","building","floor","locationDetail","capacity","facilities","roomStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -278,7 +289,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -286,18 +297,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 conferenceRoomId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.conferenceRoomId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -316,38 +343,43 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   roomCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.roomcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.conferenceroom.roomcode') }),
       trigger: 'blur'
     }
   ],
   roomName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.conferenceRoom.roomname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.conferenceroom.roomname') }),
       trigger: 'blur'
     }
   ],
-  capacity: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.conferenceRoom.capacity') }),
-      trigger: 'change'
-    }
-  ],
-  roomStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.conferenceRoom.roomstatus') }),
-      trigger: 'change'
-    }
-  ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.conferenceRoom.sortorder') }),
-      trigger: 'change'
-    }
-  ],
+  capacity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conferenceroom.capacity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conferenceroom.capacity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  roomStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conferenceroom.roomstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conferenceroom.roomstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -358,15 +390,30 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('capacity' in payload) {
+    const rawcapacity = payload.capacity
+    payload.capacity = typeof rawcapacity === 'number' ? rawcapacity : Number(rawcapacity)
+  }
+  if ('roomStatus' in payload) {
+    const rawroomStatus = payload.roomStatus
+    payload.roomStatus = typeof rawroomStatus === 'number' ? rawroomStatus : Number(rawroomStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.conferenceRoomId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

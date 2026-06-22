@@ -42,9 +42,7 @@ export function getDictDataList(queryDto: any): Promise<TaktPagedResult<DictData
   return request<TaktPagedResult<DictData>>({
     url: `${DICT_DATA_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -201,7 +199,7 @@ export function exportDictData(
     url: `${DICT_DATA_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

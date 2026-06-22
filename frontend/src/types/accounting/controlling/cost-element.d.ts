@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/controlling
 // 文件名称：cost-element.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -37,16 +37,6 @@ export interface CostElement extends CompanyDtoBase {
    * 成本要素名称
    */
   costElementName: string;
-
-  /**
-   * 成本要素简称
-   */
-  shortName?: string;
-
-  /**
-   * 成本要素描述
-   */
-  costElementDesc?: string;
 
   /**
    * 成本要素类型（0=初级，1=次级）
@@ -87,6 +77,11 @@ export interface CostElement extends CompanyDtoBase {
    * 排序号
    */
   sortOrder: number;
+
+  /**
+   * 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId） （子表：TaktCostElementChangeLog）
+   */
+  changeLogs?: CostElementChangeLog[];
 
 }
 
@@ -132,16 +127,6 @@ export interface CostElementQuery extends TaktPagedQuery {
    * 成本要素名称
    */
   costElementName?: string;
-
-  /**
-   * 成本要素简称
-   */
-  shortName?: string;
-
-  /**
-   * 成本要素描述
-   */
-  costElementDesc?: string;
 
   /**
    * 成本要素类型（0=初级，1=次级）
@@ -206,7 +191,7 @@ export interface CostElementQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -248,16 +233,6 @@ export interface CostElementCreate {
   costElementName: string;
 
   /**
-   * 成本要素简称
-   */
-  shortName?: string;
-
-  /**
-   * 成本要素描述
-   */
-  costElementDesc?: string;
-
-  /**
    * 成本要素类型（0=初级，1=次级）
    */
   costElementType: number;
@@ -293,14 +268,14 @@ export interface CostElementCreate {
   validTo: string;
 
   /**
-   * 排序号
+   * 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
    */
-  sortOrder: number;
+  changeLogs?: CostElementChangeLogCreate[];
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -390,16 +365,6 @@ export interface CostElementTemplate {
   costElementName?: string;
 
   /**
-   * 成本要素简称
-   */
-  shortName?: string;
-
-  /**
-   * 成本要素描述
-   */
-  costElementDesc?: string;
-
-  /**
    * 成本要素类型（0=初级，1=次级）
    */
   costElementType?: number;
@@ -425,14 +390,9 @@ export interface CostElementTemplate {
   costElementStatus?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -474,16 +434,6 @@ export interface CostElementImport {
   costElementName?: string;
 
   /**
-   * 成本要素简称
-   */
-  shortName?: string;
-
-  /**
-   * 成本要素描述
-   */
-  costElementDesc?: string;
-
-  /**
    * 成本要素类型（0=初级，1=次级）
    */
   costElementType?: number;
@@ -509,14 +459,9 @@ export interface CostElementImport {
   costElementStatus?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -551,16 +496,6 @@ export interface CostElementExport {
    * 成本要素名称
    */
   costElementName: string;
-
-  /**
-   * 成本要素简称
-   */
-  shortName?: string;
-
-  /**
-   * 成本要素描述
-   */
-  costElementDesc?: string;
 
   /**
    * 成本要素类型（0=初级，1=次级）
@@ -605,7 +540,7 @@ export interface CostElementExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

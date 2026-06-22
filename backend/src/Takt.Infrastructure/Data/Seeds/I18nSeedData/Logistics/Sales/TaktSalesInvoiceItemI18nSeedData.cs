@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesInvoiceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,146 +75,155 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktSalesInvoiceItem 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.salesinvoiceitem._self / entity.salesinvoiceitem.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.salesinvoiceitem._self / entity.salesinvoiceitem.{{field}}；ResourceGroup=Sales；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetSalesInvoiceItemTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.salesinvoiceitem._self
-            new TranslationSeedItem("entity.salesinvoiceitem._self", "en-US", "Sales Invoice Item Information", "实体名称"),
+            new TranslationSeedItem("entity.salesinvoiceitem._self", "en-US", "Sales Invoice Item Information_us", "实体名称"),
             // entity.salesinvoiceitem._self
-            new TranslationSeedItem("entity.salesinvoiceitem._self", "ja-JP", "Takt销售发票明细信息", "实体名称"),
+            new TranslationSeedItem("entity.salesinvoiceitem._self", "ja-JP", "Takt销售发票明细信息_jp", "实体名称"),
             // entity.salesinvoiceitem._self
             new TranslationSeedItem("entity.salesinvoiceitem._self", "zh-CN", "Takt销售发票明细信息", "实体名称"),
             // entity.salesinvoiceitem._self
-            new TranslationSeedItem("entity.salesinvoiceitem._self", "zh-HK", "Takt销售发票明细信息", "实体名称"),
+            new TranslationSeedItem("entity.salesinvoiceitem._self", "zh-HK", "Takt销售发票明细信息_hk", "实体名称"),
 
             // entity.salesinvoiceitem.salesinvoiceid
-            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "en-US", "销售发票ID", "销售发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "en-US", "销售发票ID_us", "销售发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.salesinvoiceitem.salesinvoiceid
-            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "ja-JP", "销售发票ID", "销售发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "ja-JP", "销售发票ID_jp", "销售发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.salesinvoiceitem.salesinvoiceid
             new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "zh-CN", "销售发票ID", "销售发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.salesinvoiceitem.salesinvoiceid
-            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "zh-HK", "销售发票ID", "销售发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "zh-HK", "销售发票ID_hk", "销售发票ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
             // entity.salesinvoiceitem.salesinvoicecode
-            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoicecode", "en-US", "销售发票编码", "销售发票编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoicecode", "en-US", "销售发票编码_us", "销售发票编码（冗余字段，便于查询）"),
             // entity.salesinvoiceitem.salesinvoicecode
-            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoicecode", "ja-JP", "销售发票编码", "销售发票编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoicecode", "ja-JP", "销售发票编码_jp", "销售发票编码（冗余字段，便于查询）"),
             // entity.salesinvoiceitem.salesinvoicecode
             new TranslationSeedItem("entity.salesinvoiceitem.salesinvoicecode", "zh-CN", "销售发票编码", "销售发票编码（冗余字段，便于查询）"),
             // entity.salesinvoiceitem.salesinvoicecode
-            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoicecode", "zh-HK", "销售发票编码", "销售发票编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoicecode", "zh-HK", "销售发票编码_hk", "销售发票编码（冗余字段，便于查询）"),
 
             // entity.salesinvoiceitem.linenumber
-            new TranslationSeedItem("entity.salesinvoiceitem.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
             // entity.salesinvoiceitem.linenumber
-            new TranslationSeedItem("entity.salesinvoiceitem.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
             // entity.salesinvoiceitem.linenumber
             new TranslationSeedItem("entity.salesinvoiceitem.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
             // entity.salesinvoiceitem.linenumber
-            new TranslationSeedItem("entity.salesinvoiceitem.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.salesinvoiceitem.materialcode
-            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "en-US", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "en-US", "物料编码_us", "物料编码"),
             // entity.salesinvoiceitem.materialcode
-            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "ja-JP", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "ja-JP", "物料编码_jp", "物料编码"),
             // entity.salesinvoiceitem.materialcode
             new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "zh-CN", "物料编码", "物料编码"),
             // entity.salesinvoiceitem.materialcode
-            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "zh-HK", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "zh-HK", "物料编码_hk", "物料编码"),
 
             // entity.salesinvoiceitem.materialname
-            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "en-US", "物料名称", "物料名称"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "en-US", "物料名称_us", "物料名称"),
             // entity.salesinvoiceitem.materialname
-            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "ja-JP", "物料名称", "物料名称"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "ja-JP", "物料名称_jp", "物料名称"),
             // entity.salesinvoiceitem.materialname
             new TranslationSeedItem("entity.salesinvoiceitem.materialname", "zh-CN", "物料名称", "物料名称"),
             // entity.salesinvoiceitem.materialname
-            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "zh-HK", "物料名称", "物料名称"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "zh-HK", "物料名称_hk", "物料名称"),
 
             // entity.salesinvoiceitem.materialspecification
-            new TranslationSeedItem("entity.salesinvoiceitem.materialspecification", "en-US", "物料规格", "物料规格"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialspecification", "en-US", "物料规格_us", "物料规格"),
             // entity.salesinvoiceitem.materialspecification
-            new TranslationSeedItem("entity.salesinvoiceitem.materialspecification", "ja-JP", "物料规格", "物料规格"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialspecification", "ja-JP", "物料规格_jp", "物料规格"),
             // entity.salesinvoiceitem.materialspecification
             new TranslationSeedItem("entity.salesinvoiceitem.materialspecification", "zh-CN", "物料规格", "物料规格"),
             // entity.salesinvoiceitem.materialspecification
-            new TranslationSeedItem("entity.salesinvoiceitem.materialspecification", "zh-HK", "物料规格", "物料规格"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialspecification", "zh-HK", "物料规格_hk", "物料规格"),
 
             // entity.salesinvoiceitem.salesunit
-            new TranslationSeedItem("entity.salesinvoiceitem.salesunit", "en-US", "销售单位", "销售单位"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesunit", "en-US", "销售单位_us", "销售单位"),
             // entity.salesinvoiceitem.salesunit
-            new TranslationSeedItem("entity.salesinvoiceitem.salesunit", "ja-JP", "销售单位", "销售单位"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesunit", "ja-JP", "销售单位_jp", "销售单位"),
             // entity.salesinvoiceitem.salesunit
             new TranslationSeedItem("entity.salesinvoiceitem.salesunit", "zh-CN", "销售单位", "销售单位"),
             // entity.salesinvoiceitem.salesunit
-            new TranslationSeedItem("entity.salesinvoiceitem.salesunit", "zh-HK", "销售单位", "销售单位"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesunit", "zh-HK", "销售单位_hk", "销售单位"),
 
             // entity.salesinvoiceitem.invoicequantity
-            new TranslationSeedItem("entity.salesinvoiceitem.invoicequantity", "en-US", "开票数量", "开票数量（基本单位数量）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.invoicequantity", "en-US", "开票数量_us", "开票数量（基本单位数量）"),
             // entity.salesinvoiceitem.invoicequantity
-            new TranslationSeedItem("entity.salesinvoiceitem.invoicequantity", "ja-JP", "开票数量", "开票数量（基本单位数量）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.invoicequantity", "ja-JP", "开票数量_jp", "开票数量（基本单位数量）"),
             // entity.salesinvoiceitem.invoicequantity
             new TranslationSeedItem("entity.salesinvoiceitem.invoicequantity", "zh-CN", "开票数量", "开票数量（基本单位数量）"),
             // entity.salesinvoiceitem.invoicequantity
-            new TranslationSeedItem("entity.salesinvoiceitem.invoicequantity", "zh-HK", "开票数量", "开票数量（基本单位数量）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.invoicequantity", "zh-HK", "开票数量_hk", "开票数量（基本单位数量）"),
 
             // entity.salesinvoiceitem.unitprice
-            new TranslationSeedItem("entity.salesinvoiceitem.unitprice", "en-US", "单价", "单价"),
+            new TranslationSeedItem("entity.salesinvoiceitem.unitprice", "en-US", "单价_us", "单价"),
             // entity.salesinvoiceitem.unitprice
-            new TranslationSeedItem("entity.salesinvoiceitem.unitprice", "ja-JP", "单价", "单价"),
+            new TranslationSeedItem("entity.salesinvoiceitem.unitprice", "ja-JP", "单价_jp", "单价"),
             // entity.salesinvoiceitem.unitprice
             new TranslationSeedItem("entity.salesinvoiceitem.unitprice", "zh-CN", "单价", "单价"),
             // entity.salesinvoiceitem.unitprice
-            new TranslationSeedItem("entity.salesinvoiceitem.unitprice", "zh-HK", "单价", "单价"),
+            new TranslationSeedItem("entity.salesinvoiceitem.unitprice", "zh-HK", "单价_hk", "单价"),
 
             // entity.salesinvoiceitem.discountrate
-            new TranslationSeedItem("entity.salesinvoiceitem.discountrate", "en-US", "折扣率", "折扣率（0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.discountrate", "en-US", "折扣率_us", "折扣率（0-100，表示折扣百分比）"),
             // entity.salesinvoiceitem.discountrate
-            new TranslationSeedItem("entity.salesinvoiceitem.discountrate", "ja-JP", "折扣率", "折扣率（0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.discountrate", "ja-JP", "折扣率_jp", "折扣率（0-100，表示折扣百分比）"),
             // entity.salesinvoiceitem.discountrate
             new TranslationSeedItem("entity.salesinvoiceitem.discountrate", "zh-CN", "折扣率", "折扣率（0-100，表示折扣百分比）"),
             // entity.salesinvoiceitem.discountrate
-            new TranslationSeedItem("entity.salesinvoiceitem.discountrate", "zh-HK", "折扣率", "折扣率（0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.discountrate", "zh-HK", "折扣率_hk", "折扣率（0-100，表示折扣百分比）"),
 
             // entity.salesinvoiceitem.discountamount
-            new TranslationSeedItem("entity.salesinvoiceitem.discountamount", "en-US", "折扣金额", "折扣金额"),
+            new TranslationSeedItem("entity.salesinvoiceitem.discountamount", "en-US", "折扣金额_us", "折扣金额"),
             // entity.salesinvoiceitem.discountamount
-            new TranslationSeedItem("entity.salesinvoiceitem.discountamount", "ja-JP", "折扣金额", "折扣金额"),
+            new TranslationSeedItem("entity.salesinvoiceitem.discountamount", "ja-JP", "折扣金额_jp", "折扣金额"),
             // entity.salesinvoiceitem.discountamount
             new TranslationSeedItem("entity.salesinvoiceitem.discountamount", "zh-CN", "折扣金额", "折扣金额"),
             // entity.salesinvoiceitem.discountamount
-            new TranslationSeedItem("entity.salesinvoiceitem.discountamount", "zh-HK", "折扣金额", "折扣金额"),
+            new TranslationSeedItem("entity.salesinvoiceitem.discountamount", "zh-HK", "折扣金额_hk", "折扣金额"),
 
             // entity.salesinvoiceitem.taxrate
-            new TranslationSeedItem("entity.salesinvoiceitem.taxrate", "en-US", "税费率", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.taxrate", "en-US", "税费率_us", "税费率（0-100，表示税费百分比）"),
             // entity.salesinvoiceitem.taxrate
-            new TranslationSeedItem("entity.salesinvoiceitem.taxrate", "ja-JP", "税费率", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.taxrate", "ja-JP", "税费率_jp", "税费率（0-100，表示税费百分比）"),
             // entity.salesinvoiceitem.taxrate
             new TranslationSeedItem("entity.salesinvoiceitem.taxrate", "zh-CN", "税费率", "税费率（0-100，表示税费百分比）"),
             // entity.salesinvoiceitem.taxrate
-            new TranslationSeedItem("entity.salesinvoiceitem.taxrate", "zh-HK", "税费率", "税费率（0-100，表示税费百分比）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.taxrate", "zh-HK", "税费率_hk", "税费率（0-100，表示税费百分比）"),
 
             // entity.salesinvoiceitem.taxamount
-            new TranslationSeedItem("entity.salesinvoiceitem.taxamount", "en-US", "税费", "税费"),
+            new TranslationSeedItem("entity.salesinvoiceitem.taxamount", "en-US", "税费_us", "税费"),
             // entity.salesinvoiceitem.taxamount
-            new TranslationSeedItem("entity.salesinvoiceitem.taxamount", "ja-JP", "税费", "税费"),
+            new TranslationSeedItem("entity.salesinvoiceitem.taxamount", "ja-JP", "税费_jp", "税费"),
             // entity.salesinvoiceitem.taxamount
             new TranslationSeedItem("entity.salesinvoiceitem.taxamount", "zh-CN", "税费", "税费"),
             // entity.salesinvoiceitem.taxamount
-            new TranslationSeedItem("entity.salesinvoiceitem.taxamount", "zh-HK", "税费", "税费"),
+            new TranslationSeedItem("entity.salesinvoiceitem.taxamount", "zh-HK", "税费_hk", "税费"),
 
             // entity.salesinvoiceitem.subtotalamount
-            new TranslationSeedItem("entity.salesinvoiceitem.subtotalamount", "en-US", "小计金额", "小计金额"),
+            new TranslationSeedItem("entity.salesinvoiceitem.subtotalamount", "en-US", "小计金额_us", "小计金额"),
             // entity.salesinvoiceitem.subtotalamount
-            new TranslationSeedItem("entity.salesinvoiceitem.subtotalamount", "ja-JP", "小计金额", "小计金额"),
+            new TranslationSeedItem("entity.salesinvoiceitem.subtotalamount", "ja-JP", "小计金额_jp", "小计金额"),
             // entity.salesinvoiceitem.subtotalamount
             new TranslationSeedItem("entity.salesinvoiceitem.subtotalamount", "zh-CN", "小计金额", "小计金额"),
             // entity.salesinvoiceitem.subtotalamount
-            new TranslationSeedItem("entity.salesinvoiceitem.subtotalamount", "zh-HK", "小计金额", "小计金额"),
+            new TranslationSeedItem("entity.salesinvoiceitem.subtotalamount", "zh-HK", "小计金额_hk", "小计金额"),
+
+            // entity.salesinvoiceitem.salesinvoice
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoice", "en-US", "销售发票主表_us", "销售发票主表"),
+            // entity.salesinvoiceitem.salesinvoice
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoice", "ja-JP", "销售发票主表_jp", "销售发票主表"),
+            // entity.salesinvoiceitem.salesinvoice
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoice", "zh-CN", "销售发票主表", "销售发票主表"),
+            // entity.salesinvoiceitem.salesinvoice
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoice", "zh-HK", "销售发票主表_hk", "销售发票主表"),
         };
     }
 
@@ -232,10 +241,10 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Sales";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

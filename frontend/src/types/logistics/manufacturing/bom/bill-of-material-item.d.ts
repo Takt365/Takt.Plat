@@ -16,8 +16,8 @@ import type {
 } from '@/types/common';
 
 import type {
-  Material
-} from '@/types/logistics/materials/material';
+  MaterialPlant
+} from '@/types/logistics/materials/material-plant';
 
 /**
  * Takt物料清单明细实体（扁平BOM行：一头多行，每行一个直接子件；多层BOM通过子件物料关联其BOM头递归展开）
@@ -128,9 +128,9 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   bom?: BillOfMaterial;
 
   /**
-   * 子项物料（工厂物料主数据） （主表：TaktMaterial）
+   * 子项物料（工厂物料主数据） （主表：TaktMaterialPlant）
    */
-  material?: Material;
+  materialPlant?: MaterialPlant;
 
 }
 
@@ -245,7 +245,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -359,7 +359,7 @@ export interface BillOfMaterialItemCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -463,7 +463,7 @@ export interface BillOfMaterialItemTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -557,7 +557,7 @@ export interface BillOfMaterialItemImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -666,7 +666,7 @@ export interface BillOfMaterialItemExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

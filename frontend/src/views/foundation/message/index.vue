@@ -47,8 +47,10 @@
     />
 
     <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
+    <div class="foundation-message-table-wrap">
+      <TaktSingleTable
+        :scroll="tableScroll"
+        :columns="columns"
       entity-scope="company"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'messageId'"
@@ -72,13 +74,13 @@
         <template v-else-if="column.key === 'messageGroup'">
           <TaktDictTag
             :value="getMessageField(record, 'messageGroup')"
-            dict-type="sys_message_group"
+            dict-type="sys_message_group_category"
           />
         </template>
         <template v-else-if="column.key === 'isCc'">
           <TaktDictTag
             :value="getMessageField(record, 'isCc')"
-            dict-type="sys_yes_no"
+            dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'readStatus'">
@@ -89,6 +91,7 @@
         </template>
       </template>
     </TaktSingleTable>
+    </div>
 
     <!-- 分页组件 -->
     <TaktPagination
@@ -177,7 +180,7 @@
       <a-form-item :label="t('entity.message.group')">
         <TaktSelect
           v-model:value="advancedQueryForm.messageGroup"
-          dict-type="sys_message_group"
+          dict-type="sys_message_group_category"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.group') })"
           allow-clear
         />
@@ -297,6 +300,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize, ensureTaktPaginationConfigAsync } from '@/utils/takt-paged'
 import MessageForm from './components/message-form.vue'
 import {
   getMessageList,
@@ -332,11 +336,13 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Message[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
+/** 表格 scroll.y（服务端分页固定视口高度） */
+const tableScroll = { y: 'calc(100vh - 300px)' } as const
 /** 工具栏单选时当前行 */
 const selectedRow = ref<Message | null>(null)
 /** 表格多选行 */
@@ -413,7 +419,8 @@ function handleFoundationMessageReceived(_msg: SignalRMessage): void {
 }
 
 /** 页面挂载后加载分页列表并订阅实时消息 */
-onMounted(() => {
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
   onEventBus('foundation:message:received', handleFoundationMessageReceived)
 })
@@ -634,7 +641,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -657,7 +664,7 @@ function handleReset() {
     createdAtEnd: '',
     remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -794,7 +801,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -843,23 +850,29 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+/** 分页每页条数变更（重置到默认页码） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
 
 <style scoped lang="css">
 .foundation-message {
-  padding: 16px;
+  padding: 0 4px 0 0;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+.foundation-message-table-wrap {
+  flex: 1;
   min-height: 0;
 }
 </style>

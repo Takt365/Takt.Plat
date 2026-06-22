@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-personnel-employee">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -74,13 +74,13 @@
         <template v-if="column.key === 'nativePlace'">
           <TaktDictTag
             :value="getEmployeeField(record, 'nativePlace')"
-            dict-type="hr_native_place"
+            dict-type="hr_native_place_code"
           />
         </template>
         <template v-else-if="column.key === 'ethnicity'">
           <TaktDictTag
             :value="getEmployeeField(record, 'ethnicity')"
-            dict-type="hr_ethnic_group"
+            dict-type="hr_ethnic_code"
           />
         </template>
         <template v-else-if="column.key === 'politicalStatus'">
@@ -207,7 +207,7 @@
       <a-form-item :label="t('entity.employee.nativeplace')">
         <TaktSelect
           v-model:value="advancedQueryForm.nativePlace"
-          dict-type="hr_native_place"
+          dict-type="hr_native_place_code"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employee.nativeplace') })"
           allow-clear
         />
@@ -217,7 +217,7 @@
       <a-form-item :label="t('entity.employee.ethnicity')">
         <TaktSelect
           v-model:value="advancedQueryForm.ethnicity"
-          dict-type="hr_ethnic_group"
+          dict-type="hr_ethnic_code"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employee.ethnicity') })"
           allow-clear
         />
@@ -482,11 +482,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -541,6 +541,7 @@
 </template>
 
 <script setup lang="ts">
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 员工实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee
@@ -573,9 +574,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Employee[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -594,7 +595,8 @@ const formData = ref<Partial<Employee>>({})
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -607,8 +609,8 @@ const advancedQueryForm = ref({
   mobile: '',
   email: '',
   nativePlace: '',
-  ethnicity: '',
-  politicalStatus: '',
+  ethnicity: undefined as number | undefined,
+  politicalStatus: undefined as number | undefined,
   maritalStatus: undefined as number | undefined,
   education: undefined as number | undefined,
   graduateSchool: '',
@@ -635,7 +637,7 @@ const advancedQueryForm = ref({
   photoUrl: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -677,7 +679,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'photoUrl', label: t('entity.employee.photourl') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -695,9 +697,122 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+type EmployeeQueryTrimmedKey =
+  | 'employeeNo'
+  | 'name'
+  | 'birthDateStart'
+  | 'birthDateEnd'
+  | 'idCardNo'
+  | 'mobile'
+  | 'email'
+  | 'nativePlace'
+  | 'graduateSchool'
+  | 'major'
+  | 'joinedDateStart'
+  | 'joinedDateEnd'
+  | 'probationEndDateStart'
+  | 'probationEndDateEnd'
+  | 'regularDateStart'
+  | 'regularDateEnd'
+  | 'terminationDateStart'
+  | 'terminationDateEnd'
+  | 'lastWorkDateStart'
+  | 'lastWorkDateEnd'
+  | 'resignationReason'
+  | 'primaryDeptId'
+  | 'primaryPostId'
+  | 'emergencyContactName'
+  | 'emergencyContactPhone'
+  | 'homeAddress'
+  | 'photoUrl'
+  | 'createdAtStart'
+  | 'createdAtEnd'
+  | 'ExtField'
+  | 'remark'
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {EmployeeQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<EmployeeQuery>): EmployeeQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: EmployeeQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: EmployeeQueryTrimmedKey, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v
+    }
+  }
+  assignTrimmed('employeeNo', form.employeeNo)
+  assignTrimmed('name', form.name)
+  assignTrimmed('birthDateStart', form.birthDateStart)
+  assignTrimmed('birthDateEnd', form.birthDateEnd)
+  assignTrimmed('idCardNo', form.idCardNo)
+  assignTrimmed('mobile', form.mobile)
+  assignTrimmed('email', form.email)
+  assignTrimmed('nativePlace', form.nativePlace)
+  assignTrimmed('graduateSchool', form.graduateSchool)
+  assignTrimmed('major', form.major)
+  assignTrimmed('joinedDateStart', form.joinedDateStart)
+  assignTrimmed('joinedDateEnd', form.joinedDateEnd)
+  assignTrimmed('probationEndDateStart', form.probationEndDateStart)
+  assignTrimmed('probationEndDateEnd', form.probationEndDateEnd)
+  assignTrimmed('regularDateStart', form.regularDateStart)
+  assignTrimmed('regularDateEnd', form.regularDateEnd)
+  assignTrimmed('terminationDateStart', form.terminationDateStart)
+  assignTrimmed('terminationDateEnd', form.terminationDateEnd)
+  assignTrimmed('lastWorkDateStart', form.lastWorkDateStart)
+  assignTrimmed('lastWorkDateEnd', form.lastWorkDateEnd)
+  assignTrimmed('resignationReason', form.resignationReason)
+  assignTrimmed('primaryDeptId', form.primaryDeptId)
+  assignTrimmed('primaryPostId', form.primaryPostId)
+  assignTrimmed('emergencyContactName', form.emergencyContactName)
+  assignTrimmed('emergencyContactPhone', form.emergencyContactPhone)
+  assignTrimmed('homeAddress', form.homeAddress)
+  assignTrimmed('photoUrl', form.photoUrl)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  if (form.gender !== undefined && form.gender !== null) {
+    query.gender = form.gender
+  }
+  if (form.ethnicity !== undefined && form.ethnicity !== null) {
+    query.ethnicity = form.ethnicity
+  }
+  if (form.politicalStatus !== undefined && form.politicalStatus !== null) {
+    query.politicalStatus = form.politicalStatus
+  }
+  if (form.maritalStatus !== undefined && form.maritalStatus !== null) {
+    query.maritalStatus = form.maritalStatus
+  }
+  if (form.education !== undefined && form.education !== null) {
+    query.education = form.education
+  }
+  if (form.resignationType !== undefined && form.resignationType !== null) {
+    query.resignationType = form.resignationType
+  }
+  if (form.employeeStatus !== undefined && form.employeeStatus !== null) {
+    query.employeeStatus = form.employeeStatus
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    query.isBuiltIn = form.isBuiltIn
+  }
+  return query
+}
+
+/** 页面挂载：加载分页配置后拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
@@ -1085,16 +1200,7 @@ const onClickRow = (record: Employee) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: EmployeeQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getEmployeeList(params)
+    const res = await getEmployeeList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1112,7 +1218,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1129,8 +1235,8 @@ function handleReset() {
   mobile: '',
   email: '',
   nativePlace: '',
-  ethnicity: '',
-  politicalStatus: '',
+  ethnicity: undefined as number | undefined,
+  politicalStatus: undefined as number | undefined,
   maritalStatus: undefined as number | undefined,
   education: undefined as number | undefined,
   graduateSchool: '',
@@ -1157,10 +1263,10 @@ function handleReset() {
   photoUrl: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1246,16 +1352,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: EmployeeQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportEmployee(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportEmployee(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1323,7 +1424,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1338,8 +1439,8 @@ function handleAdvancedQueryReset() {
   mobile: '',
   email: '',
   nativePlace: '',
-  ethnicity: '',
-  politicalStatus: '',
+  ethnicity: undefined as number | undefined,
+  politicalStatus: undefined as number | undefined,
   maritalStatus: undefined as number | undefined,
   education: undefined as number | undefined,
   graduateSchool: '',
@@ -1366,7 +1467,7 @@ function handleAdvancedQueryReset() {
   photoUrl: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -1402,17 +1503,8 @@ function handlePaginationChange(page: number) {
 }
 /** 分页每页条数变更 */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-personnel-employee {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

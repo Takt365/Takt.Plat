@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktItAssetI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktItAsset 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,137 +75,137 @@ public class TaktItAssetI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktItAsset 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.itasset._self / entity.itasset.{{field}}；ResourceGroup=2；ResourceType=0
+    /// I18nKey：entity.itasset._self / entity.itasset.{{field}}；ResourceGroup=HelpDesk；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetItAssetTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.itasset._self
-            new TranslationSeedItem("entity.itasset._self", "en-US", "It Asset Information", "实体名称"),
+            new TranslationSeedItem("entity.itasset._self", "en-US", "It Asset Information_us", "实体名称"),
             // entity.itasset._self
-            new TranslationSeedItem("entity.itasset._self", "ja-JP", "服务台 IT 设备保修扩展信息", "实体名称"),
+            new TranslationSeedItem("entity.itasset._self", "ja-JP", "服务台 IT 设备保修扩展信息_jp", "实体名称"),
             // entity.itasset._self
             new TranslationSeedItem("entity.itasset._self", "zh-CN", "服务台 IT 设备保修扩展信息", "实体名称"),
             // entity.itasset._self
-            new TranslationSeedItem("entity.itasset._self", "zh-HK", "服务台 IT 设备保修扩展信息", "实体名称"),
+            new TranslationSeedItem("entity.itasset._self", "zh-HK", "服务台 IT 设备保修扩展信息_hk", "实体名称"),
 
             // entity.itasset.assetcode
-            new TranslationSeedItem("entity.itasset.assetcode", "en-US", "资产号码", "资产号码"),
+            new TranslationSeedItem("entity.itasset.assetcode", "en-US", "资产号码_us", "资产号码"),
             // entity.itasset.assetcode
-            new TranslationSeedItem("entity.itasset.assetcode", "ja-JP", "资产号码", "资产号码"),
+            new TranslationSeedItem("entity.itasset.assetcode", "ja-JP", "资产号码_jp", "资产号码"),
             // entity.itasset.assetcode
             new TranslationSeedItem("entity.itasset.assetcode", "zh-CN", "资产号码", "资产号码"),
             // entity.itasset.assetcode
-            new TranslationSeedItem("entity.itasset.assetcode", "zh-HK", "资产号码", "资产号码"),
+            new TranslationSeedItem("entity.itasset.assetcode", "zh-HK", "资产号码_hk", "资产号码"),
 
             // entity.itasset.warrantytype
-            new TranslationSeedItem("entity.itasset.warrantytype", "en-US", "保修类型", "保修类型（见 TaktWarrantyType）"),
+            new TranslationSeedItem("entity.itasset.warrantytype", "en-US", "保修类型_us", "保修类型（见 TaktWarrantyType）"),
             // entity.itasset.warrantytype
-            new TranslationSeedItem("entity.itasset.warrantytype", "ja-JP", "保修类型", "保修类型（见 TaktWarrantyType）"),
+            new TranslationSeedItem("entity.itasset.warrantytype", "ja-JP", "保修类型_jp", "保修类型（见 TaktWarrantyType）"),
             // entity.itasset.warrantytype
             new TranslationSeedItem("entity.itasset.warrantytype", "zh-CN", "保修类型", "保修类型（见 TaktWarrantyType）"),
             // entity.itasset.warrantytype
-            new TranslationSeedItem("entity.itasset.warrantytype", "zh-HK", "保修类型", "保修类型（见 TaktWarrantyType）"),
+            new TranslationSeedItem("entity.itasset.warrantytype", "zh-HK", "保修类型_hk", "保修类型（见 TaktWarrantyType）"),
 
             // entity.itasset.warrantystartdate
-            new TranslationSeedItem("entity.itasset.warrantystartdate", "en-US", "保修开始日期", "保修开始日期"),
+            new TranslationSeedItem("entity.itasset.warrantystartdate", "en-US", "保修开始日期_us", "保修开始日期"),
             // entity.itasset.warrantystartdate
-            new TranslationSeedItem("entity.itasset.warrantystartdate", "ja-JP", "保修开始日期", "保修开始日期"),
+            new TranslationSeedItem("entity.itasset.warrantystartdate", "ja-JP", "保修开始日期_jp", "保修开始日期"),
             // entity.itasset.warrantystartdate
             new TranslationSeedItem("entity.itasset.warrantystartdate", "zh-CN", "保修开始日期", "保修开始日期"),
             // entity.itasset.warrantystartdate
-            new TranslationSeedItem("entity.itasset.warrantystartdate", "zh-HK", "保修开始日期", "保修开始日期"),
+            new TranslationSeedItem("entity.itasset.warrantystartdate", "zh-HK", "保修开始日期_hk", "保修开始日期"),
 
             // entity.itasset.warrantyexpirydate
-            new TranslationSeedItem("entity.itasset.warrantyexpirydate", "en-US", "保修到期日", "保修到期日"),
+            new TranslationSeedItem("entity.itasset.warrantyexpirydate", "en-US", "保修到期日_us", "保修到期日"),
             // entity.itasset.warrantyexpirydate
-            new TranslationSeedItem("entity.itasset.warrantyexpirydate", "ja-JP", "保修到期日", "保修到期日"),
+            new TranslationSeedItem("entity.itasset.warrantyexpirydate", "ja-JP", "保修到期日_jp", "保修到期日"),
             // entity.itasset.warrantyexpirydate
             new TranslationSeedItem("entity.itasset.warrantyexpirydate", "zh-CN", "保修到期日", "保修到期日"),
             // entity.itasset.warrantyexpirydate
-            new TranslationSeedItem("entity.itasset.warrantyexpirydate", "zh-HK", "保修到期日", "保修到期日"),
+            new TranslationSeedItem("entity.itasset.warrantyexpirydate", "zh-HK", "保修到期日_hk", "保修到期日"),
 
             // entity.itasset.warrantyprovider
-            new TranslationSeedItem("entity.itasset.warrantyprovider", "en-US", "保修服务商", "保修服务商/厂商"),
+            new TranslationSeedItem("entity.itasset.warrantyprovider", "en-US", "保修服务商_us", "保修服务商/厂商"),
             // entity.itasset.warrantyprovider
-            new TranslationSeedItem("entity.itasset.warrantyprovider", "ja-JP", "保修服务商", "保修服务商/厂商"),
+            new TranslationSeedItem("entity.itasset.warrantyprovider", "ja-JP", "保修服务商_jp", "保修服务商/厂商"),
             // entity.itasset.warrantyprovider
             new TranslationSeedItem("entity.itasset.warrantyprovider", "zh-CN", "保修服务商", "保修服务商/厂商"),
             // entity.itasset.warrantyprovider
-            new TranslationSeedItem("entity.itasset.warrantyprovider", "zh-HK", "保修服务商", "保修服务商/厂商"),
+            new TranslationSeedItem("entity.itasset.warrantyprovider", "zh-HK", "保修服务商_hk", "保修服务商/厂商"),
 
             // entity.itasset.warrantycontractno
-            new TranslationSeedItem("entity.itasset.warrantycontractno", "en-US", "保修合同编号", "保修合同编号"),
+            new TranslationSeedItem("entity.itasset.warrantycontractno", "en-US", "保修合同编号_us", "保修合同编号"),
             // entity.itasset.warrantycontractno
-            new TranslationSeedItem("entity.itasset.warrantycontractno", "ja-JP", "保修合同编号", "保修合同编号"),
+            new TranslationSeedItem("entity.itasset.warrantycontractno", "ja-JP", "保修合同编号_jp", "保修合同编号"),
             // entity.itasset.warrantycontractno
             new TranslationSeedItem("entity.itasset.warrantycontractno", "zh-CN", "保修合同编号", "保修合同编号"),
             // entity.itasset.warrantycontractno
-            new TranslationSeedItem("entity.itasset.warrantycontractno", "zh-HK", "保修合同编号", "保修合同编号"),
+            new TranslationSeedItem("entity.itasset.warrantycontractno", "zh-HK", "保修合同编号_hk", "保修合同编号"),
 
             // entity.itasset.servicehotline
-            new TranslationSeedItem("entity.itasset.servicehotline", "en-US", "服务电话", "服务电话"),
+            new TranslationSeedItem("entity.itasset.servicehotline", "en-US", "服务电话_us", "服务电话"),
             // entity.itasset.servicehotline
-            new TranslationSeedItem("entity.itasset.servicehotline", "ja-JP", "服务电话", "服务电话"),
+            new TranslationSeedItem("entity.itasset.servicehotline", "ja-JP", "服务电话_jp", "服务电话"),
             // entity.itasset.servicehotline
             new TranslationSeedItem("entity.itasset.servicehotline", "zh-CN", "服务电话", "服务电话"),
             // entity.itasset.servicehotline
-            new TranslationSeedItem("entity.itasset.servicehotline", "zh-HK", "服务电话", "服务电话"),
+            new TranslationSeedItem("entity.itasset.servicehotline", "zh-HK", "服务电话_hk", "服务电话"),
 
             // entity.itasset.serviceemail
-            new TranslationSeedItem("entity.itasset.serviceemail", "en-US", "服务邮箱", "服务邮箱"),
+            new TranslationSeedItem("entity.itasset.serviceemail", "en-US", "服务邮箱_us", "服务邮箱"),
             // entity.itasset.serviceemail
-            new TranslationSeedItem("entity.itasset.serviceemail", "ja-JP", "服务邮箱", "服务邮箱"),
+            new TranslationSeedItem("entity.itasset.serviceemail", "ja-JP", "服务邮箱_jp", "服务邮箱"),
             // entity.itasset.serviceemail
             new TranslationSeedItem("entity.itasset.serviceemail", "zh-CN", "服务邮箱", "服务邮箱"),
             // entity.itasset.serviceemail
-            new TranslationSeedItem("entity.itasset.serviceemail", "zh-HK", "服务邮箱", "服务邮箱"),
+            new TranslationSeedItem("entity.itasset.serviceemail", "zh-HK", "服务邮箱_hk", "服务邮箱"),
 
             // entity.itasset.maintenanceexpirydate
-            new TranslationSeedItem("entity.itasset.maintenanceexpirydate", "en-US", "维保到期日", "维保到期日"),
+            new TranslationSeedItem("entity.itasset.maintenanceexpirydate", "en-US", "维保到期日_us", "维保到期日"),
             // entity.itasset.maintenanceexpirydate
-            new TranslationSeedItem("entity.itasset.maintenanceexpirydate", "ja-JP", "维保到期日", "维保到期日"),
+            new TranslationSeedItem("entity.itasset.maintenanceexpirydate", "ja-JP", "维保到期日_jp", "维保到期日"),
             // entity.itasset.maintenanceexpirydate
             new TranslationSeedItem("entity.itasset.maintenanceexpirydate", "zh-CN", "维保到期日", "维保到期日"),
             // entity.itasset.maintenanceexpirydate
-            new TranslationSeedItem("entity.itasset.maintenanceexpirydate", "zh-HK", "维保到期日", "维保到期日"),
+            new TranslationSeedItem("entity.itasset.maintenanceexpirydate", "zh-HK", "维保到期日_hk", "维保到期日"),
 
             // entity.itasset.lastmaintenancedate
-            new TranslationSeedItem("entity.itasset.lastmaintenancedate", "en-US", "上次维保日期", "上次维保日期"),
+            new TranslationSeedItem("entity.itasset.lastmaintenancedate", "en-US", "上次维保日期_us", "上次维保日期"),
             // entity.itasset.lastmaintenancedate
-            new TranslationSeedItem("entity.itasset.lastmaintenancedate", "ja-JP", "上次维保日期", "上次维保日期"),
+            new TranslationSeedItem("entity.itasset.lastmaintenancedate", "ja-JP", "上次维保日期_jp", "上次维保日期"),
             // entity.itasset.lastmaintenancedate
             new TranslationSeedItem("entity.itasset.lastmaintenancedate", "zh-CN", "上次维保日期", "上次维保日期"),
             // entity.itasset.lastmaintenancedate
-            new TranslationSeedItem("entity.itasset.lastmaintenancedate", "zh-HK", "上次维保日期", "上次维保日期"),
+            new TranslationSeedItem("entity.itasset.lastmaintenancedate", "zh-HK", "上次维保日期_hk", "上次维保日期"),
 
             // entity.itasset.nextmaintenancedate
-            new TranslationSeedItem("entity.itasset.nextmaintenancedate", "en-US", "下次维保日期", "下次维保日期"),
+            new TranslationSeedItem("entity.itasset.nextmaintenancedate", "en-US", "下次维保日期_us", "下次维保日期"),
             // entity.itasset.nextmaintenancedate
-            new TranslationSeedItem("entity.itasset.nextmaintenancedate", "ja-JP", "下次维保日期", "下次维保日期"),
+            new TranslationSeedItem("entity.itasset.nextmaintenancedate", "ja-JP", "下次维保日期_jp", "下次维保日期"),
             // entity.itasset.nextmaintenancedate
             new TranslationSeedItem("entity.itasset.nextmaintenancedate", "zh-CN", "下次维保日期", "下次维保日期"),
             // entity.itasset.nextmaintenancedate
-            new TranslationSeedItem("entity.itasset.nextmaintenancedate", "zh-HK", "下次维保日期", "下次维保日期"),
+            new TranslationSeedItem("entity.itasset.nextmaintenancedate", "zh-HK", "下次维保日期_hk", "下次维保日期"),
 
             // entity.itasset.warrantyremark
-            new TranslationSeedItem("entity.itasset.warrantyremark", "en-US", "保修说明", "保修/维保说明"),
+            new TranslationSeedItem("entity.itasset.warrantyremark", "en-US", "保修说明_us", "保修/维保说明"),
             // entity.itasset.warrantyremark
-            new TranslationSeedItem("entity.itasset.warrantyremark", "ja-JP", "保修说明", "保修/维保说明"),
+            new TranslationSeedItem("entity.itasset.warrantyremark", "ja-JP", "保修说明_jp", "保修/维保说明"),
             // entity.itasset.warrantyremark
             new TranslationSeedItem("entity.itasset.warrantyremark", "zh-CN", "保修说明", "保修/维保说明"),
             // entity.itasset.warrantyremark
-            new TranslationSeedItem("entity.itasset.warrantyremark", "zh-HK", "保修说明", "保修/维保说明"),
+            new TranslationSeedItem("entity.itasset.warrantyremark", "zh-HK", "保修说明_hk", "保修/维保说明"),
 
             // entity.itasset.changelogs
-            new TranslationSeedItem("entity.itasset.changelogs", "en-US", "IT 设备保修变更日志列表", "IT 设备保修变更日志列表"),
+            new TranslationSeedItem("entity.itasset.changelogs", "en-US", "IT 设备保修变更日志列表_us", "IT 设备保修变更日志列表"),
             // entity.itasset.changelogs
-            new TranslationSeedItem("entity.itasset.changelogs", "ja-JP", "IT 设备保修变更日志列表", "IT 设备保修变更日志列表"),
+            new TranslationSeedItem("entity.itasset.changelogs", "ja-JP", "IT 设备保修变更日志列表_jp", "IT 设备保修变更日志列表"),
             // entity.itasset.changelogs
             new TranslationSeedItem("entity.itasset.changelogs", "zh-CN", "IT 设备保修变更日志列表", "IT 设备保修变更日志列表"),
             // entity.itasset.changelogs
-            new TranslationSeedItem("entity.itasset.changelogs", "zh-HK", "IT 设备保修变更日志列表", "IT 设备保修变更日志列表"),
+            new TranslationSeedItem("entity.itasset.changelogs", "zh-HK", "IT 设备保修变更日志列表_hk", "IT 设备保修变更日志列表"),
         };
     }
 
@@ -223,10 +223,10 @@ public class TaktItAssetI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 2;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "HelpDesk";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

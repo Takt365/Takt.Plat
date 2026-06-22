@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/controlling
 // 文件名称：cost-element.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -43,9 +43,7 @@ export function getCostElementList(queryDto: any): Promise<TaktPagedResult<CostE
   return request<TaktPagedResult<CostElement>>({
     url: `${COST_ELEMENT_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -132,7 +130,7 @@ export function deleteCostElementBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新成本要素状态
- * @param {CostElementStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {CostElementStatus} dto 状态 DTO
  * @returns {Promise<CostElement>} 成本要素DTO
  */
 export function updateCostElementStatus(dto: CostElementStatus): Promise<CostElement> {
@@ -232,7 +230,7 @@ export function exportCostElement(
     url: `${COST_ELEMENT_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

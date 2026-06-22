@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：customer.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,7 +49,7 @@ export interface Customer extends CompanyDtoBase {
   customerShortName?: string;
 
   /**
-   * 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
    */
   customerType: number;
 
@@ -124,12 +124,12 @@ export interface Customer extends CompanyDtoBase {
   currencyCode: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms: number;
 
   /**
-   * 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel: number;
 
@@ -139,7 +139,7 @@ export interface Customer extends CompanyDtoBase {
   creditAmount: number;
 
   /**
-   * 折扣率（百分比，如：5.5表示5.5%折扣）
+   * 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
    */
   discountRate: number;
 
@@ -149,7 +149,7 @@ export interface Customer extends CompanyDtoBase {
   salesBy?: string;
 
   /**
-   * 客户等级（0=普通，1=重要，2=VIP，3=战略）
+   * 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
    */
   customerLevel: number;
 
@@ -214,7 +214,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   customerShortName?: string;
 
   /**
-   * 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
    */
   customerType?: number;
 
@@ -289,12 +289,12 @@ export interface CustomerQuery extends TaktPagedQuery {
   currencyCode?: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms?: number;
 
   /**
-   * 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel?: number;
 
@@ -304,7 +304,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   creditAmount?: number;
 
   /**
-   * 折扣率（百分比，如：5.5表示5.5%折扣）
+   * 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
    */
   discountRate?: number;
 
@@ -314,7 +314,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   salesBy?: string;
 
   /**
-   * 客户等级（0=普通，1=重要，2=VIP，3=战略）
+   * 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
    */
   customerLevel?: number;
 
@@ -351,7 +351,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -403,7 +403,7 @@ export interface CustomerCreate {
   customerShortName?: string;
 
   /**
-   * 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
    */
   customerType: number;
 
@@ -478,12 +478,12 @@ export interface CustomerCreate {
   currencyCode: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms: number;
 
   /**
-   * 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel: number;
 
@@ -493,7 +493,7 @@ export interface CustomerCreate {
   creditAmount: number;
 
   /**
-   * 折扣率（百分比，如：5.5表示5.5%折扣）
+   * 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
    */
   discountRate: number;
 
@@ -503,7 +503,7 @@ export interface CustomerCreate {
   salesBy?: string;
 
   /**
-   * 客户等级（0=普通，1=重要，2=VIP，3=战略）
+   * 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
    */
   customerLevel: number;
 
@@ -523,14 +523,9 @@ export interface CustomerCreate {
   customerStatus: number;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -630,7 +625,7 @@ export interface CustomerTemplate {
   customerShortName?: string;
 
   /**
-   * 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
    */
   customerType?: number;
 
@@ -672,7 +667,7 @@ export interface CustomerTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -724,7 +719,7 @@ export interface CustomerImport {
   customerShortName?: string;
 
   /**
-   * 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
    */
   customerType?: number;
 
@@ -766,7 +761,7 @@ export interface CustomerImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -813,7 +808,7 @@ export interface CustomerExport {
   customerShortName?: string;
 
   /**
-   * 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+   * 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
    */
   customerType: number;
 
@@ -888,12 +883,12 @@ export interface CustomerExport {
   currencyCode: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms: number;
 
   /**
-   * 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel: number;
 
@@ -903,7 +898,7 @@ export interface CustomerExport {
   creditAmount: number;
 
   /**
-   * 折扣率（百分比，如：5.5表示5.5%折扣）
+   * 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
    */
   discountRate: number;
 
@@ -913,7 +908,7 @@ export interface CustomerExport {
   salesBy?: string;
 
   /**
-   * 客户等级（0=普通，1=重要，2=VIP，3=战略）
+   * 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
    */
   customerLevel: number;
 
@@ -940,7 +935,7 @@ export interface CustomerExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

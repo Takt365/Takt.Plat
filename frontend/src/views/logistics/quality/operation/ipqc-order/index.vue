@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-quality-operation-ipqc-order">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,76 +52,46 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'ipqcOrderId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getIpqcOrderId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getIpqcOrderId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="ipqcOrderId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.ipqcOrderItem._self') }}</div>
-          <a-table
-            v-if="hasIpqcOrderItemRows(record)"
-            :columns="ipqcOrderItemExpandColumns"
-            :data-source="getIpqcOrderItemRows(record)"
-            :row-key="(row: IpqcOrderItem, index?: number) => row?.ipqcOrderItemId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.ipqcOrderChangeLog._self') }}</div>
-          <a-table
-            v-if="hasIpqcOrderChangeLogRows(record)"
-            :columns="ipqcOrderChangeLogExpandColumns"
-            :data-source="getIpqcOrderChangeLogRows(record)"
-            :row-key="(row: IpqcOrderChangeLog, index?: number) => row?.ipqcOrderChangeLogId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <IpqcOrderItemPanel
+          ref="ipqcOrderItemPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <IpqcOrderForm
+        :key="formData?.ipqcOrderId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -139,158 +109,170 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.ipqcOrder.plantcode')">
+      <a-form-item :label="t('entity.ipqcorder.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceCode')">
-      <a-form-item :label="t('entity.ipqcOrder.sourcecode')">
+      <a-form-item :label="t('entity.ipqcorder.sourcecode')">
         <a-input
           v-model:value="advancedQueryForm.sourceCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.sourcecode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.sourcecode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionDateStart')">
-      <a-form-item :label="t('entity.ipqcOrder.inspectiondatestart')">
+      <a-form-item :label="t('entity.ipqcorder.inspectiondatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.inspectionDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcOrder.inspectiondatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcorder.inspectiondatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionDateEnd')">
-      <a-form-item :label="t('entity.ipqcOrder.inspectiondateend')">
+      <a-form-item :label="t('entity.ipqcorder.inspectiondateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.inspectionDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcOrder.inspectiondateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcorder.inspectiondateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ipqcOrderCode')">
-      <a-form-item :label="t('entity.ipqcOrder.code')">
+      <a-form-item :label="t('entity.ipqcorder.code')">
         <a-input
           v-model:value="advancedQueryForm.ipqcOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.code') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('processCode')">
-      <a-form-item :label="t('entity.ipqcOrder.processcode')">
+      <a-form-item :label="t('entity.ipqcorder.processcode')">
         <a-input
           v-model:value="advancedQueryForm.processCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.processcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.processcode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('processName')">
-      <a-form-item :label="t('entity.ipqcOrder.processname')">
+      <a-form-item :label="t('entity.ipqcorder.processname')">
         <a-input
           v-model:value="advancedQueryForm.processName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.processname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.processname') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalProductionQuantity')">
-      <a-form-item :label="t('entity.ipqcOrder.totalproductionquantity')">
+      <a-form-item :label="t('entity.ipqcorder.totalproductionquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.totalProductionQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.totalproductionquantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.totalproductionquantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalSampleQuantity')">
-      <a-form-item :label="t('entity.ipqcOrder.totalsamplequantity')">
+      <a-form-item :label="t('entity.ipqcorder.totalsamplequantity')">
         <a-input-number
           v-model:value="advancedQueryForm.totalSampleQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.totalsamplequantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.totalsamplequantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalQualifiedQuantity')">
-      <a-form-item :label="t('entity.ipqcOrder.totalqualifiedquantity')">
+      <a-form-item :label="t('entity.ipqcorder.totalqualifiedquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.totalQualifiedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.totalqualifiedquantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.totalqualifiedquantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalUnqualifiedQuantity')">
-      <a-form-item :label="t('entity.ipqcOrder.totalunqualifiedquantity')">
+      <a-form-item :label="t('entity.ipqcorder.totalunqualifiedquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.totalUnqualifiedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.totalunqualifiedquantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.totalunqualifiedquantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalInspectionReturnQuantity')">
-      <a-form-item :label="t('entity.ipqcOrder.totalinspectionreturnquantity')">
+      <a-form-item :label="t('entity.ipqcorder.totalinspectionreturnquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.totalInspectionReturnQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.totalinspectionreturnquantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.totalinspectionreturnquantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('judgeStatus')">
-      <a-form-item :label="t('entity.ipqcOrder.judgestatus')">
+      <a-form-item :label="t('entity.ipqcorder.judgestatus')">
         <a-input-number
           v-model:value="advancedQueryForm.judgeStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.judgestatus') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.judgestatus') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('judgeBy')">
-      <a-form-item :label="t('entity.ipqcOrder.judgeby')">
+      <a-form-item :label="t('entity.ipqcorder.judgeby')">
         <a-input
           v-model:value="advancedQueryForm.judgeBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcOrder.judgeby') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ipqcorder.judgeby') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('judgeDateStart')">
-      <a-form-item :label="t('entity.ipqcOrder.judgedatestart')">
+      <a-form-item :label="t('entity.ipqcorder.judgedatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.judgeDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcOrder.judgedatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcorder.judgedatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('judgeDateEnd')">
-      <a-form-item :label="t('entity.ipqcOrder.judgedateend')">
+      <a-form-item :label="t('entity.ipqcorder.judgedateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.judgeDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcOrder.judgedateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ipqcorder.judgedateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('judgeDescription')">
-      <a-form-item :label="t('entity.ipqcOrder.judgedescription')">
+      <a-form-item :label="t('entity.ipqcorder.judgedescription')">
         <a-textarea
           v-model:value="advancedQueryForm.judgeDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ipqcOrder.judgedescription') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ipqcorder.judgedescription') })"
           :rows="2"
           allow-clear
         />
@@ -318,11 +300,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('entity.ipqcorder.extfield')">
+        <a-textarea
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ipqcorder.extfield') })"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -332,8 +315,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -343,14 +328,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.ipqcOrder._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.ipqcorder._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.ipqcOrder._self"
+        entity-i18n-key="entity.ipqcorder._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -386,13 +371,12 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import IpqcOrderForm from './components/ipqc-order-form.vue'
-import { getIpqcOrderList, getIpqcOrderById, createIpqcOrder, updateIpqcOrder, deleteIpqcOrderById, deleteIpqcOrderBatch, getIpqcOrderTemplate, importIpqcOrder, exportIpqcOrder } from '@/api/logistics/quality/operation/ipqc-order'
-import * as ipqcOrderItemApi from '@/api/logistics/quality/operation/ipqc-order-item'
-import * as ipqcOrderChangeLogApi from '@/api/logistics/quality/operation/ipqc-order-change-log'
-import type { IpqcOrderItem, IpqcOrderItemQuery } from '@/types/logistics/quality/operation/ipqc-order-item'
-import type { IpqcOrderChangeLog, IpqcOrderChangeLogQuery } from '@/types/logistics/quality/operation/ipqc-order-change-log'
-import type { IpqcOrder, IpqcOrderQuery, IpqcOrderCreate, IpqcOrderUpdate } from '@/types/logistics/quality/operation/ipqc-order'
+import IpqcOrderItemPanel from './components/ipqc-order-item-panel.vue'
+import { provideIpqcOrderMasterContext } from './composables/use-ipqc-order-master-context'
+import { getIpqcOrderList, getIpqcOrderById, createIpqcOrder, updateIpqcOrder, deleteIpqcOrderById, deleteIpqcOrderBatch, getIpqcOrderTemplate, importIpqcOrder, exportIpqcOrder, updateIpqcOrderStatus } from '@/api/logistics/quality/operation/ipqc-order'
+import type { IpqcOrder, IpqcOrderQuery } from '@/types/logistics/quality/operation/ipqc-order'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
@@ -403,7 +387,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktIpqcOrder')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.ipqcOrder._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.ipqcorder._self') })
 )
 
 /** 快捷查询关键字 */
@@ -413,9 +397,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<IpqcOrder[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -430,11 +414,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<IpqcOrder>>({})
+const formData = ref<Partial<IpqcOrder> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -457,31 +443,31 @@ const advancedQueryForm = ref({
   judgeDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.ipqcOrder.plantcode') },
-  { key: 'sourceCode', label: t('entity.ipqcOrder.sourcecode') },
-  { key: 'inspectionDateStart', label: t('entity.ipqcOrder.inspectiondatestart') },
-  { key: 'inspectionDateEnd', label: t('entity.ipqcOrder.inspectiondateend') },
-  { key: 'ipqcOrderCode', label: t('entity.ipqcOrder.code') },
-  { key: 'processCode', label: t('entity.ipqcOrder.processcode') },
-  { key: 'processName', label: t('entity.ipqcOrder.processname') },
-  { key: 'totalProductionQuantity', label: t('entity.ipqcOrder.totalproductionquantity') },
-  { key: 'totalSampleQuantity', label: t('entity.ipqcOrder.totalsamplequantity') },
-  { key: 'totalQualifiedQuantity', label: t('entity.ipqcOrder.totalqualifiedquantity') },
-  { key: 'totalUnqualifiedQuantity', label: t('entity.ipqcOrder.totalunqualifiedquantity') },
-  { key: 'totalInspectionReturnQuantity', label: t('entity.ipqcOrder.totalinspectionreturnquantity') },
-  { key: 'judgeStatus', label: t('entity.ipqcOrder.judgestatus') },
-  { key: 'judgeBy', label: t('entity.ipqcOrder.judgeby') },
-  { key: 'judgeDateStart', label: t('entity.ipqcOrder.judgedatestart') },
-  { key: 'judgeDateEnd', label: t('entity.ipqcOrder.judgedateend') },
-  { key: 'judgeDescription', label: t('entity.ipqcOrder.judgedescription') },
+  { key: 'plantCode', label: t('entity.ipqcorder.plantcode') },
+  { key: 'sourceCode', label: t('entity.ipqcorder.sourcecode') },
+  { key: 'inspectionDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ipqcorder.inspectiondate')) },
+  { key: 'inspectionDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ipqcorder.inspectiondate')) },
+  { key: 'ipqcOrderCode', label: t('entity.ipqcorder.code') },
+  { key: 'processCode', label: t('entity.ipqcorder.processcode') },
+  { key: 'processName', label: t('entity.ipqcorder.processname') },
+  { key: 'totalProductionQuantity', label: t('entity.ipqcorder.totalproductionquantity') },
+  { key: 'totalSampleQuantity', label: t('entity.ipqcorder.totalsamplequantity') },
+  { key: 'totalQualifiedQuantity', label: t('entity.ipqcorder.totalqualifiedquantity') },
+  { key: 'totalUnqualifiedQuantity', label: t('entity.ipqcorder.totalunqualifiedquantity') },
+  { key: 'totalInspectionReturnQuantity', label: t('entity.ipqcorder.totalinspectionreturnquantity') },
+  { key: 'judgeStatus', label: t('entity.ipqcorder.judgestatus') },
+  { key: 'judgeBy', label: t('entity.ipqcorder.judgeby') },
+  { key: 'judgeDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ipqcorder.judgedate')) },
+  { key: 'judgeDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ipqcorder.judgedate')) },
+  { key: 'judgeDescription', label: t('entity.ipqcorder.judgedescription') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('entity.ipqcorder.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -499,132 +485,104 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideIpqcOrderMasterContext()
+const ipqcOrderItemPanelRef = ref<InstanceType<typeof IpqcOrderItemPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {IpqcOrderQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<IpqcOrderQuery>): IpqcOrderQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: IpqcOrderQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof IpqcOrderQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('sourceCode', form.sourceCode)
+  assignTrimmed('inspectionDateStart', form.inspectionDateStart)
+  assignTrimmed('inspectionDateEnd', form.inspectionDateEnd)
+  assignTrimmed('ipqcOrderCode', form.ipqcOrderCode)
+  assignTrimmed('processCode', form.processCode)
+  assignTrimmed('processName', form.processName)
+  if (form.totalProductionQuantity !== undefined && form.totalProductionQuantity !== null) {
+    query.totalProductionQuantity = form.totalProductionQuantity
+  }
+  if (form.totalSampleQuantity !== undefined && form.totalSampleQuantity !== null) {
+    query.totalSampleQuantity = form.totalSampleQuantity
+  }
+  if (form.totalQualifiedQuantity !== undefined && form.totalQualifiedQuantity !== null) {
+    query.totalQualifiedQuantity = form.totalQualifiedQuantity
+  }
+  if (form.totalUnqualifiedQuantity !== undefined && form.totalUnqualifiedQuantity !== null) {
+    query.totalUnqualifiedQuantity = form.totalUnqualifiedQuantity
+  }
+  if (form.totalInspectionReturnQuantity !== undefined && form.totalInspectionReturnQuantity !== null) {
+    query.totalInspectionReturnQuantity = form.totalInspectionReturnQuantity
+  }
+  if (form.judgeStatus !== undefined && form.judgeStatus !== null) {
+    query.judgeStatus = form.judgeStatus
+  }
+  assignTrimmed('judgeBy', form.judgeBy)
+  assignTrimmed('judgeDateStart', form.judgeDateStart)
+  assignTrimmed('judgeDateEnd', form.judgeDateEnd)
+  assignTrimmed('judgeDescription', form.judgeDescription)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：ipqcOrderItem 列 */
-const ipqcOrderItemExpandColumns = computed(() => [
-  {
-    title: t('entity.ipqcOrderItem.ipqcordername'),
-    dataIndex: 'ipqcOrderName',
-    key: 'ipqcOrderName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderItem.ipqcordercode'),
-    dataIndex: 'ipqcOrderCode',
-    key: 'ipqcOrderCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderItem.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderItem.materialcode'),
-    dataIndex: 'materialCode',
-    key: 'materialCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderItem.materialname'),
-    dataIndex: 'materialName',
-    key: 'materialName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderItem.batchno'),
-    dataIndex: 'batchNo',
-    key: 'batchNo',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderItem.productionquantity'),
-    dataIndex: 'productionQuantity',
-    key: 'productionQuantity',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderItem.standardcode'),
-    dataIndex: 'standardCode',
-    key: 'standardCode',
-    ellipsis: true,
-  },
-])
 
-/** 展开行预览：ipqcOrderChangeLog 列 */
-const ipqcOrderChangeLogExpandColumns = computed(() => [
-  {
-    title: t('entity.ipqcOrderChangeLog.ipqcordername'),
-    dataIndex: 'ipqcOrderName',
-    key: 'ipqcOrderName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderChangeLog.changetype'),
-    dataIndex: 'changeType',
-    key: 'changeType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderChangeLog.changeby'),
-    dataIndex: 'changeBy',
-    key: 'changeBy',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderChangeLog.changetime'),
-    dataIndex: 'changeTime',
-    key: 'changeTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ipqcOrderChangeLog.order'),
-    dataIndex: 'order',
-    key: 'order',
-    ellipsis: true,
-  },
-])
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
 
-/** 读取主表行上的 ipqcOrderItem 子表缓存 */
-function getIpqcOrderItemRows(record: IpqcOrder): IpqcOrderItem[] {
-  return (record as any)?.items ?? []
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: IpqcOrder | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getIpqcOrderId(record) : ''
 }
 
-/** 主表行是否已加载 ipqcOrderItem 子表 */
-function hasIpqcOrderItemRows(record: IpqcOrder): boolean {
-  return getIpqcOrderItemRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as IpqcOrder
+  const key = getIpqcOrderId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
-/** 读取主表行上的 ipqcOrderChangeLog 子表缓存 */
-function getIpqcOrderChangeLogRows(record: IpqcOrder): IpqcOrderChangeLog[] {
-  return (record as any)?.changeLogs ?? []
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
 }
-
-/** 主表行是否已加载 ipqcOrderChangeLog 子表 */
-function hasIpqcOrderChangeLogRows(record: IpqcOrder): boolean {
-  return getIpqcOrderChangeLogRows(record).length > 0
-}
-
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadIpqcOrderDetail(record: IpqcOrder): Promise<IpqcOrder | null> {
@@ -644,81 +602,6 @@ async function loadIpqcOrderDetail(record: IpqcOrder): Promise<IpqcOrder | null>
     return null
   }
 }
-/** 懒加载 ipqcOrderItem 子表（IpqcOrderItemQuery + ipqcOrderItemApi，与主表 IpqcOrderQuery 分离） */
-async function loadIpqcOrderItemForIpqcOrder(record: IpqcOrder): Promise<IpqcOrderItem[]> {
-  const masterId = getIpqcOrderId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: IpqcOrderItemQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      ipqcOrderId: masterId,
-    }
-    const result = await ipqcOrderItemApi.getIpqcOrderItemList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getIpqcOrderId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, items: rows } as IpqcOrder
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 ipqcOrderChangeLog 子表（IpqcOrderChangeLogQuery + ipqcOrderChangeLogApi，与主表 IpqcOrderQuery 分离） */
-async function loadIpqcOrderChangeLogForIpqcOrder(record: IpqcOrder): Promise<IpqcOrderChangeLog[]> {
-  const masterId = getIpqcOrderId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: IpqcOrderChangeLogQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      ipqcOrderId: masterId,
-    }
-    const result = await ipqcOrderChangeLogApi.getIpqcOrderChangeLogList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getIpqcOrderId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, changeLogs: rows } as IpqcOrder
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureIpqcOrderChildrenLoaded(record: IpqcOrder) {
-  if (!hasIpqcOrderItemRows(record)) {
-    await loadIpqcOrderItemForIpqcOrder(record)
-  }
-  if (!hasIpqcOrderChangeLogRows(record)) {
-    await loadIpqcOrderChangeLogForIpqcOrder(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: IpqcOrder) {
-  const key = getIpqcOrderId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureIpqcOrderChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -733,7 +616,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'ipqcOrderId') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.plantcode'),
+    title: t('entity.ipqcorder.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -742,7 +625,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.sourcecode'),
+    title: t('entity.ipqcorder.sourcecode'),
     dataIndex: 'sourceCode',
     key: 'sourceCode',
     width: 120,
@@ -751,7 +634,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'sourceCode') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.inspectiondate'),
+    title: t('entity.ipqcorder.inspectiondate'),
     dataIndex: 'inspectionDate',
     key: 'inspectionDate',
     width: 120,
@@ -760,7 +643,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'inspectionDate') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.code'),
+    title: t('entity.ipqcorder.code'),
     dataIndex: 'ipqcOrderCode',
     key: 'ipqcOrderCode',
     width: 120,
@@ -769,7 +652,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'ipqcOrderCode') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.processcode'),
+    title: t('entity.ipqcorder.processcode'),
     dataIndex: 'processCode',
     key: 'processCode',
     width: 120,
@@ -778,7 +661,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'processCode') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.processname'),
+    title: t('entity.ipqcorder.processname'),
     dataIndex: 'processName',
     key: 'processName',
     width: 120,
@@ -787,7 +670,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'processName') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.totalproductionquantity'),
+    title: t('entity.ipqcorder.totalproductionquantity'),
     dataIndex: 'totalProductionQuantity',
     key: 'totalProductionQuantity',
     width: 120,
@@ -796,7 +679,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'totalProductionQuantity') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.totalsamplequantity'),
+    title: t('entity.ipqcorder.totalsamplequantity'),
     dataIndex: 'totalSampleQuantity',
     key: 'totalSampleQuantity',
     width: 120,
@@ -805,7 +688,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'totalSampleQuantity') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.totalqualifiedquantity'),
+    title: t('entity.ipqcorder.totalqualifiedquantity'),
     dataIndex: 'totalQualifiedQuantity',
     key: 'totalQualifiedQuantity',
     width: 120,
@@ -814,7 +697,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'totalQualifiedQuantity') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.totalunqualifiedquantity'),
+    title: t('entity.ipqcorder.totalunqualifiedquantity'),
     dataIndex: 'totalUnqualifiedQuantity',
     key: 'totalUnqualifiedQuantity',
     width: 120,
@@ -823,7 +706,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'totalUnqualifiedQuantity') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.totalinspectionreturnquantity'),
+    title: t('entity.ipqcorder.totalinspectionreturnquantity'),
     dataIndex: 'totalInspectionReturnQuantity',
     key: 'totalInspectionReturnQuantity',
     width: 120,
@@ -832,7 +715,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'totalInspectionReturnQuantity') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.judgestatus'),
+    title: t('entity.ipqcorder.judgestatus'),
     dataIndex: 'judgeStatus',
     key: 'judgeStatus',
     width: 120,
@@ -841,7 +724,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'judgeStatus') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.judgeby'),
+    title: t('entity.ipqcorder.judgeby'),
     dataIndex: 'judgeBy',
     key: 'judgeBy',
     width: 120,
@@ -850,7 +733,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'judgeBy') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.judgedate'),
+    title: t('entity.ipqcorder.judgedate'),
     dataIndex: 'judgeDate',
     key: 'judgeDate',
     width: 120,
@@ -859,7 +742,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIpqcOrderField(record, 'judgeDate') ?? ''
   },
   {
-    title: t('entity.ipqcOrder.judgedescription'),
+    title: t('entity.ipqcorder.judgedescription'),
     dataIndex: 'judgeDescription',
     key: 'judgeDescription',
     width: 120,
@@ -898,6 +781,7 @@ const getIpqcOrderId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getIpqcOrderField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -905,51 +789,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: IpqcOrder, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getIpqcOrderId(selectedRow.value) === getIpqcOrderId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: IpqcOrder[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: IpqcOrder) => ({
-  onClick: () => {
-    const key = getIpqcOrderId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getIpqcOrderId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: IpqcOrderQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getIpqcOrderList(params)
+    const res = await getIpqcOrderList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -967,7 +832,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -994,22 +859,23 @@ function handleReset() {
   judgeDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.ipqcOrder._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.ipqcorder._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: IpqcOrder) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ipqcOrder._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ipqcorder._self') })
   formLoading.value = true
   try {
     const detail = await loadIpqcOrderDetail(record)
@@ -1025,7 +891,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.ipqcOrder._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.ipqcorder._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1043,12 +909,17 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateIpqcOrder(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.ipqcOrder._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.ipqcorder._self') }))
     } else {
       await createIpqcOrder(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.ipqcOrder._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.ipqcorder._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  ipqcOrderItemPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1058,6 +929,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1089,16 +962,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: IpqcOrderQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportIpqcOrder(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportIpqcOrder(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1117,10 +985,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.ipqcOrder._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.ipqcorder._self') }))
   } catch (error: any) {
     logger.error('[IpqcOrder] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.ipqcOrder._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.ipqcorder._self') }))
   } finally {
     loading.value = false
   }
@@ -1129,12 +997,16 @@ async function handleExport() {
 async function handleDeleteOne(record: IpqcOrder) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.ipqcOrder._self'), name: t('common.tip.this.target', { target: t('entity.ipqcOrder._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.ipqcorder._self'), name: t('common.tip.this.target', { target: t('entity.ipqcorder._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteIpqcOrderById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.ipqcOrder._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.ipqcorder._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1142,18 +1014,22 @@ async function handleDeleteOne(record: IpqcOrder) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.ipqcOrder._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.ipqcorder._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.ipqcOrder._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.ipqcorder._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteIpqcOrderBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.ipqcOrder._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.ipqcorder._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1166,7 +1042,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1191,7 +1067,7 @@ function handleAdvancedQueryReset() {
   judgeDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -1220,24 +1096,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-quality-operation-ipqc-order {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

@@ -64,8 +64,17 @@ public class TaktGenEngine : ITaktGenEngine
             tableScript["service_namespace"] = tableModel.ServiceNamespace ?? "Takt.Application.Services";
             tableScript["gen_author"] = tableModel.GenAuthor ?? "Takt365";
             tableScript["comment"] = tableModel.Comment ?? string.Empty;
+            tableScript["data_source"] = tableModel.DataSource ?? string.Empty;
             tableScript["table_name"] = tableModel.TableName ?? string.Empty;
             tableScript["entity_class_name"] = tableModel.EntityClassName ?? string.Empty;
+            tableScript["entity_name_pascal"] = tableModel.EntityNamePascal ?? string.Empty;
+            tableScript["entity_name_camel"] = tableModel.EntityNameCamel ?? string.Empty;
+            tableScript["entity_name_kebab"] = tableModel.EntityNameKebab ?? string.Empty;
+            tableScript["frontend_module_path"] = tableModel.FrontendModulePath ?? string.Empty;
+            tableScript["gen_module_name"] = tableModel.GenModuleName ?? string.Empty;
+            tableScript["perms_prefix_canonical"] = tableModel.PermsPrefixCanonical ?? string.Empty;
+            tableScript["is_gen_menu"] = tableModel.IsGenMenu;
+            tableScript["is_gen_translation"] = tableModel.IsGenTranslation;
             tableScript["gen_business_name"] = tableModel.GenBusinessName ?? string.Empty;
             tableScript["table_comment"] = tableModel.TableComment ?? string.Empty;
             tableScript["is_query"] = tableModel.IsQuery;
@@ -102,6 +111,7 @@ public class TaktGenEngine : ITaktGenEngine
                 btnRow["permission"] = row.Permission ?? string.Empty;
                 btnRow["menu_l10n_key"] = row.MenuL10nKey ?? string.Empty;
                 btnRow["sort_order"] = row.SortOrder;
+                btnRow["order_num"] = row.SortOrder;
                 menuButtonRowsArray.Add(btnRow);
             }
             tableScript["sql_menu_button_rows"] = menuButtonRowsArray;

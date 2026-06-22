@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionTeamDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionTeam 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionTeam 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Manufacturing.Output;
 
@@ -85,7 +84,7 @@ public class TaktProductionTeamDto : TaktCompanyDtoBase
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public int Status { get; set; }
+    public int Status { get; set; } = 0;
 
 }
 
@@ -173,7 +172,7 @@ public class TaktProductionTeamQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -257,12 +256,12 @@ public class TaktProductionTeamCreateDto
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public int Status { get; set; }
+    public int Status { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -312,7 +311,7 @@ public class TaktProductionTeamStatusDto
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "启用状态（1=启用，0=禁用）不能为空")]
-    public int Status { get; set; }
+    public int Status { get; set; } = 0;
 }
 
 // ========================================
@@ -388,7 +387,7 @@ public class TaktProductionTeamTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -471,7 +470,7 @@ public class TaktProductionTeamImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -550,12 +549,12 @@ public class TaktProductionTeamExportDto
     /// <summary>
     /// 启用状态（1=启用，0=禁用）
     /// </summary>
-    public int Status { get; set; }
+    public int Status { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

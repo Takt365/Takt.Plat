@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktLoginLogI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktLoginLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,119 +75,119 @@ public class TaktLoginLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktLoginLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.loginlog._self / entity.loginlog.{{field}}；ResourceGroup=9；ResourceType=0
+    /// I18nKey：entity.loginlog._self / entity.loginlog.{{field}}；ResourceGroup=Logging；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetLoginLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.loginlog._self
-            new TranslationSeedItem("entity.loginlog._self", "en-US", "Login Log Information", "实体名称"),
+            new TranslationSeedItem("entity.loginlog._self", "en-US", "Login Log Information_us", "实体名称"),
             // entity.loginlog._self
-            new TranslationSeedItem("entity.loginlog._self", "ja-JP", "登录日志信息", "实体名称"),
+            new TranslationSeedItem("entity.loginlog._self", "ja-JP", "登录日志信息_jp", "实体名称"),
             // entity.loginlog._self
             new TranslationSeedItem("entity.loginlog._self", "zh-CN", "登录日志信息", "实体名称"),
             // entity.loginlog._self
-            new TranslationSeedItem("entity.loginlog._self", "zh-HK", "登录日志信息", "实体名称"),
+            new TranslationSeedItem("entity.loginlog._self", "zh-HK", "登录日志信息_hk", "实体名称"),
 
             // entity.loginlog.username
-            new TranslationSeedItem("entity.loginlog.username", "en-US", "用户名", "用户名（登录账号）"),
+            new TranslationSeedItem("entity.loginlog.username", "en-US", "用户名_us", "用户名（登录账号）"),
             // entity.loginlog.username
-            new TranslationSeedItem("entity.loginlog.username", "ja-JP", "用户名", "用户名（登录账号）"),
+            new TranslationSeedItem("entity.loginlog.username", "ja-JP", "用户名_jp", "用户名（登录账号）"),
             // entity.loginlog.username
             new TranslationSeedItem("entity.loginlog.username", "zh-CN", "用户名", "用户名（登录账号）"),
             // entity.loginlog.username
-            new TranslationSeedItem("entity.loginlog.username", "zh-HK", "用户名", "用户名（登录账号）"),
+            new TranslationSeedItem("entity.loginlog.username", "zh-HK", "用户名_hk", "用户名（登录账号）"),
 
             // entity.loginlog.logintype
-            new TranslationSeedItem("entity.loginlog.logintype", "en-US", "登录方式", "登录方式"),
+            new TranslationSeedItem("entity.loginlog.logintype", "en-US", "登录方式_us", "登录方式"),
             // entity.loginlog.logintype
-            new TranslationSeedItem("entity.loginlog.logintype", "ja-JP", "登录方式", "登录方式"),
+            new TranslationSeedItem("entity.loginlog.logintype", "ja-JP", "登录方式_jp", "登录方式"),
             // entity.loginlog.logintype
             new TranslationSeedItem("entity.loginlog.logintype", "zh-CN", "登录方式", "登录方式"),
             // entity.loginlog.logintype
-            new TranslationSeedItem("entity.loginlog.logintype", "zh-HK", "登录方式", "登录方式"),
+            new TranslationSeedItem("entity.loginlog.logintype", "zh-HK", "登录方式_hk", "登录方式"),
 
             // entity.loginlog.browser
-            new TranslationSeedItem("entity.loginlog.browser", "en-US", "浏览器类型", "浏览器类型"),
+            new TranslationSeedItem("entity.loginlog.browser", "en-US", "浏览器类型_us", "浏览器类型"),
             // entity.loginlog.browser
-            new TranslationSeedItem("entity.loginlog.browser", "ja-JP", "浏览器类型", "浏览器类型"),
+            new TranslationSeedItem("entity.loginlog.browser", "ja-JP", "浏览器类型_jp", "浏览器类型"),
             // entity.loginlog.browser
             new TranslationSeedItem("entity.loginlog.browser", "zh-CN", "浏览器类型", "浏览器类型"),
             // entity.loginlog.browser
-            new TranslationSeedItem("entity.loginlog.browser", "zh-HK", "浏览器类型", "浏览器类型"),
+            new TranslationSeedItem("entity.loginlog.browser", "zh-HK", "浏览器类型_hk", "浏览器类型"),
 
             // entity.loginlog.os
-            new TranslationSeedItem("entity.loginlog.os", "en-US", "操作系统", "操作系统"),
+            new TranslationSeedItem("entity.loginlog.os", "en-US", "操作系统_us", "操作系统"),
             // entity.loginlog.os
-            new TranslationSeedItem("entity.loginlog.os", "ja-JP", "操作系统", "操作系统"),
+            new TranslationSeedItem("entity.loginlog.os", "ja-JP", "操作系统_jp", "操作系统"),
             // entity.loginlog.os
             new TranslationSeedItem("entity.loginlog.os", "zh-CN", "操作系统", "操作系统"),
             // entity.loginlog.os
-            new TranslationSeedItem("entity.loginlog.os", "zh-HK", "操作系统", "操作系统"),
+            new TranslationSeedItem("entity.loginlog.os", "zh-HK", "操作系统_hk", "操作系统"),
 
             // entity.loginlog.useragent
-            new TranslationSeedItem("entity.loginlog.useragent", "en-US", "用户代理字符串", "用户代理字符串（User-Agent）"),
+            new TranslationSeedItem("entity.loginlog.useragent", "en-US", "用户代理字符串_us", "用户代理字符串（User-Agent）"),
             // entity.loginlog.useragent
-            new TranslationSeedItem("entity.loginlog.useragent", "ja-JP", "用户代理字符串", "用户代理字符串（User-Agent）"),
+            new TranslationSeedItem("entity.loginlog.useragent", "ja-JP", "用户代理字符串_jp", "用户代理字符串（User-Agent）"),
             // entity.loginlog.useragent
             new TranslationSeedItem("entity.loginlog.useragent", "zh-CN", "用户代理字符串", "用户代理字符串（User-Agent）"),
             // entity.loginlog.useragent
-            new TranslationSeedItem("entity.loginlog.useragent", "zh-HK", "用户代理字符串", "用户代理字符串（User-Agent）"),
+            new TranslationSeedItem("entity.loginlog.useragent", "zh-HK", "用户代理字符串_hk", "用户代理字符串（User-Agent）"),
 
             // entity.loginlog.loginresult
-            new TranslationSeedItem("entity.loginlog.loginresult", "en-US", "登录结果", "登录结果"),
+            new TranslationSeedItem("entity.loginlog.loginresult", "en-US", "登录结果_us", "登录结果"),
             // entity.loginlog.loginresult
-            new TranslationSeedItem("entity.loginlog.loginresult", "ja-JP", "登录结果", "登录结果"),
+            new TranslationSeedItem("entity.loginlog.loginresult", "ja-JP", "登录结果_jp", "登录结果"),
             // entity.loginlog.loginresult
             new TranslationSeedItem("entity.loginlog.loginresult", "zh-CN", "登录结果", "登录结果"),
             // entity.loginlog.loginresult
-            new TranslationSeedItem("entity.loginlog.loginresult", "zh-HK", "登录结果", "登录结果"),
+            new TranslationSeedItem("entity.loginlog.loginresult", "zh-HK", "登录结果_hk", "登录结果"),
 
             // entity.loginlog.loginmessage
-            new TranslationSeedItem("entity.loginlog.loginmessage", "en-US", "登录结果消息", "登录结果消息"),
+            new TranslationSeedItem("entity.loginlog.loginmessage", "en-US", "登录结果消息_us", "登录结果消息"),
             // entity.loginlog.loginmessage
-            new TranslationSeedItem("entity.loginlog.loginmessage", "ja-JP", "登录结果消息", "登录结果消息"),
+            new TranslationSeedItem("entity.loginlog.loginmessage", "ja-JP", "登录结果消息_jp", "登录结果消息"),
             // entity.loginlog.loginmessage
             new TranslationSeedItem("entity.loginlog.loginmessage", "zh-CN", "登录结果消息", "登录结果消息"),
             // entity.loginlog.loginmessage
-            new TranslationSeedItem("entity.loginlog.loginmessage", "zh-HK", "登录结果消息", "登录结果消息"),
+            new TranslationSeedItem("entity.loginlog.loginmessage", "zh-HK", "登录结果消息_hk", "登录结果消息"),
 
             // entity.loginlog.loginip
-            new TranslationSeedItem("entity.loginlog.loginip", "en-US", "登录IP地址", "登录IP地址"),
+            new TranslationSeedItem("entity.loginlog.loginip", "en-US", "登录IP地址_us", "登录IP地址"),
             // entity.loginlog.loginip
-            new TranslationSeedItem("entity.loginlog.loginip", "ja-JP", "登录IP地址", "登录IP地址"),
+            new TranslationSeedItem("entity.loginlog.loginip", "ja-JP", "登录IP地址_jp", "登录IP地址"),
             // entity.loginlog.loginip
             new TranslationSeedItem("entity.loginlog.loginip", "zh-CN", "登录IP地址", "登录IP地址"),
             // entity.loginlog.loginip
-            new TranslationSeedItem("entity.loginlog.loginip", "zh-HK", "登录IP地址", "登录IP地址"),
+            new TranslationSeedItem("entity.loginlog.loginip", "zh-HK", "登录IP地址_hk", "登录IP地址"),
 
             // entity.loginlog.loginlocation
-            new TranslationSeedItem("entity.loginlog.loginlocation", "en-US", "登录地点", "登录地点（IP解析，如：中国-广东省-深圳市）"),
+            new TranslationSeedItem("entity.loginlog.loginlocation", "en-US", "登录地点_us", "登录地点（IP解析，如：中国-广东省-深圳市）"),
             // entity.loginlog.loginlocation
-            new TranslationSeedItem("entity.loginlog.loginlocation", "ja-JP", "登录地点", "登录地点（IP解析，如：中国-广东省-深圳市）"),
+            new TranslationSeedItem("entity.loginlog.loginlocation", "ja-JP", "登录地点_jp", "登录地点（IP解析，如：中国-广东省-深圳市）"),
             // entity.loginlog.loginlocation
             new TranslationSeedItem("entity.loginlog.loginlocation", "zh-CN", "登录地点", "登录地点（IP解析，如：中国-广东省-深圳市）"),
             // entity.loginlog.loginlocation
-            new TranslationSeedItem("entity.loginlog.loginlocation", "zh-HK", "登录地点", "登录地点（IP解析，如：中国-广东省-深圳市）"),
+            new TranslationSeedItem("entity.loginlog.loginlocation", "zh-HK", "登录地点_hk", "登录地点（IP解析，如：中国-广东省-深圳市）"),
 
             // entity.loginlog.logoutat
-            new TranslationSeedItem("entity.loginlog.logoutat", "en-US", "登出时间", "登出时间"),
+            new TranslationSeedItem("entity.loginlog.logoutat", "en-US", "登出时间_us", "登出时间"),
             // entity.loginlog.logoutat
-            new TranslationSeedItem("entity.loginlog.logoutat", "ja-JP", "登出时间", "登出时间"),
+            new TranslationSeedItem("entity.loginlog.logoutat", "ja-JP", "登出时间_jp", "登出时间"),
             // entity.loginlog.logoutat
             new TranslationSeedItem("entity.loginlog.logoutat", "zh-CN", "登出时间", "登出时间"),
             // entity.loginlog.logoutat
-            new TranslationSeedItem("entity.loginlog.logoutat", "zh-HK", "登出时间", "登出时间"),
+            new TranslationSeedItem("entity.loginlog.logoutat", "zh-HK", "登出时间_hk", "登出时间"),
 
             // entity.loginlog.sessionduration
-            new TranslationSeedItem("entity.loginlog.sessionduration", "en-US", "会话时长", "会话时长（秒，从登录到登出的时长）"),
+            new TranslationSeedItem("entity.loginlog.sessionduration", "en-US", "会话时长_us", "会话时长（秒，从登录到登出的时长）"),
             // entity.loginlog.sessionduration
-            new TranslationSeedItem("entity.loginlog.sessionduration", "ja-JP", "会话时长", "会话时长（秒，从登录到登出的时长）"),
+            new TranslationSeedItem("entity.loginlog.sessionduration", "ja-JP", "会话时长_jp", "会话时长（秒，从登录到登出的时长）"),
             // entity.loginlog.sessionduration
             new TranslationSeedItem("entity.loginlog.sessionduration", "zh-CN", "会话时长", "会话时长（秒，从登录到登出的时长）"),
             // entity.loginlog.sessionduration
-            new TranslationSeedItem("entity.loginlog.sessionduration", "zh-HK", "会话时长", "会话时长（秒，从登录到登出的时长）"),
+            new TranslationSeedItem("entity.loginlog.sessionduration", "zh-HK", "会话时长_hk", "会话时长（秒，从登录到登出的时长）"),
         };
     }
 
@@ -205,10 +205,10 @@ public class TaktLoginLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 9;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Logging";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

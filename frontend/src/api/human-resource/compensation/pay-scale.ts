@@ -42,9 +42,7 @@ export function getPayScaleList(queryDto: any): Promise<TaktPagedResult<PayScale
   return request<TaktPagedResult<PayScale>>({
     url: `${PAY_SCALE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportPayScale(
     url: `${PAY_SCALE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

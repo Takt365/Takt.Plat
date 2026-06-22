@@ -79,10 +79,14 @@
         @tree-drop="handleMenuTreeDrop"
       />
       <TaktTreeRightTable
-      entity-scope="tenant"
+        entity-scope="tenant"
         v-model:current="tableCurrentPage"
         v-model:page-size="tablePageSize"
         :columns="columns"
+        :visible-column-keys="visibleColumnKeys"
+        :id-column-key="'menuId'"
+        :action-column-key="'action'"
+        table-mode="tree"
         :data-source="paginatedFlatTableRows"
         :loading="loading"
         :row-key="getMenuId"
@@ -111,29 +115,38 @@
           <template v-else-if="column.key === 'menuStatus'">
             <a-switch
               :checked="getMenuField(record, 'menuStatus') === 1"
+              :disabled="getMenuField(record, 'isBuiltIn') === 1"
+              :checked-children="t('common.page.button.enable')"
+              :un-checked-children="t('common.page.button.disable')"
               :loading="Boolean(switchLoadingMap.get(getMenuId(record) + ':menuStatus'))"
-              @change="(checked) => handleMenuStatusSwitch(record, checked ? 1 : 0)"
+              @change="(checked: unknown) => handleMenuStatusSwitch(record, Boolean(checked) ? 1 : 0)"
             />
           </template>
           <template v-else-if="column.key === 'isVisible'">
             <a-switch
               :checked="getMenuField(record, 'isVisible') === 1"
+              :checked-children="t('common.page.button.enable')"
+              :un-checked-children="t('common.page.button.disable')"
               :loading="Boolean(switchLoadingMap.get(getMenuId(record) + ':isVisible'))"
-              @change="(checked) => handleMenuSwitch(record, 'isVisible', checked ? 1 : 0)"
+              @change="(checked: unknown) => handleMenuSwitch(record, 'isVisible', Boolean(checked) ? 1 : 0)"
             />
           </template>
           <template v-else-if="column.key === 'isCached'">
             <a-switch
               :checked="getMenuField(record, 'isCached') === 1"
+              :checked-children="t('common.page.button.enable')"
+              :un-checked-children="t('common.page.button.disable')"
               :loading="Boolean(switchLoadingMap.get(getMenuId(record) + ':isCached'))"
-              @change="(checked) => handleMenuSwitch(record, 'isCached', checked ? 1 : 0)"
+              @change="(checked: unknown) => handleMenuSwitch(record, 'isCached', Boolean(checked) ? 1 : 0)"
             />
           </template>
           <template v-else-if="column.key === 'isExternal'">
             <a-switch
               :checked="getMenuField(record, 'isExternal') === 1"
+              :checked-children="t('common.page.button.enable')"
+              :un-checked-children="t('common.page.button.disable')"
               :loading="Boolean(switchLoadingMap.get(getMenuId(record) + ':isExternal'))"
-              @change="(checked) => handleMenuSwitch(record, 'isExternal', checked ? 1 : 0)"
+              @change="(checked: unknown) => handleMenuSwitch(record, 'isExternal', Boolean(checked) ? 1 : 0)"
             />
           </template>
         </template>
@@ -179,7 +192,7 @@
       <a-form-item :label="t('entity.menu.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.menuStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.status') })"
           allow-clear
         />
@@ -220,6 +233,7 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'menuId'"
       :action-column-key="'action'"
+      table-mode="tree"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -241,6 +255,7 @@ import type { TreeDropPayload } from '@/components/business/takt-tree-left-table
 import { taktExcelEntityNames } from '@/utils/naming'
 import { RiEditLine, RiDeleteBinLine, RiUserSettingsLine } from '@remixicon/vue'
 import { TaktMenuType } from '@/utils/common'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 
 const { t } = useI18n()
 const menuExcelNames = taktExcelEntityNames('TaktMenu')
@@ -254,8 +269,8 @@ const treeExpandedKeys = ref<(string | number)[]>([])
 /** 右侧树表行展开状态：true=全部展开，false=全部折叠（扁平列表下仅保留工具栏状态） */
 const tableExpanded = ref(false)
 /** 右侧扁平列表分页 */
-const tableCurrentPage = ref(1)
-const tablePageSize = ref(20)
+const tableCurrentPage = ref(getTaktDefaultPageIndex())
+const tablePageSize = ref(getTaktDefaultPageSize())
 const loading = ref(false)
 /** 左侧导航树数据源（getMenuTree 全量，不受右侧查询影响） */
 const navFullTableTree = ref<any[]>([])
@@ -264,7 +279,7 @@ const fullTableTree = ref<any[]>([])
 /** 左侧树数据（由 navFullTableTree 派生） */
 const menuTreeData = ref<TreeDataItem[]>([])
 const selectedTreeKeys = ref<(string | number)[]>([])
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 const total = ref(0)
 const selectedRow = ref<Menu | null>(null)
 const selectedRows = ref<Menu[]>([])
@@ -999,7 +1014,7 @@ const handleRefresh = () => { handleSearch() }
 <style scoped lang="css">
 /* 边距由子组件（takt-tree-left-* / takt-tree-right-*）统一设置，本视图不重复设置 */
 .identity-menu {
-  padding: 0;
+  padding: 0 4px 0 0;
   display: flex;
   flex-direction: column;
   min-height: 0;

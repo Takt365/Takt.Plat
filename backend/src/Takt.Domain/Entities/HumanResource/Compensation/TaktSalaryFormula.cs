@@ -57,7 +57,7 @@ public class TaktSalaryFormula : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "formula_name", ColumnDescription = "步骤名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string FormulaName { get; set; } = string.Empty;
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     [SugarColumn(ColumnName = "formula_step", ColumnDescription = "公式步骤", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int FormulaStep { get; set; } = 0;
@@ -92,7 +92,7 @@ public class TaktSalaryFormula : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "expiry_date", ColumnDescription = "失效日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? ExpiryDate { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     [SugarColumn(ColumnName = "formula_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FormulaStatus { get; set; } = 1;

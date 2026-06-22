@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktNumberingsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-17
 // 创建人：Takt365(Cursor AI)
 // 功能描述：编号规则控制器
 // 
@@ -183,7 +183,7 @@ public class TaktNumberingsController : TaktControllerBase
     /// <summary>
     /// 更新编号规则状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>编号规则DTO</returns>
     [TaktPermission("foundation:numbering:update", "更新编号规则状态")]
     [HttpPut("status")]
@@ -262,46 +262,6 @@ public class TaktNumberingsController : TaktControllerBase
         {
             var (resultFileName, fileContent) = await _numberingService.ExportNumberingAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 预览业务编号（不占用流水号）
-    /// </summary>
-    /// <param name="request">预览参数</param>
-    /// <returns>预览结果</returns>
-    [TaktPermission("foundation:numbering:query", "预览业务编号")]
-    [HttpPost("preview")]
-    public async Task<IActionResult> PreviewNumberingAsync([FromBody] TaktNumberingPreviewRequestDto request)
-    {
-        try
-        {
-            var result = await _numberingService.PreviewNumberingAsync(request);
-            return Success(result, "预览成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 生成下一个业务编号（占用流水号）
-    /// </summary>
-    /// <param name="request">生成参数</param>
-    /// <returns>生成结果</returns>
-    [TaktPermission("foundation:numbering:update", "生成业务编号")]
-    [HttpPost("generate")]
-    public async Task<IActionResult> GenerateNumberingAsync([FromBody] TaktNumberingGenerateRequestDto request)
-    {
-        try
-        {
-            var result = await _numberingService.GenerateNumberingAsync(request);
-            return Success(result, "生成成功");
         }
         catch (Exception ex)
         {

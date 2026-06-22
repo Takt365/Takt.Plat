@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
-// 文件名称：ITaktQualityOperationOtherService.cs
-// 创建时间：2026-06-09
+// 文件名称：ITaktQualityAssuranceOtherService.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务其他通常业务费用明细应用服务接口
 // 
@@ -19,34 +19,34 @@ namespace Takt.Application.Services.Logistics.Quality.Cost;
 /// <summary>
 /// 品质业务其他通常业务费用明细应用服务接口
 /// </summary>
-public interface ITaktQualityOperationOtherService
+public interface ITaktQualityAssuranceOtherService
 {
     /// <summary>
     /// 获取品质业务其他通常业务费用明细列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    Task<TaktPagedResult<TaktQualityOperationOtherDto>> GetQualityOperationOtherListAsync(TaktQualityOperationOtherQueryDto queryDto);
+    Task<TaktPagedResult<TaktQualityAssuranceOtherDto>> GetQualityAssuranceOtherListAsync(TaktQualityAssuranceOtherQueryDto queryDto);
 
     /// <summary>
     /// 根据ID获取品质业务其他通常业务费用明细
     /// </summary>
     /// <param name="id">品质业务其他通常业务费用明细ID</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationOtherDto?> GetQualityOperationOtherByIdAsync(long id);
+    Task<TaktQualityAssuranceOtherDto?> GetQualityAssuranceOtherByIdAsync(long id);
 
     /// <summary>
     /// 获取品质业务其他通常业务费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetQualityOperationOtherOptionsAsync();
+    Task<List<TaktSelectOption>> GetQualityAssuranceOtherOptionsAsync();
 
     /// <summary>
     /// 创建品质业务其他通常业务费用明细
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationOtherDto> CreateQualityOperationOtherAsync(TaktQualityOperationOtherCreateDto dto);
+    Task<TaktQualityAssuranceOtherDto> CreateQualityAssuranceOtherAsync(TaktQualityAssuranceOtherCreateDto dto);
 
     /// <summary>
     /// 更新品质业务其他通常业务费用明细
@@ -54,21 +54,21 @@ public interface ITaktQualityOperationOtherService
     /// <param name="id">品质业务其他通常业务费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationOtherDto> UpdateQualityOperationOtherAsync(long id, TaktQualityOperationOtherUpdateDto dto);
+    Task<TaktQualityAssuranceOtherDto> UpdateQualityAssuranceOtherAsync(long id, TaktQualityAssuranceOtherUpdateDto dto);
 
     /// <summary>
     /// 删除品质业务其他通常业务费用明细
     /// </summary>
     /// <param name="id">品质业务其他通常业务费用明细ID</param>
     /// <returns>任务</returns>
-    Task DeleteQualityOperationOtherByIdAsync(long id);
+    Task DeleteQualityAssuranceOtherByIdAsync(long id);
 
     /// <summary>
     /// 批量删除品质业务其他通常业务费用明细
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    Task DeleteQualityOperationOtherBatchAsync(IEnumerable<long> ids);
+    Task DeleteQualityAssuranceOtherBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
     /// 获取导入模板
@@ -76,7 +76,7 @@ public interface ITaktQualityOperationOtherService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] content)> GetQualityOperationOtherTemplateAsync(string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] content)> GetQualityAssuranceOtherTemplateAsync(string? sheetName = null, string? fileName = null);
 
     /// <summary>
     /// 导入品质业务其他通常业务费用明细
@@ -84,7 +84,7 @@ public interface ITaktQualityOperationOtherService
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    Task<(int success, int fail, List<string> errors)> ImportQualityOperationOtherAsync(Stream fileStream, string? sheetName = null);
+    Task<(int success, int fail, List<string> errors)> ImportQualityAssuranceOtherAsync(Stream fileStream, string? sheetName = null);
 
     /// <summary>
     /// 导出品质业务其他通常业务费用明细
@@ -93,6 +93,6 @@ public interface ITaktQualityOperationOtherService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] fileContent)> ExportQualityOperationOtherAsync(TaktQualityOperationOtherQueryDto? query = null, string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] fileContent)> ExportQualityAssuranceOtherAsync(TaktQualityAssuranceOtherQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
 }

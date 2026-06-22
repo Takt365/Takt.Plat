@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 自定义报表筛选条件（对标 SAP Selection Screen）
+ * 自定义报表筛选条件（SQVI 运行时筛选项）
  * 对应前端 TaktConfigurableSelectionDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 ConfigurableSelection
@@ -49,7 +49,7 @@ export interface ConfigurableSelection extends CompanyDtoBase {
   columnName: string;
 
   /**
-   * 显示名称（Selection Screen 标签）
+   * 显示名称（SQVI 筛选项 标签）
    */
   displayName: string;
 
@@ -74,7 +74,7 @@ export interface ConfigurableSelection extends CompanyDtoBase {
   isRequired: number;
 
   /**
-   * 排序号（Selection Screen 展示顺序）
+   * 排序号（SQVI 筛选项 展示顺序）
    */
   sortOrder: number;
 
@@ -119,7 +119,7 @@ export interface ConfigurableSelectionQuery extends TaktPagedQuery {
   columnName?: string;
 
   /**
-   * 显示名称（Selection Screen 标签）
+   * 显示名称（SQVI 筛选项 标签）
    */
   displayName?: string;
 
@@ -144,7 +144,7 @@ export interface ConfigurableSelectionQuery extends TaktPagedQuery {
   isRequired?: number;
 
   /**
-   * 排序号（Selection Screen 展示顺序）
+   * 排序号（SQVI 筛选项 展示顺序）
    */
   sortOrder?: number;
 
@@ -161,7 +161,7 @@ export interface ConfigurableSelectionQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -208,7 +208,7 @@ export interface ConfigurableSelectionCreate {
   columnName: string;
 
   /**
-   * 显示名称（Selection Screen 标签）
+   * 显示名称（SQVI 筛选项 标签）
    */
   displayName: string;
 
@@ -233,14 +233,14 @@ export interface ConfigurableSelectionCreate {
   isRequired: number;
 
   /**
-   * 排序号（Selection Screen 展示顺序）
+   * 排序号（SQVI 筛选项 展示顺序）
    */
   sortOrder: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -277,7 +277,7 @@ export interface ConfigurableSelectionSort {
   configurableSelectionId: string;
 
   /**
-   * 排序号（Selection Screen 展示顺序）
+   * 排序号（SQVI 筛选项 展示顺序）
    */
   sortOrder: number;
 
@@ -316,7 +316,7 @@ export interface ConfigurableSelectionTemplate {
   columnName?: string;
 
   /**
-   * 显示名称（Selection Screen 标签）
+   * 显示名称（SQVI 筛选项 标签）
    */
   displayName?: string;
 
@@ -341,14 +341,14 @@ export interface ConfigurableSelectionTemplate {
   isRequired?: number;
 
   /**
-   * 排序号（Selection Screen 展示顺序）
+   * 排序号（SQVI 筛选项 展示顺序）
    */
   sortOrder?: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -395,7 +395,7 @@ export interface ConfigurableSelectionImport {
   columnName?: string;
 
   /**
-   * 显示名称（Selection Screen 标签）
+   * 显示名称（SQVI 筛选项 标签）
    */
   displayName?: string;
 
@@ -420,14 +420,14 @@ export interface ConfigurableSelectionImport {
   isRequired?: number;
 
   /**
-   * 排序号（Selection Screen 展示顺序）
+   * 排序号（SQVI 筛选项 展示顺序）
    */
   sortOrder?: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -469,7 +469,7 @@ export interface ConfigurableSelectionExport {
   columnName: string;
 
   /**
-   * 显示名称（Selection Screen 标签）
+   * 显示名称（SQVI 筛选项 标签）
    */
   displayName: string;
 
@@ -494,14 +494,14 @@ export interface ConfigurableSelectionExport {
   isRequired: number;
 
   /**
-   * 排序号（Selection Screen 展示顺序）
+   * 排序号（SQVI 筛选项 展示顺序）
    */
   sortOrder: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

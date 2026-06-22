@@ -31,17 +31,9 @@ import TopLayout from './top/index.vue';
 import MixLayout from './mix/index.vue';
 
 const layoutLogger = createLogger('layout');
-const router = useRouter();
 const { setting } = storeToRefs(useSettingStore());
 const settingSafe = computed(() => setting.value ?? defaultSetting);
 const { on, off } = useEventBus();
-
-/**
- * 登出后跳转登录页
- */
-function handleLogout(): void {
-  void router.push('/login');
-}
 
 /**
  * 登录成功后确保菜单与动态路由就绪
@@ -75,7 +67,6 @@ async function handleMenuRefresh(): Promise<void> {
 }
 
 onMounted(() => {
-  on('user:logout', handleLogout);
   on('user:login', handleLoginSuccess);
   on('locale:change', handleLocaleChange);
   on('theme:change', handleThemeChange);
@@ -83,7 +74,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  off('user:logout', handleLogout);
   off('user:login', handleLoginSuccess);
   off('locale:change', handleLocaleChange);
   off('theme:change', handleThemeChange);

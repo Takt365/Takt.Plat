@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-manufacturing-bom-routing">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,76 +52,46 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="approval"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'routingId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getRoutingId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getRoutingId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="routingId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.routingItem._self') }}</div>
-          <a-table
-            v-if="hasRoutingItemRows(record)"
-            :columns="routingItemExpandColumns"
-            :data-source="getRoutingItemRows(record)"
-            :row-key="(row: RoutingItem, index?: number) => row?.routingItemId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.routingChangeLog._self') }}</div>
-          <a-table
-            v-if="hasRoutingChangeLogRows(record)"
-            :columns="routingChangeLogExpandColumns"
-            :data-source="getRoutingChangeLogRows(record)"
-            :row-key="(row: RoutingChangeLog, index?: number) => row?.routingChangeLogId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <RoutingItemPanel
+          ref="routingItemPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <RoutingForm
+        :key="formData?.routingId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -143,6 +113,8 @@
         <a-input
           v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -152,6 +124,8 @@
         <a-input
           v-model:value="advancedQueryForm.workCenter"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.workcenter') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -161,6 +135,8 @@
         <a-input
           v-model:value="advancedQueryForm.routingCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.code') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -170,6 +146,8 @@
         <a-input
           v-model:value="advancedQueryForm.routingName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.name') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -188,6 +166,8 @@
         <a-input
           v-model:value="advancedQueryForm.materialCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.materialcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -197,6 +177,8 @@
         <a-input
           v-model:value="advancedQueryForm.version"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.version') })"
+          show-count
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
@@ -274,6 +256,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.initiatorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -283,6 +267,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.initiatedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -302,6 +288,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.approvedby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -311,6 +299,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.approvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -322,6 +312,17 @@
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routing.approvedatend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('flowInstanceId')">
+      <a-form-item :label="t('entity.routing.flowinstanceid')">
+        <a-input
+          v-model:value="advancedQueryForm.flowInstanceId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.flowinstanceid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -347,12 +348,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -361,8 +381,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -415,16 +437,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import RoutingForm from './components/routing-form.vue'
-import { getRoutingList, getRoutingById, createRouting, updateRouting, deleteRoutingById, deleteRoutingBatch, getRoutingTemplate, importRouting, exportRouting } from '@/api/logistics/manufacturing/bom/routing'
-import * as routingItemApi from '@/api/logistics/manufacturing/bom/routing-item'
-import * as routingChangeLogApi from '@/api/logistics/manufacturing/bom/routing-change-log'
-import type { RoutingItem, RoutingItemQuery } from '@/types/logistics/manufacturing/bom/routing-item'
-import type { RoutingChangeLog, RoutingChangeLogQuery } from '@/types/logistics/manufacturing/bom/routing-change-log'
-import type { Routing, RoutingQuery, RoutingCreate, RoutingUpdate } from '@/types/logistics/manufacturing/bom/routing'
+import RoutingItemPanel from './components/routing-item-panel.vue'
+import { provideRoutingMasterContext } from './composables/use-routing-master-context'
+import { getRoutingList, getRoutingById, createRouting, updateRouting, deleteRoutingById, deleteRoutingBatch, getRoutingTemplate, importRouting, exportRouting, updateRoutingStatus } from '@/api/logistics/manufacturing/bom/routing'
+import type { Routing, RoutingQuery } from '@/types/logistics/manufacturing/bom/routing'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -442,9 +463,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Routing[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -459,11 +480,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Routing>>({})
+const formData = ref<Partial<Routing> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -487,9 +510,10 @@ const advancedQueryForm = ref({
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -502,10 +526,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'materialCode', label: t('entity.routing.materialcode') },
   { key: 'version', label: t('entity.routing.version') },
   { key: 'routingStatus', label: t('entity.routing.status') },
-  { key: 'effectiveDateStart', label: t('entity.routing.effectivedatestart') },
-  { key: 'effectiveDateEnd', label: t('entity.routing.effectivedateend') },
-  { key: 'expiryDateStart', label: t('entity.routing.expirydatestart') },
-  { key: 'expiryDateEnd', label: t('entity.routing.expirydateend') },
+  { key: 'effectiveDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.routing.effectivedate')) },
+  { key: 'effectiveDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.routing.effectivedate')) },
+  { key: 'expiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.routing.expirydate')) },
+  { key: 'expiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.routing.expirydate')) },
   { key: 'routingDescription', label: t('entity.routing.description') },
   { key: 'approvalStatus', label: t('entity.routing.approvalstatus') },
   { key: 'initiatorId', label: t('entity.routing.initiatorid') },
@@ -514,9 +538,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'approvedBy', label: t('entity.routing.approvedby') },
   { key: 'approvedAtStart', label: t('entity.routing.approvedatstart') },
   { key: 'approvedAtEnd', label: t('entity.routing.approvedatend') },
+  { key: 'flowInstanceId', label: t('entity.routing.flowinstanceid') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -534,132 +559,102 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideRoutingMasterContext()
+const routingItemPanelRef = ref<InstanceType<typeof RoutingItemPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {RoutingQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<RoutingQuery>): RoutingQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: RoutingQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof RoutingQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('workCenter', form.workCenter)
+  assignTrimmed('routingCode', form.routingCode)
+  assignTrimmed('routingName', form.routingName)
+  if (form.purpose !== undefined && form.purpose !== null) {
+    query.purpose = form.purpose
+  }
+  assignTrimmed('materialCode', form.materialCode)
+  assignTrimmed('version', form.version)
+  if (form.routingStatus !== undefined && form.routingStatus !== null) {
+    query.routingStatus = form.routingStatus
+  }
+  assignTrimmed('effectiveDateStart', form.effectiveDateStart)
+  assignTrimmed('effectiveDateEnd', form.effectiveDateEnd)
+  assignTrimmed('expiryDateStart', form.expiryDateStart)
+  assignTrimmed('expiryDateEnd', form.expiryDateEnd)
+  assignTrimmed('routingDescription', form.routingDescription)
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  assignTrimmed('initiatorId', form.initiatorId)
+  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
+  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
+  assignTrimmed('approvedBy', form.approvedBy)
+  assignTrimmed('approvedAtStart', form.approvedAtStart)
+  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('flowInstanceId', form.flowInstanceId)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：routingItem 列 */
-const routingItemExpandColumns = computed(() => [
-  {
-    title: t('entity.routingItem.routingname'),
-    dataIndex: 'routingName',
-    key: 'routingName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingItem.routingcode'),
-    dataIndex: 'routingCode',
-    key: 'routingCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingItem.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingItem.baseunit'),
-    dataIndex: 'baseUnit',
-    key: 'baseUnit',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingItem.basequantity'),
-    dataIndex: 'baseQuantity',
-    key: 'baseQuantity',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingItem.standardminutes'),
-    dataIndex: 'standardMinutes',
-    key: 'standardMinutes',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingItem.timeunit'),
-    dataIndex: 'timeUnit',
-    key: 'timeUnit',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingItem.standardshorts'),
-    dataIndex: 'standardShorts',
-    key: 'standardShorts',
-    ellipsis: true,
-  },
-])
 
-/** 展开行预览：routingChangeLog 列 */
-const routingChangeLogExpandColumns = computed(() => [
-  {
-    title: t('entity.routingChangeLog.routingname'),
-    dataIndex: 'routingName',
-    key: 'routingName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingChangeLog.changetype'),
-    dataIndex: 'changeType',
-    key: 'changeType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingChangeLog.changeby'),
-    dataIndex: 'changeBy',
-    key: 'changeBy',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingChangeLog.changetime'),
-    dataIndex: 'changeTime',
-    key: 'changeTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.routingChangeLog.routing'),
-    dataIndex: 'routing',
-    key: 'routing',
-    ellipsis: true,
-  },
-])
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
 
-/** 读取主表行上的 routingItem 子表缓存 */
-function getRoutingItemRows(record: Routing): RoutingItem[] {
-  return (record as any)?.items ?? []
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: Routing | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getRoutingId(record) : ''
 }
 
-/** 主表行是否已加载 routingItem 子表 */
-function hasRoutingItemRows(record: Routing): boolean {
-  return getRoutingItemRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as Routing
+  const key = getRoutingId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
-/** 读取主表行上的 routingChangeLog 子表缓存 */
-function getRoutingChangeLogRows(record: Routing): RoutingChangeLog[] {
-  return (record as any)?.changeLogs ?? []
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
 }
-
-/** 主表行是否已加载 routingChangeLog 子表 */
-function hasRoutingChangeLogRows(record: Routing): boolean {
-  return getRoutingChangeLogRows(record).length > 0
-}
-
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadRoutingDetail(record: Routing): Promise<Routing | null> {
@@ -678,81 +673,6 @@ async function loadRoutingDetail(record: Routing): Promise<Routing | null> {
     message.error(error?.message || t('common.feedback.load.data.failed'))
     return null
   }
-}
-/** 懒加载 routingItem 子表（RoutingItemQuery + routingItemApi，与主表 RoutingQuery 分离） */
-async function loadRoutingItemForRouting(record: Routing): Promise<RoutingItem[]> {
-  const masterId = getRoutingId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: RoutingItemQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      routingId: masterId,
-    }
-    const result = await routingItemApi.getRoutingItemList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getRoutingId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, items: rows } as Routing
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 routingChangeLog 子表（RoutingChangeLogQuery + routingChangeLogApi，与主表 RoutingQuery 分离） */
-async function loadRoutingChangeLogForRouting(record: Routing): Promise<RoutingChangeLog[]> {
-  const masterId = getRoutingId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: RoutingChangeLogQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      routingId: masterId,
-    }
-    const result = await routingChangeLogApi.getRoutingChangeLogList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getRoutingId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, changeLogs: rows } as Routing
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureRoutingChildrenLoaded(record: Routing) {
-  if (!hasRoutingItemRows(record)) {
-    await loadRoutingItemForRouting(record)
-  }
-  if (!hasRoutingChangeLogRows(record)) {
-    await loadRoutingChangeLogForRouting(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: Routing) {
-  const key = getRoutingId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureRoutingChildrenLoaded(record)
-  expandedRowKeys.value = [key]
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
@@ -897,6 +817,7 @@ const getRoutingId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getRoutingField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -904,51 +825,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: Routing, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getRoutingId(selectedRow.value) === getRoutingId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: Routing[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Routing) => ({
-  onClick: () => {
-    const key = getRoutingId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getRoutingId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: RoutingQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getRoutingList(params)
+    const res = await getRoutingList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -966,7 +868,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -994,20 +896,22 @@ function handleReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.routing._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: Routing) {
@@ -1051,6 +955,11 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.routing._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  routingItemPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1060,6 +969,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1091,16 +1002,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: RoutingQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportRouting(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportRouting(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1137,6 +1043,10 @@ async function handleDeleteOne(record: Routing) {
     onOk: async () => {
       await deleteRoutingById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: t('entity.routing._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1156,6 +1066,10 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteRoutingBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.routing._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1168,7 +1082,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1194,9 +1108,10 @@ function handleAdvancedQueryReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1225,24 +1140,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-manufacturing-bom-routing {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

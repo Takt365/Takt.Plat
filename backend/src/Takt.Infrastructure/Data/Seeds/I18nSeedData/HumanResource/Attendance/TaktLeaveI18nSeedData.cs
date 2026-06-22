@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktLeaveI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktLeave 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,155 +75,146 @@ public class TaktLeaveI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktLeave 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.leave._self / entity.leave.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.leave._self / entity.leave.{{field}}；ResourceGroup=Attendance；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetLeaveTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.leave._self
-            new TranslationSeedItem("entity.leave._self", "en-US", "Leave Information", "实体名称"),
+            new TranslationSeedItem("entity.leave._self", "en-US", "Leave Information_us", "实体名称"),
             // entity.leave._self
-            new TranslationSeedItem("entity.leave._self", "ja-JP", "请假信息", "实体名称"),
+            new TranslationSeedItem("entity.leave._self", "ja-JP", "请假信息_jp", "实体名称"),
             // entity.leave._self
             new TranslationSeedItem("entity.leave._self", "zh-CN", "请假信息", "实体名称"),
             // entity.leave._self
-            new TranslationSeedItem("entity.leave._self", "zh-HK", "请假信息", "实体名称"),
+            new TranslationSeedItem("entity.leave._self", "zh-HK", "请假信息_hk", "实体名称"),
 
             // entity.leave.employeeid
-            new TranslationSeedItem("entity.leave.employeeid", "en-US", "员工ID", "员工 ID（请假归属员工）"),
+            new TranslationSeedItem("entity.leave.employeeid", "en-US", "员工ID_us", "员工 ID（请假归属员工）"),
             // entity.leave.employeeid
-            new TranslationSeedItem("entity.leave.employeeid", "ja-JP", "员工ID", "员工 ID（请假归属员工）"),
+            new TranslationSeedItem("entity.leave.employeeid", "ja-JP", "员工ID_jp", "员工 ID（请假归属员工）"),
             // entity.leave.employeeid
             new TranslationSeedItem("entity.leave.employeeid", "zh-CN", "员工ID", "员工 ID（请假归属员工）"),
             // entity.leave.employeeid
-            new TranslationSeedItem("entity.leave.employeeid", "zh-HK", "员工ID", "员工 ID（请假归属员工）"),
+            new TranslationSeedItem("entity.leave.employeeid", "zh-HK", "员工ID_hk", "员工 ID（请假归属员工）"),
 
             // entity.leave.employeename
-            new TranslationSeedItem("entity.leave.employeename", "en-US", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.leave.employeename", "en-US", "员工姓名_us", "员工姓名"),
             // entity.leave.employeename
-            new TranslationSeedItem("entity.leave.employeename", "ja-JP", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.leave.employeename", "ja-JP", "员工姓名_jp", "员工姓名"),
             // entity.leave.employeename
             new TranslationSeedItem("entity.leave.employeename", "zh-CN", "员工姓名", "员工姓名"),
             // entity.leave.employeename
-            new TranslationSeedItem("entity.leave.employeename", "zh-HK", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.leave.employeename", "zh-HK", "员工姓名_hk", "员工姓名"),
 
             // entity.leave.deptid
-            new TranslationSeedItem("entity.leave.deptid", "en-US", "部门ID", "部门 ID"),
+            new TranslationSeedItem("entity.leave.deptid", "en-US", "部门ID_us", "部门 ID"),
             // entity.leave.deptid
-            new TranslationSeedItem("entity.leave.deptid", "ja-JP", "部门ID", "部门 ID"),
+            new TranslationSeedItem("entity.leave.deptid", "ja-JP", "部门ID_jp", "部门 ID"),
             // entity.leave.deptid
             new TranslationSeedItem("entity.leave.deptid", "zh-CN", "部门ID", "部门 ID"),
             // entity.leave.deptid
-            new TranslationSeedItem("entity.leave.deptid", "zh-HK", "部门ID", "部门 ID"),
+            new TranslationSeedItem("entity.leave.deptid", "zh-HK", "部门ID_hk", "部门 ID"),
 
             // entity.leave.deptname
-            new TranslationSeedItem("entity.leave.deptname", "en-US", "部门名称", "部门名称"),
+            new TranslationSeedItem("entity.leave.deptname", "en-US", "部门名称_us", "部门名称"),
             // entity.leave.deptname
-            new TranslationSeedItem("entity.leave.deptname", "ja-JP", "部门名称", "部门名称"),
+            new TranslationSeedItem("entity.leave.deptname", "ja-JP", "部门名称_jp", "部门名称"),
             // entity.leave.deptname
             new TranslationSeedItem("entity.leave.deptname", "zh-CN", "部门名称", "部门名称"),
             // entity.leave.deptname
-            new TranslationSeedItem("entity.leave.deptname", "zh-HK", "部门名称", "部门名称"),
+            new TranslationSeedItem("entity.leave.deptname", "zh-HK", "部门名称_hk", "部门名称"),
 
             // entity.leave.type
-            new TranslationSeedItem("entity.leave.type", "en-US", "请假类型", "请假类型（字典 sys_leave_category；affair/sick/annual 等）"),
+            new TranslationSeedItem("entity.leave.type", "en-US", "请假类型_us", "请假类型（字典 sys_leave_type）"),
             // entity.leave.type
-            new TranslationSeedItem("entity.leave.type", "ja-JP", "请假类型", "请假类型（字典 sys_leave_category；affair/sick/annual 等）"),
+            new TranslationSeedItem("entity.leave.type", "ja-JP", "请假类型_jp", "请假类型（字典 sys_leave_type）"),
             // entity.leave.type
-            new TranslationSeedItem("entity.leave.type", "zh-CN", "请假类型", "请假类型（字典 sys_leave_category；affair/sick/annual 等）"),
+            new TranslationSeedItem("entity.leave.type", "zh-CN", "请假类型", "请假类型（字典 sys_leave_type）"),
             // entity.leave.type
-            new TranslationSeedItem("entity.leave.type", "zh-HK", "请假类型", "请假类型（字典 sys_leave_category；affair/sick/annual 等）"),
+            new TranslationSeedItem("entity.leave.type", "zh-HK", "请假类型_hk", "请假类型（字典 sys_leave_type）"),
 
             // entity.leave.startdate
-            new TranslationSeedItem("entity.leave.startdate", "en-US", "开始日期", "开始日期"),
+            new TranslationSeedItem("entity.leave.startdate", "en-US", "开始日期_us", "开始日期"),
             // entity.leave.startdate
-            new TranslationSeedItem("entity.leave.startdate", "ja-JP", "开始日期", "开始日期"),
+            new TranslationSeedItem("entity.leave.startdate", "ja-JP", "开始日期_jp", "开始日期"),
             // entity.leave.startdate
             new TranslationSeedItem("entity.leave.startdate", "zh-CN", "开始日期", "开始日期"),
             // entity.leave.startdate
-            new TranslationSeedItem("entity.leave.startdate", "zh-HK", "开始日期", "开始日期"),
+            new TranslationSeedItem("entity.leave.startdate", "zh-HK", "开始日期_hk", "开始日期"),
 
             // entity.leave.enddate
-            new TranslationSeedItem("entity.leave.enddate", "en-US", "结束日期", "结束日期"),
+            new TranslationSeedItem("entity.leave.enddate", "en-US", "结束日期_us", "结束日期"),
             // entity.leave.enddate
-            new TranslationSeedItem("entity.leave.enddate", "ja-JP", "结束日期", "结束日期"),
+            new TranslationSeedItem("entity.leave.enddate", "ja-JP", "结束日期_jp", "结束日期"),
             // entity.leave.enddate
             new TranslationSeedItem("entity.leave.enddate", "zh-CN", "结束日期", "结束日期"),
             // entity.leave.enddate
-            new TranslationSeedItem("entity.leave.enddate", "zh-HK", "结束日期", "结束日期"),
+            new TranslationSeedItem("entity.leave.enddate", "zh-HK", "结束日期_hk", "结束日期"),
 
             // entity.leave.reason
-            new TranslationSeedItem("entity.leave.reason", "en-US", "请假事由", "请假事由"),
+            new TranslationSeedItem("entity.leave.reason", "en-US", "请假事由_us", "请假事由"),
             // entity.leave.reason
-            new TranslationSeedItem("entity.leave.reason", "ja-JP", "请假事由", "请假事由"),
+            new TranslationSeedItem("entity.leave.reason", "ja-JP", "请假事由_jp", "请假事由"),
             // entity.leave.reason
             new TranslationSeedItem("entity.leave.reason", "zh-CN", "请假事由", "请假事由"),
             // entity.leave.reason
-            new TranslationSeedItem("entity.leave.reason", "zh-HK", "请假事由", "请假事由"),
+            new TranslationSeedItem("entity.leave.reason", "zh-HK", "请假事由_hk", "请假事由"),
 
             // entity.leave.relatedplant
-            new TranslationSeedItem("entity.leave.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.leave.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.leave.relatedplant
-            new TranslationSeedItem("entity.leave.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.leave.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.leave.relatedplant
             new TranslationSeedItem("entity.leave.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.leave.relatedplant
-            new TranslationSeedItem("entity.leave.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.leave.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
 
             // entity.leave.proofattachmentsjson
-            new TranslationSeedItem("entity.leave.proofattachmentsjson", "en-US", "证明附件JSON", "证明附件 JSON（与 TaktFile 字段对齐的数组）"),
+            new TranslationSeedItem("entity.leave.proofattachmentsjson", "en-US", "证明附件JSON_us", "证明附件 JSON（与 TaktFile 字段对齐的数组）"),
             // entity.leave.proofattachmentsjson
-            new TranslationSeedItem("entity.leave.proofattachmentsjson", "ja-JP", "证明附件JSON", "证明附件 JSON（与 TaktFile 字段对齐的数组）"),
+            new TranslationSeedItem("entity.leave.proofattachmentsjson", "ja-JP", "证明附件JSON_jp", "证明附件 JSON（与 TaktFile 字段对齐的数组）"),
             // entity.leave.proofattachmentsjson
             new TranslationSeedItem("entity.leave.proofattachmentsjson", "zh-CN", "证明附件JSON", "证明附件 JSON（与 TaktFile 字段对齐的数组）"),
             // entity.leave.proofattachmentsjson
-            new TranslationSeedItem("entity.leave.proofattachmentsjson", "zh-HK", "证明附件JSON", "证明附件 JSON（与 TaktFile 字段对齐的数组）"),
-
-            // entity.leave.flowinstanceid
-            new TranslationSeedItem("entity.leave.flowinstanceid", "en-US", "流程实例ID", "流程实例 ID（TaktFlowInstance）"),
-            // entity.leave.flowinstanceid
-            new TranslationSeedItem("entity.leave.flowinstanceid", "ja-JP", "流程实例ID", "流程实例 ID（TaktFlowInstance）"),
-            // entity.leave.flowinstanceid
-            new TranslationSeedItem("entity.leave.flowinstanceid", "zh-CN", "流程实例ID", "流程实例 ID（TaktFlowInstance）"),
-            // entity.leave.flowinstanceid
-            new TranslationSeedItem("entity.leave.flowinstanceid", "zh-HK", "流程实例ID", "流程实例 ID（TaktFlowInstance）"),
+            new TranslationSeedItem("entity.leave.proofattachmentsjson", "zh-HK", "证明附件JSON_hk", "证明附件 JSON（与 TaktFile 字段对齐的数组）"),
 
             // entity.leave.handlingby
-            new TranslationSeedItem("entity.leave.handlingby", "en-US", "经办人", "经办人（关联 TaktEmployee）"),
+            new TranslationSeedItem("entity.leave.handlingby", "en-US", "经办人_us", "经办人（关联 TaktEmployee）"),
             // entity.leave.handlingby
-            new TranslationSeedItem("entity.leave.handlingby", "ja-JP", "经办人", "经办人（关联 TaktEmployee）"),
+            new TranslationSeedItem("entity.leave.handlingby", "ja-JP", "经办人_jp", "经办人（关联 TaktEmployee）"),
             // entity.leave.handlingby
             new TranslationSeedItem("entity.leave.handlingby", "zh-CN", "经办人", "经办人（关联 TaktEmployee）"),
             // entity.leave.handlingby
-            new TranslationSeedItem("entity.leave.handlingby", "zh-HK", "经办人", "经办人（关联 TaktEmployee）"),
+            new TranslationSeedItem("entity.leave.handlingby", "zh-HK", "经办人_hk", "经办人（关联 TaktEmployee）"),
 
             // entity.leave.handlingat
-            new TranslationSeedItem("entity.leave.handlingat", "en-US", "经办时间", "经办时间"),
+            new TranslationSeedItem("entity.leave.handlingat", "en-US", "经办时间_us", "经办时间"),
             // entity.leave.handlingat
-            new TranslationSeedItem("entity.leave.handlingat", "ja-JP", "经办时间", "经办时间"),
+            new TranslationSeedItem("entity.leave.handlingat", "ja-JP", "经办时间_jp", "经办时间"),
             // entity.leave.handlingat
             new TranslationSeedItem("entity.leave.handlingat", "zh-CN", "经办时间", "经办时间"),
             // entity.leave.handlingat
-            new TranslationSeedItem("entity.leave.handlingat", "zh-HK", "经办时间", "经办时间"),
+            new TranslationSeedItem("entity.leave.handlingat", "zh-HK", "经办时间_hk", "经办时间"),
 
             // entity.leave.handlingcomment
-            new TranslationSeedItem("entity.leave.handlingcomment", "en-US", "经办备注", "经办备注"),
+            new TranslationSeedItem("entity.leave.handlingcomment", "en-US", "经办备注_us", "经办备注"),
             // entity.leave.handlingcomment
-            new TranslationSeedItem("entity.leave.handlingcomment", "ja-JP", "经办备注", "经办备注"),
+            new TranslationSeedItem("entity.leave.handlingcomment", "ja-JP", "经办备注_jp", "经办备注"),
             // entity.leave.handlingcomment
             new TranslationSeedItem("entity.leave.handlingcomment", "zh-CN", "经办备注", "经办备注"),
             // entity.leave.handlingcomment
-            new TranslationSeedItem("entity.leave.handlingcomment", "zh-HK", "经办备注", "经办备注"),
+            new TranslationSeedItem("entity.leave.handlingcomment", "zh-HK", "经办备注_hk", "经办备注"),
 
             // entity.leave.status
-            new TranslationSeedItem("entity.leave.status", "en-US", "请假状态", "请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.leave.status", "en-US", "请假状态_us", "请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）"),
             // entity.leave.status
-            new TranslationSeedItem("entity.leave.status", "ja-JP", "请假状态", "请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.leave.status", "ja-JP", "请假状态_jp", "请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）"),
             // entity.leave.status
-            new TranslationSeedItem("entity.leave.status", "zh-CN", "请假状态", "请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.leave.status", "zh-CN", "请假状态", "请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）"),
             // entity.leave.status
-            new TranslationSeedItem("entity.leave.status", "zh-HK", "请假状态", "请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.leave.status", "zh-HK", "请假状态_hk", "请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）"),
         };
     }
 
@@ -241,10 +232,10 @@ public class TaktLeaveI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Attendance";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

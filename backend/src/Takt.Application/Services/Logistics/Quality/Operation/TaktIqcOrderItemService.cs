@@ -102,7 +102,7 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
         EnsureThreeLayerContext();
         var list = await _iqcOrderItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MaterialName,
+            x => x.MaterialName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -436,7 +436,7 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
                 || (x.SampleSerialNo != null && x.SampleSerialNo.Contains(keywords))
                 || (x.InspectionDescription != null && x.InspectionDescription.Contains(keywords))
                 || (x.InspectorBy != null && x.InspectorBy.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.InspectionDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -533,9 +533,9 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
             exp = exp.And(x => x.InspectorBy != null && x.InspectorBy.Contains(queryDto.InspectorBy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

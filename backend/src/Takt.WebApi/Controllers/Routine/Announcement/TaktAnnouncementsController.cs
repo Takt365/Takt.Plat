@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.Announcement
 // 文件名称：TaktAnnouncementsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：公告通知控制器
 // 
@@ -41,7 +41,7 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:announcement:announcement:list", "公告通知列表")]
+    [TaktPermission("routine:announcement:list", "公告通知列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetAnnouncementListAsync([FromQuery] TaktAnnouncementQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// </summary>
     /// <param name="id">公告通知ID</param>
     /// <returns>公告通知DTO</returns>
-    [TaktPermission("routine:announcement:announcement:query", "公告通知详情")]
+    [TaktPermission("routine:announcement:query", "公告通知详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAnnouncementByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// 获取公告通知选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:announcement:announcement:query", "公告通知选项")]
+    [TaktPermission("routine:announcement:query", "公告通知选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetAnnouncementOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>公告通知DTO</returns>
-    [TaktPermission("routine:announcement:announcement:create", "创建公告通知")]
+    [TaktPermission("routine:announcement:create", "创建公告通知")]
     [HttpPost]
     public async Task<IActionResult> CreateAnnouncementAsync([FromBody] TaktAnnouncementCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// <param name="id">公告通知ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>公告通知DTO</returns>
-    [TaktPermission("routine:announcement:announcement:update", "更新公告通知")]
+    [TaktPermission("routine:announcement:update", "更新公告通知")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAnnouncementAsync(long id, [FromBody] TaktAnnouncementUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// </summary>
     /// <param name="id">公告通知ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:announcement:announcement:delete", "删除公告通知")]
+    [TaktPermission("routine:announcement:delete", "删除公告通知")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAnnouncementByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:announcement:announcement:delete", "批量删除公告通知")]
+    [TaktPermission("routine:announcement:delete", "批量删除公告通知")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteAnnouncementBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -183,9 +183,9 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// <summary>
     /// 更新公告通知状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktAnnouncementStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>公告通知DTO</returns>
-    [TaktPermission("routine:announcement:announcement:update", "更新公告通知状态")]
+    [TaktPermission("routine:announcement:update", "更新公告通知状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateAnnouncementStatusAsync([FromBody] TaktAnnouncementStatusDto dto)
     {
@@ -201,30 +201,10 @@ public class TaktAnnouncementsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 提交公告审批（发起工作流）
-    /// </summary>
-    /// <param name="id">公告 ID</param>
-    /// <returns>公告 DTO</returns>
-    [TaktPermission("routine:announcement:announcement:update", "提交公告审批")]
-    [HttpPost("{id}/submit-approval")]
-    public async Task<IActionResult> SubmitAnnouncementForApprovalAsync(long id)
-    {
-        try
-        {
-            var result = await _announcementService.SubmitAnnouncementForApprovalAsync(id);
-            return Success(result, "提交审批成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:announcement:announcement:import", "获取公告通知导入模板")]
+    [TaktPermission("routine:announcement:import", "获取公告通知导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetAnnouncementTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -244,7 +224,7 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:announcement:announcement:import", "导入公告通知")]
+    [TaktPermission("routine:announcement:import", "导入公告通知")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportAnnouncementAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -274,7 +254,7 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// 导出公告通知
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:announcement:announcement:export", "导出公告通知")]
+    [TaktPermission("routine:announcement:export", "导出公告通知")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportAnnouncementAsync([FromQuery] TaktAnnouncementQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

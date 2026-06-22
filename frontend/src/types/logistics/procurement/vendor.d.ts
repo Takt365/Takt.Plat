@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/src/types/logistics/materials
+// 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：vendor.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
-// 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -49,7 +49,7 @@ export interface Vendor extends CompanyDtoBase {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType: number;
 
@@ -124,12 +124,12 @@ export interface Vendor extends CompanyDtoBase {
   currencyCode: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms: number;
 
   /**
-   * 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel: number;
 
@@ -149,7 +149,7 @@ export interface Vendor extends CompanyDtoBase {
   agentRegion?: string;
 
   /**
-   * 经销商等级（0=普通，1=核心，2=战略，3=临时）
+   * 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
    */
   vendorLevel: number;
 
@@ -214,7 +214,7 @@ export interface VendorQuery extends TaktPagedQuery {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType?: number;
 
@@ -289,12 +289,12 @@ export interface VendorQuery extends TaktPagedQuery {
   currencyCode?: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms?: number;
 
   /**
-   * 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel?: number;
 
@@ -314,7 +314,7 @@ export interface VendorQuery extends TaktPagedQuery {
   agentRegion?: string;
 
   /**
-   * 经销商等级（0=普通，1=核心，2=战略，3=临时）
+   * 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
    */
   vendorLevel?: number;
 
@@ -351,7 +351,7 @@ export interface VendorQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -403,7 +403,7 @@ export interface VendorCreate {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType: number;
 
@@ -478,12 +478,12 @@ export interface VendorCreate {
   currencyCode: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms: number;
 
   /**
-   * 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel: number;
 
@@ -503,7 +503,7 @@ export interface VendorCreate {
   agentRegion?: string;
 
   /**
-   * 经销商等级（0=普通，1=核心，2=战略，3=临时）
+   * 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
    */
   vendorLevel: number;
 
@@ -523,14 +523,9 @@ export interface VendorCreate {
   vendorStatus: number;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -630,7 +625,7 @@ export interface VendorTemplate {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType?: number;
 
@@ -672,7 +667,7 @@ export interface VendorTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -724,7 +719,7 @@ export interface VendorImport {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType?: number;
 
@@ -766,7 +761,7 @@ export interface VendorImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -813,7 +808,7 @@ export interface VendorExport {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType: number;
 
@@ -888,12 +883,12 @@ export interface VendorExport {
   currencyCode: string;
 
   /**
-   * 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+   * 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
    */
   paymentTerms: number;
 
   /**
-   * 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel: number;
 
@@ -913,7 +908,7 @@ export interface VendorExport {
   agentRegion?: string;
 
   /**
-   * 经销商等级（0=普通，1=核心，2=战略，3=临时）
+   * 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
    */
   vendorLevel: number;
 
@@ -940,7 +935,7 @@ export interface VendorExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

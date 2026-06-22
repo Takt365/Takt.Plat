@@ -44,16 +44,16 @@ public class TaktPost : TaktCompanyEntityBase
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+    /// 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
     /// </summary>
-    [SugarColumn(ColumnName = "post_type", ColumnDescription = "岗位类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int PostType { get; set; } = 1;
+    [SugarColumn(ColumnName = "post_category", ColumnDescription = "岗位类别", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "TEC")]
+    public string PostCategory { get; set; } = "TEC";
 
     /// <summary>
-    /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
     /// </summary>
-    [SugarColumn(ColumnName = "post_level", ColumnDescription = "岗位职级", ColumnDataType = "int", IsNullable = true)]
-    public int? PostLevel { get; set; }
+    [SugarColumn(ColumnName = "post_level", ColumnDescription = "岗位职级", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "P1")]
+    public string PostLevel { get; set; } = "P1";
 
     /// <summary>
     /// 编制人数
@@ -70,26 +70,26 @@ public class TaktPost : TaktCompanyEntityBase
     /// <summary>
     /// 岗位职责
     /// </summary>
-    [SugarColumn(ColumnName = "responsibilities", ColumnDescription = "岗位职责", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
-    public string? Responsibilities { get; set; }
+    [SugarColumn(ColumnName = "responsibilities", ColumnDescription = "岗位职责", ColumnDataType = "nvarchar", Length = 2000, IsNullable = false, DefaultValue = "")]
+    public string Responsibilities { get; set; } = string.Empty;
 
     /// <summary>
     /// 任职要求
     /// </summary>
-    [SugarColumn(ColumnName = "requirements", ColumnDescription = "任职要求", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
-    public string? Requirements { get; set; }
+    [SugarColumn(ColumnName = "requirements", ColumnDescription = "任职要求", ColumnDataType = "nvarchar", Length = 2000, IsNullable = false, DefaultValue = "")]
+    public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
     /// </summary>
-    [SugarColumn(ColumnName = "education_required", ColumnDescription = "学历要求", ColumnDataType = "int", IsNullable = true)]
-    public int? EducationRequired { get; set; }
+    [SugarColumn(ColumnName = "education_required", ColumnDescription = "学历要求", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int EducationRequired { get; set; } = 1;
 
     /// <summary>
     /// 工作经验要求（年）
     /// </summary>
-    [SugarColumn(ColumnName = "experience_years", ColumnDescription = "工作经验要求（年）", ColumnDataType = "int", IsNullable = true)]
-    public int? ExperienceYears { get; set; }
+    [SugarColumn(ColumnName = "experience_years", ColumnDescription = "工作经验要求（年）", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int ExperienceYears { get; set; } = 1;
 
     /// <summary>
     /// 薪资范围（最低）

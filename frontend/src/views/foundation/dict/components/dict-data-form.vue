@@ -22,98 +22,98 @@
     >
       <!-- 表单字段顺序与 DictData 接口字段顺序一致 -->
       <a-form-item
-        :label="t('entity.dictData.dicttypecode')"
+        :label="t('entity.dictdata.dicttypecode')"
         name="dictTypeCode"
       >
         <a-input
           v-model:value="formState.dictTypeCode"
-          :placeholder="t('routine.dict.type.placeholders.dictTypeCode')"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dicttype.code') })"
           :disabled="true"
         />
       </a-form-item>
 
       <a-form-item
-        :label="t('entity.dictData.dictlabel')"
+        :label="t('entity.dictdata.dictlabel')"
         name="dictLabel"
       >
         <a-input
           v-model:value="formState.dictLabel"
-          :placeholder="t('routine.dict.type.placeholders.dictLabelUnique')"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dictdata.dictlabel') })"
         />
       </a-form-item>
 
       <a-form-item
-        :label="t('entity.dictData.i18nkey')"
+        :label="t('entity.dictdata.i18nkey')"
         name="i18nKey"
       >
         <a-input
           v-model:value="formState.i18nKey"
-          :placeholder="t('routine.dict.type.placeholders.dictL10nKey')"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.dictdata.i18nkey') })"
         />
       </a-form-item>
 
       <a-form-item
-        :label="t('entity.dictData.dictvalue')"
+        :label="t('entity.dictdata.dictvalue')"
         name="dictValue"
       >
         <a-input
           v-model:value="formState.dictValue"
-          :placeholder="t('routine.dict.type.placeholders.dictValue')"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dictdata.dictvalue') })"
         />
       </a-form-item>
 
       <a-form-item
-        :label="t('entity.dictData.cssclass')"
+        :label="t('entity.dictdata.cssclass')"
         name="cssClass"
       >
         <a-input-number
           v-model:value="formState.cssClass"
           :min="0"
-          :placeholder="t('routine.dict.type.placeholders.cssClass')"
+          :placeholder="t('common.page.form.placeholder.input', { field: t('entity.dictdata.cssclass') })"
           style="width: 100%"
         />
       </a-form-item>
 
       <a-form-item
-        :label="t('entity.dictData.listclass')"
+        :label="t('entity.dictdata.listclass')"
         name="listClass"
       >
         <a-input-number
           v-model:value="formState.listClass"
           :min="0"
-          :placeholder="t('routine.dict.type.placeholders.listClass')"
+          :placeholder="t('common.page.form.placeholder.input', { field: t('entity.dictdata.listclass') })"
           style="width: 100%"
         />
       </a-form-item>
 
       <a-form-item
-        :label="t('entity.dictData.extlabel')"
+        :label="t('entity.dictdata.extlabel')"
         name="extLabel"
       >
         <a-input
           v-model:value="formState.extLabel"
-          :placeholder="t('routine.dict.type.placeholders.extLabel')"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.dictdata.extlabel') })"
         />
       </a-form-item>
 
       <a-form-item
-        :label="t('entity.dictData.extvalue')"
+        :label="t('entity.dictdata.extvalue')"
         name="extValue"
       >
         <a-input
           v-model:value="formState.extValue"
-          :placeholder="t('routine.dict.type.placeholders.extValue')"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.dictdata.extvalue') })"
         />
       </a-form-item>
 
       <a-form-item
-        :label="t('entity.dictData.sortorder')"
+        :label="t('entity.dictdata.sortorder')"
         name="sortOrder"
       >
         <a-input-number
           v-model:value="formState.sortOrder"
           :min="0"
-          :placeholder="t('routine.dict.type.placeholders.sortOrderSort')"
+          :placeholder="t('common.page.form.placeholder.input', { field: t('entity.dictdata.sortorder') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -124,7 +124,7 @@
       >
         <a-textarea
           v-model:value="formState.remark"
-          :placeholder="t('routine.dict.type.placeholders.remark')"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
           :rows="3"
         />
       </a-form-item>
@@ -190,10 +190,10 @@ const formState = reactive<DictDataFormState>({
 
 const formRulesComputed = computed<Record<string, Rule[]>>(() => ({
   dictLabel: [
-    { required: true, message: t('routine.dict.type.rules.dictLabelRequired'), trigger: 'blur' }
+    { required: true, message: t('common.page.form.placeholder.required', { field: t('entity.dictdata.dictlabel') }), trigger: 'blur' }
   ],
   dictValue: [
-    { required: true, message: t('routine.dict.type.rules.dictValueRequired'), trigger: 'blur' }
+    { required: true, message: t('common.page.form.placeholder.required', { field: t('entity.dictdata.dictvalue') }), trigger: 'blur' }
   ]
 }))
 

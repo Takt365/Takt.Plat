@@ -76,15 +76,15 @@
         @tree-drop="handleTreeDrop"
       />
       <TaktTreeRightTable
-      entity-scope="company"
+        entity-scope="company"
         v-model:current="tableCurrentPage"
         v-model:page-size="tablePageSize"
         :columns="columns"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'id'"
-      :action-column-key="'action'"
-      table-mode="tree"
-      :data-source="paginatedFlatTableRows"
+        :visible-column-keys="visibleColumnKeys"
+        :id-column-key="'deptId'"
+        :action-column-key="'action'"
+        table-mode="tree"
+        :data-source="paginatedFlatTableRows"
         :loading="loading"
         :row-key="getDeptId"
         :stripe="true"
@@ -107,9 +107,21 @@
             {{ getDeptField(record, 'costCategory') }}
           </template>
           <template v-else-if="column.key === 'deptStatus'">
-            <TaktDictTag
-              :value="getDeptDictValue(record, 'deptStatus')"
-              dict-type="sys_normal_disable"
+            <a-switch
+              :checked="getDeptField(record, 'deptStatus') === 1"
+              :disabled="getDeptField(record, 'isBuiltIn') === 1"
+              :checked-children="t('common.page.button.enable')"
+              :un-checked-children="t('common.page.button.disable')"
+              @change="(checked: unknown) => handleDeptStatusChange(record, Boolean(checked))"
+            />
+          </template>
+          <template v-else-if="column.key === 'isBuiltIn'">
+            <a-switch
+              :checked="getDeptField(record, 'isBuiltIn') === 1"
+              :disabled="getDeptField(record, 'isBuiltIn') === 1"
+              :checked-children="t('dict.sys.yes.no.type.1')"
+              :un-checked-children="t('dict.sys.yes.no.type.0')"
+              @change="(checked: unknown) => handleDeptBuiltInChange(record, Boolean(checked))"
             />
           </template>
         </template>
@@ -147,7 +159,7 @@
       <a-form-item :label="t('entity.dept.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.deptStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dept.status') })"
           allow-clear
         />
@@ -186,9 +198,7 @@
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
-      :id-column-key="'id'"
-      :action-column-key="'action'"
-      :id-column-key="'id'"
+      :id-column-key="'deptId'"
       :action-column-key="'action'"
       table-mode="tree"
       @update:checked-keys="handleColumnKeysChange"
@@ -206,12 +216,15 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import DeptForm from './components/dept-form.vue'
 import AssignDeptEmployees from './components/assign-dept-employees.vue'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import {
   getDeptTree,
   getDeptById,
   createDept,
   updateDept,
   deleteDeptById,
+  updateDeptStatus,
+  updateDeptBuiltIn,
   getDeptTemplate,
   importDept,
   exportDept
@@ -239,8 +252,8 @@ const treeExpanded = ref(false)
 const treeExpandedKeys = ref<(string | number)[]>([])
 const tableExpanded = ref(false)
 /** 右侧扁平列表分页 */
-const tableCurrentPage = ref(1)
-const tablePageSize = ref(20)
+const tableCurrentPage = ref(getTaktDefaultPageIndex())
+const tablePageSize = ref(getTaktDefaultPageSize())
 const loading = ref(false)
 const dataSource = ref<Dept[]>([])
 /** 右侧树表数据源（受右侧查询条件影响） */
@@ -478,7 +491,7 @@ function buildDeptUpdateDto(dept: Dept, overrides: Pick<DeptUpdate, 'parentId' |
     sortOrder: overrides.sortOrder,
     description: dept.description,
     remark: dept.remark,
-    extFieldJson: dept.extFieldJson,
+    ExtField: dept.ExtField,
   }
 }
 
@@ -679,6 +692,12 @@ watchEffect(() => {
     key: 'deptStatus',
     width: 80,
   },
+  {
+    title: t('entity.dept.isbuiltin'),
+    dataIndex: 'isBuiltIn',
+    key: 'isBuiltIn',
+    width: 80,
+  },
   CreateActionColumn<Dept>({
     actions: [
       { key: 'update', label: t('common.page.button.edit'), shape: 'plain', icon: RiEditLine, permission: 'humanresource:organization:dept:update', onClick: (record: Dept) => handleEdit(record) },
@@ -721,6 +740,7 @@ const loadFullDeptTree = async () => {
   if (treeExpanded.value) {
     treeExpandedKeys.value = collectTreeExpandableKeys(filteredDeptTreeData.value)
   }
+}
 
 const applyRightTableQuery = () => {
   tableCurrentPage.value = 1
@@ -934,6 +954,66 @@ const handleExport = async () => {
 }
 
 const handleAdvancedQuery = () => { advancedQueryVisible.value = true }
+
+/**
+ * 表格行内切换部门状态（sys_normal_disable_status：1=启用，0=禁用）
+ * @param record 当前行
+ * @param checked 开关是否选中（启用）
+ */
+async function handleDeptStatusChange(record: Dept, checked: boolean) {
+  const id = getDeptId(record)
+  if (!id || getDeptField(record, 'isBuiltIn') === 1) {
+    return
+  }
+  const newStatus = checked ? 1 : 0
+  const oldStatus = getDeptField(record, 'deptStatus')
+  if (record) {
+    record.deptStatus = newStatus
+  }
+  try {
+    await updateDeptStatus({ deptId: id, deptStatus: newStatus })
+    message.success(t('common.feedback.updated'))
+  } catch (error: unknown) {
+    if (record) {
+      record.deptStatus = oldStatus as number
+    }
+    const err = error as { message?: string }
+    logger.error('[Dept] 状态更新失败', undefined, error)
+    message.error(err?.message || t('common.feedback.failed'))
+  }
+}
+
+/**
+ * 表格行内切换是否内置（sys_yes_no_type：1=是，0=否；已为内置时不可取消）
+ * @param record 当前行
+ * @param checked 开关是否选中（内置）
+ */
+async function handleDeptBuiltInChange(record: Dept, checked: boolean) {
+  const id = getDeptId(record)
+  if (!id || getDeptField(record, 'isBuiltIn') === 1) {
+    return
+  }
+  const newBuiltIn = checked ? 1 : 0
+  if (newBuiltIn === 0) {
+    return
+  }
+  const oldBuiltIn = getDeptField(record, 'isBuiltIn')
+  if (record) {
+    record.isBuiltIn = newBuiltIn
+  }
+  try {
+    await updateDeptBuiltIn({ deptId: id, isBuiltIn: newBuiltIn })
+    message.success(t('common.feedback.updated'))
+  } catch (error: unknown) {
+    if (record) {
+      record.isBuiltIn = oldBuiltIn as number
+    }
+    const err = error as { message?: string }
+    logger.error('[Dept] 内置标识更新失败', undefined, error)
+    message.error(err?.message || t('common.feedback.failed'))
+  }
+}
+
 const handleAdvancedQuerySubmit = () => {
   applyRightTableQuery()
   advancedQueryVisible.value = false

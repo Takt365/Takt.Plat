@@ -211,7 +211,7 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
                 FormConfig = formConfig,
                 FormVersion = "v1.0.0",
                 IsDatasource = 1,
-                RelatedDataBaseName = "TaktSqlSugarContext",
+                RelatedDataBaseName = tenantCode,
                 RelatedTableName = "takt_human_resource_attendance_overtime",
                 RelatedFormField = relatedField,
                 SortOrder = 11,
@@ -222,6 +222,7 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
         }
         form.FormName = "加班申请表";
         form.FormConfig = formConfig;
+        form.RelatedDataBaseName = tenantCode;
         form.RelatedTableName = "takt_human_resource_attendance_overtime";
         form.RelatedFormField = relatedField;
         form.IsDatasource = 1;

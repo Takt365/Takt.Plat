@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoiceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesInvoiceItem 生成，请按需审阅）
 // 
@@ -111,6 +111,12 @@ public class TaktSalesInvoiceItemDto : TaktCompanyDtoBase
     /// </summary>
     public decimal SubtotalAmount { get; set; }
 
+    /// <summary>
+    /// 销售发票主表
+    /// （主表：TaktSalesInvoice）
+    /// </summary>
+    public TaktSalesInvoiceDto? SalesInvoice { get; set; }
+
 }
 
 // ========================================
@@ -217,7 +223,7 @@ public class TaktSalesInvoiceItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -327,7 +333,7 @@ public class TaktSalesInvoiceItemCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -414,7 +420,7 @@ public class TaktSalesInvoiceItemTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -482,7 +488,7 @@ public class TaktSalesInvoiceItemImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -586,7 +592,7 @@ public class TaktSalesInvoiceItemExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

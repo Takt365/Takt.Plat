@@ -40,9 +40,24 @@ public class TaktFileUploadScope
     public TaktFileUploadType FileUploadType { get; set; } = TaktFileUploadType.Normal;
 
     /// <summary>
-    /// 目标文件名（可选；未指定时使用 <c>{fileCode}.{ext}</c>）
+    /// 目标文件名（storageNaming=2 自定义时使用；未指定时引擎自动生成 GUID 存储名）
     /// </summary>
     public string? TargetFileName { get; set; }
+
+    /// <summary>
+    /// 存储命名规则（字典 sys_storage_naming_config：0=原文件+哈希，1=自动生成，2=自定义）
+    /// </summary>
+    public int StorageNaming { get; set; } = 0;
+
+    /// <summary>
+    /// 存储方式（字典 sys_storage_type：0=本地，1=OSS，2=FTP）
+    /// </summary>
+    public int StorageType { get; set; } = 0;
+
+    /// <summary>
+    /// 存储配置 JSON（含 ossProvider/ftpProvider 等）
+    /// </summary>
+    public string? StorageConfig { get; set; }
 }
 
 /// <summary>
@@ -74,6 +89,11 @@ public class TaktFileChunkCheckRequest
     /// 原始文件名
     /// </summary>
     public string? FileName { get; set; }
+
+    /// <summary>
+    /// 总分片数（可选；大于 0 时校验与服务器分片计划一致）
+    /// </summary>
+    public int TotalChunks { get; set; }
 }
 
 /// <summary>
@@ -101,6 +121,11 @@ public class TaktFileChunkListRequest
     /// 总分片数（可选；大于 0 时过滤超出范围的分片序号）
     /// </summary>
     public int TotalChunks { get; set; }
+
+    /// <summary>
+    /// 文件总大小（字节；大于 0 时用于校验分片计划）
+    /// </summary>
+    public long TotalSize { get; set; }
 }
 
 /// <summary>
@@ -182,7 +207,7 @@ public class TaktFileChunkMergeRequest
 public class TaktStoredFileResult
 {
     /// <summary>
-    /// 文件编码（GUID N 格式）→ <c>TaktFile.FileCode</c>
+    /// 文件编码（业务编码 FILE+时间戳+随机段）→ <c>TaktFile.FileCode</c>
     /// </summary>
     public string FileCode { get; set; } = string.Empty;
 
@@ -222,7 +247,7 @@ public class TaktStoredFileResult
     public string? FileHash { get; set; }
 
     /// <summary>
-    /// 文件分类 → <c>TaktFile.FileCategory</c>
+    /// 文件分类（上传引擎按 FileType/MIME 自动写入）→ TaktFile.FileCategory
     /// </summary>
     public int FileCategory { get; set; } = 5;
 
@@ -256,6 +281,11 @@ public class TaktFileStorageDescriptor
     /// 存储方式 → <c>TaktFile.StorageType</c>
     /// </summary>
     public int StorageType { get; set; } = 0;
+
+    /// <summary>
+    /// 存储配置 JSON → <c>TaktFile.StorageConfig</c>
+    /// </summary>
+    public string? StorageConfig { get; set; }
 }
 
 /// <summary>
@@ -277,4 +307,65 @@ public sealed class TaktFileDownloadStreamResult
     /// MIME 类型
     /// </summary>
     public required string ContentType { get; init; }
+}
+
+/// <summary>
+/// 文件上传策略（配置 + 可选按 totalSize 计算的分片计划）
+/// </summary>
+public class TaktFileUploadPolicyResult
+{
+    /// <summary>
+    /// 单文件最大字节数
+    /// </summary>
+    public long MaxFileSizeBytes { get; set; }
+
+    /// <summary>
+    /// 最大分片数
+    /// </summary>
+    public int MaxChunkCount { get; set; }
+
+    /// <summary>
+    /// 默认分片大小（字节）
+    /// </summary>
+    public long DefaultChunkSizeBytes { get; set; }
+
+    /// <summary>
+    /// 分片上传阈值（字节）
+    /// </summary>
+    public long ChunkThresholdBytes { get; set; }
+
+    /// <summary>
+    /// 分片临时目录（相对 wwwroot）
+    /// </summary>
+    public string ChunkRelativePath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 允许扩展名（小写、不含点）
+    /// </summary>
+    public string[] AllowedExtensions { get; set; } = [];
+
+    /// <summary>
+    /// 禁止扩展名（小写、不含点）
+    /// </summary>
+    public string[] DeniedExtensions { get; set; } = [];
+
+    /// <summary>
+    /// 查询 totalSize 时：是否应分片上传
+    /// </summary>
+    public bool? UseChunkUpload { get; set; }
+
+    /// <summary>
+    /// 查询 totalSize 时：分片大小（字节）
+    /// </summary>
+    public long? ChunkSizeBytes { get; set; }
+
+    /// <summary>
+    /// 查询 totalSize 时：总分片数
+    /// </summary>
+    public int? TotalChunks { get; set; }
+
+    /// <summary>
+    /// 查询 totalSize 时：文件总大小（字节）
+    /// </summary>
+    public long? TotalSizeBytes { get; set; }
 }

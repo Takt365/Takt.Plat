@@ -131,12 +131,6 @@ public class TaktConference : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "conference_room_name", ColumnDescription = "会议室名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? ConferenceRoomName { get; set; }
     /// <summary>
-    /// 流程实例 ID（会议审批工作流）
-    /// </summary>
-    [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-    /// <summary>
     /// 参与人列表（主子表关系）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktConferenceParticipant.ConferenceId))]

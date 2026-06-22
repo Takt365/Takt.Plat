@@ -72,7 +72,7 @@ public class TaktTenantSeedData : ITaktSeedDataCoordinator
                 $"租户 {code}",  // 动态生成名称
                 "系统管理员",        // 默认联系人
                 "13800000000",       // 默认电话
-                $"admin@tenant{code}.takt.com");  // 动态生成邮箱
+                $"admin@takt.com");  // 动态生成邮箱
             
             insertCount += i;
             updateCount += u;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktEmpSalaryI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmpSalary 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,128 +75,128 @@ public class TaktEmpSalaryI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmpSalary 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.empsalary._self / entity.empsalary.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.empsalary._self / entity.empsalary.{{field}}；ResourceGroup=Compensation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetEmpSalaryTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.empsalary._self
-            new TranslationSeedItem("entity.empsalary._self", "en-US", "Emp Salary Information", "实体名称"),
+            new TranslationSeedItem("entity.empsalary._self", "en-US", "Emp Salary Information_us", "实体名称"),
             // entity.empsalary._self
-            new TranslationSeedItem("entity.empsalary._self", "ja-JP", "员工薪酬档案信息", "实体名称"),
+            new TranslationSeedItem("entity.empsalary._self", "ja-JP", "员工薪酬档案信息_jp", "实体名称"),
             // entity.empsalary._self
             new TranslationSeedItem("entity.empsalary._self", "zh-CN", "员工薪酬档案信息", "实体名称"),
             // entity.empsalary._self
-            new TranslationSeedItem("entity.empsalary._self", "zh-HK", "员工薪酬档案信息", "实体名称"),
+            new TranslationSeedItem("entity.empsalary._self", "zh-HK", "员工薪酬档案信息_hk", "实体名称"),
 
             // entity.empsalary.employeeid
-            new TranslationSeedItem("entity.empsalary.employeeid", "en-US", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.empsalary.employeeid", "en-US", "员工ID_us", "员工 ID"),
             // entity.empsalary.employeeid
-            new TranslationSeedItem("entity.empsalary.employeeid", "ja-JP", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.empsalary.employeeid", "ja-JP", "员工ID_jp", "员工 ID"),
             // entity.empsalary.employeeid
             new TranslationSeedItem("entity.empsalary.employeeid", "zh-CN", "员工ID", "员工 ID"),
             // entity.empsalary.employeeid
-            new TranslationSeedItem("entity.empsalary.employeeid", "zh-HK", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.empsalary.employeeid", "zh-HK", "员工ID_hk", "员工 ID"),
 
             // entity.empsalary.employeename
-            new TranslationSeedItem("entity.empsalary.employeename", "en-US", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.empsalary.employeename", "en-US", "员工姓名_us", "员工姓名"),
             // entity.empsalary.employeename
-            new TranslationSeedItem("entity.empsalary.employeename", "ja-JP", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.empsalary.employeename", "ja-JP", "员工姓名_jp", "员工姓名"),
             // entity.empsalary.employeename
             new TranslationSeedItem("entity.empsalary.employeename", "zh-CN", "员工姓名", "员工姓名"),
             // entity.empsalary.employeename
-            new TranslationSeedItem("entity.empsalary.employeename", "zh-HK", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.empsalary.employeename", "zh-HK", "员工姓名_hk", "员工姓名"),
 
             // entity.empsalary.payrollid
-            new TranslationSeedItem("entity.empsalary.payrollid", "en-US", "薪酬体系ID", "关联薪酬体系 ID"),
+            new TranslationSeedItem("entity.empsalary.payrollid", "en-US", "薪酬体系ID_us", "关联薪酬体系 ID"),
             // entity.empsalary.payrollid
-            new TranslationSeedItem("entity.empsalary.payrollid", "ja-JP", "薪酬体系ID", "关联薪酬体系 ID"),
+            new TranslationSeedItem("entity.empsalary.payrollid", "ja-JP", "薪酬体系ID_jp", "关联薪酬体系 ID"),
             // entity.empsalary.payrollid
             new TranslationSeedItem("entity.empsalary.payrollid", "zh-CN", "薪酬体系ID", "关联薪酬体系 ID"),
             // entity.empsalary.payrollid
-            new TranslationSeedItem("entity.empsalary.payrollid", "zh-HK", "薪酬体系ID", "关联薪酬体系 ID"),
+            new TranslationSeedItem("entity.empsalary.payrollid", "zh-HK", "薪酬体系ID_hk", "关联薪酬体系 ID"),
 
             // entity.empsalary.payscaleid
-            new TranslationSeedItem("entity.empsalary.payscaleid", "en-US", "薪级ID", "关联薪级 ID"),
+            new TranslationSeedItem("entity.empsalary.payscaleid", "en-US", "薪级ID_us", "关联薪级 ID"),
             // entity.empsalary.payscaleid
-            new TranslationSeedItem("entity.empsalary.payscaleid", "ja-JP", "薪级ID", "关联薪级 ID"),
+            new TranslationSeedItem("entity.empsalary.payscaleid", "ja-JP", "薪级ID_jp", "关联薪级 ID"),
             // entity.empsalary.payscaleid
             new TranslationSeedItem("entity.empsalary.payscaleid", "zh-CN", "薪级ID", "关联薪级 ID"),
             // entity.empsalary.payscaleid
-            new TranslationSeedItem("entity.empsalary.payscaleid", "zh-HK", "薪级ID", "关联薪级 ID"),
+            new TranslationSeedItem("entity.empsalary.payscaleid", "zh-HK", "薪级ID_hk", "关联薪级 ID"),
 
             // entity.empsalary.basesalary
-            new TranslationSeedItem("entity.empsalary.basesalary", "en-US", "基本工资", "基本工资（元）"),
+            new TranslationSeedItem("entity.empsalary.basesalary", "en-US", "基本工资_us", "基本工资（元）"),
             // entity.empsalary.basesalary
-            new TranslationSeedItem("entity.empsalary.basesalary", "ja-JP", "基本工资", "基本工资（元）"),
+            new TranslationSeedItem("entity.empsalary.basesalary", "ja-JP", "基本工资_jp", "基本工资（元）"),
             // entity.empsalary.basesalary
             new TranslationSeedItem("entity.empsalary.basesalary", "zh-CN", "基本工资", "基本工资（元）"),
             // entity.empsalary.basesalary
-            new TranslationSeedItem("entity.empsalary.basesalary", "zh-HK", "基本工资", "基本工资（元）"),
+            new TranslationSeedItem("entity.empsalary.basesalary", "zh-HK", "基本工资_hk", "基本工资（元）"),
 
             // entity.empsalary.positionsalary
-            new TranslationSeedItem("entity.empsalary.positionsalary", "en-US", "岗位工资", "岗位工资（元）"),
+            new TranslationSeedItem("entity.empsalary.positionsalary", "en-US", "岗位工资_us", "岗位工资（元）"),
             // entity.empsalary.positionsalary
-            new TranslationSeedItem("entity.empsalary.positionsalary", "ja-JP", "岗位工资", "岗位工资（元）"),
+            new TranslationSeedItem("entity.empsalary.positionsalary", "ja-JP", "岗位工资_jp", "岗位工资（元）"),
             // entity.empsalary.positionsalary
             new TranslationSeedItem("entity.empsalary.positionsalary", "zh-CN", "岗位工资", "岗位工资（元）"),
             // entity.empsalary.positionsalary
-            new TranslationSeedItem("entity.empsalary.positionsalary", "zh-HK", "岗位工资", "岗位工资（元）"),
+            new TranslationSeedItem("entity.empsalary.positionsalary", "zh-HK", "岗位工资_hk", "岗位工资（元）"),
 
             // entity.empsalary.allowancetotal
-            new TranslationSeedItem("entity.empsalary.allowancetotal", "en-US", "津贴合计", "津贴合计（元）"),
+            new TranslationSeedItem("entity.empsalary.allowancetotal", "en-US", "津贴合计_us", "津贴合计（元）"),
             // entity.empsalary.allowancetotal
-            new TranslationSeedItem("entity.empsalary.allowancetotal", "ja-JP", "津贴合计", "津贴合计（元）"),
+            new TranslationSeedItem("entity.empsalary.allowancetotal", "ja-JP", "津贴合计_jp", "津贴合计（元）"),
             // entity.empsalary.allowancetotal
             new TranslationSeedItem("entity.empsalary.allowancetotal", "zh-CN", "津贴合计", "津贴合计（元）"),
             // entity.empsalary.allowancetotal
-            new TranslationSeedItem("entity.empsalary.allowancetotal", "zh-HK", "津贴合计", "津贴合计（元）"),
+            new TranslationSeedItem("entity.empsalary.allowancetotal", "zh-HK", "津贴合计_hk", "津贴合计（元）"),
 
             // entity.empsalary.salaryitemid
-            new TranslationSeedItem("entity.empsalary.salaryitemid", "en-US", "薪资项目ID", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
+            new TranslationSeedItem("entity.empsalary.salaryitemid", "en-US", "薪资项目ID_us", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
             // entity.empsalary.salaryitemid
-            new TranslationSeedItem("entity.empsalary.salaryitemid", "ja-JP", "薪资项目ID", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
+            new TranslationSeedItem("entity.empsalary.salaryitemid", "ja-JP", "薪资项目ID_jp", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
             // entity.empsalary.salaryitemid
             new TranslationSeedItem("entity.empsalary.salaryitemid", "zh-CN", "薪资项目ID", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
             // entity.empsalary.salaryitemid
-            new TranslationSeedItem("entity.empsalary.salaryitemid", "zh-HK", "薪资项目ID", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
+            new TranslationSeedItem("entity.empsalary.salaryitemid", "zh-HK", "薪资项目ID_hk", "关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）"),
 
             // entity.empsalary.sharecount
-            new TranslationSeedItem("entity.empsalary.sharecount", "en-US", "授予股数", "授予股数/份数（股权激励定薪时使用）"),
+            new TranslationSeedItem("entity.empsalary.sharecount", "en-US", "授予股数_us", "授予股数/份数（股权激励定薪时使用）"),
             // entity.empsalary.sharecount
-            new TranslationSeedItem("entity.empsalary.sharecount", "ja-JP", "授予股数", "授予股数/份数（股权激励定薪时使用）"),
+            new TranslationSeedItem("entity.empsalary.sharecount", "ja-JP", "授予股数_jp", "授予股数/份数（股权激励定薪时使用）"),
             // entity.empsalary.sharecount
             new TranslationSeedItem("entity.empsalary.sharecount", "zh-CN", "授予股数", "授予股数/份数（股权激励定薪时使用）"),
             // entity.empsalary.sharecount
-            new TranslationSeedItem("entity.empsalary.sharecount", "zh-HK", "授予股数", "授予股数/份数（股权激励定薪时使用）"),
+            new TranslationSeedItem("entity.empsalary.sharecount", "zh-HK", "授予股数_hk", "授予股数/份数（股权激励定薪时使用）"),
 
             // entity.empsalary.effectivedate
-            new TranslationSeedItem("entity.empsalary.effectivedate", "en-US", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.empsalary.effectivedate", "en-US", "生效日期_us", "生效日期"),
             // entity.empsalary.effectivedate
-            new TranslationSeedItem("entity.empsalary.effectivedate", "ja-JP", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.empsalary.effectivedate", "ja-JP", "生效日期_jp", "生效日期"),
             // entity.empsalary.effectivedate
             new TranslationSeedItem("entity.empsalary.effectivedate", "zh-CN", "生效日期", "生效日期"),
             // entity.empsalary.effectivedate
-            new TranslationSeedItem("entity.empsalary.effectivedate", "zh-HK", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.empsalary.effectivedate", "zh-HK", "生效日期_hk", "生效日期"),
 
             // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "en-US", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.empsalary.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
             // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "ja-JP", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.empsalary.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
             // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.empsalary.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
             // entity.empsalary.status
-            new TranslationSeedItem("entity.empsalary.status", "zh-HK", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.empsalary.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
 
             // entity.empsalary.relatedplant
-            new TranslationSeedItem("entity.empsalary.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.empsalary.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.empsalary.relatedplant
-            new TranslationSeedItem("entity.empsalary.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.empsalary.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.empsalary.relatedplant
             new TranslationSeedItem("entity.empsalary.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.empsalary.relatedplant
-            new TranslationSeedItem("entity.empsalary.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.empsalary.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -214,10 +214,10 @@ public class TaktEmpSalaryI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Compensation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

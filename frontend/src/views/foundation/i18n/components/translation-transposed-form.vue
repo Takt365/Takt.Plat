@@ -21,12 +21,12 @@
       layout="horizontal"
     >
       <a-form-item
-        :label="t('entity.translation.resourcekey')"
+        :label="t('entity.translation.i18nkey')"
         name="i18nKey"
       >
         <a-input
           v-model:value="formState.i18nKey"
-          :placeholder="t('routine.localization.translation.placeholders.resourceKeyExample')"
+          :placeholder="t('common.page.form.placeholder.input', { field: t('entity.translation.i18nkey') })"
           :disabled="isEdit"
         />
       </a-form-item>
@@ -34,32 +34,26 @@
         :label="t('entity.translation.resourcetype')"
         name="resourceType"
       >
-        <a-select
+        <TaktSelect
           v-model:value="formState.resourceType"
-          :placeholder="t('routine.localization.translation.placeholders.resourceTypeSelect')"
+          dict-type="sys_resource_type"
           allow-clear
-        >
-          <a-select-option :value="0">
-            {{ t('routine.localization.translation.options.frontend') }}
-          </a-select-option>
-          <a-select-option :value="1">
-            {{ t('routine.localization.translation.options.backend') }}
-          </a-select-option>
-        </a-select>
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.translation.resourcetype') })"
+          :disabled="props.loading"
+        />
       </a-form-item>
       <a-form-item
         :label="t('entity.translation.resourcegroup')"
         name="resourceGroup"
       >
-        <a-input-number
+        <a-input
           v-model:value="formState.resourceGroup"
-          :min="0"
-          :placeholder="t('routine.localization.translation.placeholders.resourceGroupOptional')"
-          style="width: 100%"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.translation.resourcegroup') })"
+          :disabled="props.loading"
         />
       </a-form-item>
       <a-divider orientation="left">
-        {{ t('routine.localization.translation.divider.perCultureValues') }}
+        {{ t('entity.culture.translationlist') }}
       </a-divider>
       <a-form-item
         v-for="culture in cultureList"
@@ -70,7 +64,7 @@
         <a-input
           :value="formState.translations[culture.cultureCode] ?? ''"
           @update:value="(val) => { formState.translations[culture.cultureCode] = val }"
-          :placeholder="t('routine.localization.translation.placeholders.translationValueForLang', { label: culture.label })"
+          :placeholder="t('common.page.form.placeholder.required', { field: culture.label })"
         />
       </a-form-item>
       <a-form-item
@@ -79,7 +73,7 @@
       >
         <a-textarea
           v-model:value="formState.remark"
-          :placeholder="t('routine.localization.translation.placeholders.remarkOptional')"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
           :rows="2"
         />
       </a-form-item>
@@ -92,6 +86,7 @@ import { ref, reactive, watch, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { getCultureOptions } from '@/api/foundation/culture'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import type { Translation } from '@/types/foundation/translation'
 
 /** 区域文化选项（转置表单按语言列展开） */
@@ -104,8 +99,8 @@ interface CultureOptionItem {
 /** 转置表单 getFormData 返回值 */
 export interface TranslationTransposedFormData {
   i18nKey: string
-  resourceType: number
-  resourceGroup: number
+  resourceType: string
+  resourceGroup: string
   remark: string
   translations: Record<string, string>
   translationIds: Record<string, string>
@@ -125,6 +120,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { t } = useI18n()
+/** 字典缓存（sys_resource_type 等） */
+const dictDataStore = useDictDataStore()
 
 /** 表单 ref */
 const formRef = ref()
@@ -136,8 +133,8 @@ const cultureListLoading = ref(false)
 /** 表单绑定状态 */
 const formState = reactive<TranslationTransposedFormData>({
   i18nKey: '',
-  resourceType: 0,
-  resourceGroup: 0,
+  resourceType: 'frontend',
+  resourceGroup: 'page',
   remark: '',
   translations: {},
   translationIds: {},
@@ -149,28 +146,29 @@ const isEdit = computed(() => Boolean(props.formData && props.formData.length > 
 
 /** 校验规则 */
 const formRules = computed<Record<string, Rule[]>>(() => ({
-  i18nKey: [{ required: true, message: t('routine.localization.translation.rules.resourceKeyRequired'), trigger: 'blur' }],
-  resourceType: [{ required: true, message: t('routine.localization.translation.rules.resourceTypeRequired'), trigger: 'change' }]
+  i18nKey: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.translation.i18nkey') }), trigger: 'blur' }],
+  resourceType: [{ required: true, message: t('common.page.form.placeholder.select', { field: t('entity.translation.resourcetype') }), trigger: 'change' }]
 }))
 
 /**
- * 解析资源类别（兼容历史字符串）
+ * 解析资源类别（字典 sys_resource_type：frontend/backend）
  * @param value 原始值
- * @returns {number} 0=前端，1=后端
+ * @returns {string} 资源类别
  */
-function parseResourceType(value: unknown): number {
-  if (value === 1 || value === '1' || value === 'Backend') return 1
-  return 0
+function parseResourceType(value: unknown): string {
+  const text = value == null ? '' : String(value).trim()
+  return text || 'frontend'
 }
 
 /**
- * 解析资源分组为数字
+ * 解析资源分组
  * @param value 原始值
- * @returns {number} 分组编号
+ * @returns {string} 资源分组
  */
-function parseResourceGroup(value: unknown): number {
-  const n = Number(value)
-  return Number.isFinite(n) ? n : 0
+function parseResourceGroup(value: unknown): string {
+  if (value == null) return 'page'
+  const text = String(value).trim()
+  return text || 'page'
 }
 
 /**
@@ -237,8 +235,8 @@ watch(
       })
     } else {
       formState.i18nKey = ''
-      formState.resourceType = 0
-      formState.resourceGroup = 0
+      formState.resourceType = 'frontend'
+      formState.resourceGroup = 'page'
       formState.remark = ''
       formState.translations = {}
       formState.translationIds = {}
@@ -250,6 +248,7 @@ watch(
 )
 
 onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
   loadCultureList()
 })
 

@@ -1,6 +1,6 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Material
+// 命名空间：Takt.Domain.Entities.Logistics.Procurement
 // 文件名称：TaktPurchaseRequest.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
@@ -14,7 +14,7 @@ using SqlSugar;
 using Takt.Shared.Enums;
 using Takt.Domain.Entities;
 
-namespace Takt.Domain.Entities.Logistics.Materials;
+namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
 /// Takt采购申请实体
@@ -101,13 +101,6 @@ public class TaktPurchaseRequest : TaktApprovalEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "converted_status", ColumnDescription = "转订单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 流程实例ID（关联 TaktFlowInstance，发起审批后由业务写入，用于审批流程）
-    /// </summary>
-    [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 申请原因

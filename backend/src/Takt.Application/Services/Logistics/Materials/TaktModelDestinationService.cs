@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
+// 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktModelDestinationService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：型号目的地应用服务实现
 // 
@@ -13,8 +13,8 @@
 using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
-using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
-using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
+using Takt.Application.Dtos.Logistics.Materials;
+using Takt.Domain.Entities.Logistics.Materials;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -22,14 +22,14 @@ using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
 
-namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
+namespace Takt.Application.Services.Logistics.Materials;
 
 /// <summary>
 /// 型号目的地应用服务
 /// </summary>
 public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinationService
 {
-    private readonly ITaktCompanyRepository<TaktModelDestination> _modelDestinationRepository;
+    private readonly ITaktTenantRepository<TaktModelDestination> _modelDestinationRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -42,7 +42,7 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktModelDestinationService(
-        ITaktCompanyRepository<TaktModelDestination> modelDestinationRepository,
+        ITaktTenantRepository<TaktModelDestination> modelDestinationRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -81,7 +81,7 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
     public async Task<TaktModelDestinationDto?> GetModelDestinationByIdAsync(long id)
     {
         var entity = await _modelDestinationRepository.GetByIdAsync(id);
-        if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        if (entity == null || entity.TenantCode != CurrentTenantCode)
         {
             return null;
         }
@@ -94,15 +94,14 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetModelDestinationOptionsAsync()
     {
-        EnsureThreeLayerContext();
         var list = await _modelDestinationRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MaterialName,
+            x => x.TenantCode == CurrentTenantCode,
+            x => x.MaterialCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictLabel = e.MaterialCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -117,7 +116,7 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
         if (entity.SortOrder <= 0)
         {
             var maxSort = await _modelDestinationRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+                x => x.TenantCode == CurrentTenantCode,
                 x => x.SortOrder);
             entity.SortOrder = _sortOrderGenerator.GenerateNext(maxSort);
         }
@@ -223,7 +222,7 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
             return (0, 0, errors);
         }
         var importSortMax = await _modelDestinationRepository.GetMaxIntAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode,
             x => x.SortOrder);
         for (var i = 0; i < rows.Count; i++)
         {
@@ -289,20 +288,22 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.MaterialName != null && x.MaterialName.Contains(keywords))
+                || (x.ModelCode != null && x.ModelCode.Contains(keywords))
                 || (x.ModelName != null && x.ModelName.Contains(keywords))
+                || (x.DestinationCode != null && x.DestinationCode.Contains(keywords))
                 || (x.DestinationName != null && x.DestinationName.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialName))
@@ -310,9 +311,19 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
             exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.ModelCode))
+        {
+            exp = exp.And(x => x.ModelCode != null && x.ModelCode.Contains(queryDto.ModelCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ModelName))
         {
             exp = exp.And(x => x.ModelName != null && x.ModelName.Contains(queryDto.ModelName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.DestinationCode))
+        {
+            exp = exp.And(x => x.DestinationCode != null && x.DestinationCode.Contains(queryDto.DestinationCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.DestinationName))
@@ -325,9 +336,9 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

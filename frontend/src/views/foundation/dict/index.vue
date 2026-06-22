@@ -18,9 +18,9 @@
       :placeholder="
         t('common.page.form.placeholder.search', {
           keyword:
-            t('entity.dictType.code') +
-            t('common.page.action.or') +
-            t('entity.dictType.name')
+            t('entity.dicttype.code') +
+            t('common.tip.or') +
+            t('entity.dicttype.name')
         })
       "
       :loading="loading"
@@ -59,15 +59,17 @@
     />
 
     <!-- 表格 -->
-    <TaktSingleTable
-      entity-scope="tenant"
-      :columns="columns"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'id'"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getDictTypeId"
+    <div class="routine-dict-type-table-wrap">
+      <TaktSingleTable
+        :scroll="tableScroll"
+        entity-scope="tenant"
+        :columns="columns"
+        :visible-column-keys="visibleColumnKeys"
+        :id-column-key="'id'"
+        :data-source="dataSource"
+        :loading="loading"
+        :stripe="true"
+        :row-key="getDictTypeId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
       :pagination="false"
@@ -90,22 +92,24 @@
         </template>
         <template v-else-if="column.key === 'dictStatus'">
           <a-switch
-            :checked="record.dictStatus === 0"
+            :checked="record.dictStatus === 1"
             :checked-children="t('common.page.button.enable')"
             :un-checked-children="t('common.page.button.disable')"
-            @change="(checked: any) => handleStatusChange(record, !!checked)"
+            @change="(checked: unknown) => handleStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'dataSource'">
           <TaktDictTag
             :value="getDictTypeField(record, 'dataSource')"
-            dict-type="sys_data_source"
+            dict-type="sys_data_source_type"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
-          <TaktDictTag
-            :value="getDictTypeField(record, 'isBuiltIn')"
-            dict-type="sys_yes_no"
+          <a-switch
+            :checked="getDictTypeField(record, 'isBuiltIn') === 1"
+            :checked-children="t('common.status.yes')"
+            :un-checked-children="t('common.status.no')"
+            @change="(checked: unknown) => handleDictTypeBuiltInChange(record, Boolean(checked))"
           />
         </template>
       </template>
@@ -125,6 +129,7 @@
         </div>
       </template>
     </TaktSingleTable>
+    </div>
 
     <!-- 分页组件 -->
     <TaktPagination
@@ -159,17 +164,17 @@
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
-      <a-form-item :label="t('entity.dictType.code')">
+      <a-form-item :label="t('entity.dicttype.code')">
         <a-input v-model:value="advancedQueryForm.dictTypeCode" />
       </a-form-item>
-      <a-form-item :label="t('entity.dictType.name')">
+      <a-form-item :label="t('entity.dicttype.name')">
         <a-input v-model:value="advancedQueryForm.dictTypeName" />
       </a-form-item>
-      <a-form-item :label="t('entity.dictType.dictstatus')">
+      <a-form-item :label="t('entity.dicttype.dictstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.dictStatus"
-          dict-type="sys_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dictType.dictstatus') })"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dicttype.dictstatus') })"
           allow-clear
         />
       </a-form-item>
@@ -213,6 +218,7 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import { useUserStore } from '@/stores/identity/user'
 import { isLogoutInProgress } from '@/bootstrap/takt-logout-flow'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize, ensureTaktPaginationConfigAsync } from '@/utils/takt-paged'
 
 const { t } = useI18n()
 
@@ -240,10 +246,13 @@ type TaktResizeColumn = { width?: string | number } & Record<string, unknown>
 
 const loading = ref(false)
 const queryKeyword = ref('')
-const currentPage = ref(1)
-const pageSize = ref(20)
+const currentPage = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const dataSource = ref<DictType[]>([])
+
+/** 表格 scroll.y（服务端分页固定视口高度） */
+const tableScroll = { y: 'calc(100vh - 300px)' } as const
 
 /**
  * 按字典类型 id 取展开行嵌套子表数据
@@ -311,64 +320,64 @@ const dictDataColumns = computed<TableColumnsType<DictData>>(() => [
     width: 120
   },
   {
-    title: t('entity.dictData.dicttypeid'),
+    title: t('entity.dictdata.dicttypeid'),
     dataIndex: 'dictTypeId',
     key: 'dictTypeId',
     width: 120
   },
   {
-    title: t('entity.dictData.dicttypecode'),
+    title: t('entity.dictdata.dicttypecode'),
     dataIndex: 'dictTypeCode',
     key: 'dictTypeCode',
     width: 150
   },
   {
-    title: t('entity.dictData.dictlabel'),
+    title: t('entity.dictdata.dictlabel'),
     dataIndex: 'dictLabel',
     key: 'dictLabel',
     width: 150
   },
   {
-    title: t('entity.dictData.i18nkey'),
+    title: t('entity.dictdata.i18nkey'),
     dataIndex: 'i18nKey',
     key: 'i18nKey',
     width: 200,
     ellipsis: true
   },
   {
-    title: t('entity.dictData.dictvalue'),
+    title: t('entity.dictdata.dictvalue'),
     dataIndex: 'dictValue',
     key: 'dictValue',
     width: 150
   },
   {
-    title: t('entity.dictData.cssclass'),
+    title: t('entity.dictdata.cssclass'),
     dataIndex: 'cssClass',
     key: 'cssClass',
     width: 100
   },
   {
-    title: t('entity.dictData.listclass'),
+    title: t('entity.dictdata.listclass'),
     dataIndex: 'listClass',
     key: 'listClass',
     width: 100
   },
   {
-    title: t('entity.dictData.extlabel'),
+    title: t('entity.dictdata.extlabel'),
     dataIndex: 'extLabel',
     key: 'extLabel',
     width: 150,
     ellipsis: true
   },
   {
-    title: t('entity.dictData.extvalue'),
+    title: t('entity.dictdata.extvalue'),
     dataIndex: 'extValue',
     key: 'extValue',
     width: 150,
     ellipsis: true
   },
   {
-    title: t('entity.dictData.sortorder'),
+    title: t('entity.dictdata.sortorder'),
     dataIndex: 'sortOrder',
     key: 'sortOrder',
     width: 100
@@ -392,45 +401,45 @@ const columns = computed<TableColumnsType<DictType>>(() => [
       String(getDictTypeField(record, 'dictTypeId') ?? '')
   },
   {
-    title: t('entity.dictType.code'),
+    title: t('entity.dicttype.code'),
     dataIndex: 'dictTypeCode',
     key: 'dictTypeCode',
     width: 150,
     fixed: 'left'
   },
   {
-    title: t('entity.dictType.name'),
+    title: t('entity.dicttype.name'),
     dataIndex: 'dictTypeName',
     key: 'dictTypeName',
     width: 200
   },
   {
-    title: t('entity.dictType.datasource'),
+    title: t('entity.dicttype.datasource'),
     dataIndex: 'dataSource',
     key: 'dataSource',
     width: 100
   },
   {
-    title: t('entity.dictType.dictscript'),
+    title: t('entity.dicttype.dictscript'),
     dataIndex: 'dictScript',
     key: 'dictScript',
     width: 200,
     ellipsis: true
   },
   {
-    title: t('entity.dictType.isbuiltin'),
+    title: t('entity.dicttype.isbuiltin'),
     dataIndex: 'isBuiltIn',
     key: 'isBuiltIn',
     width: 100
   },
   {
-    title: t('entity.dictType.sortorder'),
+    title: t('entity.dicttype.sortorder'),
     dataIndex: 'sortOrder',
     key: 'sortOrder',
     width: 100
   },
   {
-    title: t('entity.dictType.dictstatus'),
+    title: t('entity.dicttype.dictstatus'),
     dataIndex: 'dictStatus',
     key: 'dictStatus',
     width: 100
@@ -488,7 +497,7 @@ const loadData = async () => {
       return
     }
     logger.error('[DictType] 加载数据失败', { action: 'loadData' }, error)
-    message.error(t('common.page.msg.loadtargetfail', { target: t('entity.dictType._self') }))
+    message.error(t('common.feedback.load.failed', { target: t('entity.dicttype._self') }))
   } finally {
     loading.value = false
   }
@@ -499,7 +508,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -507,13 +516,13 @@ function handleSearch() {
 const handleReset = () => {
   queryKeyword.value = ''
   advancedQueryForm.value = { dictTypeCode: '', dictTypeName: '' }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 // 新增
 const handleCreate = () => {
-  formTitle.value = t('common.page.button.create') + t('entity.dictType._self')
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.dicttype._self') })
   formData.value = null
   formVisible.value = true
 }
@@ -522,12 +531,12 @@ const handleCreate = () => {
 const handleUpdate = () => {
   if (!selectedRow.value) {
     message.warning(
-      t('common.page.action.warnselecttoaction', { action: t('common.page.button.edit'), entity: t('entity.dictType._self') })
+      t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.dicttype._self') })
     )
     return
   }
   
-  formTitle.value = t('common.page.button.edit') + t('entity.dictType._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.dicttype._self') })
   formData.value = { ...selectedRow.value }
   formVisible.value = true
 }
@@ -535,7 +544,7 @@ const handleUpdate = () => {
 // 编辑单条记录（操作列使用）
 const handleEditOne = (record: DictType) => {
   selectedRow.value = record
-  formTitle.value = t('common.page.button.edit') + t('entity.dictType._self')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.dicttype._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -544,21 +553,21 @@ const handleEditOne = (record: DictType) => {
 const handleDelete = () => {
   if (selectedRows.value.length === 0) {
     message.warning(
-      t('common.page.action.warnselecttoaction', { action: t('common.page.button.delete'), entity: t('entity.dictType._self') })
+      t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.dicttype._self') })
     )
     return
   }
   
   const ids = selectedRows.value.map((row: DictType) => row.dictTypeId).filter(Boolean)
   if (ids.length === 0) {
-    message.warning(t('common.page.msg.entityidrequired', { entity: t('entity.dictType._self') }))
+    message.warning(t('common.validation.required', { field: t('common.page.entity.id') }))
     return
   }
 
   Modal.confirm({
-    title: t('common.page.action.confirmdelete'),
-    content: t('common.page.confirm.deletecountentity', {
-      entity: t('entity.dictType._self'),
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.count', {
+      entity: t('entity.dicttype._self'),
       count: selectedRows.value.length
     }),
     okText: t('common.page.button.delete'),
@@ -571,14 +580,14 @@ const handleDelete = () => {
         } else {
           await dictTypeApi.deleteDictTypeBatch(ids as string[])
         }
-        message.success(t('common.page.msg.deletesuccess'))
+        message.success(t('common.feedback.deleted'))
         await loadData()
         selectedRowKeys.value = []
         selectedRows.value = []
         selectedRow.value = null
       } catch (error) {
         logger.error('[DictType] 删除失败', { action: 'deleteBatch' }, error)
-        message.error(t('common.page.msg.deletefail'))
+        message.error(t('common.feedback.delete.failed'))
       } finally {
         loading.value = false
       }
@@ -589,21 +598,21 @@ const handleDelete = () => {
 // 删除单条记录（操作列使用）
 const handleDeleteOne = (record: DictType) => {
   if (!record.dictTypeId) {
-    message.warning(t('common.page.msg.entityidrequired', { entity: t('entity.dictType._self') }))
+    message.warning(t('common.validation.required', { field: t('common.page.entity.id') }))
     return
   }
 
-  const name = record.dictTypeCode || t('common.page.action.thistarget', { target: t('entity.dictType._self') })
+  const name = record.dictTypeCode || t('common.tip.this.target', { target: t('entity.dicttype._self') })
   Modal.confirm({
-    title: t('common.page.action.confirmdelete'),
-    content: t('common.page.confirm.deleteentity', { entity: t('entity.dictType._self'), name }),
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.dicttype._self'), name }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       try {
         loading.value = true
         await dictTypeApi.deleteDictTypeById(record.dictTypeId)
-        message.success(t('common.page.msg.deletesuccess'))
+        message.success(t('common.feedback.deleted'))
         await loadData()
         if (selectedRow.value?.dictTypeId === record.dictTypeId) {
           selectedRow.value = null
@@ -612,7 +621,7 @@ const handleDeleteOne = (record: DictType) => {
         selectedRows.value = selectedRows.value.filter((r: DictType) => r.dictTypeId !== record.dictTypeId)
       } catch (error) {
         logger.error('[DictType] 删除失败', { action: 'deleteOne' }, error)
-        message.error(t('common.page.msg.deletefail'))
+        message.error(t('common.feedback.delete.failed'))
       } finally {
         loading.value = false
       }
@@ -634,10 +643,10 @@ const handleExport = async () => {
     if (adv.dictTypeName) query.dictTypeName = adv.dictTypeName
     if (adv.dictStatus !== undefined && adv.dictStatus !== null) query.dictStatus = adv.dictStatus
 
-    const blob = await dictTypeApi.exportDictType(query, undefined, t('entity.dictType._self'))
+    const blob = await dictTypeApi.exportDictType(query, undefined, t('entity.dicttype._self'))
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
-    const fileName = `${t('entity.dictType._self')}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}.xlsx`
+    const fileName = `${t('entity.dicttype._self')}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}.xlsx`
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
@@ -646,10 +655,10 @@ const handleExport = async () => {
     link.click()
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
-    message.success(t('common.page.msg.exportsuccess'))
+    message.success(t('common.feedback.export.success', { target: t('entity.dicttype._self') }))
   } catch (error) {
     logger.error('[DictType] 导出失败', { action: 'export' }, error)
-    message.error(t('common.page.msg.exportfail'))
+    message.error(t('common.feedback.export.failed', { target: t('entity.dicttype._self') }))
   } finally {
     loading.value = false
   }
@@ -660,13 +669,42 @@ const handleStatusChange = async (record: DictType, checked: boolean) => {
   try {
     await dictTypeApi.updateDictTypeStatus({
       dictTypeId: record.dictTypeId,
-      dictStatus: checked ? 0 : 1
+      dictStatus: checked ? 1 : 0
     })
-    message.success(t('common.page.msg.updatesuccess'))
+    message.success(t('common.feedback.updated', { target: t('entity.dicttype._self') }))
     await loadData()
   } catch (error) {
     logger.error('[DictType] 状态更新失败', { action: 'updateStatus' }, error)
-    message.error(t('common.page.msg.operatefail'))
+    message.error(t('common.feedback.failed'))
+  }
+}
+
+/**
+ * 表格行内切换是否内置（sys_yes_no_type：1=是，0=否）
+ * @param record 当前行
+ * @param checked 开关是否选中（内置）
+ */
+async function handleDictTypeBuiltInChange(record: DictType, checked: boolean) {
+  const id = getDictTypeId(record)
+  if (!id) {
+    return
+  }
+  const newBuiltIn = checked ? 1 : 0
+  const oldBuiltIn = getDictTypeField(record, 'isBuiltIn')
+  const row = dataSource.value.find((item) => getDictTypeId(item) === id)
+  if (row) {
+    row.isBuiltIn = newBuiltIn
+  }
+  try {
+    await dictTypeApi.updateDictTypeBuiltIn({ dictTypeId: id, isBuiltIn: newBuiltIn })
+    message.success(t('common.feedback.updated', { target: t('entity.dicttype._self') }))
+  } catch (error: unknown) {
+    if (row) {
+      row.isBuiltIn = oldBuiltIn as number
+    }
+    const err = error as { message?: string }
+    logger.error('[DictType] 内置标识更新失败', { action: 'updateBuiltIn' }, error)
+    message.error(err?.message || t('common.feedback.failed'))
   }
 }
 
@@ -677,7 +715,7 @@ const handleAdvancedQuery = () => {
 
 const handleAdvancedQuerySubmit = () => {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -719,21 +757,21 @@ const handleFormSubmit = async () => {
     if ('dictTypeId' in formData && formData.dictTypeId) {
       // 更新
       await dictTypeApi.updateDictType(formData.dictTypeId, formData as DictTypeUpdate)
-      message.success(t('common.page.msg.updatesuccess'))
+      message.success(t('common.feedback.updated', { target: t('entity.dicttype._self') }))
     } else {
       // 新增
       await dictTypeApi.createDictType(formData as DictTypeCreate)
-      message.success(t('common.page.msg.createsuccess'))
+      message.success(t('common.feedback.created', { target: t('entity.dicttype._self') }))
     }
     
     formVisible.value = false
     await loadData()
   } catch (error: any) {
     if (error?.errorFields) {
-      message.warning(t('common.page.msg.operatefail'))
+      message.warning(t('common.feedback.failed'))
     } else {
       logger.error('[DictType] 保存失败', { action: 'save' }, error)
-      message.error(t('common.page.msg.operatefail'))
+      message.error(t('common.feedback.failed'))
     }
   } finally {
     formLoading.value = false
@@ -825,21 +863,26 @@ const onClickRow = (record: DictType) => {
   }
 }
 
-// 展开/收起处理（手风琴模式：只允许一个展开）
-const handleExpand = async (expanded: boolean, record: DictType) => {
-  if (expanded && record.dictTypeId) {
+/**
+ * 展开/收起处理（手风琴模式：只允许一个展开）
+ * @param expanded 是否展开
+ * @param record TaktSingleTable 行数据（TableRecord）
+ */
+const handleExpand = async (expanded: boolean, record: Record<string, unknown>) => {
+  const row = record as unknown as DictType
+  if (expanded && row.dictTypeId) {
     // 手风琴模式：先关闭其他已展开的行
-    const currentKey = record.dictTypeId || ''
+    const currentKey = row.dictTypeId || ''
     if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== currentKey) {
       expandedRowKeys.value = []
     }
-    
+
     // 检查 dataSource 中是否有数据，如果没有则加载
-    const item = dataSource.value.find((row: DictType) => row.dictTypeId === record.dictTypeId)
+    const item = dataSource.value.find((r: DictType) => r.dictTypeId === row.dictTypeId)
     if (item && (!item.dictDataList || item.dictDataList.length === 0)) {
-      await loadDictData(record)
+      await loadDictData(row)
     }
-    
+
     // 设置当前行为唯一展开的行
     expandedRowKeys.value = [currentKey]
   } else {
@@ -873,7 +916,7 @@ const loadDictData = async (record: DictType) => {
     return []
   } catch (error) {
     logger.error('[DictType] 加载字典数据失败', { action: 'loadDictData' }, error)
-    message.error(t('common.page.msg.loadtargetfail', { target: t('entity.dictData._self') }))
+    message.error(t('common.feedback.load.data.failed'))
     return []
   }
 }
@@ -881,7 +924,7 @@ const loadDictData = async (record: DictType) => {
 // 打开字典数据子表窗口
 const handleOpenDictDataWindow = async (record: DictType) => {
   if (!record.dictTypeId) {
-    message.warning(t('common.page.msg.entityidrequired', { entity: t('entity.dictType._self') }))
+    message.warning(t('common.validation.required', { field: t('common.page.entity.id') }))
     return
   }
   
@@ -900,7 +943,7 @@ const handlePaginationChange = (page: number, size: number) => {
 }
 
 const handlePaginationSizeChange = (_current: number, size: number) => {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
   loadData()
 }
@@ -909,13 +952,22 @@ const handlePaginationSizeChange = (_current: number, size: number) => {
 // 生命周期
 // ========================================
 
-onMounted(() => {
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 </script>
 
 <style scoped lang="css">
 .routine-dict-type {
-  padding: 16px;
+  padding: 0 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+.routine-dict-type-table-wrap {
+  flex: 1;
+  min-height: 0;
 }
 </style>

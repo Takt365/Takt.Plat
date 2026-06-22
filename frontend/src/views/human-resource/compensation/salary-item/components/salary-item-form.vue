@@ -124,7 +124,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.calcMethod"
-                  dict-type="hr_salary_calc_method"
+                  dict-type="hr_salary_calc_method_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.calcmethod') })"
                   size="small"
                 />
@@ -212,7 +212,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isDeduction"
-                  dict-type="sys_yes_no"
+                  dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.isdeduction') })"
                   size="small"
                 />
@@ -225,7 +225,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isTaxable"
-                  dict-type="sys_yes_no"
+                  dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.istaxable') })"
                   size="small"
                 />
@@ -238,7 +238,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.includeSocialSecurityBase"
-                  dict-type="sys_yes_no"
+                  dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includesocialsecuritybase') })"
                   size="small"
                 />
@@ -251,7 +251,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.includeHousingFundBase"
-                  dict-type="sys_yes_no"
+                  dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includehousingfundbase') })"
                   size="small"
                 />
@@ -277,7 +277,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.itemStatus"
-                  dict-type="sys_normal_disable"
+                  dict-type="sys_normal_disable_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemstatus') })"
                   size="small"
                 />
@@ -308,12 +308,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('common.page.entity.ExtField')"
+                name="ExtField"
               >
                 <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                   size="small"
                   allow-clear
                 />
@@ -382,7 +382,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","itemCode","itemName","shortName","itemType","calcMethod","salaryFormulaId","defaultAmount","defaultRate","strikePrice","vestingYears","isDeduction","isTaxable","includeSocialSecurityBase","includeHousingFundBase","sortOrder","itemStatus","relatedPlant","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","itemCode","itemName","shortName","itemType","calcMethod","salaryFormulaId","defaultAmount","defaultRate","strikePrice","vestingYears","isDeduction","isTaxable","includeSocialSecurityBase","includeHousingFundBase","sortOrder","itemStatus","relatedPlant","ExtField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */

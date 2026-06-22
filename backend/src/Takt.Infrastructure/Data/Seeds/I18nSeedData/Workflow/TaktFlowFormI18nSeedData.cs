@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowFormI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowForm 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,137 +75,137 @@ public class TaktFlowFormI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktFlowForm 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.flowform._self / entity.flowform.{{field}}；ResourceGroup=6；ResourceType=0
+    /// I18nKey：entity.flowform._self / entity.flowform.{{field}}；ResourceGroup=Workflow；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetFlowFormTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.flowform._self
-            new TranslationSeedItem("entity.flowform._self", "en-US", "Flow Form Information", "实体名称"),
+            new TranslationSeedItem("entity.flowform._self", "en-US", "Flow Form Information_us", "实体名称"),
             // entity.flowform._self
-            new TranslationSeedItem("entity.flowform._self", "ja-JP", "流程表单定义信息", "实体名称"),
+            new TranslationSeedItem("entity.flowform._self", "ja-JP", "流程表单定义信息_jp", "实体名称"),
             // entity.flowform._self
             new TranslationSeedItem("entity.flowform._self", "zh-CN", "流程表单定义信息", "实体名称"),
             // entity.flowform._self
-            new TranslationSeedItem("entity.flowform._self", "zh-HK", "流程表单定义信息", "实体名称"),
+            new TranslationSeedItem("entity.flowform._self", "zh-HK", "流程表单定义信息_hk", "实体名称"),
 
             // entity.flowform.formcode
-            new TranslationSeedItem("entity.flowform.formcode", "en-US", "表单编码", "表单编码（公司内唯一）"),
+            new TranslationSeedItem("entity.flowform.formcode", "en-US", "表单编码_us", "表单编码（公司内唯一）"),
             // entity.flowform.formcode
-            new TranslationSeedItem("entity.flowform.formcode", "ja-JP", "表单编码", "表单编码（公司内唯一）"),
+            new TranslationSeedItem("entity.flowform.formcode", "ja-JP", "表单编码_jp", "表单编码（公司内唯一）"),
             // entity.flowform.formcode
             new TranslationSeedItem("entity.flowform.formcode", "zh-CN", "表单编码", "表单编码（公司内唯一）"),
             // entity.flowform.formcode
-            new TranslationSeedItem("entity.flowform.formcode", "zh-HK", "表单编码", "表单编码（公司内唯一）"),
+            new TranslationSeedItem("entity.flowform.formcode", "zh-HK", "表单编码_hk", "表单编码（公司内唯一）"),
 
             // entity.flowform.formname
-            new TranslationSeedItem("entity.flowform.formname", "en-US", "表单名称", "表单名称"),
+            new TranslationSeedItem("entity.flowform.formname", "en-US", "表单名称_us", "表单名称"),
             // entity.flowform.formname
-            new TranslationSeedItem("entity.flowform.formname", "ja-JP", "表单名称", "表单名称"),
+            new TranslationSeedItem("entity.flowform.formname", "ja-JP", "表单名称_jp", "表单名称"),
             // entity.flowform.formname
             new TranslationSeedItem("entity.flowform.formname", "zh-CN", "表单名称", "表单名称"),
             // entity.flowform.formname
-            new TranslationSeedItem("entity.flowform.formname", "zh-HK", "表单名称", "表单名称"),
+            new TranslationSeedItem("entity.flowform.formname", "zh-HK", "表单名称_hk", "表单名称"),
 
             // entity.flowform.formcategory
-            new TranslationSeedItem("entity.flowform.formcategory", "en-US", "表单分类", "表单分类（字典 sys_form_category）"),
+            new TranslationSeedItem("entity.flowform.formcategory", "en-US", "表单分类_us", "表单分类（字典 sys_form_category）"),
             // entity.flowform.formcategory
-            new TranslationSeedItem("entity.flowform.formcategory", "ja-JP", "表单分类", "表单分类（字典 sys_form_category）"),
+            new TranslationSeedItem("entity.flowform.formcategory", "ja-JP", "表单分类_jp", "表单分类（字典 sys_form_category）"),
             // entity.flowform.formcategory
             new TranslationSeedItem("entity.flowform.formcategory", "zh-CN", "表单分类", "表单分类（字典 sys_form_category）"),
             // entity.flowform.formcategory
-            new TranslationSeedItem("entity.flowform.formcategory", "zh-HK", "表单分类", "表单分类（字典 sys_form_category）"),
+            new TranslationSeedItem("entity.flowform.formcategory", "zh-HK", "表单分类_hk", "表单分类（字典 sys_form_category）"),
 
             // entity.flowform.formtype
-            new TranslationSeedItem("entity.flowform.formtype", "en-US", "表单类型", "表单类型（字典 sys_form_type）"),
+            new TranslationSeedItem("entity.flowform.formtype", "en-US", "表单类型_us", "表单类型（字典 sys_form_type）"),
             // entity.flowform.formtype
-            new TranslationSeedItem("entity.flowform.formtype", "ja-JP", "表单类型", "表单类型（字典 sys_form_type）"),
+            new TranslationSeedItem("entity.flowform.formtype", "ja-JP", "表单类型_jp", "表单类型（字典 sys_form_type）"),
             // entity.flowform.formtype
             new TranslationSeedItem("entity.flowform.formtype", "zh-CN", "表单类型", "表单类型（字典 sys_form_type）"),
             // entity.flowform.formtype
-            new TranslationSeedItem("entity.flowform.formtype", "zh-HK", "表单类型", "表单类型（字典 sys_form_type）"),
+            new TranslationSeedItem("entity.flowform.formtype", "zh-HK", "表单类型_hk", "表单类型（字典 sys_form_type）"),
 
             // entity.flowform.formconfig
-            new TranslationSeedItem("entity.flowform.formconfig", "en-US", "表单配置JSON", "表单设计 JSON"),
+            new TranslationSeedItem("entity.flowform.formconfig", "en-US", "表单配置JSON_us", "表单设计 JSON"),
             // entity.flowform.formconfig
-            new TranslationSeedItem("entity.flowform.formconfig", "ja-JP", "表单配置JSON", "表单设计 JSON"),
+            new TranslationSeedItem("entity.flowform.formconfig", "ja-JP", "表单配置JSON_jp", "表单设计 JSON"),
             // entity.flowform.formconfig
             new TranslationSeedItem("entity.flowform.formconfig", "zh-CN", "表单配置JSON", "表单设计 JSON"),
             // entity.flowform.formconfig
-            new TranslationSeedItem("entity.flowform.formconfig", "zh-HK", "表单配置JSON", "表单设计 JSON"),
+            new TranslationSeedItem("entity.flowform.formconfig", "zh-HK", "表单配置JSON_hk", "表单设计 JSON"),
 
             // entity.flowform.formtemplate
-            new TranslationSeedItem("entity.flowform.formtemplate", "en-US", "表单模板JSON", "表单模板 JSON"),
+            new TranslationSeedItem("entity.flowform.formtemplate", "en-US", "表单模板JSON_us", "表单模板 JSON"),
             // entity.flowform.formtemplate
-            new TranslationSeedItem("entity.flowform.formtemplate", "ja-JP", "表单模板JSON", "表单模板 JSON"),
+            new TranslationSeedItem("entity.flowform.formtemplate", "ja-JP", "表单模板JSON_jp", "表单模板 JSON"),
             // entity.flowform.formtemplate
             new TranslationSeedItem("entity.flowform.formtemplate", "zh-CN", "表单模板JSON", "表单模板 JSON"),
             // entity.flowform.formtemplate
-            new TranslationSeedItem("entity.flowform.formtemplate", "zh-HK", "表单模板JSON", "表单模板 JSON"),
+            new TranslationSeedItem("entity.flowform.formtemplate", "zh-HK", "表单模板JSON_hk", "表单模板 JSON"),
 
             // entity.flowform.formversion
-            new TranslationSeedItem("entity.flowform.formversion", "en-US", "表单版本", "表单版本标签"),
+            new TranslationSeedItem("entity.flowform.formversion", "en-US", "表单版本_us", "表单版本标签"),
             // entity.flowform.formversion
-            new TranslationSeedItem("entity.flowform.formversion", "ja-JP", "表单版本", "表单版本标签"),
+            new TranslationSeedItem("entity.flowform.formversion", "ja-JP", "表单版本_jp", "表单版本标签"),
             // entity.flowform.formversion
             new TranslationSeedItem("entity.flowform.formversion", "zh-CN", "表单版本", "表单版本标签"),
             // entity.flowform.formversion
-            new TranslationSeedItem("entity.flowform.formversion", "zh-HK", "表单版本", "表单版本标签"),
+            new TranslationSeedItem("entity.flowform.formversion", "zh-HK", "表单版本_hk", "表单版本标签"),
 
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "en-US", "是否数据源表单", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "en-US", "是否数据源表单_us", "是否绑定数据源"),
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "ja-JP", "是否数据源表单", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "ja-JP", "是否数据源表单_jp", "是否绑定数据源"),
             // entity.flowform.isdatasource
             new TranslationSeedItem("entity.flowform.isdatasource", "zh-CN", "是否数据源表单", "是否绑定数据源"),
             // entity.flowform.isdatasource
-            new TranslationSeedItem("entity.flowform.isdatasource", "zh-HK", "是否数据源表单", "是否绑定数据源"),
+            new TranslationSeedItem("entity.flowform.isdatasource", "zh-HK", "是否数据源表单_hk", "是否绑定数据源"),
 
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "en-US", "关联数据库名", "关联数据库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "en-US", "关联数据库名_us", "关联数据库名"),
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "ja-JP", "关联数据库名", "关联数据库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "ja-JP", "关联数据库名_jp", "关联数据库名"),
             // entity.flowform.relateddatabasename
             new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-CN", "关联数据库名", "关联数据库名"),
             // entity.flowform.relateddatabasename
-            new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-HK", "关联数据库名", "关联数据库名"),
+            new TranslationSeedItem("entity.flowform.relateddatabasename", "zh-HK", "关联数据库名_hk", "关联数据库名"),
 
             // entity.flowform.relatedtablename
-            new TranslationSeedItem("entity.flowform.relatedtablename", "en-US", "关联表名", "关联表名"),
+            new TranslationSeedItem("entity.flowform.relatedtablename", "en-US", "关联表名_us", "关联表名"),
             // entity.flowform.relatedtablename
-            new TranslationSeedItem("entity.flowform.relatedtablename", "ja-JP", "关联表名", "关联表名"),
+            new TranslationSeedItem("entity.flowform.relatedtablename", "ja-JP", "关联表名_jp", "关联表名"),
             // entity.flowform.relatedtablename
             new TranslationSeedItem("entity.flowform.relatedtablename", "zh-CN", "关联表名", "关联表名"),
             // entity.flowform.relatedtablename
-            new TranslationSeedItem("entity.flowform.relatedtablename", "zh-HK", "关联表名", "关联表名"),
+            new TranslationSeedItem("entity.flowform.relatedtablename", "zh-HK", "关联表名_hk", "关联表名"),
 
             // entity.flowform.relatedformfield
-            new TranslationSeedItem("entity.flowform.relatedformfield", "en-US", "关联字段映射", "关联字段映射 JSON"),
+            new TranslationSeedItem("entity.flowform.relatedformfield", "en-US", "关联字段映射_us", "关联字段映射 JSON"),
             // entity.flowform.relatedformfield
-            new TranslationSeedItem("entity.flowform.relatedformfield", "ja-JP", "关联字段映射", "关联字段映射 JSON"),
+            new TranslationSeedItem("entity.flowform.relatedformfield", "ja-JP", "关联字段映射_jp", "关联字段映射 JSON"),
             // entity.flowform.relatedformfield
             new TranslationSeedItem("entity.flowform.relatedformfield", "zh-CN", "关联字段映射", "关联字段映射 JSON"),
             // entity.flowform.relatedformfield
-            new TranslationSeedItem("entity.flowform.relatedformfield", "zh-HK", "关联字段映射", "关联字段映射 JSON"),
+            new TranslationSeedItem("entity.flowform.relatedformfield", "zh-HK", "关联字段映射_hk", "关联字段映射 JSON"),
 
             // entity.flowform.sortorder
-            new TranslationSeedItem("entity.flowform.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.flowform.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.flowform.sortorder
-            new TranslationSeedItem("entity.flowform.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.flowform.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.flowform.sortorder
             new TranslationSeedItem("entity.flowform.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.flowform.sortorder
-            new TranslationSeedItem("entity.flowform.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.flowform.sortorder", "zh-HK", "排序号_hk", "排序号"),
 
             // entity.flowform.formstatus
-            new TranslationSeedItem("entity.flowform.formstatus", "en-US", "表单状态", "表单状态"),
+            new TranslationSeedItem("entity.flowform.formstatus", "en-US", "表单状态_us", "表单状态"),
             // entity.flowform.formstatus
-            new TranslationSeedItem("entity.flowform.formstatus", "ja-JP", "表单状态", "表单状态"),
+            new TranslationSeedItem("entity.flowform.formstatus", "ja-JP", "表单状态_jp", "表单状态"),
             // entity.flowform.formstatus
             new TranslationSeedItem("entity.flowform.formstatus", "zh-CN", "表单状态", "表单状态"),
             // entity.flowform.formstatus
-            new TranslationSeedItem("entity.flowform.formstatus", "zh-HK", "表单状态", "表单状态"),
+            new TranslationSeedItem("entity.flowform.formstatus", "zh-HK", "表单状态_hk", "表单状态"),
         };
     }
 
@@ -223,10 +223,10 @@ public class TaktFlowFormI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 6;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Workflow";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

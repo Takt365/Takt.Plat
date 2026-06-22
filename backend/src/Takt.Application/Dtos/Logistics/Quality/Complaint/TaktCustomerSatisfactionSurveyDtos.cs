@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerSatisfactionSurvey 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerSatisfactionSurvey 生成，请按需审阅）
 // 
@@ -350,7 +350,7 @@ public class TaktCustomerSatisfactionSurveyQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -512,11 +512,6 @@ public class TaktCustomerSatisfactionSurveyCreateDto
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 调查项目明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktCustomerSatisfactionSurveyItemCreateDto>? Items { get; set; }
@@ -524,7 +519,7 @@ public class TaktCustomerSatisfactionSurveyCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -684,7 +679,7 @@ public class TaktCustomerSatisfactionSurveyTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -777,7 +772,7 @@ public class TaktCustomerSatisfactionSurveyImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -942,7 +937,7 @@ public class TaktCustomerSatisfactionSurveyExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

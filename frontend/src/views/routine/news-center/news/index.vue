@@ -148,6 +148,14 @@
           <a-empty v-else class="mb-4" />
         </div>
       </template>
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'newsStatus'">
+          <TaktDictTag
+            :value="getNewsField(record, 'newsStatus')"
+            dict-type="sys_publish_status"
+          />
+        </template>
+      </template>
     </TaktSingleTable>
 
     <!-- 分页组件 -->
@@ -444,10 +452,11 @@
       </div>
       <div v-show="isFieldVisible('newsStatus')">
       <a-form-item :label="t('entity.news.status')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.newsStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.status') })"
-          style="width: 100%"
+          dict-type="sys_publish_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.status') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -538,11 +547,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -597,6 +606,7 @@
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 新闻中心主实体 支持分类、置顶、推荐、社交统计管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/routine/news-center/news
@@ -641,9 +651,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<News[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -703,7 +713,7 @@ const advancedQueryForm = ref({
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -745,7 +755,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'approvedAtEnd', label: t('entity.news.approvedatend') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -1523,7 +1533,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsStatus') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1670,7 +1679,7 @@ function handleReset() {
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
   currentPage.value = 1
@@ -1885,7 +1894,7 @@ function handleAdvancedQueryReset() {
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }

@@ -41,7 +41,7 @@ public class TaktSalesPriceChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:sales:salespricechangelog:list", "销售价格变更记录列表")]
+    [TaktPermission("logistics:sales:price:list", "销售价格变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSalesPriceChangeLogListAsync([FromQuery] TaktSalesPriceChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSalesPriceChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">销售价格变更记录ID</param>
     /// <returns>销售价格变更记录DTO</returns>
-    [TaktPermission("logistics:sales:salespricechangelog:query", "销售价格变更记录详情")]
+    [TaktPermission("logistics:sales:price:query", "销售价格变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSalesPriceChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSalesPriceChangeLogsController : TaktControllerBase
     /// 获取销售价格变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:sales:salespricechangelog:query", "销售价格变更记录选项")]
+    [TaktPermission("logistics:sales:price:query", "销售价格变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSalesPriceChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSalesPriceChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>销售价格变更记录DTO</returns>
-    [TaktPermission("logistics:sales:salespricechangelog:create", "创建销售价格变更记录")]
+    [TaktPermission("logistics:sales:price:create", "创建销售价格变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateSalesPriceChangeLogAsync([FromBody] TaktSalesPriceChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSalesPriceChangeLogsController : TaktControllerBase
     /// <param name="id">销售价格变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>销售价格变更记录DTO</returns>
-    [TaktPermission("logistics:sales:salespricechangelog:update", "更新销售价格变更记录")]
+    [TaktPermission("logistics:sales:price:update", "更新销售价格变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSalesPriceChangeLogAsync(long id, [FromBody] TaktSalesPriceChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSalesPriceChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">销售价格变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:sales:salespricechangelog:delete", "删除销售价格变更记录")]
+    [TaktPermission("logistics:sales:price:delete", "删除销售价格变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSalesPriceChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSalesPriceChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:sales:salespricechangelog:delete", "批量删除销售价格变更记录")]
+    [TaktPermission("logistics:sales:price:delete", "批量删除销售价格变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSalesPriceChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktSalesPriceChangeLogsController : TaktControllerBase
     /// 导出销售价格变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:sales:salespricechangelog:export", "导出销售价格变更记录")]
+    [TaktPermission("logistics:sales:price:export", "导出销售价格变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSalesPriceChangeLogAsync([FromQuery] TaktSalesPriceChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

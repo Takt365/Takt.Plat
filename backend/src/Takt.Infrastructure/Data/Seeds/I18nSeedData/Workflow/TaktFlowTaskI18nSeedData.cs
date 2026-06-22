@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowTaskI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowTask 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,173 +75,173 @@ public class TaktFlowTaskI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktFlowTask 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.flowtask._self / entity.flowtask.{{field}}；ResourceGroup=6；ResourceType=0
+    /// I18nKey：entity.flowtask._self / entity.flowtask.{{field}}；ResourceGroup=Workflow；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetFlowTaskTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.flowtask._self
-            new TranslationSeedItem("entity.flowtask._self", "en-US", "Flow Task Information", "实体名称"),
+            new TranslationSeedItem("entity.flowtask._self", "en-US", "Flow Task Information_us", "实体名称"),
             // entity.flowtask._self
-            new TranslationSeedItem("entity.flowtask._self", "ja-JP", "流程用户任务信息", "实体名称"),
+            new TranslationSeedItem("entity.flowtask._self", "ja-JP", "流程用户任务信息_jp", "实体名称"),
             // entity.flowtask._self
             new TranslationSeedItem("entity.flowtask._self", "zh-CN", "流程用户任务信息", "实体名称"),
             // entity.flowtask._self
-            new TranslationSeedItem("entity.flowtask._self", "zh-HK", "流程用户任务信息", "实体名称"),
+            new TranslationSeedItem("entity.flowtask._self", "zh-HK", "流程用户任务信息_hk", "实体名称"),
 
             // entity.flowtask.instanceid
-            new TranslationSeedItem("entity.flowtask.instanceid", "en-US", "流程实例ID", "流程实例 ID"),
+            new TranslationSeedItem("entity.flowtask.instanceid", "en-US", "流程实例ID_us", "流程实例 ID"),
             // entity.flowtask.instanceid
-            new TranslationSeedItem("entity.flowtask.instanceid", "ja-JP", "流程实例ID", "流程实例 ID"),
+            new TranslationSeedItem("entity.flowtask.instanceid", "ja-JP", "流程实例ID_jp", "流程实例 ID"),
             // entity.flowtask.instanceid
             new TranslationSeedItem("entity.flowtask.instanceid", "zh-CN", "流程实例ID", "流程实例 ID"),
             // entity.flowtask.instanceid
-            new TranslationSeedItem("entity.flowtask.instanceid", "zh-HK", "流程实例ID", "流程实例 ID"),
+            new TranslationSeedItem("entity.flowtask.instanceid", "zh-HK", "流程实例ID_hk", "流程实例 ID"),
 
             // entity.flowtask.taskdefinitionkey
-            new TranslationSeedItem("entity.flowtask.taskdefinitionkey", "en-US", "任务定义键", "任务定义键（设计器节点 nodeId）"),
+            new TranslationSeedItem("entity.flowtask.taskdefinitionkey", "en-US", "任务定义键_us", "任务定义键（设计器节点 nodeId）"),
             // entity.flowtask.taskdefinitionkey
-            new TranslationSeedItem("entity.flowtask.taskdefinitionkey", "ja-JP", "任务定义键", "任务定义键（设计器节点 nodeId）"),
+            new TranslationSeedItem("entity.flowtask.taskdefinitionkey", "ja-JP", "任务定义键_jp", "任务定义键（设计器节点 nodeId）"),
             // entity.flowtask.taskdefinitionkey
             new TranslationSeedItem("entity.flowtask.taskdefinitionkey", "zh-CN", "任务定义键", "任务定义键（设计器节点 nodeId）"),
             // entity.flowtask.taskdefinitionkey
-            new TranslationSeedItem("entity.flowtask.taskdefinitionkey", "zh-HK", "任务定义键", "任务定义键（设计器节点 nodeId）"),
+            new TranslationSeedItem("entity.flowtask.taskdefinitionkey", "zh-HK", "任务定义键_hk", "任务定义键（设计器节点 nodeId）"),
 
             // entity.flowtask.taskname
-            new TranslationSeedItem("entity.flowtask.taskname", "en-US", "任务名称", "任务名称"),
+            new TranslationSeedItem("entity.flowtask.taskname", "en-US", "任务名称_us", "任务名称"),
             // entity.flowtask.taskname
-            new TranslationSeedItem("entity.flowtask.taskname", "ja-JP", "任务名称", "任务名称"),
+            new TranslationSeedItem("entity.flowtask.taskname", "ja-JP", "任务名称_jp", "任务名称"),
             // entity.flowtask.taskname
             new TranslationSeedItem("entity.flowtask.taskname", "zh-CN", "任务名称", "任务名称"),
             // entity.flowtask.taskname
-            new TranslationSeedItem("entity.flowtask.taskname", "zh-HK", "任务名称", "任务名称"),
+            new TranslationSeedItem("entity.flowtask.taskname", "zh-HK", "任务名称_hk", "任务名称"),
 
             // entity.flowtask.assigneeuserid
-            new TranslationSeedItem("entity.flowtask.assigneeuserid", "en-US", "办理人ID", "办理人 ID"),
+            new TranslationSeedItem("entity.flowtask.assigneeuserid", "en-US", "办理人ID_us", "办理人 ID"),
             // entity.flowtask.assigneeuserid
-            new TranslationSeedItem("entity.flowtask.assigneeuserid", "ja-JP", "办理人ID", "办理人 ID"),
+            new TranslationSeedItem("entity.flowtask.assigneeuserid", "ja-JP", "办理人ID_jp", "办理人 ID"),
             // entity.flowtask.assigneeuserid
             new TranslationSeedItem("entity.flowtask.assigneeuserid", "zh-CN", "办理人ID", "办理人 ID"),
             // entity.flowtask.assigneeuserid
-            new TranslationSeedItem("entity.flowtask.assigneeuserid", "zh-HK", "办理人ID", "办理人 ID"),
+            new TranslationSeedItem("entity.flowtask.assigneeuserid", "zh-HK", "办理人ID_hk", "办理人 ID"),
 
             // entity.flowtask.assigneeusername
-            new TranslationSeedItem("entity.flowtask.assigneeusername", "en-US", "办理人姓名", "办理人姓名"),
+            new TranslationSeedItem("entity.flowtask.assigneeusername", "en-US", "办理人姓名_us", "办理人姓名"),
             // entity.flowtask.assigneeusername
-            new TranslationSeedItem("entity.flowtask.assigneeusername", "ja-JP", "办理人姓名", "办理人姓名"),
+            new TranslationSeedItem("entity.flowtask.assigneeusername", "ja-JP", "办理人姓名_jp", "办理人姓名"),
             // entity.flowtask.assigneeusername
             new TranslationSeedItem("entity.flowtask.assigneeusername", "zh-CN", "办理人姓名", "办理人姓名"),
             // entity.flowtask.assigneeusername
-            new TranslationSeedItem("entity.flowtask.assigneeusername", "zh-HK", "办理人姓名", "办理人姓名"),
+            new TranslationSeedItem("entity.flowtask.assigneeusername", "zh-HK", "办理人姓名_hk", "办理人姓名"),
 
             // entity.flowtask.owneruserid
-            new TranslationSeedItem("entity.flowtask.owneruserid", "en-US", "任务所有者ID", "任务所有者 ID（转办前原办理人）"),
+            new TranslationSeedItem("entity.flowtask.owneruserid", "en-US", "任务所有者ID_us", "任务所有者 ID（转办前原办理人）"),
             // entity.flowtask.owneruserid
-            new TranslationSeedItem("entity.flowtask.owneruserid", "ja-JP", "任务所有者ID", "任务所有者 ID（转办前原办理人）"),
+            new TranslationSeedItem("entity.flowtask.owneruserid", "ja-JP", "任务所有者ID_jp", "任务所有者 ID（转办前原办理人）"),
             // entity.flowtask.owneruserid
             new TranslationSeedItem("entity.flowtask.owneruserid", "zh-CN", "任务所有者ID", "任务所有者 ID（转办前原办理人）"),
             // entity.flowtask.owneruserid
-            new TranslationSeedItem("entity.flowtask.owneruserid", "zh-HK", "任务所有者ID", "任务所有者 ID（转办前原办理人）"),
+            new TranslationSeedItem("entity.flowtask.owneruserid", "zh-HK", "任务所有者ID_hk", "任务所有者 ID（转办前原办理人）"),
 
             // entity.flowtask.taskstatus
-            new TranslationSeedItem("entity.flowtask.taskstatus", "en-US", "任务状态", "任务状态"),
+            new TranslationSeedItem("entity.flowtask.taskstatus", "en-US", "任务状态_us", "任务状态"),
             // entity.flowtask.taskstatus
-            new TranslationSeedItem("entity.flowtask.taskstatus", "ja-JP", "任务状态", "任务状态"),
+            new TranslationSeedItem("entity.flowtask.taskstatus", "ja-JP", "任务状态_jp", "任务状态"),
             // entity.flowtask.taskstatus
             new TranslationSeedItem("entity.flowtask.taskstatus", "zh-CN", "任务状态", "任务状态"),
             // entity.flowtask.taskstatus
-            new TranslationSeedItem("entity.flowtask.taskstatus", "zh-HK", "任务状态", "任务状态"),
+            new TranslationSeedItem("entity.flowtask.taskstatus", "zh-HK", "任务状态_hk", "任务状态"),
 
             // entity.flowtask.signtype
-            new TranslationSeedItem("entity.flowtask.signtype", "en-US", "会签类型", "会签类型"),
+            new TranslationSeedItem("entity.flowtask.signtype", "en-US", "会签类型_us", "会签类型"),
             // entity.flowtask.signtype
-            new TranslationSeedItem("entity.flowtask.signtype", "ja-JP", "会签类型", "会签类型"),
+            new TranslationSeedItem("entity.flowtask.signtype", "ja-JP", "会签类型_jp", "会签类型"),
             // entity.flowtask.signtype
             new TranslationSeedItem("entity.flowtask.signtype", "zh-CN", "会签类型", "会签类型"),
             // entity.flowtask.signtype
-            new TranslationSeedItem("entity.flowtask.signtype", "zh-HK", "会签类型", "会签类型"),
+            new TranslationSeedItem("entity.flowtask.signtype", "zh-HK", "会签类型_hk", "会签类型"),
 
             // entity.flowtask.priority
-            new TranslationSeedItem("entity.flowtask.priority", "en-US", "优先级", "优先级"),
+            new TranslationSeedItem("entity.flowtask.priority", "en-US", "优先级_us", "优先级"),
             // entity.flowtask.priority
-            new TranslationSeedItem("entity.flowtask.priority", "ja-JP", "优先级", "优先级"),
+            new TranslationSeedItem("entity.flowtask.priority", "ja-JP", "优先级_jp", "优先级"),
             // entity.flowtask.priority
             new TranslationSeedItem("entity.flowtask.priority", "zh-CN", "优先级", "优先级"),
             // entity.flowtask.priority
-            new TranslationSeedItem("entity.flowtask.priority", "zh-HK", "优先级", "优先级"),
+            new TranslationSeedItem("entity.flowtask.priority", "zh-HK", "优先级_hk", "优先级"),
 
             // entity.flowtask.duedate
-            new TranslationSeedItem("entity.flowtask.duedate", "en-US", "到期时间", "到期时间"),
+            new TranslationSeedItem("entity.flowtask.duedate", "en-US", "到期时间_us", "到期时间"),
             // entity.flowtask.duedate
-            new TranslationSeedItem("entity.flowtask.duedate", "ja-JP", "到期时间", "到期时间"),
+            new TranslationSeedItem("entity.flowtask.duedate", "ja-JP", "到期时间_jp", "到期时间"),
             // entity.flowtask.duedate
             new TranslationSeedItem("entity.flowtask.duedate", "zh-CN", "到期时间", "到期时间"),
             // entity.flowtask.duedate
-            new TranslationSeedItem("entity.flowtask.duedate", "zh-HK", "到期时间", "到期时间"),
+            new TranslationSeedItem("entity.flowtask.duedate", "zh-HK", "到期时间_hk", "到期时间"),
 
             // entity.flowtask.claimtime
-            new TranslationSeedItem("entity.flowtask.claimtime", "en-US", "认领时间", "认领时间"),
+            new TranslationSeedItem("entity.flowtask.claimtime", "en-US", "认领时间_us", "认领时间"),
             // entity.flowtask.claimtime
-            new TranslationSeedItem("entity.flowtask.claimtime", "ja-JP", "认领时间", "认领时间"),
+            new TranslationSeedItem("entity.flowtask.claimtime", "ja-JP", "认领时间_jp", "认领时间"),
             // entity.flowtask.claimtime
             new TranslationSeedItem("entity.flowtask.claimtime", "zh-CN", "认领时间", "认领时间"),
             // entity.flowtask.claimtime
-            new TranslationSeedItem("entity.flowtask.claimtime", "zh-HK", "认领时间", "认领时间"),
+            new TranslationSeedItem("entity.flowtask.claimtime", "zh-HK", "认领时间_hk", "认领时间"),
 
             // entity.flowtask.completedat
-            new TranslationSeedItem("entity.flowtask.completedat", "en-US", "办结时间", "办结时间"),
+            new TranslationSeedItem("entity.flowtask.completedat", "en-US", "办结时间_us", "办结时间"),
             // entity.flowtask.completedat
-            new TranslationSeedItem("entity.flowtask.completedat", "ja-JP", "办结时间", "办结时间"),
+            new TranslationSeedItem("entity.flowtask.completedat", "ja-JP", "办结时间_jp", "办结时间"),
             // entity.flowtask.completedat
             new TranslationSeedItem("entity.flowtask.completedat", "zh-CN", "办结时间", "办结时间"),
             // entity.flowtask.completedat
-            new TranslationSeedItem("entity.flowtask.completedat", "zh-HK", "办结时间", "办结时间"),
+            new TranslationSeedItem("entity.flowtask.completedat", "zh-HK", "办结时间_hk", "办结时间"),
 
             // entity.flowtask.isaddsign
-            new TranslationSeedItem("entity.flowtask.isaddsign", "en-US", "是否加签", "是否加签任务"),
+            new TranslationSeedItem("entity.flowtask.isaddsign", "en-US", "是否加签_us", "是否加签任务"),
             // entity.flowtask.isaddsign
-            new TranslationSeedItem("entity.flowtask.isaddsign", "ja-JP", "是否加签", "是否加签任务"),
+            new TranslationSeedItem("entity.flowtask.isaddsign", "ja-JP", "是否加签_jp", "是否加签任务"),
             // entity.flowtask.isaddsign
             new TranslationSeedItem("entity.flowtask.isaddsign", "zh-CN", "是否加签", "是否加签任务"),
             // entity.flowtask.isaddsign
-            new TranslationSeedItem("entity.flowtask.isaddsign", "zh-HK", "是否加签", "是否加签任务"),
+            new TranslationSeedItem("entity.flowtask.isaddsign", "zh-HK", "是否加签_hk", "是否加签任务"),
 
             // entity.flowtask.addsignid
-            new TranslationSeedItem("entity.flowtask.addsignid", "en-US", "加签记录ID", "加签记录 ID（TaktFlowAddSign）"),
+            new TranslationSeedItem("entity.flowtask.addsignid", "en-US", "加签记录ID_us", "加签记录 ID（TaktFlowAddSign）"),
             // entity.flowtask.addsignid
-            new TranslationSeedItem("entity.flowtask.addsignid", "ja-JP", "加签记录ID", "加签记录 ID（TaktFlowAddSign）"),
+            new TranslationSeedItem("entity.flowtask.addsignid", "ja-JP", "加签记录ID_jp", "加签记录 ID（TaktFlowAddSign）"),
             // entity.flowtask.addsignid
             new TranslationSeedItem("entity.flowtask.addsignid", "zh-CN", "加签记录ID", "加签记录 ID（TaktFlowAddSign）"),
             // entity.flowtask.addsignid
-            new TranslationSeedItem("entity.flowtask.addsignid", "zh-HK", "加签记录ID", "加签记录 ID（TaktFlowAddSign）"),
+            new TranslationSeedItem("entity.flowtask.addsignid", "zh-HK", "加签记录ID_hk", "加签记录 ID（TaktFlowAddSign）"),
 
             // entity.flowtask.sortorder
-            new TranslationSeedItem("entity.flowtask.sortorder", "en-US", "序号", "多实例序号"),
+            new TranslationSeedItem("entity.flowtask.sortorder", "en-US", "序号_us", "多实例序号"),
             // entity.flowtask.sortorder
-            new TranslationSeedItem("entity.flowtask.sortorder", "ja-JP", "序号", "多实例序号"),
+            new TranslationSeedItem("entity.flowtask.sortorder", "ja-JP", "序号_jp", "多实例序号"),
             // entity.flowtask.sortorder
             new TranslationSeedItem("entity.flowtask.sortorder", "zh-CN", "序号", "多实例序号"),
             // entity.flowtask.sortorder
-            new TranslationSeedItem("entity.flowtask.sortorder", "zh-HK", "序号", "多实例序号"),
+            new TranslationSeedItem("entity.flowtask.sortorder", "zh-HK", "序号_hk", "多实例序号"),
 
             // entity.flowtask.comment
-            new TranslationSeedItem("entity.flowtask.comment", "en-US", "审批意见", "审批意见"),
+            new TranslationSeedItem("entity.flowtask.comment", "en-US", "审批意见_us", "审批意见"),
             // entity.flowtask.comment
-            new TranslationSeedItem("entity.flowtask.comment", "ja-JP", "审批意见", "审批意见"),
+            new TranslationSeedItem("entity.flowtask.comment", "ja-JP", "审批意见_jp", "审批意见"),
             // entity.flowtask.comment
             new TranslationSeedItem("entity.flowtask.comment", "zh-CN", "审批意见", "审批意见"),
             // entity.flowtask.comment
-            new TranslationSeedItem("entity.flowtask.comment", "zh-HK", "审批意见", "审批意见"),
+            new TranslationSeedItem("entity.flowtask.comment", "zh-HK", "审批意见_hk", "审批意见"),
 
             // entity.flowtask.instance
-            new TranslationSeedItem("entity.flowtask.instance", "en-US", "所属流程实例", "所属流程实例"),
+            new TranslationSeedItem("entity.flowtask.instance", "en-US", "所属流程实例_us", "所属流程实例"),
             // entity.flowtask.instance
-            new TranslationSeedItem("entity.flowtask.instance", "ja-JP", "所属流程实例", "所属流程实例"),
+            new TranslationSeedItem("entity.flowtask.instance", "ja-JP", "所属流程实例_jp", "所属流程实例"),
             // entity.flowtask.instance
             new TranslationSeedItem("entity.flowtask.instance", "zh-CN", "所属流程实例", "所属流程实例"),
             // entity.flowtask.instance
-            new TranslationSeedItem("entity.flowtask.instance", "zh-HK", "所属流程实例", "所属流程实例"),
+            new TranslationSeedItem("entity.flowtask.instance", "zh-HK", "所属流程实例_hk", "所属流程实例"),
         };
     }
 
@@ -259,10 +259,10 @@ public class TaktFlowTaskI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 6;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Workflow";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

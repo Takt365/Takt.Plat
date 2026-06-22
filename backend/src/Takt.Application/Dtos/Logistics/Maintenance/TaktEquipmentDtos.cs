@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktEquipmentDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Equipment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEquipment 生成，请按需审阅）
 // 
@@ -176,15 +176,27 @@ public class TaktEquipmentDto : TaktCompanyDtoBase
     public int WarrantyStatus { get; set; } = 0;
 
     /// <summary>
-    /// 设备状态（0=运行中，1=停机，2=维修中，3=故障，4=待报废，5=已报废）
+    /// 设备状态（字典 sys_equipment_status）
     /// </summary>
     public int EquipmentStatus { get; set; } = 0;
 
     /// <summary>
-    /// 维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）
-    /// （子表：TaktMaintenance）
+    /// 维护通知单列表
+    /// （子表：TaktMaintenanceNotification）
     /// </summary>
-    public List<TaktMaintenanceDto>? MaintenanceRecords { get; set; }
+    public List<TaktMaintenanceNotificationDto>? MaintenanceNotifications { get; set; }
+
+    /// <summary>
+    /// 维护工单列表
+    /// （子表：TaktMaintenanceWorkOrder）
+    /// </summary>
+    public List<TaktMaintenanceWorkOrderDto>? MaintenanceWorkOrders { get; set; }
+
+    /// <summary>
+    /// 维护履历列表（由维护工单完工归档生成，只读）
+    /// （子表：TaktMaintenanceHistory）
+    /// </summary>
+    public List<TaktMaintenanceHistoryDto>? MaintenanceHistories { get; set; }
 
 }
 
@@ -374,7 +386,7 @@ public class TaktEquipmentQueryDto : TaktPagedQuery
     public int? WarrantyStatus { get; set; }
 
     /// <summary>
-    /// 设备状态（0=运行中，1=停机，2=维修中，3=故障，4=待报废，5=已报废）
+    /// 设备状态（字典 sys_equipment_status）
     /// </summary>
     public int? EquipmentStatus { get; set; }
 
@@ -391,7 +403,7 @@ public class TaktEquipmentQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -567,19 +579,29 @@ public class TaktEquipmentCreateDto
     public int WarrantyStatus { get; set; } = 0;
 
     /// <summary>
-    /// 设备状态（0=运行中，1=停机，2=维修中，3=故障，4=待报废，5=已报废）
+    /// 设备状态（字典 sys_equipment_status）
     /// </summary>
     public int EquipmentStatus { get; set; } = 0;
 
     /// <summary>
-    /// 维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）（子表，级联保存）
+    /// 维护通知单列表（子表，级联保存）
     /// </summary>
-    public List<TaktMaintenanceCreateDto>? MaintenanceRecords { get; set; }
+    public List<TaktMaintenanceNotificationCreateDto>? MaintenanceNotifications { get; set; }
+
+    /// <summary>
+    /// 维护工单列表（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceWorkOrderCreateDto>? MaintenanceWorkOrders { get; set; }
+
+    /// <summary>
+    /// 维护履历列表（由维护工单完工归档生成，只读）（子表，级联保存）
+    /// </summary>
+    public List<TaktMaintenanceHistoryCreateDto>? MaintenanceHistories { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -714,7 +736,7 @@ public class TaktEquipmentTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -806,7 +828,7 @@ public class TaktEquipmentImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -977,14 +999,14 @@ public class TaktEquipmentExportDto
     public int WarrantyStatus { get; set; } = 0;
 
     /// <summary>
-    /// 设备状态（0=运行中，1=停机，2=维修中，3=故障，4=待报废，5=已报废）
+    /// 设备状态（字典 sys_equipment_status）
     /// </summary>
     public int EquipmentStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

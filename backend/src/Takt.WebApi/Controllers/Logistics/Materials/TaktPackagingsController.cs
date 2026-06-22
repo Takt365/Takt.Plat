@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
+// 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktPackagingsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料包装信息控制器
 // 
@@ -11,11 +11,11 @@
 // ========================================
 
 using Microsoft.AspNetCore.Mvc;
-using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
-using Takt.Application.Services.Logistics.Manufacturing.Bom;
+using Takt.Application.Dtos.Logistics.Materials;
+using Takt.Application.Services.Logistics.Materials;
 using Takt.Shared.Constants;
 
-namespace Takt.WebApi.Controllers.Logistics.Manufacturing.Bom;
+namespace Takt.WebApi.Controllers.Logistics.Materials;
 
 /// <summary>
 /// 物料包装信息控制器
@@ -41,7 +41,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:list", "物料包装信息列表")]
+    [TaktPermission("logistics:materials:packaging:list", "物料包装信息列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPackagingListAsync([FromQuery] TaktPackagingQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">物料包装信息ID</param>
     /// <returns>物料包装信息DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:query", "物料包装信息详情")]
+    [TaktPermission("logistics:materials:packaging:query", "物料包装信息详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPackagingByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// 获取物料包装信息选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:query", "物料包装信息选项")]
+    [TaktPermission("logistics:materials:packaging:query", "物料包装信息选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPackagingOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>物料包装信息DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:create", "创建物料包装信息")]
+    [TaktPermission("logistics:materials:packaging:create", "创建物料包装信息")]
     [HttpPost]
     public async Task<IActionResult> CreatePackagingAsync([FromBody] TaktPackagingCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// <param name="id">物料包装信息ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>物料包装信息DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:update", "更新物料包装信息")]
+    [TaktPermission("logistics:materials:packaging:update", "更新物料包装信息")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePackagingAsync(long id, [FromBody] TaktPackagingUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">物料包装信息ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:delete", "删除物料包装信息")]
+    [TaktPermission("logistics:materials:packaging:delete", "删除物料包装信息")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePackagingByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:delete", "批量删除物料包装信息")]
+    [TaktPermission("logistics:materials:packaging:delete", "批量删除物料包装信息")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePackagingBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>物料包装信息DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:update", "更新物料包装信息排序")]
+    [TaktPermission("logistics:materials:packaging:update", "更新物料包装信息排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdatePackagingSortAsync([FromBody] TaktPackagingSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:import", "获取物料包装信息导入模板")]
+    [TaktPermission("logistics:materials:packaging:import", "获取物料包装信息导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPackagingTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:import", "导入物料包装信息")]
+    [TaktPermission("logistics:materials:packaging:import", "导入物料包装信息")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPackagingAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPackagingsController : TaktControllerBase
     /// 导出物料包装信息
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:packaging:export", "导出物料包装信息")]
+    [TaktPermission("logistics:materials:packaging:export", "导出物料包装信息")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPackagingAsync([FromQuery] TaktPackagingQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

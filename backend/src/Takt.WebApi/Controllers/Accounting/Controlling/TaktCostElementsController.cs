@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Controlling
 // 文件名称：TaktCostElementsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本要素控制器
 // 
@@ -13,6 +13,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Accounting.Controlling;
 using Takt.Application.Services.Accounting.Controlling;
+using Takt.Shared.Constants;
 
 namespace Takt.WebApi.Controllers.Accounting.Controlling;
 
@@ -40,7 +41,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("accounting:controlling:costelement:list", "成本要素列表")]
+    [TaktPermission("accounting:controlling:cost:element:list", "成本要素列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetCostElementListAsync([FromQuery] TaktCostElementQueryDto queryDto)
     {
@@ -60,7 +61,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// </summary>
     /// <param name="id">成本要素ID</param>
     /// <returns>成本要素DTO</returns>
-    [TaktPermission("accounting:controlling:costelement:query", "成本要素详情")]
+    [TaktPermission("accounting:controlling:cost:element:query", "成本要素详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCostElementByIdAsync(long id)
     {
@@ -83,7 +84,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// 获取成本要素树形选项列表
     /// </summary>
     /// <returns>树形选项</returns>
-    [TaktPermission("accounting:controlling:costelement:query", "成本要素树形选项")]
+    [TaktPermission("accounting:controlling:cost:element:query", "成本要素树形选项")]
     [HttpGet("tree-options")]
     public async Task<IActionResult> GetCostElementTreeOptionsAsync()
     {
@@ -101,9 +102,9 @@ public class TaktCostElementsController : TaktControllerBase
     /// <summary>
     /// 获取成本要素树形列表
     /// </summary>
-    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 1）</param>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
     /// <returns>树形数据</returns>
-    [TaktPermission("accounting:controlling:costelement:query", "成本要素树")]
+    [TaktPermission("accounting:controlling:cost:element:query", "成本要素树")]
     [HttpGet("tree")]
     public async Task<IActionResult> GetCostElementTreeAsync([FromQuery] long parentId = 0, [FromQuery] bool includeDisabled = false)
     {
@@ -123,7 +124,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>成本要素DTO</returns>
-    [TaktPermission("accounting:controlling:costelement:create", "创建成本要素")]
+    [TaktPermission("accounting:controlling:cost:element:create", "创建成本要素")]
     [HttpPost]
     public async Task<IActionResult> CreateCostElementAsync([FromBody] TaktCostElementCreateDto dto)
     {
@@ -144,7 +145,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// <param name="id">成本要素ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>成本要素DTO</returns>
-    [TaktPermission("accounting:controlling:costelement:update", "更新成本要素")]
+    [TaktPermission("accounting:controlling:cost:element:update", "更新成本要素")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCostElementAsync(long id, [FromBody] TaktCostElementUpdateDto dto)
     {
@@ -164,7 +165,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// </summary>
     /// <param name="id">成本要素ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:costelement:delete", "删除成本要素")]
+    [TaktPermission("accounting:controlling:cost:element:delete", "删除成本要素")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCostElementByIdAsync(long id)
     {
@@ -184,7 +185,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:costelement:delete", "批量删除成本要素")]
+    [TaktPermission("accounting:controlling:cost:element:delete", "批量删除成本要素")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteCostElementBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -202,9 +203,9 @@ public class TaktCostElementsController : TaktControllerBase
     /// <summary>
     /// 更新成本要素状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>成本要素DTO</returns>
-    [TaktPermission("accounting:controlling:costelement:update", "更新成本要素状态")]
+    [TaktPermission("accounting:controlling:cost:element:update", "更新成本要素状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateCostElementStatusAsync([FromBody] TaktCostElementStatusDto dto)
     {
@@ -224,7 +225,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>成本要素DTO</returns>
-    [TaktPermission("accounting:controlling:costelement:update", "更新成本要素排序")]
+    [TaktPermission("accounting:controlling:cost:element:update", "更新成本要素排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateCostElementSortAsync([FromBody] TaktCostElementSortDto dto)
     {
@@ -243,7 +244,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:controlling:costelement:import", "获取成本要素导入模板")]
+    [TaktPermission("accounting:controlling:cost:element:import", "获取成本要素导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetCostElementTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -263,7 +264,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("accounting:controlling:costelement:import", "导入成本要素")]
+    [TaktPermission("accounting:controlling:cost:element:import", "导入成本要素")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportCostElementAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -293,7 +294,7 @@ public class TaktCostElementsController : TaktControllerBase
     /// 导出成本要素
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:controlling:costelement:export", "导出成本要素")]
+    [TaktPermission("accounting:controlling:cost:element:export", "导出成本要素")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportCostElementAsync([FromQuery] TaktCostElementQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

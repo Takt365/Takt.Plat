@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA检查日报应用服务实现
 // 
@@ -101,8 +101,8 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
     {
         EnsureThreeLayerContext();
         var list = await _pcbaInspectionRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.PlantCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.Status == 1,
+            x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -415,7 +415,7 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
                 || (x.BatchNo != null && x.BatchNo.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || SqlFunc.ToString(x.Status).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ProdDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -462,9 +462,9 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
             exp = exp.And(x => x.Status == queryDto.Status);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

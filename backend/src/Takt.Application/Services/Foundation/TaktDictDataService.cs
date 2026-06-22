@@ -97,7 +97,7 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
     {
         var list = await _dictDataRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
-            x => x.DictTypeCode,
+            x => x.DictTypeCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -437,7 +437,7 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
                 || SqlFunc.ToString(x.CssClass).Contains(keywords)
                 || SqlFunc.ToString(x.IsDefault).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -498,9 +498,9 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

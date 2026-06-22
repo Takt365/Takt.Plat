@@ -39,7 +39,7 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售价格编码（唯一索引）
@@ -163,7 +163,7 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -198,7 +198,7 @@ public class TaktSalesPriceCreateDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售价格编码（唯一索引）
@@ -244,7 +244,7 @@ public class TaktSalesPriceCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -319,7 +319,7 @@ public class TaktSalesPriceTemplateDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售价格编码（唯一索引）
@@ -344,7 +344,7 @@ public class TaktSalesPriceTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -376,7 +376,7 @@ public class TaktSalesPriceImportDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售价格编码（唯一索引）
@@ -401,7 +401,7 @@ public class TaktSalesPriceImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -434,7 +434,7 @@ public class TaktSalesPriceExportDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售价格编码（唯一索引）
@@ -469,7 +469,7 @@ public class TaktSalesPriceExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

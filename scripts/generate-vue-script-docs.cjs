@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-vue-script-docs.cjs
 // 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
@@ -34,11 +34,12 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<${entityPascal}>>({})
+const formData = ref<Partial<${entityPascal}> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()` : '';
+const formRef = ref()
+` : '';
   const importLine = hasImport ? `/** 导入对话框是否打开 */
 const importVisible = ref(false)
 ` : '';
@@ -66,9 +67,9 @@ const treeExpandedKeys = ref<(string | number)[]>([])
 /** 右侧表格展开状态（预留） */
 const tableExpanded = ref(false)
 /** 右侧拍平列表当前页码 */
-const tableCurrentPage = ref(1)
+const tableCurrentPage = ref(getTaktDefaultPageIndex())
 /** 右侧拍平列表每页条数 */
-const tablePageSize = ref(20)
+const tablePageSize = ref(getTaktDefaultPageSize())
 /** 页面 loading（树加载、提交、导出等） */
 const loading = ref(false)
 /** 全量树表节点（左侧树与右侧表共用，不受右侧查询过滤） */
@@ -129,11 +130,12 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<${entityPascal}>>({})
+const formData = ref<Partial<${entityPascal}> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()` : '';
+const formRef = ref()
+` : '';
   const importLine = hasImport ? `/** 导入对话框是否打开 */
 const importVisible = ref(false)
 ` : '';
@@ -157,9 +159,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<${entityPascal}[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -168,7 +170,8 @@ const selectedRow = ref<${entityPascal} | null>(null)
 const selectedRows = ref<${entityPascal}[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
-${formBlock}/** 高级查询抽屉是否打开 */
+${formBlock}
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -194,14 +197,17 @@ ${updateDisabled}${deleteDisabled}`;
  * @param {object} options
  */
 function buildFormScriptStateBlock(options) {
-  const { formContentClassExpr, formFieldsJson, mdScript, scopeStoreScript } = options;
-  return `/** i18n 翻译函数 */
-const { t } = useI18n()
-${scopeStoreScript || ''}/** 表单内容区高度 class（字段多时 tab-10 行） */
+  const { formContentClassExpr, formFieldsJson, mdScript, scopeStoreScript, useFormTabs = true } = options;
+  const formContentScript = useFormTabs
+    ? `/** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = ${formContentClassExpr}
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
+`
+    : '';
+  return `/** i18n 翻译函数 */
+const { t } = useI18n()
+${scopeStoreScript || ''}${formContentScript}/** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ${formFieldsJson}
 ${mdScript}
 
@@ -213,7 +219,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 

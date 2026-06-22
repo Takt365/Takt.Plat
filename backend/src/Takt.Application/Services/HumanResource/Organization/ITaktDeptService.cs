@@ -86,6 +86,13 @@ public interface ITaktDeptService
     Task<TaktDeptDto> UpdateDeptStatusAsync(TaktDeptStatusDto dto);
 
     /// <summary>
+    /// 更新部门是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktDeptDto> UpdateDeptBuiltInAsync(TaktDeptBuiltInDto dto);
+
+    /// <summary>
     /// 更新部门排序
     /// </summary>
     /// <param name="dto">排序DTO</param>

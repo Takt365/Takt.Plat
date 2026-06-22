@@ -51,11 +51,6 @@ public class TaktCountersign : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "executive_office", ColumnDescription = "总经室", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? ExecutiveOffice { get; set; }
     /// <summary>
-    /// 流程实例 ID
-    /// </summary>
-    [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
-    public long? FlowInstanceId { get; set; }
-    /// <summary>
     /// 申请人（员工 ID）
     /// </summary>
     [SugarColumn(ColumnName = "applicant_by", ColumnDescription = "申请人", ColumnDataType = "bigint", IsNullable = false)]

@@ -44,7 +44,7 @@ public class TaktBenefitItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "benefit_type", ColumnDescription = "福利类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BenefitType { get; set; } = 0;
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle）
+    /// 发放周期（字典 hr_benefit_payment_cycle_type）
     /// </summary>
     [SugarColumn(ColumnName = "payment_cycle", ColumnDescription = "发放周期", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentCycle { get; set; } = 0;
@@ -69,7 +69,7 @@ public class TaktBenefitItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_ratio", ColumnDescription = "个人承担比例", ColumnDataType = "decimal", Length = 8, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal EmployeeRatio { get; set; }
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no）
+    /// 是否强制福利（字典 sys_yes_no_type）
     /// </summary>
     [SugarColumn(ColumnName = "is_mandatory", ColumnDescription = "是否强制福利", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsMandatory { get; set; } = 0;
@@ -79,7 +79,7 @@ public class TaktBenefitItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     [SugarColumn(ColumnName = "item_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ItemStatus { get; set; } = 1;

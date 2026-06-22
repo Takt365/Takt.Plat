@@ -71,8 +71,7 @@ public class TaktNotificationHub : Hub
             var companyCode = await ResolveCompanyCodeAsync();
             var connectionId = Context.ConnectionId ?? string.Empty;
             var httpContext = Context.GetHttpContext();
-            var connectIp = ResolveHubClientIp(httpContext);
-            var connectLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(connectIp, null);
+            var (connectIp, connectLocation) = TaktLocationHelper.ResolveClientIpAndLocationForLog(httpContext);
             var connectTime = DateTime.Now;
 
             await Groups.AddToGroupAsync(connectionId, TaktSignalRGroupNames.UserGroup(companyCode, userName));
@@ -160,7 +159,7 @@ public class TaktNotificationHub : Hub
                 FromUserName = fromUserName,
                 FromUserId = fromUserId,
                 ToUserName = toUserName,
-                MessageTitle = messageTitle,
+                MessageTitle = messageTitle ?? string.Empty,
                 MessageContent = messageContent,
                 MessageType = messageType,
                 MessageGroup = messageGroup ?? 1,
@@ -214,7 +213,7 @@ public class TaktNotificationHub : Hub
             {
                 CompanyCode = companyCode,
                 FromUserName = fromUserName,
-                MessageTitle = messageTitle,
+                MessageTitle = messageTitle ?? string.Empty,
                 MessageContent = messageContent,
                 MessageType = messageType,
                 MessageGroup = messageGroup,
@@ -281,32 +280,6 @@ public class TaktNotificationHub : Hub
         RequireResolvedLoginUser();
         var userName = _userContext.UserName!.Trim();
         return await _messageService.GetUnreadMessageCountAsync(userName);
-    }
-
-    /// <summary>
-    /// 从 Hub HTTP 上下文解析客户端 IP（优先 X-Forwarded-For）
-    /// </summary>
-    /// <param name="httpContext">HTTP 上下文</param>
-    /// <returns>客户端 IP</returns>
-    private static string? ResolveHubClientIp(HttpContext? httpContext)
-    {
-        if (httpContext == null)
-        {
-            return null;
-        }
-
-        var forwarded = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(forwarded))
-        {
-            var ip = forwarded.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-                .FirstOrDefault();
-            if (!string.IsNullOrWhiteSpace(ip))
-            {
-                return ip.Trim();
-            }
-        }
-
-        return httpContext.Connection.RemoteIpAddress?.ToString();
     }
 
     /// <summary>

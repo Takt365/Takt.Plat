@@ -26,23 +26,28 @@ public class TaktApprovalFlowBusinessService : TaktServiceBase
 {
     private readonly ITaktCompanyRepository<TaktFlowForm> _flowFormRepository;
     private readonly ITaktApprovalFlowDataGateway _approvalFlowDataGateway;
+    private readonly IReadOnlyDictionary<string, ITaktApprovalFlowCompletedContributor> _flowCompletedContributorMap;
 
     /// <summary>
     /// 初始化通用审批流程集成服务
     /// </summary>
     /// <param name="flowFormRepository">流程表单仓储</param>
     /// <param name="approvalFlowDataGateway">审批表数据网关</param>
+    /// <param name="flowCompletedContributors">审批通过后业务回写贡献点集合</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
+    /// <exception cref="InvalidOperationException">存在重复 RelatedTableName 的 Contributor</exception>
     public TaktApprovalFlowBusinessService(
         ITaktCompanyRepository<TaktFlowForm> flowFormRepository,
         ITaktApprovalFlowDataGateway approvalFlowDataGateway,
+        IEnumerable<ITaktApprovalFlowCompletedContributor> flowCompletedContributors,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _flowFormRepository = flowFormRepository;
         _approvalFlowDataGateway = approvalFlowDataGateway;
+        _flowCompletedContributorMap = BuildFlowCompletedContributorMap(flowCompletedContributors);
     }
 
     /// <summary>
@@ -130,6 +135,62 @@ public class TaktApprovalFlowBusinessService : TaktServiceBase
                     dataColumns);
             }
         }
+        if (instance.InstanceStatus == TaktFlowInstanceStatus.Completed)
+        {
+            await DispatchFlowCompletedContributorsAsync(instance, form.RelatedTableName!, entityId);
+        }
+    }
+
+    /// <summary>
+    /// 构建审批通过后回写 Contributor 索引（启动时校验 RelatedTableName 全应用唯一）
+    /// </summary>
+    /// <param name="flowCompletedContributors">Contributor 集合</param>
+    /// <returns>表名到 Contributor 的只读字典</returns>
+    /// <exception cref="InvalidOperationException">存在重复 RelatedTableName</exception>
+    private static IReadOnlyDictionary<string, ITaktApprovalFlowCompletedContributor> BuildFlowCompletedContributorMap(
+        IEnumerable<ITaktApprovalFlowCompletedContributor> flowCompletedContributors)
+    {
+        ArgumentNullException.ThrowIfNull(flowCompletedContributors);
+        var map = new Dictionary<string, ITaktApprovalFlowCompletedContributor>(StringComparer.OrdinalIgnoreCase);
+        foreach (var contributor in flowCompletedContributors)
+        {
+            ArgumentNullException.ThrowIfNull(contributor);
+            var tableName = contributor.RelatedTableName;
+            ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
+            if (map.TryGetValue(tableName, out var existing))
+            {
+                throw new InvalidOperationException(
+                    $"审批通过后回写 Contributor 表名重复：{tableName}（{existing.GetType().Name} 与 {contributor.GetType().Name}）");
+            }
+            map[tableName] = contributor;
+        }
+        return map;
+    }
+
+    /// <summary>
+    /// 分发审批通过后业务回写（各审批实体应用服务实现 ITaktApprovalFlowCompletedContributor）
+    /// </summary>
+    /// <param name="instance">流程实例</param>
+    /// <param name="relatedTableName">数据源物理表名</param>
+    /// <param name="entityId">业务单据主键</param>
+    /// <returns>异步任务</returns>
+    private async Task DispatchFlowCompletedContributorsAsync(
+        TaktFlowInstance instance,
+        string relatedTableName,
+        long entityId)
+    {
+        if (!_flowCompletedContributorMap.TryGetValue(relatedTableName, out var contributor))
+        {
+            return;
+        }
+        var context = new TaktApprovalFlowCompletedContext
+        {
+            TenantCode = instance.TenantCode,
+            CompanyCode = instance.CompanyCode,
+            EntityId = entityId,
+            OperatorUserId = instance.StartUserId
+        };
+        await contributor.OnApprovalFlowCompletedAsync(context);
     }
 
     /// <summary>

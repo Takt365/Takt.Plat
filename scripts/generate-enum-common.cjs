@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-enum-common.cjs
 // 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
@@ -129,15 +129,15 @@ function parseEntityScalarProperties(entityContent) {
 }
 
 /**
- * 查找实体的状态字段（优先 TaktCommonStatus 的 *Status）
+ * 查找实体的状态字段（实体列一律 int，优先 int 类型 *Status）
  * @param {object[]} properties parseEntityScalarProperties 或 DTO 解析结果
  */
 function findEntityStatusProperty(properties) {
   const statuses = properties.filter((p) => /Status$/i.test(p.name) || p.name === 'Status');
   return (
-    statuses.find((p) => p.bareType === 'TaktCommonStatus')
+    statuses.find((p) => p.bareType === 'int')
     || statuses.find((p) => isSharedEnumType(p.bareType))
-    || statuses.find((p) => p.bareType === 'int')
+    || statuses.find((p) => p.bareType === 'TaktCommonStatus')
     || statuses[0]
     || null
   );
@@ -169,10 +169,10 @@ function contentUsesSharedEnums(content) {
 }
 
 /**
- * 提取用于 Options/Tree「仅启用项」过滤的状态字段元数据
+ * 提取用于 Options/Tree「仅启用项」过滤的状态字段元数据（实体 Status 为 int，对齐 sys_normal_disable_status 启用=1）
  * @param {string} entityContent
  * @param {string} [entityShort]
- * @returns {{ field: string, kind: 'sharedEnum'|'int', enumType?: string, enabledLiteral?: string, intEnabled?: number }|null}
+ * @returns {{ field: string, kind: 'int', intEnabled: number }|null}
  */
 function extractPrimaryEnableStatusMeta(entityContent, entityShort = '') {
   const props = parseEntityScalarProperties(entityContent);
@@ -180,27 +180,7 @@ function extractPrimaryEnableStatusMeta(entityContent, entityShort = '') {
   if (!statusProp) {
     return null;
   }
-  if (statusProp.bareType === 'TaktCommonStatus') {
-    return {
-      field: statusProp.name,
-      kind: 'sharedEnum',
-      enumType: 'TaktCommonStatus',
-      enabledLiteral: 'TaktCommonStatus.Enabled',
-    };
-  }
-  if (isSharedEnumType(statusProp.bareType)) {
-    const enabledLiteral = getSharedEnumEnabledLiteral(statusProp.bareType);
-    if (enabledLiteral) {
-      return {
-        field: statusProp.name,
-        kind: 'sharedEnum',
-        enumType: statusProp.bareType,
-        enabledLiteral,
-      };
-    }
-    return null;
-  }
-  if (statusProp.bareType === 'int') {
+  if (statusProp.bareType === 'int' || isSharedEnumType(statusProp.bareType) || statusProp.bareType === 'TaktCommonStatus') {
     return {
       field: statusProp.name,
       kind: 'int',
@@ -211,15 +191,16 @@ function extractPrimaryEnableStatusMeta(entityContent, entityShort = '') {
 }
 
 /**
- * 内置项禁用保护：解析状态字段（TaktCommonStatus / int EmployeeStatus 等）
+ * 内置项禁用保护：解析状态字段（int Status / int EmployeeStatus 等；IsBuiltIn 为 int 字典 sys_yes_no_type）
  * @param {string} entityContent
- * @returns {{ field: string, kind: 'commonStatus'|'intEnabled'|'employeeResigned' }|null}
+ * @returns {{ field: string, kind: 'intEnabled'|'employeeResigned' }|null}
  */
 function extractBuiltInDisableStatusMeta(entityContent) {
-  if (!/public\s+TaktYesNo\s+IsBuiltIn\s*\{/.test(entityContent)) {
+  const props = parseEntityScalarProperties(entityContent);
+  const isBuiltInProp = props.find((p) => p.name === 'IsBuiltIn');
+  if (!isBuiltInProp || isBuiltInProp.bareType !== 'int') {
     return null;
   }
-  const props = parseEntityScalarProperties(entityContent);
   if (props.some((p) => p.name === 'EmployeeStatus')) {
     return { field: 'EmployeeStatus', kind: 'employeeResigned' };
   }
@@ -227,10 +208,7 @@ function extractBuiltInDisableStatusMeta(entityContent) {
   if (!statusProp) {
     return null;
   }
-  if (statusProp.bareType === 'TaktCommonStatus') {
-    return { field: statusProp.name, kind: 'commonStatus' };
-  }
-  if (statusProp.bareType === 'int') {
+  if (statusProp.bareType === 'int' || isSharedEnumType(statusProp.bareType) || statusProp.bareType === 'TaktCommonStatus') {
     return { field: statusProp.name, kind: 'intEnabled' };
   }
   return null;
@@ -241,11 +219,20 @@ function extractBuiltInDisableStatusMeta(entityContent) {
  * @param {string|null} block
  * @param {{ field?: string, kind?: string }|null} statusMeta
  */
+/**
+ * Options 实现是否含过时的状态比较（枚举字面量或缺少 int 启用过滤）
+ * @param {string|null} block
+ * @param {{ field?: string, kind?: string, intEnabled?: number }|null} statusMeta
+ */
 function optionsBlockUsesStaleIntStatusCompare(block, statusMeta) {
-  if (!block || !statusMeta?.field || statusMeta.kind !== 'sharedEnum') {
+  if (!block || !statusMeta?.field || statusMeta.kind !== 'int') {
     return false;
   }
-  return new RegExp(`\\b${statusMeta.field}\\s*==\\s*1\\b`).test(block);
+  const enabled = statusMeta.intEnabled ?? 1;
+  if (new RegExp(`\\bx\\.${statusMeta.field}\\s*==\\s*Takt\\w+\\.`).test(block)) {
+    return true;
+  }
+  return !new RegExp(`\\bx\\.${statusMeta.field}\\s*==\\s*${enabled}\\b`).test(block);
 }
 
 module.exports = {

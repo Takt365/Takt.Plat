@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktPayrollI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPayroll 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,101 +75,101 @@ public class TaktPayrollI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktPayroll 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.payroll._self / entity.payroll.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.payroll._self / entity.payroll.{{field}}；ResourceGroup=Compensation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetPayrollTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.payroll._self
-            new TranslationSeedItem("entity.payroll._self", "en-US", "Payroll Information", "实体名称"),
+            new TranslationSeedItem("entity.payroll._self", "en-US", "Payroll Information_us", "实体名称"),
             // entity.payroll._self
-            new TranslationSeedItem("entity.payroll._self", "ja-JP", "薪酬体系信息", "实体名称"),
+            new TranslationSeedItem("entity.payroll._self", "ja-JP", "薪酬体系信息_jp", "实体名称"),
             // entity.payroll._self
             new TranslationSeedItem("entity.payroll._self", "zh-CN", "薪酬体系信息", "实体名称"),
             // entity.payroll._self
-            new TranslationSeedItem("entity.payroll._self", "zh-HK", "薪酬体系信息", "实体名称"),
+            new TranslationSeedItem("entity.payroll._self", "zh-HK", "薪酬体系信息_hk", "实体名称"),
 
             // entity.payroll.code
-            new TranslationSeedItem("entity.payroll.code", "en-US", "薪酬体系编码", "薪酬体系编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.payroll.code", "en-US", "薪酬体系编码_us", "薪酬体系编码（租户+公司内唯一）"),
             // entity.payroll.code
-            new TranslationSeedItem("entity.payroll.code", "ja-JP", "薪酬体系编码", "薪酬体系编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.payroll.code", "ja-JP", "薪酬体系编码_jp", "薪酬体系编码（租户+公司内唯一）"),
             // entity.payroll.code
             new TranslationSeedItem("entity.payroll.code", "zh-CN", "薪酬体系编码", "薪酬体系编码（租户+公司内唯一）"),
             // entity.payroll.code
-            new TranslationSeedItem("entity.payroll.code", "zh-HK", "薪酬体系编码", "薪酬体系编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.payroll.code", "zh-HK", "薪酬体系编码_hk", "薪酬体系编码（租户+公司内唯一）"),
 
             // entity.payroll.name
-            new TranslationSeedItem("entity.payroll.name", "en-US", "薪酬体系名称", "薪酬体系名称"),
+            new TranslationSeedItem("entity.payroll.name", "en-US", "薪酬体系名称_us", "薪酬体系名称"),
             // entity.payroll.name
-            new TranslationSeedItem("entity.payroll.name", "ja-JP", "薪酬体系名称", "薪酬体系名称"),
+            new TranslationSeedItem("entity.payroll.name", "ja-JP", "薪酬体系名称_jp", "薪酬体系名称"),
             // entity.payroll.name
             new TranslationSeedItem("entity.payroll.name", "zh-CN", "薪酬体系名称", "薪酬体系名称"),
             // entity.payroll.name
-            new TranslationSeedItem("entity.payroll.name", "zh-HK", "薪酬体系名称", "薪酬体系名称"),
+            new TranslationSeedItem("entity.payroll.name", "zh-HK", "薪酬体系名称_hk", "薪酬体系名称"),
 
             // entity.payroll.payscaleid
-            new TranslationSeedItem("entity.payroll.payscaleid", "en-US", "薪级表ID", "关联薪级表 ID"),
+            new TranslationSeedItem("entity.payroll.payscaleid", "en-US", "薪级表ID_us", "关联薪级表 ID"),
             // entity.payroll.payscaleid
-            new TranslationSeedItem("entity.payroll.payscaleid", "ja-JP", "薪级表ID", "关联薪级表 ID"),
+            new TranslationSeedItem("entity.payroll.payscaleid", "ja-JP", "薪级表ID_jp", "关联薪级表 ID"),
             // entity.payroll.payscaleid
             new TranslationSeedItem("entity.payroll.payscaleid", "zh-CN", "薪级表ID", "关联薪级表 ID"),
             // entity.payroll.payscaleid
-            new TranslationSeedItem("entity.payroll.payscaleid", "zh-HK", "薪级表ID", "关联薪级表 ID"),
+            new TranslationSeedItem("entity.payroll.payscaleid", "zh-HK", "薪级表ID_hk", "关联薪级表 ID"),
 
             // entity.payroll.formulasetcode
-            new TranslationSeedItem("entity.payroll.formulasetcode", "en-US", "公式方案编码", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
+            new TranslationSeedItem("entity.payroll.formulasetcode", "en-US", "公式方案编码_us", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
             // entity.payroll.formulasetcode
-            new TranslationSeedItem("entity.payroll.formulasetcode", "ja-JP", "公式方案编码", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
+            new TranslationSeedItem("entity.payroll.formulasetcode", "ja-JP", "公式方案编码_jp", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
             // entity.payroll.formulasetcode
             new TranslationSeedItem("entity.payroll.formulasetcode", "zh-CN", "公式方案编码", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
             // entity.payroll.formulasetcode
-            new TranslationSeedItem("entity.payroll.formulasetcode", "zh-HK", "公式方案编码", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
+            new TranslationSeedItem("entity.payroll.formulasetcode", "zh-HK", "公式方案编码_hk", "默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）"),
 
             // entity.payroll.effectivedate
-            new TranslationSeedItem("entity.payroll.effectivedate", "en-US", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.payroll.effectivedate", "en-US", "生效日期_us", "生效日期"),
             // entity.payroll.effectivedate
-            new TranslationSeedItem("entity.payroll.effectivedate", "ja-JP", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.payroll.effectivedate", "ja-JP", "生效日期_jp", "生效日期"),
             // entity.payroll.effectivedate
             new TranslationSeedItem("entity.payroll.effectivedate", "zh-CN", "生效日期", "生效日期"),
             // entity.payroll.effectivedate
-            new TranslationSeedItem("entity.payroll.effectivedate", "zh-HK", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.payroll.effectivedate", "zh-HK", "生效日期_hk", "生效日期"),
 
             // entity.payroll.expirydate
-            new TranslationSeedItem("entity.payroll.expirydate", "en-US", "失效日期", "失效日期"),
+            new TranslationSeedItem("entity.payroll.expirydate", "en-US", "失效日期_us", "失效日期"),
             // entity.payroll.expirydate
-            new TranslationSeedItem("entity.payroll.expirydate", "ja-JP", "失效日期", "失效日期"),
+            new TranslationSeedItem("entity.payroll.expirydate", "ja-JP", "失效日期_jp", "失效日期"),
             // entity.payroll.expirydate
             new TranslationSeedItem("entity.payroll.expirydate", "zh-CN", "失效日期", "失效日期"),
             // entity.payroll.expirydate
-            new TranslationSeedItem("entity.payroll.expirydate", "zh-HK", "失效日期", "失效日期"),
+            new TranslationSeedItem("entity.payroll.expirydate", "zh-HK", "失效日期_hk", "失效日期"),
 
             // entity.payroll.status
-            new TranslationSeedItem("entity.payroll.status", "en-US", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.payroll.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
             // entity.payroll.status
-            new TranslationSeedItem("entity.payroll.status", "ja-JP", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.payroll.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
             // entity.payroll.status
-            new TranslationSeedItem("entity.payroll.status", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.payroll.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
             // entity.payroll.status
-            new TranslationSeedItem("entity.payroll.status", "zh-HK", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.payroll.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
 
             // entity.payroll.description
-            new TranslationSeedItem("entity.payroll.description", "en-US", "说明", "说明"),
+            new TranslationSeedItem("entity.payroll.description", "en-US", "说明_us", "说明"),
             // entity.payroll.description
-            new TranslationSeedItem("entity.payroll.description", "ja-JP", "说明", "说明"),
+            new TranslationSeedItem("entity.payroll.description", "ja-JP", "说明_jp", "说明"),
             // entity.payroll.description
             new TranslationSeedItem("entity.payroll.description", "zh-CN", "说明", "说明"),
             // entity.payroll.description
-            new TranslationSeedItem("entity.payroll.description", "zh-HK", "说明", "说明"),
+            new TranslationSeedItem("entity.payroll.description", "zh-HK", "说明_hk", "说明"),
 
             // entity.payroll.relatedplant
-            new TranslationSeedItem("entity.payroll.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payroll.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.payroll.relatedplant
-            new TranslationSeedItem("entity.payroll.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payroll.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.payroll.relatedplant
             new TranslationSeedItem("entity.payroll.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.payroll.relatedplant
-            new TranslationSeedItem("entity.payroll.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payroll.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -187,10 +187,10 @@ public class TaktPayrollI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Compensation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

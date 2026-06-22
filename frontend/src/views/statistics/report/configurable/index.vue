@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/statistics/report/configurable -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：自定义报表主实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：自定义报表主实体管理页面，含查询、增删改、SQVI 设计器与运行时 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -30,7 +30,6 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -65,9 +64,6 @@
       :row-key="getConfigurableId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
@@ -76,86 +72,18 @@
         <template v-if="column.key === 'reportStatus'">
           <TaktDictTag
             :value="getConfigurableField(record, 'reportStatus')"
-            dict-type="sys_normal_disable"
+            dict-type="sys_normal_disable_status"
           />
         </template>
-      </template>
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.configurableSource._self') }}</div>
-          <a-table
-            v-if="hasConfigurableSourceRows(record)"
-            :columns="configurableSourceExpandColumns"
-            :data-source="getConfigurableSourceRows(record)"
-            :row-key="(row: ConfigurableSource, index?: number) => row?.configurableSourceId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
+        <template v-else-if="column.key === 'reportDomain'">
+          {{ resolveDomainLabel(getConfigurableField(record, 'reportDomain') as number | undefined) }}
+        </template>
+        <template v-else-if="column.key === 'isPublic'">
+          <TaktDictTag
+            :value="getConfigurableField(record, 'isPublic')"
+            dict-type="sys_is_public_type"
           />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.configurableJoin._self') }}</div>
-          <a-table
-            v-if="hasConfigurableJoinRows(record)"
-            :columns="configurableJoinExpandColumns"
-            :data-source="getConfigurableJoinRows(record)"
-            :row-key="(row: ConfigurableJoin, index?: number) => row?.configurableJoinId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.configurableField._self') }}</div>
-          <a-table
-            v-if="hasConfigurableFieldRows(record)"
-            :columns="configurableFieldExpandColumns"
-            :data-source="getConfigurableFieldRows(record)"
-            :row-key="(row: ConfigurableField, index?: number) => row?.configurableFieldId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.configurableSelection._self') }}</div>
-          <a-table
-            v-if="hasConfigurableSelectionRows(record)"
-            :columns="configurableSelectionExpandColumns"
-            :data-source="getConfigurableSelectionRows(record)"
-            :row-key="(row: ConfigurableSelection, index?: number) => row?.configurableSelectionId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.configurableGroupBy._self') }}</div>
-          <a-table
-            v-if="hasConfigurableGroupByRows(record)"
-            :columns="configurableGroupByExpandColumns"
-            :data-source="getConfigurableGroupByRows(record)"
-            :row-key="(row: ConfigurableGroupBy, index?: number) => row?.configurableGroupById || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.configurableOrderBy._self') }}</div>
-          <a-table
-            v-if="hasConfigurableOrderByRows(record)"
-            :columns="configurableOrderByExpandColumns"
-            :data-source="getConfigurableOrderByRows(record)"
-            :row-key="(row: ConfigurableOrderBy, index?: number) => row?.configurableOrderById || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+        </template>
       </template>
     </TaktSingleTable>
 
@@ -172,13 +100,14 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="85%"
+      :use-viewport-size="true"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <ConfigurableForm
+      <ConfigurableSqviDesigner
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -215,19 +144,24 @@
       </div>
       <div v-show="isFieldVisible('reportDomain')">
       <a-form-item :label="t('entity.configurable.reportdomain')">
-        <a-input-number
+        <a-select
           v-model:value="advancedQueryForm.reportDomain"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.configurable.reportdomain') })"
-          style="width: 100%"
+          :options="moduleOptions"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.configurable.reportdomain') })"
+          allow-clear
+          size="small"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('reportSubCategory')">
       <a-form-item :label="t('entity.configurable.reportsubcategory')">
-        <a-input
+        <a-select
           v-model:value="advancedQueryForm.reportSubCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.configurable.reportsubcategory') })"
+          :options="subCategoryOptions"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.configurable.reportsubcategory') })"
+          :disabled="!advancedQueryForm.reportDomain || subCategoryOptions.length === 0"
           allow-clear
+          size="small"
         />
       </a-form-item>
       </div>
@@ -258,21 +192,14 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ownerUserId')">
-      <a-form-item :label="t('entity.configurable.owneruserid')">
-        <a-input
-          v-model:value="advancedQueryForm.ownerUserId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.configurable.owneruserid') })"
+      <div v-show="isFieldVisible('isPublic')">
+      <a-form-item :label="t('entity.configurable.ispublic')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isPublic"
+          dict-type="sys_is_public_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.configurable.ispublic') })"
           allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isBuiltIn')">
-      <a-form-item :label="t('entity.configurable.isbuiltin')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isBuiltIn"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.configurable.isbuiltin') })"
-          style="width: 100%"
+          size="small"
         />
       </a-form-item>
       </div>
@@ -289,7 +216,7 @@
       <a-form-item :label="t('entity.configurable.reportstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.reportStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.configurable.reportstatus') })"
           allow-clear
         />
@@ -324,15 +251,6 @@
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
         />
       </a-form-item>
       </div>
@@ -382,37 +300,29 @@
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
+
   </div>
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 自定义报表主实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/statistics/report/configurable
  */
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
-import ConfigurableForm from './components/configurable-form.vue'
+import ConfigurableSqviDesigner from './components/configurable-sqvi-designer.vue'
 import { getConfigurableList, getConfigurableById, createConfigurable, updateConfigurable, deleteConfigurableById, deleteConfigurableBatch, getConfigurableTemplate, importConfigurable, exportConfigurable } from '@/api/statistics/report/configurable'
-import * as configurableSourceApi from '@/api/statistics/report/configurable-source'
-import * as configurableJoinApi from '@/api/statistics/report/configurable-join'
-import * as configurableFieldApi from '@/api/statistics/report/configurable-field'
-import * as configurableSelectionApi from '@/api/statistics/report/configurable-selection'
-import * as configurableGroupByApi from '@/api/statistics/report/configurable-group-by'
-import * as configurableOrderByApi from '@/api/statistics/report/configurable-order-by'
-import type { ConfigurableSource, ConfigurableSourceQuery } from '@/types/statistics/report/configurable-source'
-import type { ConfigurableJoin, ConfigurableJoinQuery } from '@/types/statistics/report/configurable-join'
-import type { ConfigurableField, ConfigurableFieldQuery } from '@/types/statistics/report/configurable-field'
-import type { ConfigurableSelection, ConfigurableSelectionQuery } from '@/types/statistics/report/configurable-selection'
-import type { ConfigurableGroupBy, ConfigurableGroupByQuery } from '@/types/statistics/report/configurable-group-by'
-import type { ConfigurableOrderBy, ConfigurableOrderByQuery } from '@/types/statistics/report/configurable-order-by'
-import type { Configurable, ConfigurableQuery, ConfigurableCreate, ConfigurableUpdate } from '@/types/statistics/report/configurable'
+import type { Configurable, ConfigurableQuery } from '@/types/statistics/report/configurable'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiPlayLine } from '@remixicon/vue'
+import { useConfigurableReportCategory } from './composables/use-configurable-report-category'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -430,9 +340,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Configurable[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -451,7 +361,8 @@ const formData = ref<Partial<Configurable>>({})
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -462,16 +373,31 @@ const advancedQueryForm = ref({
   distinctRows: undefined as number | undefined,
   maxExportRows: undefined as number | undefined,
   maxQueryRows: undefined as number | undefined,
-  ownerUserId: '',
-  isBuiltIn: undefined as number | undefined,
+  isPublic: undefined as number | undefined,
   sortOrder: undefined as number | undefined,
   reportStatus: undefined as number | undefined,
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
   remark: '',
 })
+/** 高级查询：业务域 / 子分类菜单联动 */
+const advancedReportDomain = computed({
+  get: () => advancedQueryForm.value.reportDomain,
+  set: (value: number | undefined) => {
+    advancedQueryForm.value.reportDomain = value
+  },
+})
+const advancedReportSubCategory = computed({
+  get: () => advancedQueryForm.value.reportSubCategory,
+  set: (value: string) => {
+    advancedQueryForm.value.reportSubCategory = value
+  },
+})
+const { moduleOptions, subCategoryOptions, resolveSubCategoryLabel, resolveDomainLabel } = useConfigurableReportCategory(
+  advancedReportDomain,
+  advancedReportSubCategory
+)
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
   { key: 'reportCode', label: t('entity.configurable.reportcode') },
@@ -481,14 +407,12 @@ const queryFieldsMeta = computed(() => [
   { key: 'distinctRows', label: t('entity.configurable.distinctrows') },
   { key: 'maxExportRows', label: t('entity.configurable.maxexportrows') },
   { key: 'maxQueryRows', label: t('entity.configurable.maxqueryrows') },
-  { key: 'ownerUserId', label: t('entity.configurable.owneruserid') },
-  { key: 'isBuiltIn', label: t('entity.configurable.isbuiltin') },
+  { key: 'isPublic', label: t('entity.configurable.ispublic') },
   { key: 'sortOrder', label: t('entity.configurable.sortorder') },
   { key: 'reportStatus', label: t('entity.configurable.reportstatus') },
   { key: 'description', label: t('entity.configurable.description') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -505,321 +429,13 @@ const entityIdName = 'configurableId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
-
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** 路由导航（跳转执行页） */
+const router = useRouter()
 
 /** 页面挂载后加载分页列表 */
 onMounted(() => {
   loadData()
 })
-
-/** 展开行预览：configurableSource 列 */
-const configurableSourceExpandColumns = computed(() => [
-  {
-    title: t('entity.configurableSource.configurablename'),
-    dataIndex: 'configurableName',
-    key: 'configurableName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSource.sourcealias'),
-    dataIndex: 'sourceAlias',
-    key: 'sourceAlias',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSource.tablename'),
-    dataIndex: 'tableName',
-    key: 'tableName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSource.isprimary'),
-    dataIndex: 'isPrimary',
-    key: 'isPrimary',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSource.configurable'),
-    dataIndex: 'configurable',
-    key: 'configurable',
-    ellipsis: true,
-  },
-])
-
-/** 展开行预览：configurableJoin 列 */
-const configurableJoinExpandColumns = computed(() => [
-  {
-    title: t('entity.configurableJoin.configurablename'),
-    dataIndex: 'configurableName',
-    key: 'configurableName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableJoin.jointype'),
-    dataIndex: 'joinType',
-    key: 'joinType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableJoin.leftsourcealias'),
-    dataIndex: 'leftSourceAlias',
-    key: 'leftSourceAlias',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableJoin.leftcolumnname'),
-    dataIndex: 'leftColumnName',
-    key: 'leftColumnName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableJoin.rightsourcealias'),
-    dataIndex: 'rightSourceAlias',
-    key: 'rightSourceAlias',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableJoin.rightcolumnname'),
-    dataIndex: 'rightColumnName',
-    key: 'rightColumnName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableJoin.configurable'),
-    dataIndex: 'configurable',
-    key: 'configurable',
-    ellipsis: true,
-  },
-])
-
-/** 展开行预览：configurableField 列 */
-const configurableFieldExpandColumns = computed(() => [
-  {
-    title: t('entity.configurableField.configurablename'),
-    dataIndex: 'configurableName',
-    key: 'configurableName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableField.sourcealias'),
-    dataIndex: 'sourceAlias',
-    key: 'sourceAlias',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableField.columnname'),
-    dataIndex: 'columnName',
-    key: 'columnName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableField.displayname'),
-    dataIndex: 'displayName',
-    key: 'displayName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableField.outputalias'),
-    dataIndex: 'outputAlias',
-    key: 'outputAlias',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableField.aggregatefunc'),
-    dataIndex: 'aggregateFunc',
-    key: 'aggregateFunc',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableField.isvisible'),
-    dataIndex: 'isVisible',
-    key: 'isVisible',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableField.configurable'),
-    dataIndex: 'configurable',
-    key: 'configurable',
-    ellipsis: true,
-  },
-])
-
-/** 展开行预览：configurableSelection 列 */
-const configurableSelectionExpandColumns = computed(() => [
-  {
-    title: t('entity.configurableSelection.configurablename'),
-    dataIndex: 'configurableName',
-    key: 'configurableName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSelection.sourcealias'),
-    dataIndex: 'sourceAlias',
-    key: 'sourceAlias',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSelection.columnname'),
-    dataIndex: 'columnName',
-    key: 'columnName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSelection.displayname'),
-    dataIndex: 'displayName',
-    key: 'displayName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSelection.filteroperator'),
-    dataIndex: 'filterOperator',
-    key: 'filterOperator',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSelection.defaultvalue'),
-    dataIndex: 'defaultValue',
-    key: 'defaultValue',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSelection.defaultvalueto'),
-    dataIndex: 'defaultValueTo',
-    key: 'defaultValueTo',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableSelection.isrequired'),
-    dataIndex: 'isRequired',
-    key: 'isRequired',
-    ellipsis: true,
-  },
-])
-
-/** 展开行预览：configurableGroupBy 列 */
-const configurableGroupByExpandColumns = computed(() => [
-  {
-    title: t('entity.configurableGroupBy.configurablename'),
-    dataIndex: 'configurableName',
-    key: 'configurableName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableGroupBy.sourcealias'),
-    dataIndex: 'sourceAlias',
-    key: 'sourceAlias',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableGroupBy.columnname'),
-    dataIndex: 'columnName',
-    key: 'columnName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableGroupBy.configurable'),
-    dataIndex: 'configurable',
-    key: 'configurable',
-    ellipsis: true,
-  },
-])
-
-/** 展开行预览：configurableOrderBy 列 */
-const configurableOrderByExpandColumns = computed(() => [
-  {
-    title: t('entity.configurableOrderBy.configurablename'),
-    dataIndex: 'configurableName',
-    key: 'configurableName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableOrderBy.sourcealias'),
-    dataIndex: 'sourceAlias',
-    key: 'sourceAlias',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableOrderBy.columnname'),
-    dataIndex: 'columnName',
-    key: 'columnName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableOrderBy.sortdirection'),
-    dataIndex: 'sortDirection',
-    key: 'sortDirection',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.configurableOrderBy.configurable'),
-    dataIndex: 'configurable',
-    key: 'configurable',
-    ellipsis: true,
-  },
-])
-
-/** 读取主表行上的 configurableSource 子表缓存 */
-function getConfigurableSourceRows(record: Configurable): ConfigurableSource[] {
-  return (record as any)?.sources ?? []
-}
-
-/** 主表行是否已加载 configurableSource 子表 */
-function hasConfigurableSourceRows(record: Configurable): boolean {
-  return getConfigurableSourceRows(record).length > 0
-}
-
-/** 读取主表行上的 configurableJoin 子表缓存 */
-function getConfigurableJoinRows(record: Configurable): ConfigurableJoin[] {
-  return (record as any)?.joins ?? []
-}
-
-/** 主表行是否已加载 configurableJoin 子表 */
-function hasConfigurableJoinRows(record: Configurable): boolean {
-  return getConfigurableJoinRows(record).length > 0
-}
-
-/** 读取主表行上的 configurableField 子表缓存 */
-function getConfigurableFieldRows(record: Configurable): ConfigurableField[] {
-  return (record as any)?.fields ?? []
-}
-
-/** 主表行是否已加载 configurableField 子表 */
-function hasConfigurableFieldRows(record: Configurable): boolean {
-  return getConfigurableFieldRows(record).length > 0
-}
-
-/** 读取主表行上的 configurableSelection 子表缓存 */
-function getConfigurableSelectionRows(record: Configurable): ConfigurableSelection[] {
-  return (record as any)?.selections ?? []
-}
-
-/** 主表行是否已加载 configurableSelection 子表 */
-function hasConfigurableSelectionRows(record: Configurable): boolean {
-  return getConfigurableSelectionRows(record).length > 0
-}
-
-/** 读取主表行上的 configurableGroupBy 子表缓存 */
-function getConfigurableGroupByRows(record: Configurable): ConfigurableGroupBy[] {
-  return (record as any)?.groupBys ?? []
-}
-
-/** 主表行是否已加载 configurableGroupBy 子表 */
-function hasConfigurableGroupByRows(record: Configurable): boolean {
-  return getConfigurableGroupByRows(record).length > 0
-}
-
-/** 读取主表行上的 configurableOrderBy 子表缓存 */
-function getConfigurableOrderByRows(record: Configurable): ConfigurableOrderBy[] {
-  return (record as any)?.orderBys ?? []
-}
-
-/** 主表行是否已加载 configurableOrderBy 子表 */
-function hasConfigurableOrderByRows(record: Configurable): boolean {
-  return getConfigurableOrderByRows(record).length > 0
-}
-
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadConfigurableDetail(record: Configurable): Promise<Configurable | null> {
@@ -838,197 +454,6 @@ async function loadConfigurableDetail(record: Configurable): Promise<Configurabl
     message.error(error?.message || t('common.feedback.load.data.failed'))
     return null
   }
-}
-/** 懒加载 configurableSource 子表（ConfigurableSourceQuery + configurableSourceApi，与主表 ConfigurableQuery 分离） */
-async function loadConfigurableSourceForConfigurable(record: Configurable): Promise<ConfigurableSource[]> {
-  const masterId = getConfigurableId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ConfigurableSourceQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      configurableId: masterId,
-    }
-    const result = await configurableSourceApi.getConfigurableSourceList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getConfigurableId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, sources: rows } as Configurable
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 configurableJoin 子表（ConfigurableJoinQuery + configurableJoinApi，与主表 ConfigurableQuery 分离） */
-async function loadConfigurableJoinForConfigurable(record: Configurable): Promise<ConfigurableJoin[]> {
-  const masterId = getConfigurableId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ConfigurableJoinQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      configurableId: masterId,
-    }
-    const result = await configurableJoinApi.getConfigurableJoinList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getConfigurableId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, joins: rows } as Configurable
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 configurableField 子表（ConfigurableFieldQuery + configurableFieldApi，与主表 ConfigurableQuery 分离） */
-async function loadConfigurableFieldForConfigurable(record: Configurable): Promise<ConfigurableField[]> {
-  const masterId = getConfigurableId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ConfigurableFieldQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      configurableId: masterId,
-    }
-    const result = await configurableFieldApi.getConfigurableFieldList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getConfigurableId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, fields: rows } as Configurable
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 configurableSelection 子表（ConfigurableSelectionQuery + configurableSelectionApi，与主表 ConfigurableQuery 分离） */
-async function loadConfigurableSelectionForConfigurable(record: Configurable): Promise<ConfigurableSelection[]> {
-  const masterId = getConfigurableId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ConfigurableSelectionQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      configurableId: masterId,
-    }
-    const result = await configurableSelectionApi.getConfigurableSelectionList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getConfigurableId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, selections: rows } as Configurable
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 configurableGroupBy 子表（ConfigurableGroupByQuery + configurableGroupByApi，与主表 ConfigurableQuery 分离） */
-async function loadConfigurableGroupByForConfigurable(record: Configurable): Promise<ConfigurableGroupBy[]> {
-  const masterId = getConfigurableId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ConfigurableGroupByQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      configurableId: masterId,
-    }
-    const result = await configurableGroupByApi.getConfigurableGroupByList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getConfigurableId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, groupBys: rows } as Configurable
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 configurableOrderBy 子表（ConfigurableOrderByQuery + configurableOrderByApi，与主表 ConfigurableQuery 分离） */
-async function loadConfigurableOrderByForConfigurable(record: Configurable): Promise<ConfigurableOrderBy[]> {
-  const masterId = getConfigurableId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ConfigurableOrderByQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      configurableId: masterId,
-    }
-    const result = await configurableOrderByApi.getConfigurableOrderByList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getConfigurableId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, orderBys: rows } as Configurable
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureConfigurableChildrenLoaded(record: Configurable) {
-  if (!hasConfigurableSourceRows(record)) {
-    await loadConfigurableSourceForConfigurable(record)
-  }
-  if (!hasConfigurableJoinRows(record)) {
-    await loadConfigurableJoinForConfigurable(record)
-  }
-  if (!hasConfigurableFieldRows(record)) {
-    await loadConfigurableFieldForConfigurable(record)
-  }
-  if (!hasConfigurableSelectionRows(record)) {
-    await loadConfigurableSelectionForConfigurable(record)
-  }
-  if (!hasConfigurableGroupByRows(record)) {
-    await loadConfigurableGroupByForConfigurable(record)
-  }
-  if (!hasConfigurableOrderByRows(record)) {
-    await loadConfigurableOrderByForConfigurable(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: Configurable) {
-  const key = getConfigurableId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureConfigurableChildrenLoaded(record)
-  expandedRowKeys.value = [key]
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
@@ -1068,7 +493,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConfigurableField(record, 'reportDomain') ?? ''
   },
   {
     title: t('entity.configurable.reportsubcategory'),
@@ -1077,7 +501,11 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConfigurableField(record, 'reportSubCategory') ?? ''
+    customRender: ({ record }: { record: any }) =>
+      resolveSubCategoryLabel(
+        getConfigurableField(record, 'reportDomain') as number | undefined,
+        getConfigurableField(record, 'reportSubCategory') as string | undefined
+      )
   },
   {
     title: t('entity.configurable.distinctrows'),
@@ -1107,31 +535,12 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConfigurableField(record, 'maxQueryRows') ?? ''
   },
   {
-    title: t('entity.configurable.owneruserid'),
-    dataIndex: 'ownerUserId',
-    key: 'ownerUserId',
-    width: 120,
+    title: t('entity.configurable.ispublic'),
+    dataIndex: 'isPublic',
+    key: 'isPublic',
+    width: 100,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConfigurableField(record, 'ownerUserId') ?? ''
-  },
-  {
-    title: t('entity.configurable.ownerusername'),
-    dataIndex: 'ownerUserName',
-    key: 'ownerUserName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConfigurableField(record, 'ownerUserName') ?? ''
-  },
-  {
-    title: t('entity.configurable.isbuiltin'),
-    dataIndex: 'isBuiltIn',
-    key: 'isBuiltIn',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getConfigurableField(record, 'isBuiltIn') ?? ''
   },
   {
     title: t('entity.configurable.reportstatus'),
@@ -1151,7 +560,18 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getConfigurableField(record, 'description') ?? ''
   },
   CreateActionColumn({
+    width: 200,
     actions: [
+      {
+        key: 'run',
+        label: t('statistics.report.configurable.page.runreport'),
+        shape: 'plain',
+        icon: RiPlayLine,
+        buttonClass: 'takt-button-run',
+        permission: 'statistics:report:configurable:run',
+        disabled: (record: Configurable) => getConfigurableField(record, 'reportStatus') !== 1,
+        onClick: (record: Configurable) => handleRunReport(record),
+      },
       {
         key: 'update',
         label: t('common.page.button.edit'),
@@ -1248,6 +668,22 @@ async function loadData() {
 /** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
 useTableRefresh(loadData)
 
+/** 跳转 SQVI 报表独立执行页 */
+function handleRunReport(record: Configurable) {
+  const id = getConfigurableId(record)
+  if (!id) {
+    return
+  }
+  const name = getConfigurableField(record, 'reportName') ?? ''
+  router.push({
+    path: '/statistics/report/configurable/run',
+    query: {
+      id,
+      ...(name ? { name } : {}),
+    },
+  })
+}
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -1265,14 +701,12 @@ function handleReset() {
   distinctRows: undefined as number | undefined,
   maxExportRows: undefined as number | undefined,
   maxQueryRows: undefined as number | undefined,
-  ownerUserId: '',
-  isBuiltIn: undefined as number | undefined,
+  isPublic: undefined as number | undefined,
   sortOrder: undefined as number | undefined,
   reportStatus: undefined as number | undefined,
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
   remark: '',
   }
   currentPage.value = 1
@@ -1336,6 +770,7 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formRef.value?.resetFields?.()
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1370,7 +805,7 @@ async function handleExport() {
     const kw = (queryKeyword.value ?? '').trim()
     const exportQuery: ConfigurableQuery = {
       pageIndex: 1,
-      pageSize: 100000,
+      pageSize: 50000,
       ...advancedQueryForm.value
     }
     if (kw.length > 0) {
@@ -1457,14 +892,12 @@ function handleAdvancedQueryReset() {
   distinctRows: undefined as number | undefined,
   maxExportRows: undefined as number | undefined,
   maxQueryRows: undefined as number | undefined,
-  ownerUserId: '',
-  isBuiltIn: undefined as number | undefined,
+  isPublic: undefined as number | undefined,
   sortOrder: undefined as number | undefined,
   reportStatus: undefined as number | undefined,
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
   remark: '',
   }
 }

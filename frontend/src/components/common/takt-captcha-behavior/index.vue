@@ -60,8 +60,8 @@
                   >
                     {{
                       hasTargetIndicator
-                        ? t('login.page.captcha.slideToTarget', { position: targetPosition })
-                        : t('login.page.captcha.behaviorHint')
+                        ? t('login.page.captcha.slide.to.target', { position: targetPosition })
+                        : t('login.page.captcha.behavior.hint')
                     }}
                   </a-typography-text>
                   <a-typography-text

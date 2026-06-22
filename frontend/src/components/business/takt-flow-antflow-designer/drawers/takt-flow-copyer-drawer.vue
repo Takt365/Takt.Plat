@@ -47,13 +47,13 @@
         style="margin-right: 8px"
         @click="handleClose"
       >
-        取消
+        {{ t('common.page.button.cancel') }}
       </a-button>
       <a-button
         type="primary"
         @click="handleSave"
       >
-        确定
+        {{ t('common.page.button.ok') }}
       </a-button>
     </template>
     <TaktFlowSelectUserDialog

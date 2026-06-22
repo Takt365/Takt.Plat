@@ -97,7 +97,7 @@ public class TaktVocabularyService : TaktServiceBase, ITaktVocabularyService
     {
         var list = await _vocabularyRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
-            x => x.WordText,
+            x => x.WordText ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -339,7 +339,7 @@ public class TaktVocabularyService : TaktServiceBase, ITaktVocabularyService
                 || SqlFunc.ToString(x.FilterLevel).Contains(keywords)
                 || (x.ReplaceText != null && x.ReplaceText.Contains(keywords))
                 || SqlFunc.ToString(x.Status).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -370,9 +370,9 @@ public class TaktVocabularyService : TaktServiceBase, ITaktVocabularyService
             exp = exp.And(x => x.Status == queryDto.Status);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

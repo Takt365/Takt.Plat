@@ -39,7 +39,7 @@ public class TaktBonusPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "bonus_type", ColumnDescription = "奖金类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BonusType { get; set; } = 0;
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method）
+    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
     /// </summary>
     [SugarColumn(ColumnName = "calc_method", ColumnDescription = "计算方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CalcMethod { get; set; } = 0;
@@ -60,7 +60,7 @@ public class TaktBonusPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "effective_date", ColumnDescription = "生效日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime EffectiveDate { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     [SugarColumn(ColumnName = "plan_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PlanStatus { get; set; } = 1;

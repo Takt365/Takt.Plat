@@ -40,9 +40,7 @@ export function getEmployeeSkillList(queryDto: any): Promise<TaktPagedResult<Emp
   return request<TaktPagedResult<EmployeeSkill>>({
     url: `${EMPLOYEE_SKILL_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportEmployeeSkill(
     url: `${EMPLOYEE_SKILL_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

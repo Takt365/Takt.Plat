@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Financial
 // 文件名称：TaktAccountTitleChangeLogsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会计科目变更记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktAccountTitleChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("accounting:financial:accounttitlechangelog:list", "会计科目变更记录列表")]
+    [TaktPermission("accounting:financial:account:title:change:log:list", "会计科目变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetAccountTitleChangeLogListAsync([FromQuery] TaktAccountTitleChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktAccountTitleChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">会计科目变更记录ID</param>
     /// <returns>会计科目变更记录DTO</returns>
-    [TaktPermission("accounting:financial:accounttitlechangelog:query", "会计科目变更记录详情")]
+    [TaktPermission("accounting:financial:account:title:change:log:query", "会计科目变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAccountTitleChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktAccountTitleChangeLogsController : TaktControllerBase
     /// 获取会计科目变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("accounting:financial:accounttitlechangelog:query", "会计科目变更记录选项")]
+    [TaktPermission("accounting:financial:account:title:change:log:query", "会计科目变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetAccountTitleChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktAccountTitleChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>会计科目变更记录DTO</returns>
-    [TaktPermission("accounting:financial:accounttitlechangelog:create", "创建会计科目变更记录")]
+    [TaktPermission("accounting:financial:account:title:change:log:create", "创建会计科目变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateAccountTitleChangeLogAsync([FromBody] TaktAccountTitleChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktAccountTitleChangeLogsController : TaktControllerBase
     /// <param name="id">会计科目变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>会计科目变更记录DTO</returns>
-    [TaktPermission("accounting:financial:accounttitlechangelog:update", "更新会计科目变更记录")]
+    [TaktPermission("accounting:financial:account:title:change:log:update", "更新会计科目变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAccountTitleChangeLogAsync(long id, [FromBody] TaktAccountTitleChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktAccountTitleChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">会计科目变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:financial:accounttitlechangelog:delete", "删除会计科目变更记录")]
+    [TaktPermission("accounting:financial:account:title:change:log:delete", "删除会计科目变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAccountTitleChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktAccountTitleChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:financial:accounttitlechangelog:delete", "批量删除会计科目变更记录")]
+    [TaktPermission("accounting:financial:account:title:change:log:delete", "批量删除会计科目变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteAccountTitleChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktAccountTitleChangeLogsController : TaktControllerBase
     /// 导出会计科目变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:financial:accounttitlechangelog:export", "导出会计科目变更记录")]
+    [TaktPermission("accounting:financial:account:title:change:log:export", "导出会计科目变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportAccountTitleChangeLogAsync([FromQuery] TaktAccountTitleChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

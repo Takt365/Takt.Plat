@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-manufacturing-output-equipment-operation-rate">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'equipmentOperationRateId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <EquipmentOperationRateForm
+        :key="formData?.equipmentOperationRateId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,266 +110,282 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.equipmentOperationRate.plantcode')">
+      <a-form-item :label="t('entity.equipmentoperationrate.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('timeCategory')">
-      <a-form-item :label="t('entity.equipmentOperationRate.timecategory')">
+      <a-form-item :label="t('entity.equipmentoperationrate.timecategory')">
         <a-input-number
           v-model:value="advancedQueryForm.timeCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.timecategory') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.timecategory') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startDateStart')">
-      <a-form-item :label="t('entity.equipmentOperationRate.startdatestart')">
+      <a-form-item :label="t('entity.equipmentoperationrate.startdatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.startDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentOperationRate.startdatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.startdatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startDateEnd')">
-      <a-form-item :label="t('entity.equipmentOperationRate.startdateend')">
+      <a-form-item :label="t('entity.equipmentoperationrate.startdateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.startDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentOperationRate.startdateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.startdateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endDateStart')">
-      <a-form-item :label="t('entity.equipmentOperationRate.enddatestart')">
+      <a-form-item :label="t('entity.equipmentoperationrate.enddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.endDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentOperationRate.enddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.enddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endDateEnd')">
-      <a-form-item :label="t('entity.equipmentOperationRate.enddateend')">
+      <a-form-item :label="t('entity.equipmentoperationrate.enddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.endDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentOperationRate.enddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipmentoperationrate.enddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('weekNumber')">
-      <a-form-item :label="t('entity.equipmentOperationRate.weeknumber')">
+      <a-form-item :label="t('entity.equipmentoperationrate.weeknumber')">
         <a-input-number
           v-model:value="advancedQueryForm.weekNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.weeknumber') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.weeknumber') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('monthNumber')">
-      <a-form-item :label="t('entity.equipmentOperationRate.monthnumber')">
+      <a-form-item :label="t('entity.equipmentoperationrate.monthnumber')">
         <a-input-number
           v-model:value="advancedQueryForm.monthNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.monthnumber') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.monthnumber') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('equipmentCode')">
-      <a-form-item :label="t('entity.equipmentOperationRate.equipmentcode')">
+      <a-form-item :label="t('entity.equipmentoperationrate.equipmentcode')">
         <a-input
           v-model:value="advancedQueryForm.equipmentCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.equipmentcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('equipmentName')">
-      <a-form-item :label="t('entity.equipmentOperationRate.equipmentname')">
+      <a-form-item :label="t('entity.equipmentoperationrate.equipmentname')">
         <a-input
           v-model:value="advancedQueryForm.equipmentName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.equipmentname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('equipmentType')">
-      <a-form-item :label="t('entity.equipmentOperationRate.equipmenttype')">
+      <a-form-item :label="t('entity.equipmentoperationrate.equipmenttype')">
         <a-input-number
           v-model:value="advancedQueryForm.equipmentType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.equipmenttype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmenttype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('productionLine')">
-      <a-form-item :label="t('entity.equipmentOperationRate.productionline')">
+      <a-form-item :label="t('entity.equipmentoperationrate.productionline')">
         <a-input
           v-model:value="advancedQueryForm.productionLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.productionline') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.productionline') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shiftNo')">
-      <a-form-item :label="t('entity.equipmentOperationRate.shiftno')">
+      <a-form-item :label="t('entity.equipmentoperationrate.shiftno')">
         <a-input-number
           v-model:value="advancedQueryForm.shiftNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.shiftno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.shiftno') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedRuntime')">
-      <a-form-item :label="t('entity.equipmentOperationRate.plannedruntime')">
+      <a-form-item :label="t('entity.equipmentoperationrate.plannedruntime')">
         <a-input-number
           v-model:value="advancedQueryForm.plannedRuntime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.plannedruntime') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.plannedruntime') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualRuntime')">
-      <a-form-item :label="t('entity.equipmentOperationRate.actualruntime')">
+      <a-form-item :label="t('entity.equipmentoperationrate.actualruntime')">
         <a-input-number
           v-model:value="advancedQueryForm.actualRuntime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.actualruntime') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.actualruntime') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('downtime')">
-      <a-form-item :label="t('entity.equipmentOperationRate.downtime')">
+      <a-form-item :label="t('entity.equipmentoperationrate.downtime')">
         <a-input-number
           v-model:value="advancedQueryForm.downtime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.downtime') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.downtime') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('equipmentOperationRate')">
-      <a-form-item :label="t('entity.equipmentOperationRate.equipmentoperationrate')">
+      <a-form-item :label="t('entity.equipmentoperationrate.equipmentoperationrate')">
         <a-input-number
           v-model:value="advancedQueryForm.equipmentOperationRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.equipmentoperationrate') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentoperationrate') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedOutput')">
-      <a-form-item :label="t('entity.equipmentOperationRate.plannedoutput')">
+      <a-form-item :label="t('entity.equipmentoperationrate.plannedoutput')">
         <a-input-number
           v-model:value="advancedQueryForm.plannedOutput"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.plannedoutput') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.plannedoutput') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualOutput')">
-      <a-form-item :label="t('entity.equipmentOperationRate.actualoutput')">
+      <a-form-item :label="t('entity.equipmentoperationrate.actualoutput')">
         <a-input-number
           v-model:value="advancedQueryForm.actualOutput"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.actualoutput') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.actualoutput') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('qualifiedQuantity')">
-      <a-form-item :label="t('entity.equipmentOperationRate.qualifiedquantity')">
+      <a-form-item :label="t('entity.equipmentoperationrate.qualifiedquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.qualifiedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.qualifiedquantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.qualifiedquantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('defectiveQuantity')">
-      <a-form-item :label="t('entity.equipmentOperationRate.defectivequantity')">
+      <a-form-item :label="t('entity.equipmentoperationrate.defectivequantity')">
         <a-input-number
           v-model:value="advancedQueryForm.defectiveQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.defectivequantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.defectivequantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('yieldRate')">
-      <a-form-item :label="t('entity.equipmentOperationRate.yieldrate')">
+      <a-form-item :label="t('entity.equipmentoperationrate.yieldrate')">
         <a-input-number
           v-model:value="advancedQueryForm.yieldRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.yieldrate') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.yieldrate') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('downtimeReasonType')">
-      <a-form-item :label="t('entity.equipmentOperationRate.downtimereasontype')">
+      <a-form-item :label="t('entity.equipmentoperationrate.downtimereasontype')">
         <a-input-number
           v-model:value="advancedQueryForm.downtimeReasonType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.downtimereasontype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.downtimereasontype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('downtimeReason')">
-      <a-form-item :label="t('entity.equipmentOperationRate.downtimereason')">
+      <a-form-item :label="t('entity.equipmentoperationrate.downtimereason')">
         <a-input
           v-model:value="advancedQueryForm.downtimeReason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.downtimereason') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.downtimereason') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('equipmentStatus')">
-      <a-form-item :label="t('entity.equipmentOperationRate.equipmentstatus')">
+      <a-form-item :label="t('entity.equipmentoperationrate.equipmentstatus')">
         <a-input-number
           v-model:value="advancedQueryForm.equipmentStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.equipmentstatus') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentstatus') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('equipmentOperator')">
-      <a-form-item :label="t('entity.equipmentOperationRate.equipmentoperator')">
+      <a-form-item :label="t('entity.equipmentoperationrate.equipmentoperator')">
         <a-input
           v-model:value="advancedQueryForm.equipmentOperator"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.equipmentoperator') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentoperator') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('equipmentMaintainer')">
-      <a-form-item :label="t('entity.equipmentOperationRate.equipmentmaintainer')">
+      <a-form-item :label="t('entity.equipmentoperationrate.equipmentmaintainer')">
         <a-input
           v-model:value="advancedQueryForm.equipmentMaintainer"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.equipmentmaintainer') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.equipmentmaintainer') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('teamLeader')">
-      <a-form-item :label="t('entity.equipmentOperationRate.teamleader')">
+      <a-form-item :label="t('entity.equipmentoperationrate.teamleader')">
         <a-input
           v-model:value="advancedQueryForm.teamLeader"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.teamleader') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.teamleader') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('status')">
-      <a-form-item :label="t('entity.equipmentOperationRate.status')">
+      <a-form-item :label="t('entity.equipmentoperationrate.status')">
         <a-input-number
           v-model:value="advancedQueryForm.status"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentOperationRate.status') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipmentoperationrate.status') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -395,12 +412,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -409,8 +445,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -420,14 +458,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.equipmentOperationRate._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.equipmentoperationrate._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.equipmentOperationRate._self"
+        entity-i18n-key="entity.equipmentoperationrate._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -463,12 +501,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import EquipmentOperationRateForm from './components/equipment-operation-rate-form.vue'
-import { getEquipmentOperationRateList, getEquipmentOperationRateById, createEquipmentOperationRate, updateEquipmentOperationRate, deleteEquipmentOperationRateById, deleteEquipmentOperationRateBatch, getEquipmentOperationRateTemplate, importEquipmentOperationRate, exportEquipmentOperationRate } from '@/api/logistics/manufacturing/output/equipment-operation-rate'
-import type { EquipmentOperationRate, EquipmentOperationRateQuery, EquipmentOperationRateCreate, EquipmentOperationRateUpdate } from '@/types/logistics/manufacturing/output/equipment-operation-rate'
+import { getEquipmentOperationRateList, getEquipmentOperationRateById, createEquipmentOperationRate, updateEquipmentOperationRate, deleteEquipmentOperationRateById, deleteEquipmentOperationRateBatch, getEquipmentOperationRateTemplate, importEquipmentOperationRate, exportEquipmentOperationRate, updateEquipmentOperationRateStatus } from '@/api/logistics/manufacturing/output/equipment-operation-rate'
+import type { EquipmentOperationRate, EquipmentOperationRateQuery } from '@/types/logistics/manufacturing/output/equipment-operation-rate'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -476,7 +515,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktEquipmentOperationRate')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.equipmentOperationRate._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.equipmentoperationrate._self') })
 )
 
 /** 快捷查询关键字 */
@@ -486,9 +525,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<EquipmentOperationRate[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -503,11 +542,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<EquipmentOperationRate>>({})
+const formData = ref<Partial<EquipmentOperationRate> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -542,43 +583,43 @@ const advancedQueryForm = ref({
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.equipmentOperationRate.plantcode') },
-  { key: 'timeCategory', label: t('entity.equipmentOperationRate.timecategory') },
-  { key: 'startDateStart', label: t('entity.equipmentOperationRate.startdatestart') },
-  { key: 'startDateEnd', label: t('entity.equipmentOperationRate.startdateend') },
-  { key: 'endDateStart', label: t('entity.equipmentOperationRate.enddatestart') },
-  { key: 'endDateEnd', label: t('entity.equipmentOperationRate.enddateend') },
-  { key: 'weekNumber', label: t('entity.equipmentOperationRate.weeknumber') },
-  { key: 'monthNumber', label: t('entity.equipmentOperationRate.monthnumber') },
-  { key: 'equipmentCode', label: t('entity.equipmentOperationRate.equipmentcode') },
-  { key: 'equipmentName', label: t('entity.equipmentOperationRate.equipmentname') },
-  { key: 'equipmentType', label: t('entity.equipmentOperationRate.equipmenttype') },
-  { key: 'productionLine', label: t('entity.equipmentOperationRate.productionline') },
-  { key: 'shiftNo', label: t('entity.equipmentOperationRate.shiftno') },
-  { key: 'plannedRuntime', label: t('entity.equipmentOperationRate.plannedruntime') },
-  { key: 'actualRuntime', label: t('entity.equipmentOperationRate.actualruntime') },
-  { key: 'downtime', label: t('entity.equipmentOperationRate.downtime') },
-  { key: 'equipmentOperationRate', label: t('entity.equipmentOperationRate.equipmentoperationrate') },
-  { key: 'plannedOutput', label: t('entity.equipmentOperationRate.plannedoutput') },
-  { key: 'actualOutput', label: t('entity.equipmentOperationRate.actualoutput') },
-  { key: 'qualifiedQuantity', label: t('entity.equipmentOperationRate.qualifiedquantity') },
-  { key: 'defectiveQuantity', label: t('entity.equipmentOperationRate.defectivequantity') },
-  { key: 'yieldRate', label: t('entity.equipmentOperationRate.yieldrate') },
-  { key: 'downtimeReasonType', label: t('entity.equipmentOperationRate.downtimereasontype') },
-  { key: 'downtimeReason', label: t('entity.equipmentOperationRate.downtimereason') },
-  { key: 'equipmentStatus', label: t('entity.equipmentOperationRate.equipmentstatus') },
-  { key: 'equipmentOperator', label: t('entity.equipmentOperationRate.equipmentoperator') },
-  { key: 'equipmentMaintainer', label: t('entity.equipmentOperationRate.equipmentmaintainer') },
-  { key: 'teamLeader', label: t('entity.equipmentOperationRate.teamleader') },
-  { key: 'status', label: t('entity.equipmentOperationRate.status') },
+  { key: 'plantCode', label: t('entity.equipmentoperationrate.plantcode') },
+  { key: 'timeCategory', label: t('entity.equipmentoperationrate.timecategory') },
+  { key: 'startDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipmentoperationrate.startdate')) },
+  { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipmentoperationrate.startdate')) },
+  { key: 'endDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipmentoperationrate.enddate')) },
+  { key: 'endDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipmentoperationrate.enddate')) },
+  { key: 'weekNumber', label: t('entity.equipmentoperationrate.weeknumber') },
+  { key: 'monthNumber', label: t('entity.equipmentoperationrate.monthnumber') },
+  { key: 'equipmentCode', label: t('entity.equipmentoperationrate.equipmentcode') },
+  { key: 'equipmentName', label: t('entity.equipmentoperationrate.equipmentname') },
+  { key: 'equipmentType', label: t('entity.equipmentoperationrate.equipmenttype') },
+  { key: 'productionLine', label: t('entity.equipmentoperationrate.productionline') },
+  { key: 'shiftNo', label: t('entity.equipmentoperationrate.shiftno') },
+  { key: 'plannedRuntime', label: t('entity.equipmentoperationrate.plannedruntime') },
+  { key: 'actualRuntime', label: t('entity.equipmentoperationrate.actualruntime') },
+  { key: 'downtime', label: t('entity.equipmentoperationrate.downtime') },
+  { key: 'equipmentOperationRate', label: t('entity.equipmentoperationrate.equipmentoperationrate') },
+  { key: 'plannedOutput', label: t('entity.equipmentoperationrate.plannedoutput') },
+  { key: 'actualOutput', label: t('entity.equipmentoperationrate.actualoutput') },
+  { key: 'qualifiedQuantity', label: t('entity.equipmentoperationrate.qualifiedquantity') },
+  { key: 'defectiveQuantity', label: t('entity.equipmentoperationrate.defectivequantity') },
+  { key: 'yieldRate', label: t('entity.equipmentoperationrate.yieldrate') },
+  { key: 'downtimeReasonType', label: t('entity.equipmentoperationrate.downtimereasontype') },
+  { key: 'downtimeReason', label: t('entity.equipmentoperationrate.downtimereason') },
+  { key: 'equipmentStatus', label: t('entity.equipmentoperationrate.equipmentstatus') },
+  { key: 'equipmentOperator', label: t('entity.equipmentoperationrate.equipmentoperator') },
+  { key: 'equipmentMaintainer', label: t('entity.equipmentoperationrate.equipmentmaintainer') },
+  { key: 'teamLeader', label: t('entity.equipmentoperationrate.teamleader') },
+  { key: 'status', label: t('entity.equipmentoperationrate.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -597,10 +638,104 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {EquipmentOperationRateQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<EquipmentOperationRateQuery>): EquipmentOperationRateQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: EquipmentOperationRateQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof EquipmentOperationRateQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  if (form.timeCategory !== undefined && form.timeCategory !== null) {
+    query.timeCategory = form.timeCategory
+  }
+  assignTrimmed('startDateStart', form.startDateStart)
+  assignTrimmed('startDateEnd', form.startDateEnd)
+  assignTrimmed('endDateStart', form.endDateStart)
+  assignTrimmed('endDateEnd', form.endDateEnd)
+  if (form.weekNumber !== undefined && form.weekNumber !== null) {
+    query.weekNumber = form.weekNumber
+  }
+  if (form.monthNumber !== undefined && form.monthNumber !== null) {
+    query.monthNumber = form.monthNumber
+  }
+  assignTrimmed('equipmentCode', form.equipmentCode)
+  assignTrimmed('equipmentName', form.equipmentName)
+  if (form.equipmentType !== undefined && form.equipmentType !== null) {
+    query.equipmentType = form.equipmentType
+  }
+  assignTrimmed('productionLine', form.productionLine)
+  if (form.shiftNo !== undefined && form.shiftNo !== null) {
+    query.shiftNo = form.shiftNo
+  }
+  if (form.plannedRuntime !== undefined && form.plannedRuntime !== null) {
+    query.plannedRuntime = form.plannedRuntime
+  }
+  if (form.actualRuntime !== undefined && form.actualRuntime !== null) {
+    query.actualRuntime = form.actualRuntime
+  }
+  if (form.downtime !== undefined && form.downtime !== null) {
+    query.downtime = form.downtime
+  }
+  if (form.equipmentOperationRate !== undefined && form.equipmentOperationRate !== null) {
+    query.equipmentOperationRate = form.equipmentOperationRate
+  }
+  if (form.plannedOutput !== undefined && form.plannedOutput !== null) {
+    query.plannedOutput = form.plannedOutput
+  }
+  if (form.actualOutput !== undefined && form.actualOutput !== null) {
+    query.actualOutput = form.actualOutput
+  }
+  if (form.qualifiedQuantity !== undefined && form.qualifiedQuantity !== null) {
+    query.qualifiedQuantity = form.qualifiedQuantity
+  }
+  if (form.defectiveQuantity !== undefined && form.defectiveQuantity !== null) {
+    query.defectiveQuantity = form.defectiveQuantity
+  }
+  if (form.yieldRate !== undefined && form.yieldRate !== null) {
+    query.yieldRate = form.yieldRate
+  }
+  if (form.downtimeReasonType !== undefined && form.downtimeReasonType !== null) {
+    query.downtimeReasonType = form.downtimeReasonType
+  }
+  assignTrimmed('downtimeReason', form.downtimeReason)
+  if (form.equipmentStatus !== undefined && form.equipmentStatus !== null) {
+    query.equipmentStatus = form.equipmentStatus
+  }
+  assignTrimmed('equipmentOperator', form.equipmentOperator)
+  assignTrimmed('equipmentMaintainer', form.equipmentMaintainer)
+  assignTrimmed('teamLeader', form.teamLeader)
+  if (form.status !== undefined && form.status !== null) {
+    query.status = form.status
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -620,7 +755,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentOperationRateId') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.plantcode'),
+    title: t('entity.equipmentoperationrate.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -629,7 +764,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.timecategory'),
+    title: t('entity.equipmentoperationrate.timecategory'),
     dataIndex: 'timeCategory',
     key: 'timeCategory',
     width: 120,
@@ -638,7 +773,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'timeCategory') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.startdate'),
+    title: t('entity.equipmentoperationrate.startdate'),
     dataIndex: 'startDate',
     key: 'startDate',
     width: 120,
@@ -647,7 +782,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'startDate') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.enddate'),
+    title: t('entity.equipmentoperationrate.enddate'),
     dataIndex: 'endDate',
     key: 'endDate',
     width: 120,
@@ -656,7 +791,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'endDate') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.weeknumber'),
+    title: t('entity.equipmentoperationrate.weeknumber'),
     dataIndex: 'weekNumber',
     key: 'weekNumber',
     width: 120,
@@ -665,7 +800,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'weekNumber') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.monthnumber'),
+    title: t('entity.equipmentoperationrate.monthnumber'),
     dataIndex: 'monthNumber',
     key: 'monthNumber',
     width: 120,
@@ -674,7 +809,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'monthNumber') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.equipmentcode'),
+    title: t('entity.equipmentoperationrate.equipmentcode'),
     dataIndex: 'equipmentCode',
     key: 'equipmentCode',
     width: 120,
@@ -683,7 +818,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentCode') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.equipmentname'),
+    title: t('entity.equipmentoperationrate.equipmentname'),
     dataIndex: 'equipmentName',
     key: 'equipmentName',
     width: 120,
@@ -692,7 +827,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentName') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.equipmenttype'),
+    title: t('entity.equipmentoperationrate.equipmenttype'),
     dataIndex: 'equipmentType',
     key: 'equipmentType',
     width: 120,
@@ -701,7 +836,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentType') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.productionline'),
+    title: t('entity.equipmentoperationrate.productionline'),
     dataIndex: 'productionLine',
     key: 'productionLine',
     width: 120,
@@ -710,7 +845,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'productionLine') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.shiftno'),
+    title: t('entity.equipmentoperationrate.shiftno'),
     dataIndex: 'shiftNo',
     key: 'shiftNo',
     width: 120,
@@ -719,7 +854,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'shiftNo') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.plannedruntime'),
+    title: t('entity.equipmentoperationrate.plannedruntime'),
     dataIndex: 'plannedRuntime',
     key: 'plannedRuntime',
     width: 120,
@@ -728,7 +863,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'plannedRuntime') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.actualruntime'),
+    title: t('entity.equipmentoperationrate.actualruntime'),
     dataIndex: 'actualRuntime',
     key: 'actualRuntime',
     width: 120,
@@ -737,7 +872,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'actualRuntime') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.downtime'),
+    title: t('entity.equipmentoperationrate.downtime'),
     dataIndex: 'downtime',
     key: 'downtime',
     width: 120,
@@ -746,7 +881,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'downtime') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.equipmentoperationrate'),
+    title: t('entity.equipmentoperationrate.equipmentoperationrate'),
     dataIndex: 'equipmentOperationRate',
     key: 'equipmentOperationRate',
     width: 120,
@@ -755,7 +890,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentOperationRate') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.plannedoutput'),
+    title: t('entity.equipmentoperationrate.plannedoutput'),
     dataIndex: 'plannedOutput',
     key: 'plannedOutput',
     width: 120,
@@ -764,7 +899,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'plannedOutput') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.actualoutput'),
+    title: t('entity.equipmentoperationrate.actualoutput'),
     dataIndex: 'actualOutput',
     key: 'actualOutput',
     width: 120,
@@ -773,7 +908,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'actualOutput') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.qualifiedquantity'),
+    title: t('entity.equipmentoperationrate.qualifiedquantity'),
     dataIndex: 'qualifiedQuantity',
     key: 'qualifiedQuantity',
     width: 120,
@@ -782,7 +917,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'qualifiedQuantity') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.defectivequantity'),
+    title: t('entity.equipmentoperationrate.defectivequantity'),
     dataIndex: 'defectiveQuantity',
     key: 'defectiveQuantity',
     width: 120,
@@ -791,7 +926,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'defectiveQuantity') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.yieldrate'),
+    title: t('entity.equipmentoperationrate.yieldrate'),
     dataIndex: 'yieldRate',
     key: 'yieldRate',
     width: 120,
@@ -800,7 +935,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'yieldRate') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.downtimereasontype'),
+    title: t('entity.equipmentoperationrate.downtimereasontype'),
     dataIndex: 'downtimeReasonType',
     key: 'downtimeReasonType',
     width: 120,
@@ -809,7 +944,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'downtimeReasonType') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.downtimereason'),
+    title: t('entity.equipmentoperationrate.downtimereason'),
     dataIndex: 'downtimeReason',
     key: 'downtimeReason',
     width: 120,
@@ -818,7 +953,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'downtimeReason') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.equipmentstatus'),
+    title: t('entity.equipmentoperationrate.equipmentstatus'),
     dataIndex: 'equipmentStatus',
     key: 'equipmentStatus',
     width: 120,
@@ -827,7 +962,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentStatus') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.equipmentoperator'),
+    title: t('entity.equipmentoperationrate.equipmentoperator'),
     dataIndex: 'equipmentOperator',
     key: 'equipmentOperator',
     width: 120,
@@ -836,7 +971,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentOperator') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.equipmentmaintainer'),
+    title: t('entity.equipmentoperationrate.equipmentmaintainer'),
     dataIndex: 'equipmentMaintainer',
     key: 'equipmentMaintainer',
     width: 120,
@@ -845,7 +980,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'equipmentMaintainer') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.teamleader'),
+    title: t('entity.equipmentoperationrate.teamleader'),
     dataIndex: 'teamLeader',
     key: 'teamLeader',
     width: 120,
@@ -854,7 +989,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentOperationRateField(record, 'teamLeader') ?? ''
   },
   {
-    title: t('entity.equipmentOperationRate.status'),
+    title: t('entity.equipmentoperationrate.status'),
     dataIndex: 'status',
     key: 'status',
     width: 120,
@@ -892,6 +1027,7 @@ const getEquipmentOperationRateId = (record: any): string => record?.[entityIdNa
  * @param field 字段名
  */
 const getEquipmentOperationRateField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -935,16 +1071,7 @@ const onClickRow = (record: EquipmentOperationRate) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: EquipmentOperationRateQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getEquipmentOperationRateList(params)
+    const res = await getEquipmentOperationRateList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -962,7 +1089,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1001,22 +1128,23 @@ function handleReset() {
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.equipmentOperationRate._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.equipmentoperationrate._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: EquipmentOperationRate) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.equipmentOperationRate._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.equipmentoperationrate._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -1026,7 +1154,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.equipmentOperationRate._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.equipmentoperationrate._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1044,12 +1172,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEquipmentOperationRate(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.equipmentOperationRate._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.equipmentoperationrate._self') }))
     } else {
       await createEquipmentOperationRate(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.equipmentOperationRate._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.equipmentoperationrate._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -1059,6 +1189,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1090,16 +1222,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: EquipmentOperationRateQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportEquipmentOperationRate(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportEquipmentOperationRate(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1118,10 +1245,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.equipmentOperationRate._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.equipmentoperationrate._self') }))
   } catch (error: any) {
     logger.error('[EquipmentOperationRate] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.equipmentOperationRate._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.equipmentoperationrate._self') }))
   } finally {
     loading.value = false
   }
@@ -1130,12 +1257,12 @@ async function handleExport() {
 async function handleDeleteOne(record: EquipmentOperationRate) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.equipmentOperationRate._self'), name: t('common.tip.this.target', { target: t('entity.equipmentOperationRate._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.equipmentoperationrate._self'), name: t('common.tip.this.target', { target: t('entity.equipmentoperationrate._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEquipmentOperationRateById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.equipmentOperationRate._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.equipmentoperationrate._self') }))
       loadData()
     }
   })
@@ -1143,18 +1270,18 @@ async function handleDeleteOne(record: EquipmentOperationRate) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.equipmentOperationRate._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.equipmentoperationrate._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.equipmentOperationRate._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.equipmentoperationrate._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEquipmentOperationRateBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.equipmentOperationRate._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.equipmentoperationrate._self') }))
       loadData()
     }
   })
@@ -1167,7 +1294,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1204,7 +1331,7 @@ function handleAdvancedQueryReset() {
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1234,23 +1361,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.logistics-manufacturing-output-equipment-operation-rate {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

@@ -137,7 +137,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.formulaStep"
-                  dict-type="hr_salary_formula_step"
+                  dict-type="hr_salary_formula_step_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryformula.formulastep') })"
                   size="small"
                 />
@@ -240,7 +240,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.formulaStatus"
-                  dict-type="sys_normal_disable"
+                  dict-type="sys_normal_disable_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryformula.formulastatus') })"
                   size="small"
                 />
@@ -261,12 +261,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('common.page.entity.ExtField')"
+                name="ExtField"
               >
                 <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                   size="small"
                   allow-clear
                 />
@@ -335,7 +335,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","setCode","setName","PayrollId","formulaCode","formulaName","formulaStep","sortOrder","targetField","formulaExpression","stepDescription","effectiveDate","expiryDate","formulaStatus","relatedPlant","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","setCode","setName","PayrollId","formulaCode","formulaName","formulaStep","sortOrder","targetField","formulaExpression","stepDescription","effectiveDate","expiryDate","formulaStatus","relatedPlant","ExtField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */

@@ -35,23 +35,23 @@
         v-show="currentStep === 1"
         class="step-content"
       >
-        <a-form-item :label="t('workflow.scheme.page.linkForm')">
+        <a-form-item :label="t('workflow.scheme.page.link.form.title')">
           <a-radio-group
             v-model:value="linkFormMode"
             class="scheme-form__form-radio"
           >
             <a-radio value="link">
-              {{ t('workflow.scheme.page.linkFormOptionLink') }}
+              {{ t('workflow.scheme.page.link.form.option.link') }}
             </a-radio>
             <a-radio value="new">
-              {{ t('workflow.scheme.page.linkFormOptionNew') }}
+              {{ t('workflow.scheme.page.link.form.option.new') }}
             </a-radio>
           </a-radio-group>
         </a-form-item>
         <!-- 关联表单：表单选择器 -->
         <a-form-item
           v-if="linkFormMode === 'link'"
-          :label="t('workflow.scheme.page.linkForm')"
+          :label="t('workflow.scheme.page.link.form.title')"
           name="formCode"
         >
           <a-spin :spinning="formListLoading">
@@ -59,7 +59,7 @@
               <a-select
                 v-model:value="formSelectValue"
                 style="width: 100%"
-                :placeholder="t('workflow.scheme.page.selectFormPlaceholder')"
+                :placeholder="t('workflow.scheme.page.select.form.placeholder')"
                 allow-clear
                 show-search
                 :filter-option="filterFormOption"
@@ -80,34 +80,34 @@
               v-else-if="!formListLoading"
               class="scheme-form__no-form"
             >
-              <span class="scheme-form__hint">{{ t('workflow.scheme.page.noFormHint') }}</span>
+              <span class="scheme-form__hint">{{ t('workflow.scheme.page.no.form.hint') }}</span>
             </div>
           </a-spin>
         </a-form-item>
         <template v-if="linkFormMode === 'new'">
           <a-form-item
-            :label="t('workflow.scheme.page.newFormCode')"
+            :label="t('workflow.scheme.page.new.form.code.label')"
             required
           >
             <a-input
               v-model:value="newFormCode"
-              :placeholder="t('workflow.scheme.page.newFormCodePlaceholder')"
+              :placeholder="t('workflow.scheme.page.new.form.code.placeholder')"
             />
           </a-form-item>
           <a-form-item
-            :label="t('workflow.scheme.page.newFormName')"
+            :label="t('workflow.scheme.page.new.form.name.label')"
             required
           >
             <a-input
               v-model:value="newFormName"
-              :placeholder="t('workflow.scheme.page.newFormNamePlaceholder')"
+              :placeholder="t('workflow.scheme.page.new.form.name.placeholder')"
             />
           </a-form-item>
         </template>
         <!-- 表单设计器：关联与新建均在此展示/设计 -->
         <div class="scheme-form__form-designer-section">
           <div class="scheme-form__form-designer-section__title">
-            {{ linkFormMode === 'link' ? t('workflow.scheme.page.linkFormOptionLink') : t('workflow.scheme.page.linkFormOptionNew') }}
+            {{ linkFormMode === 'link' ? t('workflow.scheme.page.link.form.option.link') : t('workflow.scheme.page.link.form.option.new') }}
           </div>
           <div class="scheme-form__form-designer-section__body">
             <TaktFormDesigner
@@ -127,7 +127,7 @@
       >
         <div class="scheme-designer-section">
           <div class="scheme-designer-section__title">
-            {{ isEdit ? t('workflow.scheme.page.designerLabelEdit') : t('workflow.scheme.page.designerLabel') }}
+            {{ isEdit ? t('workflow.scheme.page.designer.label.edit') : t('workflow.scheme.page.designer.label.create') }}
           </div>
           <div class="scheme-designer-section__body">
             <TaktFlowAntflowDesigner
@@ -207,9 +207,9 @@ const newFormName = ref('')
 
 // 步骤配置：1 流程信息、2 关联表单、3 流程设计
 const steps = computed(() => [
-  { title: t('workflow.scheme.page.step.step1FlowInfo'), content: 0 },
-  { title: t('workflow.scheme.page.step.step2SelectForm'), content: 1 },
-  { title: t('workflow.scheme.page.step.step3FlowDesign'), content: 2 }
+  { title: t('workflow.scheme.page.step.step1.flow.info'), content: 0 },
+  { title: t('workflow.scheme.page.step.step2.select.form'), content: 1 },
+  { title: t('workflow.scheme.page.step.step3.flow.design'), content: 2 }
 ])
 const stepItems = computed(() => steps.value.map(item => ({ key: item.title, title: item.title })))
 
@@ -314,8 +314,8 @@ const stepFieldNames: Record<number, string[]> = {
 }
 
 const formRules = computed(() => ({
-  processKey: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowScheme.processkey') }) }],
-  processName: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowScheme.processname') }) }]
+  processKey: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowscheme.processkey') }) }],
+  processName: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.flowscheme.processname') }) }]
 }))
 
 // 校验当前步骤需校验的字段，通过返回 true
@@ -358,20 +358,20 @@ function validateFormLinkStep(): boolean {
   const config = formDesignConfig.value?.trim()
   if (!config) {
     currentStep.value = 1
-    message.warning(t('workflow.scheme.page.formConfigRequired'))
+    message.warning(t('workflow.scheme.page.form.config.required'))
     return false
   }
   if (linkFormMode.value === 'link') {
     if (!form.formId || !form.formCode?.trim()) {
       currentStep.value = 1
-      message.warning(t('workflow.scheme.page.linkFormRequired'))
+      message.warning(t('workflow.scheme.page.link.form.required'))
       return false
     }
     return true
   }
   if (!newFormCode.value?.trim() || !newFormName.value?.trim()) {
     currentStep.value = 1
-    message.warning(t('workflow.scheme.page.newFormRequired'))
+    message.warning(t('workflow.scheme.page.new.form.required'))
     return false
   }
   return true
@@ -410,7 +410,7 @@ async function persistFormBeforeSchemeSave(): Promise<boolean> {
       return true
     }
     if (!form.formId) {
-      message.warning(t('workflow.scheme.page.linkFormRequired'))
+      message.warning(t('workflow.scheme.page.link.form.required'))
       return false
     }
     const detail = await getFlowFormById(String(form.formId))
@@ -451,7 +451,7 @@ const validateAllSteps = async (): Promise<boolean> => {
         await formRef.value?.validateFields(fields)
       } catch {
         currentStep.value = i
-        message.warning(t('workflow.scheme.page.step.validateFail', { step: i + 1 }))
+        message.warning(t('workflow.scheme.page.step.validate.fail', { step: i + 1 }))
         return false
       }
     }

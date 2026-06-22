@@ -123,8 +123,26 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public string? ProcessDescription { get; set; }
 
     /// <summary>
+    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// </summary>
+    [SugarColumn(ColumnName = "process_segment_type", ColumnDescription = "工艺段类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int ProcessSegmentType { get; set; } = 1;
+
+    /// <summary>
+    /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
+    /// </summary>
+    [SugarColumn(ColumnName = "ext_json", ColumnDescription = "工序扩展JSON", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
+    public string? ExtJson { get; set; }
+
+    /// <summary>
     /// 工艺路线主表（主表）
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(RoutingId))]
     public TaktRouting? Routing { get; set; }
+
+    /// <summary>
+    /// 工序参数定义
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktRoutingItemArgument.RoutingItemId))]
+    public List<TaktRoutingItemArgument>? Arguments { get; set; }
 }

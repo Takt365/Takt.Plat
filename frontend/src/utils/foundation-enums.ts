@@ -89,7 +89,7 @@ export enum TaktMessageType {
 }
 
 /**
- * 在线消息分组（与后端 TaktMessageGroup、字典 sys_message_group 一致）
+ * 在线消息分组（与后端 TaktMessageGroup、字典 sys_message_group_category 一致）
  */
 export enum TaktMessageGroup {
   /** 协同 */

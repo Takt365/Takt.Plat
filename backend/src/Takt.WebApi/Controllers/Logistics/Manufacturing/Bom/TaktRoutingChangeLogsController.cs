@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingChangeLogsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-15
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工艺路线变更日志控制器
 // 
@@ -41,7 +41,7 @@ public class TaktRoutingChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingchangelog:list", "工艺路线变更日志列表")]
+    [TaktPermission("logistics:manufacturing:bom:routing:list", "工艺路线变更日志列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetRoutingChangeLogListAsync([FromQuery] TaktRoutingChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktRoutingChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工艺路线变更日志ID</param>
     /// <returns>工艺路线变更日志DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingchangelog:query", "工艺路线变更日志详情")]
+    [TaktPermission("logistics:manufacturing:bom:routing:query", "工艺路线变更日志详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetRoutingChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktRoutingChangeLogsController : TaktControllerBase
     /// 获取工艺路线变更日志选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingchangelog:query", "工艺路线变更日志选项")]
+    [TaktPermission("logistics:manufacturing:bom:routing:query", "工艺路线变更日志选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetRoutingChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktRoutingChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>工艺路线变更日志DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingchangelog:create", "创建工艺路线变更日志")]
+    [TaktPermission("logistics:manufacturing:bom:routing:create", "创建工艺路线变更日志")]
     [HttpPost]
     public async Task<IActionResult> CreateRoutingChangeLogAsync([FromBody] TaktRoutingChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktRoutingChangeLogsController : TaktControllerBase
     /// <param name="id">工艺路线变更日志ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>工艺路线变更日志DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingchangelog:update", "更新工艺路线变更日志")]
+    [TaktPermission("logistics:manufacturing:bom:routing:update", "更新工艺路线变更日志")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRoutingChangeLogAsync(long id, [FromBody] TaktRoutingChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktRoutingChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">工艺路线变更日志ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingchangelog:delete", "删除工艺路线变更日志")]
+    [TaktPermission("logistics:manufacturing:bom:routing:delete", "删除工艺路线变更日志")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteRoutingChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktRoutingChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingchangelog:delete", "批量删除工艺路线变更日志")]
+    [TaktPermission("logistics:manufacturing:bom:routing:delete", "批量删除工艺路线变更日志")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteRoutingChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktRoutingChangeLogsController : TaktControllerBase
     /// 导出工艺路线变更日志
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:routingchangelog:export", "导出工艺路线变更日志")]
+    [TaktPermission("logistics:manufacturing:bom:routing:export", "导出工艺路线变更日志")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportRoutingChangeLogAsync([FromQuery] TaktRoutingChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -1,8 +1,8 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/sales/sales-invoice/components -->
-<!-- 文件名称：sales-invoice-form.vue -->
-<!-- 功能描述：Takt销售发票实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 命名空间：@/views/logistics/sales/invoice/components -->
+<!-- 文件名称：invoice-form.vue -->
+<!-- 功能描述：Takt销售发票实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form invoice-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -17,9 +18,8 @@
   >
     <a-tabs
       v-model:active-key="activeTab"
-      class="sales-invoice-form-tabs"
+      class="invoice-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,99 +63,107 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesInvoice.plantcode')"
+                :label="t('entity.salesinvoice.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.plantcode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.salesInvoiceId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesInvoice.code')"
+                :label="t('entity.salesinvoice.code')"
                 name="salesInvoiceCode"
               >
                 <a-input
                   v-model:value="formState.salesInvoiceCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.code') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.code') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.salesInvoiceId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesInvoice.salesordercode')"
+                :label="t('entity.salesinvoice.salesordercode')"
                 name="salesOrderCode"
               >
                 <a-input
                   v-model:value="formState.salesOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.salesordercode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.salesordercode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.salesInvoiceId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesInvoice.customercode')"
+                :label="t('entity.salesinvoice.customercode')"
                 name="customerCode"
               >
                 <a-input
                   v-model:value="formState.customerCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.customercode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.customercode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.salesInvoiceId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesInvoice.customername')"
+                :label="t('entity.salesinvoice.customername')"
                 name="customerName"
               >
                 <a-input
                   v-model:value="formState.customerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.customername') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.customername') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesInvoice.invoicedate')"
+                :label="t('entity.salesinvoice.invoicedate')"
                 name="invoiceDate"
               >
                 <a-date-picker
                   v-model:value="formState.invoiceDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesInvoice.invoicedate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.invoicedate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesInvoice.totalamount')"
+                :label="t('entity.salesinvoice.totalamount')"
                 name="totalAmount"
               >
                 <a-input-number
                   v-model:value="formState.totalAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.totalamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.totalamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -168,80 +178,90 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesInvoice.taxamount')"
+                :label="t('entity.salesinvoice.taxamount')"
                 name="taxAmount"
               >
                 <a-input-number
                   v-model:value="formState.taxAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.taxamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.taxamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesInvoice.actualamount')"
+                :label="t('entity.salesinvoice.actualamount')"
                 name="actualAmount"
               >
                 <a-input-number
                   v-model:value="formState.actualAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.actualamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.actualamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesInvoice.invoicestatus')"
+                :label="t('entity.salesinvoice.invoicestatus')"
                 name="invoiceStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.invoiceStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.invoicestatus') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="logistics_invoice_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.invoicestatus') })"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesInvoice.paymentmethod')"
+                :label="t('entity.salesinvoice.paymentmethod')"
                 name="paymentMethod"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.paymentMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.paymentmethod') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="logistics_payment_method_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.paymentmethod') })"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesInvoice.taxinvoiceno')"
+                :label="t('entity.salesinvoice.taxinvoiceno')"
                 name="taxInvoiceNo"
               >
                 <a-input
                   v-model:value="formState.taxInvoiceNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.taxinvoiceno') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.taxinvoiceno') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -254,143 +274,44 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：salesInvoiceItem -->
-      <a-tab-pane
-        key="child-items"
-        :tab="t('entity.salesInvoiceItem._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddSalesInvoiceItemRow">
-            {{ t('common.page.button.create') }}{{ t('entity.salesInvoiceItem._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="salesInvoiceItemFormColumns"
-          :data-source="childSalesInvoiceItemRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoiceItem.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'materialCode'">
-              <a-input
-                v-model:value="record.materialCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoiceItem.materialcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'materialName'">
-              <a-input
-                v-model:value="record.materialName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoiceItem.materialname') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'materialSpecification'">
-              <a-input
-                v-model:value="record.materialSpecification"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoiceItem.materialspecification') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'salesUnit'">
-              <a-input
-                v-model:value="record.salesUnit"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoiceItem.salesunit') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'invoiceQuantity'">
-              <a-input-number
-                v-model:value="record.invoiceQuantity"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoiceItem.invoicequantity') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'unitPrice'">
-              <a-input-number
-                v-model:value="record.unitPrice"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoiceItem.unitprice') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'discountRate'">
-              <a-input-number
-                v-model:value="record.discountRate"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoiceItem.discountrate') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveSalesInvoiceItemRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 items -->
+    <TaktEditableTable
+      ref="salesInvoiceItemTableRef"
+      v-model="childSalesInvoiceItemRows"
+      :columns="salesInvoiceItemFormColumns"
+      :title="t('entity.salesinvoiceitem._self')"
+      :add-button-entity="t('entity.salesinvoiceitem._self')"
+      id-field="salesInvoiceItemId"
+      :default-row="createDefaultSalesInvoiceItemRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
  * Takt销售发票实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
- * @module views/logistics/sales/sales-invoice/components
+ * @module views/logistics/sales/invoice/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { SalesInvoiceCreate, SalesInvoiceItemCreate, SalesInvoiceItem } from '@/types/logistics/sales/sales-invoice'
+import type { SalesInvoiceCreate } from '@/types/logistics/sales/invoice'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -423,123 +344,99 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesInvoiceCode","salesOrderCode","customerCode","customerName","invoiceDate","totalAmount","taxAmount","actualAmount","invoiceStatus","paymentMethod","taxInvoiceNo","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesInvoiceCode","salesOrderCode","customerCode","customerName","invoiceDate","totalAmount","taxAmount","actualAmount","invoiceStatus","paymentMethod","taxInvoiceNo","extField","remark"]
 
-/** salesInvoiceItem 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childSalesInvoiceItemRows = ref<Record<string, unknown>[]>([])
+const salesInvoiceItemTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 salesInvoiceItem 表单列定义 */
-const salesInvoiceItemFormColumns = computed(() => [
+/** 子表 salesInvoiceItem 可编辑列 */
+const salesInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.salesInvoiceItem.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.salesinvoiceitem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.salesInvoiceItem.materialcode'),
-    dataIndex: 'materialCode',
     key: 'materialCode',
+    title: t('entity.salesinvoiceitem.materialcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.salesInvoiceItem.materialname'),
-    dataIndex: 'materialName',
     key: 'materialName',
+    title: t('entity.salesinvoiceitem.materialname'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.salesInvoiceItem.materialspecification'),
-    dataIndex: 'materialSpecification',
     key: 'materialSpecification',
-    width: 140,
+    title: t('entity.salesinvoiceitem.materialspecification'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.salesinvoiceitem.materialspecification') }),
   },
   {
-    title: t('entity.salesInvoiceItem.salesunit'),
-    dataIndex: 'salesUnit',
     key: 'salesUnit',
+    title: t('entity.salesinvoiceitem.salesunit'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.salesInvoiceItem.invoicequantity'),
-    dataIndex: 'invoiceQuantity',
     key: 'invoiceQuantity',
+    title: t('entity.salesinvoiceitem.invoicequantity'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.salesInvoiceItem.unitprice'),
-    dataIndex: 'unitPrice',
     key: 'unitPrice',
+    title: t('entity.salesinvoiceitem.unitprice'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.salesInvoiceItem.discountrate'),
-    dataIndex: 'discountRate',
     key: 'discountRate',
+    title: t('entity.salesinvoiceitem.discountrate'),
+    editor: 'inputNumber',
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SalesInvoiceCreate & { salesInvoiceId?: string }> | null | undefined) {
-  childSalesInvoiceItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.salesInvoiceItemId ?? `new-${index}`,
-  }))
+  childSalesInvoiceItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 salesInvoiceItem 行 */
-function handleAddSalesInvoiceItemRow() {
-  childSalesInvoiceItemRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      lineNumber: 0,
-      materialCode: '',
-      materialName: '',
-      materialSpecification: '',
-      salesUnit: '',
-      invoiceQuantity: 0,
-      unitPrice: 0,
-      discountRate: 0,
-  })
-}
-
-/** 表单 Tab 内删除 salesInvoiceItem 行 */
-function handleRemoveSalesInvoiceItemRow(index: number) {
-  childSalesInvoiceItemRows.value.splice(index, 1)
+function createDefaultSalesInvoiceItemRow(): Record<string, unknown> {
+  return {
+    lineNumber: (childSalesInvoiceItemRows.value.length + 1) * 10,
+    materialCode: '',
+    materialName: '',
+    materialSpecification: '',
+    salesUnit: '',
+    invoiceQuantity: 0,
+    unitPrice: 0,
+    discountRate: 0,
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.salesInvoiceId ?? ''
   return {
     ...formState,
-    items: childSalesInvoiceItemRows.value.map(({ __rowKey, ...rest }) => rest),
+    items: salesInvoiceItemTableRef.value?.getRows?.() ?? childSalesInvoiceItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      salesInvoiceId: masterId,
+    })),
   }
 }
 
@@ -551,7 +448,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -559,19 +456,48 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  invoiceStatus: 0,
+  paymentMethod: 0
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 salesInvoiceId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.salesInvoiceId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).items
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -587,88 +513,154 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.plantcode') }),
+      trigger: 'blur'
+    }
+  ],
   salesInvoiceCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.code') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.code') }),
       trigger: 'blur'
     }
   ],
   customerCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.customercode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.customercode') }),
       trigger: 'blur'
     }
   ],
   customerName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.customername') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.customername') }),
       trigger: 'blur'
     }
   ],
   invoiceDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesInvoice.invoicedate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.invoicedate') }),
       trigger: 'change'
     }
   ],
-  totalAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesInvoice.totalamount') }),
-      trigger: 'change'
-    }
-  ],
-  taxAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesInvoice.taxamount') }),
-      trigger: 'change'
-    }
-  ],
-  actualAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesInvoice.actualamount') }),
-      trigger: 'change'
-    }
-  ],
-  invoiceStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesInvoice.invoicestatus') }),
-      trigger: 'change'
-    }
-  ],
-  paymentMethod: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesInvoice.paymentmethod') }),
-      trigger: 'change'
-    }
-  ],
+  totalAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.totalamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.totalamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.taxamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.taxamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  actualAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.actualamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.actualamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  invoiceStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.invoicestatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.invoicestatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  paymentMethod: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.paymentmethod') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.paymentmethod') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await salesInvoiceItemTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('totalAmount' in payload) {
+    const rawtotalAmount = payload.totalAmount
+    payload.totalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
+  }
+  if ('taxAmount' in payload) {
+    const rawtaxAmount = payload.taxAmount
+    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  }
+  if ('actualAmount' in payload) {
+    const rawactualAmount = payload.actualAmount
+    payload.actualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
+  }
+  if ('invoiceStatus' in payload) {
+    const rawinvoiceStatus = payload.invoiceStatus
+    payload.invoiceStatus = typeof rawinvoiceStatus === 'number' ? rawinvoiceStatus : Number(rawinvoiceStatus)
+  }
+  if ('paymentMethod' in payload) {
+    const rawpaymentMethod = payload.paymentMethod
+    payload.paymentMethod = typeof rawpaymentMethod === 'number' ? rawpaymentMethod : Number(rawpaymentMethod)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.salesInvoiceId)
   childSalesInvoiceItemRows.value = []
+  salesInvoiceItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

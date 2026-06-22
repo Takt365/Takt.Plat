@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Talent
 // 文件名称：TaktTalentStaffingRequirementValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TalentStaffingRequirement 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTalentStaffingRequirement 生成，请按需审阅）
 // 
@@ -31,10 +31,10 @@ public class TaktTalentStaffingRequirementCreateValidator : AbstractValidator<Ta
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.ReqNo)
             .NotEmpty().WithMessage("需求单号不能为空")
             .MaximumLength(30).WithMessage("需求单号长度不能超过30个字符");
@@ -49,7 +49,7 @@ public class TaktTalentStaffingRequirementCreateValidator : AbstractValidator<Ta
             .MaximumLength(20).WithMessage("编制类型长度不能超过20个字符");
         RuleFor(x => x.ReasonCode)
             .NotEmpty().WithMessage("需求原因不能为空")
-            .MaximumLength(40).WithMessage("需求原因长度不能超过40个字符");
+            .MaximumLength(30).WithMessage("需求原因长度不能超过30个字符");
         RuleFor(x => x.ReplaceEmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("替补员工ID不能为负数");
         RuleFor(x => x.ContractType)
@@ -62,7 +62,7 @@ public class TaktTalentStaffingRequirementCreateValidator : AbstractValidator<Ta
             .MaximumLength(4000).WithMessage("任职要求长度不能超过4000个字符");
         RuleFor(x => x.BudgetYear)
             .MaximumLength(4).WithMessage("预算年度长度不能超过4个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -103,9 +103,9 @@ public class TaktTalentStaffingRequirementImportValidator : AbstractValidator<Ta
     public TaktTalentStaffingRequirementImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.ReqNo)
             .NotEmpty().WithMessage("需求单号不能为空")
             .MaximumLength(30).WithMessage("需求单号长度不能超过30个字符");
@@ -120,7 +120,7 @@ public class TaktTalentStaffingRequirementImportValidator : AbstractValidator<Ta
             .MaximumLength(20).WithMessage("编制类型长度不能超过20个字符");
         RuleFor(x => x.ReasonCode)
             .NotEmpty().WithMessage("需求原因不能为空")
-            .MaximumLength(40).WithMessage("需求原因长度不能超过40个字符");
+            .MaximumLength(30).WithMessage("需求原因长度不能超过30个字符");
         RuleFor(x => x.ReplaceEmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("替补员工ID不能为负数");
         RuleFor(x => x.ContractType)
@@ -131,8 +131,8 @@ public class TaktTalentStaffingRequirementImportValidator : AbstractValidator<Ta
             .MaximumLength(4000).WithMessage("岗位职责长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.JobDesc));
         RuleFor(x => x.Qualification)
             .MaximumLength(4000).WithMessage("任职要求长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.Qualification));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

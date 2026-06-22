@@ -143,13 +143,13 @@ public class TaktServiceContract : TaktCompanyEntityBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 服务订单列表（外键在子表 <see cref="TaktServiceOrder.ServiceContractId"/>）
+    /// 服务订单列表（外键在子表 TaktServiceOrder.ServiceContractId）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktServiceOrder.ServiceContractId))]
     public List<TaktServiceOrder>? ServiceOrders { get; set; }
 
     /// <summary>
-    /// 服务请求列表（外键在子表 <see cref="TaktServiceRequest.ServiceContractId"/>）
+    /// 服务请求列表（外键在子表 TaktServiceRequest.ServiceContractId）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktServiceRequest.ServiceContractId))]
     public List<TaktServiceRequest>? ServiceRequests { get; set; }

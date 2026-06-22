@@ -10,7 +10,8 @@
 <template>
   <!-- 根：a-form 包裹 a-tabs；formRef 供父级 validate、resetFields -->
 {{~ create_col_count = 0 ~}}
-{{~ for col in columns ~}}{{~ if col.is_create == 1 ~}}{{~ create_col_count = create_col_count + 1 ~}}{{~ end ~}}{{~ end ~}}
+{{~ has_ext_field = false ~}}
+{{~ for col in columns ~}}{{~ if col.is_create == 1 ~}}{{~ create_col_count = create_col_count + 1 ~}}{{~ if (col.ts_column_name | string.downcase) == "extfield" ~}}{{~ has_ext_field = true ~}}{{~ end ~}}{{~ end ~}}{{~ end ~}}
 {{~ tab_count = 1 ~}}
 {{~ if create_col_count > 0 ~}}
 {{~ tab_count = 0 ~}}
@@ -42,6 +43,30 @@
 {{~ if col.is_create == 1 ~}}
 {{~ if field_idx >= (tab_index - 1) * 10 && field_idx < tab_index * 10 ~}}
             <a-col :span="{{ if table.front_form_layout == 12 }}24{{ else }}{{ if col.html_type == "textarea" }}24{{ else }}12{{ end }}{{ end }}">
+{{~ if (col.ts_column_name | string.downcase) == "extfield" ~}}
+              <a-form-item
+                name="{{ col.ts_column_name }}"
+              >
+                <template #label>
+                  <a-tooltip
+                    :title="t('common.page.entity.extfieldhint')"
+                    placement="top"
+                  >
+                    <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                  </a-tooltip>
+                  <span>{{ t('entity.{{ table.entity_name_camel }}.{{ col.ts_column_name | string.downcase }}') }}</span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.{{ col.ts_column_name }}"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  size="small"
+                  allow-clear
+                />
+              </a-form-item>
+{{~ else ~}}
               <a-form-item
                 :label="t('entity.{{ table.entity_name_camel }}.{{ col.ts_column_name | string.downcase }}')"
                 name="{{ col.ts_column_name }}"
@@ -71,6 +96,7 @@
                 />
 {{~ end ~}}
               </a-form-item>
+{{~ end ~}}
             </a-col>
 {{~ end ~}}
 {{~ field_idx = field_idx + 1 ~}}
@@ -93,6 +119,9 @@
  */
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+{{~ if has_ext_field ~}}
+import { RiQuestionLine } from '@remixicon/vue'
+{{~ end ~}}
 import type { Rule } from 'ant-design-vue/es/form'
 import type { {{ table.entity_name_pascal }} } from '@/types/{{ table.frontend_module_path }}/{{ table.entity_name_kebab }}'
 

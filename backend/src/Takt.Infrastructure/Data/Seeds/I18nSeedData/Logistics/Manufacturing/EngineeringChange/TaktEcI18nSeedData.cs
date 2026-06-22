@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEc 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,155 +75,155 @@ public class TaktEcI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEc 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.ec._self / entity.ec.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.ec._self / entity.ec.{{field}}；ResourceGroup=EngineeringChange；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetEcTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.ec._self
-            new TranslationSeedItem("entity.ec._self", "en-US", "Ec Information", "实体名称"),
+            new TranslationSeedItem("entity.ec._self", "en-US", "Ec Information_us", "实体名称"),
             // entity.ec._self
-            new TranslationSeedItem("entity.ec._self", "ja-JP", "设变信息", "实体名称"),
+            new TranslationSeedItem("entity.ec._self", "ja-JP", "设变信息_jp", "实体名称"),
             // entity.ec._self
             new TranslationSeedItem("entity.ec._self", "zh-CN", "设变信息", "实体名称"),
             // entity.ec._self
-            new TranslationSeedItem("entity.ec._self", "zh-HK", "设变信息", "实体名称"),
+            new TranslationSeedItem("entity.ec._self", "zh-HK", "设变信息_hk", "实体名称"),
 
             // entity.ec.plantcode
-            new TranslationSeedItem("entity.ec.plantcode", "en-US", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.ec.plantcode", "en-US", "工厂代码_us", "工厂代码"),
             // entity.ec.plantcode
-            new TranslationSeedItem("entity.ec.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.ec.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
             // entity.ec.plantcode
             new TranslationSeedItem("entity.ec.plantcode", "zh-CN", "工厂代码", "工厂代码"),
             // entity.ec.plantcode
-            new TranslationSeedItem("entity.ec.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.ec.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
 
             // entity.ec.no
-            new TranslationSeedItem("entity.ec.no", "en-US", "设变单号", "设变单号（唯一）"),
+            new TranslationSeedItem("entity.ec.no", "en-US", "设变单号_us", "设变单号（唯一）"),
             // entity.ec.no
-            new TranslationSeedItem("entity.ec.no", "ja-JP", "设变单号", "设变单号（唯一）"),
+            new TranslationSeedItem("entity.ec.no", "ja-JP", "设变单号_jp", "设变单号（唯一）"),
             // entity.ec.no
             new TranslationSeedItem("entity.ec.no", "zh-CN", "设变单号", "设变单号（唯一）"),
             // entity.ec.no
-            new TranslationSeedItem("entity.ec.no", "zh-HK", "设变单号", "设变单号（唯一）"),
+            new TranslationSeedItem("entity.ec.no", "zh-HK", "设变单号_hk", "设变单号（唯一）"),
 
             // entity.ec.issuedate
-            new TranslationSeedItem("entity.ec.issuedate", "en-US", "发行日期", "发行日期"),
+            new TranslationSeedItem("entity.ec.issuedate", "en-US", "发行日期_us", "发行日期"),
             // entity.ec.issuedate
-            new TranslationSeedItem("entity.ec.issuedate", "ja-JP", "发行日期", "发行日期"),
+            new TranslationSeedItem("entity.ec.issuedate", "ja-JP", "发行日期_jp", "发行日期"),
             // entity.ec.issuedate
             new TranslationSeedItem("entity.ec.issuedate", "zh-CN", "发行日期", "发行日期"),
             // entity.ec.issuedate
-            new TranslationSeedItem("entity.ec.issuedate", "zh-HK", "发行日期", "发行日期"),
+            new TranslationSeedItem("entity.ec.issuedate", "zh-HK", "发行日期_hk", "发行日期"),
 
             // entity.ec.changestatus
-            new TranslationSeedItem("entity.ec.changestatus", "en-US", "变更状态", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
+            new TranslationSeedItem("entity.ec.changestatus", "en-US", "变更状态_us", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
             // entity.ec.changestatus
-            new TranslationSeedItem("entity.ec.changestatus", "ja-JP", "变更状态", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
+            new TranslationSeedItem("entity.ec.changestatus", "ja-JP", "变更状态_jp", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
             // entity.ec.changestatus
             new TranslationSeedItem("entity.ec.changestatus", "zh-CN", "变更状态", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
             // entity.ec.changestatus
-            new TranslationSeedItem("entity.ec.changestatus", "zh-HK", "变更状态", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
+            new TranslationSeedItem("entity.ec.changestatus", "zh-HK", "变更状态_hk", "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)"),
 
             // entity.ec.title
-            new TranslationSeedItem("entity.ec.title", "en-US", "设变主题", "设变主题/标题"),
+            new TranslationSeedItem("entity.ec.title", "en-US", "设变主题_us", "设变主题/标题"),
             // entity.ec.title
-            new TranslationSeedItem("entity.ec.title", "ja-JP", "设变主题", "设变主题/标题"),
+            new TranslationSeedItem("entity.ec.title", "ja-JP", "设变主题_jp", "设变主题/标题"),
             // entity.ec.title
             new TranslationSeedItem("entity.ec.title", "zh-CN", "设变主题", "设变主题/标题"),
             // entity.ec.title
-            new TranslationSeedItem("entity.ec.title", "zh-HK", "设变主题", "设变主题/标题"),
+            new TranslationSeedItem("entity.ec.title", "zh-HK", "设变主题_hk", "设变主题/标题"),
 
             // entity.ec.detailtext
-            new TranslationSeedItem("entity.ec.detailtext", "en-US", "设变详情", "设变详情/详细说明"),
+            new TranslationSeedItem("entity.ec.detailtext", "en-US", "设变详情_us", "设变详情/详细说明"),
             // entity.ec.detailtext
-            new TranslationSeedItem("entity.ec.detailtext", "ja-JP", "设变详情", "设变详情/详细说明"),
+            new TranslationSeedItem("entity.ec.detailtext", "ja-JP", "设变详情_jp", "设变详情/详细说明"),
             // entity.ec.detailtext
             new TranslationSeedItem("entity.ec.detailtext", "zh-CN", "设变详情", "设变详情/详细说明"),
             // entity.ec.detailtext
-            new TranslationSeedItem("entity.ec.detailtext", "zh-HK", "设变详情", "设变详情/详细说明"),
+            new TranslationSeedItem("entity.ec.detailtext", "zh-HK", "设变详情_hk", "设变详情/详细说明"),
 
             // entity.ec.leader
-            new TranslationSeedItem("entity.ec.leader", "en-US", "负责人", "负责人"),
+            new TranslationSeedItem("entity.ec.leader", "en-US", "负责人_us", "负责人"),
             // entity.ec.leader
-            new TranslationSeedItem("entity.ec.leader", "ja-JP", "负责人", "负责人"),
+            new TranslationSeedItem("entity.ec.leader", "ja-JP", "负责人_jp", "负责人"),
             // entity.ec.leader
             new TranslationSeedItem("entity.ec.leader", "zh-CN", "负责人", "负责人"),
             // entity.ec.leader
-            new TranslationSeedItem("entity.ec.leader", "zh-HK", "负责人", "负责人"),
+            new TranslationSeedItem("entity.ec.leader", "zh-HK", "负责人_hk", "负责人"),
 
             // entity.ec.lossamount
-            new TranslationSeedItem("entity.ec.lossamount", "en-US", "损失金额", "损失金额"),
+            new TranslationSeedItem("entity.ec.lossamount", "en-US", "损失金额_us", "损失金额"),
             // entity.ec.lossamount
-            new TranslationSeedItem("entity.ec.lossamount", "ja-JP", "损失金额", "损失金额"),
+            new TranslationSeedItem("entity.ec.lossamount", "ja-JP", "损失金额_jp", "损失金额"),
             // entity.ec.lossamount
             new TranslationSeedItem("entity.ec.lossamount", "zh-CN", "损失金额", "损失金额"),
             // entity.ec.lossamount
-            new TranslationSeedItem("entity.ec.lossamount", "zh-HK", "损失金额", "损失金额"),
+            new TranslationSeedItem("entity.ec.lossamount", "zh-HK", "损失金额_hk", "损失金额"),
 
             // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "en-US", "区分", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
+            new TranslationSeedItem("entity.ec.distinction", "en-US", "区分_us", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
             // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "ja-JP", "区分", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
+            new TranslationSeedItem("entity.ec.distinction", "ja-JP", "区分_jp", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
             // entity.ec.distinction
             new TranslationSeedItem("entity.ec.distinction", "zh-CN", "区分", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
             // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "zh-HK", "区分", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
+            new TranslationSeedItem("entity.ec.distinction", "zh-HK", "区分_hk", "区分/类别 1:全仕向，2：部管，3：内部，4：技术"),
 
             // entity.ec.effectivedate
-            new TranslationSeedItem("entity.ec.effectivedate", "en-US", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.ec.effectivedate", "en-US", "生效日期_us", "生效日期"),
             // entity.ec.effectivedate
-            new TranslationSeedItem("entity.ec.effectivedate", "ja-JP", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.ec.effectivedate", "ja-JP", "生效日期_jp", "生效日期"),
             // entity.ec.effectivedate
             new TranslationSeedItem("entity.ec.effectivedate", "zh-CN", "生效日期", "生效日期"),
             // entity.ec.effectivedate
-            new TranslationSeedItem("entity.ec.effectivedate", "zh-HK", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.ec.effectivedate", "zh-HK", "生效日期_hk", "生效日期"),
 
             // entity.ec.entrydate
-            new TranslationSeedItem("entity.ec.entrydate", "en-US", "录入日期", "录入日期"),
+            new TranslationSeedItem("entity.ec.entrydate", "en-US", "录入日期_us", "录入日期"),
             // entity.ec.entrydate
-            new TranslationSeedItem("entity.ec.entrydate", "ja-JP", "录入日期", "录入日期"),
+            new TranslationSeedItem("entity.ec.entrydate", "ja-JP", "录入日期_jp", "录入日期"),
             // entity.ec.entrydate
             new TranslationSeedItem("entity.ec.entrydate", "zh-CN", "录入日期", "录入日期"),
             // entity.ec.entrydate
-            new TranslationSeedItem("entity.ec.entrydate", "zh-HK", "录入日期", "录入日期"),
+            new TranslationSeedItem("entity.ec.entrydate", "zh-HK", "录入日期_hk", "录入日期"),
 
             // entity.ec.flowinstanceid
-            new TranslationSeedItem("entity.ec.flowinstanceid", "en-US", "流程实例ID", "流程实例ID（关联工作流）"),
+            new TranslationSeedItem("entity.ec.flowinstanceid", "en-US", "流程实例ID_us", "流程实例ID（关联工作流）"),
             // entity.ec.flowinstanceid
-            new TranslationSeedItem("entity.ec.flowinstanceid", "ja-JP", "流程实例ID", "流程实例ID（关联工作流）"),
+            new TranslationSeedItem("entity.ec.flowinstanceid", "ja-JP", "流程实例ID_jp", "流程实例ID（关联工作流）"),
             // entity.ec.flowinstanceid
             new TranslationSeedItem("entity.ec.flowinstanceid", "zh-CN", "流程实例ID", "流程实例ID（关联工作流）"),
             // entity.ec.flowinstanceid
-            new TranslationSeedItem("entity.ec.flowinstanceid", "zh-HK", "流程实例ID", "流程实例ID（关联工作流）"),
+            new TranslationSeedItem("entity.ec.flowinstanceid", "zh-HK", "流程实例ID_hk", "流程实例ID（关联工作流）"),
 
             // entity.ec.status
-            new TranslationSeedItem("entity.ec.status", "en-US", "设变状态", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.ec.status", "en-US", "设变状态_us", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
             // entity.ec.status
-            new TranslationSeedItem("entity.ec.status", "ja-JP", "设变状态", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.ec.status", "ja-JP", "设变状态_jp", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
             // entity.ec.status
             new TranslationSeedItem("entity.ec.status", "zh-CN", "设变状态", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
             // entity.ec.status
-            new TranslationSeedItem("entity.ec.status", "zh-HK", "设变状态", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
+            new TranslationSeedItem("entity.ec.status", "zh-HK", "设变状态_hk", "设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）"),
 
             // entity.ec.details
-            new TranslationSeedItem("entity.ec.details", "en-US", "设变明细列表", "设变明细列表"),
+            new TranslationSeedItem("entity.ec.details", "en-US", "设变明细列表_us", "设变明细列表"),
             // entity.ec.details
-            new TranslationSeedItem("entity.ec.details", "ja-JP", "设变明细列表", "设变明细列表"),
+            new TranslationSeedItem("entity.ec.details", "ja-JP", "设变明细列表_jp", "设变明细列表"),
             // entity.ec.details
             new TranslationSeedItem("entity.ec.details", "zh-CN", "设变明细列表", "设变明细列表"),
             // entity.ec.details
-            new TranslationSeedItem("entity.ec.details", "zh-HK", "设变明细列表", "设变明细列表"),
+            new TranslationSeedItem("entity.ec.details", "zh-HK", "设变明细列表_hk", "设变明细列表"),
 
             // entity.ec.attachments
-            new TranslationSeedItem("entity.ec.attachments", "en-US", "设变附件列表", "设变附件列表（一个设变可对应多个附件）"),
+            new TranslationSeedItem("entity.ec.attachments", "en-US", "设变附件列表_us", "设变附件列表（一个设变可对应多个附件）"),
             // entity.ec.attachments
-            new TranslationSeedItem("entity.ec.attachments", "ja-JP", "设变附件列表", "设变附件列表（一个设变可对应多个附件）"),
+            new TranslationSeedItem("entity.ec.attachments", "ja-JP", "设变附件列表_jp", "设变附件列表（一个设变可对应多个附件）"),
             // entity.ec.attachments
             new TranslationSeedItem("entity.ec.attachments", "zh-CN", "设变附件列表", "设变附件列表（一个设变可对应多个附件）"),
             // entity.ec.attachments
-            new TranslationSeedItem("entity.ec.attachments", "zh-HK", "设变附件列表", "设变附件列表（一个设变可对应多个附件）"),
+            new TranslationSeedItem("entity.ec.attachments", "zh-HK", "设变附件列表_hk", "设变附件列表（一个设变可对应多个附件）"),
         };
     }
 
@@ -241,10 +241,10 @@ public class TaktEcI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "EngineeringChange";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

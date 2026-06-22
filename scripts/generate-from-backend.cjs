@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-from-backend.cjs
 // 创建时间：2026-05-22
 // 创建人：Takt365(Cursor AI)
@@ -21,6 +21,8 @@ const {
   logGeneratedFileWritePolicy,
   parseSingleEntityGenerateArgs,
   sanitizeXmlDocPlainText,
+  resolveFrontendModuleFileName,
+  resolveFrontendOutputRelPath,
 } = require('./generate-script-common.cjs');
 const {
   shouldExcludeDtoSourceBase,
@@ -498,8 +500,9 @@ function inferParamBinding(param, routeTemplate, httpMethod) {
  */
 function getTypesImportPath(moduleName, controllerName, entityPrefix) {
   const entity = entityPrefix || entityShortFromControllerClassName(controllerName);
-  const typeFile = dtosSourceFileToOutputName(`Takt${entity}Dtos`);
-  return `@/types/${moduleName}/${typeFile}`;
+  const rawTypeFile = dtosSourceFileToOutputName(`Takt${entity}Dtos`);
+  const { importPath } = resolveFrontendOutputRelPath(moduleName, rawTypeFile);
+  return `@/types/${importPath}`;
 }
 
 /**
@@ -516,7 +519,8 @@ function getTypeImportPathForDtoClass(dtoClassName, moduleName) {
     : [...DTO_TYPE_INDEX.entries()].find(([, v]) => v.frontendName === dtoClassName)?.[0];
   const indexed = DTO_TYPE_INDEX.get(dtoClassName) || (backendName && DTO_TYPE_INDEX.get(backendName));
   if (indexed) {
-    return `@/types/${indexed.moduleName}/${indexed.typeFile}`;
+    const importPath = indexed.importPath || `${indexed.moduleName}/${indexed.typeFile}`;
+    return `@/types/${importPath}`;
   }
   const typeFile = dtoClassToFileName(backendName || dtoClassName);
   return `@/types/${moduleName}/${typeFile}`;
@@ -1095,6 +1099,25 @@ function buildUrlExpression(apiBaseVar, routeSuffix) {
 }
 
 /**
+ * 是否为分页/导出 Query 参数（扁平 params 绑定 [FromQuery] DTO，禁止 params: { queryDto } 嵌套）
+ * @param {object} param
+ * @returns {boolean}
+ */
+function isFlatQueryParam(param) {
+  if (!param) {
+    return false;
+  }
+  const type = param.csharpType || '';
+  const name = param.csharpName || param.name || '';
+  return (
+    type.includes('QueryDto')
+    || type.endsWith('Query')
+    || name === 'queryDto'
+    || name === 'query'
+  );
+}
+
+/**
  * 生成多行 request({ url, method, ... }) 调用
  */
 function buildHttpCallLines(method, apiBaseVar) {
@@ -1130,14 +1153,14 @@ function buildHttpCallLines(method, apiBaseVar) {
     lines.push('  },');
   }
 
-  if (queryParams.length === 1 && queryParams[0].csharpType.includes('QueryDto')) {
+  if (queryParams.length === 1 && isFlatQueryParam(queryParams[0])) {
     lines.push(`  params: ${toFrontendParamName(queryParams[0])},`);
   } else if (queryParams.length > 0) {
     lines.push('  params: {');
     queryParams.forEach((p, index) => {
       const comma = index < queryParams.length - 1 ? ',' : '';
       const name = toFrontendParamName(p);
-      if (p.csharpType.includes('QueryDto')) {
+      if (isFlatQueryParam(p)) {
         lines.push(`    ...${name}${comma}`);
       } else {
         lines.push(`    ${name}${comma}`);
@@ -1482,7 +1505,12 @@ function generateApiFile(methods, moduleName, fileName, typesImportPath, meta, c
     lines.push(generateApiMethod(method, dtoTypes, apiBaseVar, aliasEntityFile));
   });
 
-  return lines.join('\n');
+  let content = lines.join('\n');
+  if (moduleName === 'foundation' && fileName === 'file') {
+    const { mergeFoundationFileUploadApi } = require('./api-fragments/foundation-file-upload-api.cjs');
+    content = mergeFoundationFileUploadApi(content);
+  }
+  return content;
 }
 
 // ========================================
@@ -1553,11 +1581,13 @@ function processDtos(entityPrefix = null) {
 
   // 第一遍：建立全局 DTO 索引（供主子表/转置跨模块 import）
   results.forEach(({ moduleName, sourceFileBase, dtos }) => {
-    const typeFileName = dtosSourceFileToOutputName(sourceFileBase);
+    const rawTypeFileName = dtosSourceFileToOutputName(sourceFileBase);
+    const outputRel = resolveFrontendOutputRelPath(moduleName, rawTypeFileName);
     dtos.forEach((dto) => {
       const entry = {
         moduleName,
-        typeFile: typeFileName,
+        typeFile: outputRel.file,
+        importPath: outputRel.importPath,
         frontendName: dto.frontendName,
         backendName: dto.name,
       };
@@ -1567,11 +1597,12 @@ function processDtos(entityPrefix = null) {
   });
 
   results.forEach(({ moduleName, sourceFileBase, dtos }) => {
-    const typeFileName = dtosSourceFileToOutputName(sourceFileBase);
-    const outputPath = path.join(CONFIG.frontendRoot, CONFIG.output.types, moduleName);
+    const rawTypeFileName = dtosSourceFileToOutputName(sourceFileBase);
+    const outputRel = resolveFrontendOutputRelPath(moduleName, rawTypeFileName);
+    const outputPath = path.join(CONFIG.frontendRoot, CONFIG.output.types, outputRel.relDir);
 
-    const content = generateTypesFile(dtos, moduleName, typeFileName);
-    const filePath = path.join(outputPath, `${typeFileName}.d.ts`);
+    const content = generateTypesFile(dtos, moduleName, outputRel.file);
+    const filePath = path.join(outputPath, `${outputRel.file}.d.ts`);
     const writeResult = writeGeneratedFile(filePath, content);
     if (writeResult.created) {
       created += 1;
@@ -1640,12 +1671,13 @@ function processControllers(entityPrefix = null) {
 
   // 生成API文件
   Object.entries(results).forEach(([controllerName, { methods, moduleName, meta }]) => {
-    const outputPath = path.join(CONFIG.frontendRoot, CONFIG.output.api, moduleName);
+    const rawFileName = controllerClassToFileName(controllerName);
+    const outputRel = resolveFrontendOutputRelPath(moduleName, rawFileName);
+    const outputPath = path.join(CONFIG.frontendRoot, CONFIG.output.api, outputRel.relDir);
 
-    const fileName = controllerClassToFileName(controllerName);
     const typesImportPath = getTypesImportPath(moduleName, controllerName, entityPrefix);
-    const content = generateApiFile(methods, moduleName, fileName, typesImportPath, meta, controllerName);
-    const filePath = path.join(outputPath, `${fileName}.ts`);
+    const content = generateApiFile(methods, moduleName, outputRel.file, typesImportPath, meta, controllerName);
+    const filePath = path.join(outputPath, `${outputRel.file}.ts`);
     const writeResult = writeGeneratedFile(filePath, content);
     if (writeResult.created) {
       created += 1;

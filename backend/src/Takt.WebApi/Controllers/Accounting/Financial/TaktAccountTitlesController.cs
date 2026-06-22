@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Financial
 // 文件名称：TaktAccountTitlesController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会计科目控制器
 // 
@@ -13,6 +13,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Accounting.Financial;
 using Takt.Application.Services.Accounting.Financial;
+using Takt.Shared.Constants;
 
 namespace Takt.WebApi.Controllers.Accounting.Financial;
 
@@ -40,7 +41,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("accounting:financial:accounttitle:list", "会计科目列表")]
+    [TaktPermission("accounting:financial:account:title:list", "会计科目列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetAccountTitleListAsync([FromQuery] TaktAccountTitleQueryDto queryDto)
     {
@@ -60,7 +61,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// </summary>
     /// <param name="id">会计科目ID</param>
     /// <returns>会计科目DTO</returns>
-    [TaktPermission("accounting:financial:accounttitle:query", "会计科目详情")]
+    [TaktPermission("accounting:financial:account:title:query", "会计科目详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAccountTitleByIdAsync(long id)
     {
@@ -83,7 +84,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// 获取会计科目树形选项列表
     /// </summary>
     /// <returns>树形选项</returns>
-    [TaktPermission("accounting:financial:accounttitle:query", "会计科目树形选项")]
+    [TaktPermission("accounting:financial:account:title:query", "会计科目树形选项")]
     [HttpGet("tree-options")]
     public async Task<IActionResult> GetAccountTitleTreeOptionsAsync()
     {
@@ -101,9 +102,9 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// <summary>
     /// 获取会计科目树形列表
     /// </summary>
-    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 1）</param>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
     /// <returns>树形数据</returns>
-    [TaktPermission("accounting:financial:accounttitle:query", "会计科目树")]
+    [TaktPermission("accounting:financial:account:title:query", "会计科目树")]
     [HttpGet("tree")]
     public async Task<IActionResult> GetAccountTitleTreeAsync([FromQuery] long parentId = 0, [FromQuery] bool includeDisabled = false)
     {
@@ -123,7 +124,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>会计科目DTO</returns>
-    [TaktPermission("accounting:financial:accounttitle:create", "创建会计科目")]
+    [TaktPermission("accounting:financial:account:title:create", "创建会计科目")]
     [HttpPost]
     public async Task<IActionResult> CreateAccountTitleAsync([FromBody] TaktAccountTitleCreateDto dto)
     {
@@ -144,7 +145,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// <param name="id">会计科目ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>会计科目DTO</returns>
-    [TaktPermission("accounting:financial:accounttitle:update", "更新会计科目")]
+    [TaktPermission("accounting:financial:account:title:update", "更新会计科目")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAccountTitleAsync(long id, [FromBody] TaktAccountTitleUpdateDto dto)
     {
@@ -164,7 +165,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// </summary>
     /// <param name="id">会计科目ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:financial:accounttitle:delete", "删除会计科目")]
+    [TaktPermission("accounting:financial:account:title:delete", "删除会计科目")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAccountTitleByIdAsync(long id)
     {
@@ -184,7 +185,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:financial:accounttitle:delete", "批量删除会计科目")]
+    [TaktPermission("accounting:financial:account:title:delete", "批量删除会计科目")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteAccountTitleBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -202,9 +203,9 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// <summary>
     /// 更新会计科目状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>会计科目DTO</returns>
-    [TaktPermission("accounting:financial:accounttitle:update", "更新会计科目状态")]
+    [TaktPermission("accounting:financial:account:title:update", "更新会计科目状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateAccountTitleStatusAsync([FromBody] TaktAccountTitleStatusDto dto)
     {
@@ -224,7 +225,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>会计科目DTO</returns>
-    [TaktPermission("accounting:financial:accounttitle:update", "更新会计科目排序")]
+    [TaktPermission("accounting:financial:account:title:update", "更新会计科目排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateAccountTitleSortAsync([FromBody] TaktAccountTitleSortDto dto)
     {
@@ -243,7 +244,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:financial:accounttitle:import", "获取会计科目导入模板")]
+    [TaktPermission("accounting:financial:account:title:import", "获取会计科目导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetAccountTitleTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -263,7 +264,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("accounting:financial:accounttitle:import", "导入会计科目")]
+    [TaktPermission("accounting:financial:account:title:import", "导入会计科目")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportAccountTitleAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -293,7 +294,7 @@ public class TaktAccountTitlesController : TaktControllerBase
     /// 导出会计科目
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:financial:accounttitle:export", "导出会计科目")]
+    [TaktPermission("accounting:financial:account:title:export", "导出会计科目")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportAccountTitleAsync([FromQuery] TaktAccountTitleQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

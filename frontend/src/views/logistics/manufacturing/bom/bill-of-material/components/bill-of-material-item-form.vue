@@ -2,332 +2,344 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/bill-of-material/components -->
 <!-- 文件名称：bill-of-material-item-form.vue -->
-<!-- 功能描述：BOM 明细独立 CRUD 弹窗表单；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt物料清单实体子表 billOfMaterialItem 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
-<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form bill-of-material-item-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
     label-align="right"
   >
-    <a-row :gutter="24">
-      <a-col :span="12">
-        <a-form-item :label="t('entity.billOfMaterialItem.linenumber')" name="lineNumber">
-          <a-input-number
-            v-model:value="formState.lineNumber"
-            :min="1"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.linenumber') })"
-            size="small"
-            style="width: 100%"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="12">
-        <a-form-item :label="t('entity.billOfMaterialItem.materialcode')" name="materialCode">
-          <a-input
-            v-model:value="formState.materialCode"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.materialcode') })"
-            size="small"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="12">
-        <a-form-item :label="t('entity.billOfMaterialItem.materialid')" name="materialId">
-          <a-input
-            v-model:value="formState.materialId"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.materialid') })"
-            size="small"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="12">
-        <a-form-item :label="t('entity.billOfMaterialItem.usagequantity')" name="usageQuantity">
-          <a-input-number
-            v-model:value="formState.usageQuantity"
-            :min="0"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.usagequantity') })"
-            size="small"
-            style="width: 100%"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="12">
-        <a-form-item :label="t('entity.billOfMaterialItem.materialunit')" name="materialUnit">
-          <a-input
-            v-model:value="formState.materialUnit"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.materialunit') })"
-            size="small"
-            allow-clear
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="12">
-        <a-form-item :label="t('entity.billOfMaterialItem.scraprate')" name="scrapRate">
-          <a-input-number
-            v-model:value="formState.scrapRate"
-            :min="0"
-            :max="100"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.scraprate') })"
-            size="small"
-            style="width: 100%"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="12">
-        <a-form-item :label="t('entity.billOfMaterialItem.actualusagequantity')" name="actualUsageQuantity">
-          <a-input-number
-            v-model:value="formState.actualUsageQuantity"
-            :min="0"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.actualusagequantity') })"
-            size="small"
-            style="width: 100%"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="12">
-        <a-form-item :label="t('entity.billOfMaterialItem.operationseq')" name="operationSeq">
-          <a-input-number
-            v-model:value="formState.operationSeq"
-            :min="0"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.operationseq') })"
-            size="small"
-            style="width: 100%"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item :label="t('common.page.entity.remark')" name="remark">
-          <a-textarea
-            v-model:value="formState.remark"
-            :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-            :rows="2"
-            size="small"
-          />
-        </a-form-item>
-      </a-col>
-    </a-row>
+    <a-tabs
+      v-model:active-key="activeTab"
+      class="bill-of-material-item-form-tabs"
+    >
+      <a-tab-pane
+        key="tab-0"
+        :tab="t('common.page.form.tabs.basicinfo')"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.billofmaterialitem.bomcode')"
+                name="bomCode"
+              >
+                <a-input
+                  v-model:value="formState.bomCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.bomcode') })"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                  :disabled="!!formData?.billOfMaterialItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.billofmaterialitem.linenumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.linenumber') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.billofmaterialitem.materialid')"
+                name="materialId"
+              >
+                <a-input
+                  v-model:value="formState.materialId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.billofmaterialitem.materialcode')"
+                name="materialCode"
+              >
+                <a-input
+                  v-model:value="formState.materialCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialcode') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.billOfMaterialItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.billofmaterialitem.usagequantity')"
+                name="usageQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.usageQuantity"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.usagequantity') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.billofmaterialitem.materialunit')"
+                name="materialUnit"
+              >
+                <a-input
+                  v-model:value="formState.materialUnit"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialunit') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.billofmaterialitem.scraprate')"
+                name="scrapRate"
+              >
+                <a-input-number
+                  v-model:value="formState.scrapRate"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.scraprate') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.billofmaterialitem.actualusagequantity')"
+                name="actualUsageQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.actualUsageQuantity"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.actualusagequantity') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+    </a-tabs>
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * BOM 明细独立维护表单（底部面板 / 可选复用）
+ * Takt物料清单实体子表 billOfMaterialItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/manufacturing/bom/bill-of-material/components
  */
-import { reactive, ref, computed, watch } from 'vue'
+import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type {
-  BillOfMaterialItem,
-  BillOfMaterialItemCreate,
-  BillOfMaterialItemUpdate,
-} from '@/types/logistics/manufacturing/bom/bill-of-material-item'
-import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
+import type { BillOfMaterialItemCreate } from '@/types/logistics/manufacturing/bom/bill-of-material-item'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
+/** 表单内容区高度 class（字段多时 tab-10 行） */
+const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
+const activeTab = ref('tab-0')
+/** CreateDto 字段名列表（与 formState 键对齐） */
+const formFields = ["bomCode","lineNumber","materialId","materialCode","usageQuantity","materialUnit","scrapRate","actualUsageQuantity"]
 
-/** 父级传入的编辑 DTO；新增时为 undefined */
+
+/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
-  formData?: Partial<BillOfMaterialItem> | null
-  /** 主表 BOM 头 ID（新建明细必填） */
-  masterBillOfMaterialId?: string
-  /** 主表 BOM 编码（新建明细冗余字段） */
-  masterBomCode?: string
+  formData?: Partial<BillOfMaterialItemCreate & { billOfMaterialItemId?: string }> | null
+  /** 父级提交 loading，禁用表单项 */
   loading?: boolean
+  /** 主表选中行 Id（Create/Update 提交时写入外键） */
+  masterId?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
-  masterBillOfMaterialId: '',
-  masterBomCode: '',
+  formData: null,
   loading: false,
+  masterId: '',
 })
-
-/** 明细表单模型（独立 CRUD 常用字段） */
-interface BillOfMaterialItemFormState {
-  tenantCode?: string
-  companyCode?: string
-  companyDefaultCulture?: string
-  billOfMaterialId?: string
-  bomCode?: string
-  lineNumber?: number
-  materialId?: string
-  materialCode?: string
-  usageQuantity?: number
-  materialUnit?: string
-  scrapRate?: number
-  actualUsageQuantity?: number
-  operationSeq?: number
-  substitutePriority?: number
-  isOptional?: number
-  isPhantom?: number
-  remark?: string
-  billOfMaterialItemId?: string
-}
 
 /** a-form 实例 ref */
 const formRef = ref()
 /** 表单双向绑定模型 */
-const formState = reactive<BillOfMaterialItemFormState>({})
-
-/**
- * 写入租户/公司隔离字段
- * @param target 表单对象
- * @param force 新增态强制覆盖
- */
-function applyScopeDefaults(target: BillOfMaterialItemFormState, force = false) {
-  if (force || !target.tenantCode) {
-    target.tenantCode = tenantStore.tenantCode
-  }
-  if (force || !target.companyCode) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
-  }
+const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
 }
 
-/** 表单校验规则 */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 billOfMaterialItemId 才视为编辑） */
+watch(
+  () => props.formData,
+  (val) => {
+    if (val?.billOfMaterialItemId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
+
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      formRef.value?.clearValidate()
+    }
+  },
+  { immediate: true }
+)
+
+/** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  lineNumber: [
+  bomCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.linenumber') }),
-      trigger: 'change',
-    },
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.bomcode') }),
+      trigger: 'blur'
+    }
   ],
+  lineNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.linenumber') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.linenumber') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   materialId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.materialid') }),
-      trigger: 'blur',
-    },
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialid') }),
+      trigger: 'blur'
+    }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.materialcode') }),
-      trigger: 'blur',
-    },
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialcode') }),
+      trigger: 'blur'
+    }
   ],
-  usageQuantity: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.usagequantity') }),
-      trigger: 'change',
+  usageQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.usagequantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.usagequantity') }))
+      }
+      return Promise.resolve()
     },
-  ],
+    trigger: 'change'
+  }],
   materialUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.materialunit') }),
-      trigger: 'blur',
-    },
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialunit') }),
+      trigger: 'blur'
+    }
   ],
-  scrapRate: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.scraprate') }),
-      trigger: 'change',
+  scrapRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.scraprate') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.scraprate') }))
+      }
+      return Promise.resolve()
     },
-  ],
-  actualUsageQuantity: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.actualusagequantity') }),
-      trigger: 'change',
+    trigger: 'change'
+  }],
+  actualUsageQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.actualusagequantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.actualusagequantity') }))
+      }
+      return Promise.resolve()
     },
-  ],
-  operationSeq: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.operationseq') }),
-      trigger: 'change',
-    },
-  ],
+    trigger: 'change'
+  }],
 }))
 
-watch(
-  () => [props.formData, props.masterBillOfMaterialId, props.masterBomCode] as const,
-  ([val]) => {
-    Object.keys(formState).forEach((k) => delete (formState as Record<string, unknown>)[k])
-    const next: BillOfMaterialItemFormState = val ? { ...val } : {
-      lineNumber: 10,
-      materialId: '',
-      materialCode: '',
-      usageQuantity: 0,
-      materialUnit: '',
-      scrapRate: 0,
-      actualUsageQuantity: 0,
-      operationSeq: 0,
-      substitutePriority: 0,
-      isOptional: 0,
-      isPhantom: 0,
-      remark: '',
-    }
-    if (!val?.billOfMaterialItemId) {
-      next.billOfMaterialId = props.masterBillOfMaterialId
-      next.bomCode = props.masterBomCode
-    }
-    applyScopeDefaults(next, !val?.billOfMaterialItemId)
-    Object.assign(formState, next)
-  },
-  { immediate: true, deep: true }
-)
-
-/** 校验表单（失败 throw） */
+/** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  return formState
 }
 
-/** 映射为 Create/Update DTO */
-function getValues(): BillOfMaterialItemCreate | BillOfMaterialItemUpdate {
-  const payload: BillOfMaterialItemCreate = {
-    tenantCode: formState.tenantCode ?? tenantStore.tenantCode,
-    companyCode: formState.companyCode ?? tenantStore.companyCode,
-    companyDefaultCulture: formState.companyDefaultCulture ?? userStore.userInfo?.companyDefaultCulture ?? '',
-    billOfMaterialId: String(formState.billOfMaterialId || props.masterBillOfMaterialId || ''),
-    bomCode: String(formState.bomCode || props.masterBomCode || ''),
-    lineNumber: formState.lineNumber ?? 0,
-    materialId: formState.materialId ?? '',
-    materialCode: formState.materialCode ?? '',
-    usageQuantity: formState.usageQuantity ?? 0,
-    materialUnit: formState.materialUnit ?? '',
-    scrapRate: formState.scrapRate ?? 0,
-    actualUsageQuantity: formState.actualUsageQuantity ?? 0,
-    operationSeq: formState.operationSeq ?? 0,
-    substitutePriority: formState.substitutePriority ?? 0,
-    isOptional: formState.isOptional ?? 0,
-    isPhantom: formState.isPhantom ?? 0,
-    remark: formState.remark,
+/** 映射为 Create/Update DTO（含主表外键 billOfMaterialId） */
+function getValues(): Record<string, any> {
+  const payload = { ...formState }
+  if ('lineNumber' in payload) {
+    const rawlineNumber = payload.lineNumber
+    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
   }
-  if (props.formData?.billOfMaterialItemId) {
-    return {
-      ...payload,
-      billOfMaterialItemId: props.formData.billOfMaterialItemId,
-    }
+  if ('usageQuantity' in payload) {
+    const rawusageQuantity = payload.usageQuantity
+    payload.usageQuantity = typeof rawusageQuantity === 'number' ? rawusageQuantity : Number(rawusageQuantity)
   }
+  if ('scrapRate' in payload) {
+    const rawscrapRate = payload.scrapRate
+    payload.scrapRate = typeof rawscrapRate === 'number' ? rawscrapRate : Number(rawscrapRate)
+  }
+  if ('actualUsageQuantity' in payload) {
+    const rawactualUsageQuantity = payload.actualUsageQuantity
+    payload.actualUsageQuantity = typeof rawactualUsageQuantity === 'number' ? rawactualUsageQuantity : Number(rawactualUsageQuantity)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  payload.billOfMaterialId = props.masterId
   return payload
 }
 
-/** 重置表单 */
+/** 重置表单（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
-  Object.keys(formState).forEach((k) => delete (formState as Record<string, unknown>)[k])
+  Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
+
+<style scoped lang="css">
+:deep(.ant-tabs-content-holder) {
+  min-height: 50vh;
+}
+
+:deep(.ant-tabs-tabpane) {
+  min-height: 50vh;
+}
+</style>

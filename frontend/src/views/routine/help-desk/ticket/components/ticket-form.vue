@@ -73,7 +73,7 @@
               >
                 <a-input
                   v-model:value="formState.ticketNo"
-                  :placeholder="isEditMode ? t('common.page.form.placeholder.required', { field: t('entity.ticket.no') }) : t('routine.help-desk.ticket.page.ticketNoAuto')"
+                  :placeholder="isEditMode ? t('common.page.form.placeholder.required', { field: t('entity.ticket.no') }) : t('routine.help-desk.ticket.page.ticket.no.auto')"
                   size="small"
                   :disabled="!isEditMode"
                   allow-clear
@@ -126,10 +126,36 @@
               >
                 <TaktSelect
                   v-model:value="formState.ticketStatus"
-                  dict-type="helpdesk_ticket_status"
+                  dict-type="sys_ticket_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.status') })"
                   size="small"
                   disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.ticket.urgency')"
+                name="urgency"
+              >
+                <TaktSelect
+                  v-model:value="formState.urgency"
+                  dict-type="sys_urgency_level_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.urgency') })"
+                  size="small"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.ticket.impact')"
+                name="impact"
+              >
+                <TaktSelect
+                  v-model:value="formState.impact"
+                  dict-type="sys_impact_level_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.impact') })"
+                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -140,9 +166,10 @@
               >
                 <TaktSelect
                   v-model:value="formState.priority"
-                  dict-type="sys_priority"
+                  dict-type="sys_priority_level_category"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.priority') })"
                   size="small"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -190,7 +217,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.ticketSource"
-                  dict-type="helpdesk_ticket_source"
+                  dict-type="routine_ticket_source_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.source') })"
                   size="small"
                   :disabled="isEditMode"
@@ -417,12 +444,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('common.page.entity.ExtField')"
+                name="ExtField"
               >
                 <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                   size="small"
                   allow-clear
                 />
@@ -528,10 +555,10 @@
                 allow-clear
               />
             </template>
-            <template v-else-if="column.key === 'extFieldJson'">
+            <template v-else-if="column.key === 'ExtField'">
               <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                v-model:value="record.ExtField"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                 size="small"
                 allow-clear
               />
@@ -568,6 +595,7 @@ import type { TicketCreate, TicketChangeLogCreate, TicketChangeLog } from '@/typ
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 import { getAssetList } from '@/api/accounting/financial/asset'
+import { resolveTicketPriority } from '@/utils/takt-ticket-priority'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -608,9 +636,16 @@ function applyNewTicketDefaults(target: Record<string, unknown>) {
   if (target.ticketSource == null) {
     target.ticketSource = 0
   }
-  if (target.priority == null) {
-    target.priority = 1
+  if (target.urgency == null) {
+    target.urgency = 3
   }
+  if (target.impact == null) {
+    target.impact = 3
+  }
+  target.priority = resolveTicketPriority(
+    target.urgency as number | undefined,
+    target.impact as number | undefined,
+  )
   if (!target.submitterId && userStore.userId) {
     target.submitterId = userStore.userId
   }
@@ -629,7 +664,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","ticketNo","title","content","attachmentsJson","ticketStatus","priority","categoryCode","assetCode","ticketSource","submitterId","submitterName","assigneeId","assigneeName","knowledgeId","parentTicketId","firstResponseAt","firstResponseDueBy","resolvedAt","resolutionDueBy","closedAt","flowInstanceId","applicantDeptId","applicantDeptName","applicantBy","childTickets","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","ticketNo","title","content","attachmentsJson","ticketStatus","urgency","impact","priority","categoryCode","assetCode","ticketSource","submitterId","submitterName","assigneeId","assigneeName","knowledgeId","parentTicketId","firstResponseAt","firstResponseDueBy","resolvedAt","resolutionDueBy","closedAt","flowInstanceId","applicantDeptId","applicantDeptName","applicantBy","childTickets","ExtField","remark"]
 
 /** 资产号码下拉选项（value=AssetCode） */
 const assetOptions = ref<Array<{ label: string; value: string }>>([])
@@ -703,9 +738,9 @@ const ticketChangeLogFormColumns = computed(() => [
     width: 140,
   },
   {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
+    title: t('common.page.entity.ExtField'),
+    dataIndex: 'ExtField',
+    key: 'ExtField',
     width: 140,
   },
   {
@@ -742,7 +777,7 @@ function handleAddTicketChangeLogRow() {
       changeSummary: '',
       changeFields: '',
       changeReason: '',
-      extFieldJson: '',
+      ExtField: '',
       remark: '',
   })
 }
@@ -792,6 +827,14 @@ watch(
   { immediate: true, deep: true }
 )
 
+/** 紧急度/影响范围变更时本地预览优先级（与服务端矩阵一致） */
+watch(
+  () => [formState.urgency, formState.impact] as const,
+  ([urgency, impact]) => {
+    formState.priority = resolveTicketPriority(urgency, impact)
+  },
+)
+
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
@@ -829,10 +872,17 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  priority: [
+  urgency: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.ticket.priority') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.ticket.urgency') }),
+      trigger: 'change'
+    }
+  ],
+  impact: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.select', { field: t('entity.ticket.impact') }),
       trigger: 'change'
     }
   ],

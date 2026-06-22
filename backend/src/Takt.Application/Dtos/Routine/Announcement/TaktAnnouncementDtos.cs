@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.Announcement
 // 文件名称：TaktAnnouncementDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Announcement 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAnnouncement 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Routine.Announcement;
 
@@ -23,7 +22,7 @@ namespace Takt.Application.Dtos.Routine.Announcement;
 // ========================================
 
 /// <summary>
-/// 公告通知实体 用于发布系统公告、通知、新闻等信息 支持富文本内容、附件、置顶、定时发布等功能 需要审批流程：草稿→审批→发布
+/// 公告通知实体 用于发布系统公告、通知等信息 支持富文本内容、附件、置顶、定时发布等功能 需要审批流程：草稿→审批→发布
 /// 对应前端 TaktAnnouncementDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -42,9 +41,9 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+    /// 公告类型（字典 sys_announcement_category）
     /// </summary>
-    public int AnnouncementType { get; set; }
+    public int AnnouncementType { get; set; } = 0;
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -74,12 +73,12 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     /// <summary>
     /// 是否定时发布（1=是，0=否）
     /// </summary>
-    public int IsScheduled { get; set; }
+    public int IsScheduled { get; set; } = 0;
 
     /// <summary>
     /// 是否置顶（1=是，0=否）
     /// </summary>
-    public int IsTop { get; set; }
+    public int IsTop { get; set; } = 0;
 
     /// <summary>
     /// 置顶优先级（数字越大越靠前）
@@ -112,9 +111,9 @@ public class TaktAnnouncementDto : TaktApprovalDtoBase
     public string? TargetUsers { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+    /// 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    public int AnnouncementStatus { get; set; }
+    public int AnnouncementStatus { get; set; } = 0;
 
 }
 
@@ -144,7 +143,7 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     public string? Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+    /// 公告类型（字典 sys_announcement_category）
     /// </summary>
     public int? AnnouncementType { get; set; }
 
@@ -224,14 +223,14 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     public string? TargetUsers { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+    /// 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     public int? AnnouncementStatus { get; set; }
 
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -266,6 +265,12 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     public DateTime? ApprovedAtEnd { get; set; }
 
     /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -278,7 +283,7 @@ public class TaktAnnouncementQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -317,9 +322,9 @@ public class TaktAnnouncementCreateDto
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+    /// 公告类型（字典 sys_announcement_category）
     /// </summary>
-    public int AnnouncementType { get; set; }
+    public int AnnouncementType { get; set; } = 0;
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -350,12 +355,12 @@ public class TaktAnnouncementCreateDto
     /// <summary>
     /// 是否定时发布（1=是，0=否）
     /// </summary>
-    public int IsScheduled { get; set; }
+    public int IsScheduled { get; set; } = 0;
 
     /// <summary>
     /// 是否置顶（1=是，0=否）
     /// </summary>
-    public int IsTop { get; set; }
+    public int IsTop { get; set; } = 0;
 
     /// <summary>
     /// 置顶优先级（数字越大越靠前）
@@ -389,14 +394,14 @@ public class TaktAnnouncementCreateDto
     public string? TargetUsers { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+    /// 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    public int AnnouncementStatus { get; set; }
+    public int AnnouncementStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -443,10 +448,10 @@ public class TaktAnnouncementStatusDto
     public long AnnouncementId { get; set; }
 
     /// <summary>
-    /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+    /// 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    [Required(ErrorMessage = "状态（0=草稿，1=已发布，2=已撤回，3=已过期）不能为空")]
-    public int AnnouncementStatus { get; set; }
+    [Required(ErrorMessage = "状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）不能为空")]
+    public int AnnouncementStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -474,7 +479,7 @@ public class TaktAnnouncementTemplateDto
     public string? Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+    /// 公告类型（字典 sys_announcement_category）
     /// </summary>
     public int? AnnouncementType { get; set; }
 
@@ -531,7 +536,7 @@ public class TaktAnnouncementTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -566,7 +571,7 @@ public class TaktAnnouncementImportDto
     public string? Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+    /// 公告类型（字典 sys_announcement_category）
     /// </summary>
     public int? AnnouncementType { get; set; }
 
@@ -623,7 +628,7 @@ public class TaktAnnouncementImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -654,9 +659,9 @@ public class TaktAnnouncementExportDto
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+    /// 公告类型（字典 sys_announcement_category）
     /// </summary>
-    public int AnnouncementType { get; set; }
+    public int AnnouncementType { get; set; } = 0;
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -686,12 +691,12 @@ public class TaktAnnouncementExportDto
     /// <summary>
     /// 是否定时发布（1=是，0=否）
     /// </summary>
-    public int IsScheduled { get; set; }
+    public int IsScheduled { get; set; } = 0;
 
     /// <summary>
     /// 是否置顶（1=是，0=否）
     /// </summary>
-    public int IsTop { get; set; }
+    public int IsTop { get; set; } = 0;
 
     /// <summary>
     /// 置顶优先级（数字越大越靠前）
@@ -724,14 +729,14 @@ public class TaktAnnouncementExportDto
     public string? TargetUsers { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+    /// 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
-    public int AnnouncementStatus { get; set; }
+    public int AnnouncementStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

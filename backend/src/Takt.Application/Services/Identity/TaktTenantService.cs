@@ -101,7 +101,7 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
     {
         var list = await _tenantRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.TenantStatus == 1,
-            x => x.TenantName,
+            x => x.TenantName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -331,7 +331,7 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
                 || (x.ContactEmail != null && x.ContactEmail.Contains(keywords))
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || SqlFunc.ToString(x.TenantStatus).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.SubscriptionStartTime).Contains(keywords)
                 || SqlFunc.ToString(x.SubscriptionEndTime).Contains(keywords)
@@ -369,9 +369,9 @@ public class TaktTenantService : TaktServiceBase, ITaktTenantService
             exp = exp.And(x => x.TenantStatus == queryDto.TenantStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

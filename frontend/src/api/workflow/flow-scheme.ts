@@ -42,9 +42,7 @@ export function getFlowSchemeList(queryDto: any): Promise<TaktPagedResult<FlowSc
   return request<TaktPagedResult<FlowScheme>>({
     url: `${FLOW_SCHEME_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportFlowScheme(
     url: `${FLOW_SCHEME_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

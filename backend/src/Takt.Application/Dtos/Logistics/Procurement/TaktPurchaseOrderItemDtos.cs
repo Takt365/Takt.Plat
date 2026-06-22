@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Dtos.Logistics.Materials
+// 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderItemDtos.cs
 // 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
@@ -15,7 +15,7 @@ using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 
-namespace Takt.Application.Dtos.Logistics.Materials;
+namespace Takt.Application.Dtos.Logistics.Procurement;
 
 // ========================================
 // PurchaseOrderItem 响应 DTO
@@ -257,7 +257,7 @@ public class TaktPurchaseOrderItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -387,7 +387,7 @@ public class TaktPurchaseOrderItemCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -513,7 +513,7 @@ public class TaktPurchaseOrderItemTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -596,7 +596,7 @@ public class TaktPurchaseOrderItemImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -720,7 +720,7 @@ public class TaktPurchaseOrderItemExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

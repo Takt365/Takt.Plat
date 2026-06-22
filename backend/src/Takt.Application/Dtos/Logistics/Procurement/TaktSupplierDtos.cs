@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Dtos.Logistics.Materials
+// 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktSupplierDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Supplier 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSupplier 生成，请按需审阅）
 // 
@@ -14,9 +14,8 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
-namespace Takt.Application.Dtos.Logistics.Materials;
+namespace Takt.Application.Dtos.Logistics.Procurement;
 
 // ========================================
 // Supplier 响应 DTO
@@ -57,7 +56,7 @@ public class TaktSupplierDto : TaktCompanyDtoBase
     public string? SupplierShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商类型（0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+    /// 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
     /// </summary>
     public int SupplierType { get; set; } = 0;
 
@@ -132,12 +131,12 @@ public class TaktSupplierDto : TaktCompanyDtoBase
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 供货商等级（0=普通，1=优选，2=战略，3=临时）
+    /// 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
     /// </summary>
     public int SupplierLevel { get; set; } = 0;
 
@@ -154,7 +153,7 @@ public class TaktSupplierDto : TaktCompanyDtoBase
     /// <summary>
     /// 供货商状态（1=启用，0=禁用）
     /// </summary>
-    public int SupplierStatus { get; set; }
+    public int SupplierStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -204,7 +203,7 @@ public class TaktSupplierQueryDto : TaktPagedQuery
     public string? SupplierShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商类型（0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+    /// 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
     /// </summary>
     public int? SupplierType { get; set; }
 
@@ -279,12 +278,12 @@ public class TaktSupplierQueryDto : TaktPagedQuery
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int? PaymentTerms { get; set; }
 
     /// <summary>
-    /// 供货商等级（0=普通，1=优选，2=战略，3=临时）
+    /// 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
     /// </summary>
     public int? SupplierLevel { get; set; }
 
@@ -321,7 +320,7 @@ public class TaktSupplierQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -377,7 +376,7 @@ public class TaktSupplierCreateDto
     public string? SupplierShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商类型（0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+    /// 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
     /// </summary>
     public int SupplierType { get; set; } = 0;
 
@@ -453,12 +452,12 @@ public class TaktSupplierCreateDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 供货商等级（0=普通，1=优选，2=战略，3=临时）
+    /// 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
     /// </summary>
     public int SupplierLevel { get; set; } = 0;
 
@@ -475,17 +474,12 @@ public class TaktSupplierCreateDto
     /// <summary>
     /// 供货商状态（1=启用，0=禁用）
     /// </summary>
-    public int SupplierStatus { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int SupplierStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -535,7 +529,7 @@ public class TaktSupplierStatusDto
     /// 供货商状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "供货商状态（1=启用，0=禁用）不能为空")]
-    public int SupplierStatus { get; set; }
+    public int SupplierStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -602,7 +596,7 @@ public class TaktSupplierTemplateDto
     public string? SupplierShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商类型（0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+    /// 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
     /// </summary>
     public int? SupplierType { get; set; }
 
@@ -644,7 +638,7 @@ public class TaktSupplierTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -694,7 +688,7 @@ public class TaktSupplierImportDto
     public string? SupplierShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商类型（0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+    /// 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
     /// </summary>
     public int? SupplierType { get; set; }
 
@@ -736,7 +730,7 @@ public class TaktSupplierImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -787,7 +781,7 @@ public class TaktSupplierExportDto
     public string? SupplierShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供货商类型（0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+    /// 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
     /// </summary>
     public int SupplierType { get; set; } = 0;
 
@@ -862,12 +856,12 @@ public class TaktSupplierExportDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 供货商等级（0=普通，1=优选，2=战略，3=临时）
+    /// 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
     /// </summary>
     public int SupplierLevel { get; set; } = 0;
 
@@ -884,7 +878,7 @@ public class TaktSupplierExportDto
     /// <summary>
     /// 供货商状态（1=启用，0=禁用）
     /// </summary>
-    public int SupplierStatus { get; set; }
+    public int SupplierStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -894,7 +888,7 @@ public class TaktSupplierExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

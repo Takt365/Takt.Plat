@@ -11,9 +11,10 @@
  * ======================================== */
 
 @import './color-base.css';
+@import './tag-base.css';
 @import './button-base.css';
 @import './dict-tag-base.css';
-@import './navigation-menu-base.css';
+@import './menu-base.css';
 @import './utilities.css';
 @import 'tailwindcss';
 
@@ -215,6 +216,64 @@ a:active {
   font-size: 32px;
 }
 
+/** 生成表单统一 label 列宽（容纳图标 + 扩展字段JSON） */
+:root {
+  --takt-form-label-col-width: 10.75rem;
+}
+
+/** 脚本生成表单：标签右对齐、输入控件左对齐、统一 label 列宽 */
+.takt-generated-form.ant-form-horizontal .ant-form-item .ant-form-item-label {
+  flex: 0 0 var(--takt-form-label-col-width) !important;
+  width: var(--takt-form-label-col-width) !important;
+  max-width: var(--takt-form-label-col-width) !important;
+  text-align: right;
+}
+
+.takt-generated-form.ant-form-horizontal .ant-form-item-label > label {
+  width: 100%;
+  overflow: visible;
+  white-space: nowrap;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: right;
+}
+
+.takt-generated-form.ant-form-horizontal .ant-form-item .ant-form-item-control {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: left;
+}
+
+.takt-generated-form.ant-form-horizontal .ant-form-item-control-input,
+.takt-generated-form.ant-form-horizontal .ant-form-item-control-input-content {
+  text-align: left;
+}
+
+/** 表单标签旁 ExtField 问号提示图标（RiQuestionLine + a-tooltip） */
+.takt-form-label-hint-icon {
+  margin-right: 4px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--ant-color-text-tertiary);
+  cursor: help;
+  vertical-align: middle;
+}
+
+.takt-form-item-ext-field .ant-form-item-label > label {
+  height: auto;
+  overflow: visible;
+}
+
+.takt-form-ext-field-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  max-width: none;
+}
+
 @keyframes takt-captcha-shine {
   0% {
     background-position: -200% 0;
@@ -224,7 +283,11 @@ a:active {
   }
 }
 
-/** 代码生成预览（highlight.js 块样式，覆盖 github.css） */
+/** 代码生成预览（highlight.js 块样式；勿再引入 github.css，避免全局 .hljs 白底冲突） */
+.takt-code-preview-panel {
+  background-color: var(--ant-color-bg-container);
+}
+
 .takt-code-preview-panel .hljs {
   display: block;
   overflow: auto;
@@ -232,14 +295,14 @@ a:active {
   min-width: max-content;
   padding: 12px;
   font-family: Consolas, Monaco, monospace;
-  background: #bce2e8 !important;
+  background: transparent !important;
   border-radius: 4px;
-  color: var(--ant-color-text, #262626);
+  color: var(--ant-color-text);
 }
 
 .takt-code-preview-panel .hljs-comment,
 .takt-code-preview-panel .hljs-quote {
-  color: var(--ant-color-text-tertiary, #8c8c8c);
+  color: var(--ant-color-text-tertiary);
 }
 
 .takt-code-preview-panel .hljs-keyword,
@@ -247,7 +310,7 @@ a:active {
 .takt-code-preview-panel .hljs-literal,
 .takt-code-preview-panel .hljs-section,
 .takt-code-preview-panel .hljs-link {
-  color: var(--ant-color-primary, #1677ff);
+  color: var(--ant-color-primary);
 }
 
 .takt-code-preview-panel .hljs-string,
@@ -255,7 +318,7 @@ a:active {
 .takt-code-preview-panel .hljs-symbol,
 .takt-code-preview-panel .hljs-bullet,
 .takt-code-preview-panel .hljs-addition {
-  color: var(--ant-color-success, #389e0d);
+  color: var(--ant-color-success);
 }
 
 .takt-code-preview-panel .hljs-number,
@@ -265,7 +328,7 @@ a:active {
 .takt-code-preview-panel .hljs-meta,
 .takt-code-preview-panel .hljs-variable,
 .takt-code-preview-panel .hljs-template-variable {
-  color: var(--ant-color-warning, #d48806);
+  color: var(--ant-color-warning);
 }
 
 .takt-code-preview-panel .hljs-title,
@@ -273,10 +336,32 @@ a:active {
 .takt-code-preview-panel .hljs-selector-id,
 .takt-code-preview-panel .hljs-selector-class,
 .takt-code-preview-panel .hljs-function {
-  color: var(--ant-color-info, #1677ff);
+  color: var(--ant-color-info);
 }
 
-[data-doc-theme='dark'] .takt-code-preview-panel .hljs,
-[data-doc-theme='dark'] .takt-code-preview-panel .hljs * {
-  color: var(--ant-color-text, #f0f0f0) !important;
+[data-theme='dark'] .takt-code-preview-panel {
+  background-color: var(--ant-color-bg-container);
+}
+
+/** 分配弹窗 Transfer：配合 50vh 列表，中间操作列相对视口高度垂直居中 */
+.takt-transfer.ant-transfer {
+  align-items: stretch;
+}
+
+.takt-transfer .ant-transfer-list-content-item:not(.ant-transfer-list-content-item-disabled) {
+  cursor: pointer;
+}
+
+/** 左右主子表行点击选中高亮（与 takt-master-detail-table-lr masterCustomRow 一致） */
+.takt-master-detail-table-row-selected > td {
+  background-color: var(--ant-color-primary-bg) !important;
+}
+
+/** 主内容区：子路由页面可 height:100% 填满，表格 flex 区才能拿到固定高度 */
+.layout-content-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }

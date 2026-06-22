@@ -64,7 +64,7 @@ export interface PayScale extends CompanyDtoBase {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   scaleStatus: number;
 
@@ -129,7 +129,7 @@ export interface PayScaleQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   scaleStatus?: number;
 
@@ -151,7 +151,7 @@ export interface PayScaleQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -218,7 +218,7 @@ export interface PayScaleCreate {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   scaleStatus: number;
 
@@ -230,7 +230,7 @@ export interface PayScaleCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -267,7 +267,7 @@ export interface PayScaleStatus {
   payScaleId: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   scaleStatus: number;
 
@@ -330,7 +330,7 @@ export interface PayScaleTemplate {
   sortOrder?: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   scaleStatus?: number;
 
@@ -342,7 +342,7 @@ export interface PayScaleTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -394,7 +394,7 @@ export interface PayScaleImport {
   sortOrder?: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   scaleStatus?: number;
 
@@ -406,7 +406,7 @@ export interface PayScaleImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -468,7 +468,7 @@ export interface PayScaleExport {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   scaleStatus: number;
 
@@ -480,7 +480,7 @@ export interface PayScaleExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

@@ -2,123 +2,219 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/locales/statistics/logging/server-monitor
 // 文件名称：ja-JP.ts
-// 创建时间：2026-06-12
+// 创建时间：2026-06-16
 // 创建人：Takt365(Cursor AI)
-// 功能描述：サービス監視ページ静的文案；参照キー statistics.logging.server-monitor.page.*
+// 功能描述：statistics/logging/server-monitor 页面静态文案；引用键 statistics.logging.server-monitor.page.*
 //
-// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
 export default {
   page: {
-    title: 'サービス監視',
-    description: 'アプリケーション稼働状態とサーバーハードウェア（CPU、メモリ、GPU、ディスク、ネットワーク）を表示',
+    title: "サービス監視",
+    description: "アプリケーション稼働状態とサーバーハードウェア（CPU、メモリ、GPU、ディスク、ネットワーク）を表示",
     tabs: {
-      app: 'アプリ',
-      system: 'システム',
-      cpu: 'CPU',
-      memory: 'メモリ',
-      gpu: 'GPU',
-      drive: 'ディスク',
-      network: 'ネットワーク',
+      app: "アプリ",
+      system: "システム",
+      cpu: "CPU",
+      memory: "メモリ",
+      gpu: "GPU",
+      drive: "ディスク",
+      network: "ネットワーク",
     },
     section: {
-      appStatus: 'アプリケーション状態',
-      osLanguage: 'OS と言語',
-      motherboard: 'マザーボード',
-      cpu: 'CPU 情報',
-      memory: 'メモリ情報',
-      gpu: 'GPU 情報',
-      drive: 'ディスク情報',
-      network: 'ネットワークアダプター',
+      app: {
+        status: "アプリケーション状態",
+      },
+      os: {
+        language: "OS と言語",
+      },
+      motherboard: "マザーボード",
+      cpu: "CPU 情報",
+      memory: "メモリ情報",
+      gpu: "GPU 情報",
+      drive: "ディスク情報",
+      network: "ネットワークアダプター",
     },
     field: {
-      applicationName: 'アプリケーション名',
-      applicationVersion: 'バージョン',
-      environment: '実行環境',
-      machineName: 'マシン名',
-      dotNetVersion: '.NET バージョン',
-      processArchitecture: 'プロセスアーキテクチャ',
-      processorCount: 'プロセッサ数',
-      startTime: '起動時刻',
-      uptime: '稼働時間',
-      workingSet: 'ワーキングセット',
-      operatingSystem: 'オペレーティングシステム',
-      osVersion: 'OS バージョン',
-      currentCulture: '現在のカルチャ',
-      currentUiCulture: '現在の UI カルチャ',
-      systemType: 'OS アーキテクチャ',
-      systemType32: '32 ビット',
-      systemType64: '64 ビット',
-      motherboardManufacturer: 'マザーボードメーカー',
-      motherboardProduct: 'マザーボード型番 / ID',
-      motherboardSerialNumber: 'マザーボードシリアル',
-      motherboardVersion: 'マザーボードバージョン',
-      motherboardUuid: 'マシン UUID',
-      cpuName: '名称',
-      cpuManufacturer: 'メーカー',
-      cpuCores: 'コア数',
-      cpuLogicalProcessors: '論理プロセッサ',
-      cpuUsagePercent: 'CPU 使用率',
-      cpuModel: 'CPU モデル',
-      cpuSocket: 'ソケット',
-      cpuLogicalCoreName: '論理コア',
-      usageUsed: '使用中',
-      usageIdle: '空き',
-      cpuProcessorId: 'プロセッサ ID',
-      memoryTotalPhysical: '物理メモリ合計',
-      memoryUsedPhysical: '使用物理メモリ',
-      memoryAvailable: '空き',
-      memoryUsagePercent: 'メモリ使用率',
-      memoryType: '種類',
-      memoryTypePhysical: '物理メモリ',
-      memoryTypeVirtual: '仮想メモリ',
-      memoryBankLabel: 'スロット',
-      memoryManufacturer: 'メーカー',
-      memoryCapacity: '容量',
-      memorySpeed: '周波数',
-      memoryPartNumber: '部品番号',
-      memorySerialNumber: 'シリアル番号',
-      gpuName: '名称',
-      gpuManufacturer: 'メーカー',
-      gpuAdapterRam: 'ビデオメモリ',
-      gpuDriverVersion: 'ドライバーバージョン',
-      driveName: 'ドライブ',
-      driveType: '種類',
-      driveFileSystem: 'ファイルシステム',
-      driveTotalSize: '総容量',
-      driveFreeSpace: '空き容量',
-      driveUsedSpace: '使用容量',
-      driveUsagePercent: '使用率',
-      networkName: '名称',
-      networkDescription: '説明',
-      networkMacAddress: 'MAC アドレス',
-      networkIpAddress: 'IP アドレス',
-      networkSpeed: '速度',
-      networkStatus: '状態',
-      networkStatusOnline: 'オンライン',
-      networkStatusNoInternet: 'インターネット未接続',
-      networkStatusDnsFault: 'DNS 異常',
-      networkStatusUp: '接続中',
-      networkStatusDown: '切断',
-      networkStatusEnabled: '有効',
-      networkStatusDisabled: '無効',
-      networkStatusUnknown: '不明',
+      application: {
+        name: "アプリケーション名",
+        version: "バージョン",
+      },
+      environment: "実行環境",
+      machine: {
+        name: "マシン名",
+      },
+      dot: {
+        net: {
+          version: ".NET バージョン",
+        },
+      },
+      process: {
+        architecture: "プロセスアーキテクチャ",
+      },
+      processor: {
+        count: "プロセッサ数",
+      },
+      start: {
+        time: "起動時刻",
+      },
+      uptime: "稼働時間",
+      working: {
+        set: "ワーキングセット",
+      },
+      operating: {
+        system: "オペレーティングシステム",
+      },
+      os: {
+        version: "OS バージョン",
+      },
+      current: {
+        culture: "現在のカルチャ",
+        ui: {
+          culture: "現在の UI カルチャ",
+        },
+      },
+      system: {
+        type: "OS アーキテクチャ",
+        type32: "32 ビット",
+        type64: "64 ビット",
+      },
+      motherboard: {
+        manufacturer: "マザーボードメーカー",
+        product: "マザーボード型番 / ID",
+        serial: {
+          number: "マザーボードシリアル",
+        },
+        version: "マザーボードバージョン",
+        uuid: "マシン UUID",
+      },
+      cpu: {
+        name: "名称",
+        manufacturer: "メーカー",
+        cores: "コア数",
+        logical: {
+          processors: "論理プロセッサ",
+          core: {
+            name: "論理コア",
+          },
+        },
+        usage: {
+          percent: "CPU 使用率",
+        },
+        model: "CPU モデル",
+        socket: "ソケット",
+        processor: {
+          id: "プロセッサ ID",
+        },
+      },
+      usage: {
+        used: "使用中",
+        idle: "空き",
+      },
+      memory: {
+        total: {
+          physical: "物理メモリ合計",
+        },
+        used: {
+          physical: "使用物理メモリ",
+        },
+        available: "空き",
+        usage: {
+          percent: "メモリ使用率",
+        },
+        type: {
+          physical: "物理メモリ",
+          virtual: "仮想メモリ",
+        },
+        bank: {
+          label: "スロット",
+        },
+        manufacturer: "メーカー",
+        capacity: "容量",
+        speed: "周波数",
+        part: {
+          number: "部品番号",
+        },
+        serial: {
+          number: "シリアル番号",
+        },
+      },
+      gpu: {
+        name: "名称",
+        manufacturer: "メーカー",
+        adapter: {
+          ram: "ビデオメモリ",
+        },
+        driver: {
+          version: "ドライバーバージョン",
+        },
+      },
+      drive: {
+        name: "ドライブ",
+        type: "種類",
+        file: {
+          system: "ファイルシステム",
+        },
+        total: {
+          size: "総容量",
+        },
+        free: {
+          space: "空き容量",
+        },
+        used: {
+          space: "使用容量",
+        },
+        usage: {
+          percent: "使用率",
+        },
+      },
+      network: {
+        name: "名称",
+        description: "説明",
+        mac: {
+          address: "MAC アドレス",
+        },
+        ip: {
+          address: "IP アドレス",
+        },
+        speed: "速度",
+        status: {
+          online: "オンライン",
+          no: {
+            internet: "インターネット未接続",
+          },
+          dns: {
+            fault: "DNS 異常",
+          },
+          up: "接続中",
+          down: "切断",
+          enabled: "有効",
+          disabled: "無効",
+          unknown: "不明",
+        },
+      },
     },
     unit: {
-      core: 'コア',
-      thread: 'スレッド',
-      day: '日',
-      hour: '時間',
-      minute: '分',
+      core: "コア",
+      thread: "スレッド",
+      day: "日",
+      hour: "時間",
+      minute: "分",
     },
     button: {
-      refreshCache: 'ハードウェアキャッシュを更新',
+      refresh: {
+        cache: "ハードウェアキャッシュを更新",
+      },
     },
     message: {
-      loadFail: '監視データの読み込みに失敗しました',
-      refreshSuccess: 'ハードウェアキャッシュを更新しました',
+      load: {
+        fail: "監視データの読み込みに失敗しました",
+      },
+      refresh: {
+        success: "ハードウェアキャッシュを更新しました",
+      },
     },
   },
 };

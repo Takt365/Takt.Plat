@@ -62,13 +62,13 @@ public class TaktUser : TaktTenantEntityBase
     public string DefaultCulture { get; set; } = "en-US";
     
     /// <summary>
-    /// 是否内置（字典 sys_yes_no；种子用户 admin/guest/demo 为内置，不允许删除）
+    /// 是否内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "是否内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     [SugarColumn(ColumnName = "user_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int UserStatus { get; set; } = 1;

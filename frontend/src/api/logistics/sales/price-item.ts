@@ -1,7 +1,7 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
-// 文件名称：sales-price-item.ts
+// 文件名称：price-item.ts
 // 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
@@ -19,7 +19,7 @@ import type {
   SalesPriceItem,
   SalesPriceItemCreate,
   SalesPriceItemUpdate
-} from '@/types/logistics/sales/sales-price-item';
+} from '@/types/logistics/sales/price-item';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -40,9 +40,7 @@ export function getSalesPriceItemList(queryDto: any): Promise<TaktPagedResult<Sa
   return request<TaktPagedResult<SalesPriceItem>>({
     url: `${SALES_PRICE_ITEM_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportSalesPriceItem(
     url: `${SALES_PRICE_ITEM_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

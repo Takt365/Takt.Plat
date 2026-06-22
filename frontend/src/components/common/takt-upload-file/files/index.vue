@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { InboxOutlined } from '@ant-design/icons-vue'
-import { message } from 'ant-design-vue'
+import { message, Upload } from 'ant-design-vue'
 import type { UploadChangeParam, UploadFile, UploadProps } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { logger } from '@/utils/logger'
@@ -139,30 +139,29 @@ watch(fileList, (newValue) => {
 
 // 上传前的钩子
 const handleBeforeUpload = (file: UploadFile | File) => {
-  // 如果是手动上传模式，阻止自动上传
-  if (!props.autoUpload) {
-    return false
-  }
-  
-  // 获取原生 File 对象
   const originFile = (file as UploadFile).originFileObj || (file as File)
-  
-  // 如果设置了文件大小限制
+
   if (props.maxSize && originFile.size) {
     const fileSizeMB = originFile.size / 1024 / 1024
     if (fileSizeMB > props.maxSize) {
       message.error(t('components.common.page.upload.filesizeexceed', { max: props.maxSize }))
-      return false
+      return Upload.LIST_IGNORE
     }
   }
 
-  // 如果提供了自定义 beforeUpload
   if (props.beforeUpload) {
     const beforeUpload = props.beforeUpload
-    return beforeUpload(
+    const result = beforeUpload(
       originFile as Parameters<BeforeUploadFn>[0],
       fileList.value as Parameters<BeforeUploadFn>[1]
     )
+    if (result === Upload.LIST_IGNORE || result === false) {
+      return result
+    }
+  }
+
+  if (!props.autoUpload) {
+    return false
   }
 
   return true
@@ -180,7 +179,12 @@ const handleChange = (info: UploadChangeParam) => {
   if (status === 'done') {
     message.success(t('components.common.page.upload.fileuploadsuccess', { name: info.file.name }))
   } else if (status === 'error') {
-    message.error(t('components.common.page.upload.fileuploadfail', { name: info.file.name }))
+    const detail = info.file.error instanceof Error
+      ? info.file.error.message
+      : typeof info.file.error === 'string'
+        ? info.file.error
+        : ''
+    message.error(detail || t('components.common.page.upload.fileuploadfail', { name: info.file.name }))
   }
 }
 

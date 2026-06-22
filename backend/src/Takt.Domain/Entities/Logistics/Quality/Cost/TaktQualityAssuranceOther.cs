@@ -1,7 +1,7 @@
 ﻿// ========================================
 // 项目名称:节拍数字工厂 ·Takt Plat (TDF)
 // 命名空间:Takt.Domain.Entities.Logistics.Quality.Cost
-// 文件名称:TaktQualityOperationOther.cs
+// 文件名称:TaktQualityAssuranceOther.cs
 // 创建时间:2026-05-08
 // 创建人:Takt365(Qoder AI)
 // 功能描述:品质业务明细 - 其他通常业务费用
@@ -19,25 +19,25 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 /// <summary>
 /// 品质业务明细 - 其他通常业务费用
 /// </summary>
-[SugarTable("takt_logistics_quality_operation_other", "品质业务其他通常业务费用明细表")]
-[SugarIndex("ix_quality_operation_other_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_quality_operation_other_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_quality_operation_other_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(QualityOperationId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_quality_operation_other_line_number", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, false)]
-public class TaktQualityOperationOther : TaktCompanyEntityBase
+[SugarTable("takt_logistics_quality_assurance_other", "品质业务其他通常业务费用明细表")]
+[SugarIndex("ix_quality_assurance_other_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_quality_assurance_other_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_quality_assurance_other_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(QualityAssuranceId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_assurance_other_line_number", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, false)]
+public class TaktQualityAssuranceOther : TaktCompanyEntityBase
 {
     /// <summary>
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
-    [SugarColumn(ColumnName = "quality_operation_id", ColumnDescription = "品质业务主表ID", ColumnDataType = "bigint", IsNullable = false)]
+    [SugarColumn(ColumnName = "quality_assurance_id", ColumnDescription = "品质业务主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationId { get; set; }
+    public long QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "quality_operation_code", ColumnDescription = "品质业务编码", ColumnDataType = "nvarchar", Length = 30, IsNullable = false)]
-    public string QualityOperationCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "quality_assurance_code", ColumnDescription = "品质业务编码", ColumnDataType = "nvarchar", Length = 30, IsNullable = false)]
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 项号（如10, 20, 30，步长严格为10）
@@ -72,6 +72,6 @@ public class TaktQualityOperationOther : TaktCompanyEntityBase
     /// <summary>
     /// 品质业务主表(导航属性)
     /// </summary>
-    [Navigate(NavigateType.ManyToOne, nameof(QualityOperationId))]
-    public TaktQualityOperation? Operation { get; set; }
+    [Navigate(NavigateType.ManyToOne, nameof(QualityAssuranceId))]
+    public TaktQualityAssurance? Operation { get; set; }
 }

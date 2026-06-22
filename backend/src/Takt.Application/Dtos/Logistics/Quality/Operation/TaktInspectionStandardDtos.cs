@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：InspectionStandard 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktInspectionStandard 生成，请按需审阅）
 // 
@@ -38,7 +38,7 @@ public class TaktInspectionStandardDto : TaktCompanyDtoBase
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验标准编码（唯一索引）
@@ -186,7 +186,7 @@ public class TaktInspectionStandardQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -221,7 +221,8 @@ public class TaktInspectionStandardCreateDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "工厂代码不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验标准编码（唯一索引）
@@ -285,7 +286,7 @@ public class TaktInspectionStandardCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -415,7 +416,7 @@ public class TaktInspectionStandardTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -502,7 +503,7 @@ public class TaktInspectionStandardImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -535,7 +536,7 @@ public class TaktInspectionStandardExportDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验标准编码（唯一索引）
@@ -590,7 +591,7 @@ public class TaktInspectionStandardExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

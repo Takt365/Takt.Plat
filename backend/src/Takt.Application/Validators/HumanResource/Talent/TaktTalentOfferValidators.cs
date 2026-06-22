@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Talent
 // 文件名称：TaktTalentOfferValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TalentOffer 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTalentOffer 生成，请按需审阅）
 // 
@@ -31,10 +31,10 @@ public class TaktTalentOfferCreateValidator : AbstractValidator<TaktTalentOfferC
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.InterviewId)
             .GreaterThanOrEqualTo(0).WithMessage("面试安排ID不能为负数");
         RuleFor(x => x.OfferNo)
@@ -46,14 +46,14 @@ public class TaktTalentOfferCreateValidator : AbstractValidator<TaktTalentOfferC
             .GreaterThanOrEqualTo(0).WithMessage("拟录用部门ID不能为负数");
         RuleFor(x => x.DeptName)
             .NotEmpty().WithMessage("拟录用部门名称不能为空")
-            .MaximumLength(40).WithMessage("拟录用部门名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("拟录用部门名称长度不能超过100个字符");
         RuleFor(x => x.PostId)
             .GreaterThanOrEqualTo(0).WithMessage("拟录用岗位ID不能为负数");
         RuleFor(x => x.PostName)
-            .MaximumLength(40).WithMessage("拟录用岗位名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("拟录用岗位名称长度不能超过100个字符");
         RuleFor(x => x.Reason)
             .MaximumLength(500).WithMessage("录用说明长度不能超过500个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -94,9 +94,9 @@ public class TaktTalentOfferImportValidator : AbstractValidator<TaktTalentOfferI
     public TaktTalentOfferImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.InterviewId)
             .GreaterThanOrEqualTo(0).WithMessage("面试安排ID不能为负数");
         RuleFor(x => x.OfferNo)
@@ -108,15 +108,15 @@ public class TaktTalentOfferImportValidator : AbstractValidator<TaktTalentOfferI
             .GreaterThanOrEqualTo(0).WithMessage("拟录用部门ID不能为负数");
         RuleFor(x => x.DeptName)
             .NotEmpty().WithMessage("拟录用部门名称不能为空")
-            .MaximumLength(40).WithMessage("拟录用部门名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("拟录用部门名称长度不能超过100个字符");
         RuleFor(x => x.PostId)
             .GreaterThanOrEqualTo(0).WithMessage("拟录用岗位ID不能为负数");
         RuleFor(x => x.PostName)
-            .MaximumLength(40).WithMessage("拟录用岗位名称长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.PostName));
+            .MaximumLength(100).WithMessage("拟录用岗位名称长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.PostName));
         RuleFor(x => x.Reason)
             .MaximumLength(500).WithMessage("录用说明长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Reason));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

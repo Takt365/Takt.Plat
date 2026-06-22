@@ -1,6 +1,6 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/sales/sales-invoice -->
+<!-- 命名空间：@/views/logistics/sales/invoice -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：Takt销售发票实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-sales-sales-invoice">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,17 +20,17 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:sales:salesinvoice:create"
-      update-permission="logistics:sales:salesinvoice:update"
-      delete-permission="logistics:sales:salesinvoice:delete"
-      import-permission="logistics:sales:salesinvoice:import"
-      export-permission="logistics:sales:salesinvoice:export"
+      create-permission="logistics:sales:invoice:create"
+      update-permission="logistics:sales:invoice:update"
+      delete-permission="logistics:sales:invoice:delete"
+      import-permission="logistics:sales:invoice:import"
+      export-permission="logistics:sales:invoice:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,64 +52,61 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'salesInvoiceId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getSalesInvoiceId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getSalesInvoiceId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="salesInvoiceId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.salesInvoiceItem._self') }}</div>
-          <a-table
-            v-if="hasSalesInvoiceItemRows(record)"
-            :columns="salesInvoiceItemExpandColumns"
-            :data-source="getSalesInvoiceItemRows(record)"
-            :row-key="(row: SalesInvoiceItem, index?: number) => row?.salesInvoiceItemId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'invoiceStatus'">
+          <TaktDictTag
+            :value="getSalesInvoiceField(record, 'invoiceStatus')"
+            dict-type="logistics_invoice_status"
           />
-          <a-empty v-else class="mb-4" />
-        </div>
+        </template>
+        <template v-else-if="column.key === 'paymentMethod'">
+          <TaktDictTag
+            :value="getSalesInvoiceField(record, 'paymentMethod')"
+            dict-type="logistics_payment_method_type"
+          />
+        </template>
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+      <template #detail>
+        <SalesInvoiceItemPanel
+          ref="salesInvoiceItemPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
+      </template>
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <SalesInvoiceForm
+        :key="formData?.salesInvoiceId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -120,127 +117,141 @@
       v-model:open="advancedQueryVisible"
       v-model:visible-field-keys="visibleQueryFieldKeys"
       :fields="queryFieldsMeta"
-      :storage-key="'takt-query-fields-logistics-sales-sales-invoice'"
+      :storage-key="'takt-query-fields-logistics-sales-invoice'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.salesInvoice.plantcode')">
+      <a-form-item :label="t('entity.salesinvoice.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.plantcode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesInvoiceCode')">
-      <a-form-item :label="t('entity.salesInvoice.code')">
+      <a-form-item :label="t('entity.salesinvoice.code')">
         <a-input
           v-model:value="advancedQueryForm.salesInvoiceCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.code') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesOrderCode')">
-      <a-form-item :label="t('entity.salesInvoice.salesordercode')">
+      <a-form-item :label="t('entity.salesinvoice.salesordercode')">
         <a-input
           v-model:value="advancedQueryForm.salesOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.salesordercode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.salesordercode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerCode')">
-      <a-form-item :label="t('entity.salesInvoice.customercode')">
+      <a-form-item :label="t('entity.salesinvoice.customercode')">
         <a-input
           v-model:value="advancedQueryForm.customerCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.customercode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.customercode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerName')">
-      <a-form-item :label="t('entity.salesInvoice.customername')">
+      <a-form-item :label="t('entity.salesinvoice.customername')">
         <a-input
           v-model:value="advancedQueryForm.customerName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.customername') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.customername') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('invoiceDateStart')">
-      <a-form-item :label="t('entity.salesInvoice.invoicedatestart')">
+      <a-form-item :label="t('entity.salesinvoice.invoicedatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.invoiceDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesInvoice.invoicedatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.invoicedatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('invoiceDateEnd')">
-      <a-form-item :label="t('entity.salesInvoice.invoicedateend')">
+      <a-form-item :label="t('entity.salesinvoice.invoicedateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.invoiceDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesInvoice.invoicedateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.invoicedateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalAmount')">
-      <a-form-item :label="t('entity.salesInvoice.totalamount')">
+      <a-form-item :label="t('entity.salesinvoice.totalamount')">
         <a-input-number
           v-model:value="advancedQueryForm.totalAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.totalamount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.totalamount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taxAmount')">
-      <a-form-item :label="t('entity.salesInvoice.taxamount')">
+      <a-form-item :label="t('entity.salesinvoice.taxamount')">
         <a-input-number
           v-model:value="advancedQueryForm.taxAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.taxamount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.taxamount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualAmount')">
-      <a-form-item :label="t('entity.salesInvoice.actualamount')">
+      <a-form-item :label="t('entity.salesinvoice.actualamount')">
         <a-input-number
           v-model:value="advancedQueryForm.actualAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.actualamount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.actualamount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('invoiceStatus')">
-      <a-form-item :label="t('entity.salesInvoice.invoicestatus')">
-        <a-input-number
+      <a-form-item :label="t('entity.salesinvoice.invoicestatus')">
+        <TaktSelect
           v-model:value="advancedQueryForm.invoiceStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.invoicestatus') })"
-          style="width: 100%"
+          dict-type="logistics_invoice_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.invoicestatus') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('paymentMethod')">
-      <a-form-item :label="t('entity.salesInvoice.paymentmethod')">
-        <a-input-number
+      <a-form-item :label="t('entity.salesinvoice.paymentmethod')">
+        <TaktSelect
           v-model:value="advancedQueryForm.paymentMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.paymentmethod') })"
-          style="width: 100%"
+          dict-type="logistics_payment_method_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesinvoice.paymentmethod') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taxInvoiceNo')">
-      <a-form-item :label="t('entity.salesInvoice.taxinvoiceno')">
+      <a-form-item :label="t('entity.salesinvoice.taxinvoiceno')">
         <a-input
           v-model:value="advancedQueryForm.taxInvoiceNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesInvoice.taxinvoiceno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesinvoice.taxinvoiceno') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -267,12 +278,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -281,8 +311,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -292,14 +324,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.salesInvoice._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.salesinvoice._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.salesInvoice._self"
+        entity-i18n-key="entity.salesinvoice._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -328,21 +360,23 @@
 <script setup lang="ts">
 /**
  * Takt销售发票实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
- * @module views/logistics/sales/sales-invoice
+ * @module views/logistics/sales/invoice
  */
 import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
-import SalesInvoiceForm from './components/sales-invoice-form.vue'
-import { getSalesInvoiceList, getSalesInvoiceById, createSalesInvoice, updateSalesInvoice, deleteSalesInvoiceById, deleteSalesInvoiceBatch, getSalesInvoiceTemplate, importSalesInvoice, exportSalesInvoice } from '@/api/logistics/sales/sales-invoice'
-import * as salesInvoiceItemApi from '@/api/logistics/sales/sales-invoice-item'
-import type { SalesInvoiceItem, SalesInvoiceItemQuery } from '@/types/logistics/sales/sales-invoice-item'
-import type { SalesInvoice, SalesInvoiceQuery, SalesInvoiceCreate, SalesInvoiceUpdate } from '@/types/logistics/sales/sales-invoice'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import SalesInvoiceForm from './components/invoice-form.vue'
+import SalesInvoiceItemPanel from './components/invoice-item-panel.vue'
+import { provideSalesInvoiceMasterContext } from './composables/use-invoice-master-context'
+import { getSalesInvoiceList, getSalesInvoiceById, createSalesInvoice, updateSalesInvoice, deleteSalesInvoiceById, deleteSalesInvoiceBatch, getSalesInvoiceTemplate, importSalesInvoice, exportSalesInvoice, updateSalesInvoiceStatus } from '@/api/logistics/sales/invoice'
+import type { SalesInvoice, SalesInvoiceQuery } from '@/types/logistics/sales/invoice'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -350,7 +384,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktSalesInvoice')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.salesInvoice._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.salesinvoice._self') })
 )
 
 /** 快捷查询关键字 */
@@ -360,9 +394,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<SalesInvoice[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -377,11 +411,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<SalesInvoice>>({})
+const formData = ref<Partial<SalesInvoice> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -400,27 +436,27 @@ const advancedQueryForm = ref({
   taxInvoiceNo: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.salesInvoice.plantcode') },
-  { key: 'salesInvoiceCode', label: t('entity.salesInvoice.code') },
-  { key: 'salesOrderCode', label: t('entity.salesInvoice.salesordercode') },
-  { key: 'customerCode', label: t('entity.salesInvoice.customercode') },
-  { key: 'customerName', label: t('entity.salesInvoice.customername') },
-  { key: 'invoiceDateStart', label: t('entity.salesInvoice.invoicedatestart') },
-  { key: 'invoiceDateEnd', label: t('entity.salesInvoice.invoicedateend') },
-  { key: 'totalAmount', label: t('entity.salesInvoice.totalamount') },
-  { key: 'taxAmount', label: t('entity.salesInvoice.taxamount') },
-  { key: 'actualAmount', label: t('entity.salesInvoice.actualamount') },
-  { key: 'invoiceStatus', label: t('entity.salesInvoice.invoicestatus') },
-  { key: 'paymentMethod', label: t('entity.salesInvoice.paymentmethod') },
-  { key: 'taxInvoiceNo', label: t('entity.salesInvoice.taxinvoiceno') },
+  { key: 'plantCode', label: t('entity.salesinvoice.plantcode') },
+  { key: 'salesInvoiceCode', label: t('entity.salesinvoice.code') },
+  { key: 'salesOrderCode', label: t('entity.salesinvoice.salesordercode') },
+  { key: 'customerCode', label: t('entity.salesinvoice.customercode') },
+  { key: 'customerName', label: t('entity.salesinvoice.customername') },
+  { key: 'invoiceDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.salesinvoice.invoicedate')) },
+  { key: 'invoiceDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.salesinvoice.invoicedate')) },
+  { key: 'totalAmount', label: t('entity.salesinvoice.totalamount') },
+  { key: 'taxAmount', label: t('entity.salesinvoice.taxamount') },
+  { key: 'actualAmount', label: t('entity.salesinvoice.actualamount') },
+  { key: 'invoiceStatus', label: t('entity.salesinvoice.invoicestatus') },
+  { key: 'paymentMethod', label: t('entity.salesinvoice.paymentmethod') },
+  { key: 'taxInvoiceNo', label: t('entity.salesinvoice.taxinvoiceno') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -438,76 +474,101 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideSalesInvoiceMasterContext()
+const salesInvoiceItemPanelRef = ref<InstanceType<typeof SalesInvoiceItemPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {SalesInvoiceQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<SalesInvoiceQuery>): SalesInvoiceQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: SalesInvoiceQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof SalesInvoiceQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('salesInvoiceCode', form.salesInvoiceCode)
+  assignTrimmed('salesOrderCode', form.salesOrderCode)
+  assignTrimmed('customerCode', form.customerCode)
+  assignTrimmed('customerName', form.customerName)
+  assignTrimmed('invoiceDateStart', form.invoiceDateStart)
+  assignTrimmed('invoiceDateEnd', form.invoiceDateEnd)
+  if (form.totalAmount !== undefined && form.totalAmount !== null) {
+    query.totalAmount = form.totalAmount
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    query.taxAmount = form.taxAmount
+  }
+  if (form.actualAmount !== undefined && form.actualAmount !== null) {
+    query.actualAmount = form.actualAmount
+  }
+  if (form.invoiceStatus !== undefined && form.invoiceStatus !== null) {
+    query.invoiceStatus = form.invoiceStatus
+  }
+  if (form.paymentMethod !== undefined && form.paymentMethod !== null) {
+    query.paymentMethod = form.paymentMethod
+  }
+  assignTrimmed('taxInvoiceNo', form.taxInvoiceNo)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
-/** 展开行预览：salesInvoiceItem 列 */
-const salesInvoiceItemExpandColumns = computed(() => [
-  {
-    title: t('entity.salesInvoiceItem.salesinvoicename'),
-    dataIndex: 'salesInvoiceName',
-    key: 'salesInvoiceName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesInvoiceItem.salesinvoicecode'),
-    dataIndex: 'salesInvoiceCode',
-    key: 'salesInvoiceCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesInvoiceItem.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesInvoiceItem.materialcode'),
-    dataIndex: 'materialCode',
-    key: 'materialCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesInvoiceItem.materialname'),
-    dataIndex: 'materialName',
-    key: 'materialName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesInvoiceItem.materialspecification'),
-    dataIndex: 'materialSpecification',
-    key: 'materialSpecification',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesInvoiceItem.salesunit'),
-    dataIndex: 'salesUnit',
-    key: 'salesUnit',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesInvoiceItem.invoicequantity'),
-    dataIndex: 'invoiceQuantity',
-    key: 'invoiceQuantity',
-    ellipsis: true,
-  },
-])
 
-/** 读取主表行上的 salesInvoiceItem 子表缓存 */
-function getSalesInvoiceItemRows(record: SalesInvoice): SalesInvoiceItem[] {
-  return (record as any)?.items ?? []
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: SalesInvoice | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getSalesInvoiceId(record) : ''
 }
 
-/** 主表行是否已加载 salesInvoiceItem 子表 */
-function hasSalesInvoiceItemRows(record: SalesInvoice): boolean {
-  return getSalesInvoiceItemRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as SalesInvoice
+  const key = getSalesInvoiceId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadSalesInvoiceDetail(record: SalesInvoice): Promise<SalesInvoice | null> {
@@ -527,52 +588,6 @@ async function loadSalesInvoiceDetail(record: SalesInvoice): Promise<SalesInvoic
     return null
   }
 }
-/** 懒加载 salesInvoiceItem 子表（SalesInvoiceItemQuery + salesInvoiceItemApi，与主表 SalesInvoiceQuery 分离） */
-async function loadSalesInvoiceItemForSalesInvoice(record: SalesInvoice): Promise<SalesInvoiceItem[]> {
-  const masterId = getSalesInvoiceId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: SalesInvoiceItemQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      salesInvoiceId: masterId,
-    }
-    const result = await salesInvoiceItemApi.getSalesInvoiceItemList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getSalesInvoiceId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, items: rows } as SalesInvoice
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureSalesInvoiceChildrenLoaded(record: SalesInvoice) {
-  if (!hasSalesInvoiceItemRows(record)) {
-    await loadSalesInvoiceItemForSalesInvoice(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: SalesInvoice) {
-  const key = getSalesInvoiceId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureSalesInvoiceChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -587,7 +602,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'salesInvoiceId') ?? ''
   },
   {
-    title: t('entity.salesInvoice.plantcode'),
+    title: t('entity.salesinvoice.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -596,7 +611,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.salesInvoice.code'),
+    title: t('entity.salesinvoice.code'),
     dataIndex: 'salesInvoiceCode',
     key: 'salesInvoiceCode',
     width: 120,
@@ -605,7 +620,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'salesInvoiceCode') ?? ''
   },
   {
-    title: t('entity.salesInvoice.salesordercode'),
+    title: t('entity.salesinvoice.salesordercode'),
     dataIndex: 'salesOrderCode',
     key: 'salesOrderCode',
     width: 120,
@@ -614,7 +629,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'salesOrderCode') ?? ''
   },
   {
-    title: t('entity.salesInvoice.customercode'),
+    title: t('entity.salesinvoice.customercode'),
     dataIndex: 'customerCode',
     key: 'customerCode',
     width: 120,
@@ -623,7 +638,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'customerCode') ?? ''
   },
   {
-    title: t('entity.salesInvoice.customername'),
+    title: t('entity.salesinvoice.customername'),
     dataIndex: 'customerName',
     key: 'customerName',
     width: 120,
@@ -632,7 +647,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'customerName') ?? ''
   },
   {
-    title: t('entity.salesInvoice.invoicedate'),
+    title: t('entity.salesinvoice.invoicedate'),
     dataIndex: 'invoiceDate',
     key: 'invoiceDate',
     width: 120,
@@ -641,7 +656,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'invoiceDate') ?? ''
   },
   {
-    title: t('entity.salesInvoice.totalamount'),
+    title: t('entity.salesinvoice.totalamount'),
     dataIndex: 'totalAmount',
     key: 'totalAmount',
     width: 120,
@@ -650,7 +665,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'totalAmount') ?? ''
   },
   {
-    title: t('entity.salesInvoice.taxamount'),
+    title: t('entity.salesinvoice.taxamount'),
     dataIndex: 'taxAmount',
     key: 'taxAmount',
     width: 120,
@@ -659,7 +674,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'taxAmount') ?? ''
   },
   {
-    title: t('entity.salesInvoice.actualamount'),
+    title: t('entity.salesinvoice.actualamount'),
     dataIndex: 'actualAmount',
     key: 'actualAmount',
     width: 120,
@@ -668,25 +683,23 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'actualAmount') ?? ''
   },
   {
-    title: t('entity.salesInvoice.invoicestatus'),
+    title: t('entity.salesinvoice.invoicestatus'),
     dataIndex: 'invoiceStatus',
     key: 'invoiceStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'invoiceStatus') ?? ''
   },
   {
-    title: t('entity.salesInvoice.paymentmethod'),
+    title: t('entity.salesinvoice.paymentmethod'),
     dataIndex: 'paymentMethod',
     key: 'paymentMethod',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'paymentMethod') ?? ''
   },
   {
-    title: t('entity.salesInvoice.taxinvoiceno'),
+    title: t('entity.salesinvoice.taxinvoiceno'),
     dataIndex: 'taxInvoiceNo',
     key: 'taxInvoiceNo',
     width: 120,
@@ -701,7 +714,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:sales:salesinvoice:update',
+        permission: 'logistics:sales:invoice:update',
         onClick: (record: SalesInvoice) => handleEdit(record)
       },
       {
@@ -709,7 +722,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:sales:salesinvoice:delete',
+        permission: 'logistics:sales:invoice:delete',
         onClick: (record: SalesInvoice) => handleDeleteOne(record)
       }
     ]
@@ -725,6 +738,7 @@ const getSalesInvoiceId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getSalesInvoiceField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -732,51 +746,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: SalesInvoice, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getSalesInvoiceId(selectedRow.value) === getSalesInvoiceId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: SalesInvoice[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: SalesInvoice) => ({
-  onClick: () => {
-    const key = getSalesInvoiceId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getSalesInvoiceId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: SalesInvoiceQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getSalesInvoiceList(params)
+    const res = await getSalesInvoiceList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -794,7 +789,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -817,22 +812,23 @@ function handleReset() {
   taxInvoiceNo: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.salesInvoice._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.salesinvoice._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: SalesInvoice) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.salesInvoice._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.salesinvoice._self') })
   formLoading.value = true
   try {
     const detail = await loadSalesInvoiceDetail(record)
@@ -848,7 +844,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.salesInvoice._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.salesinvoice._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -866,12 +862,17 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateSalesInvoice(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.salesInvoice._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.salesinvoice._self') }))
     } else {
       await createSalesInvoice(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.salesInvoice._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.salesinvoice._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  salesInvoiceItemPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -881,6 +882,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -912,16 +915,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: SalesInvoiceQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportSalesInvoice(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportSalesInvoice(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -940,10 +938,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.salesInvoice._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.salesinvoice._self') }))
   } catch (error: any) {
     logger.error('[SalesInvoice] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.salesInvoice._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.salesinvoice._self') }))
   } finally {
     loading.value = false
   }
@@ -952,12 +950,16 @@ async function handleExport() {
 async function handleDeleteOne(record: SalesInvoice) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.salesInvoice._self'), name: t('common.tip.this.target', { target: t('entity.salesInvoice._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.salesinvoice._self'), name: t('common.tip.this.target', { target: t('entity.salesinvoice._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSalesInvoiceById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.salesInvoice._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.salesinvoice._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -965,18 +967,22 @@ async function handleDeleteOne(record: SalesInvoice) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.salesInvoice._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.salesinvoice._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.salesInvoice._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.salesinvoice._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteSalesInvoiceBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.salesInvoice._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.salesinvoice._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -989,7 +995,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1010,7 +1016,7 @@ function handleAdvancedQueryReset() {
   taxInvoiceNo: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1039,24 +1045,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-sales-sales-invoice {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

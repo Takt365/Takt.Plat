@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/maintenance
 // 文件名称：equipment.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -169,14 +169,24 @@ export interface Equipment extends CompanyDtoBase {
   warrantyStatus: number;
 
   /**
-   * 设备状态（0=运行中，1=停机，2=维修中，3=故障，4=待报废，5=已报废）
+   * 设备状态（字典 sys_equipment_status）
    */
   equipmentStatus: number;
 
   /**
-   * 维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id） （子表：TaktMaintenance）
+   * 维护通知单列表 （子表：TaktMaintenanceNotification）
    */
-  maintenanceRecords?: Maintenance[];
+  maintenanceNotifications?: MaintenanceNotification[];
+
+  /**
+   * 维护工单列表 （子表：TaktMaintenanceWorkOrder）
+   */
+  maintenanceWorkOrders?: MaintenanceWorkOrder[];
+
+  /**
+   * 维护履历列表（由维护工单完工归档生成，只读） （子表：TaktMaintenanceHistory）
+   */
+  maintenanceHistories?: MaintenanceHistory[];
 
 }
 
@@ -364,7 +374,7 @@ export interface EquipmentQuery extends TaktPagedQuery {
   warrantyStatus?: number;
 
   /**
-   * 设备状态（0=运行中，1=停机，2=维修中，3=故障，4=待报废，5=已报废）
+   * 设备状态（字典 sys_equipment_status）
    */
   equipmentStatus?: number;
 
@@ -381,7 +391,7 @@ export interface EquipmentQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -553,19 +563,29 @@ export interface EquipmentCreate {
   warrantyStatus: number;
 
   /**
-   * 设备状态（0=运行中，1=停机，2=维修中，3=故障，4=待报废，5=已报废）
+   * 设备状态（字典 sys_equipment_status）
    */
   equipmentStatus: number;
 
   /**
-   * 维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）（子表，级联保存）
+   * 维护通知单列表（子表，级联保存）
    */
-  maintenanceRecords?: MaintenanceCreate[];
+  maintenanceNotifications?: MaintenanceNotificationCreate[];
+
+  /**
+   * 维护工单列表（子表，级联保存）
+   */
+  maintenanceWorkOrders?: MaintenanceWorkOrderCreate[];
+
+  /**
+   * 维护履历列表（由维护工单完工归档生成，只读）（子表，级联保存）
+   */
+  maintenanceHistories?: MaintenanceHistoryCreate[];
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -688,7 +708,7 @@ export interface EquipmentTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -782,7 +802,7 @@ export interface EquipmentImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -949,14 +969,14 @@ export interface EquipmentExport {
   warrantyStatus: number;
 
   /**
-   * 设备状态（0=运行中，1=停机，2=维修中，3=故障，4=待报废，5=已报废）
+   * 设备状态（字典 sys_equipment_status）
    */
   equipmentStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

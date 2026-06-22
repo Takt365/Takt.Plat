@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/routing/components -->
 <!-- 文件名称：routing-form.vue -->
-<!-- 功能描述：工艺路线主表实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：工艺路线主表实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form routing-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="routing-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -74,8 +77,10 @@
                 <a-input
                   v-model:value="formState.plantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.plantcode') })"
-                  size="small"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.routingId"
                 />
               </a-form-item>
             </a-col>
@@ -87,7 +92,8 @@
                 <a-input
                   v-model:value="formState.workCenter"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.workcenter') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -100,8 +106,10 @@
                 <a-input
                   v-model:value="formState.routingCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.code') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.routingId"
                 />
               </a-form-item>
             </a-col>
@@ -113,7 +121,8 @@
                 <a-input
                   v-model:value="formState.routingName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.name') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -126,7 +135,6 @@
                 <a-input-number
                   v-model:value="formState.purpose"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.purpose') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -139,8 +147,10 @@
                 <a-input
                   v-model:value="formState.materialCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.materialcode') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.routingId"
                 />
               </a-form-item>
             </a-col>
@@ -152,7 +162,8 @@
                 <a-input
                   v-model:value="formState.version"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.version') })"
-                  size="small"
+                  show-count
+                  :maxlength="10"
                   allow-clear
                 />
               </a-form-item>
@@ -167,7 +178,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.routing.status')"
                 name="routingStatus"
@@ -175,12 +186,11 @@
                 <a-input-number
                   v-model:value="formState.routingStatus"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routing.status') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.routing.effectivedate')"
                 name="effectiveDate"
@@ -189,12 +199,11 @@
                   v-model:value="formState.effectiveDate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routing.effectivedate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.routing.expirydate')"
                 name="expiryDate"
@@ -203,7 +212,6 @@
                   v-model:value="formState.expiryDate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routing.expirydate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -217,19 +225,31 @@
                   v-model:value="formState.routingDescription"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.routing.description') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -242,239 +262,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：routingItem -->
-      <a-tab-pane
-        key="child-items"
-        :tab="t('entity.routingItem._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddRoutingItemRow">
-            {{ t('common.page.button.create') }}{{ t('entity.routingItem._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="routingItemFormColumns"
-          :data-source="childRoutingItemRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingItem.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'baseUnit'">
-              <a-input
-                v-model:value="record.baseUnit"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingItem.baseunit') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'baseQuantity'">
-              <a-input-number
-                v-model:value="record.baseQuantity"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingItem.basequantity') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'standardMinutes'">
-              <a-input-number
-                v-model:value="record.standardMinutes"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingItem.standardminutes') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'timeUnit'">
-              <a-input
-                v-model:value="record.timeUnit"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingItem.timeunit') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'standardShorts'">
-              <a-input-number
-                v-model:value="record.standardShorts"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingItem.standardshorts') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'pointsUnit'">
-              <a-input
-                v-model:value="record.pointsUnit"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingItem.pointsunit') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'pointsToMinutesRate'">
-              <a-input-number
-                v-model:value="record.pointsToMinutesRate"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingItem.pointstominutesrate') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveRoutingItemRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：routingChangeLog -->
-      <a-tab-pane
-        key="child-changeLogs"
-        :tab="t('entity.routingChangeLog._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddRoutingChangeLogRow">
-            {{ t('common.page.button.create') }}{{ t('entity.routingChangeLog._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="routingChangeLogFormColumns"
-          :data-source="childRoutingChangeLogRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'changeFields'">
-              <a-input
-                v-model:value="record.changeFields"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingChangeLog.changefields') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeType'">
-              <a-input-number
-                v-model:value="record.changeType"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingChangeLog.changetype') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'changeReason'">
-              <a-input
-                v-model:value="record.changeReason"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingChangeLog.changereason') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeBy'">
-              <a-input
-                v-model:value="record.changeBy"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingChangeLog.changeby') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeTime'">
-              <a-input
-                v-model:value="record.changeTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingChangeLog.changetime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'extFieldJson'">
-              <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveRoutingChangeLogRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 items -->
+    <TaktEditableTable
+      ref="routingItemTableRef"
+      v-model="childRoutingItemRows"
+      :columns="routingItemFormColumns"
+      :title="t('entity.routingitem._self')"
+      :add-button-entity="t('entity.routingitem._self')"
+      id-field="routingItemId"
+      :default-row="createDefaultRoutingItemRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -486,7 +296,8 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { RoutingCreate, RoutingItemCreate, RoutingItem, RoutingChangeLogCreate, RoutingChangeLog } from '@/types/logistics/manufacturing/bom/routing'
+import type { RoutingCreate } from '@/types/logistics/manufacturing/bom/routing'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -519,222 +330,99 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","workCenter","routingCode","routingName","purpose","materialCode","version","routingStatus","effectiveDate","expiryDate","routingDescription","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","workCenter","routingCode","routingName","purpose","materialCode","version","routingStatus","effectiveDate","expiryDate","routingDescription","extField","remark"]
 
-/** routingItem 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childRoutingItemRows = ref<Record<string, unknown>[]>([])
-/** routingChangeLog 子表行（表单 Tab 内嵌） */
-const childRoutingChangeLogRows = ref<Record<string, unknown>[]>([])
+const routingItemTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 routingItem 表单列定义 */
-const routingItemFormColumns = computed(() => [
+/** 子表 routingItem 可编辑列 */
+const routingItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.routingItem.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.routingitem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.routingItem.baseunit'),
-    dataIndex: 'baseUnit',
     key: 'baseUnit',
+    title: t('entity.routingitem.baseunit'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.routingItem.basequantity'),
-    dataIndex: 'baseQuantity',
     key: 'baseQuantity',
+    title: t('entity.routingitem.basequantity'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.routingItem.standardminutes'),
-    dataIndex: 'standardMinutes',
     key: 'standardMinutes',
+    title: t('entity.routingitem.standardminutes'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.routingItem.timeunit'),
-    dataIndex: 'timeUnit',
     key: 'timeUnit',
+    title: t('entity.routingitem.timeunit'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.routingItem.standardshorts'),
-    dataIndex: 'standardShorts',
     key: 'standardShorts',
+    title: t('entity.routingitem.standardshorts'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.routingItem.pointsunit'),
-    dataIndex: 'pointsUnit',
     key: 'pointsUnit',
+    title: t('entity.routingitem.pointsunit'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.routingItem.pointstominutesrate'),
-    dataIndex: 'pointsToMinutesRate',
     key: 'pointsToMinutesRate',
+    title: t('entity.routingitem.pointstominutesrate'),
+    editor: 'inputNumber',
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 routingChangeLog 表单列定义 */
-const routingChangeLogFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.routingChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    width: 140,
-  },
-  {
-    title: t('entity.routingChangeLog.changetype'),
-    dataIndex: 'changeType',
-    key: 'changeType',
-    width: 140,
-  },
-  {
-    title: t('entity.routingChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    width: 140,
-  },
-  {
-    title: t('entity.routingChangeLog.changeby'),
-    dataIndex: 'changeBy',
-    key: 'changeBy',
-    width: 140,
-  },
-  {
-    title: t('entity.routingChangeLog.changetime'),
-    dataIndex: 'changeTime',
-    key: 'changeTime',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
-    key: 'remark',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<RoutingCreate & { routingId?: string }> | null | undefined) {
-  childRoutingItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.routingItemId ?? `new-${index}`,
-  }))
-  childRoutingChangeLogRows.value = ((val as any)?.changeLogs ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.routingChangeLogId ?? `new-${index}`,
-  }))
+  childRoutingItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 routingItem 行 */
-function handleAddRoutingItemRow() {
-  childRoutingItemRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      lineNumber: 0,
-      baseUnit: '',
-      baseQuantity: 0,
-      standardMinutes: 0,
-      timeUnit: '',
-      standardShorts: 0,
-      pointsUnit: '',
-      pointsToMinutesRate: 0,
-  })
-}
-
-/** 表单 Tab 内删除 routingItem 行 */
-function handleRemoveRoutingItemRow(index: number) {
-  childRoutingItemRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 routingChangeLog 行 */
-function handleAddRoutingChangeLogRow() {
-  childRoutingChangeLogRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      changeFields: '',
-      changeType: 0,
-      changeReason: '',
-      changeBy: '',
-      changeTime: '',
-      extFieldJson: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 routingChangeLog 行 */
-function handleRemoveRoutingChangeLogRow(index: number) {
-  childRoutingChangeLogRows.value.splice(index, 1)
+function createDefaultRoutingItemRow(): Record<string, unknown> {
+  return {
+    lineNumber: (childRoutingItemRows.value.length + 1) * 10,
+    baseUnit: '',
+    baseQuantity: 0,
+    standardMinutes: 0,
+    timeUnit: '',
+    standardShorts: 0,
+    pointsUnit: '',
+    pointsToMinutesRate: 0,
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.routingId ?? ''
   return {
     ...formState,
-    items: childRoutingItemRows.value.map(({ __rowKey, ...rest }) => rest),
-    changeLogs: childRoutingChangeLogRows.value.map(({ __rowKey, ...rest }) => rest),
+    items: routingItemTableRef.value?.getRows?.() ?? childRoutingItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      routingId: masterId,
+    })),
   }
 }
 
@@ -746,7 +434,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -754,20 +442,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 routingId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.routingId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).items
-    delete (next as any).changeLogs
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -811,13 +514,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  purpose: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.routing.purpose') }),
-      trigger: 'change'
-    }
-  ],
+  purpose: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routing.purpose') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routing.purpose') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   materialCode: [
     {
       required: true,
@@ -832,33 +541,55 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  routingStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.routing.status') }),
-      trigger: 'change'
-    }
-  ],
+  routingStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routing.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routing.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await routingItemTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('purpose' in payload) {
+    const rawpurpose = payload.purpose
+    payload.purpose = typeof rawpurpose === 'number' ? rawpurpose : Number(rawpurpose)
+  }
+  if ('routingStatus' in payload) {
+    const rawroutingStatus = payload.routingStatus
+    payload.routingStatus = typeof rawroutingStatus === 'number' ? rawroutingStatus : Number(rawroutingStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.routingId)
   childRoutingItemRows.value = []
-  childRoutingChangeLogRows.value = []
+  routingItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

@@ -65,12 +65,12 @@ public class TaktTranslationDto : TaktTenantDtoBase
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public int ResourceGroup { get; set; }
+    public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源类别（0=前端，1=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
     /// </summary>
-    public int ResourceType { get; set; }
+    public string ResourceType { get; set; } = "frontend";
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -124,12 +124,12 @@ public class TaktTranslationQueryDto : TaktPagedQuery
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public int? ResourceGroup { get; set; }
+    public string? ResourceGroup { get; set; }
 
     /// <summary>
-    /// 资源类别（0=前端，1=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
     /// </summary>
-    public int? ResourceType { get; set; }
+    public string? ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -149,7 +149,7 @@ public class TaktTranslationQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -198,12 +198,12 @@ public class TaktTranslationCreateDto
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public int ResourceGroup { get; set; }
+    public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源类别（0=前端，1=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
     /// </summary>
-    public int ResourceType { get; set; }
+    public string ResourceType { get; set; } = "frontend";
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -213,7 +213,7 @@ public class TaktTranslationCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -280,12 +280,12 @@ public class TaktTranslationTemplateDto
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public int? ResourceGroup { get; set; }
+    public string? ResourceGroup { get; set; }
 
     /// <summary>
-    /// 资源类别（0=前端，1=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
     /// </summary>
-    public int? ResourceType { get; set; }
+    public string? ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -295,7 +295,7 @@ public class TaktTranslationTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -338,12 +338,12 @@ public class TaktTranslationImportDto
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public int? ResourceGroup { get; set; }
+    public string? ResourceGroup { get; set; }
 
     /// <summary>
-    /// 资源类别（0=前端，1=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
     /// </summary>
-    public int? ResourceType { get; set; }
+    public string? ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -353,7 +353,7 @@ public class TaktTranslationImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -402,12 +402,12 @@ public class TaktTranslationExportDto
     /// <summary>
     /// 资源分组（用于分类管理翻译）
     /// </summary>
-    public int ResourceGroup { get; set; }
+    public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资源类别（0=前端，1=后端）
+    /// 资源类别（字典 sys_resource_type；frontend=前端，backend=后端）
     /// </summary>
-    public int ResourceType { get; set; }
+    public string ResourceType { get; set; } = "frontend";
 
     /// <summary>
     /// 上下文注释（帮助翻译人员理解使用场景）
@@ -417,7 +417,7 @@ public class TaktTranslationExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -454,12 +454,12 @@ public class TaktTranslationTransposedDto
     /// <summary>
     /// 资源分组
     /// </summary>
-    public int ResourceGroup { get; set; }
+    public string ResourceGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 资源类别
     /// </summary>
-    public int ResourceType { get; set; }
+    public string ResourceType { get; set; } = "frontend";
 
     /// <summary>
     /// 上下文注释
@@ -505,12 +505,12 @@ public class TaktTranslationTransposedQueryDto : TaktPagedQuery
     /// <summary>
     /// 资源分组
     /// </summary>
-    public int? ResourceGroup { get; set; }
+    public string? ResourceGroup { get; set; }
 
     /// <summary>
     /// 资源类别
     /// </summary>
-    public int? ResourceType { get; set; }
+    public string? ResourceType { get; set; }
 
     /// <summary>
     /// 上下文注释

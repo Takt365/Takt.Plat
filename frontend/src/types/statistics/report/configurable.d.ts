@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 自定义报表主实体（对标 SAP QuickViewer / SQVI 查询定义）
+ * 自定义报表主实体（SQVI 查询定义）
  * 对应前端 TaktConfigurableDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 Configurable
@@ -64,19 +64,9 @@ export interface Configurable extends CompanyDtoBase {
   maxQueryRows: number;
 
   /**
-   * 归属用户 ID（为空表示公司级共享报表）
+   * 公开（字典 sys_is_public_type；0=公开，1=私有）
    */
-  ownerUserId?: string;
-
-  /**
-   * 归属用户 名称（填充字段）
-   */
-  ownerUserName?: string;
-
-  /**
-   * 是否内置（内置报表禁止删除）
-   */
-  isBuiltIn: number;
+  isPublic: number;
 
   /**
    * 排序号
@@ -109,7 +99,7 @@ export interface Configurable extends CompanyDtoBase {
   fields?: ConfigurableField[];
 
   /**
-   * 筛选条件列表（Selection Screen / WHERE） （子表：TaktConfigurableSelection）
+   * 筛选条件列表（SQVI WHERE） （子表：TaktConfigurableSelection）
    */
   selections?: ConfigurableSelection[];
 
@@ -179,14 +169,9 @@ export interface ConfigurableQuery extends TaktPagedQuery {
   maxQueryRows?: number;
 
   /**
-   * 归属用户 ID（为空表示公司级共享报表）
+   * 公开（字典 sys_is_public_type；0=公开，1=私有）
    */
-  ownerUserId?: string;
-
-  /**
-   * 是否内置（内置报表禁止删除）
-   */
-  isBuiltIn?: number;
+  isPublic?: number;
 
   /**
    * 排序号
@@ -216,7 +201,7 @@ export interface ConfigurableQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -283,14 +268,9 @@ export interface ConfigurableCreate {
   maxQueryRows: number;
 
   /**
-   * 归属用户 ID（为空表示公司级共享报表）
+   * 公开（字典 sys_is_public_type；0=公开，1=私有）
    */
-  ownerUserId?: string;
-
-  /**
-   * 是否内置（内置报表禁止删除）
-   */
-  isBuiltIn: number;
+  isPublic: number;
 
   /**
    * 排序号
@@ -323,7 +303,7 @@ export interface ConfigurableCreate {
   fields?: ConfigurableFieldCreate[];
 
   /**
-   * 筛选条件列表（Selection Screen / WHERE）（子表，级联保存）
+   * 筛选条件列表（SQVI WHERE）（子表，级联保存）
    */
   selections?: ConfigurableSelectionCreate[];
 
@@ -340,7 +320,7 @@ export interface ConfigurableCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -455,14 +435,9 @@ export interface ConfigurableTemplate {
   maxQueryRows?: number;
 
   /**
-   * 归属用户 ID（为空表示公司级共享报表）
+   * 公开（字典 sys_is_public_type；0=公开，1=私有）
    */
-  ownerUserId?: string;
-
-  /**
-   * 是否内置（内置报表禁止删除）
-   */
-  isBuiltIn?: number;
+  isPublic?: number;
 
   /**
    * 排序号
@@ -482,7 +457,7 @@ export interface ConfigurableTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -549,14 +524,9 @@ export interface ConfigurableImport {
   maxQueryRows?: number;
 
   /**
-   * 归属用户 ID（为空表示公司级共享报表）
+   * 公开（字典 sys_is_public_type；0=公开，1=私有）
    */
-  ownerUserId?: string;
-
-  /**
-   * 是否内置（内置报表禁止删除）
-   */
-  isBuiltIn?: number;
+  isPublic?: number;
 
   /**
    * 排序号
@@ -576,7 +546,7 @@ export interface ConfigurableImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -638,14 +608,9 @@ export interface ConfigurableExport {
   maxQueryRows: number;
 
   /**
-   * 归属用户 ID（为空表示公司级共享报表）
+   * 公开（字典 sys_is_public_type；0=公开，1=私有）
    */
-  ownerUserId?: string;
-
-  /**
-   * 是否内置（内置报表禁止删除）
-   */
-  isBuiltIn: number;
+  isPublic: number;
 
   /**
    * 排序号
@@ -665,7 +630,7 @@ export interface ConfigurableExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -677,5 +642,204 @@ export interface ConfigurableExport {
    */
   createdAt: string;
 
+}
+
+// ========================================
+// SQVI 运行时
+// ========================================
+
+/**
+ * 运行时结果列
+ */
+export interface ConfigurableRuntimeColumn {
+  /**
+   * 列键
+   */
+  key: string;
+
+  /**
+   * 列显示名
+   */
+  label: string;
+}
+
+/**
+ * SQVI 筛选项
+ */
+export interface ConfigurableRuntimeSelection {
+  /**
+   * 筛选项主键（运行时表单独立绑定）
+   */
+  configurableSelectionId?: string;
+
+  /**
+   * 排序号（运行时取值键）
+   */
+  sortOrder: number;
+
+  /**
+   * 数据源别名
+   */
+  sourceAlias: string;
+
+  /**
+   * 列名
+   */
+  columnName: string;
+
+  /**
+   * 显示名称
+   */
+  displayName: string;
+
+  /**
+   * 比较运算符
+   */
+  filterOperator: number;
+
+  /**
+   * 是否必填
+   */
+  isRequired: number;
+
+  /**
+   * 默认值
+   */
+  defaultValue?: string;
+
+  /**
+   * 区间结束默认值
+   */
+  defaultValueTo?: string;
+}
+
+/**
+ * SQVI 运行时筛选条件
+ */
+export interface ConfigurableRuntimeScreen {
+  /**
+   * 报表主键
+   */
+  configurableId: string;
+
+  /**
+   * 报表编码
+   */
+  reportCode: string;
+
+  /**
+   * 报表名称
+   */
+  reportName: string;
+
+  /**
+   * 查询最大行数
+   */
+  maxQueryRows: number;
+
+  /**
+   * 导出最大行数
+   */
+  maxExportRows: number;
+
+  /**
+   * 输出列
+   */
+  columns: ConfigurableRuntimeColumn[];
+
+  /**
+   * 筛选项
+   */
+  selections: ConfigurableRuntimeSelection[];
+}
+
+/**
+ * 运行时筛选值
+ */
+export interface ConfigurableRuntimeSelectionValue {
+  /**
+   * 筛选项主键（优先于 sortOrder 匹配）
+   */
+  configurableSelectionId?: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 筛选值
+   */
+  value?: string;
+
+  /**
+   * 区间结束值
+   */
+  valueTo?: string;
+
+  /**
+   * 运行时比较运算符（1～8，与 gen_query_type SortOrder 一致）
+   */
+  filterOperator?: number;
+}
+
+/**
+ * 执行报表查询请求
+ */
+export interface ConfigurableExecuteQuery extends TaktPagedQuery {
+  /**
+   * 筛选值列表
+   */
+  selectionValues: ConfigurableRuntimeSelectionValue[];
+
+  /**
+   * 本次查询行数上限（0 或未传默认 500，最大 50000）
+   */
+  rowLimit?: number;
+}
+
+/**
+ * 报表查询结果
+ */
+export interface ConfigurableQueryResult {
+  /**
+   * 输出列
+   */
+  columns: ConfigurableRuntimeColumn[];
+
+  /**
+   * 数据行
+   */
+  rows: Record<string, unknown>[];
+
+  /**
+   * 总记录数
+   */
+  total: number;
+
+  /**
+   * 当前页码
+   */
+  pageIndex: number;
+
+  /**
+   * 每页大小
+   */
+  pageSize: number;
+}
+
+/**
+ * 导出报表数据请求
+ */
+export interface ConfigurableExportData {
+  /**
+   * 筛选值列表
+   */
+  selectionValues: ConfigurableRuntimeSelectionValue[];
+
+  /**
+   * 本次导出行数上限（0 或未传默认 500，最大 50000）
+   */
+  rowLimit?: number;
 }
 

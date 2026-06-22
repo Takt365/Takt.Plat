@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：rbac-parent-config.cjs
 // 创建时间：2026-06-01
 // 创建人：Takt365(Cursor AI)

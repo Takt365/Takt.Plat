@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-quality-operation-sampling-scheme">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'samplingSchemeId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <SamplingSchemeForm
+        :key="formData?.samplingSchemeId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,154 +110,162 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.samplingScheme.plantcode')">
+      <a-form-item :label="t('entity.samplingscheme.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('samplingSchemeCode')">
-      <a-form-item :label="t('entity.samplingScheme.code')">
+      <a-form-item :label="t('entity.samplingscheme.code')">
         <a-input
           v-model:value="advancedQueryForm.samplingSchemeCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.code') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('samplingSchemeName')">
-      <a-form-item :label="t('entity.samplingScheme.name')">
+      <a-form-item :label="t('entity.samplingscheme.name')">
         <a-input
           v-model:value="advancedQueryForm.samplingSchemeName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.name') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.name') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('samplingSchemeType')">
-      <a-form-item :label="t('entity.samplingScheme.type')">
+      <a-form-item :label="t('entity.samplingscheme.type')">
         <a-input-number
           v-model:value="advancedQueryForm.samplingSchemeType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.type') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.type') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('samplingStandard')">
-      <a-form-item :label="t('entity.samplingScheme.samplingstandard')">
+      <a-form-item :label="t('entity.samplingscheme.samplingstandard')">
         <a-input-number
           v-model:value="advancedQueryForm.samplingStandard"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.samplingstandard') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.samplingstandard') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionLevel')">
-      <a-form-item :label="t('entity.samplingScheme.inspectionlevel')">
+      <a-form-item :label="t('entity.samplingscheme.inspectionlevel')">
         <a-input-number
           v-model:value="advancedQueryForm.inspectionLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.inspectionlevel') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.inspectionlevel') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('aqlValue')">
-      <a-form-item :label="t('entity.samplingScheme.aqlvalue')">
+      <a-form-item :label="t('entity.samplingscheme.aqlvalue')">
         <a-input-number
           v-model:value="advancedQueryForm.aqlValue"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.aqlvalue') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.aqlvalue') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lotSizeMin')">
-      <a-form-item :label="t('entity.samplingScheme.lotsizemin')">
+      <a-form-item :label="t('entity.samplingscheme.lotsizemin')">
         <a-input-number
           v-model:value="advancedQueryForm.lotSizeMin"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.lotsizemin') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.lotsizemin') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lotSizeMax')">
-      <a-form-item :label="t('entity.samplingScheme.lotsizemax')">
+      <a-form-item :label="t('entity.samplingscheme.lotsizemax')">
         <a-input-number
           v-model:value="advancedQueryForm.lotSizeMax"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.lotsizemax') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.lotsizemax') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sampleSize')">
-      <a-form-item :label="t('entity.samplingScheme.samplesize')">
+      <a-form-item :label="t('entity.samplingscheme.samplesize')">
         <a-input-number
           v-model:value="advancedQueryForm.sampleSize"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.samplesize') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.samplesize') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('acceptanceNumber')">
-      <a-form-item :label="t('entity.samplingScheme.acceptancenumber')">
+      <a-form-item :label="t('entity.samplingscheme.acceptancenumber')">
         <a-input-number
           v-model:value="advancedQueryForm.acceptanceNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.acceptancenumber') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.acceptancenumber') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('rejectionNumber')">
-      <a-form-item :label="t('entity.samplingScheme.rejectionnumber')">
+      <a-form-item :label="t('entity.samplingscheme.rejectionnumber')">
         <a-input-number
           v-model:value="advancedQueryForm.rejectionNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.rejectionnumber') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.rejectionnumber') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionStrictness')">
-      <a-form-item :label="t('entity.samplingScheme.inspectionstrictness')">
+      <a-form-item :label="t('entity.samplingscheme.inspectionstrictness')">
         <a-input-number
           v-model:value="advancedQueryForm.inspectionStrictness"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.inspectionstrictness') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.inspectionstrictness') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isTransferRuleEnabled')">
-      <a-form-item :label="t('entity.samplingScheme.istransferruleenabled')">
+      <a-form-item :label="t('entity.samplingscheme.istransferruleenabled')">
         <a-input-number
           v-model:value="advancedQueryForm.isTransferRuleEnabled"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.istransferruleenabled') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.istransferruleenabled') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('transferRuleConfig')">
-      <a-form-item :label="t('entity.samplingScheme.transferruleconfig')">
+      <a-form-item :label="t('entity.samplingscheme.transferruleconfig')">
         <a-input
           v-model:value="advancedQueryForm.transferRuleConfig"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.transferruleconfig') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.transferruleconfig') })"
+          show-count
+          :maxlength="2000"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('samplingSchemeStatus')">
-      <a-form-item :label="t('entity.samplingScheme.status')">
+      <a-form-item :label="t('entity.samplingscheme.status')">
         <a-input-number
           v-model:value="advancedQueryForm.samplingSchemeStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingScheme.status') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.samplingscheme.status') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('schemeDescription')">
-      <a-form-item :label="t('entity.samplingScheme.schemedescription')">
+      <a-form-item :label="t('entity.samplingscheme.schemedescription')">
         <a-textarea
           v-model:value="advancedQueryForm.schemeDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.samplingScheme.schemedescription') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.samplingscheme.schemedescription') })"
           :rows="2"
           allow-clear
         />
@@ -284,12 +293,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -298,8 +326,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -309,14 +339,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.samplingScheme._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.samplingscheme._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.samplingScheme._self"
+        entity-i18n-key="entity.samplingscheme._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -352,12 +382,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SamplingSchemeForm from './components/sampling-scheme-form.vue'
-import { getSamplingSchemeList, getSamplingSchemeById, createSamplingScheme, updateSamplingScheme, deleteSamplingSchemeById, deleteSamplingSchemeBatch, getSamplingSchemeTemplate, importSamplingScheme, exportSamplingScheme } from '@/api/logistics/quality/operation/sampling-scheme'
-import type { SamplingScheme, SamplingSchemeQuery, SamplingSchemeCreate, SamplingSchemeUpdate } from '@/types/logistics/quality/operation/sampling-scheme'
+import { getSamplingSchemeList, getSamplingSchemeById, createSamplingScheme, updateSamplingScheme, deleteSamplingSchemeById, deleteSamplingSchemeBatch, getSamplingSchemeTemplate, importSamplingScheme, exportSamplingScheme, updateSamplingSchemeStatus } from '@/api/logistics/quality/operation/sampling-scheme'
+import type { SamplingScheme, SamplingSchemeQuery } from '@/types/logistics/quality/operation/sampling-scheme'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -365,7 +396,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktSamplingScheme')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.samplingScheme._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.samplingscheme._self') })
 )
 
 /** 快捷查询关键字 */
@@ -375,9 +406,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<SamplingScheme[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -392,11 +423,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<SamplingScheme>>({})
+const formData = ref<Partial<SamplingScheme> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -419,31 +452,31 @@ const advancedQueryForm = ref({
   schemeDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.samplingScheme.plantcode') },
-  { key: 'samplingSchemeCode', label: t('entity.samplingScheme.code') },
-  { key: 'samplingSchemeName', label: t('entity.samplingScheme.name') },
-  { key: 'samplingSchemeType', label: t('entity.samplingScheme.type') },
-  { key: 'samplingStandard', label: t('entity.samplingScheme.samplingstandard') },
-  { key: 'inspectionLevel', label: t('entity.samplingScheme.inspectionlevel') },
-  { key: 'aqlValue', label: t('entity.samplingScheme.aqlvalue') },
-  { key: 'lotSizeMin', label: t('entity.samplingScheme.lotsizemin') },
-  { key: 'lotSizeMax', label: t('entity.samplingScheme.lotsizemax') },
-  { key: 'sampleSize', label: t('entity.samplingScheme.samplesize') },
-  { key: 'acceptanceNumber', label: t('entity.samplingScheme.acceptancenumber') },
-  { key: 'rejectionNumber', label: t('entity.samplingScheme.rejectionnumber') },
-  { key: 'inspectionStrictness', label: t('entity.samplingScheme.inspectionstrictness') },
-  { key: 'isTransferRuleEnabled', label: t('entity.samplingScheme.istransferruleenabled') },
-  { key: 'transferRuleConfig', label: t('entity.samplingScheme.transferruleconfig') },
-  { key: 'samplingSchemeStatus', label: t('entity.samplingScheme.status') },
-  { key: 'schemeDescription', label: t('entity.samplingScheme.schemedescription') },
+  { key: 'plantCode', label: t('entity.samplingscheme.plantcode') },
+  { key: 'samplingSchemeCode', label: t('entity.samplingscheme.code') },
+  { key: 'samplingSchemeName', label: t('entity.samplingscheme.name') },
+  { key: 'samplingSchemeType', label: t('entity.samplingscheme.type') },
+  { key: 'samplingStandard', label: t('entity.samplingscheme.samplingstandard') },
+  { key: 'inspectionLevel', label: t('entity.samplingscheme.inspectionlevel') },
+  { key: 'aqlValue', label: t('entity.samplingscheme.aqlvalue') },
+  { key: 'lotSizeMin', label: t('entity.samplingscheme.lotsizemin') },
+  { key: 'lotSizeMax', label: t('entity.samplingscheme.lotsizemax') },
+  { key: 'sampleSize', label: t('entity.samplingscheme.samplesize') },
+  { key: 'acceptanceNumber', label: t('entity.samplingscheme.acceptancenumber') },
+  { key: 'rejectionNumber', label: t('entity.samplingscheme.rejectionnumber') },
+  { key: 'inspectionStrictness', label: t('entity.samplingscheme.inspectionstrictness') },
+  { key: 'isTransferRuleEnabled', label: t('entity.samplingscheme.istransferruleenabled') },
+  { key: 'transferRuleConfig', label: t('entity.samplingscheme.transferruleconfig') },
+  { key: 'samplingSchemeStatus', label: t('entity.samplingscheme.status') },
+  { key: 'schemeDescription', label: t('entity.samplingscheme.schemedescription') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -462,10 +495,82 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {SamplingSchemeQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<SamplingSchemeQuery>): SamplingSchemeQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: SamplingSchemeQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof SamplingSchemeQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('samplingSchemeCode', form.samplingSchemeCode)
+  assignTrimmed('samplingSchemeName', form.samplingSchemeName)
+  if (form.samplingSchemeType !== undefined && form.samplingSchemeType !== null) {
+    query.samplingSchemeType = form.samplingSchemeType
+  }
+  if (form.samplingStandard !== undefined && form.samplingStandard !== null) {
+    query.samplingStandard = form.samplingStandard
+  }
+  if (form.inspectionLevel !== undefined && form.inspectionLevel !== null) {
+    query.inspectionLevel = form.inspectionLevel
+  }
+  if (form.aqlValue !== undefined && form.aqlValue !== null) {
+    query.aqlValue = form.aqlValue
+  }
+  if (form.lotSizeMin !== undefined && form.lotSizeMin !== null) {
+    query.lotSizeMin = form.lotSizeMin
+  }
+  if (form.lotSizeMax !== undefined && form.lotSizeMax !== null) {
+    query.lotSizeMax = form.lotSizeMax
+  }
+  if (form.sampleSize !== undefined && form.sampleSize !== null) {
+    query.sampleSize = form.sampleSize
+  }
+  if (form.acceptanceNumber !== undefined && form.acceptanceNumber !== null) {
+    query.acceptanceNumber = form.acceptanceNumber
+  }
+  if (form.rejectionNumber !== undefined && form.rejectionNumber !== null) {
+    query.rejectionNumber = form.rejectionNumber
+  }
+  if (form.inspectionStrictness !== undefined && form.inspectionStrictness !== null) {
+    query.inspectionStrictness = form.inspectionStrictness
+  }
+  if (form.isTransferRuleEnabled !== undefined && form.isTransferRuleEnabled !== null) {
+    query.isTransferRuleEnabled = form.isTransferRuleEnabled
+  }
+  assignTrimmed('transferRuleConfig', form.transferRuleConfig)
+  if (form.samplingSchemeStatus !== undefined && form.samplingSchemeStatus !== null) {
+    query.samplingSchemeStatus = form.samplingSchemeStatus
+  }
+  assignTrimmed('schemeDescription', form.schemeDescription)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -485,7 +590,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'samplingSchemeId') ?? ''
   },
   {
-    title: t('entity.samplingScheme.plantcode'),
+    title: t('entity.samplingscheme.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -494,7 +599,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.samplingScheme.code'),
+    title: t('entity.samplingscheme.code'),
     dataIndex: 'samplingSchemeCode',
     key: 'samplingSchemeCode',
     width: 120,
@@ -503,7 +608,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'samplingSchemeCode') ?? ''
   },
   {
-    title: t('entity.samplingScheme.name'),
+    title: t('entity.samplingscheme.name'),
     dataIndex: 'samplingSchemeName',
     key: 'samplingSchemeName',
     width: 120,
@@ -512,7 +617,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'samplingSchemeName') ?? ''
   },
   {
-    title: t('entity.samplingScheme.type'),
+    title: t('entity.samplingscheme.type'),
     dataIndex: 'samplingSchemeType',
     key: 'samplingSchemeType',
     width: 120,
@@ -521,7 +626,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'samplingSchemeType') ?? ''
   },
   {
-    title: t('entity.samplingScheme.samplingstandard'),
+    title: t('entity.samplingscheme.samplingstandard'),
     dataIndex: 'samplingStandard',
     key: 'samplingStandard',
     width: 120,
@@ -530,7 +635,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'samplingStandard') ?? ''
   },
   {
-    title: t('entity.samplingScheme.inspectionlevel'),
+    title: t('entity.samplingscheme.inspectionlevel'),
     dataIndex: 'inspectionLevel',
     key: 'inspectionLevel',
     width: 120,
@@ -539,7 +644,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'inspectionLevel') ?? ''
   },
   {
-    title: t('entity.samplingScheme.aqlvalue'),
+    title: t('entity.samplingscheme.aqlvalue'),
     dataIndex: 'aqlValue',
     key: 'aqlValue',
     width: 120,
@@ -548,7 +653,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'aqlValue') ?? ''
   },
   {
-    title: t('entity.samplingScheme.lotsizemin'),
+    title: t('entity.samplingscheme.lotsizemin'),
     dataIndex: 'lotSizeMin',
     key: 'lotSizeMin',
     width: 120,
@@ -557,7 +662,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'lotSizeMin') ?? ''
   },
   {
-    title: t('entity.samplingScheme.lotsizemax'),
+    title: t('entity.samplingscheme.lotsizemax'),
     dataIndex: 'lotSizeMax',
     key: 'lotSizeMax',
     width: 120,
@@ -566,7 +671,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'lotSizeMax') ?? ''
   },
   {
-    title: t('entity.samplingScheme.samplesize'),
+    title: t('entity.samplingscheme.samplesize'),
     dataIndex: 'sampleSize',
     key: 'sampleSize',
     width: 120,
@@ -575,7 +680,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'sampleSize') ?? ''
   },
   {
-    title: t('entity.samplingScheme.acceptancenumber'),
+    title: t('entity.samplingscheme.acceptancenumber'),
     dataIndex: 'acceptanceNumber',
     key: 'acceptanceNumber',
     width: 120,
@@ -584,7 +689,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'acceptanceNumber') ?? ''
   },
   {
-    title: t('entity.samplingScheme.rejectionnumber'),
+    title: t('entity.samplingscheme.rejectionnumber'),
     dataIndex: 'rejectionNumber',
     key: 'rejectionNumber',
     width: 120,
@@ -593,7 +698,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'rejectionNumber') ?? ''
   },
   {
-    title: t('entity.samplingScheme.inspectionstrictness'),
+    title: t('entity.samplingscheme.inspectionstrictness'),
     dataIndex: 'inspectionStrictness',
     key: 'inspectionStrictness',
     width: 120,
@@ -602,7 +707,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'inspectionStrictness') ?? ''
   },
   {
-    title: t('entity.samplingScheme.istransferruleenabled'),
+    title: t('entity.samplingscheme.istransferruleenabled'),
     dataIndex: 'isTransferRuleEnabled',
     key: 'isTransferRuleEnabled',
     width: 120,
@@ -611,7 +716,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'isTransferRuleEnabled') ?? ''
   },
   {
-    title: t('entity.samplingScheme.transferruleconfig'),
+    title: t('entity.samplingscheme.transferruleconfig'),
     dataIndex: 'transferRuleConfig',
     key: 'transferRuleConfig',
     width: 120,
@@ -620,7 +725,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'transferRuleConfig') ?? ''
   },
   {
-    title: t('entity.samplingScheme.status'),
+    title: t('entity.samplingscheme.status'),
     dataIndex: 'samplingSchemeStatus',
     key: 'samplingSchemeStatus',
     width: 120,
@@ -629,7 +734,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSamplingSchemeField(record, 'samplingSchemeStatus') ?? ''
   },
   {
-    title: t('entity.samplingScheme.schemedescription'),
+    title: t('entity.samplingscheme.schemedescription'),
     dataIndex: 'schemeDescription',
     key: 'schemeDescription',
     width: 120,
@@ -667,6 +772,7 @@ const getSamplingSchemeId = (record: any): string => record?.[entityIdName] ?? '
  * @param field 字段名
  */
 const getSamplingSchemeField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -710,16 +816,7 @@ const onClickRow = (record: SamplingScheme) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: SamplingSchemeQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getSamplingSchemeList(params)
+    const res = await getSamplingSchemeList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -737,7 +834,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -764,22 +861,23 @@ function handleReset() {
   schemeDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.samplingScheme._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.samplingscheme._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: SamplingScheme) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.samplingScheme._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.samplingscheme._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -789,7 +887,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.samplingScheme._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.samplingscheme._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -807,12 +905,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateSamplingScheme(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.samplingScheme._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.samplingscheme._self') }))
     } else {
       await createSamplingScheme(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.samplingScheme._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.samplingscheme._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -822,6 +922,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -853,16 +955,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: SamplingSchemeQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportSamplingScheme(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportSamplingScheme(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -881,10 +978,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.samplingScheme._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.samplingscheme._self') }))
   } catch (error: any) {
     logger.error('[SamplingScheme] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.samplingScheme._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.samplingscheme._self') }))
   } finally {
     loading.value = false
   }
@@ -893,12 +990,12 @@ async function handleExport() {
 async function handleDeleteOne(record: SamplingScheme) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.samplingScheme._self'), name: t('common.tip.this.target', { target: t('entity.samplingScheme._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.samplingscheme._self'), name: t('common.tip.this.target', { target: t('entity.samplingscheme._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSamplingSchemeById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.samplingScheme._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.samplingscheme._self') }))
       loadData()
     }
   })
@@ -906,18 +1003,18 @@ async function handleDeleteOne(record: SamplingScheme) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.samplingScheme._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.samplingscheme._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.samplingScheme._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.samplingscheme._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteSamplingSchemeBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.samplingScheme._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.samplingscheme._self') }))
       loadData()
     }
   })
@@ -930,7 +1027,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -955,7 +1052,7 @@ function handleAdvancedQueryReset() {
   schemeDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -985,23 +1082,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.logistics-quality-operation-sampling-scheme {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

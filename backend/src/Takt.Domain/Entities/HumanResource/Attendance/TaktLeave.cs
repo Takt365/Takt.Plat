@@ -51,7 +51,7 @@ public class TaktLeave : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }
     /// <summary>
-    /// 请假类型（字典 sys_leave_category；affair/sick/annual 等）
+    /// 请假类型（字典 sys_leave_type）
     /// </summary>
     [SugarColumn(ColumnName = "leave_type", ColumnDescription = "请假类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string LeaveType { get; set; } = string.Empty;
@@ -81,12 +81,6 @@ public class TaktLeave : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "proof_attachments_json", ColumnDescription = "证明附件JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? ProofAttachmentsJson { get; set; }
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
-    /// </summary>
-    [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [SugarColumn(ColumnName = "handling_by", ColumnDescription = "经办人", ColumnDataType = "bigint", IsNullable = false)]
@@ -103,7 +97,7 @@ public class TaktLeave : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "handling_comment", ColumnDescription = "经办备注", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? HandlingComment { get; set; }
     /// <summary>
-    /// 请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
+    /// 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
     [SugarColumn(ColumnName = "leave_status", ColumnDescription = "请假状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LeaveStatus { get; set; }

@@ -47,9 +47,9 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public string RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型
+    /// 业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）
     /// </summary>
-    public int DocumentType { get; set; }
+    public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -57,12 +57,12 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public string DepartmentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前缀（如：SO-, PO-, INV-）
+    /// 前缀编码（如：PUR、SORD、ANN，最多 4 位）
     /// </summary>
-    public string? Prefix { get; set; } = string.Empty;
+    public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+    /// 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -77,9 +77,9 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public int SequenceStep { get; set; } = 0;
 
     /// <summary>
-    /// 后缀（如：-CN, -USD, -V2）
+    /// 后缀编码（可选，最多 4 位）
     /// </summary>
-    public string? Suffix { get; set; } = string.Empty;
+    public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -92,12 +92,12 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public int CurrentSequence { get; set; } = 0;
 
     /// <summary>
-    /// 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+    /// 起始编码（完整业务编号，末段为流水号；生成编号后更新为最近一次产出编码） 如：SO-20250120-000001
     /// </summary>
-    public string? ExampleCode { get; set; } = string.Empty;
+    public string ExampleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 分隔符（默认 -，也可用 _ 或 /）
+    /// 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
     /// </summary>
     public string Separator { get; set; } = string.Empty;
 
@@ -112,7 +112,7 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public int Status { get; set; }
 
     /// <summary>
-    /// 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
+    /// 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,PrefixCode,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
     /// </summary>
     public string? Description { get; set; } = string.Empty;
 
@@ -149,9 +149,9 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public string? RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型
+    /// 业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）
     /// </summary>
-    public int? DocumentType { get; set; }
+    public string? DocumentType { get; set; }
 
     /// <summary>
     /// 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -159,12 +159,12 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public string? DepartmentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前缀（如：SO-, PO-, INV-）
+    /// 前缀编码（如：PUR、SORD、ANN，最多 4 位）
     /// </summary>
-    public string? Prefix { get; set; } = string.Empty;
+    public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+    /// 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -179,9 +179,9 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public int? SequenceStep { get; set; }
 
     /// <summary>
-    /// 后缀（如：-CN, -USD, -V2）
+    /// 后缀编码（可选，最多 4 位）
     /// </summary>
-    public string? Suffix { get; set; } = string.Empty;
+    public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -194,12 +194,12 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public int? CurrentSequence { get; set; }
 
     /// <summary>
-    /// 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+    /// 起始编码（模糊查询，可选） 如：SO-20250120-000001
     /// </summary>
     public string? ExampleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 分隔符（默认 -，也可用 _ 或 /）
+    /// 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
     /// </summary>
     public string? Separator { get; set; } = string.Empty;
 
@@ -214,7 +214,7 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public int? Status { get; set; }
 
     /// <summary>
-    /// 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
+    /// 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,PrefixCode,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
     /// </summary>
     public string? Description { get; set; } = string.Empty;
 
@@ -231,7 +231,7 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -276,9 +276,9 @@ public class TaktNumberingCreateDto
     public string RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型
+    /// 业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）
     /// </summary>
-    public int DocumentType { get; set; }
+    public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -287,12 +287,12 @@ public class TaktNumberingCreateDto
     public string DepartmentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前缀（如：SO-, PO-, INV-）
+    /// 前缀编码（如：PUR、SORD、ANN，最多 4 位）
     /// </summary>
-    public string? Prefix { get; set; } = string.Empty;
+    public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+    /// 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -307,9 +307,9 @@ public class TaktNumberingCreateDto
     public int SequenceStep { get; set; } = 0;
 
     /// <summary>
-    /// 后缀（如：-CN, -USD, -V2）
+    /// 后缀编码（可选，最多 4 位）
     /// </summary>
-    public string? Suffix { get; set; } = string.Empty;
+    public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -323,14 +323,13 @@ public class TaktNumberingCreateDto
     public int CurrentSequence { get; set; } = 0;
 
     /// <summary>
-    /// 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+    /// 起始编码（保存时由服务端按规则自动生成，客户端无须提交） 如：SO-20250120-000001
     /// </summary>
-    public string? ExampleCode { get; set; } = string.Empty;
+    public string ExampleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 分隔符（默认 -，也可用 _ 或 /）
+    /// 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
     /// </summary>
-    [Required(ErrorMessage = "分隔符（默认 -，也可用 _ 或 /）不能为空")]
     public string Separator { get; set; } = string.Empty;
 
     /// <summary>
@@ -344,14 +343,14 @@ public class TaktNumberingCreateDto
     public int Status { get; set; }
 
     /// <summary>
-    /// 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
+    /// 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,PrefixCode,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
     /// </summary>
     public string? Description { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -434,9 +433,9 @@ public class TaktNumberingTemplateDto
     public string? RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型
+    /// 业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）
     /// </summary>
-    public int? DocumentType { get; set; }
+    public string? DocumentType { get; set; }
 
     /// <summary>
     /// 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -444,12 +443,12 @@ public class TaktNumberingTemplateDto
     public string? DepartmentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前缀（如：SO-, PO-, INV-）
+    /// 前缀编码（如：PUR、SORD、ANN，最多 4 位）
     /// </summary>
-    public string? Prefix { get; set; } = string.Empty;
+    public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+    /// 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -464,9 +463,9 @@ public class TaktNumberingTemplateDto
     public int? SequenceStep { get; set; }
 
     /// <summary>
-    /// 后缀（如：-CN, -USD, -V2）
+    /// 后缀编码（可选，最多 4 位）
     /// </summary>
-    public string? Suffix { get; set; } = string.Empty;
+    public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -479,14 +478,14 @@ public class TaktNumberingTemplateDto
     public int? CurrentSequence { get; set; }
 
     /// <summary>
-    /// 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+    /// 起始编码（导入可留空，服务端按规则自动生成） 如：SO-20250120-000001
     /// </summary>
-    public string? ExampleCode { get; set; } = string.Empty;
+    public string ExampleCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -526,9 +525,9 @@ public class TaktNumberingImportDto
     public string? RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型
+    /// 业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）
     /// </summary>
-    public int? DocumentType { get; set; }
+    public string? DocumentType { get; set; }
 
     /// <summary>
     /// 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -536,12 +535,12 @@ public class TaktNumberingImportDto
     public string? DepartmentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前缀（如：SO-, PO-, INV-）
+    /// 前缀编码（如：PUR、SORD、ANN，最多 4 位）
     /// </summary>
-    public string? Prefix { get; set; } = string.Empty;
+    public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+    /// 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -556,9 +555,9 @@ public class TaktNumberingImportDto
     public int? SequenceStep { get; set; }
 
     /// <summary>
-    /// 后缀（如：-CN, -USD, -V2）
+    /// 后缀编码（可选，最多 4 位）
     /// </summary>
-    public string? Suffix { get; set; } = string.Empty;
+    public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -571,14 +570,14 @@ public class TaktNumberingImportDto
     public int? CurrentSequence { get; set; }
 
     /// <summary>
-    /// 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+    /// 起始编码（导入可留空，服务端按规则自动生成） 如：SO-20250120-000001
     /// </summary>
-    public string? ExampleCode { get; set; } = string.Empty;
+    public string ExampleCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -619,9 +618,9 @@ public class TaktNumberingExportDto
     public string RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型
+    /// 业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）
     /// </summary>
-    public int DocumentType { get; set; }
+    public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -629,12 +628,12 @@ public class TaktNumberingExportDto
     public string DepartmentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前缀（如：SO-, PO-, INV-）
+    /// 前缀编码（如：PUR、SORD、ANN，最多 4 位）
     /// </summary>
-    public string? Prefix { get; set; } = string.Empty;
+    public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+    /// 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -649,9 +648,9 @@ public class TaktNumberingExportDto
     public int SequenceStep { get; set; } = 0;
 
     /// <summary>
-    /// 后缀（如：-CN, -USD, -V2）
+    /// 后缀编码（可选，最多 4 位）
     /// </summary>
-    public string? Suffix { get; set; } = string.Empty;
+    public string? SuffixCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -664,12 +663,12 @@ public class TaktNumberingExportDto
     public int CurrentSequence { get; set; } = 0;
 
     /// <summary>
-    /// 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+    /// 起始编码（完整业务编号，末段为流水号；生成编号后更新为最近一次产出编码） 如：SO-20250120-000001
     /// </summary>
-    public string? ExampleCode { get; set; } = string.Empty;
+    public string ExampleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 分隔符（默认 -，也可用 _ 或 /）
+    /// 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
     /// </summary>
     public string Separator { get; set; } = string.Empty;
 
@@ -684,14 +683,14 @@ public class TaktNumberingExportDto
     public int Status { get; set; }
 
     /// <summary>
-    /// 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
+    /// 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,PrefixCode,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
     /// </summary>
     public string? Description { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -730,9 +729,9 @@ public class TaktNumberingPreviewRequestDto
     public string? RuleName { get; set; }
 
     /// <summary>
-    /// 单据类型（草稿预览）
+    /// 业务领域（草稿预览，与一级菜单域一致）
     /// </summary>
-    public int DocumentType { get; set; }
+    public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门编码（草稿预览必填）
@@ -742,7 +741,7 @@ public class TaktNumberingPreviewRequestDto
     /// <summary>
     /// 前缀
     /// </summary>
-    public string? Prefix { get; set; }
+    public string? PrefixCode { get; set; }
 
     /// <summary>
     /// 日期格式
@@ -762,7 +761,7 @@ public class TaktNumberingPreviewRequestDto
     /// <summary>
     /// 后缀
     /// </summary>
-    public string? Suffix { get; set; }
+    public string? SuffixCode { get; set; }
 
     /// <summary>
     /// 重置周期

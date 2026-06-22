@@ -26,7 +26,7 @@
       <a-list
         :data-source="notifications"
         item-layout="horizontal"
-        :pagination="{ pageSize: 10, size: 'small' }"
+        :pagination="{ pageSize: getTaktDefaultPageSize(), size: 'small' }"
       >
         <template #renderItem="{ item }">
           <a-list-item>
@@ -77,6 +77,7 @@ import type { Component } from 'vue';
 import type { Events, NotificationType } from '@/types/event';
 import { useEventBus } from '@/utils/event-bus';
 import { createLogger } from '@/utils/logger';
+import { getTaktDefaultPageSize } from '@/utils/takt-paged';
 
 /** 通知中心模块日志 */
 const notificationLogger = createLogger('notification-center');

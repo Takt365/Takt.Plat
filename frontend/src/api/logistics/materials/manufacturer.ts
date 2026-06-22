@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/materials
 // 文件名称：manufacturer.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -42,9 +42,7 @@ export function getManufacturerList(queryDto: any): Promise<TaktPagedResult<Manu
   return request<TaktPagedResult<Manufacturer>>({
     url: `${MANUFACTURER_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -114,7 +112,7 @@ export function deleteManufacturerBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新制造商信息状态
- * @param {ManufacturerStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {ManufacturerStatus} dto 状态 DTO
  * @returns {Promise<Manufacturer>} 制造商信息DTO
  */
 export function updateManufacturerStatus(dto: ManufacturerStatus): Promise<Manufacturer> {
@@ -214,7 +212,7 @@ export function exportManufacturer(
     url: `${MANUFACTURER_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

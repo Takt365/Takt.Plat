@@ -94,7 +94,7 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
         EnsureThreeLayerContext();
         var list = await _quartzLogRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.TaskName,
+            x => x.TaskName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -235,7 +235,7 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
                 || (x.ExecuteIp != null && x.ExecuteIp.Contains(keywords))
                 || (x.ExecuteHost != null && x.ExecuteHost.Contains(keywords))
                 || SqlFunc.ToString(x.ExecuteStatus).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ExecuteTime).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -297,9 +297,9 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
             exp = exp.And(x => x.ExecuteStatus == queryDto.ExecuteStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

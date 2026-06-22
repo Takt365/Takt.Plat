@@ -184,12 +184,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('common.page.entity.ExtField')"
+                name="ExtField"
               >
                 <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                   size="small"
                   allow-clear
                 />
@@ -251,7 +251,7 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
 }
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 const activeTab = ref('tab-0')
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","staffingRequirementId","planNo","planDate","planStartDate","planEndDate","planHeadcount","reason","talentJobPostings","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","staffingRequirementId","planNo","planDate","planStartDate","planEndDate","planHeadcount","reason","talentJobPostings","ExtField","remark"]
 
 
 interface Props {

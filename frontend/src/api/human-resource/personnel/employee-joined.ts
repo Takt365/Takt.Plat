@@ -40,9 +40,7 @@ export function getEmployeeJoinedList(queryDto: any): Promise<TaktPagedResult<Em
   return request<TaktPagedResult<EmployeeJoined>>({
     url: `${EMPLOYEE_JOINED_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportEmployeeJoined(
     url: `${EMPLOYEE_JOINED_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentOfferI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentOffer 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,119 +75,119 @@ public class TaktTalentOfferI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktTalentOffer 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.talentoffer._self / entity.talentoffer.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.talentoffer._self / entity.talentoffer.{{field}}；ResourceGroup=Talent；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetTalentOfferTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.talentoffer._self
-            new TranslationSeedItem("entity.talentoffer._self", "en-US", "Talent Offer Information", "实体名称"),
+            new TranslationSeedItem("entity.talentoffer._self", "en-US", "Talent Offer Information_us", "实体名称"),
             // entity.talentoffer._self
-            new TranslationSeedItem("entity.talentoffer._self", "ja-JP", "录用信息", "实体名称"),
+            new TranslationSeedItem("entity.talentoffer._self", "ja-JP", "录用信息_jp", "实体名称"),
             // entity.talentoffer._self
             new TranslationSeedItem("entity.talentoffer._self", "zh-CN", "录用信息", "实体名称"),
             // entity.talentoffer._self
-            new TranslationSeedItem("entity.talentoffer._self", "zh-HK", "录用信息", "实体名称"),
+            new TranslationSeedItem("entity.talentoffer._self", "zh-HK", "录用信息_hk", "实体名称"),
 
             // entity.talentoffer.interviewid
-            new TranslationSeedItem("entity.talentoffer.interviewid", "en-US", "面试安排ID", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
+            new TranslationSeedItem("entity.talentoffer.interviewid", "en-US", "面试安排ID_us", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
             // entity.talentoffer.interviewid
-            new TranslationSeedItem("entity.talentoffer.interviewid", "ja-JP", "面试安排ID", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
+            new TranslationSeedItem("entity.talentoffer.interviewid", "ja-JP", "面试安排ID_jp", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
             // entity.talentoffer.interviewid
             new TranslationSeedItem("entity.talentoffer.interviewid", "zh-CN", "面试安排ID", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
             // entity.talentoffer.interviewid
-            new TranslationSeedItem("entity.talentoffer.interviewid", "zh-HK", "面试安排ID", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
+            new TranslationSeedItem("entity.talentoffer.interviewid", "zh-HK", "面试安排ID_hk", "面试安排ID（用人需求→招聘计划→职位发布→面试安排→录用）"),
 
             // entity.talentoffer.offerno
-            new TranslationSeedItem("entity.talentoffer.offerno", "en-US", "录用编号", "录用编号（租户+公司内业务编号）"),
+            new TranslationSeedItem("entity.talentoffer.offerno", "en-US", "录用编号_us", "录用编号（租户+公司内业务编号）"),
             // entity.talentoffer.offerno
-            new TranslationSeedItem("entity.talentoffer.offerno", "ja-JP", "录用编号", "录用编号（租户+公司内业务编号）"),
+            new TranslationSeedItem("entity.talentoffer.offerno", "ja-JP", "录用编号_jp", "录用编号（租户+公司内业务编号）"),
             // entity.talentoffer.offerno
             new TranslationSeedItem("entity.talentoffer.offerno", "zh-CN", "录用编号", "录用编号（租户+公司内业务编号）"),
             // entity.talentoffer.offerno
-            new TranslationSeedItem("entity.talentoffer.offerno", "zh-HK", "录用编号", "录用编号（租户+公司内业务编号）"),
+            new TranslationSeedItem("entity.talentoffer.offerno", "zh-HK", "录用编号_hk", "录用编号（租户+公司内业务编号）"),
 
             // entity.talentoffer.hiredate
-            new TranslationSeedItem("entity.talentoffer.hiredate", "en-US", "录用日期", "录用日期（HireDate：确认录用/发 offer）"),
+            new TranslationSeedItem("entity.talentoffer.hiredate", "en-US", "录用日期_us", "录用日期（HireDate：确认录用/发 offer）"),
             // entity.talentoffer.hiredate
-            new TranslationSeedItem("entity.talentoffer.hiredate", "ja-JP", "录用日期", "录用日期（HireDate：确认录用/发 offer）"),
+            new TranslationSeedItem("entity.talentoffer.hiredate", "ja-JP", "录用日期_jp", "录用日期（HireDate：确认录用/发 offer）"),
             // entity.talentoffer.hiredate
             new TranslationSeedItem("entity.talentoffer.hiredate", "zh-CN", "录用日期", "录用日期（HireDate：确认录用/发 offer）"),
             // entity.talentoffer.hiredate
-            new TranslationSeedItem("entity.talentoffer.hiredate", "zh-HK", "录用日期", "录用日期（HireDate：确认录用/发 offer）"),
+            new TranslationSeedItem("entity.talentoffer.hiredate", "zh-HK", "录用日期_hk", "录用日期（HireDate：确认录用/发 offer）"),
 
             // entity.talentoffer.employeeid
-            new TranslationSeedItem("entity.talentoffer.employeeid", "en-US", "关联员工ID", "关联员工ID（录用通过并建档后回填，可空）"),
+            new TranslationSeedItem("entity.talentoffer.employeeid", "en-US", "关联员工ID_us", "关联员工ID（录用通过并建档后回填，可空）"),
             // entity.talentoffer.employeeid
-            new TranslationSeedItem("entity.talentoffer.employeeid", "ja-JP", "关联员工ID", "关联员工ID（录用通过并建档后回填，可空）"),
+            new TranslationSeedItem("entity.talentoffer.employeeid", "ja-JP", "关联员工ID_jp", "关联员工ID（录用通过并建档后回填，可空）"),
             // entity.talentoffer.employeeid
             new TranslationSeedItem("entity.talentoffer.employeeid", "zh-CN", "关联员工ID", "关联员工ID（录用通过并建档后回填，可空）"),
             // entity.talentoffer.employeeid
-            new TranslationSeedItem("entity.talentoffer.employeeid", "zh-HK", "关联员工ID", "关联员工ID（录用通过并建档后回填，可空）"),
+            new TranslationSeedItem("entity.talentoffer.employeeid", "zh-HK", "关联员工ID_hk", "关联员工ID（录用通过并建档后回填，可空）"),
 
             // entity.talentoffer.deptid
-            new TranslationSeedItem("entity.talentoffer.deptid", "en-US", "拟录用部门ID", "拟录用部门ID"),
+            new TranslationSeedItem("entity.talentoffer.deptid", "en-US", "拟录用部门ID_us", "拟录用部门ID"),
             // entity.talentoffer.deptid
-            new TranslationSeedItem("entity.talentoffer.deptid", "ja-JP", "拟录用部门ID", "拟录用部门ID"),
+            new TranslationSeedItem("entity.talentoffer.deptid", "ja-JP", "拟录用部门ID_jp", "拟录用部门ID"),
             // entity.talentoffer.deptid
             new TranslationSeedItem("entity.talentoffer.deptid", "zh-CN", "拟录用部门ID", "拟录用部门ID"),
             // entity.talentoffer.deptid
-            new TranslationSeedItem("entity.talentoffer.deptid", "zh-HK", "拟录用部门ID", "拟录用部门ID"),
+            new TranslationSeedItem("entity.talentoffer.deptid", "zh-HK", "拟录用部门ID_hk", "拟录用部门ID"),
 
             // entity.talentoffer.deptname
-            new TranslationSeedItem("entity.talentoffer.deptname", "en-US", "拟录用部门名称", "拟录用部门名称"),
+            new TranslationSeedItem("entity.talentoffer.deptname", "en-US", "拟录用部门名称_us", "拟录用部门名称"),
             // entity.talentoffer.deptname
-            new TranslationSeedItem("entity.talentoffer.deptname", "ja-JP", "拟录用部门名称", "拟录用部门名称"),
+            new TranslationSeedItem("entity.talentoffer.deptname", "ja-JP", "拟录用部门名称_jp", "拟录用部门名称"),
             // entity.talentoffer.deptname
             new TranslationSeedItem("entity.talentoffer.deptname", "zh-CN", "拟录用部门名称", "拟录用部门名称"),
             // entity.talentoffer.deptname
-            new TranslationSeedItem("entity.talentoffer.deptname", "zh-HK", "拟录用部门名称", "拟录用部门名称"),
+            new TranslationSeedItem("entity.talentoffer.deptname", "zh-HK", "拟录用部门名称_hk", "拟录用部门名称"),
 
             // entity.talentoffer.postid
-            new TranslationSeedItem("entity.talentoffer.postid", "en-US", "拟录用岗位ID", "拟录用岗位ID"),
+            new TranslationSeedItem("entity.talentoffer.postid", "en-US", "拟录用岗位ID_us", "拟录用岗位ID"),
             // entity.talentoffer.postid
-            new TranslationSeedItem("entity.talentoffer.postid", "ja-JP", "拟录用岗位ID", "拟录用岗位ID"),
+            new TranslationSeedItem("entity.talentoffer.postid", "ja-JP", "拟录用岗位ID_jp", "拟录用岗位ID"),
             // entity.talentoffer.postid
             new TranslationSeedItem("entity.talentoffer.postid", "zh-CN", "拟录用岗位ID", "拟录用岗位ID"),
             // entity.talentoffer.postid
-            new TranslationSeedItem("entity.talentoffer.postid", "zh-HK", "拟录用岗位ID", "拟录用岗位ID"),
+            new TranslationSeedItem("entity.talentoffer.postid", "zh-HK", "拟录用岗位ID_hk", "拟录用岗位ID"),
 
             // entity.talentoffer.postname
-            new TranslationSeedItem("entity.talentoffer.postname", "en-US", "拟录用岗位名称", "拟录用岗位名称"),
+            new TranslationSeedItem("entity.talentoffer.postname", "en-US", "拟录用岗位名称_us", "拟录用岗位名称"),
             // entity.talentoffer.postname
-            new TranslationSeedItem("entity.talentoffer.postname", "ja-JP", "拟录用岗位名称", "拟录用岗位名称"),
+            new TranslationSeedItem("entity.talentoffer.postname", "ja-JP", "拟录用岗位名称_jp", "拟录用岗位名称"),
             // entity.talentoffer.postname
             new TranslationSeedItem("entity.talentoffer.postname", "zh-CN", "拟录用岗位名称", "拟录用岗位名称"),
             // entity.talentoffer.postname
-            new TranslationSeedItem("entity.talentoffer.postname", "zh-HK", "拟录用岗位名称", "拟录用岗位名称"),
+            new TranslationSeedItem("entity.talentoffer.postname", "zh-HK", "拟录用岗位名称_hk", "拟录用岗位名称"),
 
             // entity.talentoffer.reason
-            new TranslationSeedItem("entity.talentoffer.reason", "en-US", "录用说明", "录用说明"),
+            new TranslationSeedItem("entity.talentoffer.reason", "en-US", "录用说明_us", "录用说明"),
             // entity.talentoffer.reason
-            new TranslationSeedItem("entity.talentoffer.reason", "ja-JP", "录用说明", "录用说明"),
+            new TranslationSeedItem("entity.talentoffer.reason", "ja-JP", "录用说明_jp", "录用说明"),
             // entity.talentoffer.reason
             new TranslationSeedItem("entity.talentoffer.reason", "zh-CN", "录用说明", "录用说明"),
             // entity.talentoffer.reason
-            new TranslationSeedItem("entity.talentoffer.reason", "zh-HK", "录用说明", "录用说明"),
+            new TranslationSeedItem("entity.talentoffer.reason", "zh-HK", "录用说明_hk", "录用说明"),
 
             // entity.talentoffer.interview
-            new TranslationSeedItem("entity.talentoffer.interview", "en-US", "面试安排", "面试安排"),
+            new TranslationSeedItem("entity.talentoffer.interview", "en-US", "面试安排_us", "面试安排"),
             // entity.talentoffer.interview
-            new TranslationSeedItem("entity.talentoffer.interview", "ja-JP", "面试安排", "面试安排"),
+            new TranslationSeedItem("entity.talentoffer.interview", "ja-JP", "面试安排_jp", "面试安排"),
             // entity.talentoffer.interview
             new TranslationSeedItem("entity.talentoffer.interview", "zh-CN", "面试安排", "面试安排"),
             // entity.talentoffer.interview
-            new TranslationSeedItem("entity.talentoffer.interview", "zh-HK", "面试安排", "面试安排"),
+            new TranslationSeedItem("entity.talentoffer.interview", "zh-HK", "面试安排_hk", "面试安排"),
 
             // entity.talentoffer.employeeonboardings
-            new TranslationSeedItem("entity.talentoffer.employeeonboardings", "en-US", "入职待办", "入职待办"),
+            new TranslationSeedItem("entity.talentoffer.employeeonboardings", "en-US", "入职待办_us", "入职待办"),
             // entity.talentoffer.employeeonboardings
-            new TranslationSeedItem("entity.talentoffer.employeeonboardings", "ja-JP", "入职待办", "入职待办"),
+            new TranslationSeedItem("entity.talentoffer.employeeonboardings", "ja-JP", "入职待办_jp", "入职待办"),
             // entity.talentoffer.employeeonboardings
             new TranslationSeedItem("entity.talentoffer.employeeonboardings", "zh-CN", "入职待办", "入职待办"),
             // entity.talentoffer.employeeonboardings
-            new TranslationSeedItem("entity.talentoffer.employeeonboardings", "zh-HK", "入职待办", "入职待办"),
+            new TranslationSeedItem("entity.talentoffer.employeeonboardings", "zh-HK", "入职待办_hk", "入职待办"),
         };
     }
 
@@ -205,10 +205,10 @@ public class TaktTalentOfferI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Talent";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

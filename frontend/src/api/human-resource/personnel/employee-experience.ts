@@ -40,9 +40,7 @@ export function getEmployeeExperienceList(queryDto: any): Promise<TaktPagedResul
   return request<TaktPagedResult<EmployeeExperience>>({
     url: `${EMPLOYEE_EXPERIENCE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportEmployeeExperience(
     url: `${EMPLOYEE_EXPERIENCE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

@@ -19,17 +19,17 @@
     :rules="formRules"
   >
     <a-form-item
-      :label="t('entity.flowTask.comment')"
+      :label="t('entity.flowtask.comment')"
       name="comment"
     >
       <a-textarea
         v-model:value="form.comment"
         :rows="3"
-        :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.flowTask.comment') })"
+        :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.flowtask.comment') })"
       />
     </a-form-item>
     <a-form-item
-      :label="t('workflow.todo.page.approveResult')"
+      :label="t('workflow.todo.page.approve.result')"
       name="approved"
     >
       <a-radio-group v-model:value="form.approved">
@@ -43,12 +43,12 @@
     </a-form-item>
     <a-form-item
       v-if="!form.approved"
-      :label="t('workflow.todo.page.nodeRejectStepLabel')"
+      :label="t('workflow.todo.page.node.reject.step.label')"
       name="nodeRejectStep"
     >
       <a-input
         v-model:value="form.nodeRejectStep"
-        :placeholder="t('workflow.todo.page.nodeRejectStepPlaceholder')"
+        :placeholder="t('workflow.todo.page.node.reject.step.placeholder')"
         allow-clear
       />
     </a-form-item>

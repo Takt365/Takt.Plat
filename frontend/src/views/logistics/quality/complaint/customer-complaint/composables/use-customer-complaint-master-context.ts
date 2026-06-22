@@ -1,0 +1,41 @@
+// ========================================
+// 项目名称：节拍数字工厂 · Takt Plat (TDF)
+// 命名空间：@/views/logistics/quality/complaint/customer-complaint/composables
+// 文件名称：use-customer-complaint-master-context.ts
+// 功能描述：客诉主表实体主表选中行上下文（供右侧明细面板读取）
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// ========================================
+
+import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
+import type { CustomerComplaint } from '@/types/logistics/quality/complaint/customer-complaint'
+
+/** 主表选中行上下文 */
+export interface CustomerComplaintMasterContext {
+  /** 当前选中的主表行（右侧明细依赖） */
+  selectedMasterRow: Ref<CustomerComplaint | null>
+}
+
+const customerComplaintMasterContextKey: InjectionKey<CustomerComplaintMasterContext> = Symbol('customer-complaintMasterContext')
+
+/**
+ * 在主表页 provide 选中行上下文
+ * @returns {CustomerComplaintMasterContext} 主表上下文
+ */
+export function provideCustomerComplaintMasterContext(): CustomerComplaintMasterContext {
+  const selectedMasterRow = ref<CustomerComplaint | null>(null)
+  const ctx: CustomerComplaintMasterContext = { selectedMasterRow }
+  provide(customerComplaintMasterContextKey, ctx)
+  return ctx
+}
+
+/**
+ * 在明细面板 inject 主表选中行
+ * @returns {CustomerComplaintMasterContext} 主表上下文
+ */
+export function useCustomerComplaintMasterContext(): CustomerComplaintMasterContext {
+  const ctx = inject(customerComplaintMasterContextKey)
+  if (!ctx) {
+    throw new Error('useCustomerComplaintMasterContext must be used within customer-complaint index')
+  }
+  return ctx
+}

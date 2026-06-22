@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktCultureI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCulture 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,92 +75,92 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktCulture 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.culture._self / entity.culture.{{field}}；ResourceGroup=8；ResourceType=0
+    /// I18nKey：entity.culture._self / entity.culture.{{field}}；ResourceGroup=Foundation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetCultureTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.culture._self
-            new TranslationSeedItem("entity.culture._self", "en-US", "Culture Information", "实体名称"),
+            new TranslationSeedItem("entity.culture._self", "en-US", "Culture Information_us", "实体名称"),
             // entity.culture._self
-            new TranslationSeedItem("entity.culture._self", "ja-JP", "区域文化信息", "实体名称"),
+            new TranslationSeedItem("entity.culture._self", "ja-JP", "区域文化信息_jp", "实体名称"),
             // entity.culture._self
             new TranslationSeedItem("entity.culture._self", "zh-CN", "区域文化信息", "实体名称"),
             // entity.culture._self
-            new TranslationSeedItem("entity.culture._self", "zh-HK", "区域文化信息", "实体名称"),
+            new TranslationSeedItem("entity.culture._self", "zh-HK", "区域文化信息_hk", "实体名称"),
 
             // entity.culture.code
-            new TranslationSeedItem("entity.culture.code", "en-US", "区域编码", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.culture.code", "en-US", "区域编码_us", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
             // entity.culture.code
-            new TranslationSeedItem("entity.culture.code", "ja-JP", "区域编码", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.culture.code", "ja-JP", "区域编码_jp", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
             // entity.culture.code
             new TranslationSeedItem("entity.culture.code", "zh-CN", "区域编码", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
             // entity.culture.code
-            new TranslationSeedItem("entity.culture.code", "zh-HK", "区域编码", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
+            new TranslationSeedItem("entity.culture.code", "zh-HK", "区域编码_hk", "区域文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）"),
 
             // entity.culture.languagename
-            new TranslationSeedItem("entity.culture.languagename", "en-US", "语言名称", "语言名称（如：简体中文、English）"),
+            new TranslationSeedItem("entity.culture.languagename", "en-US", "语言名称_us", "语言名称（如：简体中文、English）"),
             // entity.culture.languagename
-            new TranslationSeedItem("entity.culture.languagename", "ja-JP", "语言名称", "语言名称（如：简体中文、English）"),
+            new TranslationSeedItem("entity.culture.languagename", "ja-JP", "语言名称_jp", "语言名称（如：简体中文、English）"),
             // entity.culture.languagename
             new TranslationSeedItem("entity.culture.languagename", "zh-CN", "语言名称", "语言名称（如：简体中文、English）"),
             // entity.culture.languagename
-            new TranslationSeedItem("entity.culture.languagename", "zh-HK", "语言名称", "语言名称（如：简体中文、English）"),
+            new TranslationSeedItem("entity.culture.languagename", "zh-HK", "语言名称_hk", "语言名称（如：简体中文、English）"),
 
             // entity.culture.nativename
-            new TranslationSeedItem("entity.culture.nativename", "en-US", "本地化名称", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
+            new TranslationSeedItem("entity.culture.nativename", "en-US", "本地化名称_us", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
             // entity.culture.nativename
-            new TranslationSeedItem("entity.culture.nativename", "ja-JP", "本地化名称", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
+            new TranslationSeedItem("entity.culture.nativename", "ja-JP", "本地化名称_jp", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
             // entity.culture.nativename
             new TranslationSeedItem("entity.culture.nativename", "zh-CN", "本地化名称", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
             // entity.culture.nativename
-            new TranslationSeedItem("entity.culture.nativename", "zh-HK", "本地化名称", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
+            new TranslationSeedItem("entity.culture.nativename", "zh-HK", "本地化名称_hk", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
 
             // entity.culture.icon
-            new TranslationSeedItem("entity.culture.icon", "en-US", "语言图标", "语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）"),
+            new TranslationSeedItem("entity.culture.icon", "en-US", "语言图标_us", "语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）"),
             // entity.culture.icon
-            new TranslationSeedItem("entity.culture.icon", "ja-JP", "语言图标", "语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）"),
+            new TranslationSeedItem("entity.culture.icon", "ja-JP", "语言图标_jp", "语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）"),
             // entity.culture.icon
             new TranslationSeedItem("entity.culture.icon", "zh-CN", "语言图标", "语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）"),
             // entity.culture.icon
-            new TranslationSeedItem("entity.culture.icon", "zh-HK", "语言图标", "语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）"),
+            new TranslationSeedItem("entity.culture.icon", "zh-HK", "语言图标_hk", "语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）"),
 
             // entity.culture.sortorder
-            new TranslationSeedItem("entity.culture.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.culture.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.culture.sortorder
-            new TranslationSeedItem("entity.culture.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.culture.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.culture.sortorder
             new TranslationSeedItem("entity.culture.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.culture.sortorder
-            new TranslationSeedItem("entity.culture.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.culture.sortorder", "zh-HK", "排序号_hk", "排序号"),
 
             // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "en-US", "是否默认语言", "是否默认语言（1=是，0=否）"),
+            new TranslationSeedItem("entity.culture.isdefault", "en-US", "是否默认语言_us", "是否默认语言（1=是，0=否）"),
             // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "ja-JP", "是否默认语言", "是否默认语言（1=是，0=否）"),
+            new TranslationSeedItem("entity.culture.isdefault", "ja-JP", "是否默认语言_jp", "是否默认语言（1=是，0=否）"),
             // entity.culture.isdefault
             new TranslationSeedItem("entity.culture.isdefault", "zh-CN", "是否默认语言", "是否默认语言（1=是，0=否）"),
             // entity.culture.isdefault
-            new TranslationSeedItem("entity.culture.isdefault", "zh-HK", "是否默认语言", "是否默认语言（1=是，0=否）"),
+            new TranslationSeedItem("entity.culture.isdefault", "zh-HK", "是否默认语言_hk", "是否默认语言（1=是，0=否）"),
 
             // entity.culture.languagestatus
-            new TranslationSeedItem("entity.culture.languagestatus", "en-US", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.culture.languagestatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.culture.languagestatus
-            new TranslationSeedItem("entity.culture.languagestatus", "ja-JP", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.culture.languagestatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.culture.languagestatus
-            new TranslationSeedItem("entity.culture.languagestatus", "zh-CN", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.culture.languagestatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.culture.languagestatus
-            new TranslationSeedItem("entity.culture.languagestatus", "zh-HK", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.culture.languagestatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
 
             // entity.culture.translationlist
-            new TranslationSeedItem("entity.culture.translationlist", "en-US", "翻译列表", "翻译列表（一对多关联）"),
+            new TranslationSeedItem("entity.culture.translationlist", "en-US", "翻译列表_us", "翻译列表（一对多关联）"),
             // entity.culture.translationlist
-            new TranslationSeedItem("entity.culture.translationlist", "ja-JP", "翻译列表", "翻译列表（一对多关联）"),
+            new TranslationSeedItem("entity.culture.translationlist", "ja-JP", "翻译列表_jp", "翻译列表（一对多关联）"),
             // entity.culture.translationlist
             new TranslationSeedItem("entity.culture.translationlist", "zh-CN", "翻译列表", "翻译列表（一对多关联）"),
             // entity.culture.translationlist
-            new TranslationSeedItem("entity.culture.translationlist", "zh-HK", "翻译列表", "翻译列表（一对多关联）"),
+            new TranslationSeedItem("entity.culture.translationlist", "zh-HK", "翻译列表_hk", "翻译列表（一对多关联）"),
         };
     }
 
@@ -178,10 +178,10 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 8;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Foundation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

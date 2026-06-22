@@ -136,9 +136,9 @@ public class TaktBillOfMaterialItemDto : TaktCompanyDtoBase
 
     /// <summary>
     /// 子项物料（工厂物料主数据）
-    /// （主表：TaktMaterial）
+    /// （主表：TaktMaterialPlant）
     /// </summary>
-    public TaktMaterialDto? Material { get; set; }
+    public TaktMaterialPlantDto? MaterialPlant { get; set; }
 
 }
 
@@ -257,7 +257,7 @@ public class TaktBillOfMaterialItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -377,7 +377,7 @@ public class TaktBillOfMaterialItemCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -490,7 +490,7 @@ public class TaktBillOfMaterialItemTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -584,7 +584,7 @@ public class TaktBillOfMaterialItemImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -699,7 +699,7 @@ public class TaktBillOfMaterialItemExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

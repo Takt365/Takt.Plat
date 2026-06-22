@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-organization-post">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -69,19 +69,45 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 字典列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'postStatus'">
+          <a-switch
+            :checked="getPostField(record, 'postStatus') === 1"
+            :disabled="getPostField(record, 'isBuiltIn') === 1"
+            :checked-children="t('common.page.button.enable')"
+            :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handlePostStatusChange(record, Boolean(checked))"
+          />
+        </template>
+        <template v-else-if="column.key === 'postCategory'">
           <TaktDictTag
-            :value="getPostField(record, 'postStatus')"
-            dict-type="sys_normal_disable"
+            :value="getPostField(record, 'postCategory')"
+            dict-type="sys_post_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'postLevel'">
+          <TaktDictTag
+            :value="getPostField(record, 'postLevel')"
+            dict-type="sys_post_level_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'educationRequired'">
+          <TaktDictTag
+            :value="getPostField(record, 'educationRequired')"
+            dict-type="hr_education_level_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'isBuiltIn'">
+          <TaktDictTag
+            :value="getPostField(record, 'isBuiltIn')"
+            dict-type="sys_yes_no_type"
           />
         </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -101,6 +127,7 @@
       @cancel="handleFormCancel"
     >
       <PostForm
+        :key="formData?.postId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -144,21 +171,23 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('postType')">
-      <a-form-item :label="t('entity.post.type')">
-        <a-input-number
-          v-model:value="advancedQueryForm.postType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.type') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('postCategory')">
+      <a-form-item :label="t('entity.post.category')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.postCategory"
+          dict-type="sys_post_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.category') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('postLevel')">
       <a-form-item :label="t('entity.post.level')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.postLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.level') })"
-          style="width: 100%"
+          dict-type="sys_post_level_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.level') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -200,10 +229,11 @@
       </div>
       <div v-show="isFieldVisible('educationRequired')">
       <a-form-item :label="t('entity.post.educationrequired')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.educationRequired"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.educationrequired') })"
-          style="width: 100%"
+          dict-type="hr_education_level_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.educationrequired') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -238,7 +268,7 @@
       <a-form-item :label="t('entity.post.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.postStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.status') })"
           allow-clear
         />
@@ -246,10 +276,11 @@
       </div>
       <div v-show="isFieldVisible('isBuiltIn')">
       <a-form-item :label="t('entity.post.isbuiltin')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.isbuiltin') })"
-          style="width: 100%"
+          dict-type="sys_yes_no_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.isbuiltin') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -294,11 +325,30 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+          :rows="4"
+          show-count
+          :maxlength="400"
           allow-clear
         />
       </a-form-item>
@@ -308,7 +358,9 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
+          :rows="4"
+          show-count
+          :maxlength="400"
           allow-clear
         />
       </a-form-item>
@@ -337,6 +389,11 @@
         @success="handleImportSuccess"
       />
     </TaktModal>
+    <AssignPostEmployees
+      v-model:open="assignPostEmployeesVisible"
+      :post="currentAssignPost"
+      @success="handleAssignSuccess"
+    />
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
@@ -362,12 +419,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PostForm from './components/post-form.vue'
-import { getPostList, getPostById, createPost, updatePost, deletePostById, deletePostBatch, getPostTemplate, importPost, exportPost } from '@/api/human-resource/organization/post'
+import AssignPostEmployees from './components/assign-post-employees.vue'
+import { getPostList, getPostById, createPost, updatePost, deletePostById, deletePostBatch, updatePostStatus, getPostTemplate, importPost, exportPost } from '@/api/human-resource/organization/post'
 import type { Post, PostQuery, PostCreate, PostUpdate } from '@/types/human-resource/organization/post'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine, RiUserLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -385,9 +445,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Post[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -402,19 +462,20 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Post>>({})
+const formData = ref<Partial<Post> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   postCode: '',
   postName: '',
   deptId: '',
-  postType: undefined as number | undefined,
-  postLevel: undefined as number | undefined,
+  postCategory: undefined as string | undefined,
+  postLevel: undefined as string | undefined,
   headcount: undefined as number | undefined,
   currentCount: undefined as number | undefined,
   responsibilities: '',
@@ -429,7 +490,7 @@ const advancedQueryForm = ref({
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -437,7 +498,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'postCode', label: t('entity.post.code') },
   { key: 'postName', label: t('entity.post.name') },
   { key: 'deptId', label: t('entity.post.deptid') },
-  { key: 'postType', label: t('entity.post.type') },
+  { key: 'postCategory', label: t('entity.post.category') },
   { key: 'postLevel', label: t('entity.post.level') },
   { key: 'headcount', label: t('entity.post.headcount') },
   { key: 'currentCount', label: t('entity.post.currentcount') },
@@ -453,13 +514,17 @@ const queryFieldsMeta = computed(() => [
   { key: 'description', label: t('entity.post.description') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
+/** 分配岗位员工弹窗是否打开 */
+const assignPostEmployeesVisible = ref(false)
+/** 当前分配员工的目标岗位 */
+const currentAssignPost = ref<Post | null>(null)
 /** 导入对话框是否打开 */
 const importVisible = ref(false)
 /** 表格当前可见列 key */
@@ -471,9 +536,80 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? / long? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {PostQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<PostQuery>): PostQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: PostQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof PostQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('postCode', form.postCode)
+  assignTrimmed('postName', form.postName)
+  assignTrimmed('deptId', form.deptId)
+  if (form.postCategory !== undefined && form.postCategory !== null && form.postCategory !== '') {
+    query.postCategory = form.postCategory
+  }
+  if (form.postLevel !== undefined && form.postLevel !== null && form.postLevel !== '') {
+    query.postLevel = form.postLevel
+  }
+  if (form.headcount !== undefined && form.headcount !== null) {
+    query.headcount = form.headcount
+  }
+  if (form.currentCount !== undefined && form.currentCount !== null) {
+    query.currentCount = form.currentCount
+  }
+  assignTrimmed('responsibilities', form.responsibilities)
+  assignTrimmed('requirements', form.requirements)
+  if (form.educationRequired !== undefined && form.educationRequired !== null) {
+    query.educationRequired = form.educationRequired
+  }
+  if (form.experienceYears !== undefined && form.experienceYears !== null) {
+    query.experienceYears = form.experienceYears
+  }
+  if (form.salaryMin !== undefined && form.salaryMin !== null) {
+    query.salaryMin = form.salaryMin
+  }
+  if (form.salaryMax !== undefined && form.salaryMax !== null) {
+    query.salaryMax = form.salaryMax
+  }
+  if (form.postStatus !== undefined && form.postStatus !== null) {
+    query.postStatus = form.postStatus
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    query.isBuiltIn = form.isBuiltIn
+  }
+  if (form.sortOrder !== undefined && form.sortOrder !== null) {
+    query.sortOrder = form.sortOrder
+  }
+  assignTrimmed('description', form.description)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -522,22 +658,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPostField(record, 'deptId') ?? ''
   },
   {
-    title: t('entity.post.deptname'),
-    dataIndex: 'deptName',
-    key: 'deptName',
+    title: t('entity.post.category'),
+    dataIndex: 'postCategory',
+    key: 'postCategory',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'deptName') ?? ''
-  },
-  {
-    title: t('entity.post.type'),
-    dataIndex: 'postType',
-    key: 'postType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'postType') ?? ''
+    customRender: ({ record }: { record: any }) => getPostField(record, 'postCategory') ?? ''
   },
   {
     title: t('entity.post.level'),
@@ -634,8 +761,7 @@ const columns = computed<TableColumnsType>(() => [
     key: 'isBuiltIn',
     width: 120,
     resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'isBuiltIn') ?? ''
+    ellipsis: true
   },
   {
     title: t('entity.post.description'),
@@ -664,6 +790,14 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiEditLine,
         permission: 'humanresource:organization:post:update',
         onClick: (record: Post) => handleEdit(record)
+      },
+      {
+        key: 'allocate-post-user',
+        label: t('common.page.button.allocate') + t('entity.employee._self'),
+        shape: 'plain',
+        icon: RiUserLine,
+        permission: 'humanresource:organization:post:update',
+        onClick: (record: Post) => handleAssignPostEmployees(record)
       },
       {
         key: 'delete',
@@ -728,16 +862,7 @@ const onClickRow = (record: Post) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: PostQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getPostList(params)
+    const res = await getPostList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -755,7 +880,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -766,8 +891,8 @@ function handleReset() {
   postCode: '',
   postName: '',
   deptId: '',
-  postType: undefined as number | undefined,
-  postLevel: undefined as number | undefined,
+  postCategory: undefined as string | undefined,
+  postLevel: undefined as string | undefined,
   headcount: undefined as number | undefined,
   currentCount: undefined as number | undefined,
   responsibilities: '',
@@ -782,24 +907,39 @@ function handleReset() {
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.post._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: Post) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.post._self') })
   formData.value = { ...record }
   formVisible.value = true
+}
+
+/**
+ * 打开分配岗位员工弹窗
+ * @param record 岗位行
+ */
+function handleAssignPostEmployees(record: Post) {
+  currentAssignPost.value = record
+  assignPostEmployeesVisible.value = true
+}
+
+/** 分配成功后刷新列表 */
+function handleAssignSuccess() {
+  loadData()
 }
 
 /** 工具栏编辑：打开当前单选行 */
@@ -831,6 +971,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.post._self') }))
     }
     formVisible.value = false
+    formData.value = null
+    nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -840,6 +982,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -867,20 +1011,45 @@ function handleImportSuccess(result: { success: number; fail: number; errors: st
 function handleImportCancel() {
   importVisible.value = false
 }
+
+/**
+ * 表格行内切换岗位状态（sys_normal_disable_status：1=启用，0=禁用）
+ * @param record 当前行
+ * @param checked 开关是否选中（启用）
+ */
+async function handlePostStatusChange(record: Post, checked: boolean) {
+  const id = getPostId(record)
+  if (!id || getPostField(record, 'isBuiltIn') === 1) {
+    return
+  }
+  const newStatus = checked ? 1 : 0
+  const oldStatus = getPostField(record, 'postStatus')
+  const row = dataSource.value.find((item) => getPostId(item) === id)
+  if (row) {
+    row.postStatus = newStatus
+  }
+  try {
+    await updatePostStatus({ postId: id, postStatus: newStatus })
+    message.success(t('common.feedback.updated'))
+  } catch (error: unknown) {
+    if (row) {
+      row.postStatus = oldStatus as number
+    }
+    const err = error as { message?: string }
+    logger.error('[Post] 状态更新失败', { error })
+    message.error(err?.message || t('common.feedback.failed'))
+  }
+}
+
 /** 导出当前查询条件下的 Excel */
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: PostQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportPost(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportPost(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -948,7 +1117,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -957,8 +1126,8 @@ function handleAdvancedQueryReset() {
   postCode: '',
   postName: '',
   deptId: '',
-  postType: undefined as number | undefined,
-  postLevel: undefined as number | undefined,
+  postCategory: undefined as string | undefined,
+  postLevel: undefined as string | undefined,
   headcount: undefined as number | undefined,
   currentCount: undefined as number | undefined,
   responsibilities: '',
@@ -973,7 +1142,7 @@ function handleAdvancedQueryReset() {
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1003,23 +1172,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-organization-post {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

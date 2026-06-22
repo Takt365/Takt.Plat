@@ -193,6 +193,7 @@ import { RiUserLine, RiUserAddLine, RiMailLine, RiPhoneLine } from '@remixicon/v
 import type { Rule } from 'ant-design-vue/es/form';
 import LoginBrand from '@/views/login/components/login-brand.vue';
 import {
+  isTaktCaptchaDisabledError,
   probeSessionCaptchaRequiredAsync,
   useTaktLoginCaptcha,
   type TaktCaptchaPanelExpose,
@@ -268,6 +269,7 @@ const {
   challenge: captchaChallenge,
   panelRef,
   registerOnVerified: registerCaptchaOnVerified,
+  registerOnCaptchaSkipped: registerCaptchaOnCaptchaSkipped,
   isSlider: captchaIsSlider,
   loadChallengeAsync: loadCaptchaChallengeAsync,
   handleCanSubmitChange: handleCaptchaCanSubmitChange,
@@ -301,7 +303,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   userName: [
     {
       required: true,
-      message: t('login.page.validate.usernameRequired'),
+      message: t('login.page.validate.username.required'),
       trigger: 'blur',
     },
     {
@@ -311,7 +313,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
           return Promise.resolve();
         }
         if (!isValidLoginUsername(trimmed)) {
-          return Promise.reject(t('login.page.validate.usernameInvalid'));
+          return Promise.reject(t('login.page.validate.username.invalid'));
         }
         return Promise.resolve();
       },
@@ -321,7 +323,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   userEmail: [
     {
       required: true,
-      message: t('login.page.validate.emailRequired'),
+      message: t('login.page.validate.email.required'),
       trigger: 'blur',
     },
     {
@@ -331,16 +333,16 @@ const rules = computed<Record<string, Rule[]>>(() => ({
           return Promise.resolve();
         }
         if (!isValidEmail(trimmed)) {
-          return Promise.reject(t('login.page.validate.emailInvalid'));
+          return Promise.reject(t('login.page.validate.email.invalid'));
         }
         if (trimmed.length < EMAIL_MIN_LENGTH) {
           return Promise.reject(
-            t('login.page.validate.emailTooShort', { min: EMAIL_MIN_LENGTH })
+            t('login.page.validate.email.too.short', { min: EMAIL_MIN_LENGTH })
           );
         }
         if (trimmed.length > EMAIL_MAX_LENGTH) {
           return Promise.reject(
-            t('login.page.validate.emailTooLong', { max: EMAIL_MAX_LENGTH })
+            t('login.page.validate.email.too.long', { max: EMAIL_MAX_LENGTH })
           );
         }
         return Promise.resolve();
@@ -351,7 +353,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   userPhone: [
     {
       required: true,
-      message: t('login.page.validate.phoneRequired'),
+      message: t('login.page.validate.phone.required'),
       trigger: 'blur',
     },
     {
@@ -362,7 +364,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         }
         const culture = localeStore.currentLocale;
         if (!isValidPhoneByCulture(trimmed, culture)) {
-          return Promise.reject(t('login.page.validate.phoneInvalid'));
+          return Promise.reject(t('login.page.validate.phone.invalid'));
         }
         return Promise.resolve();
       },
@@ -455,11 +457,15 @@ async function handleInfoStepSubmit(): Promise<void> {
     }
     await doRegisterAsync();
   } catch (error: unknown) {
+    if (isTaktCaptchaDisabledError(error)) {
+      await doRegisterAsync();
+      return;
+    }
     registerLogger.error('获取验证码挑战失败', { action: 'probeCaptcha' }, error);
     message.error(
       error instanceof Error && error.message
         ? error.message
-        : t('login.page.validate.captchaRequired'),
+        : t('login.page.validate.captcha.required'),
     );
   } finally {
     loading.value = false;
@@ -467,6 +473,10 @@ async function handleInfoStepSubmit(): Promise<void> {
 }
 
 registerCaptchaOnVerified(handleCaptchaConfirm);
+
+registerCaptchaOnCaptchaSkipped(async () => {
+  await doRegisterAsync();
+});
 
 /** 返回登录主表单或路由 */
 function goToLogin(): void {

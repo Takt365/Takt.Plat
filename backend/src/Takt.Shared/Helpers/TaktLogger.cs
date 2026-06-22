@@ -78,7 +78,7 @@ public static class TaktLogger
     /// </summary>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Verbose(string messageTemplate, params object[]? propertyValues)
+    public static void Verbose(string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Verbose, null, messageTemplate, null, propertyValues);
     }
@@ -89,7 +89,7 @@ public static class TaktLogger
     /// <param name="exception">异常</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Verbose(Exception exception, string messageTemplate, params object[]? propertyValues)
+    public static void Verbose(Exception exception, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Verbose, exception, messageTemplate, null, propertyValues);
     }
@@ -99,7 +99,7 @@ public static class TaktLogger
     /// </summary>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Debug(string messageTemplate, params object[]? propertyValues)
+    public static void Debug(string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Debug, null, messageTemplate, null, propertyValues);
     }
@@ -110,7 +110,7 @@ public static class TaktLogger
     /// <param name="context">业务上下文</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Debug(TaktLogContext context, string messageTemplate, params object[]? propertyValues)
+    public static void Debug(TaktLogContext context, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Debug, null, messageTemplate, context, propertyValues);
     }
@@ -121,7 +121,7 @@ public static class TaktLogger
     /// <param name="exception">异常</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Debug(Exception exception, string messageTemplate, params object[]? propertyValues)
+    public static void Debug(Exception exception, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Debug, exception, messageTemplate, null, propertyValues);
     }
@@ -131,7 +131,7 @@ public static class TaktLogger
     /// </summary>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Information(string messageTemplate, params object[]? propertyValues)
+    public static void Information(string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Information, null, messageTemplate, null, propertyValues);
     }
@@ -142,7 +142,7 @@ public static class TaktLogger
     /// <param name="context">业务上下文</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Information(TaktLogContext context, string messageTemplate, params object[]? propertyValues)
+    public static void Information(TaktLogContext context, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Information, null, messageTemplate, context, propertyValues);
     }
@@ -153,7 +153,7 @@ public static class TaktLogger
     /// <param name="exception">异常</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Information(Exception exception, string messageTemplate, params object[]? propertyValues)
+    public static void Information(Exception exception, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Information, exception, messageTemplate, null, propertyValues);
     }
@@ -163,7 +163,7 @@ public static class TaktLogger
     /// </summary>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Warning(string messageTemplate, params object[]? propertyValues)
+    public static void Warning(string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Warning, null, messageTemplate, null, propertyValues);
     }
@@ -174,7 +174,7 @@ public static class TaktLogger
     /// <param name="context">业务上下文</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Warning(TaktLogContext context, string messageTemplate, params object[]? propertyValues)
+    public static void Warning(TaktLogContext context, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Warning, null, messageTemplate, context, propertyValues);
     }
@@ -185,7 +185,7 @@ public static class TaktLogger
     /// <param name="exception">异常</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Warning(Exception exception, string messageTemplate, params object[]? propertyValues)
+    public static void Warning(Exception exception, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Warning, exception, messageTemplate, null, propertyValues);
     }
@@ -195,7 +195,7 @@ public static class TaktLogger
     /// </summary>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Error(string messageTemplate, params object[]? propertyValues)
+    public static void Error(string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Error, null, messageTemplate, null, propertyValues);
     }
@@ -206,7 +206,7 @@ public static class TaktLogger
     /// <param name="context">业务上下文</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Error(TaktLogContext context, string messageTemplate, params object[]? propertyValues)
+    public static void Error(TaktLogContext context, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Error, null, messageTemplate, context, propertyValues);
     }
@@ -217,7 +217,7 @@ public static class TaktLogger
     /// <param name="exception">异常</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Error(Exception exception, string messageTemplate, params object[]? propertyValues)
+    public static void Error(Exception exception, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Error, exception, messageTemplate, null, propertyValues);
     }
@@ -229,7 +229,7 @@ public static class TaktLogger
     /// <param name="context">业务上下文</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Error(Exception exception, TaktLogContext context, string messageTemplate, params object[]? propertyValues)
+    public static void Error(Exception exception, TaktLogContext context, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Error, exception, messageTemplate, context, propertyValues);
     }
@@ -239,7 +239,7 @@ public static class TaktLogger
     /// </summary>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Fatal(string messageTemplate, params object[]? propertyValues)
+    public static void Fatal(string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Fatal, null, messageTemplate, null, propertyValues, flushReport: true);
     }
@@ -250,7 +250,7 @@ public static class TaktLogger
     /// <param name="exception">异常</param>
     /// <param name="messageTemplate">消息模板</param>
     /// <param name="propertyValues">属性值</param>
-    public static void Fatal(Exception exception, string messageTemplate, params object[]? propertyValues)
+    public static void Fatal(Exception exception, string messageTemplate, params object?[]? propertyValues)
     {
         Write(LogEventLevel.Fatal, exception, messageTemplate, null, propertyValues, flushReport: true);
     }
@@ -321,7 +321,7 @@ public static class TaktLogger
         Exception? exception,
         string messageTemplate,
         TaktLogContext? context,
-        object[]? propertyValues,
+        object?[]? propertyValues,
         bool flushReport = false)
     {
         var taktLevel = TaktLogFormatter.FromSerilogLevel(level);
@@ -331,7 +331,7 @@ public static class TaktLogger
         }
 
         using var scope = BeginScope(context);
-        var values = propertyValues ?? Array.Empty<object>();
+        var values = propertyValues ?? Array.Empty<object?>();
 
         if (exception == null)
         {

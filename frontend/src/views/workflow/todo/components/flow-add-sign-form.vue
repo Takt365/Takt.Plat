@@ -19,14 +19,14 @@
     :rules="formRules"
   >
     <a-form-item
-      :label="t('workflow.todo.page.addSignApprovers')"
+      :label="t('workflow.todo.page.add.sign.approvers.label')"
       name="approverIds"
       required
     >
       <a-select
         v-model:value="form.approverIds"
         mode="multiple"
-        :placeholder="t('workflow.todo.page.addSignApproversPlaceholder')"
+        :placeholder="t('workflow.todo.page.add.sign.approvers.placeholder')"
         show-search
         :filter-option="filterUserOption"
         :options="userOptions"
@@ -36,27 +36,27 @@
       />
     </a-form-item>
     <a-form-item
-      :label="t('entity.flowAddSign.signtype')"
+      :label="t('entity.flowaddsign.signtype')"
       name="approveType"
     >
       <a-select
         v-model:value="form.approveType"
         style="width: 100%"
-        :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowAddSign.signtype') })"
+        :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowaddsign.signtype') })"
       >
         <a-select-option value="sequential">
-          {{ t('workflow.todo.page.addSignTypeSequential') }}
+          {{ t('workflow.todo.page.add.sign.type.sequential') }}
         </a-select-option>
         <a-select-option value="all">
-          {{ t('workflow.todo.page.addSignTypeAll') }}
+          {{ t('workflow.todo.page.add.sign.type.all') }}
         </a-select-option>
         <a-select-option value="one">
-          {{ t('workflow.todo.page.addSignTypeOne') }}
+          {{ t('workflow.todo.page.add.sign.type.one') }}
         </a-select-option>
       </a-select>
     </a-form-item>
     <a-form-item
-      :label="t('entity.flowAddSign.reason')"
+      :label="t('entity.flowaddsign.reason')"
       name="reason"
     >
       <a-textarea
@@ -66,7 +66,7 @@
     </a-form-item>
     <a-form-item name="returnToSignNode">
       <a-checkbox v-model:checked="form.returnToSignNode">
-        {{ t('entity.flowAddSign.returntosignnode') }}
+        {{ t('entity.flowaddsign.returntosignnode') }}
       </a-checkbox>
     </a-form-item>
   </a-form>
@@ -102,7 +102,7 @@ const formRef = ref()
 
 const formRules = computed(() => ({
   approverIds: [
-    { required: true, type: 'array' as const, min: 1, message: t('workflow.todo.page.addSignApproversPlaceholder') }
+    { required: true, type: 'array' as const, min: 1, message: t('workflow.todo.page.add.sign.approvers.placeholder') }
   ],
   approveType: [],
   reason: [],

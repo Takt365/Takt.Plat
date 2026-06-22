@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktClientDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Client 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktClient 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Sales;
 
@@ -57,7 +56,7 @@ public class TaktClientDto : TaktCompanyDtoBase
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
     /// </summary>
     public int ClientType { get; set; } = 0;
 
@@ -132,12 +131,12 @@ public class TaktClientDto : TaktCompanyDtoBase
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 销售渠道（0=直销，1=经销，2=代销，3=电商，4=其他）
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
     /// </summary>
     public int SalesChannel { get; set; } = 0;
 
@@ -152,7 +151,7 @@ public class TaktClientDto : TaktCompanyDtoBase
     public string? StoreName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端等级（0=普通，1=重要，2=VIP，3=战略）
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
     /// </summary>
     public int ClientLevel { get; set; } = 0;
 
@@ -169,7 +168,7 @@ public class TaktClientDto : TaktCompanyDtoBase
     /// <summary>
     /// 客户端状态（1=启用，0=禁用）
     /// </summary>
-    public int ClientStatus { get; set; }
+    public int ClientStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -219,7 +218,7 @@ public class TaktClientQueryDto : TaktPagedQuery
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
     /// </summary>
     public int? ClientType { get; set; }
 
@@ -294,12 +293,12 @@ public class TaktClientQueryDto : TaktPagedQuery
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int? PaymentTerms { get; set; }
 
     /// <summary>
-    /// 销售渠道（0=直销，1=经销，2=代销，3=电商，4=其他）
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
     /// </summary>
     public int? SalesChannel { get; set; }
 
@@ -314,7 +313,7 @@ public class TaktClientQueryDto : TaktPagedQuery
     public string? StoreName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端等级（0=普通，1=重要，2=VIP，3=战略）
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
     /// </summary>
     public int? ClientLevel { get; set; }
 
@@ -351,7 +350,7 @@ public class TaktClientQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -407,7 +406,7 @@ public class TaktClientCreateDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
     /// </summary>
     public int ClientType { get; set; } = 0;
 
@@ -483,12 +482,12 @@ public class TaktClientCreateDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 销售渠道（0=直销，1=经销，2=代销，3=电商，4=其他）
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
     /// </summary>
     public int SalesChannel { get; set; } = 0;
 
@@ -503,7 +502,7 @@ public class TaktClientCreateDto
     public string? StoreName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端等级（0=普通，1=重要，2=VIP，3=战略）
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
     /// </summary>
     public int ClientLevel { get; set; } = 0;
 
@@ -520,17 +519,12 @@ public class TaktClientCreateDto
     /// <summary>
     /// 客户端状态（1=启用，0=禁用）
     /// </summary>
-    public int ClientStatus { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int ClientStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -580,7 +574,7 @@ public class TaktClientStatusDto
     /// 客户端状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "客户端状态（1=启用，0=禁用）不能为空")]
-    public int ClientStatus { get; set; }
+    public int ClientStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -647,7 +641,7 @@ public class TaktClientTemplateDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
     /// </summary>
     public int? ClientType { get; set; }
 
@@ -689,7 +683,7 @@ public class TaktClientTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -739,7 +733,7 @@ public class TaktClientImportDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
     /// </summary>
     public int? ClientType { get; set; }
 
@@ -781,7 +775,7 @@ public class TaktClientImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -832,7 +826,7 @@ public class TaktClientExportDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
     /// </summary>
     public int ClientType { get; set; } = 0;
 
@@ -907,12 +901,12 @@ public class TaktClientExportDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 销售渠道（0=直销，1=经销，2=代销，3=电商，4=其他）
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
     /// </summary>
     public int SalesChannel { get; set; } = 0;
 
@@ -927,7 +921,7 @@ public class TaktClientExportDto
     public string? StoreName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端等级（0=普通，1=重要，2=VIP，3=战略）
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
     /// </summary>
     public int ClientLevel { get; set; } = 0;
 
@@ -944,7 +938,7 @@ public class TaktClientExportDto
     /// <summary>
     /// 客户端状态（1=启用，0=禁用）
     /// </summary>
-    public int ClientStatus { get; set; }
+    public int ClientStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -954,7 +948,7 @@ public class TaktClientExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

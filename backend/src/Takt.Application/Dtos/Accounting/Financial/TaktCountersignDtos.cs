@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktCountersignDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Countersign 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCountersign 生成，请按需审阅）
 // 
@@ -59,11 +59,6 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     /// 总经室 JSON
     /// </summary>
     public string? ExecutiveOffice { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 流程实例 名称（填充字段）
-    /// </summary>
-    public string? FlowInstanceName { get; set; }
 
     /// <summary>
     /// 申请人（员工 ID）
@@ -179,12 +174,6 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 申请人（员工 ID）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -253,7 +242,7 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -288,6 +277,12 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public DateTime? ApprovedAtEnd { get; set; }
 
     /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -300,7 +295,7 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -357,12 +352,6 @@ public class TaktCountersignCreateDto
     /// 总经室 JSON
     /// </summary>
     public string? ExecutiveOffice { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 流程实例 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 申请人（员工 ID）
@@ -433,7 +422,7 @@ public class TaktCountersignCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -531,12 +520,6 @@ public class TaktCountersignTemplateDto
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 申请人（员工 ID）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -568,9 +551,14 @@ public class TaktCountersignTemplateDto
     public string? CountersignTitle { get; set; } = string.Empty;
 
     /// <summary>
+    /// 申请原因
+    /// </summary>
+    public string? ApplicationReason { get; set; } = string.Empty;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -625,12 +613,6 @@ public class TaktCountersignImportDto
     public string? ExecutiveOffice { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 申请人（员工 ID）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -662,9 +644,14 @@ public class TaktCountersignImportDto
     public string? CountersignTitle { get; set; } = string.Empty;
 
     /// <summary>
+    /// 申请原因
+    /// </summary>
+    public string? ApplicationReason { get; set; } = string.Empty;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -713,12 +700,6 @@ public class TaktCountersignExportDto
     /// 总经室 JSON
     /// </summary>
     public string? ExecutiveOffice { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 流程实例 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 申请人（员工 ID）
@@ -789,7 +770,7 @@ public class TaktCountersignExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

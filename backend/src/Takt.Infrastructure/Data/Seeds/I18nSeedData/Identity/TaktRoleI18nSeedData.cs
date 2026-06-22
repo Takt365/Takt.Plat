@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktRoleI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRole 实体字段国际化种子（已对齐前端 locales：src/locales/identity/role）
 // 
@@ -75,119 +75,119 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktRole 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.role._self / entity.role.{{field}}；ResourceGroup=1；ResourceType=0
+    /// I18nKey：entity.role._self / entity.role.{{field}}；ResourceGroup=Identity；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetRoleTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.role._self
-            new TranslationSeedItem("entity.role._self", "en-US", "Role Information", "实体名称"),
+            new TranslationSeedItem("entity.role._self", "en-US", "Role Information_us", "实体名称"),
             // entity.role._self
-            new TranslationSeedItem("entity.role._self", "ja-JP", "角色信息", "实体名称"),
+            new TranslationSeedItem("entity.role._self", "ja-JP", "角色信息_jp", "实体名称"),
             // entity.role._self
             new TranslationSeedItem("entity.role._self", "zh-CN", "角色信息", "实体名称"),
             // entity.role._self
-            new TranslationSeedItem("entity.role._self", "zh-HK", "角色信息", "实体名称"),
+            new TranslationSeedItem("entity.role._self", "zh-HK", "角色信息_hk", "实体名称"),
 
             // entity.role.code
-            new TranslationSeedItem("entity.role.code", "en-US", "角色编码", "角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）"),
+            new TranslationSeedItem("entity.role.code", "en-US", "角色编码_us", "角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）"),
             // entity.role.code
-            new TranslationSeedItem("entity.role.code", "ja-JP", "角色编码", "角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）"),
+            new TranslationSeedItem("entity.role.code", "ja-JP", "角色编码_jp", "角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）"),
             // entity.role.code
             new TranslationSeedItem("entity.role.code", "zh-CN", "角色编码", "角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）"),
             // entity.role.code
-            new TranslationSeedItem("entity.role.code", "zh-HK", "角色编码", "角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）"),
+            new TranslationSeedItem("entity.role.code", "zh-HK", "角色编码_hk", "角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）"),
 
             // entity.role.name
-            new TranslationSeedItem("entity.role.name", "en-US", "角色名称", "角色名称"),
+            new TranslationSeedItem("entity.role.name", "en-US", "角色名称_us", "角色名称"),
             // entity.role.name
-            new TranslationSeedItem("entity.role.name", "ja-JP", "角色名称", "角色名称"),
+            new TranslationSeedItem("entity.role.name", "ja-JP", "角色名称_jp", "角色名称"),
             // entity.role.name
             new TranslationSeedItem("entity.role.name", "zh-CN", "角色名称", "角色名称"),
             // entity.role.name
-            new TranslationSeedItem("entity.role.name", "zh-HK", "角色名称", "角色名称"),
+            new TranslationSeedItem("entity.role.name", "zh-HK", "角色名称_hk", "角色名称"),
 
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "en-US", "数据权限范围", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "en-US", "数据权限范围_us", "数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "ja-JP", "数据权限范围", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "ja-JP", "数据权限范围_jp", "数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "zh-CN", "数据权限范围", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "zh-CN", "数据权限范围", "数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "zh-HK", "数据权限范围", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "zh-HK", "数据权限范围_hk", "数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
 
             // entity.role.sortorder
-            new TranslationSeedItem("entity.role.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.role.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.role.sortorder
-            new TranslationSeedItem("entity.role.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.role.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.role.sortorder
             new TranslationSeedItem("entity.role.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.role.sortorder
-            new TranslationSeedItem("entity.role.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.role.sortorder", "zh-HK", "排序号_hk", "排序号"),
 
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "en-US", "是否内置", "是否内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
+            new TranslationSeedItem("entity.role.isbuiltin", "en-US", "是否内置_us", "是否内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）"),
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "ja-JP", "是否内置", "是否内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
+            new TranslationSeedItem("entity.role.isbuiltin", "ja-JP", "是否内置_jp", "是否内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）"),
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "zh-CN", "是否内置", "是否内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
+            new TranslationSeedItem("entity.role.isbuiltin", "zh-CN", "是否内置", "是否内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）"),
             // entity.role.isbuiltin
-            new TranslationSeedItem("entity.role.isbuiltin", "zh-HK", "是否内置", "是否内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),
+            new TranslationSeedItem("entity.role.isbuiltin", "zh-HK", "是否内置_hk", "是否内置（字典 sys_yes_no_type；种子角色为内置，不允许删除）"),
 
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "en-US", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.role.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "ja-JP", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.role.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.role.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
             // entity.role.status
-            new TranslationSeedItem("entity.role.status", "zh-HK", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.role.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
 
             // entity.role.description
-            new TranslationSeedItem("entity.role.description", "en-US", "角色描述", "角色描述"),
+            new TranslationSeedItem("entity.role.description", "en-US", "角色描述_us", "角色描述"),
             // entity.role.description
-            new TranslationSeedItem("entity.role.description", "ja-JP", "角色描述", "角色描述"),
+            new TranslationSeedItem("entity.role.description", "ja-JP", "角色描述_jp", "角色描述"),
             // entity.role.description
             new TranslationSeedItem("entity.role.description", "zh-CN", "角色描述", "角色描述"),
             // entity.role.description
-            new TranslationSeedItem("entity.role.description", "zh-HK", "角色描述", "角色描述"),
+            new TranslationSeedItem("entity.role.description", "zh-HK", "角色描述_hk", "角色描述"),
 
             // entity.role.menus
-            new TranslationSeedItem("entity.role.menus", "en-US", "角色菜单权限关联", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.role.menus", "en-US", "角色菜单权限关联_us", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
             // entity.role.menus
-            new TranslationSeedItem("entity.role.menus", "ja-JP", "角色菜单权限关联", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.role.menus", "ja-JP", "角色菜单权限关联_jp", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
             // entity.role.menus
             new TranslationSeedItem("entity.role.menus", "zh-CN", "角色菜单权限关联", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
             // entity.role.menus
-            new TranslationSeedItem("entity.role.menus", "zh-HK", "角色菜单权限关联", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
+            new TranslationSeedItem("entity.role.menus", "zh-HK", "角色菜单权限关联_hk", "角色菜单权限关联（RBAC，表 takt_identity_role_menu）"),
 
             // entity.role.companies
-            new TranslationSeedItem("entity.role.companies", "en-US", "角色可访问公司关联", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
+            new TranslationSeedItem("entity.role.companies", "en-US", "角色可访问公司关联_us", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
             // entity.role.companies
-            new TranslationSeedItem("entity.role.companies", "ja-JP", "角色可访问公司关联", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
+            new TranslationSeedItem("entity.role.companies", "ja-JP", "角色可访问公司关联_jp", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
             // entity.role.companies
             new TranslationSeedItem("entity.role.companies", "zh-CN", "角色可访问公司关联", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
             // entity.role.companies
-            new TranslationSeedItem("entity.role.companies", "zh-HK", "角色可访问公司关联", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
+            new TranslationSeedItem("entity.role.companies", "zh-HK", "角色可访问公司关联_hk", "角色可访问公司关联（RBAC，表 takt_identity_role_company）"),
 
             // entity.role.depts
-            new TranslationSeedItem("entity.role.depts", "en-US", "自定义数据权限关联部门", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
+            new TranslationSeedItem("entity.role.depts", "en-US", "自定义数据权限关联部门_us", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
             // entity.role.depts
-            new TranslationSeedItem("entity.role.depts", "ja-JP", "自定义数据权限关联部门", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
+            new TranslationSeedItem("entity.role.depts", "ja-JP", "自定义数据权限关联部门_jp", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
             // entity.role.depts
             new TranslationSeedItem("entity.role.depts", "zh-CN", "自定义数据权限关联部门", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
             // entity.role.depts
-            new TranslationSeedItem("entity.role.depts", "zh-HK", "自定义数据权限关联部门", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
+            new TranslationSeedItem("entity.role.depts", "zh-HK", "自定义数据权限关联部门_hk", "自定义数据权限关联部门（RBAC，表 takt_human_resource_organization_roledept）"),
 
             // entity.role.userroles
-            new TranslationSeedItem("entity.role.userroles", "en-US", "拥有该角色的用户关联", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
+            new TranslationSeedItem("entity.role.userroles", "en-US", "拥有该角色的用户关联_us", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
             // entity.role.userroles
-            new TranslationSeedItem("entity.role.userroles", "ja-JP", "拥有该角色的用户关联", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
+            new TranslationSeedItem("entity.role.userroles", "ja-JP", "拥有该角色的用户关联_jp", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
             // entity.role.userroles
             new TranslationSeedItem("entity.role.userroles", "zh-CN", "拥有该角色的用户关联", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
             // entity.role.userroles
-            new TranslationSeedItem("entity.role.userroles", "zh-HK", "拥有该角色的用户关联", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
+            new TranslationSeedItem("entity.role.userroles", "zh-HK", "拥有该角色的用户关联_hk", "拥有该角色的用户关联（RBAC，表 takt_identity_user_role）"),
         };
     }
 
@@ -205,10 +205,10 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 1;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Identity";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

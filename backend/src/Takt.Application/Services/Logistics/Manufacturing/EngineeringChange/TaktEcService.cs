@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变主应用服务实现
 // 
@@ -105,8 +105,8 @@ public class TaktEcService : TaktServiceBase, ITaktEcService
     {
         EnsureThreeLayerContext();
         var list = await _ecRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.PlantCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ChangeStatus == 1,
+            x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -470,9 +470,8 @@ public class TaktEcService : TaktServiceBase, ITaktEcService
                 || (x.EcLeader != null && x.EcLeader.Contains(keywords))
                 || SqlFunc.ToString(x.EcLossAmount).Contains(keywords)
                 || (x.EcDistinction != null && x.EcDistinction.Contains(keywords))
-                || SqlFunc.ToString(x.FlowInstanceId).Contains(keywords)
                 || SqlFunc.ToString(x.EcStatus).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EcIssueDate).Contains(keywords)
                 || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
@@ -521,19 +520,14 @@ public class TaktEcService : TaktServiceBase, ITaktEcService
             exp = exp.And(x => x.EcDistinction != null && x.EcDistinction.Contains(queryDto.EcDistinction));
         }
 
-        if (queryDto?.FlowInstanceId.HasValue == true)
-        {
-            exp = exp.And(x => x.FlowInstanceId == queryDto.FlowInstanceId);
-        }
-
         if (queryDto?.EcStatus.HasValue == true)
         {
             exp = exp.And(x => x.EcStatus == queryDto.EcStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

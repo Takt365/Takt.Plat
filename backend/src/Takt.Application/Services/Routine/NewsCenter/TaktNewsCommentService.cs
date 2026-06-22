@@ -419,7 +419,7 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
                 || SqlFunc.ToString(x.CommentLevel).Contains(keywords)
                 || SqlFunc.ToString(x.FlowInstanceId).Contains(keywords)
                 || SqlFunc.ToString(x.CommentStatus).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CommentTime).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -491,9 +491,9 @@ public class TaktNewsCommentService : TaktServiceBase, ITaktNewsCommentService
             exp = exp.And(x => x.CommentStatus == queryDto.CommentStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

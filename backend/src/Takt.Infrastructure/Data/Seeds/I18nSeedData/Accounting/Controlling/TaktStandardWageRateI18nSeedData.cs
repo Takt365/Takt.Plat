@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktStandardWageRateI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStandardWageRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,146 +75,146 @@ public class TaktStandardWageRateI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktStandardWageRate 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.standardwagerate._self / entity.standardwagerate.{{field}}；ResourceGroup=3；ResourceType=0
+    /// I18nKey：entity.standardwagerate._self / entity.standardwagerate.{{field}}；ResourceGroup=Controlling；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetStandardWageRateTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.standardwagerate._self
-            new TranslationSeedItem("entity.standardwagerate._self", "en-US", "Standard Wage Rate Information", "实体名称"),
+            new TranslationSeedItem("entity.standardwagerate._self", "en-US", "Standard Wage Rate Information_us", "实体名称"),
             // entity.standardwagerate._self
-            new TranslationSeedItem("entity.standardwagerate._self", "ja-JP", "标准工资率信息", "实体名称"),
+            new TranslationSeedItem("entity.standardwagerate._self", "ja-JP", "标准工资率信息_jp", "实体名称"),
             // entity.standardwagerate._self
             new TranslationSeedItem("entity.standardwagerate._self", "zh-CN", "标准工资率信息", "实体名称"),
             // entity.standardwagerate._self
-            new TranslationSeedItem("entity.standardwagerate._self", "zh-HK", "标准工资率信息", "实体名称"),
+            new TranslationSeedItem("entity.standardwagerate._self", "zh-HK", "标准工资率信息_hk", "实体名称"),
 
             // entity.standardwagerate.yearmonth
-            new TranslationSeedItem("entity.standardwagerate.yearmonth", "en-US", "年月", "年月（yyyyMM）"),
+            new TranslationSeedItem("entity.standardwagerate.yearmonth", "en-US", "年月_us", "年月（yyyyMM）"),
             // entity.standardwagerate.yearmonth
-            new TranslationSeedItem("entity.standardwagerate.yearmonth", "ja-JP", "年月", "年月（yyyyMM）"),
+            new TranslationSeedItem("entity.standardwagerate.yearmonth", "ja-JP", "年月_jp", "年月（yyyyMM）"),
             // entity.standardwagerate.yearmonth
             new TranslationSeedItem("entity.standardwagerate.yearmonth", "zh-CN", "年月", "年月（yyyyMM）"),
             // entity.standardwagerate.yearmonth
-            new TranslationSeedItem("entity.standardwagerate.yearmonth", "zh-HK", "年月", "年月（yyyyMM）"),
+            new TranslationSeedItem("entity.standardwagerate.yearmonth", "zh-HK", "年月_hk", "年月（yyyyMM）"),
 
             // entity.standardwagerate.workingdays
-            new TranslationSeedItem("entity.standardwagerate.workingdays", "en-US", "工作天数", "工作天数"),
+            new TranslationSeedItem("entity.standardwagerate.workingdays", "en-US", "工作天数_us", "工作天数"),
             // entity.standardwagerate.workingdays
-            new TranslationSeedItem("entity.standardwagerate.workingdays", "ja-JP", "工作天数", "工作天数"),
+            new TranslationSeedItem("entity.standardwagerate.workingdays", "ja-JP", "工作天数_jp", "工作天数"),
             // entity.standardwagerate.workingdays
             new TranslationSeedItem("entity.standardwagerate.workingdays", "zh-CN", "工作天数", "工作天数"),
             // entity.standardwagerate.workingdays
-            new TranslationSeedItem("entity.standardwagerate.workingdays", "zh-HK", "工作天数", "工作天数"),
+            new TranslationSeedItem("entity.standardwagerate.workingdays", "zh-HK", "工作天数_hk", "工作天数"),
 
             // entity.standardwagerate.salesamount
-            new TranslationSeedItem("entity.standardwagerate.salesamount", "en-US", "销售额", "销售额"),
+            new TranslationSeedItem("entity.standardwagerate.salesamount", "en-US", "销售额_us", "销售额"),
             // entity.standardwagerate.salesamount
-            new TranslationSeedItem("entity.standardwagerate.salesamount", "ja-JP", "销售额", "销售额"),
+            new TranslationSeedItem("entity.standardwagerate.salesamount", "ja-JP", "销售额_jp", "销售额"),
             // entity.standardwagerate.salesamount
             new TranslationSeedItem("entity.standardwagerate.salesamount", "zh-CN", "销售额", "销售额"),
             // entity.standardwagerate.salesamount
-            new TranslationSeedItem("entity.standardwagerate.salesamount", "zh-HK", "销售额", "销售额"),
+            new TranslationSeedItem("entity.standardwagerate.salesamount", "zh-HK", "销售额_hk", "销售额"),
 
             // entity.standardwagerate.directlaborcount
-            new TranslationSeedItem("entity.standardwagerate.directlaborcount", "en-US", "直接人数", "直接人数"),
+            new TranslationSeedItem("entity.standardwagerate.directlaborcount", "en-US", "直接人数_us", "直接人数"),
             // entity.standardwagerate.directlaborcount
-            new TranslationSeedItem("entity.standardwagerate.directlaborcount", "ja-JP", "直接人数", "直接人数"),
+            new TranslationSeedItem("entity.standardwagerate.directlaborcount", "ja-JP", "直接人数_jp", "直接人数"),
             // entity.standardwagerate.directlaborcount
             new TranslationSeedItem("entity.standardwagerate.directlaborcount", "zh-CN", "直接人数", "直接人数"),
             // entity.standardwagerate.directlaborcount
-            new TranslationSeedItem("entity.standardwagerate.directlaborcount", "zh-HK", "直接人数", "直接人数"),
+            new TranslationSeedItem("entity.standardwagerate.directlaborcount", "zh-HK", "直接人数_hk", "直接人数"),
 
             // entity.standardwagerate.directlaborwage
-            new TranslationSeedItem("entity.standardwagerate.directlaborwage", "en-US", "直接工资", "直接工资"),
+            new TranslationSeedItem("entity.standardwagerate.directlaborwage", "en-US", "直接工资_us", "直接工资"),
             // entity.standardwagerate.directlaborwage
-            new TranslationSeedItem("entity.standardwagerate.directlaborwage", "ja-JP", "直接工资", "直接工资"),
+            new TranslationSeedItem("entity.standardwagerate.directlaborwage", "ja-JP", "直接工资_jp", "直接工资"),
             // entity.standardwagerate.directlaborwage
             new TranslationSeedItem("entity.standardwagerate.directlaborwage", "zh-CN", "直接工资", "直接工资"),
             // entity.standardwagerate.directlaborwage
-            new TranslationSeedItem("entity.standardwagerate.directlaborwage", "zh-HK", "直接工资", "直接工资"),
+            new TranslationSeedItem("entity.standardwagerate.directlaborwage", "zh-HK", "直接工资_hk", "直接工资"),
 
             // entity.standardwagerate.directovertimehours
-            new TranslationSeedItem("entity.standardwagerate.directovertimehours", "en-US", "直接加班小时", "直接加班小时"),
+            new TranslationSeedItem("entity.standardwagerate.directovertimehours", "en-US", "直接加班小时_us", "直接加班小时"),
             // entity.standardwagerate.directovertimehours
-            new TranslationSeedItem("entity.standardwagerate.directovertimehours", "ja-JP", "直接加班小时", "直接加班小时"),
+            new TranslationSeedItem("entity.standardwagerate.directovertimehours", "ja-JP", "直接加班小时_jp", "直接加班小时"),
             // entity.standardwagerate.directovertimehours
             new TranslationSeedItem("entity.standardwagerate.directovertimehours", "zh-CN", "直接加班小时", "直接加班小时"),
             // entity.standardwagerate.directovertimehours
-            new TranslationSeedItem("entity.standardwagerate.directovertimehours", "zh-HK", "直接加班小时", "直接加班小时"),
+            new TranslationSeedItem("entity.standardwagerate.directovertimehours", "zh-HK", "直接加班小时_hk", "直接加班小时"),
 
             // entity.standardwagerate.directovertimetotal
-            new TranslationSeedItem("entity.standardwagerate.directovertimetotal", "en-US", "直接加班总额", "直接加班总额"),
+            new TranslationSeedItem("entity.standardwagerate.directovertimetotal", "en-US", "直接加班总额_us", "直接加班总额"),
             // entity.standardwagerate.directovertimetotal
-            new TranslationSeedItem("entity.standardwagerate.directovertimetotal", "ja-JP", "直接加班总额", "直接加班总额"),
+            new TranslationSeedItem("entity.standardwagerate.directovertimetotal", "ja-JP", "直接加班总额_jp", "直接加班总额"),
             // entity.standardwagerate.directovertimetotal
             new TranslationSeedItem("entity.standardwagerate.directovertimetotal", "zh-CN", "直接加班总额", "直接加班总额"),
             // entity.standardwagerate.directovertimetotal
-            new TranslationSeedItem("entity.standardwagerate.directovertimetotal", "zh-HK", "直接加班总额", "直接加班总额"),
+            new TranslationSeedItem("entity.standardwagerate.directovertimetotal", "zh-HK", "直接加班总额_hk", "直接加班总额"),
 
             // entity.standardwagerate.directwagerate
-            new TranslationSeedItem("entity.standardwagerate.directwagerate", "en-US", "直接工资率", "直接工资率"),
+            new TranslationSeedItem("entity.standardwagerate.directwagerate", "en-US", "直接工资率_us", "直接工资率"),
             // entity.standardwagerate.directwagerate
-            new TranslationSeedItem("entity.standardwagerate.directwagerate", "ja-JP", "直接工资率", "直接工资率"),
+            new TranslationSeedItem("entity.standardwagerate.directwagerate", "ja-JP", "直接工资率_jp", "直接工资率"),
             // entity.standardwagerate.directwagerate
             new TranslationSeedItem("entity.standardwagerate.directwagerate", "zh-CN", "直接工资率", "直接工资率"),
             // entity.standardwagerate.directwagerate
-            new TranslationSeedItem("entity.standardwagerate.directwagerate", "zh-HK", "直接工资率", "直接工资率"),
+            new TranslationSeedItem("entity.standardwagerate.directwagerate", "zh-HK", "直接工资率_hk", "直接工资率"),
 
             // entity.standardwagerate.indirectlaborcount
-            new TranslationSeedItem("entity.standardwagerate.indirectlaborcount", "en-US", "间接人数", "间接人数"),
+            new TranslationSeedItem("entity.standardwagerate.indirectlaborcount", "en-US", "间接人数_us", "间接人数"),
             // entity.standardwagerate.indirectlaborcount
-            new TranslationSeedItem("entity.standardwagerate.indirectlaborcount", "ja-JP", "间接人数", "间接人数"),
+            new TranslationSeedItem("entity.standardwagerate.indirectlaborcount", "ja-JP", "间接人数_jp", "间接人数"),
             // entity.standardwagerate.indirectlaborcount
             new TranslationSeedItem("entity.standardwagerate.indirectlaborcount", "zh-CN", "间接人数", "间接人数"),
             // entity.standardwagerate.indirectlaborcount
-            new TranslationSeedItem("entity.standardwagerate.indirectlaborcount", "zh-HK", "间接人数", "间接人数"),
+            new TranslationSeedItem("entity.standardwagerate.indirectlaborcount", "zh-HK", "间接人数_hk", "间接人数"),
 
             // entity.standardwagerate.indirectlaborwage
-            new TranslationSeedItem("entity.standardwagerate.indirectlaborwage", "en-US", "间接工资", "间接工资"),
+            new TranslationSeedItem("entity.standardwagerate.indirectlaborwage", "en-US", "间接工资_us", "间接工资"),
             // entity.standardwagerate.indirectlaborwage
-            new TranslationSeedItem("entity.standardwagerate.indirectlaborwage", "ja-JP", "间接工资", "间接工资"),
+            new TranslationSeedItem("entity.standardwagerate.indirectlaborwage", "ja-JP", "间接工资_jp", "间接工资"),
             // entity.standardwagerate.indirectlaborwage
             new TranslationSeedItem("entity.standardwagerate.indirectlaborwage", "zh-CN", "间接工资", "间接工资"),
             // entity.standardwagerate.indirectlaborwage
-            new TranslationSeedItem("entity.standardwagerate.indirectlaborwage", "zh-HK", "间接工资", "间接工资"),
+            new TranslationSeedItem("entity.standardwagerate.indirectlaborwage", "zh-HK", "间接工资_hk", "间接工资"),
 
             // entity.standardwagerate.indirectovertimehours
-            new TranslationSeedItem("entity.standardwagerate.indirectovertimehours", "en-US", "间接加班小时", "间接加班小时"),
+            new TranslationSeedItem("entity.standardwagerate.indirectovertimehours", "en-US", "间接加班小时_us", "间接加班小时"),
             // entity.standardwagerate.indirectovertimehours
-            new TranslationSeedItem("entity.standardwagerate.indirectovertimehours", "ja-JP", "间接加班小时", "间接加班小时"),
+            new TranslationSeedItem("entity.standardwagerate.indirectovertimehours", "ja-JP", "间接加班小时_jp", "间接加班小时"),
             // entity.standardwagerate.indirectovertimehours
             new TranslationSeedItem("entity.standardwagerate.indirectovertimehours", "zh-CN", "间接加班小时", "间接加班小时"),
             // entity.standardwagerate.indirectovertimehours
-            new TranslationSeedItem("entity.standardwagerate.indirectovertimehours", "zh-HK", "间接加班小时", "间接加班小时"),
+            new TranslationSeedItem("entity.standardwagerate.indirectovertimehours", "zh-HK", "间接加班小时_hk", "间接加班小时"),
 
             // entity.standardwagerate.indirectovertimetotal
-            new TranslationSeedItem("entity.standardwagerate.indirectovertimetotal", "en-US", "间接加班总额", "间接加班总额"),
+            new TranslationSeedItem("entity.standardwagerate.indirectovertimetotal", "en-US", "间接加班总额_us", "间接加班总额"),
             // entity.standardwagerate.indirectovertimetotal
-            new TranslationSeedItem("entity.standardwagerate.indirectovertimetotal", "ja-JP", "间接加班总额", "间接加班总额"),
+            new TranslationSeedItem("entity.standardwagerate.indirectovertimetotal", "ja-JP", "间接加班总额_jp", "间接加班总额"),
             // entity.standardwagerate.indirectovertimetotal
             new TranslationSeedItem("entity.standardwagerate.indirectovertimetotal", "zh-CN", "间接加班总额", "间接加班总额"),
             // entity.standardwagerate.indirectovertimetotal
-            new TranslationSeedItem("entity.standardwagerate.indirectovertimetotal", "zh-HK", "间接加班总额", "间接加班总额"),
+            new TranslationSeedItem("entity.standardwagerate.indirectovertimetotal", "zh-HK", "间接加班总额_hk", "间接加班总额"),
 
             // entity.standardwagerate.indirectwagerate
-            new TranslationSeedItem("entity.standardwagerate.indirectwagerate", "en-US", "间接工资率", "间接工资率"),
+            new TranslationSeedItem("entity.standardwagerate.indirectwagerate", "en-US", "间接工资率_us", "间接工资率"),
             // entity.standardwagerate.indirectwagerate
-            new TranslationSeedItem("entity.standardwagerate.indirectwagerate", "ja-JP", "间接工资率", "间接工资率"),
+            new TranslationSeedItem("entity.standardwagerate.indirectwagerate", "ja-JP", "间接工资率_jp", "间接工资率"),
             // entity.standardwagerate.indirectwagerate
             new TranslationSeedItem("entity.standardwagerate.indirectwagerate", "zh-CN", "间接工资率", "间接工资率"),
             // entity.standardwagerate.indirectwagerate
-            new TranslationSeedItem("entity.standardwagerate.indirectwagerate", "zh-HK", "间接工资率", "间接工资率"),
+            new TranslationSeedItem("entity.standardwagerate.indirectwagerate", "zh-HK", "间接工资率_hk", "间接工资率"),
 
             // entity.standardwagerate.relatedplant
-            new TranslationSeedItem("entity.standardwagerate.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.standardwagerate.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.standardwagerate.relatedplant
-            new TranslationSeedItem("entity.standardwagerate.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.standardwagerate.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.standardwagerate.relatedplant
             new TranslationSeedItem("entity.standardwagerate.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.standardwagerate.relatedplant
-            new TranslationSeedItem("entity.standardwagerate.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.standardwagerate.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -232,10 +232,10 @@ public class TaktStandardWageRateI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 3;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Controlling";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

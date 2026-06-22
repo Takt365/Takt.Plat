@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionOrderService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产工单应用服务实现
 // 
@@ -92,8 +92,8 @@ public class TaktProductionOrderService : TaktServiceBase, ITaktProductionOrderS
     {
         EnsureThreeLayerContext();
         var list = await _productionOrderRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.PlantCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.Status == 1,
+            x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -321,7 +321,7 @@ public class TaktProductionOrderService : TaktServiceBase, ITaktProductionOrderS
                 || (x.SerialNo != null && x.SerialNo.Contains(keywords))
                 || (x.RoutingCode != null && x.RoutingCode.Contains(keywords))
                 || SqlFunc.ToString(x.Status).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ActualStartDate).Contains(keywords)
                 || SqlFunc.ToString(x.ActualEndDate).Contains(keywords)
@@ -399,9 +399,9 @@ public class TaktProductionOrderService : TaktServiceBase, ITaktProductionOrderS
             exp = exp.And(x => x.Status == queryDto.Status);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

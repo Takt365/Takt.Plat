@@ -99,7 +99,7 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
     {
         var list = await _dictTypeRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
-            x => x.DictTypeName,
+            x => x.DictTypeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -221,6 +221,31 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
             throw new TaktBusinessException("不允许禁用内置字典类型");
         }
         entity.DictStatus = dto.DictStatus;
+        await _dictTypeRepository.UpdateAsync(entity);
+        return await GetDictTypeByIdAsync(dto.DictTypeId) ?? throw new TaktBusinessException("字典类型不存在");
+    }
+
+    /// <summary>
+    /// 更新字典类型是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktDictTypeDto> UpdateDictTypeBuiltInAsync(TaktDictTypeBuiltInDto dto)
+    {
+        var entity = await _dictTypeRepository.GetByIdAsync(dto.DictTypeId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("字典类型不存在");
+        }
+        if (dto.IsBuiltIn is not 0 and not 1)
+        {
+            throw new TaktBusinessException("是否内置必须为字典 sys_yes_no_type 合法值（0=否，1=是）");
+        }
+        if (entity.IsBuiltIn == 1 && dto.IsBuiltIn != 1)
+        {
+            throw new TaktBusinessException("不允许取消内置字典类型标识");
+        }
+        entity.IsBuiltIn = dto.IsBuiltIn;
         await _dictTypeRepository.UpdateAsync(entity);
         return await GetDictTypeByIdAsync(dto.DictTypeId) ?? throw new TaktBusinessException("字典类型不存在");
     }
@@ -416,7 +441,7 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || SqlFunc.ToString(x.DictStatus).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -457,9 +482,9 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
             exp = exp.And(x => x.DictStatus == queryDto.DictStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

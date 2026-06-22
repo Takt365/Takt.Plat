@@ -27,13 +27,6 @@ import {
   TAKT_IDLE_ACTIVITY_THROTTLE_MS,
 } from '@/utils/common';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
-import {
-  STORE_I18N_LAYOUT_SESSION_CANCEL,
-  STORE_I18N_LAYOUT_SESSION_CONTENT,
-  STORE_I18N_LAYOUT_SESSION_OK,
-  STORE_I18N_LAYOUT_SESSION_TITLE,
-  STORE_I18N_TIP_SESSION_IDLE_LOGOUT,
-} from '@/utils/takt-store-i18n';
 import { EventBus } from '@/utils/event-bus';
 import { createLogger } from '@/utils/logger';
 
@@ -113,10 +106,10 @@ function showIdleWarningModal(warningMinutes: number): void {
   const minutes = Math.max(1, warningMinutes);
   const warningMs = minutes * 60_000;
   const modal = Modal.confirm({
-    title: translateLocaleMessage(STORE_I18N_LAYOUT_SESSION_TITLE),
-    content: translateLocaleMessage(STORE_I18N_LAYOUT_SESSION_CONTENT, { minutes }),
-    okText: translateLocaleMessage(STORE_I18N_LAYOUT_SESSION_OK),
-    cancelText: translateLocaleMessage(STORE_I18N_LAYOUT_SESSION_CANCEL),
+    title: translateLocaleMessage('layouts.page.session.title'),
+    content: translateLocaleMessage('layouts.page.session.content', { minutes }),
+    okText: translateLocaleMessage('layouts.page.session.oktext'),
+    cancelText: translateLocaleMessage('layouts.page.session.canceltext'),
     centered: true,
     maskClosable: false,
     onOk: () => {
@@ -209,7 +202,7 @@ async function handleIdleTimeout(): Promise<void> {
 
   idleSessionLogger.info('用户空闲超时，执行自动登出', { action: 'idle-timeout' });
 
-  const message = translateLocaleMessage(STORE_I18N_TIP_SESSION_IDLE_LOGOUT);
+  const message = translateLocaleMessage('common.tip.session.idle.logout');
 
   try {
     await executeIdleLogoutAsync(message);

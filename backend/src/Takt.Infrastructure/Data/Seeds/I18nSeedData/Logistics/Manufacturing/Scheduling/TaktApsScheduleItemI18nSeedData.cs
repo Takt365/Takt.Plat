@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleItemI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsScheduleItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,218 +75,245 @@ public class TaktApsScheduleItemI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktApsScheduleItem 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.apsscheduleitem._self / entity.apsscheduleitem.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.apsscheduleitem._self / entity.apsscheduleitem.{{field}}；ResourceGroup=Scheduling；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetApsScheduleItemTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.apsscheduleitem._self
-            new TranslationSeedItem("entity.apsscheduleitem._self", "en-US", "Aps Schedule Item Information", "实体名称"),
+            new TranslationSeedItem("entity.apsscheduleitem._self", "en-US", "Aps Schedule Item Information_us", "实体名称"),
             // entity.apsscheduleitem._self
-            new TranslationSeedItem("entity.apsscheduleitem._self", "ja-JP", "APS排程明细信息", "实体名称"),
+            new TranslationSeedItem("entity.apsscheduleitem._self", "ja-JP", "APS排程明细信息_jp", "实体名称"),
             // entity.apsscheduleitem._self
             new TranslationSeedItem("entity.apsscheduleitem._self", "zh-CN", "APS排程明细信息", "实体名称"),
             // entity.apsscheduleitem._self
-            new TranslationSeedItem("entity.apsscheduleitem._self", "zh-HK", "APS排程明细信息", "实体名称"),
+            new TranslationSeedItem("entity.apsscheduleitem._self", "zh-HK", "APS排程明细信息_hk", "实体名称"),
 
             // entity.apsscheduleitem.apsscheduleid
-            new TranslationSeedItem("entity.apsscheduleitem.apsscheduleid", "en-US", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.apsscheduleitem.apsscheduleid", "en-US", "APS排程ID_us", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.apsscheduleitem.apsscheduleid
-            new TranslationSeedItem("entity.apsscheduleitem.apsscheduleid", "ja-JP", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.apsscheduleitem.apsscheduleid", "ja-JP", "APS排程ID_jp", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.apsscheduleitem.apsscheduleid
             new TranslationSeedItem("entity.apsscheduleitem.apsscheduleid", "zh-CN", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.apsscheduleitem.apsscheduleid
-            new TranslationSeedItem("entity.apsscheduleitem.apsscheduleid", "zh-HK", "APS排程ID", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.apsscheduleitem.apsscheduleid", "zh-HK", "APS排程ID_hk", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
             // entity.apsscheduleitem.apsschedulecode
-            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "en-US", "APS排程编码", "APS排程编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "en-US", "APS排程编码_us", "APS排程编码（冗余字段，便于查询）"),
             // entity.apsscheduleitem.apsschedulecode
-            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "ja-JP", "APS排程编码", "APS排程编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "ja-JP", "APS排程编码_jp", "APS排程编码（冗余字段，便于查询）"),
             // entity.apsscheduleitem.apsschedulecode
             new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "zh-CN", "APS排程编码", "APS排程编码（冗余字段，便于查询）"),
             // entity.apsscheduleitem.apsschedulecode
-            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "zh-HK", "APS排程编码", "APS排程编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "zh-HK", "APS排程编码_hk", "APS排程编码（冗余字段，便于查询）"),
+
+            // entity.apsscheduleitem.apsorderid
+            new TranslationSeedItem("entity.apsscheduleitem.apsorderid", "en-US", "APS订单ID_us", "APS 订单 ID（关联 TaktApsOrder，可选）"),
+            // entity.apsscheduleitem.apsorderid
+            new TranslationSeedItem("entity.apsscheduleitem.apsorderid", "ja-JP", "APS订单ID_jp", "APS 订单 ID（关联 TaktApsOrder，可选）"),
+            // entity.apsscheduleitem.apsorderid
+            new TranslationSeedItem("entity.apsscheduleitem.apsorderid", "zh-CN", "APS订单ID", "APS 订单 ID（关联 TaktApsOrder，可选）"),
+            // entity.apsscheduleitem.apsorderid
+            new TranslationSeedItem("entity.apsscheduleitem.apsorderid", "zh-HK", "APS订单ID_hk", "APS 订单 ID（关联 TaktApsOrder，可选）"),
+
+            // entity.apsscheduleitem.apsoperationid
+            new TranslationSeedItem("entity.apsscheduleitem.apsoperationid", "en-US", "APS工序排程ID_us", "APS 工序排程 ID（关联 TaktApsOperation，可选）"),
+            // entity.apsscheduleitem.apsoperationid
+            new TranslationSeedItem("entity.apsscheduleitem.apsoperationid", "ja-JP", "APS工序排程ID_jp", "APS 工序排程 ID（关联 TaktApsOperation，可选）"),
+            // entity.apsscheduleitem.apsoperationid
+            new TranslationSeedItem("entity.apsscheduleitem.apsoperationid", "zh-CN", "APS工序排程ID", "APS 工序排程 ID（关联 TaktApsOperation，可选）"),
+            // entity.apsscheduleitem.apsoperationid
+            new TranslationSeedItem("entity.apsscheduleitem.apsoperationid", "zh-HK", "APS工序排程ID_hk", "APS 工序排程 ID（关联 TaktApsOperation，可选）"),
+
+            // entity.apsscheduleitem.routingitemid
+            new TranslationSeedItem("entity.apsscheduleitem.routingitemid", "en-US", "工艺路线工序ID_us", "工艺路线工序 ID（关联 TaktRoutingItem，可选）"),
+            // entity.apsscheduleitem.routingitemid
+            new TranslationSeedItem("entity.apsscheduleitem.routingitemid", "ja-JP", "工艺路线工序ID_jp", "工艺路线工序 ID（关联 TaktRoutingItem，可选）"),
+            // entity.apsscheduleitem.routingitemid
+            new TranslationSeedItem("entity.apsscheduleitem.routingitemid", "zh-CN", "工艺路线工序ID", "工艺路线工序 ID（关联 TaktRoutingItem，可选）"),
+            // entity.apsscheduleitem.routingitemid
+            new TranslationSeedItem("entity.apsscheduleitem.routingitemid", "zh-HK", "工艺路线工序ID_hk", "工艺路线工序 ID（关联 TaktRoutingItem，可选）"),
 
             // entity.apsscheduleitem.linenumber
-            new TranslationSeedItem("entity.apsscheduleitem.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.apsscheduleitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
             // entity.apsscheduleitem.linenumber
-            new TranslationSeedItem("entity.apsscheduleitem.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.apsscheduleitem.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
             // entity.apsscheduleitem.linenumber
             new TranslationSeedItem("entity.apsscheduleitem.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
             // entity.apsscheduleitem.linenumber
-            new TranslationSeedItem("entity.apsscheduleitem.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.apsscheduleitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.apsscheduleitem.workordercode
-            new TranslationSeedItem("entity.apsscheduleitem.workordercode", "en-US", "生产工单编码", "生产工单编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.workordercode", "en-US", "生产工单编码_us", "生产工单编码"),
             // entity.apsscheduleitem.workordercode
-            new TranslationSeedItem("entity.apsscheduleitem.workordercode", "ja-JP", "生产工单编码", "生产工单编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.workordercode", "ja-JP", "生产工单编码_jp", "生产工单编码"),
             // entity.apsscheduleitem.workordercode
             new TranslationSeedItem("entity.apsscheduleitem.workordercode", "zh-CN", "生产工单编码", "生产工单编码"),
             // entity.apsscheduleitem.workordercode
-            new TranslationSeedItem("entity.apsscheduleitem.workordercode", "zh-HK", "生产工单编码", "生产工单编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.workordercode", "zh-HK", "生产工单编码_hk", "生产工单编码"),
 
             // entity.apsscheduleitem.productcode
-            new TranslationSeedItem("entity.apsscheduleitem.productcode", "en-US", "产品编码", "产品编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.productcode", "en-US", "产品编码_us", "产品编码"),
             // entity.apsscheduleitem.productcode
-            new TranslationSeedItem("entity.apsscheduleitem.productcode", "ja-JP", "产品编码", "产品编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.productcode", "ja-JP", "产品编码_jp", "产品编码"),
             // entity.apsscheduleitem.productcode
             new TranslationSeedItem("entity.apsscheduleitem.productcode", "zh-CN", "产品编码", "产品编码"),
             // entity.apsscheduleitem.productcode
-            new TranslationSeedItem("entity.apsscheduleitem.productcode", "zh-HK", "产品编码", "产品编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.productcode", "zh-HK", "产品编码_hk", "产品编码"),
 
             // entity.apsscheduleitem.productname
-            new TranslationSeedItem("entity.apsscheduleitem.productname", "en-US", "产品名称", "产品名称"),
+            new TranslationSeedItem("entity.apsscheduleitem.productname", "en-US", "产品名称_us", "产品名称"),
             // entity.apsscheduleitem.productname
-            new TranslationSeedItem("entity.apsscheduleitem.productname", "ja-JP", "产品名称", "产品名称"),
+            new TranslationSeedItem("entity.apsscheduleitem.productname", "ja-JP", "产品名称_jp", "产品名称"),
             // entity.apsscheduleitem.productname
             new TranslationSeedItem("entity.apsscheduleitem.productname", "zh-CN", "产品名称", "产品名称"),
             // entity.apsscheduleitem.productname
-            new TranslationSeedItem("entity.apsscheduleitem.productname", "zh-HK", "产品名称", "产品名称"),
+            new TranslationSeedItem("entity.apsscheduleitem.productname", "zh-HK", "产品名称_hk", "产品名称"),
 
             // entity.apsscheduleitem.workcentercode
-            new TranslationSeedItem("entity.apsscheduleitem.workcentercode", "en-US", "工作中心编码", "工作中心编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.workcentercode", "en-US", "工作中心编码_us", "工作中心编码"),
             // entity.apsscheduleitem.workcentercode
-            new TranslationSeedItem("entity.apsscheduleitem.workcentercode", "ja-JP", "工作中心编码", "工作中心编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.workcentercode", "ja-JP", "工作中心编码_jp", "工作中心编码"),
             // entity.apsscheduleitem.workcentercode
             new TranslationSeedItem("entity.apsscheduleitem.workcentercode", "zh-CN", "工作中心编码", "工作中心编码"),
             // entity.apsscheduleitem.workcentercode
-            new TranslationSeedItem("entity.apsscheduleitem.workcentercode", "zh-HK", "工作中心编码", "工作中心编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.workcentercode", "zh-HK", "工作中心编码_hk", "工作中心编码"),
 
             // entity.apsscheduleitem.workcentername
-            new TranslationSeedItem("entity.apsscheduleitem.workcentername", "en-US", "工作中心名称", "工作中心名称"),
+            new TranslationSeedItem("entity.apsscheduleitem.workcentername", "en-US", "工作中心名称_us", "工作中心名称"),
             // entity.apsscheduleitem.workcentername
-            new TranslationSeedItem("entity.apsscheduleitem.workcentername", "ja-JP", "工作中心名称", "工作中心名称"),
+            new TranslationSeedItem("entity.apsscheduleitem.workcentername", "ja-JP", "工作中心名称_jp", "工作中心名称"),
             // entity.apsscheduleitem.workcentername
             new TranslationSeedItem("entity.apsscheduleitem.workcentername", "zh-CN", "工作中心名称", "工作中心名称"),
             // entity.apsscheduleitem.workcentername
-            new TranslationSeedItem("entity.apsscheduleitem.workcentername", "zh-HK", "工作中心名称", "工作中心名称"),
+            new TranslationSeedItem("entity.apsscheduleitem.workcentername", "zh-HK", "工作中心名称_hk", "工作中心名称"),
 
             // entity.apsscheduleitem.processcode
-            new TranslationSeedItem("entity.apsscheduleitem.processcode", "en-US", "工序编码", "工序编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.processcode", "en-US", "工序编码_us", "工序编码"),
             // entity.apsscheduleitem.processcode
-            new TranslationSeedItem("entity.apsscheduleitem.processcode", "ja-JP", "工序编码", "工序编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.processcode", "ja-JP", "工序编码_jp", "工序编码"),
             // entity.apsscheduleitem.processcode
             new TranslationSeedItem("entity.apsscheduleitem.processcode", "zh-CN", "工序编码", "工序编码"),
             // entity.apsscheduleitem.processcode
-            new TranslationSeedItem("entity.apsscheduleitem.processcode", "zh-HK", "工序编码", "工序编码"),
+            new TranslationSeedItem("entity.apsscheduleitem.processcode", "zh-HK", "工序编码_hk", "工序编码"),
 
             // entity.apsscheduleitem.processname
-            new TranslationSeedItem("entity.apsscheduleitem.processname", "en-US", "工序名称", "工序名称"),
+            new TranslationSeedItem("entity.apsscheduleitem.processname", "en-US", "工序名称_us", "工序名称"),
             // entity.apsscheduleitem.processname
-            new TranslationSeedItem("entity.apsscheduleitem.processname", "ja-JP", "工序名称", "工序名称"),
+            new TranslationSeedItem("entity.apsscheduleitem.processname", "ja-JP", "工序名称_jp", "工序名称"),
             // entity.apsscheduleitem.processname
             new TranslationSeedItem("entity.apsscheduleitem.processname", "zh-CN", "工序名称", "工序名称"),
             // entity.apsscheduleitem.processname
-            new TranslationSeedItem("entity.apsscheduleitem.processname", "zh-HK", "工序名称", "工序名称"),
+            new TranslationSeedItem("entity.apsscheduleitem.processname", "zh-HK", "工序名称_hk", "工序名称"),
 
             // entity.apsscheduleitem.processsequence
-            new TranslationSeedItem("entity.apsscheduleitem.processsequence", "en-US", "工序序号", "工序序号"),
+            new TranslationSeedItem("entity.apsscheduleitem.processsequence", "en-US", "工序序号_us", "工序序号"),
             // entity.apsscheduleitem.processsequence
-            new TranslationSeedItem("entity.apsscheduleitem.processsequence", "ja-JP", "工序序号", "工序序号"),
+            new TranslationSeedItem("entity.apsscheduleitem.processsequence", "ja-JP", "工序序号_jp", "工序序号"),
             // entity.apsscheduleitem.processsequence
             new TranslationSeedItem("entity.apsscheduleitem.processsequence", "zh-CN", "工序序号", "工序序号"),
             // entity.apsscheduleitem.processsequence
-            new TranslationSeedItem("entity.apsscheduleitem.processsequence", "zh-HK", "工序序号", "工序序号"),
+            new TranslationSeedItem("entity.apsscheduleitem.processsequence", "zh-HK", "工序序号_hk", "工序序号"),
 
             // entity.apsscheduleitem.processstandardst
-            new TranslationSeedItem("entity.apsscheduleitem.processstandardst", "en-US", "工序标准ST值", "工序标准ST值"),
+            new TranslationSeedItem("entity.apsscheduleitem.processstandardst", "en-US", "工序标准ST值_us", "工序标准ST值"),
             // entity.apsscheduleitem.processstandardst
-            new TranslationSeedItem("entity.apsscheduleitem.processstandardst", "ja-JP", "工序标准ST值", "工序标准ST值"),
+            new TranslationSeedItem("entity.apsscheduleitem.processstandardst", "ja-JP", "工序标准ST值_jp", "工序标准ST值"),
             // entity.apsscheduleitem.processstandardst
             new TranslationSeedItem("entity.apsscheduleitem.processstandardst", "zh-CN", "工序标准ST值", "工序标准ST值"),
             // entity.apsscheduleitem.processstandardst
-            new TranslationSeedItem("entity.apsscheduleitem.processstandardst", "zh-HK", "工序标准ST值", "工序标准ST值"),
+            new TranslationSeedItem("entity.apsscheduleitem.processstandardst", "zh-HK", "工序标准ST值_hk", "工序标准ST值"),
 
             // entity.apsscheduleitem.processstandardstunit
-            new TranslationSeedItem("entity.apsscheduleitem.processstandardstunit", "en-US", "工序标准ST单位", "工序标准ST单位（0=秒/件，1=Shot/件，2=Point/件，3=分钟/件，4=小时/件）"),
+            new TranslationSeedItem("entity.apsscheduleitem.processstandardstunit", "en-US", "工序标准ST单位_us", "工序标准ST单位（0=秒/件，1=Shot/件，2=Point/件，3=分钟/件，4=小时/件）"),
             // entity.apsscheduleitem.processstandardstunit
-            new TranslationSeedItem("entity.apsscheduleitem.processstandardstunit", "ja-JP", "工序标准ST单位", "工序标准ST单位（0=秒/件，1=Shot/件，2=Point/件，3=分钟/件，4=小时/件）"),
+            new TranslationSeedItem("entity.apsscheduleitem.processstandardstunit", "ja-JP", "工序标准ST单位_jp", "工序标准ST单位（0=秒/件，1=Shot/件，2=Point/件，3=分钟/件，4=小时/件）"),
             // entity.apsscheduleitem.processstandardstunit
             new TranslationSeedItem("entity.apsscheduleitem.processstandardstunit", "zh-CN", "工序标准ST单位", "工序标准ST单位（0=秒/件，1=Shot/件，2=Point/件，3=分钟/件，4=小时/件）"),
             // entity.apsscheduleitem.processstandardstunit
-            new TranslationSeedItem("entity.apsscheduleitem.processstandardstunit", "zh-HK", "工序标准ST单位", "工序标准ST单位（0=秒/件，1=Shot/件，2=Point/件，3=分钟/件，4=小时/件）"),
+            new TranslationSeedItem("entity.apsscheduleitem.processstandardstunit", "zh-HK", "工序标准ST单位_hk", "工序标准ST单位（0=秒/件，1=Shot/件，2=Point/件，3=分钟/件，4=小时/件）"),
 
             // entity.apsscheduleitem.extraminutes
-            new TranslationSeedItem("entity.apsscheduleitem.extraminutes", "en-US", "额外时间", "额外时间（分钟），如换模、调试、清洁等准备时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.extraminutes", "en-US", "额外时间_us", "额外时间（分钟），如换模、调试、清洁等准备时间"),
             // entity.apsscheduleitem.extraminutes
-            new TranslationSeedItem("entity.apsscheduleitem.extraminutes", "ja-JP", "额外时间", "额外时间（分钟），如换模、调试、清洁等准备时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.extraminutes", "ja-JP", "额外时间_jp", "额外时间（分钟），如换模、调试、清洁等准备时间"),
             // entity.apsscheduleitem.extraminutes
             new TranslationSeedItem("entity.apsscheduleitem.extraminutes", "zh-CN", "额外时间", "额外时间（分钟），如换模、调试、清洁等准备时间"),
             // entity.apsscheduleitem.extraminutes
-            new TranslationSeedItem("entity.apsscheduleitem.extraminutes", "zh-HK", "额外时间", "额外时间（分钟），如换模、调试、清洁等准备时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.extraminutes", "zh-HK", "额外时间_hk", "额外时间（分钟），如换模、调试、清洁等准备时间"),
 
             // entity.apsscheduleitem.planquantity
-            new TranslationSeedItem("entity.apsscheduleitem.planquantity", "en-US", "计划数量", "计划数量"),
+            new TranslationSeedItem("entity.apsscheduleitem.planquantity", "en-US", "计划数量_us", "计划数量"),
             // entity.apsscheduleitem.planquantity
-            new TranslationSeedItem("entity.apsscheduleitem.planquantity", "ja-JP", "计划数量", "计划数量"),
+            new TranslationSeedItem("entity.apsscheduleitem.planquantity", "ja-JP", "计划数量_jp", "计划数量"),
             // entity.apsscheduleitem.planquantity
             new TranslationSeedItem("entity.apsscheduleitem.planquantity", "zh-CN", "计划数量", "计划数量"),
             // entity.apsscheduleitem.planquantity
-            new TranslationSeedItem("entity.apsscheduleitem.planquantity", "zh-HK", "计划数量", "计划数量"),
+            new TranslationSeedItem("entity.apsscheduleitem.planquantity", "zh-HK", "计划数量_hk", "计划数量"),
 
             // entity.apsscheduleitem.planstarttime
-            new TranslationSeedItem("entity.apsscheduleitem.planstarttime", "en-US", "计划开始时间", "计划开始时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.planstarttime", "en-US", "计划开始时间_us", "计划开始时间"),
             // entity.apsscheduleitem.planstarttime
-            new TranslationSeedItem("entity.apsscheduleitem.planstarttime", "ja-JP", "计划开始时间", "计划开始时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.planstarttime", "ja-JP", "计划开始时间_jp", "计划开始时间"),
             // entity.apsscheduleitem.planstarttime
             new TranslationSeedItem("entity.apsscheduleitem.planstarttime", "zh-CN", "计划开始时间", "计划开始时间"),
             // entity.apsscheduleitem.planstarttime
-            new TranslationSeedItem("entity.apsscheduleitem.planstarttime", "zh-HK", "计划开始时间", "计划开始时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.planstarttime", "zh-HK", "计划开始时间_hk", "计划开始时间"),
 
             // entity.apsscheduleitem.planendtime
-            new TranslationSeedItem("entity.apsscheduleitem.planendtime", "en-US", "计划结束时间", "计划结束时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.planendtime", "en-US", "计划结束时间_us", "计划结束时间"),
             // entity.apsscheduleitem.planendtime
-            new TranslationSeedItem("entity.apsscheduleitem.planendtime", "ja-JP", "计划结束时间", "计划结束时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.planendtime", "ja-JP", "计划结束时间_jp", "计划结束时间"),
             // entity.apsscheduleitem.planendtime
             new TranslationSeedItem("entity.apsscheduleitem.planendtime", "zh-CN", "计划结束时间", "计划结束时间"),
             // entity.apsscheduleitem.planendtime
-            new TranslationSeedItem("entity.apsscheduleitem.planendtime", "zh-HK", "计划结束时间", "计划结束时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.planendtime", "zh-HK", "计划结束时间_hk", "计划结束时间"),
 
             // entity.apsscheduleitem.actualstarttime
-            new TranslationSeedItem("entity.apsscheduleitem.actualstarttime", "en-US", "实际开始时间", "实际开始时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.actualstarttime", "en-US", "实际开始时间_us", "实际开始时间"),
             // entity.apsscheduleitem.actualstarttime
-            new TranslationSeedItem("entity.apsscheduleitem.actualstarttime", "ja-JP", "实际开始时间", "实际开始时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.actualstarttime", "ja-JP", "实际开始时间_jp", "实际开始时间"),
             // entity.apsscheduleitem.actualstarttime
             new TranslationSeedItem("entity.apsscheduleitem.actualstarttime", "zh-CN", "实际开始时间", "实际开始时间"),
             // entity.apsscheduleitem.actualstarttime
-            new TranslationSeedItem("entity.apsscheduleitem.actualstarttime", "zh-HK", "实际开始时间", "实际开始时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.actualstarttime", "zh-HK", "实际开始时间_hk", "实际开始时间"),
 
             // entity.apsscheduleitem.actualendtime
-            new TranslationSeedItem("entity.apsscheduleitem.actualendtime", "en-US", "实际结束时间", "实际结束时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.actualendtime", "en-US", "实际结束时间_us", "实际结束时间"),
             // entity.apsscheduleitem.actualendtime
-            new TranslationSeedItem("entity.apsscheduleitem.actualendtime", "ja-JP", "实际结束时间", "实际结束时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.actualendtime", "ja-JP", "实际结束时间_jp", "实际结束时间"),
             // entity.apsscheduleitem.actualendtime
             new TranslationSeedItem("entity.apsscheduleitem.actualendtime", "zh-CN", "实际结束时间", "实际结束时间"),
             // entity.apsscheduleitem.actualendtime
-            new TranslationSeedItem("entity.apsscheduleitem.actualendtime", "zh-HK", "实际结束时间", "实际结束时间"),
+            new TranslationSeedItem("entity.apsscheduleitem.actualendtime", "zh-HK", "实际结束时间_hk", "实际结束时间"),
 
             // entity.apsscheduleitem.processstatus
-            new TranslationSeedItem("entity.apsscheduleitem.processstatus", "en-US", "工序状态", "工序状态（0=未开始，1=准备中，2=加工中，3=已完工，4=已暂停，5=已取消）"),
+            new TranslationSeedItem("entity.apsscheduleitem.processstatus", "en-US", "工序状态_us", "工序状态（0=未开始，1=准备中，2=加工中，3=已完工，4=已暂停，5=已取消）"),
             // entity.apsscheduleitem.processstatus
-            new TranslationSeedItem("entity.apsscheduleitem.processstatus", "ja-JP", "工序状态", "工序状态（0=未开始，1=准备中，2=加工中，3=已完工，4=已暂停，5=已取消）"),
+            new TranslationSeedItem("entity.apsscheduleitem.processstatus", "ja-JP", "工序状态_jp", "工序状态（0=未开始，1=准备中，2=加工中，3=已完工，4=已暂停，5=已取消）"),
             // entity.apsscheduleitem.processstatus
             new TranslationSeedItem("entity.apsscheduleitem.processstatus", "zh-CN", "工序状态", "工序状态（0=未开始，1=准备中，2=加工中，3=已完工，4=已暂停，5=已取消）"),
             // entity.apsscheduleitem.processstatus
-            new TranslationSeedItem("entity.apsscheduleitem.processstatus", "zh-HK", "工序状态", "工序状态（0=未开始，1=准备中，2=加工中，3=已完工，4=已暂停，5=已取消）"),
+            new TranslationSeedItem("entity.apsscheduleitem.processstatus", "zh-HK", "工序状态_hk", "工序状态（0=未开始，1=准备中，2=加工中，3=已完工，4=已暂停，5=已取消）"),
 
             // entity.apsscheduleitem.priority
-            new TranslationSeedItem("entity.apsscheduleitem.priority", "en-US", "优先级", "优先级（0=普通，1=紧急，2=特急）"),
+            new TranslationSeedItem("entity.apsscheduleitem.priority", "en-US", "优先级_us", "优先级（0=普通，1=紧急，2=特急）"),
             // entity.apsscheduleitem.priority
-            new TranslationSeedItem("entity.apsscheduleitem.priority", "ja-JP", "优先级", "优先级（0=普通，1=紧急，2=特急）"),
+            new TranslationSeedItem("entity.apsscheduleitem.priority", "ja-JP", "优先级_jp", "优先级（0=普通，1=紧急，2=特急）"),
             // entity.apsscheduleitem.priority
             new TranslationSeedItem("entity.apsscheduleitem.priority", "zh-CN", "优先级", "优先级（0=普通，1=紧急，2=特急）"),
             // entity.apsscheduleitem.priority
-            new TranslationSeedItem("entity.apsscheduleitem.priority", "zh-HK", "优先级", "优先级（0=普通，1=紧急，2=特急）"),
+            new TranslationSeedItem("entity.apsscheduleitem.priority", "zh-HK", "优先级_hk", "优先级（0=普通，1=紧急，2=特急）"),
 
             // entity.apsscheduleitem.schedule
-            new TranslationSeedItem("entity.apsscheduleitem.schedule", "en-US", "APS排程主表", "APS排程主表（主表）"),
+            new TranslationSeedItem("entity.apsscheduleitem.schedule", "en-US", "APS排程主表_us", "APS排程主表（主表）"),
             // entity.apsscheduleitem.schedule
-            new TranslationSeedItem("entity.apsscheduleitem.schedule", "ja-JP", "APS排程主表", "APS排程主表（主表）"),
+            new TranslationSeedItem("entity.apsscheduleitem.schedule", "ja-JP", "APS排程主表_jp", "APS排程主表（主表）"),
             // entity.apsscheduleitem.schedule
             new TranslationSeedItem("entity.apsscheduleitem.schedule", "zh-CN", "APS排程主表", "APS排程主表（主表）"),
             // entity.apsscheduleitem.schedule
-            new TranslationSeedItem("entity.apsscheduleitem.schedule", "zh-HK", "APS排程主表", "APS排程主表（主表）"),
+            new TranslationSeedItem("entity.apsscheduleitem.schedule", "zh-HK", "APS排程主表_hk", "APS排程主表（主表）"),
         };
     }
 
@@ -304,10 +331,10 @@ public class TaktApsScheduleItemI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Scheduling";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

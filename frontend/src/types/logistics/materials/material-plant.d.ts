@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
-// 文件名称：material.d.ts
-// 创建时间：2026-06-09
+// 文件名称：material-plant.d.ts
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,17 +16,17 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt物料实体
- * 对应前端 TaktMaterialDto
+ * Takt工厂物料实体
+ * 对应前端 TaktMaterialPlantDto
  * 继承 TaktCompanyDtoBase
- * 对应前端 Material
- * @description 对应后端 TaktMaterialDto
+ * 对应前端 MaterialPlant
+ * @description 对应后端 TaktMaterialPlantDto
  */
-export interface Material extends CompanyDtoBase {
+export interface MaterialPlant extends CompanyDtoBase {
   /**
-   * MaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   * MaterialPlantID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
-  materialId: string;
+  materialPlantId: string;
 
   /**
    * 工厂代码
@@ -64,7 +64,7 @@ export interface Material extends CompanyDtoBase {
   materialHierarchy?: string;
 
   /**
-   * 品目组代码
+   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
    */
   materialGroupCode?: string;
 
@@ -89,7 +89,7 @@ export interface Material extends CompanyDtoBase {
   baseUnit: string;
 
   /**
-   * 采购组
+   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
@@ -252,12 +252,12 @@ export interface Material extends CompanyDtoBase {
 
 
 /**
- * Material 分页查询 DTO
+ * MaterialPlant 分页查询 DTO
  * 继承 TaktPagedQuery
- * 对应前端 MaterialQuery
- * @description 对应后端 TaktMaterialQueryDto
+ * 对应前端 MaterialPlantQuery
+ * @description 对应后端 TaktMaterialPlantQueryDto
  */
-export interface MaterialQuery extends TaktPagedQuery {
+export interface MaterialPlantQuery extends TaktPagedQuery {
   /**
    * 租户编码
    */
@@ -304,7 +304,7 @@ export interface MaterialQuery extends TaktPagedQuery {
   materialHierarchy?: string;
 
   /**
-   * 品目组代码
+   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
    */
   materialGroupCode?: string;
 
@@ -329,7 +329,7 @@ export interface MaterialQuery extends TaktPagedQuery {
   baseUnit?: string;
 
   /**
-   * 采购组
+   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
@@ -506,7 +506,7 @@ export interface MaterialQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -517,11 +517,11 @@ export interface MaterialQuery extends TaktPagedQuery {
 
 
 /**
- * 创建Material DTO
- * 对应前端 MaterialCreate
- * @description 对应后端 TaktMaterialCreateDto
+ * 创建MaterialPlant DTO
+ * 对应前端 MaterialPlantCreate
+ * @description 对应后端 TaktMaterialPlantCreateDto
  */
-export interface MaterialCreate {
+export interface MaterialPlantCreate {
   /**
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
@@ -573,7 +573,7 @@ export interface MaterialCreate {
   materialHierarchy?: string;
 
   /**
-   * 品目组代码
+   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
    */
   materialGroupCode?: string;
 
@@ -598,7 +598,7 @@ export interface MaterialCreate {
   baseUnit: string;
 
   /**
-   * 采购组
+   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
@@ -760,7 +760,7 @@ export interface MaterialCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -771,30 +771,30 @@ export interface MaterialCreate {
 
 
 /**
- * 更新Material DTO
- * 继承 TaktMaterialCreateDto，添加 MaterialId 字段
- * 对应前端 MaterialUpdate
- * @description 对应后端 TaktMaterialUpdateDto
+ * 更新MaterialPlant DTO
+ * 继承 TaktMaterialPlantCreateDto，添加 MaterialPlantId 字段
+ * 对应前端 MaterialPlantUpdate
+ * @description 对应后端 TaktMaterialPlantUpdateDto
  */
-export interface MaterialUpdate extends MaterialCreate {
+export interface MaterialPlantUpdate extends MaterialPlantCreate {
   /**
-   * MaterialID（标识要更新的实体）
+   * MaterialPlantID（标识要更新的实体）
    */
-  materialId: string;
+  materialPlantId: string;
 
 }
 
 
 /**
- * Material 状态更新 DTO
- * 对应前端 MaterialStatus
- * @description 对应后端 TaktMaterialStatusDto
+ * MaterialPlant 状态更新 DTO
+ * 对应前端 MaterialPlantStatus
+ * @description 对应后端 TaktMaterialPlantStatusDto
  */
-export interface MaterialStatus {
+export interface MaterialPlantStatus {
   /**
-   * MaterialID
+   * MaterialPlantID
    */
-  materialId: string;
+  materialPlantId: string;
 
   /**
    * 物料状态（1=启用，0=禁用）
@@ -805,11 +805,11 @@ export interface MaterialStatus {
 
 
 /**
- * Material 导入模板行 DTO
- * 对应前端 MaterialTemplate
- * @description 对应后端 TaktMaterialTemplateDto
+ * MaterialPlant 导入模板行 DTO
+ * 对应前端 MaterialPlantTemplate
+ * @description 对应后端 TaktMaterialPlantTemplateDto
  */
-export interface MaterialTemplate {
+export interface MaterialPlantTemplate {
   /**
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
@@ -856,7 +856,7 @@ export interface MaterialTemplate {
   materialHierarchy?: string;
 
   /**
-   * 品目组代码
+   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
    */
   materialGroupCode?: string;
 
@@ -883,7 +883,7 @@ export interface MaterialTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -894,11 +894,11 @@ export interface MaterialTemplate {
 
 
 /**
- * Material 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 MaterialImport
- * @description 对应后端 TaktMaterialImportDto
+ * MaterialPlant 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 MaterialPlantImport
+ * @description 对应后端 TaktMaterialPlantImportDto
  */
-export interface MaterialImport {
+export interface MaterialPlantImport {
   /**
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
@@ -950,7 +950,7 @@ export interface MaterialImport {
   materialHierarchy?: string;
 
   /**
-   * 品目组代码
+   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
    */
   materialGroupCode?: string;
 
@@ -977,7 +977,7 @@ export interface MaterialImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -988,15 +988,15 @@ export interface MaterialImport {
 
 
 /**
- * Material 导出 DTO（独立实现，不继承响应 Dto）
- * 对应前端 MaterialExport
- * @description 对应后端 TaktMaterialExportDto
+ * MaterialPlant 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 MaterialPlantExport
+ * @description 对应后端 TaktMaterialPlantExportDto
  */
-export interface MaterialExport {
+export interface MaterialPlantExport {
   /**
-   * MaterialID
+   * MaterialPlantID
    */
-  materialId: string;
+  materialPlantId: string;
 
   /**
    * 公司代码
@@ -1039,7 +1039,7 @@ export interface MaterialExport {
   materialHierarchy?: string;
 
   /**
-   * 品目组代码
+   * 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
    */
   materialGroupCode?: string;
 
@@ -1064,7 +1064,7 @@ export interface MaterialExport {
   baseUnit: string;
 
   /**
-   * 采购组
+   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
@@ -1226,7 +1226,7 @@ export interface MaterialExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

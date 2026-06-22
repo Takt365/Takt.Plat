@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Training
 // 文件名称：TaktTrainingPlanValidators.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TrainingPlan 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTrainingPlan 生成，请按需审阅）
 // 
@@ -55,7 +55,7 @@ public class TaktTrainingPlanCreateValidator : AbstractValidator<TaktTrainingPla
             .MaximumLength(1000).WithMessage("计划说明长度不能超过1000个字符");
         RuleFor(x => x.RelatedPlant)
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -119,8 +119,8 @@ public class TaktTrainingPlanImportValidator : AbstractValidator<TaktTrainingPla
             .MaximumLength(1000).WithMessage("计划说明长度不能超过1000个字符");
         RuleFor(x => x.RelatedPlant)
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

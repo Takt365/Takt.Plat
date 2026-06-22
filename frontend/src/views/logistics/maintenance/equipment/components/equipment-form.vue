@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/maintenance/equipment/components -->
 <!-- 文件名称：equipment-form.vue -->
-<!-- 功能描述：Takt工厂设备实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt工厂设备实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="equipment-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -74,8 +77,10 @@
                 <a-input
                   v-model:value="formState.plantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.plantcode') })"
-                  size="small"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.equipmentId"
                 />
               </a-form-item>
             </a-col>
@@ -87,8 +92,10 @@
                 <a-input
                   v-model:value="formState.equipmentCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.code') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.equipmentId"
                 />
               </a-form-item>
             </a-col>
@@ -100,7 +107,8 @@
                 <a-input
                   v-model:value="formState.equipmentName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.name') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -113,7 +121,6 @@
                 <a-input-number
                   v-model:value="formState.equipmentType"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.type') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -126,7 +133,8 @@
                 <a-input
                   v-model:value="formState.equipmentModel"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.model') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -139,7 +147,8 @@
                 <a-input
                   v-model:value="formState.equipmentSpecification"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.specification') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -152,7 +161,8 @@
                 <a-input
                   v-model:value="formState.equipmentBrand"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.brand') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -175,7 +185,8 @@
                 <a-input
                   v-model:value="formState.manufacturer"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.manufacturer') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -188,7 +199,8 @@
                 <a-input
                   v-model:value="formState.dealerBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.dealerby') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -201,7 +213,8 @@
                 <a-input
                   v-model:value="formState.serialNumber"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.serialnumber') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -214,7 +227,8 @@
                 <a-input
                   v-model:value="formState.workshopBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.workshopby') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -227,7 +241,8 @@
                 <a-input
                   v-model:value="formState.productionLineBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.productionlineby') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -240,7 +255,8 @@
                 <a-input
                   v-model:value="formState.workstationBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.workstationby') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -253,7 +269,8 @@
                 <a-input
                   v-model:value="formState.deptBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.deptby') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -266,7 +283,8 @@
                 <a-input
                   v-model:value="formState.equipmentLocation"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.location') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -279,7 +297,8 @@
                 <a-input
                   v-model:value="formState.responsibleUserBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.responsibleuserby') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -292,7 +311,8 @@
                 <a-input
                   v-model:value="formState.operatorBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.operatorby') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -316,7 +336,6 @@
                   v-model:value="formState.purchaseDate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.purchasedate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -330,7 +349,6 @@
                   v-model:value="formState.installationDate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.installationdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -344,7 +362,6 @@
                   v-model:value="formState.startDate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.startdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -358,7 +375,6 @@
                   v-model:value="formState.warrantyStartDate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.warrantystartdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -372,7 +388,6 @@
                   v-model:value="formState.warrantyEndDate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.warrantyenddate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -385,7 +400,6 @@
                 <a-input-number
                   v-model:value="formState.equipmentOriginalValue"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.originalvalue') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -398,7 +412,8 @@
                 <a-input
                   v-model:value="formState.technicalParameters"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.technicalparameters') })"
-                  size="small"
+                  show-count
+                  :maxlength="4000"
                   allow-clear
                 />
               </a-form-item>
@@ -411,7 +426,8 @@
                 <a-input
                   v-model:value="formState.equipmentImages"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.images') })"
-                  size="small"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
@@ -424,7 +440,8 @@
                 <a-input
                   v-model:value="formState.equipmentDocuments"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.documents') })"
-                  size="small"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
@@ -437,7 +454,6 @@
                 <a-input-number
                   v-model:value="formState.isCritical"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.iscritical') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -452,7 +468,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.equipment.warrantystatus')"
                 name="warrantyStatus"
@@ -460,33 +476,44 @@
                 <a-input-number
                   v-model:value="formState.warrantyStatus"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.warrantystatus') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.equipment.status')"
                 name="equipmentStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.equipmentStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.status') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="sys_equipment_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.status') })"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -499,130 +526,15 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
-      </a-tab-pane>
-      <!-- 子表：maintenance -->
-      <a-tab-pane
-        key="child-maintenanceRecords"
-        :tab="t('entity.maintenance._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddMaintenanceRow">
-            {{ t('common.page.button.create') }}{{ t('entity.maintenance._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="maintenanceFormColumns"
-          :data-source="childMaintenanceRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'maintenanceType'">
-              <a-input-number
-                v-model:value="record.maintenanceType"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.type') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'maintenanceCompany'">
-              <a-input
-                v-model:value="record.maintenanceCompany"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.company') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'maintenanceTechnician'">
-              <a-input
-                v-model:value="record.maintenanceTechnician"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.technician') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'maintenanceDate'">
-              <a-date-picker
-                v-model:value="record.maintenanceDate"
-                :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenance.date') })"
-                value-format="YYYY-MM-DD"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'maintenanceStartTime'">
-              <a-input
-                v-model:value="record.maintenanceStartTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.starttime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'maintenanceEndTime'">
-              <a-input
-                v-model:value="record.maintenanceEndTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenance.endtime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'maintenanceContent'">
-              <a-textarea
-                v-model:value="record.maintenanceContent"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.maintenance.content') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveMaintenanceRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
       </a-tab-pane>
     </a-tabs>
   </a-form>
@@ -630,13 +542,16 @@
 
 <script setup lang="ts">
 /**
- * Takt工厂设备实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Takt工厂设备实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/maintenance/equipment/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { EquipmentCreate, MaintenanceCreate, Maintenance } from '@/types/logistics/maintenance/equipment'
+import type { EquipmentCreate } from '@/types/logistics/maintenance/equipment'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -669,125 +584,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","equipmentCode","equipmentName","equipmentType","equipmentModel","equipmentSpecification","equipmentBrand","manufacturer","dealerBy","serialNumber","workshopBy","productionLineBy","workstationBy","deptBy","equipmentLocation","responsibleUserBy","operatorBy","purchaseDate","installationDate","startDate","warrantyStartDate","warrantyEndDate","equipmentOriginalValue","technicalParameters","equipmentImages","equipmentDocuments","isCritical","warrantyStatus","equipmentStatus","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","equipmentCode","equipmentName","equipmentType","equipmentModel","equipmentSpecification","equipmentBrand","manufacturer","dealerBy","serialNumber","workshopBy","productionLineBy","workstationBy","deptBy","equipmentLocation","responsibleUserBy","operatorBy","purchaseDate","installationDate","startDate","warrantyStartDate","warrantyEndDate","equipmentOriginalValue","technicalParameters","equipmentImages","equipmentDocuments","isCritical","warrantyStatus","equipmentStatus","extField","remark"]
 
-/** maintenance 子表行（表单 Tab 内嵌） */
-const childMaintenanceRows = ref<Record<string, unknown>[]>([])
-
-/** 子表 maintenance 表单列定义 */
-const maintenanceFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.maintenance.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    width: 140,
-  },
-  {
-    title: t('entity.maintenance.type'),
-    dataIndex: 'maintenanceType',
-    key: 'maintenanceType',
-    width: 140,
-  },
-  {
-    title: t('entity.maintenance.company'),
-    dataIndex: 'maintenanceCompany',
-    key: 'maintenanceCompany',
-    width: 140,
-  },
-  {
-    title: t('entity.maintenance.technician'),
-    dataIndex: 'maintenanceTechnician',
-    key: 'maintenanceTechnician',
-    width: 140,
-  },
-  {
-    title: t('entity.maintenance.date'),
-    dataIndex: 'maintenanceDate',
-    key: 'maintenanceDate',
-    width: 140,
-  },
-  {
-    title: t('entity.maintenance.starttime'),
-    dataIndex: 'maintenanceStartTime',
-    key: 'maintenanceStartTime',
-    width: 140,
-  },
-  {
-    title: t('entity.maintenance.endtime'),
-    dataIndex: 'maintenanceEndTime',
-    key: 'maintenanceEndTime',
-    width: 140,
-  },
-  {
-    title: t('entity.maintenance.content'),
-    dataIndex: 'maintenanceContent',
-    key: 'maintenanceContent',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<EquipmentCreate & { equipmentId?: string }> | null | undefined) {
-  childMaintenanceRows.value = ((val as any)?.maintenanceRecords ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.maintenanceId ?? `new-${index}`,
-  }))
-}
-
-/** 表单 Tab 内新增 maintenance 行 */
-function handleAddMaintenanceRow() {
-  childMaintenanceRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      lineNumber: 0,
-      maintenanceType: 0,
-      maintenanceCompany: '',
-      maintenanceTechnician: '',
-      maintenanceDate: '',
-      maintenanceStartTime: '',
-      maintenanceEndTime: '',
-      maintenanceContent: '',
-  })
-}
-
-/** 表单 Tab 内删除 maintenance 行 */
-function handleRemoveMaintenanceRow(index: number) {
-  childMaintenanceRows.value.splice(index, 1)
-}
-
-/** 组装 Create/Update 载荷（主表 + 子表数组） */
-function buildSubmitPayload() {
-  return {
-    ...formState,
-    maintenanceRecords: childMaintenanceRows.value.map(({ __rowKey, ...rest }) => rest),
-  }
-}
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -797,7 +595,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -805,19 +603,41 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 equipmentId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
-    delete (next as any).maintenanceRecords
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
-    syncChildRowsFromFormData(val)
+    if (val?.equipmentId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
+
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -854,41 +674,71 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  equipmentType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.equipment.type') }),
-      trigger: 'change'
-    }
-  ],
-  equipmentOriginalValue: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.equipment.originalvalue') }),
-      trigger: 'change'
-    }
-  ],
-  isCritical: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.equipment.iscritical') }),
-      trigger: 'change'
-    }
-  ],
-  warrantyStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.equipment.warrantystatus') }),
-      trigger: 'change'
-    }
-  ],
-  equipmentStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.equipment.status') }),
-      trigger: 'change'
-    }
-  ],
+  equipmentType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipment.type') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipment.type') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  equipmentOriginalValue: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipment.originalvalue') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipment.originalvalue') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isCritical: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipment.iscritical') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipment.iscritical') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  warrantyStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipment.warrantystatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipment.warrantystatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  equipmentStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipment.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.equipment.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -899,15 +749,42 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = { ...formState }
+  if ('equipmentType' in payload) {
+    const rawequipmentType = payload.equipmentType
+    payload.equipmentType = typeof rawequipmentType === 'number' ? rawequipmentType : Number(rawequipmentType)
+  }
+  if ('equipmentOriginalValue' in payload) {
+    const rawequipmentOriginalValue = payload.equipmentOriginalValue
+    payload.equipmentOriginalValue = typeof rawequipmentOriginalValue === 'number' ? rawequipmentOriginalValue : Number(rawequipmentOriginalValue)
+  }
+  if ('isCritical' in payload) {
+    const rawisCritical = payload.isCritical
+    payload.isCritical = typeof rawisCritical === 'number' ? rawisCritical : Number(rawisCritical)
+  }
+  if ('warrantyStatus' in payload) {
+    const rawwarrantyStatus = payload.warrantyStatus
+    payload.warrantyStatus = typeof rawwarrantyStatus === 'number' ? rawwarrantyStatus : Number(rawwarrantyStatus)
+  }
+  if ('equipmentStatus' in payload) {
+    const rawequipmentStatus = payload.equipmentStatus
+    payload.equipmentStatus = typeof rawequipmentStatus === 'number' ? rawequipmentStatus : Number(rawequipmentStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
-  childMaintenanceRows.value = []
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.equipmentId)
+
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

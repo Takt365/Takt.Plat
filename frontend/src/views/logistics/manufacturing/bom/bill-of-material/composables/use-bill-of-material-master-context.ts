@@ -2,9 +2,8 @@
 // 项目名称：节拍数字工厂 · Takt Plat (TDF)
 // 命名空间：@/views/logistics/manufacturing/bom/bill-of-material/composables
 // 文件名称：use-bill-of-material-master-context.ts
-// 功能描述：制造 BOM 主表选中行上下文（供底部明细面板读取，对齐 Vue.NetCore getBomSelectRow）
+// 功能描述：Takt物料清单实体主表选中行上下文（供右侧明细面板读取）
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
-// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
@@ -12,16 +11,14 @@ import type { BillOfMaterial } from '@/types/logistics/manufacturing/bom/bill-of
 
 /** 主表选中行上下文 */
 export interface BillOfMaterialMasterContext {
-  /** 当前选中的 BOM 主表行（底部明细依赖） */
+  /** 当前选中的主表行（右侧明细依赖） */
   selectedMasterRow: Ref<BillOfMaterial | null>
 }
 
-const billOfMaterialMasterContextKey: InjectionKey<BillOfMaterialMasterContext> = Symbol(
-  'billOfMaterialMasterContext'
-)
+const billOfMaterialMasterContextKey: InjectionKey<BillOfMaterialMasterContext> = Symbol('bill-of-materialMasterContext')
 
 /**
- * 在 BOM 主表页 provide 选中行上下文
+ * 在主表页 provide 选中行上下文
  * @returns {BillOfMaterialMasterContext} 主表上下文
  */
 export function provideBillOfMaterialMasterContext(): BillOfMaterialMasterContext {
@@ -32,7 +29,7 @@ export function provideBillOfMaterialMasterContext(): BillOfMaterialMasterContex
 }
 
 /**
- * 在 BOM 明细面板 inject 主表选中行
+ * 在明细面板 inject 主表选中行
  * @returns {BillOfMaterialMasterContext} 主表上下文
  */
 export function useBillOfMaterialMasterContext(): BillOfMaterialMasterContext {

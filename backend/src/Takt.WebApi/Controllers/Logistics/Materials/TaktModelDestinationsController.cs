@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Bom
+// 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktModelDestinationsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：型号目的地控制器
 // 
@@ -11,11 +11,11 @@
 // ========================================
 
 using Microsoft.AspNetCore.Mvc;
-using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
-using Takt.Application.Services.Logistics.Manufacturing.Bom;
+using Takt.Application.Dtos.Logistics.Materials;
+using Takt.Application.Services.Logistics.Materials;
 using Takt.Shared.Constants;
 
-namespace Takt.WebApi.Controllers.Logistics.Manufacturing.Bom;
+namespace Takt.WebApi.Controllers.Logistics.Materials;
 
 /// <summary>
 /// 型号目的地控制器
@@ -41,7 +41,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:list", "型号目的地列表")]
+    [TaktPermission("logistics:materials:modeldestination:list", "型号目的地列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetModelDestinationListAsync([FromQuery] TaktModelDestinationQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">型号目的地ID</param>
     /// <returns>型号目的地DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:query", "型号目的地详情")]
+    [TaktPermission("logistics:materials:modeldestination:query", "型号目的地详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetModelDestinationByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// 获取型号目的地选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:query", "型号目的地选项")]
+    [TaktPermission("logistics:materials:modeldestination:query", "型号目的地选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetModelDestinationOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>型号目的地DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:create", "创建型号目的地")]
+    [TaktPermission("logistics:materials:modeldestination:create", "创建型号目的地")]
     [HttpPost]
     public async Task<IActionResult> CreateModelDestinationAsync([FromBody] TaktModelDestinationCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// <param name="id">型号目的地ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>型号目的地DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:update", "更新型号目的地")]
+    [TaktPermission("logistics:materials:modeldestination:update", "更新型号目的地")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateModelDestinationAsync(long id, [FromBody] TaktModelDestinationUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// </summary>
     /// <param name="id">型号目的地ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:delete", "删除型号目的地")]
+    [TaktPermission("logistics:materials:modeldestination:delete", "删除型号目的地")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteModelDestinationByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:delete", "批量删除型号目的地")]
+    [TaktPermission("logistics:materials:modeldestination:delete", "批量删除型号目的地")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteModelDestinationBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>型号目的地DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:update", "更新型号目的地排序")]
+    [TaktPermission("logistics:materials:modeldestination:update", "更新型号目的地排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateModelDestinationSortAsync([FromBody] TaktModelDestinationSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:import", "获取型号目的地导入模板")]
+    [TaktPermission("logistics:materials:modeldestination:import", "获取型号目的地导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetModelDestinationTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:import", "导入型号目的地")]
+    [TaktPermission("logistics:materials:modeldestination:import", "导入型号目的地")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportModelDestinationAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// 导出型号目的地
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:modeldestination:export", "导出型号目的地")]
+    [TaktPermission("logistics:materials:modeldestination:export", "导出型号目的地")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportModelDestinationAsync([FromQuery] TaktModelDestinationQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

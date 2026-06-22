@@ -49,7 +49,7 @@ export interface SalaryItem extends CompanyDtoBase {
   itemType: number;
 
   /**
-   * 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+   * 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
    */
   calcMethod: number;
 
@@ -84,22 +84,22 @@ export interface SalaryItem extends CompanyDtoBase {
   vestingYears: number;
 
   /**
-   * 是否扣款项（字典 sys_yes_no）
+   * 是否扣款项（字典 sys_yes_no_type）
    */
   isDeduction: number;
 
   /**
-   * 是否计入应税所得（字典 sys_yes_no）
+   * 是否计入应税所得（字典 sys_yes_no_type）
    */
   isTaxable: number;
 
   /**
-   * 是否计入社保基数（字典 sys_yes_no）
+   * 是否计入社保基数（字典 sys_yes_no_type）
    */
   includeSocialSecurityBase: number;
 
   /**
-   * 是否计入公积金基数（字典 sys_yes_no）
+   * 是否计入公积金基数（字典 sys_yes_no_type）
    */
   includeHousingFundBase: number;
 
@@ -109,7 +109,7 @@ export interface SalaryItem extends CompanyDtoBase {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus: number;
 
@@ -159,7 +159,7 @@ export interface SalaryItemQuery extends TaktPagedQuery {
   itemType?: number;
 
   /**
-   * 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+   * 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
    */
   calcMethod?: number;
 
@@ -189,22 +189,22 @@ export interface SalaryItemQuery extends TaktPagedQuery {
   vestingYears?: number;
 
   /**
-   * 是否扣款项（字典 sys_yes_no）
+   * 是否扣款项（字典 sys_yes_no_type）
    */
   isDeduction?: number;
 
   /**
-   * 是否计入应税所得（字典 sys_yes_no）
+   * 是否计入应税所得（字典 sys_yes_no_type）
    */
   isTaxable?: number;
 
   /**
-   * 是否计入社保基数（字典 sys_yes_no）
+   * 是否计入社保基数（字典 sys_yes_no_type）
    */
   includeSocialSecurityBase?: number;
 
   /**
-   * 是否计入公积金基数（字典 sys_yes_no）
+   * 是否计入公积金基数（字典 sys_yes_no_type）
    */
   includeHousingFundBase?: number;
 
@@ -214,7 +214,7 @@ export interface SalaryItemQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus?: number;
 
@@ -236,7 +236,7 @@ export interface SalaryItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -288,7 +288,7 @@ export interface SalaryItemCreate {
   itemType: number;
 
   /**
-   * 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+   * 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
    */
   calcMethod: number;
 
@@ -318,22 +318,22 @@ export interface SalaryItemCreate {
   vestingYears: number;
 
   /**
-   * 是否扣款项（字典 sys_yes_no）
+   * 是否扣款项（字典 sys_yes_no_type）
    */
   isDeduction: number;
 
   /**
-   * 是否计入应税所得（字典 sys_yes_no）
+   * 是否计入应税所得（字典 sys_yes_no_type）
    */
   isTaxable: number;
 
   /**
-   * 是否计入社保基数（字典 sys_yes_no）
+   * 是否计入社保基数（字典 sys_yes_no_type）
    */
   includeSocialSecurityBase: number;
 
   /**
-   * 是否计入公积金基数（字典 sys_yes_no）
+   * 是否计入公积金基数（字典 sys_yes_no_type）
    */
   includeHousingFundBase: number;
 
@@ -343,7 +343,7 @@ export interface SalaryItemCreate {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus: number;
 
@@ -355,7 +355,7 @@ export interface SalaryItemCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -392,7 +392,7 @@ export interface SalaryItemStatus {
   salaryItemId: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus: number;
 
@@ -455,7 +455,7 @@ export interface SalaryItemTemplate {
   itemType?: number;
 
   /**
-   * 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+   * 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
    */
   calcMethod?: number;
 
@@ -470,22 +470,22 @@ export interface SalaryItemTemplate {
   vestingYears?: number;
 
   /**
-   * 是否扣款项（字典 sys_yes_no）
+   * 是否扣款项（字典 sys_yes_no_type）
    */
   isDeduction?: number;
 
   /**
-   * 是否计入应税所得（字典 sys_yes_no）
+   * 是否计入应税所得（字典 sys_yes_no_type）
    */
   isTaxable?: number;
 
   /**
-   * 是否计入社保基数（字典 sys_yes_no）
+   * 是否计入社保基数（字典 sys_yes_no_type）
    */
   includeSocialSecurityBase?: number;
 
   /**
-   * 是否计入公积金基数（字典 sys_yes_no）
+   * 是否计入公积金基数（字典 sys_yes_no_type）
    */
   includeHousingFundBase?: number;
 
@@ -497,7 +497,7 @@ export interface SalaryItemTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -549,7 +549,7 @@ export interface SalaryItemImport {
   itemType?: number;
 
   /**
-   * 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+   * 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
    */
   calcMethod?: number;
 
@@ -564,22 +564,22 @@ export interface SalaryItemImport {
   vestingYears?: number;
 
   /**
-   * 是否扣款项（字典 sys_yes_no）
+   * 是否扣款项（字典 sys_yes_no_type）
    */
   isDeduction?: number;
 
   /**
-   * 是否计入应税所得（字典 sys_yes_no）
+   * 是否计入应税所得（字典 sys_yes_no_type）
    */
   isTaxable?: number;
 
   /**
-   * 是否计入社保基数（字典 sys_yes_no）
+   * 是否计入社保基数（字典 sys_yes_no_type）
    */
   includeSocialSecurityBase?: number;
 
   /**
-   * 是否计入公积金基数（字典 sys_yes_no）
+   * 是否计入公积金基数（字典 sys_yes_no_type）
    */
   includeHousingFundBase?: number;
 
@@ -591,7 +591,7 @@ export interface SalaryItemImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -638,7 +638,7 @@ export interface SalaryItemExport {
   itemType: number;
 
   /**
-   * 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+   * 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
    */
   calcMethod: number;
 
@@ -668,22 +668,22 @@ export interface SalaryItemExport {
   vestingYears: number;
 
   /**
-   * 是否扣款项（字典 sys_yes_no）
+   * 是否扣款项（字典 sys_yes_no_type）
    */
   isDeduction: number;
 
   /**
-   * 是否计入应税所得（字典 sys_yes_no）
+   * 是否计入应税所得（字典 sys_yes_no_type）
    */
   isTaxable: number;
 
   /**
-   * 是否计入社保基数（字典 sys_yes_no）
+   * 是否计入社保基数（字典 sys_yes_no_type）
    */
   includeSocialSecurityBase: number;
 
   /**
-   * 是否计入公积金基数（字典 sys_yes_no）
+   * 是否计入公积金基数（字典 sys_yes_no_type）
    */
   includeHousingFundBase: number;
 
@@ -693,7 +693,7 @@ export interface SalaryItemExport {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus: number;
 
@@ -705,7 +705,7 @@ export interface SalaryItemExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

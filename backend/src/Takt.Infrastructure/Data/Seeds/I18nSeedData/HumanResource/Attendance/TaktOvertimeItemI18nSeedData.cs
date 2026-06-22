@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktOvertimeItemI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktOvertimeItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,101 +75,101 @@ public class TaktOvertimeItemI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktOvertimeItem 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.overtimeitem._self / entity.overtimeitem.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.overtimeitem._self / entity.overtimeitem.{{field}}；ResourceGroup=Attendance；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetOvertimeItemTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.overtimeitem._self
-            new TranslationSeedItem("entity.overtimeitem._self", "en-US", "Overtime Item Information", "实体名称"),
+            new TranslationSeedItem("entity.overtimeitem._self", "en-US", "Overtime Item Information_us", "实体名称"),
             // entity.overtimeitem._self
-            new TranslationSeedItem("entity.overtimeitem._self", "ja-JP", "加班申请明细信息", "实体名称"),
+            new TranslationSeedItem("entity.overtimeitem._self", "ja-JP", "加班申请明细信息_jp", "实体名称"),
             // entity.overtimeitem._self
             new TranslationSeedItem("entity.overtimeitem._self", "zh-CN", "加班申请明细信息", "实体名称"),
             // entity.overtimeitem._self
-            new TranslationSeedItem("entity.overtimeitem._self", "zh-HK", "加班申请明细信息", "实体名称"),
+            new TranslationSeedItem("entity.overtimeitem._self", "zh-HK", "加班申请明细信息_hk", "实体名称"),
 
             // entity.overtimeitem.overtimeid
-            new TranslationSeedItem("entity.overtimeitem.overtimeid", "en-US", "加班申请单ID", "加班申请单 ID"),
+            new TranslationSeedItem("entity.overtimeitem.overtimeid", "en-US", "加班申请单ID_us", "加班申请单 ID"),
             // entity.overtimeitem.overtimeid
-            new TranslationSeedItem("entity.overtimeitem.overtimeid", "ja-JP", "加班申请单ID", "加班申请单 ID"),
+            new TranslationSeedItem("entity.overtimeitem.overtimeid", "ja-JP", "加班申请单ID_jp", "加班申请单 ID"),
             // entity.overtimeitem.overtimeid
             new TranslationSeedItem("entity.overtimeitem.overtimeid", "zh-CN", "加班申请单ID", "加班申请单 ID"),
             // entity.overtimeitem.overtimeid
-            new TranslationSeedItem("entity.overtimeitem.overtimeid", "zh-HK", "加班申请单ID", "加班申请单 ID"),
+            new TranslationSeedItem("entity.overtimeitem.overtimeid", "zh-HK", "加班申请单ID_hk", "加班申请单 ID"),
 
             // entity.overtimeitem.linenumber
-            new TranslationSeedItem("entity.overtimeitem.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.overtimeitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
             // entity.overtimeitem.linenumber
-            new TranslationSeedItem("entity.overtimeitem.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.overtimeitem.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
             // entity.overtimeitem.linenumber
             new TranslationSeedItem("entity.overtimeitem.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
             // entity.overtimeitem.linenumber
-            new TranslationSeedItem("entity.overtimeitem.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.overtimeitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.overtimeitem.employeeid
-            new TranslationSeedItem("entity.overtimeitem.employeeid", "en-US", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.overtimeitem.employeeid", "en-US", "员工ID_us", "员工 ID"),
             // entity.overtimeitem.employeeid
-            new TranslationSeedItem("entity.overtimeitem.employeeid", "ja-JP", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.overtimeitem.employeeid", "ja-JP", "员工ID_jp", "员工 ID"),
             // entity.overtimeitem.employeeid
             new TranslationSeedItem("entity.overtimeitem.employeeid", "zh-CN", "员工ID", "员工 ID"),
             // entity.overtimeitem.employeeid
-            new TranslationSeedItem("entity.overtimeitem.employeeid", "zh-HK", "员工ID", "员工 ID"),
+            new TranslationSeedItem("entity.overtimeitem.employeeid", "zh-HK", "员工ID_hk", "员工 ID"),
 
             // entity.overtimeitem.employeename
-            new TranslationSeedItem("entity.overtimeitem.employeename", "en-US", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.overtimeitem.employeename", "en-US", "员工姓名_us", "员工姓名"),
             // entity.overtimeitem.employeename
-            new TranslationSeedItem("entity.overtimeitem.employeename", "ja-JP", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.overtimeitem.employeename", "ja-JP", "员工姓名_jp", "员工姓名"),
             // entity.overtimeitem.employeename
             new TranslationSeedItem("entity.overtimeitem.employeename", "zh-CN", "员工姓名", "员工姓名"),
             // entity.overtimeitem.employeename
-            new TranslationSeedItem("entity.overtimeitem.employeename", "zh-HK", "员工姓名", "员工姓名"),
+            new TranslationSeedItem("entity.overtimeitem.employeename", "zh-HK", "员工姓名_hk", "员工姓名"),
 
             // entity.overtimeitem.plannedhours
-            new TranslationSeedItem("entity.overtimeitem.plannedhours", "en-US", "计划小时数", "计划加班小时数"),
+            new TranslationSeedItem("entity.overtimeitem.plannedhours", "en-US", "计划小时数_us", "计划加班小时数"),
             // entity.overtimeitem.plannedhours
-            new TranslationSeedItem("entity.overtimeitem.plannedhours", "ja-JP", "计划小时数", "计划加班小时数"),
+            new TranslationSeedItem("entity.overtimeitem.plannedhours", "ja-JP", "计划小时数_jp", "计划加班小时数"),
             // entity.overtimeitem.plannedhours
             new TranslationSeedItem("entity.overtimeitem.plannedhours", "zh-CN", "计划小时数", "计划加班小时数"),
             // entity.overtimeitem.plannedhours
-            new TranslationSeedItem("entity.overtimeitem.plannedhours", "zh-HK", "计划小时数", "计划加班小时数"),
+            new TranslationSeedItem("entity.overtimeitem.plannedhours", "zh-HK", "计划小时数_hk", "计划加班小时数"),
 
             // entity.overtimeitem.actualstarttime
-            new TranslationSeedItem("entity.overtimeitem.actualstarttime", "en-US", "实际开始时间", "实际加班开始时间"),
+            new TranslationSeedItem("entity.overtimeitem.actualstarttime", "en-US", "实际开始时间_us", "实际加班开始时间"),
             // entity.overtimeitem.actualstarttime
-            new TranslationSeedItem("entity.overtimeitem.actualstarttime", "ja-JP", "实际开始时间", "实际加班开始时间"),
+            new TranslationSeedItem("entity.overtimeitem.actualstarttime", "ja-JP", "实际开始时间_jp", "实际加班开始时间"),
             // entity.overtimeitem.actualstarttime
             new TranslationSeedItem("entity.overtimeitem.actualstarttime", "zh-CN", "实际开始时间", "实际加班开始时间"),
             // entity.overtimeitem.actualstarttime
-            new TranslationSeedItem("entity.overtimeitem.actualstarttime", "zh-HK", "实际开始时间", "实际加班开始时间"),
+            new TranslationSeedItem("entity.overtimeitem.actualstarttime", "zh-HK", "实际开始时间_hk", "实际加班开始时间"),
 
             // entity.overtimeitem.actualendtime
-            new TranslationSeedItem("entity.overtimeitem.actualendtime", "en-US", "实际结束时间", "实际加班结束时间"),
+            new TranslationSeedItem("entity.overtimeitem.actualendtime", "en-US", "实际结束时间_us", "实际加班结束时间"),
             // entity.overtimeitem.actualendtime
-            new TranslationSeedItem("entity.overtimeitem.actualendtime", "ja-JP", "实际结束时间", "实际加班结束时间"),
+            new TranslationSeedItem("entity.overtimeitem.actualendtime", "ja-JP", "实际结束时间_jp", "实际加班结束时间"),
             // entity.overtimeitem.actualendtime
             new TranslationSeedItem("entity.overtimeitem.actualendtime", "zh-CN", "实际结束时间", "实际加班结束时间"),
             // entity.overtimeitem.actualendtime
-            new TranslationSeedItem("entity.overtimeitem.actualendtime", "zh-HK", "实际结束时间", "实际加班结束时间"),
+            new TranslationSeedItem("entity.overtimeitem.actualendtime", "zh-HK", "实际结束时间_hk", "实际加班结束时间"),
 
             // entity.overtimeitem.actualhours
-            new TranslationSeedItem("entity.overtimeitem.actualhours", "en-US", "实际小时数", "实际加班小时数"),
+            new TranslationSeedItem("entity.overtimeitem.actualhours", "en-US", "实际小时数_us", "实际加班小时数"),
             // entity.overtimeitem.actualhours
-            new TranslationSeedItem("entity.overtimeitem.actualhours", "ja-JP", "实际小时数", "实际加班小时数"),
+            new TranslationSeedItem("entity.overtimeitem.actualhours", "ja-JP", "实际小时数_jp", "实际加班小时数"),
             // entity.overtimeitem.actualhours
             new TranslationSeedItem("entity.overtimeitem.actualhours", "zh-CN", "实际小时数", "实际加班小时数"),
             // entity.overtimeitem.actualhours
-            new TranslationSeedItem("entity.overtimeitem.actualhours", "zh-HK", "实际小时数", "实际加班小时数"),
+            new TranslationSeedItem("entity.overtimeitem.actualhours", "zh-HK", "实际小时数_hk", "实际加班小时数"),
 
             // entity.overtimeitem.overtime
-            new TranslationSeedItem("entity.overtimeitem.overtime", "en-US", "加班主表", "加班主表"),
+            new TranslationSeedItem("entity.overtimeitem.overtime", "en-US", "加班主表_us", "加班主表"),
             // entity.overtimeitem.overtime
-            new TranslationSeedItem("entity.overtimeitem.overtime", "ja-JP", "加班主表", "加班主表"),
+            new TranslationSeedItem("entity.overtimeitem.overtime", "ja-JP", "加班主表_jp", "加班主表"),
             // entity.overtimeitem.overtime
             new TranslationSeedItem("entity.overtimeitem.overtime", "zh-CN", "加班主表", "加班主表"),
             // entity.overtimeitem.overtime
-            new TranslationSeedItem("entity.overtimeitem.overtime", "zh-HK", "加班主表", "加班主表"),
+            new TranslationSeedItem("entity.overtimeitem.overtime", "zh-HK", "加班主表_hk", "加班主表"),
         };
     }
 
@@ -187,10 +187,10 @@ public class TaktOvertimeItemI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Attendance";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

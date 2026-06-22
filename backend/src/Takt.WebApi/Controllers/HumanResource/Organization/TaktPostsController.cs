@@ -201,6 +201,26 @@ public class TaktPostsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 更新岗位是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>岗位DTO</returns>
+    [TaktPermission("humanresource:organization:post:update", "更新岗位是否内置")]
+    [HttpPut("built-in")]
+    public async Task<IActionResult> UpdatePostBuiltInAsync([FromBody] TaktPostBuiltInDto dto)
+    {
+        try
+        {
+            var result = await _postService.UpdatePostBuiltInAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 更新岗位排序
     /// </summary>
     /// <param name="dto">排序DTO</param>

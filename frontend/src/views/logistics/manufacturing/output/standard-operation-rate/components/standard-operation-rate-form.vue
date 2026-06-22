@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,100 +63,99 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationRate.plantcode')"
+                :label="t('entity.standardoperationrate.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationRate.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationrate.plantcode') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.standardOperationRateId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationRate.financialyear')"
+                :label="t('entity.standardoperationrate.financialyear')"
                 name="financialYear"
               >
                 <a-input
                   v-model:value="formState.financialYear"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationRate.financialyear') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationrate.financialyear') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationRate.operationtype')"
+                :label="t('entity.standardoperationrate.operationtype')"
                 name="operationType"
               >
                 <a-input-number
                   v-model:value="formState.operationType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationRate.operationtype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationrate.operationtype') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationRate.operationrate')"
+                :label="t('entity.standardoperationrate.operationrate')"
                 name="operationRate"
               >
                 <a-input-number
                   v-model:value="formState.operationRate"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationRate.operationrate') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationrate.operationrate') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationRate.effectivedate')"
+                :label="t('entity.standardoperationrate.effectivedate')"
                 name="effectiveDate"
               >
                 <a-date-picker
                   v-model:value="formState.effectiveDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardOperationRate.effectivedate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationrate.effectivedate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationRate.expirydate')"
+                :label="t('entity.standardoperationrate.expirydate')"
                 name="expiryDate"
               >
                 <a-date-picker
                   v-model:value="formState.expiryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardOperationRate.expirydate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationrate.expirydate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationRate.status')"
+                :label="t('entity.standardoperationrate.status')"
                 name="status"
               >
                 <a-input-number
                   v-model:value="formState.status"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationRate.status') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationrate.status') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -168,16 +170,15 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('entity.standardoperationrate.extfield')"
+                name="ExtField"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
-                  allow-clear
+                <a-textarea
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.standardoperationrate.extfield') })"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -189,15 +190,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -243,7 +245,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","financialYear","operationType","operationRate","effectiveDate","expiryDate","status","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","financialYear","operationType","operationRate","effectiveDate","expiryDate","status","ExtField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -254,7 +256,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -262,18 +264,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 standardOperationRateId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.standardOperationRateId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -292,45 +310,63 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.standardOperationRate.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.standardoperationrate.plantcode') }),
       trigger: 'blur'
     }
   ],
   financialYear: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.standardOperationRate.financialyear') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.standardoperationrate.financialyear') }),
       trigger: 'blur'
     }
   ],
-  operationType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.standardOperationRate.operationtype') }),
-      trigger: 'change'
-    }
-  ],
-  operationRate: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.standardOperationRate.operationrate') }),
-      trigger: 'change'
-    }
-  ],
+  operationType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationrate.operationtype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationrate.operationtype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  operationRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationrate.operationrate') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationrate.operationrate') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   effectiveDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.standardOperationRate.effectivedate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.standardoperationrate.effectivedate') }),
       trigger: 'change'
     }
   ],
-  status: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.standardOperationRate.status') }),
-      trigger: 'change'
-    }
-  ],
+  status: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationrate.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationrate.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -341,15 +377,34 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('operationType' in payload) {
+    const rawoperationType = payload.operationType
+    payload.operationType = typeof rawoperationType === 'number' ? rawoperationType : Number(rawoperationType)
+  }
+  if ('operationRate' in payload) {
+    const rawoperationRate = payload.operationRate
+    payload.operationRate = typeof rawoperationRate === 'number' ? rawoperationRate : Number(rawoperationRate)
+  }
+  if ('status' in payload) {
+    const rawstatus = payload.status
+    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.standardOperationRateId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

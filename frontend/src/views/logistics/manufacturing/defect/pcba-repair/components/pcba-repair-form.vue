@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/defect/pcba-repair/components -->
 <!-- 文件名称：pcba-repair-form.vue -->
-<!-- 功能描述：PCBA改修日报实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：PCBA改修日报实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form pcba-repair-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="pcba-repair-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,99 +63,103 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaRepair.plantcode')"
+                :label="t('entity.pcbarepair.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.plantcode') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.pcbaRepairId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaRepair.prodcategory')"
+                :label="t('entity.pcbarepair.prodcategory')"
                 name="prodCategory"
               >
                 <a-input
                   v-model:value="formState.prodCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodcategory') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodcategory') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaRepair.proddate')"
+                :label="t('entity.pcbarepair.proddate')"
                 name="prodDate"
               >
                 <a-date-picker
                   v-model:value="formState.prodDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaRepair.proddate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.proddate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaRepair.prodline')"
+                :label="t('entity.pcbarepair.prodline')"
                 name="prodLine"
               >
                 <a-input
                   v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodline') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodline') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaRepair.shiftno')"
+                :label="t('entity.pcbarepair.shiftno')"
                 name="shiftNo"
               >
                 <a-input-number
                   v-model:value="formState.shiftNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.shiftno') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.shiftno') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaRepair.prodordercode')"
+                :label="t('entity.pcbarepair.prodordercode')"
                 name="prodOrderCode"
               >
                 <a-input
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodordercode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodordercode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.pcbaRepairId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaRepair.prodorderqty')"
+                :label="t('entity.pcbarepair.prodorderqty')"
                 name="prodOrderQty"
               >
                 <a-input-number
                   v-model:value="formState.prodOrderQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodorderqty') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodorderqty') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -168,67 +174,84 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.pcbaRepair.modelcode')"
+                :label="t('entity.pcbarepair.modelcode')"
                 name="modelCode"
               >
                 <a-input
                   v-model:value="formState.modelCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.modelcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.modelcode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.pcbaRepairId"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.pcbaRepair.batchno')"
+                :label="t('entity.pcbarepair.batchno')"
                 name="batchNo"
               >
                 <a-input
                   v-model:value="formState.batchNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.batchno') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.batchno') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.pcbaRepair.materialcode')"
+                :label="t('entity.pcbarepair.materialcode')"
                 name="materialCode"
               >
                 <a-input
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.materialcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.materialcode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.pcbaRepairId"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.pcbaRepair.status')"
+                :label="t('entity.pcbarepair.status')"
                 name="status"
               >
                 <a-input-number
                   v-model:value="formState.status"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.status') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.status') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -241,131 +264,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：pcbaRepairDetail -->
-      <a-tab-pane
-        key="child-pcbaRepairDetails"
-        :tab="t('entity.pcbaRepairDetail._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddPcbaRepairDetailRow">
-            {{ t('common.page.button.create') }}{{ t('entity.pcbaRepairDetail._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="pcbaRepairDetailFormColumns"
-          :data-source="childPcbaRepairDetailRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'prodOrderCode'">
-              <a-input
-                v-model:value="record.prodOrderCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepairDetail.prodordercode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepairDetail.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'pcbaBoardType'">
-              <a-input
-                v-model:value="record.pcbaBoardType"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepairDetail.pcbaboardtype') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'prodActualQty'">
-              <a-input-number
-                v-model:value="record.prodActualQty"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepairDetail.prodactualqty') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'prodLine'">
-              <a-input
-                v-model:value="record.prodLine"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepairDetail.prodline') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'cardNo'">
-              <a-input
-                v-model:value="record.cardNo"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepairDetail.cardno') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'defectSymptom'">
-              <a-input
-                v-model:value="record.defectSymptom"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepairDetail.defectsymptom') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'defectEngineering'">
-              <a-input
-                v-model:value="record.defectEngineering"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepairDetail.defectengineering') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemovePcbaRepairDetailRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 pcbaRepairDetails -->
+    <TaktEditableTable
+      ref="pcbaRepairDetailTableRef"
+      v-model="childPcbaRepairDetailRows"
+      :columns="pcbaRepairDetailFormColumns"
+      :title="t('entity.pcbarepairdetail._self')"
+      :add-button-entity="t('entity.pcbarepairdetail._self')"
+      id-field="pcbaRepairDetailId"
+      :default-row="createDefaultPcbaRepairDetailRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -377,7 +298,8 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { PcbaRepairCreate, PcbaRepairDetailCreate, PcbaRepairDetail } from '@/types/logistics/manufacturing/defect/pcba-repair'
+import type { PcbaRepairCreate } from '@/types/logistics/manufacturing/defect/pcba-repair'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -410,123 +332,99 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodLine","shiftNo","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","status","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodLine","shiftNo","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","status","extField","remark"]
 
-/** pcbaRepairDetail 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childPcbaRepairDetailRows = ref<Record<string, unknown>[]>([])
+const pcbaRepairDetailTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 pcbaRepairDetail 表单列定义 */
-const pcbaRepairDetailFormColumns = computed(() => [
+/** 子表 pcbaRepairDetail 可编辑列 */
+const pcbaRepairDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.pcbaRepairDetail.prodordercode'),
-    dataIndex: 'prodOrderCode',
     key: 'prodOrderCode',
+    title: t('entity.pcbarepairdetail.prodordercode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.pcbaRepairDetail.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.pcbarepairdetail.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.pcbaRepairDetail.pcbaboardtype'),
-    dataIndex: 'pcbaBoardType',
     key: 'pcbaBoardType',
-    width: 140,
+    title: t('entity.pcbarepairdetail.pcbaboardtype'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.pcbaboardtype') }),
   },
   {
-    title: t('entity.pcbaRepairDetail.prodactualqty'),
-    dataIndex: 'prodActualQty',
     key: 'prodActualQty',
+    title: t('entity.pcbarepairdetail.prodactualqty'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.pcbaRepairDetail.prodline'),
-    dataIndex: 'prodLine',
     key: 'prodLine',
-    width: 140,
+    title: t('entity.pcbarepairdetail.prodline'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.prodline') }),
   },
   {
-    title: t('entity.pcbaRepairDetail.cardno'),
-    dataIndex: 'cardNo',
     key: 'cardNo',
-    width: 140,
+    title: t('entity.pcbarepairdetail.cardno'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.cardno') }),
   },
   {
-    title: t('entity.pcbaRepairDetail.defectsymptom'),
-    dataIndex: 'defectSymptom',
     key: 'defectSymptom',
-    width: 140,
+    title: t('entity.pcbarepairdetail.defectsymptom'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.defectsymptom') }),
   },
   {
-    title: t('entity.pcbaRepairDetail.defectengineering'),
-    dataIndex: 'defectEngineering',
     key: 'defectEngineering',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
+    title: t('entity.pcbarepairdetail.defectengineering'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.defectengineering') }),
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<PcbaRepairCreate & { pcbaRepairId?: string }> | null | undefined) {
-  childPcbaRepairDetailRows.value = ((val as any)?.pcbaRepairDetails ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.pcbaRepairDetailId ?? `new-${index}`,
-  }))
+  childPcbaRepairDetailRows.value = ((val as any)?.pcbaRepairDetails ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 pcbaRepairDetail 行 */
-function handleAddPcbaRepairDetailRow() {
-  childPcbaRepairDetailRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      prodOrderCode: '',
-      lineNumber: 0,
-      pcbaBoardType: '',
-      prodActualQty: 0,
-      prodLine: '',
-      cardNo: '',
-      defectSymptom: '',
-      defectEngineering: '',
-  })
-}
-
-/** 表单 Tab 内删除 pcbaRepairDetail 行 */
-function handleRemovePcbaRepairDetailRow(index: number) {
-  childPcbaRepairDetailRows.value.splice(index, 1)
+function createDefaultPcbaRepairDetailRow(): Record<string, unknown> {
+  return {
+    prodOrderCode: '',
+    lineNumber: (childPcbaRepairDetailRows.value.length + 1) * 10,
+    pcbaBoardType: '',
+    prodActualQty: 0,
+    prodLine: '',
+    cardNo: '',
+    defectSymptom: '',
+    defectEngineering: '',
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.pcbaRepairId ?? ''
   return {
     ...formState,
-    pcbaRepairDetails: childPcbaRepairDetailRows.value.map(({ __rowKey, ...rest }) => rest),
+    pcbaRepairDetails: pcbaRepairDetailTableRef.value?.getRows?.() ?? childPcbaRepairDetailRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      pcbaRepairId: masterId,
+    })),
   }
 }
 
@@ -538,7 +436,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -546,19 +444,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 pcbaRepairId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.pcbaRepairId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).pcbaRepairDetails
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -577,92 +491,131 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.plantcode') }),
       trigger: 'blur'
     }
   ],
   prodCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodcategory') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodcategory') }),
       trigger: 'blur'
     }
   ],
   prodDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.pcbaRepair.proddate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.proddate') }),
       trigger: 'change'
     }
   ],
   prodLine: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodline') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodline') }),
       trigger: 'blur'
     }
   ],
-  shiftNo: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.pcbaRepair.shiftno') }),
-      trigger: 'change'
-    }
-  ],
+  shiftNo: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.shiftno') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.shiftno') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   prodOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodordercode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodordercode') }),
       trigger: 'blur'
     }
   ],
-  prodOrderQty: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.pcbaRepair.prodorderqty') }),
-      trigger: 'change'
-    }
-  ],
+  prodOrderQty: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.prodorderqty') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.prodorderqty') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   modelCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.modelcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.modelcode') }),
       trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.materialcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.materialcode') }),
       trigger: 'blur'
     }
   ],
-  status: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.pcbaRepair.status') }),
-      trigger: 'change'
-    }
-  ],
+  status: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await pcbaRepairDetailTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('shiftNo' in payload) {
+    const rawshiftNo = payload.shiftNo
+    payload.shiftNo = typeof rawshiftNo === 'number' ? rawshiftNo : Number(rawshiftNo)
+  }
+  if ('prodOrderQty' in payload) {
+    const rawprodOrderQty = payload.prodOrderQty
+    payload.prodOrderQty = typeof rawprodOrderQty === 'number' ? rawprodOrderQty : Number(rawprodOrderQty)
+  }
+  if ('status' in payload) {
+    const rawstatus = payload.status
+    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.pcbaRepairId)
   childPcbaRepairDetailRows.value = []
+  pcbaRepairDetailTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

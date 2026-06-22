@@ -142,7 +142,7 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -204,7 +204,7 @@ public class TaktDictTypeCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -255,6 +255,30 @@ public class TaktDictTypeStatusDto
     /// </summary>
     [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
     public int DictStatus { get; set; }
+}
+
+// ========================================
+// DictType 是否内置 DTO
+// ========================================
+
+/// <summary>
+/// DictType 是否内置更新 DTO
+/// </summary>
+public class TaktDictTypeBuiltInDto
+{
+    /// <summary>
+    /// DictTypeID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long DictTypeId { get; set; }
+
+    /// <summary>
+    /// 是否内置（字典 sys_yes_no_type；1=是，0=否）
+    /// </summary>
+    [Required(ErrorMessage = "是否内置不能为空")]
+    public int IsBuiltIn { get; set; }
 }
 
 // ========================================
@@ -328,7 +352,7 @@ public class TaktDictTypeTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -380,7 +404,7 @@ public class TaktDictTypeImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -443,7 +467,7 @@ public class TaktDictTypeExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

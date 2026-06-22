@@ -1,0 +1,55 @@
+Takt Menu Permission Fix Report
+Generated: 2026-06-21T05:12:58.291Z
+Total changes: 17
+
+[TaktMenuLevel2SeedData.cs] CODE_DATABASE_INFO
+  code:database:info:list
+  -> code:database:databaseinfo:list
+[TaktMenuLevel2SeedData.cs] CODE_TABLE_CLONE
+  code:database:table:list
+  -> code:database:tableclone:list
+[TaktMenuLevel2SeedData.cs] CODE_DATA_CLONE
+  code:database:data:list
+  -> code:database:dataclone:list
+[TaktMenuLevel3SeedData.cs] LOGISTICS_SERVICE_SERVICE_REQUEST
+  logistics:service:request:list
+  -> logistics:service:contract:list
+[TaktMenuLevel3SeedData.cs] LOGISTICS_SERVICE_SERVICE_ORDER
+  logistics:service:order:list
+  -> logistics:service:contract:list
+[TaktMenuLevel3SeedData.cs] LOGISTICS_SERVICE_SERVICE_TICKET
+  logistics:service:ticket:list
+  -> logistics:service:contract:list
+[TaktMenuLevel3SeedData.cs] HUMANRESOURCE_PERSONNEL_EMPLOYEE_ONBOARDING
+  humanresource:personnel:employeeonboarding:list
+  -> humanresource:talent:staffingrequirement:list
+[TaktMenuLevel3SeedData.cs] HUMANRESOURCE_BENEFITS_ITEM
+  humanresource:benefits:item:list
+  -> humanresource:benefits:benefititem:list
+[TaktMenuLevel3SeedData.cs] HUMANRESOURCE_BENEFITS_EMP_PLAN
+  humanresource:benefits:empplan:list
+  -> humanresource:benefits:empbenefitplan:list
+[TaktMenuLevel3SeedData.cs] HUMANRESOURCE_PERFORMANCE_PERF_CYCLE
+  humanresource:performance:cycle:list
+  -> humanresource:performance:perfcycle:list
+[TaktMenuLevel3SeedData.cs] HUMANRESOURCE_PERFORMANCE_PERF_SCHEME
+  humanresource:performance:scheme:list
+  -> humanresource:performance:perfscheme:list
+[TaktMenuLevel3SeedData.cs] HUMANRESOURCE_PERFORMANCE_PERF_OBJECTIVE
+  humanresource:performance:objective:list
+  -> humanresource:performance:perfobjective:list
+[TaktMenuLevel3SeedData.cs] HUMANRESOURCE_PERFORMANCE_PERF_ASSESSMENT
+  humanresource:performance:assessment:list
+  -> humanresource:performance:perfassessment:list
+[TaktMenuLevel3SeedData.cs] HUMANRESOURCE_PERFORMANCE_PERF_ANALYSIS
+  humanresource:performance:analysis:list
+  -> humanresource:performance:perfanalysis:list
+[TaktMenuLevel3SeedData.cs] ROUTINE_DOCUMENT_CENTER_DOCUMENT
+  routine:documentcenter:document:list
+  -> routine:documentcenter:list
+[TaktMenuLevel3SeedData.cs] ROUTINE_DOCUMENT_CENTER_DOCUMENT_CHANGE_LOG
+  routine:documentcenter:document:list
+  -> routine:documentcenter:list
+[TaktMenuLevel4SeedData.cs] LOGISTICS_PROCUREMENT_INVOICE
+  logistics:procurement:invoice:list
+  -> logistics:procurement:purchaseinvoice:list

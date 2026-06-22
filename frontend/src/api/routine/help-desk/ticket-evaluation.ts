@@ -40,9 +40,7 @@ export function getTicketEvaluationList(queryDto: any): Promise<TaktPagedResult<
   return request<TaktPagedResult<TicketEvaluation>>({
     url: `${TICKET_EVALUATION_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportTicketEvaluation(
     url: `${TICKET_EVALUATION_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

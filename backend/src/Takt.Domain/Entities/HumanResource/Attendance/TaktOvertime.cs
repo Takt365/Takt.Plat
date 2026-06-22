@@ -85,12 +85,6 @@ public class TaktOvertime : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
     public string? RelatedPlant { get; set; }
     /// <summary>
-    /// 流程实例 ID（<see cref="Workflow.TaktFlowInstance"/>）
-    /// </summary>
-    [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [SugarColumn(ColumnName = "handling_by", ColumnDescription = "经办人", ColumnDataType = "bigint", IsNullable = false)]
@@ -107,7 +101,7 @@ public class TaktOvertime : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "handling_comment", ColumnDescription = "经办备注", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? HandlingComment { get; set; }
     /// <summary>
-    /// 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+    /// 加班状态（字典 sys_approval_status）
     /// </summary>
     [SugarColumn(ColumnName = "overtime_status", ColumnDescription = "加班状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int OvertimeStatus { get; set; }

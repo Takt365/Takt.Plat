@@ -36,34 +36,34 @@
           :tab="t('statistics.logging.server-monitor.page.tabs.app')"
         >
           <a-descriptions bordered :column="2" size="small" class="pt-2">
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.applicationName')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.application.name')">
               {{ appStatus.applicationName }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.applicationVersion')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.application.version')">
               <a-tag color="blue">{{ appStatus.applicationVersion }}</a-tag>
             </a-descriptions-item>
             <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.environment')">
               <a-tag :color="envColor">{{ appStatus.environment }}</a-tag>
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.machineName')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.machine.name')">
               {{ appStatus.machineName }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.dotNetVersion')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.dot.net.version')">
               {{ appStatus.dotNetVersion }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.processArchitecture')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.process.architecture')">
               {{ appStatus.processArchitecture || '-' }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.processorCount')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.processor.count')">
               {{ appStatus.processorCount }} {{ t('statistics.logging.server-monitor.page.unit.core') }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.startTime')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.start.time')">
               {{ formatDateTime(appStatus.startTime) }}
             </a-descriptions-item>
             <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.uptime')">
               {{ formatUptime(appStatus.uptime) }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.workingSet')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.working.set')">
               {{ formatBytes(Number(appStatus.workingSet) || 0) }}
             </a-descriptions-item>
           </a-descriptions>
@@ -75,37 +75,37 @@
           :tab="t('statistics.logging.server-monitor.page.tabs.system')"
         >
           <a-descriptions bordered :column="2" size="small" class="pt-2">
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.operatingSystem')" :span="2">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.operating.system')" :span="2">
               {{ hardwareInfo.operatingSystem }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.osVersion')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.os.version')">
               {{ hardwareInfo.operatingSystemLanguage.osVersion || '-' }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.currentCulture')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.current.culture')">
               {{ hardwareInfo.operatingSystemLanguage.currentCultureDisplayName }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.currentUiCulture')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.current.ui.culture')">
               {{ hardwareInfo.operatingSystemLanguage.currentUICultureDisplayName }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.systemType')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.system.type')">
               {{ hardwareInfo.osArchitecture || '-' }}
             </a-descriptions-item>
           </a-descriptions>
           <a-divider class="my-3" />
           <a-descriptions bordered :column="2" size="small" :title="t('statistics.logging.server-monitor.page.section.motherboard')">
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboardManufacturer')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboard.manufacturer')">
               {{ hardwareInfo.motherboard.manufacturer || '-' }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboardProduct')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboard.product')">
               {{ hardwareInfo.motherboard.product || '-' }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboardSerialNumber')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboard.serial.number')">
               {{ hardwareInfo.motherboard.serialNumber || '-' }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboardVersion')">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboard.version')">
               {{ hardwareInfo.motherboard.version || '-' }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboardUuid')" :span="2">
+            <a-descriptions-item :label="t('statistics.logging.server-monitor.page.field.motherboard.uuid')" :span="2">
               {{ hardwareInfo.motherboard.uuid || '-' }}
             </a-descriptions-item>
           </a-descriptions>
@@ -119,7 +119,7 @@
           <div class="pt-2">
             <div class="flex flex-col items-center gap-2 pb-2 max-w-[280px] mx-auto">
               <span class="text-sm text-text-secondary">
-                {{ t('statistics.logging.server-monitor.page.field.cpuUsagePercent') }}
+                {{ t('statistics.logging.server-monitor.page.field.cpu.usage.percent') }}
               </span>
               <div ref="cpuUsageGaugeRef" class="h-[260px] w-full max-w-[320px]" />
             </div>
@@ -181,7 +181,7 @@
           <div class="pt-2">
             <div class="flex flex-col items-center gap-2 pb-2 max-w-[280px] mx-auto">
               <span class="text-sm text-text-secondary">
-                {{ t('statistics.logging.server-monitor.page.field.memoryUsagePercent') }}
+                {{ t('statistics.logging.server-monitor.page.field.memory.usage.percent') }}
               </span>
               <div ref="memoryUsageGaugeRef" class="h-[260px] w-full max-w-[320px]" />
             </div>
@@ -483,7 +483,7 @@ const memorySummaryList = computed(() => {
   return [
     {
       key: 'physical',
-      memoryType: t('statistics.logging.server-monitor.page.field.memoryTypePhysical'),
+      memoryType: t('statistics.logging.server-monitor.page.field.memory.type.physical'),
       totalSize: memory.totalPhysicalMemory,
       usedSpace: memory.usedPhysicalMemory,
       freeSpace: memory.availablePhysicalMemory,
@@ -491,7 +491,7 @@ const memorySummaryList = computed(() => {
     },
     {
       key: 'virtual',
-      memoryType: t('statistics.logging.server-monitor.page.field.memoryTypeVirtual'),
+      memoryType: t('statistics.logging.server-monitor.page.field.memory.type.virtual'),
       totalSize: memory.totalVirtualMemory,
       usedSpace: memory.usedVirtualMemory,
       freeSpace: memory.availableVirtualMemory,
@@ -525,38 +525,38 @@ const envColor = computed(() => {
 
 /** CPU 表格列（每行 = 一个物理 CPU / Socket） */
 const cpuColumns = computed(() => [
-  { title: t('statistics.logging.server-monitor.page.field.cpuName'), dataIndex: 'name', key: 'name' },
-  { title: t('statistics.logging.server-monitor.page.field.cpuManufacturer'), dataIndex: 'manufacturer', key: 'manufacturer' },
-  { title: t('statistics.logging.server-monitor.page.field.cpuCores'), dataIndex: 'numberOfCores', key: 'numberOfCores' },
-  { title: t('statistics.logging.server-monitor.page.field.cpuLogicalProcessors'), dataIndex: 'numberOfLogicalProcessors', key: 'numberOfLogicalProcessors' },
-  { title: t('statistics.logging.server-monitor.page.field.cpuSocket'), dataIndex: 'socketDesignation', key: 'socketDesignation' },
-  { title: t('statistics.logging.server-monitor.page.field.cpuUsagePercent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 180 },
-  { title: t('statistics.logging.server-monitor.page.field.cpuProcessorId'), dataIndex: 'processorId', key: 'processorId' },
+  { title: t('statistics.logging.server-monitor.page.field.cpu.name'), dataIndex: 'name', key: 'name' },
+  { title: t('statistics.logging.server-monitor.page.field.cpu.manufacturer'), dataIndex: 'manufacturer', key: 'manufacturer' },
+  { title: t('statistics.logging.server-monitor.page.field.cpu.cores'), dataIndex: 'numberOfCores', key: 'numberOfCores' },
+  { title: t('statistics.logging.server-monitor.page.field.cpu.logical.processors'), dataIndex: 'numberOfLogicalProcessors', key: 'numberOfLogicalProcessors' },
+  { title: t('statistics.logging.server-monitor.page.field.cpu.socket'), dataIndex: 'socketDesignation', key: 'socketDesignation' },
+  { title: t('statistics.logging.server-monitor.page.field.cpu.usage.percent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 180 },
+  { title: t('statistics.logging.server-monitor.page.field.cpu.processor.id'), dataIndex: 'processorId', key: 'processorId' },
 ])
 
 /** 逻辑核心子表列（CpuCoreList） */
 const cpuCoreColumns = computed(() => [
-  { title: t('statistics.logging.server-monitor.page.field.cpuLogicalCoreName'), dataIndex: 'name', key: 'name', width: 120 },
-  { title: t('statistics.logging.server-monitor.page.field.cpuUsagePercent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 180 },
+  { title: t('statistics.logging.server-monitor.page.field.cpu.logical.core.name'), dataIndex: 'name', key: 'name', width: 120 },
+  { title: t('statistics.logging.server-monitor.page.field.cpu.usage.percent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 180 },
 ])
 
 /** 内存汇总表格列 */
 const memoryColumns = computed(() => [
-  { title: t('statistics.logging.server-monitor.page.field.memoryType'), dataIndex: 'memoryType', key: 'memoryType' },
-  { title: t('statistics.logging.server-monitor.page.field.memoryTotalPhysical'), dataIndex: 'totalSize', key: 'totalSize' },
-  { title: t('statistics.logging.server-monitor.page.field.memoryUsedPhysical'), dataIndex: 'usedSpace', key: 'usedSpace' },
-  { title: t('statistics.logging.server-monitor.page.field.memoryAvailable'), dataIndex: 'freeSpace', key: 'freeSpace' },
-  { title: t('statistics.logging.server-monitor.page.field.memoryUsagePercent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 180 },
+  { title: t('statistics.logging.server-monitor.page.field.memory.type'), dataIndex: 'memoryType', key: 'memoryType' },
+  { title: t('statistics.logging.server-monitor.page.field.memory.total.physical'), dataIndex: 'totalSize', key: 'totalSize' },
+  { title: t('statistics.logging.server-monitor.page.field.memory.used.physical'), dataIndex: 'usedSpace', key: 'usedSpace' },
+  { title: t('statistics.logging.server-monitor.page.field.memory.available'), dataIndex: 'freeSpace', key: 'freeSpace' },
+  { title: t('statistics.logging.server-monitor.page.field.memory.usage.percent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 180 },
 ])
 
 /** 物理内存条子表列 */
 const memoryModuleColumns = computed(() => [
-  { title: t('statistics.logging.server-monitor.page.field.memoryBankLabel'), dataIndex: 'bankLabel', key: 'bankLabel' },
-  { title: t('statistics.logging.server-monitor.page.field.memoryManufacturer'), dataIndex: 'manufacturer', key: 'manufacturer' },
-  { title: t('statistics.logging.server-monitor.page.field.memoryCapacity'), dataIndex: 'capacity', key: 'capacity' },
-  { title: t('statistics.logging.server-monitor.page.field.memorySpeed'), dataIndex: 'speed', key: 'speed' },
-  { title: t('statistics.logging.server-monitor.page.field.memoryPartNumber'), dataIndex: 'partNumber', key: 'partNumber' },
-  { title: t('statistics.logging.server-monitor.page.field.memorySerialNumber'), dataIndex: 'serialNumber', key: 'serialNumber' },
+  { title: t('statistics.logging.server-monitor.page.field.memory.bank.label'), dataIndex: 'bankLabel', key: 'bankLabel' },
+  { title: t('statistics.logging.server-monitor.page.field.memory.manufacturer'), dataIndex: 'manufacturer', key: 'manufacturer' },
+  { title: t('statistics.logging.server-monitor.page.field.memory.capacity'), dataIndex: 'capacity', key: 'capacity' },
+  { title: t('statistics.logging.server-monitor.page.field.memory.speed'), dataIndex: 'speed', key: 'speed' },
+  { title: t('statistics.logging.server-monitor.page.field.memory.part.number'), dataIndex: 'partNumber', key: 'partNumber' },
+  { title: t('statistics.logging.server-monitor.page.field.memory.serial.number'), dataIndex: 'serialNumber', key: 'serialNumber' },
 ])
 
 /**
@@ -652,30 +652,30 @@ function formatMemoryModuleSpeed(speedMHz: unknown): string {
 
 /** 磁盘表格列 */
 const driveColumns = computed(() => [
-  { title: t('statistics.logging.server-monitor.page.field.driveName'), dataIndex: 'name', key: 'name' },
-  { title: t('statistics.logging.server-monitor.page.field.driveType'), dataIndex: 'driveType', key: 'driveType' },
-  { title: t('statistics.logging.server-monitor.page.field.driveFileSystem'), dataIndex: 'fileSystem', key: 'fileSystem' },
-  { title: t('statistics.logging.server-monitor.page.field.driveTotalSize'), dataIndex: 'totalSize', key: 'totalSize' },
-  { title: t('statistics.logging.server-monitor.page.field.driveFreeSpace'), dataIndex: 'freeSpace', key: 'freeSpace' },
-  { title: t('statistics.logging.server-monitor.page.field.driveUsedSpace'), dataIndex: 'usedSpace', key: 'usedSpace' },
-  { title: t('statistics.logging.server-monitor.page.field.driveUsagePercent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 200 },
+  { title: t('statistics.logging.server-monitor.page.field.drive.name'), dataIndex: 'name', key: 'name' },
+  { title: t('statistics.logging.server-monitor.page.field.drive.type'), dataIndex: 'driveType', key: 'driveType' },
+  { title: t('statistics.logging.server-monitor.page.field.drive.file.system'), dataIndex: 'fileSystem', key: 'fileSystem' },
+  { title: t('statistics.logging.server-monitor.page.field.drive.total.size'), dataIndex: 'totalSize', key: 'totalSize' },
+  { title: t('statistics.logging.server-monitor.page.field.drive.free.space'), dataIndex: 'freeSpace', key: 'freeSpace' },
+  { title: t('statistics.logging.server-monitor.page.field.drive.used.space'), dataIndex: 'usedSpace', key: 'usedSpace' },
+  { title: t('statistics.logging.server-monitor.page.field.drive.usage.percent'), dataIndex: 'usagePercent', key: 'usagePercent', width: 200 },
 ])
 
 /** 显卡表格列 */
 const gpuColumns = computed(() => [
-  { title: t('statistics.logging.server-monitor.page.field.gpuName'), dataIndex: 'name', key: 'name', ellipsis: true },
-  { title: t('statistics.logging.server-monitor.page.field.gpuManufacturer'), dataIndex: 'manufacturer', key: 'manufacturer' },
-  { title: t('statistics.logging.server-monitor.page.field.gpuAdapterRam'), dataIndex: 'adapterRam', key: 'adapterRam' },
-  { title: t('statistics.logging.server-monitor.page.field.gpuDriverVersion'), dataIndex: 'driverVersion', key: 'driverVersion' },
+  { title: t('statistics.logging.server-monitor.page.field.gpu.name'), dataIndex: 'name', key: 'name', ellipsis: true },
+  { title: t('statistics.logging.server-monitor.page.field.gpu.manufacturer'), dataIndex: 'manufacturer', key: 'manufacturer' },
+  { title: t('statistics.logging.server-monitor.page.field.gpu.adapter.ram'), dataIndex: 'adapterRam', key: 'adapterRam' },
+  { title: t('statistics.logging.server-monitor.page.field.gpu.driver.version'), dataIndex: 'driverVersion', key: 'driverVersion' },
 ])
 
 /** 网络表格列 */
 const networkColumns = computed(() => [
-  { title: t('statistics.logging.server-monitor.page.field.networkName'), dataIndex: 'name', key: 'name', ellipsis: true },
-  { title: t('statistics.logging.server-monitor.page.field.networkMacAddress'), dataIndex: 'macAddress', key: 'macAddress' },
-  { title: t('statistics.logging.server-monitor.page.field.networkIpAddress'), dataIndex: 'ipAddress', key: 'ipAddress' },
-  { title: t('statistics.logging.server-monitor.page.field.networkSpeed'), dataIndex: 'speed', key: 'speed' },
-  { title: t('statistics.logging.server-monitor.page.field.networkStatus'), dataIndex: 'status', key: 'status' },
+  { title: t('statistics.logging.server-monitor.page.field.network.name'), dataIndex: 'name', key: 'name', ellipsis: true },
+  { title: t('statistics.logging.server-monitor.page.field.network.mac.address'), dataIndex: 'macAddress', key: 'macAddress' },
+  { title: t('statistics.logging.server-monitor.page.field.network.ip.address'), dataIndex: 'ipAddress', key: 'ipAddress' },
+  { title: t('statistics.logging.server-monitor.page.field.network.speed'), dataIndex: 'speed', key: 'speed' },
+  { title: t('statistics.logging.server-monitor.page.field.network.status'), dataIndex: 'status', key: 'status' },
 ])
 
 /**
@@ -808,21 +808,21 @@ function formatNetworkStatus(status: string | undefined): string {
   const normalized = (status ?? '').trim().toLowerCase()
   switch (normalized) {
     case 'online':
-      return t('statistics.logging.server-monitor.page.field.networkStatusOnline')
+      return t('statistics.logging.server-monitor.page.field.network.status.online')
     case 'nointernet':
-      return t('statistics.logging.server-monitor.page.field.networkStatusNoInternet')
+      return t('statistics.logging.server-monitor.page.field.network.status.no.internet')
     case 'dnsfault':
-      return t('statistics.logging.server-monitor.page.field.networkStatusDnsFault')
+      return t('statistics.logging.server-monitor.page.field.network.status.dns.fault')
     case 'up':
-      return t('statistics.logging.server-monitor.page.field.networkStatusUp')
+      return t('statistics.logging.server-monitor.page.field.network.status.up')
     case 'down':
-      return t('statistics.logging.server-monitor.page.field.networkStatusDown')
+      return t('statistics.logging.server-monitor.page.field.network.status.down')
     case 'enabled':
-      return t('statistics.logging.server-monitor.page.field.networkStatusEnabled')
+      return t('statistics.logging.server-monitor.page.field.network.status.enabled')
     case 'disabled':
-      return t('statistics.logging.server-monitor.page.field.networkStatusDisabled')
+      return t('statistics.logging.server-monitor.page.field.network.status.disabled')
     default:
-      return status?.trim() || t('statistics.logging.server-monitor.page.field.networkStatusUnknown')
+      return status?.trim() || t('statistics.logging.server-monitor.page.field.network.status.unknown')
   }
 }
 
@@ -919,7 +919,7 @@ function renderUsageGaugeChart(
   }
   const used = clampUsagePercent(usedPercent)
   const accentColor = getGaugeAccentColor(used)
-  const usedLabel = t('statistics.logging.server-monitor.page.field.usageUsed')
+  const usedLabel = t('statistics.logging.server-monitor.page.field.usage.used')
   chartRef.chart.setOption(
     {
       tooltip: {
@@ -1153,7 +1153,7 @@ async function loadData() {
       }
     })
   } catch {
-    message.error(t('statistics.logging.server-monitor.page.message.loadFail'))
+    message.error(t('statistics.logging.server-monitor.page.message.load.fail'))
   } finally {
     loading.value = false
   }

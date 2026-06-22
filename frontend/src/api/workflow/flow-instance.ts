@@ -42,9 +42,7 @@ export function getFlowInstanceList(queryDto: any): Promise<TaktPagedResult<Flow
   return request<TaktPagedResult<FlowInstance>>({
     url: `${FLOW_INSTANCE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -201,7 +199,7 @@ export function exportFlowInstance(
     url: `${FLOW_INSTANCE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

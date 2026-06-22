@@ -41,9 +41,7 @@ export function getTrainingPlanList(queryDto: any): Promise<TaktPagedResult<Trai
   return request<TaktPagedResult<TrainingPlan>>({
     url: `${TRAINING_PLAN_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportTrainingPlan(
     url: `${TRAINING_PLAN_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

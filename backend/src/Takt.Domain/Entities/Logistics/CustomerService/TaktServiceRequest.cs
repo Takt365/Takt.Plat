@@ -96,10 +96,10 @@ public class TaktServiceRequest : TaktCompanyEntityBase
     public int SourceChannel { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
-    [SugarColumn(ColumnName = "priority", ColumnDescription = "优先级", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int Priority { get; set; } = 1;
+    [SugarColumn(ColumnName = "priority", ColumnDescription = "优先级", ColumnDataType = "int", IsNullable = false, DefaultValue = "3")]
+    public int Priority { get; set; } = 3;
 
     /// <summary>
     /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
@@ -175,7 +175,19 @@ public class TaktServiceRequest : TaktCompanyEntityBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 服务工单列表（外键在子表 <see cref="TaktServiceTicket.ServiceRequestId"/>）
+    /// 关联服务合同
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(ServiceContractId))]
+    public TaktServiceContract? ServiceContract { get; set; }
+
+    /// <summary>
+    /// 关联服务订单列表（外键在子表 TaktServiceOrder.ServiceRequestId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktServiceOrder.ServiceRequestId))]
+    public List<TaktServiceOrder>? ServiceOrders { get; set; }
+
+    /// <summary>
+    /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktServiceTicket.ServiceRequestId))]
     public List<TaktServiceTicket>? Tickets { get; set; }

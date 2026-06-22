@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktAccountTitleDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AccountTitle 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAccountTitle 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Accounting.Financial;
 
@@ -45,16 +44,6 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     /// 科目名称
     /// </summary>
     public string TitleName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目描述
-    /// </summary>
-    public string? TitleDesc { get; set; } = string.Empty;
 
     /// <summary>
     /// 父级 ID
@@ -120,7 +109,7 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     /// <summary>
     /// 科目状态（1=启用，0=禁用）
     /// </summary>
-    public int TitleStatus { get; set; }
+    public int TitleStatus { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -136,6 +125,12 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）
+    /// （子表：TaktAccountTitleChangeLog）
+    /// </summary>
+    public List<TaktAccountTitleChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -184,16 +179,6 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     /// 科目名称
     /// </summary>
     public string? TitleName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目描述
-    /// </summary>
-    public string? TitleDesc { get; set; } = string.Empty;
 
     /// <summary>
     /// 父级 ID
@@ -299,7 +284,7 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -342,16 +327,6 @@ public class TaktAccountTitleCreateDto
     /// </summary>
     [Required(ErrorMessage = "科目名称不能为空")]
     public string TitleName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目描述
-    /// </summary>
-    public string? TitleDesc { get; set; } = string.Empty;
 
     /// <summary>
     /// 父级 ID
@@ -412,7 +387,7 @@ public class TaktAccountTitleCreateDto
     /// <summary>
     /// 科目状态（1=启用，0=禁用）
     /// </summary>
-    public int TitleStatus { get; set; }
+    public int TitleStatus { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -425,14 +400,14 @@ public class TaktAccountTitleCreateDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）（子表，级联保存）
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public List<TaktAccountTitleChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -482,7 +457,7 @@ public class TaktAccountTitleStatusDto
     /// 科目状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "科目状态（1=启用，0=禁用）不能为空")]
-    public int TitleStatus { get; set; }
+    public int TitleStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -539,16 +514,6 @@ public class TaktAccountTitleTemplateDto
     public string? TitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 科目简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目描述
-    /// </summary>
-    public string? TitleDesc { get; set; } = string.Empty;
-
-    /// <summary>
     /// 父级 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -602,7 +567,7 @@ public class TaktAccountTitleTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -642,16 +607,6 @@ public class TaktAccountTitleImportDto
     public string? TitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 科目简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目描述
-    /// </summary>
-    public string? TitleDesc { get; set; } = string.Empty;
-
-    /// <summary>
     /// 父级 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -705,7 +660,7 @@ public class TaktAccountTitleImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -744,16 +699,6 @@ public class TaktAccountTitleExportDto
     /// 科目名称
     /// </summary>
     public string TitleName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目描述
-    /// </summary>
-    public string? TitleDesc { get; set; } = string.Empty;
 
     /// <summary>
     /// 父级 ID
@@ -819,7 +764,7 @@ public class TaktAccountTitleExportDto
     /// <summary>
     /// 科目状态（1=启用，0=禁用）
     /// </summary>
-    public int TitleStatus { get; set; }
+    public int TitleStatus { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -839,7 +784,7 @@ public class TaktAccountTitleExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

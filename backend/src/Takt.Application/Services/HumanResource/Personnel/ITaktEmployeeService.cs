@@ -102,4 +102,13 @@ public interface ITaktEmployeeService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportEmployeeAsync(TaktEmployeeQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    /// <summary>
+    /// 按已审批上岗（主职）与调动单重算员工主档任职快照（上岗/调动审批通过后调用）
+    /// </summary>
+    /// <param name="employeeId">员工 ID</param>
+    /// <param name="tenantCode">租户编码（与流程实例一致）</param>
+    /// <param name="companyCode">公司编码（与流程实例一致）</param>
+    /// <returns>异步任务</returns>
+    Task RefreshEmployeePrimaryAssignmentAsync(long employeeId, string tenantCode, string companyCode);
+
 }

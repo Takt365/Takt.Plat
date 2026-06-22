@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
-// 文件名称：ITaktQualityFailureAssyReworkService.cs
-// 创建时间：2026-06-09
+// 文件名称：ITaktQualityIssueAssyReworkService.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题组装不良改修费用明细应用服务接口
 // 
@@ -19,34 +19,34 @@ namespace Takt.Application.Services.Logistics.Quality.Cost;
 /// <summary>
 /// 质量问题组装不良改修费用明细应用服务接口
 /// </summary>
-public interface ITaktQualityFailureAssyReworkService
+public interface ITaktQualityIssueAssyReworkService
 {
     /// <summary>
     /// 获取质量问题组装不良改修费用明细列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    Task<TaktPagedResult<TaktQualityFailureAssyReworkDto>> GetQualityFailureAssyReworkListAsync(TaktQualityFailureAssyReworkQueryDto queryDto);
+    Task<TaktPagedResult<TaktQualityIssueAssyReworkDto>> GetQualityIssueAssyReworkListAsync(TaktQualityIssueAssyReworkQueryDto queryDto);
 
     /// <summary>
     /// 根据ID获取质量问题组装不良改修费用明细
     /// </summary>
     /// <param name="id">质量问题组装不良改修费用明细ID</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityFailureAssyReworkDto?> GetQualityFailureAssyReworkByIdAsync(long id);
+    Task<TaktQualityIssueAssyReworkDto?> GetQualityIssueAssyReworkByIdAsync(long id);
 
     /// <summary>
     /// 获取质量问题组装不良改修费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetQualityFailureAssyReworkOptionsAsync();
+    Task<List<TaktSelectOption>> GetQualityIssueAssyReworkOptionsAsync();
 
     /// <summary>
     /// 创建质量问题组装不良改修费用明细
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityFailureAssyReworkDto> CreateQualityFailureAssyReworkAsync(TaktQualityFailureAssyReworkCreateDto dto);
+    Task<TaktQualityIssueAssyReworkDto> CreateQualityIssueAssyReworkAsync(TaktQualityIssueAssyReworkCreateDto dto);
 
     /// <summary>
     /// 更新质量问题组装不良改修费用明细
@@ -54,21 +54,21 @@ public interface ITaktQualityFailureAssyReworkService
     /// <param name="id">质量问题组装不良改修费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityFailureAssyReworkDto> UpdateQualityFailureAssyReworkAsync(long id, TaktQualityFailureAssyReworkUpdateDto dto);
+    Task<TaktQualityIssueAssyReworkDto> UpdateQualityIssueAssyReworkAsync(long id, TaktQualityIssueAssyReworkUpdateDto dto);
 
     /// <summary>
     /// 删除质量问题组装不良改修费用明细
     /// </summary>
     /// <param name="id">质量问题组装不良改修费用明细ID</param>
     /// <returns>任务</returns>
-    Task DeleteQualityFailureAssyReworkByIdAsync(long id);
+    Task DeleteQualityIssueAssyReworkByIdAsync(long id);
 
     /// <summary>
     /// 批量删除质量问题组装不良改修费用明细
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    Task DeleteQualityFailureAssyReworkBatchAsync(IEnumerable<long> ids);
+    Task DeleteQualityIssueAssyReworkBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
     /// 获取导入模板
@@ -76,7 +76,7 @@ public interface ITaktQualityFailureAssyReworkService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] content)> GetQualityFailureAssyReworkTemplateAsync(string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] content)> GetQualityIssueAssyReworkTemplateAsync(string? sheetName = null, string? fileName = null);
 
     /// <summary>
     /// 导入质量问题组装不良改修费用明细
@@ -84,7 +84,7 @@ public interface ITaktQualityFailureAssyReworkService
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    Task<(int success, int fail, List<string> errors)> ImportQualityFailureAssyReworkAsync(Stream fileStream, string? sheetName = null);
+    Task<(int success, int fail, List<string> errors)> ImportQualityIssueAssyReworkAsync(Stream fileStream, string? sheetName = null);
 
     /// <summary>
     /// 导出质量问题组装不良改修费用明细
@@ -93,6 +93,6 @@ public interface ITaktQualityFailureAssyReworkService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] fileContent)> ExportQualityFailureAssyReworkAsync(TaktQualityFailureAssyReworkQueryDto? query = null, string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] fileContent)> ExportQualityIssueAssyReworkAsync(TaktQualityIssueAssyReworkQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
 }

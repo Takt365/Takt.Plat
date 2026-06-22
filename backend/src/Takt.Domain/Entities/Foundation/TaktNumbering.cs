@@ -42,10 +42,10 @@ public class TaktNumbering : TaktCompanyEntityBase
     public string RuleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单据类型
+    /// 业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）
     /// </summary>
-    [SugarColumn(ColumnName = "document_type", ColumnDescription = "单据类型", ColumnDataType = "int", IsNullable = false)]
-    public int DocumentType { get; set; }
+    [SugarColumn(ColumnName = "document_type", ColumnDescription = "业务领域", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "")]
+    public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门编码（如：DEPT01, DEPT02，不可为空）
@@ -55,60 +55,59 @@ public class TaktNumbering : TaktCompanyEntityBase
     public string DepartmentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前缀（如：SO-, PO-, INV-）
+    /// 前缀编码（如：PUR、SORD、ANN）
     /// </summary>
-    [SugarColumn(ColumnName = "prefix", ColumnDescription = "前缀", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
-    public string? Prefix { get; set; }
+    [SugarColumn(ColumnName = "prefix_code", ColumnDescription = "前缀编码", ColumnDataType = "varchar", Length = 4, IsNullable = true)]
+    public string? PrefixCode { get; set; }
 
     /// <summary>
-    /// 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm）
-    /// 为空表示不使用日期
+    /// 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
     /// </summary>
     [SugarColumn(ColumnName = "date_format", ColumnDescription = "日期格式", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? DateFormat { get; set; }
 
     /// <summary>
-    /// 流水号位数（3=001, 4=0001, 5=00001, 6=000001）
+    /// 流水位数（3=001, 4=0001, 5=00001, 6=000001）
     /// </summary>
-    [SugarColumn(ColumnName = "sequence_length", ColumnDescription = "流水号位数", ColumnDataType = "int", IsNullable = false, DefaultValue = "6")]
+    [SugarColumn(ColumnName = "sequence_length", ColumnDescription = "流水位数", ColumnDataType = "int", IsNullable = false, DefaultValue = "6")]
     public int SequenceLength { get; set; } = 6;
 
     /// <summary>
-    /// 流水号步长（每次递增的数值，默认1）
+    /// 流水步长（每次递增的数值，默认1）
     /// </summary>
-    [SugarColumn(ColumnName = "sequence_step", ColumnDescription = "流水号步长", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    [SugarColumn(ColumnName = "sequence_step", ColumnDescription = "流水步长", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int SequenceStep { get; set; } = 1;
 
     /// <summary>
-    /// 后缀（如：-CN, -USD, -V2）
+    /// 后缀编码（可选，最多 4 位）
     /// </summary>
-    [SugarColumn(ColumnName = "suffix", ColumnDescription = "后缀", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
-    public string? Suffix { get; set; }
+    [SugarColumn(ColumnName = "suffix_code", ColumnDescription = "后缀编码", ColumnDataType = "varchar", Length = 4, IsNullable = true)]
+    public string? SuffixCode { get; set; }
 
     /// <summary>
-    /// 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
+    /// 重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）
     /// </summary>
     [SugarColumn(ColumnName = "reset_period", ColumnDescription = "重置周期", ColumnDataType = "varchar", Length = 20, IsNullable = false, DefaultValue = "none")]
     public string ResetPeriod { get; set; } = "none";
 
     /// <summary>
-    /// 当前流水号（用于记录下一个流水号值）
+    /// 当前流水（用于记录下一个流水号值）
     /// </summary>
-    [SugarColumn(ColumnName = "current_sequence", ColumnDescription = "当前流水号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "current_sequence", ColumnDescription = "当前流水", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CurrentSequence { get; set; } = 0;
 
     /// <summary>
-    /// 示例编码（自动生成，用于预览规则效果）
-    /// 如：SO-20250120-000001
+    /// 起始编码（新增时必填；完整业务编号样例，末段为当前流水号）
+    /// 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
     /// </summary>
-    [SugarColumn(ColumnName = "example_code", ColumnDescription = "示例编码", ColumnDataType = "varchar", Length = 100, IsNullable = true)]
-    public string? ExampleCode { get; set; }
+    [SugarColumn(ColumnName = "example_code", ColumnDescription = "起始编码", ColumnDataType = "varchar", Length = 100, IsNullable = false)]
+    public string ExampleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 分隔符（默认 -，也可用 _ 或 /）
+    /// 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
     /// </summary>
-    [SugarColumn(ColumnName = "separator", ColumnDescription = "分隔符", ColumnDataType = "varchar", Length = 1, IsNullable = false, DefaultValue = "-")]
-    public string Separator { get; set; } = "-";
+    [SugarColumn(ColumnName = "separator", ColumnDescription = "分隔符", ColumnDataType = "varchar", Length = 1, IsNullable = true)]
+    public string? Separator { get; set; }
 
     /// <summary>
     /// 是否内置（0=否，1=是，系统内置的不可删除）
@@ -117,13 +116,13 @@ public class TaktNumbering : TaktCompanyEntityBase
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int Status { get; set; } = 1;
 
     /// <summary>
-    /// 描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）
+    /// 描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence（段名为实体属性名）
     /// </summary>
     [SugarColumn(ColumnName = "description", ColumnDescription = "描述说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? Description { get; set; }

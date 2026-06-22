@@ -44,9 +44,7 @@ export function getVocabularyList(queryDto: any): Promise<TaktPagedResult<Vocabu
   return request<TaktPagedResult<Vocabulary>>({
     url: `${VOCABULARY_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -203,7 +201,7 @@ export function exportVocabulary(
     url: `${VOCABULARY_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

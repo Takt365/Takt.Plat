@@ -128,7 +128,7 @@ export const useHeaderNotificationStore = defineStore('headerNotification', () =
       ? `${messageTitle}\n${body}`
       : (messageTitle || body);
     return {
-      title: translateLocaleMessage('common.page.signalr.newMessage'),
+      title: translateLocaleMessage('common.page.signalr.new.message'),
       content: description ? `${sender}: ${description}` : sender,
     };
   }

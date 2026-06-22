@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/financial
 // 文件名称：account-title.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -43,9 +43,7 @@ export function getAccountTitleList(queryDto: any): Promise<TaktPagedResult<Acco
   return request<TaktPagedResult<AccountTitle>>({
     url: `${ACCOUNT_TITLE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -132,7 +130,7 @@ export function deleteAccountTitleBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新会计科目状态
- * @param {AccountTitleStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {AccountTitleStatus} dto 状态 DTO
  * @returns {Promise<AccountTitle>} 会计科目DTO
  */
 export function updateAccountTitleStatus(dto: AccountTitleStatus): Promise<AccountTitle> {
@@ -232,7 +230,7 @@ export function exportAccountTitle(
     url: `${ACCOUNT_TITLE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

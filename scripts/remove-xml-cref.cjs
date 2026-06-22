@@ -20,7 +20,7 @@ const TARGET_DIRS = [
   path.join(ROOT, 'frontend', 'src'),
 ];
 
-const SKIP_DIR_NAMES = new Set(['node_modules', '_build_out', 'bin', 'obj']);
+const SKIP_DIR_NAMES = new Set(['node_modules', 'bin', 'obj', '.tmp']);
 const TARGET_EXT = new Set(['.cs', '.ts', '.vue', '.tsx', '.js', '.cjs']);
 
 function walkDir(dir, onFile) {

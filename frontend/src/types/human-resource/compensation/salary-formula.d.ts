@@ -59,7 +59,7 @@ export interface SalaryFormula extends CompanyDtoBase {
   formulaName: string;
 
   /**
-   * 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+   * 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
    */
   formulaStep: number;
 
@@ -94,7 +94,7 @@ export interface SalaryFormula extends CompanyDtoBase {
   expiryDate?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   formulaStatus: number;
 
@@ -149,7 +149,7 @@ export interface SalaryFormulaQuery extends TaktPagedQuery {
   formulaName?: string;
 
   /**
-   * 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+   * 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
    */
   formulaStep?: number;
 
@@ -194,7 +194,7 @@ export interface SalaryFormulaQuery extends TaktPagedQuery {
   expiryDateEnd?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   formulaStatus?: number;
 
@@ -216,7 +216,7 @@ export interface SalaryFormulaQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -273,7 +273,7 @@ export interface SalaryFormulaCreate {
   formulaName: string;
 
   /**
-   * 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+   * 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
    */
   formulaStep: number;
 
@@ -308,7 +308,7 @@ export interface SalaryFormulaCreate {
   expiryDate?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   formulaStatus: number;
 
@@ -320,7 +320,7 @@ export interface SalaryFormulaCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -357,7 +357,7 @@ export interface SalaryFormulaStatus {
   salaryFormulaId: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   formulaStatus: number;
 
@@ -425,7 +425,7 @@ export interface SalaryFormulaTemplate {
   formulaName?: string;
 
   /**
-   * 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+   * 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
    */
   formulaStep?: number;
 
@@ -450,7 +450,7 @@ export interface SalaryFormulaTemplate {
   stepDescription?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   formulaStatus?: number;
 
@@ -462,7 +462,7 @@ export interface SalaryFormulaTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -519,7 +519,7 @@ export interface SalaryFormulaImport {
   formulaName?: string;
 
   /**
-   * 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+   * 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
    */
   formulaStep?: number;
 
@@ -544,7 +544,7 @@ export interface SalaryFormulaImport {
   stepDescription?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   formulaStatus?: number;
 
@@ -556,7 +556,7 @@ export interface SalaryFormulaImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -608,7 +608,7 @@ export interface SalaryFormulaExport {
   formulaName: string;
 
   /**
-   * 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+   * 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
    */
   formulaStep: number;
 
@@ -643,7 +643,7 @@ export interface SalaryFormulaExport {
   expiryDate?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   formulaStatus: number;
 
@@ -655,7 +655,7 @@ export interface SalaryFormulaExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

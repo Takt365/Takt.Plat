@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-entity-exclusions.cjs
 // 创建时间：2026-05-25
 // 创建人：Takt365(Cursor AI)
@@ -43,6 +43,10 @@ const MANUAL_STANDALONE_SERVICE_ENTITY_NAMES = new Set([
  */
 const STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES = new Set([
   'QuartzLog',
+  'StorageLocation',
+  'ServiceRequest',
+  'ServiceOrder',
+  'ServiceTicket',
 ]);
 
 /**

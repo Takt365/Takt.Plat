@@ -478,7 +478,9 @@ const insertActionButtons = () => {
   
   if (props.multiple && props.showCheckAll) {
     actionsContainer.appendChild(createButton(t('common.page.button.checkall'), handleCheckAll))
-    actionsContainer.appendChild(createButton(t('common.page.button.uncheckall'), handleUncheckAll))
+    actionsContainer.appendChild(
+      createButton(`${t('common.page.button.cancel')}${t('common.page.button.all')}`, handleUncheckAll),
+    )
   }
   
   // 查找下拉框内容区域或树容器

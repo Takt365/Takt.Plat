@@ -41,9 +41,7 @@ export function getNewsAttachmentList(queryDto: any): Promise<TaktPagedResult<Ne
   return request<TaktPagedResult<NewsAttachment>>({
     url: `${NEWS_ATTACHMENT_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportNewsAttachment(
     url: `${NEWS_ATTACHMENT_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

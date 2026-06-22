@@ -1,14 +1,14 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/materials/material -->
+<!-- 命名空间：@/views/logistics/materials/material-plant -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt物料实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：Takt工厂物料实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-materials-material">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:materials:material:create"
-      update-permission="logistics:materials:material:update"
-      delete-permission="logistics:materials:material:delete"
-      import-permission="logistics:materials:material:import"
-      export-permission="logistics:materials:material:export"
+      create-permission="logistics:materials:materialplant:create"
+      update-permission="logistics:materials:materialplant:update"
+      delete-permission="logistics:materials:materialplant:delete"
+      import-permission="logistics:materials:materialplant:import"
+      export-permission="logistics:materials:materialplant:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,34 +54,35 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'materialId'"
+      :id-column-key="'materialPlantId'"
       table-mode="single"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
-      :row-key="getMaterialId"
+      :row-key="getMaterialPlantId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
 
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'materialStatus'">
-          <TaktDictTag
-            :value="getMaterialField(record, 'materialStatus')"
-            dict-type="sys_normal_disable"
+          <a-switch
+            :checked="getMaterialPlantField(record, 'materialStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleMaterialStatusChange(record, Boolean(checked))"
           />
         </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -100,7 +101,8 @@
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <MaterialForm
+      <MaterialPlantForm
+        :key="formData?.materialPlantId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -111,416 +113,458 @@
       v-model:open="advancedQueryVisible"
       v-model:visible-field-keys="visibleQueryFieldKeys"
       :fields="queryFieldsMeta"
-      :storage-key="'takt-query-fields-logistics-materials-material'"
+      :storage-key="'takt-query-fields-logistics-materials-material-plant'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.material.plantcode')">
+      <a-form-item :label="t('entity.materialplant.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.plantcode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.material.code')">
+      <a-form-item :label="t('entity.materialplant.materialcode')">
         <a-input
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.code') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="t('entity.material.name')">
+      <a-form-item :label="t('entity.materialplant.materialname')">
         <a-input
           v-model:value="advancedQueryForm.materialName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.name') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialname') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialSpecification')">
-      <a-form-item :label="t('entity.material.specification')">
+      <a-form-item :label="t('entity.materialplant.materialspecification')">
         <a-input
           v-model:value="advancedQueryForm.materialSpecification"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.specification') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialspecification') })"
+          show-count
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialDescription')">
-      <a-form-item :label="t('entity.material.description')">
+      <a-form-item :label="t('entity.materialplant.materialdescription')">
         <a-textarea
           v-model:value="advancedQueryForm.materialDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.material.description') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.materialplant.materialdescription') })"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('industrySector')">
-      <a-form-item :label="t('entity.material.industrysector')">
+      <a-form-item :label="t('entity.materialplant.industrysector')">
         <a-input
           v-model:value="advancedQueryForm.industrySector"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.industrysector') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.industrysector') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialHierarchy')">
-      <a-form-item :label="t('entity.material.hierarchy')">
+      <a-form-item :label="t('entity.materialplant.materialhierarchy')">
         <a-input
           v-model:value="advancedQueryForm.materialHierarchy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.hierarchy') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialhierarchy') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialGroupCode')">
-      <a-form-item :label="t('entity.material.groupcode')">
+      <a-form-item :label="t('entity.materialplant.materialgroupcode')">
         <a-input
           v-model:value="advancedQueryForm.materialGroupCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.groupcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialgroupcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialType')">
-      <a-form-item :label="t('entity.material.type')">
+      <a-form-item :label="t('entity.materialplant.materialtype')">
         <a-input-number
           v-model:value="advancedQueryForm.materialType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.type') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialtype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialModel')">
-      <a-form-item :label="t('entity.material.model')">
+      <a-form-item :label="t('entity.materialplant.materialmodel')">
         <a-input
           v-model:value="advancedQueryForm.materialModel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.model') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialmodel') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialBrand')">
-      <a-form-item :label="t('entity.material.brand')">
+      <a-form-item :label="t('entity.materialplant.materialbrand')">
         <a-input
           v-model:value="advancedQueryForm.materialBrand"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.brand') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialbrand') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('baseUnit')">
-      <a-form-item :label="t('entity.material.baseunit')">
+      <a-form-item :label="t('entity.materialplant.baseunit')">
         <a-input
           v-model:value="advancedQueryForm.baseUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.baseunit') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.baseunit') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchaseGroup')">
-      <a-form-item :label="t('entity.material.purchasegroup')">
+      <a-form-item :label="t('entity.materialplant.purchasegroup')">
         <a-input
           v-model:value="advancedQueryForm.purchaseGroup"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.purchasegroup') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasegroup') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchaseType')">
-      <a-form-item :label="t('entity.material.purchasetype')">
+      <a-form-item :label="t('entity.materialplant.purchasetype')">
         <a-input-number
           v-model:value="advancedQueryForm.purchaseType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.purchasetype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasetype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('specialProcurement')">
-      <a-form-item :label="t('entity.material.specialprocurement')">
+      <a-form-item :label="t('entity.materialplant.specialprocurement')">
         <a-input-number
           v-model:value="advancedQueryForm.specialProcurement"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.specialprocurement') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.specialprocurement') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isBulk')">
-      <a-form-item :label="t('entity.material.isbulk')">
+      <a-form-item :label="t('entity.materialplant.isbulk')">
         <a-input-number
           v-model:value="advancedQueryForm.isBulk"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.isbulk') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isbulk') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('minOrderQuantity')">
-      <a-form-item :label="t('entity.material.minorderquantity')">
+      <a-form-item :label="t('entity.materialplant.minorderquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.minOrderQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.minorderquantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.minorderquantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('roundingValue')">
-      <a-form-item :label="t('entity.material.roundingvalue')">
+      <a-form-item :label="t('entity.materialplant.roundingvalue')">
         <a-input-number
           v-model:value="advancedQueryForm.roundingValue"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.roundingvalue') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.roundingvalue') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedDeliveryTimeDays')">
-      <a-form-item :label="t('entity.material.planneddeliverytimedays')">
+      <a-form-item :label="t('entity.materialplant.planneddeliverytimedays')">
         <a-input-number
           v-model:value="advancedQueryForm.plannedDeliveryTimeDays"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.planneddeliverytimedays') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.planneddeliverytimedays') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inHouseProductionDays')">
-      <a-form-item :label="t('entity.material.inhouseproductiondays')">
+      <a-form-item :label="t('entity.materialplant.inhouseproductiondays')">
         <a-input-number
           v-model:value="advancedQueryForm.inHouseProductionDays"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.inhouseproductiondays') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.inhouseproductiondays') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('manufacturer')">
-      <a-form-item :label="t('entity.material.manufacturer')">
+      <a-form-item :label="t('entity.materialplant.manufacturer')">
         <a-input
           v-model:value="advancedQueryForm.manufacturer"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.manufacturer') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.manufacturer') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('manufacturerPartNumber')">
-      <a-form-item :label="t('entity.material.manufacturerpartnumber')">
+      <a-form-item :label="t('entity.materialplant.manufacturerpartnumber')">
         <a-input
           v-model:value="advancedQueryForm.manufacturerPartNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.manufacturerpartnumber') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.manufacturerpartnumber') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('currencyCode')">
-      <a-form-item :label="t('entity.material.currencycode')">
+      <a-form-item :label="t('entity.materialplant.currencycode')">
         <a-input
           v-model:value="advancedQueryForm.currencyCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.currencycode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.currencycode') })"
+          show-count
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priceControl')">
-      <a-form-item :label="t('entity.material.pricecontrol')">
+      <a-form-item :label="t('entity.materialplant.pricecontrol')">
         <a-input-number
           v-model:value="advancedQueryForm.priceControl"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.pricecontrol') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.pricecontrol') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priceUnit')">
-      <a-form-item :label="t('entity.material.priceunit')">
+      <a-form-item :label="t('entity.materialplant.priceunit')">
         <a-input-number
           v-model:value="advancedQueryForm.priceUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.priceunit') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.priceunit') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('valuationCategory')">
-      <a-form-item :label="t('entity.material.valuationcategory')">
+      <a-form-item :label="t('entity.materialplant.valuationcategory')">
         <a-input
           v-model:value="advancedQueryForm.valuationCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.valuationcategory') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.valuationcategory') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('differenceCode')">
-      <a-form-item :label="t('entity.material.differencecode')">
+      <a-form-item :label="t('entity.materialplant.differencecode')">
         <a-input
           v-model:value="advancedQueryForm.differenceCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.differencecode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.differencecode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('profitCenter')">
-      <a-form-item :label="t('entity.material.profitcenter')">
+      <a-form-item :label="t('entity.materialplant.profitcenter')">
         <a-input
           v-model:value="advancedQueryForm.profitCenter"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.profitcenter') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.profitcenter') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('latestPurchasePrice')">
-      <a-form-item :label="t('entity.material.latestpurchaseprice')">
+      <a-form-item :label="t('entity.materialplant.latestpurchaseprice')">
         <a-input-number
           v-model:value="advancedQueryForm.latestPurchasePrice"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.latestpurchaseprice') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.latestpurchaseprice') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesPrice')">
-      <a-form-item :label="t('entity.material.salesprice')">
+      <a-form-item :label="t('entity.materialplant.salesprice')">
         <a-input-number
           v-model:value="advancedQueryForm.salesPrice"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.salesprice') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.salesprice') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('safetyStock')">
-      <a-form-item :label="t('entity.material.safetystock')">
+      <a-form-item :label="t('entity.materialplant.safetystock')">
         <a-input-number
           v-model:value="advancedQueryForm.safetyStock"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.safetystock') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.safetystock') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maxStock')">
-      <a-form-item :label="t('entity.material.maxstock')">
+      <a-form-item :label="t('entity.materialplant.maxstock')">
         <a-input-number
           v-model:value="advancedQueryForm.maxStock"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.maxstock') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.maxstock') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('minStock')">
-      <a-form-item :label="t('entity.material.minstock')">
+      <a-form-item :label="t('entity.materialplant.minstock')">
         <a-input-number
           v-model:value="advancedQueryForm.minStock"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.minstock') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.minstock') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('currentStock')">
-      <a-form-item :label="t('entity.material.currentstock')">
+      <a-form-item :label="t('entity.materialplant.currentstock')">
         <a-input-number
           v-model:value="advancedQueryForm.currentStock"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.currentstock') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.currentstock') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('productionLocation')">
-      <a-form-item :label="t('entity.material.productionlocation')">
+      <a-form-item :label="t('entity.materialplant.productionlocation')">
         <a-input
           v-model:value="advancedQueryForm.productionLocation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.productionlocation') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.productionlocation') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchasingLocation')">
-      <a-form-item :label="t('entity.material.purchasinglocation')">
+      <a-form-item :label="t('entity.materialplant.purchasinglocation')">
         <a-input
           v-model:value="advancedQueryForm.purchasingLocation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.purchasinglocation') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasinglocation') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionRequired')">
-      <a-form-item :label="t('entity.material.inspectionrequired')">
+      <a-form-item :label="t('entity.materialplant.inspectionrequired')">
         <a-input-number
           v-model:value="advancedQueryForm.inspectionRequired"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.inspectionrequired') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.inspectionrequired') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isBatch')">
-      <a-form-item :label="t('entity.material.isbatch')">
+      <a-form-item :label="t('entity.materialplant.isbatch')">
         <a-input-number
           v-model:value="advancedQueryForm.isBatch"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.isbatch') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isbatch') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isExpiry')">
-      <a-form-item :label="t('entity.material.isexpiry')">
+      <a-form-item :label="t('entity.materialplant.isexpiry')">
         <a-input-number
           v-model:value="advancedQueryForm.isExpiry"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.isexpiry') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isexpiry') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDays')">
-      <a-form-item :label="t('entity.material.expirydays')">
+      <a-form-item :label="t('entity.materialplant.expirydays')">
         <a-input-number
           v-model:value="advancedQueryForm.expiryDays"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.expirydays') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.expirydays') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialStatus')">
-      <a-form-item :label="t('entity.material.status')">
+      <a-form-item :label="t('entity.materialplant.materialstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialStatus"
-          dict-type="sys_normal_disable"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.status') })"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.materialstatus') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialAttributes')">
-      <a-form-item :label="t('entity.material.attributes')">
+      <a-form-item :label="t('entity.materialplant.materialattributes')">
         <a-input
           v-model:value="advancedQueryForm.materialAttributes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.attributes') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialattributes') })"
+          show-count
+          :maxlength="4000"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isEndOfLife')">
-      <a-form-item :label="t('entity.material.isendoflife')">
+      <a-form-item :label="t('entity.materialplant.isendoflife')">
         <a-input
           v-model:value="advancedQueryForm.isEndOfLife"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.material.isendoflife') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.isendoflife') })"
+          show-count
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endOfLifeDateStart')">
-      <a-form-item :label="t('entity.material.endoflifedatestart')">
+      <a-form-item :label="t('entity.materialplant.endoflifedatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.endOfLifeDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.endoflifedatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.endoflifedatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endOfLifeDateEnd')">
-      <a-form-item :label="t('entity.material.endoflifedateend')">
+      <a-form-item :label="t('entity.materialplant.endoflifedateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.endOfLifeDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.material.endoflifedateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.endoflifedateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
@@ -548,12 +592,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -562,8 +625,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -573,14 +638,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.material._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.materialplant._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.material._self"
+        entity-i18n-key="entity.materialplant._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -596,7 +661,7 @@
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
-      :id-column-key="'materialId'"
+      :id-column-key="'materialPlantId'"
       :action-column-key="'action'"
       entity-scope="company"
       table-mode="single"
@@ -608,28 +673,30 @@
 
 <script setup lang="ts">
 /**
- * Takt物料实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
- * @module views/logistics/materials/material
+ * Takt工厂物料实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * @module views/logistics/materials/material-plant
  */
 import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
-import MaterialForm from './components/material-form.vue'
-import { getMaterialList, getMaterialById, createMaterial, updateMaterial, deleteMaterialById, deleteMaterialBatch, getMaterialTemplate, importMaterial, exportMaterial } from '@/api/logistics/materials/material'
-import type { Material, MaterialQuery, MaterialCreate, MaterialUpdate } from '@/types/logistics/materials/material'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import MaterialPlantForm from './components/material-plant-form.vue'
+import { getMaterialPlantList, getMaterialPlantById, createMaterialPlant, updateMaterialPlant, deleteMaterialPlantById, deleteMaterialPlantBatch, getMaterialPlantTemplate, importMaterialPlant, exportMaterialPlant, updateMaterialPlantStatus } from '@/api/logistics/materials/material-plant'
+import type { MaterialPlant, MaterialPlantQuery } from '@/types/logistics/materials/material-plant'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
-const excelNames = taktExcelEntityNames('TaktMaterial')
+const excelNames = taktExcelEntityNames('TaktMaterialPlant')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.material._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.materialplant._self') })
 )
 
 /** 快捷查询关键字 */
@@ -637,17 +704,17 @@ const queryKeyword = ref('')
 /** 列表 loading */
 const loading = ref(false)
 /** 分页列表数据 */
-const dataSource = ref<Material[]>([])
+const dataSource = ref<MaterialPlant[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Material | null>(null)
+const selectedRow = ref<MaterialPlant | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Material[]>([])
+const selectedRows = ref<MaterialPlant[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -656,11 +723,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Material>>({})
+const formData = ref<Partial<MaterialPlant> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -711,59 +780,59 @@ const advancedQueryForm = ref({
   endOfLifeDateEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.material.plantcode') },
-  { key: 'materialCode', label: t('entity.material.code') },
-  { key: 'materialName', label: t('entity.material.name') },
-  { key: 'materialSpecification', label: t('entity.material.specification') },
-  { key: 'materialDescription', label: t('entity.material.description') },
-  { key: 'industrySector', label: t('entity.material.industrysector') },
-  { key: 'materialHierarchy', label: t('entity.material.hierarchy') },
-  { key: 'materialGroupCode', label: t('entity.material.groupcode') },
-  { key: 'materialType', label: t('entity.material.type') },
-  { key: 'materialModel', label: t('entity.material.model') },
-  { key: 'materialBrand', label: t('entity.material.brand') },
-  { key: 'baseUnit', label: t('entity.material.baseunit') },
-  { key: 'purchaseGroup', label: t('entity.material.purchasegroup') },
-  { key: 'purchaseType', label: t('entity.material.purchasetype') },
-  { key: 'specialProcurement', label: t('entity.material.specialprocurement') },
-  { key: 'isBulk', label: t('entity.material.isbulk') },
-  { key: 'minOrderQuantity', label: t('entity.material.minorderquantity') },
-  { key: 'roundingValue', label: t('entity.material.roundingvalue') },
-  { key: 'plannedDeliveryTimeDays', label: t('entity.material.planneddeliverytimedays') },
-  { key: 'inHouseProductionDays', label: t('entity.material.inhouseproductiondays') },
-  { key: 'manufacturer', label: t('entity.material.manufacturer') },
-  { key: 'manufacturerPartNumber', label: t('entity.material.manufacturerpartnumber') },
-  { key: 'currencyCode', label: t('entity.material.currencycode') },
-  { key: 'priceControl', label: t('entity.material.pricecontrol') },
-  { key: 'priceUnit', label: t('entity.material.priceunit') },
-  { key: 'valuationCategory', label: t('entity.material.valuationcategory') },
-  { key: 'differenceCode', label: t('entity.material.differencecode') },
-  { key: 'profitCenter', label: t('entity.material.profitcenter') },
-  { key: 'latestPurchasePrice', label: t('entity.material.latestpurchaseprice') },
-  { key: 'salesPrice', label: t('entity.material.salesprice') },
-  { key: 'safetyStock', label: t('entity.material.safetystock') },
-  { key: 'maxStock', label: t('entity.material.maxstock') },
-  { key: 'minStock', label: t('entity.material.minstock') },
-  { key: 'currentStock', label: t('entity.material.currentstock') },
-  { key: 'productionLocation', label: t('entity.material.productionlocation') },
-  { key: 'purchasingLocation', label: t('entity.material.purchasinglocation') },
-  { key: 'inspectionRequired', label: t('entity.material.inspectionrequired') },
-  { key: 'isBatch', label: t('entity.material.isbatch') },
-  { key: 'isExpiry', label: t('entity.material.isexpiry') },
-  { key: 'expiryDays', label: t('entity.material.expirydays') },
-  { key: 'materialStatus', label: t('entity.material.status') },
-  { key: 'materialAttributes', label: t('entity.material.attributes') },
-  { key: 'isEndOfLife', label: t('entity.material.isendoflife') },
-  { key: 'endOfLifeDateStart', label: t('entity.material.endoflifedatestart') },
-  { key: 'endOfLifeDateEnd', label: t('entity.material.endoflifedateend') },
+  { key: 'plantCode', label: t('entity.materialplant.plantcode') },
+  { key: 'materialCode', label: t('entity.materialplant.materialcode') },
+  { key: 'materialName', label: t('entity.materialplant.materialname') },
+  { key: 'materialSpecification', label: t('entity.materialplant.materialspecification') },
+  { key: 'materialDescription', label: t('entity.materialplant.materialdescription') },
+  { key: 'industrySector', label: t('entity.materialplant.industrysector') },
+  { key: 'materialHierarchy', label: t('entity.materialplant.materialhierarchy') },
+  { key: 'materialGroupCode', label: t('entity.materialplant.materialgroupcode') },
+  { key: 'materialType', label: t('entity.materialplant.materialtype') },
+  { key: 'materialModel', label: t('entity.materialplant.materialmodel') },
+  { key: 'materialBrand', label: t('entity.materialplant.materialbrand') },
+  { key: 'baseUnit', label: t('entity.materialplant.baseunit') },
+  { key: 'purchaseGroup', label: t('entity.materialplant.purchasegroup') },
+  { key: 'purchaseType', label: t('entity.materialplant.purchasetype') },
+  { key: 'specialProcurement', label: t('entity.materialplant.specialprocurement') },
+  { key: 'isBulk', label: t('entity.materialplant.isbulk') },
+  { key: 'minOrderQuantity', label: t('entity.materialplant.minorderquantity') },
+  { key: 'roundingValue', label: t('entity.materialplant.roundingvalue') },
+  { key: 'plannedDeliveryTimeDays', label: t('entity.materialplant.planneddeliverytimedays') },
+  { key: 'inHouseProductionDays', label: t('entity.materialplant.inhouseproductiondays') },
+  { key: 'manufacturer', label: t('entity.materialplant.manufacturer') },
+  { key: 'manufacturerPartNumber', label: t('entity.materialplant.manufacturerpartnumber') },
+  { key: 'currencyCode', label: t('entity.materialplant.currencycode') },
+  { key: 'priceControl', label: t('entity.materialplant.pricecontrol') },
+  { key: 'priceUnit', label: t('entity.materialplant.priceunit') },
+  { key: 'valuationCategory', label: t('entity.materialplant.valuationcategory') },
+  { key: 'differenceCode', label: t('entity.materialplant.differencecode') },
+  { key: 'profitCenter', label: t('entity.materialplant.profitcenter') },
+  { key: 'latestPurchasePrice', label: t('entity.materialplant.latestpurchaseprice') },
+  { key: 'salesPrice', label: t('entity.materialplant.salesprice') },
+  { key: 'safetyStock', label: t('entity.materialplant.safetystock') },
+  { key: 'maxStock', label: t('entity.materialplant.maxstock') },
+  { key: 'minStock', label: t('entity.materialplant.minstock') },
+  { key: 'currentStock', label: t('entity.materialplant.currentstock') },
+  { key: 'productionLocation', label: t('entity.materialplant.productionlocation') },
+  { key: 'purchasingLocation', label: t('entity.materialplant.purchasinglocation') },
+  { key: 'inspectionRequired', label: t('entity.materialplant.inspectionrequired') },
+  { key: 'isBatch', label: t('entity.materialplant.isbatch') },
+  { key: 'isExpiry', label: t('entity.materialplant.isexpiry') },
+  { key: 'expiryDays', label: t('entity.materialplant.expirydays') },
+  { key: 'materialStatus', label: t('entity.materialplant.materialstatus') },
+  { key: 'materialAttributes', label: t('entity.materialplant.materialattributes') },
+  { key: 'isEndOfLife', label: t('entity.materialplant.isendoflife') },
+  { key: 'endOfLifeDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.materialplant.endoflifedate')) },
+  { key: 'endOfLifeDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.materialplant.endoflifedate')) },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -775,17 +844,138 @@ const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
-const entityIdName = 'materialId'
+const entityIdName = 'materialPlantId'
 /** 工具栏「编辑」是否禁用（须恰好选中一行） */
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {MaterialPlantQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<MaterialPlantQuery>): MaterialPlantQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: MaterialPlantQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof MaterialPlantQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('materialCode', form.materialCode)
+  assignTrimmed('materialName', form.materialName)
+  assignTrimmed('materialSpecification', form.materialSpecification)
+  assignTrimmed('materialDescription', form.materialDescription)
+  assignTrimmed('industrySector', form.industrySector)
+  assignTrimmed('materialHierarchy', form.materialHierarchy)
+  assignTrimmed('materialGroupCode', form.materialGroupCode)
+  if (form.materialType !== undefined && form.materialType !== null) {
+    query.materialType = form.materialType
+  }
+  assignTrimmed('materialModel', form.materialModel)
+  assignTrimmed('materialBrand', form.materialBrand)
+  assignTrimmed('baseUnit', form.baseUnit)
+  assignTrimmed('purchaseGroup', form.purchaseGroup)
+  if (form.purchaseType !== undefined && form.purchaseType !== null) {
+    query.purchaseType = form.purchaseType
+  }
+  if (form.specialProcurement !== undefined && form.specialProcurement !== null) {
+    query.specialProcurement = form.specialProcurement
+  }
+  if (form.isBulk !== undefined && form.isBulk !== null) {
+    query.isBulk = form.isBulk
+  }
+  if (form.minOrderQuantity !== undefined && form.minOrderQuantity !== null) {
+    query.minOrderQuantity = form.minOrderQuantity
+  }
+  if (form.roundingValue !== undefined && form.roundingValue !== null) {
+    query.roundingValue = form.roundingValue
+  }
+  if (form.plannedDeliveryTimeDays !== undefined && form.plannedDeliveryTimeDays !== null) {
+    query.plannedDeliveryTimeDays = form.plannedDeliveryTimeDays
+  }
+  if (form.inHouseProductionDays !== undefined && form.inHouseProductionDays !== null) {
+    query.inHouseProductionDays = form.inHouseProductionDays
+  }
+  assignTrimmed('manufacturer', form.manufacturer)
+  assignTrimmed('manufacturerPartNumber', form.manufacturerPartNumber)
+  assignTrimmed('currencyCode', form.currencyCode)
+  if (form.priceControl !== undefined && form.priceControl !== null) {
+    query.priceControl = form.priceControl
+  }
+  if (form.priceUnit !== undefined && form.priceUnit !== null) {
+    query.priceUnit = form.priceUnit
+  }
+  assignTrimmed('valuationCategory', form.valuationCategory)
+  assignTrimmed('differenceCode', form.differenceCode)
+  assignTrimmed('profitCenter', form.profitCenter)
+  if (form.latestPurchasePrice !== undefined && form.latestPurchasePrice !== null) {
+    query.latestPurchasePrice = form.latestPurchasePrice
+  }
+  if (form.salesPrice !== undefined && form.salesPrice !== null) {
+    query.salesPrice = form.salesPrice
+  }
+  if (form.safetyStock !== undefined && form.safetyStock !== null) {
+    query.safetyStock = form.safetyStock
+  }
+  if (form.maxStock !== undefined && form.maxStock !== null) {
+    query.maxStock = form.maxStock
+  }
+  if (form.minStock !== undefined && form.minStock !== null) {
+    query.minStock = form.minStock
+  }
+  if (form.currentStock !== undefined && form.currentStock !== null) {
+    query.currentStock = form.currentStock
+  }
+  assignTrimmed('productionLocation', form.productionLocation)
+  assignTrimmed('purchasingLocation', form.purchasingLocation)
+  if (form.inspectionRequired !== undefined && form.inspectionRequired !== null) {
+    query.inspectionRequired = form.inspectionRequired
+  }
+  if (form.isBatch !== undefined && form.isBatch !== null) {
+    query.isBatch = form.isBatch
+  }
+  if (form.isExpiry !== undefined && form.isExpiry !== null) {
+    query.isExpiry = form.isExpiry
+  }
+  if (form.expiryDays !== undefined && form.expiryDays !== null) {
+    query.expiryDays = form.expiryDays
+  }
+  if (form.materialStatus !== undefined && form.materialStatus !== null) {
+    query.materialStatus = form.materialStatus
+  }
+  assignTrimmed('materialAttributes', form.materialAttributes)
+  assignTrimmed('isEndOfLife', form.isEndOfLife)
+  assignTrimmed('endOfLifeDateStart', form.endOfLifeDateStart)
+  assignTrimmed('endOfLifeDateEnd', form.endOfLifeDateEnd)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -796,376 +986,376 @@ onMounted(() => {
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
-    dataIndex: 'materialId',
-    key: 'materialId',
+    dataIndex: 'materialPlantId',
+    key: 'materialPlantId',
     width: 80,
     resizable: true,
     ellipsis: true,
     fixed: 'left',
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialId') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialPlantId') ?? ''
   },
   {
-    title: t('entity.material.plantcode'),
+    title: t('entity.materialplant.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'plantCode') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.material.code'),
+    title: t('entity.materialplant.materialcode'),
     dataIndex: 'materialCode',
     key: 'materialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialCode') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialCode') ?? ''
   },
   {
-    title: t('entity.material.name'),
+    title: t('entity.materialplant.materialname'),
     dataIndex: 'materialName',
     key: 'materialName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialName') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialName') ?? ''
   },
   {
-    title: t('entity.material.specification'),
+    title: t('entity.materialplant.materialspecification'),
     dataIndex: 'materialSpecification',
     key: 'materialSpecification',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialSpecification') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialSpecification') ?? ''
   },
   {
-    title: t('entity.material.description'),
+    title: t('entity.materialplant.materialdescription'),
     dataIndex: 'materialDescription',
     key: 'materialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialDescription') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialDescription') ?? ''
   },
   {
-    title: t('entity.material.industrysector'),
+    title: t('entity.materialplant.industrysector'),
     dataIndex: 'industrySector',
     key: 'industrySector',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'industrySector') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'industrySector') ?? ''
   },
   {
-    title: t('entity.material.hierarchy'),
+    title: t('entity.materialplant.materialhierarchy'),
     dataIndex: 'materialHierarchy',
     key: 'materialHierarchy',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialHierarchy') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialHierarchy') ?? ''
   },
   {
-    title: t('entity.material.groupcode'),
+    title: t('entity.materialplant.materialgroupcode'),
     dataIndex: 'materialGroupCode',
     key: 'materialGroupCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialGroupCode') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialGroupCode') ?? ''
   },
   {
-    title: t('entity.material.type'),
+    title: t('entity.materialplant.materialtype'),
     dataIndex: 'materialType',
     key: 'materialType',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialType') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialType') ?? ''
   },
   {
-    title: t('entity.material.model'),
+    title: t('entity.materialplant.materialmodel'),
     dataIndex: 'materialModel',
     key: 'materialModel',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialModel') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialModel') ?? ''
   },
   {
-    title: t('entity.material.brand'),
+    title: t('entity.materialplant.materialbrand'),
     dataIndex: 'materialBrand',
     key: 'materialBrand',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialBrand') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialBrand') ?? ''
   },
   {
-    title: t('entity.material.baseunit'),
+    title: t('entity.materialplant.baseunit'),
     dataIndex: 'baseUnit',
     key: 'baseUnit',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'baseUnit') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'baseUnit') ?? ''
   },
   {
-    title: t('entity.material.purchasegroup'),
+    title: t('entity.materialplant.purchasegroup'),
     dataIndex: 'purchaseGroup',
     key: 'purchaseGroup',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'purchaseGroup') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'purchaseGroup') ?? ''
   },
   {
-    title: t('entity.material.purchasetype'),
+    title: t('entity.materialplant.purchasetype'),
     dataIndex: 'purchaseType',
     key: 'purchaseType',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'purchaseType') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'purchaseType') ?? ''
   },
   {
-    title: t('entity.material.specialprocurement'),
+    title: t('entity.materialplant.specialprocurement'),
     dataIndex: 'specialProcurement',
     key: 'specialProcurement',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'specialProcurement') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'specialProcurement') ?? ''
   },
   {
-    title: t('entity.material.isbulk'),
+    title: t('entity.materialplant.isbulk'),
     dataIndex: 'isBulk',
     key: 'isBulk',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'isBulk') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'isBulk') ?? ''
   },
   {
-    title: t('entity.material.minorderquantity'),
+    title: t('entity.materialplant.minorderquantity'),
     dataIndex: 'minOrderQuantity',
     key: 'minOrderQuantity',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'minOrderQuantity') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'minOrderQuantity') ?? ''
   },
   {
-    title: t('entity.material.roundingvalue'),
+    title: t('entity.materialplant.roundingvalue'),
     dataIndex: 'roundingValue',
     key: 'roundingValue',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'roundingValue') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'roundingValue') ?? ''
   },
   {
-    title: t('entity.material.planneddeliverytimedays'),
+    title: t('entity.materialplant.planneddeliverytimedays'),
     dataIndex: 'plannedDeliveryTimeDays',
     key: 'plannedDeliveryTimeDays',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'plannedDeliveryTimeDays') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'plannedDeliveryTimeDays') ?? ''
   },
   {
-    title: t('entity.material.inhouseproductiondays'),
+    title: t('entity.materialplant.inhouseproductiondays'),
     dataIndex: 'inHouseProductionDays',
     key: 'inHouseProductionDays',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'inHouseProductionDays') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'inHouseProductionDays') ?? ''
   },
   {
-    title: t('entity.material.manufacturer'),
+    title: t('entity.materialplant.manufacturer'),
     dataIndex: 'manufacturer',
     key: 'manufacturer',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'manufacturer') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'manufacturer') ?? ''
   },
   {
-    title: t('entity.material.manufacturerpartnumber'),
+    title: t('entity.materialplant.manufacturerpartnumber'),
     dataIndex: 'manufacturerPartNumber',
     key: 'manufacturerPartNumber',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'manufacturerPartNumber') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'manufacturerPartNumber') ?? ''
   },
   {
-    title: t('entity.material.currencycode'),
+    title: t('entity.materialplant.currencycode'),
     dataIndex: 'currencyCode',
     key: 'currencyCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'currencyCode') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'currencyCode') ?? ''
   },
   {
-    title: t('entity.material.pricecontrol'),
+    title: t('entity.materialplant.pricecontrol'),
     dataIndex: 'priceControl',
     key: 'priceControl',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'priceControl') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'priceControl') ?? ''
   },
   {
-    title: t('entity.material.priceunit'),
+    title: t('entity.materialplant.priceunit'),
     dataIndex: 'priceUnit',
     key: 'priceUnit',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'priceUnit') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'priceUnit') ?? ''
   },
   {
-    title: t('entity.material.valuationcategory'),
+    title: t('entity.materialplant.valuationcategory'),
     dataIndex: 'valuationCategory',
     key: 'valuationCategory',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'valuationCategory') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'valuationCategory') ?? ''
   },
   {
-    title: t('entity.material.differencecode'),
+    title: t('entity.materialplant.differencecode'),
     dataIndex: 'differenceCode',
     key: 'differenceCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'differenceCode') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'differenceCode') ?? ''
   },
   {
-    title: t('entity.material.profitcenter'),
+    title: t('entity.materialplant.profitcenter'),
     dataIndex: 'profitCenter',
     key: 'profitCenter',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'profitCenter') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'profitCenter') ?? ''
   },
   {
-    title: t('entity.material.latestpurchaseprice'),
+    title: t('entity.materialplant.latestpurchaseprice'),
     dataIndex: 'latestPurchasePrice',
     key: 'latestPurchasePrice',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'latestPurchasePrice') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'latestPurchasePrice') ?? ''
   },
   {
-    title: t('entity.material.salesprice'),
+    title: t('entity.materialplant.salesprice'),
     dataIndex: 'salesPrice',
     key: 'salesPrice',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'salesPrice') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'salesPrice') ?? ''
   },
   {
-    title: t('entity.material.safetystock'),
+    title: t('entity.materialplant.safetystock'),
     dataIndex: 'safetyStock',
     key: 'safetyStock',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'safetyStock') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'safetyStock') ?? ''
   },
   {
-    title: t('entity.material.maxstock'),
+    title: t('entity.materialplant.maxstock'),
     dataIndex: 'maxStock',
     key: 'maxStock',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'maxStock') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'maxStock') ?? ''
   },
   {
-    title: t('entity.material.minstock'),
+    title: t('entity.materialplant.minstock'),
     dataIndex: 'minStock',
     key: 'minStock',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'minStock') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'minStock') ?? ''
   },
   {
-    title: t('entity.material.currentstock'),
+    title: t('entity.materialplant.currentstock'),
     dataIndex: 'currentStock',
     key: 'currentStock',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'currentStock') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'currentStock') ?? ''
   },
   {
-    title: t('entity.material.productionlocation'),
+    title: t('entity.materialplant.productionlocation'),
     dataIndex: 'productionLocation',
     key: 'productionLocation',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'productionLocation') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'productionLocation') ?? ''
   },
   {
-    title: t('entity.material.purchasinglocation'),
+    title: t('entity.materialplant.purchasinglocation'),
     dataIndex: 'purchasingLocation',
     key: 'purchasingLocation',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'purchasingLocation') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'purchasingLocation') ?? ''
   },
   {
-    title: t('entity.material.inspectionrequired'),
+    title: t('entity.materialplant.inspectionrequired'),
     dataIndex: 'inspectionRequired',
     key: 'inspectionRequired',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'inspectionRequired') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'inspectionRequired') ?? ''
   },
   {
-    title: t('entity.material.isbatch'),
+    title: t('entity.materialplant.isbatch'),
     dataIndex: 'isBatch',
     key: 'isBatch',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'isBatch') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'isBatch') ?? ''
   },
   {
-    title: t('entity.material.isexpiry'),
+    title: t('entity.materialplant.isexpiry'),
     dataIndex: 'isExpiry',
     key: 'isExpiry',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'isExpiry') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'isExpiry') ?? ''
   },
   {
-    title: t('entity.material.expirydays'),
+    title: t('entity.materialplant.expirydays'),
     dataIndex: 'expiryDays',
     key: 'expiryDays',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'expiryDays') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'expiryDays') ?? ''
   },
   {
-    title: t('entity.material.status'),
+    title: t('entity.materialplant.materialstatus'),
     dataIndex: 'materialStatus',
     key: 'materialStatus',
     width: 120,
@@ -1173,31 +1363,31 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.material.attributes'),
+    title: t('entity.materialplant.materialattributes'),
     dataIndex: 'materialAttributes',
     key: 'materialAttributes',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'materialAttributes') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialAttributes') ?? ''
   },
   {
-    title: t('entity.material.isendoflife'),
+    title: t('entity.materialplant.isendoflife'),
     dataIndex: 'isEndOfLife',
     key: 'isEndOfLife',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'isEndOfLife') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'isEndOfLife') ?? ''
   },
   {
-    title: t('entity.material.endoflifedate'),
+    title: t('entity.materialplant.endoflifedate'),
     dataIndex: 'endOfLifeDate',
     key: 'endOfLifeDate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialField(record, 'endOfLifeDate') ?? ''
+    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'endOfLifeDate') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1206,61 +1396,62 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:materials:material:update',
-        onClick: (record: Material) => handleEdit(record)
+        permission: 'logistics:materials:materialplant:update',
+        onClick: (record: MaterialPlant) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:materials:material:delete',
-        onClick: (record: Material) => handleDeleteOne(record)
+        permission: 'logistics:materials:materialplant:delete',
+        onClick: (record: MaterialPlant) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getMaterialId = (record: any): string => record?.[entityIdName] ?? ''
+const getMaterialPlantId = (record: any): string => record?.[entityIdName] ?? ''
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
-const getMaterialField = (record: any, field: string): any => record?.[field]
+const getMaterialPlantField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Material[]) => {
+  onChange: (keys: (string | number)[], rows: MaterialPlant[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: Material, selected: boolean) => {
+  onSelect: (record: MaterialPlant, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getMaterialId(selectedRow.value) === getMaterialId(record)) {
+    } else if (getMaterialPlantId(selectedRow.value) === getMaterialPlantId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Material[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: MaterialPlant[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Material) => ({
+const onClickRow = (record: MaterialPlant) => ({
   onClick: () => {
-    const key = getMaterialId(record)
+    const key = getMaterialPlantId(record)
     const index = selectedRowKeys.value.indexOf(key)
     if (index > -1) {
       selectedRowKeys.value.splice(index, 1)
     } else {
       selectedRowKeys.value.push(key)
     }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getMaterialId(item)))
+    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getMaterialPlantId(item)))
     selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
     if (rowSelection.value.onChange) {
       rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
@@ -1272,20 +1463,11 @@ const onClickRow = (record: Material) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: MaterialQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getMaterialList(params)
+    const res = await getMaterialPlantList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
-    logger.error('[Material] 加载数据失败', { error })
+    logger.error('[MaterialPlant] 加载数据失败', { error })
     message.error(error?.message || t('common.feedback.load.data.failed'))
     dataSource.value = []
     total.value = 0
@@ -1299,7 +1481,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1354,22 +1536,23 @@ function handleReset() {
   endOfLifeDateEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.material._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.materialplant._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
-function handleEdit(record: Material) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.material._self') })
+function handleEdit(record: MaterialPlant) {
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.materialplant._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -1379,7 +1562,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.material._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.materialplant._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1396,13 +1579,15 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-      await updateMaterial(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.material._self') }))
+      await updateMaterialPlant(id, payload as any)
+      message.success(t('common.feedback.updated', { target: t('entity.materialplant._self') }))
     } else {
-      await createMaterial(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.material._self') }))
+      await createMaterialPlant(payload as any)
+      message.success(t('common.feedback.created', { target: t('entity.materialplant._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -1412,6 +1597,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1420,13 +1607,13 @@ function handleImport() {
 
 /** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getMaterialTemplate(sheetName, fileName)
+  const res = await getMaterialPlantTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
 /** 上传并导入 Excel 文件 */
 async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importMaterial(file, sheetName)
+  return await importMaterialPlant(file, sheetName)
 }
 
 /** 导入完成回调：刷新列表并可选关闭对话框 */
@@ -1443,16 +1630,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: MaterialQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportMaterial(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportMaterialPlant(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1471,24 +1653,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.material._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.materialplant._self') }))
   } catch (error: any) {
-    logger.error('[Material] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.material._self') }))
+    logger.error('[MaterialPlant] 导出失败', { error })
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.materialplant._self') }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Material) {
+async function handleDeleteOne(record: MaterialPlant) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.material._self'), name: t('common.tip.this.target', { target: t('entity.material._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.materialplant._self'), name: t('common.tip.this.target', { target: t('entity.materialplant._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await deleteMaterialById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.material._self') }))
+      await deleteMaterialPlantById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: t('entity.materialplant._self') }))
       loadData()
     }
   })
@@ -1496,21 +1678,45 @@ async function handleDeleteOne(record: Material) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.material._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.materialplant._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.material._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.materialplant._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteMaterialBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.material._self') }))
+      await deleteMaterialPlantBatch(ids)
+      message.success(t('common.feedback.deleted', { target: t('entity.materialplant._self') }))
       loadData()
     }
   })
+}
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleMaterialStatusChange(record: MaterialPlant, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getMaterialPlantField(record, 'materialStatus')
+  const id = getMaterialPlantId(record)
+  const row = dataSource.value.find((item) => getMaterialPlantId(item) === id)
+  if (row) {
+    row.materialStatus = newVal
+  }
+  try {
+    await updateMaterialPlantStatus({ materialPlantId: id, materialStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.materialStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
 }
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
@@ -1520,7 +1726,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1573,7 +1779,7 @@ function handleAdvancedQueryReset() {
   endOfLifeDateEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1603,23 +1809,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.logistics-materials-material {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

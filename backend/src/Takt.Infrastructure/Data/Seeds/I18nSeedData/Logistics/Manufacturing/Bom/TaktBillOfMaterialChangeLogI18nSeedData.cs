@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialChangeLogI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterialChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,83 +75,83 @@ public class TaktBillOfMaterialChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktBillOfMaterialChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.billofmaterialchangelog._self / entity.billofmaterialchangelog.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.billofmaterialchangelog._self / entity.billofmaterialchangelog.{{field}}；ResourceGroup=Bom；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetBillOfMaterialChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.billofmaterialchangelog._self
-            new TranslationSeedItem("entity.billofmaterialchangelog._self", "en-US", "Bill Of Material Change Log Information", "实体名称"),
+            new TranslationSeedItem("entity.billofmaterialchangelog._self", "en-US", "Bill Of Material Change Log Information_us", "实体名称"),
             // entity.billofmaterialchangelog._self
-            new TranslationSeedItem("entity.billofmaterialchangelog._self", "ja-JP", "BOM变更记录信息", "实体名称"),
+            new TranslationSeedItem("entity.billofmaterialchangelog._self", "ja-JP", "BOM变更记录信息_jp", "实体名称"),
             // entity.billofmaterialchangelog._self
             new TranslationSeedItem("entity.billofmaterialchangelog._self", "zh-CN", "BOM变更记录信息", "实体名称"),
             // entity.billofmaterialchangelog._self
-            new TranslationSeedItem("entity.billofmaterialchangelog._self", "zh-HK", "BOM变更记录信息", "实体名称"),
+            new TranslationSeedItem("entity.billofmaterialchangelog._self", "zh-HK", "BOM变更记录信息_hk", "实体名称"),
 
             // entity.billofmaterialchangelog.billofmaterialid
-            new TranslationSeedItem("entity.billofmaterialchangelog.billofmaterialid", "en-US", "物料清单ID", "物料清单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.billofmaterialid", "en-US", "物料清单ID_us", "物料清单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.billofmaterialchangelog.billofmaterialid
-            new TranslationSeedItem("entity.billofmaterialchangelog.billofmaterialid", "ja-JP", "物料清单ID", "物料清单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.billofmaterialid", "ja-JP", "物料清单ID_jp", "物料清单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.billofmaterialchangelog.billofmaterialid
             new TranslationSeedItem("entity.billofmaterialchangelog.billofmaterialid", "zh-CN", "物料清单ID", "物料清单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.billofmaterialchangelog.billofmaterialid
-            new TranslationSeedItem("entity.billofmaterialchangelog.billofmaterialid", "zh-HK", "物料清单ID", "物料清单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.billofmaterialid", "zh-HK", "物料清单ID_hk", "物料清单ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
             // entity.billofmaterialchangelog.bomcode
-            new TranslationSeedItem("entity.billofmaterialchangelog.bomcode", "en-US", "BOM编码", "BOM编码"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.bomcode", "en-US", "BOM编码_us", "BOM编码"),
             // entity.billofmaterialchangelog.bomcode
-            new TranslationSeedItem("entity.billofmaterialchangelog.bomcode", "ja-JP", "BOM编码", "BOM编码"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.bomcode", "ja-JP", "BOM编码_jp", "BOM编码"),
             // entity.billofmaterialchangelog.bomcode
             new TranslationSeedItem("entity.billofmaterialchangelog.bomcode", "zh-CN", "BOM编码", "BOM编码"),
             // entity.billofmaterialchangelog.bomcode
-            new TranslationSeedItem("entity.billofmaterialchangelog.bomcode", "zh-HK", "BOM编码", "BOM编码"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.bomcode", "zh-HK", "BOM编码_hk", "BOM编码"),
 
             // entity.billofmaterialchangelog.changefields
-            new TranslationSeedItem("entity.billofmaterialchangelog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changefields", "en-US", "变更字段列表_us", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
             // entity.billofmaterialchangelog.changefields
-            new TranslationSeedItem("entity.billofmaterialchangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changefields", "ja-JP", "变更字段列表_jp", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
             // entity.billofmaterialchangelog.changefields
             new TranslationSeedItem("entity.billofmaterialchangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
             // entity.billofmaterialchangelog.changefields
-            new TranslationSeedItem("entity.billofmaterialchangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changefields", "zh-HK", "变更字段列表_hk", "变更字段列表（JSON数组格式，记录同一时间点修改的所有字段及其旧值、新值） 格式：[{\"field\":\"FieldName\",\"description\":\"字段描述\",\"oldValue\":\"旧值\",\"newValue\":\"新值\"}]"),
 
             // entity.billofmaterialchangelog.changetime
-            new TranslationSeedItem("entity.billofmaterialchangelog.changetime", "en-US", "变更时间", "变更时间"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changetime", "en-US", "变更时间_us", "变更时间"),
             // entity.billofmaterialchangelog.changetime
-            new TranslationSeedItem("entity.billofmaterialchangelog.changetime", "ja-JP", "变更时间", "变更时间"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changetime", "ja-JP", "变更时间_jp", "变更时间"),
             // entity.billofmaterialchangelog.changetime
             new TranslationSeedItem("entity.billofmaterialchangelog.changetime", "zh-CN", "变更时间", "变更时间"),
             // entity.billofmaterialchangelog.changetime
-            new TranslationSeedItem("entity.billofmaterialchangelog.changetime", "zh-HK", "变更时间", "变更时间"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changetime", "zh-HK", "变更时间_hk", "变更时间"),
 
             // entity.billofmaterialchangelog.changeby
-            new TranslationSeedItem("entity.billofmaterialchangelog.changeby", "en-US", "变更人", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changeby", "en-US", "变更人_us", "变更人（人员代码）"),
             // entity.billofmaterialchangelog.changeby
-            new TranslationSeedItem("entity.billofmaterialchangelog.changeby", "ja-JP", "变更人", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changeby", "ja-JP", "变更人_jp", "变更人（人员代码）"),
             // entity.billofmaterialchangelog.changeby
             new TranslationSeedItem("entity.billofmaterialchangelog.changeby", "zh-CN", "变更人", "变更人（人员代码）"),
             // entity.billofmaterialchangelog.changeby
-            new TranslationSeedItem("entity.billofmaterialchangelog.changeby", "zh-HK", "变更人", "变更人（人员代码）"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changeby", "zh-HK", "变更人_hk", "变更人（人员代码）"),
 
             // entity.billofmaterialchangelog.changereason
-            new TranslationSeedItem("entity.billofmaterialchangelog.changereason", "en-US", "变更原因", "变更原因"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changereason", "en-US", "变更原因_us", "变更原因"),
             // entity.billofmaterialchangelog.changereason
-            new TranslationSeedItem("entity.billofmaterialchangelog.changereason", "ja-JP", "变更原因", "变更原因"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changereason", "ja-JP", "变更原因_jp", "变更原因"),
             // entity.billofmaterialchangelog.changereason
             new TranslationSeedItem("entity.billofmaterialchangelog.changereason", "zh-CN", "变更原因", "变更原因"),
             // entity.billofmaterialchangelog.changereason
-            new TranslationSeedItem("entity.billofmaterialchangelog.changereason", "zh-HK", "变更原因", "变更原因"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.changereason", "zh-HK", "变更原因_hk", "变更原因"),
 
             // entity.billofmaterialchangelog.bom
-            new TranslationSeedItem("entity.billofmaterialchangelog.bom", "en-US", "BOM", "BOM（主表）"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.bom", "en-US", "BOM_us", "BOM（主表）"),
             // entity.billofmaterialchangelog.bom
-            new TranslationSeedItem("entity.billofmaterialchangelog.bom", "ja-JP", "BOM", "BOM（主表）"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.bom", "ja-JP", "BOM_jp", "BOM（主表）"),
             // entity.billofmaterialchangelog.bom
             new TranslationSeedItem("entity.billofmaterialchangelog.bom", "zh-CN", "BOM", "BOM（主表）"),
             // entity.billofmaterialchangelog.bom
-            new TranslationSeedItem("entity.billofmaterialchangelog.bom", "zh-HK", "BOM", "BOM（主表）"),
+            new TranslationSeedItem("entity.billofmaterialchangelog.bom", "zh-HK", "BOM_hk", "BOM（主表）"),
         };
     }
 
@@ -169,10 +169,10 @@ public class TaktBillOfMaterialChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Bom";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

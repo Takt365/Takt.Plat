@@ -1,10 +1,10 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Material
-// 文件名称：TaktMaterial.cs
+// 文件名称：TaktMaterialPlant.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt物料实体，定义物料领域模型（PlantCode 标识工厂维度）
+// 功能描述：Takt工厂物料实体，定义物料领域模型（PlantCode 标识工厂维度）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,16 +16,16 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
-/// Takt物料实体
+/// Takt工厂物料实体
 /// </summary>
-[SugarTable("takt_logistics_materials_material", "物料表")]
+[SugarTable("takt_logistics_materials_material_plant", "工厂物料表")]
 [SugarIndex("ix_material_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_material_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_materials_material_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_materials_material_material_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_materials_material_material_type", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialType), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_materials_material_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
-public class TaktMaterial : TaktCompanyEntityBase
+public class TaktMaterialPlant : TaktCompanyEntityBase
 {
     /// <summary>
     /// 工厂代码
@@ -71,9 +71,9 @@ public class TaktMaterial : TaktCompanyEntityBase
     public string? MaterialHierarchy { get; set; }
 
     /// <summary>
-    /// 品目组代码
+    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
     /// </summary>
-    [SugarColumn(ColumnName = "material_group_code", ColumnDescription = "品目组代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "material_group_code", ColumnDescription = "品目组代码", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? MaterialGroupCode { get; set; }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class TaktMaterial : TaktCompanyEntityBase
     public string BaseUnit { get; set; } = "PC";
 
     /// <summary>
-    /// 采购组
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_group", ColumnDescription = "采购组", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? PurchaseGroup { get; set; }
@@ -291,4 +291,10 @@ public class TaktMaterial : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "end_of_life_date", ColumnDescription = "停产日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? EndOfLifeDate { get; set; }
+
+    /// <summary>
+    /// 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktMaterialPlantChangeLog.MaterialPlantId))]
+    public List<TaktMaterialPlantChangeLog>? ChangeLogs { get; set; }
 }

@@ -1,0 +1,418 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
+// 文件名称：TaktEcViewDtos.cs
+// 创建时间：2026-06-22
+// 创建人：Takt365(Cursor AI)
+// 功能描述：设变看板/投入批次/物料确认/部门视图/旧品管制 专用 DTO
+//
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.ComponentModel.DataAnnotations;
+using Mapster;
+using Takt.Shared.Helpers;
+using Takt.Shared.Models;
+
+namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
+
+// ========================================
+// 部门视图（技术/采购/生管等）共用 DTO
+// ========================================
+
+/// <summary>
+/// 设变部门视图行（明细 + 部门记录合并展示）
+/// </summary>
+public class TaktEcDeptViewDto : TaktCompanyDtoBase
+{
+    /// <summary>部门记录 ID；未创建时为空</summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? EcDeptId { get; set; }
+    /// <summary>设变明细 ID</summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcDetailId { get; set; }
+    /// <summary>设变主表 ID</summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcId { get; set; }
+    /// <summary>设变单号</summary>
+    public string EcNo { get; set; } = string.Empty;
+    /// <summary>明细行号</summary>
+    public int LineNumber { get; set; }
+    /// <summary>型号</summary>
+    public string EcModel { get; set; } = string.Empty;
+    /// <summary>变更内容</summary>
+    public string? EcChange { get; set; }
+    /// <summary>旧料号</summary>
+    public string? EcOldItem { get; set; }
+    /// <summary>新料号</summary>
+    public string? EcNewItem { get; set; }
+    /// <summary>旧料号描述</summary>
+    public string? EcOldText { get; set; }
+    /// <summary>新料号描述</summary>
+    public string? EcNewText { get; set; }
+    /// <summary>部门编码</summary>
+    public string DeptCode { get; set; } = string.Empty;
+    /// <summary>是否实施（0=否 1=是）</summary>
+    public int IsImplemented { get; set; }
+    /// <summary>内容</summary>
+    public string? Content { get; set; }
+    /// <summary>预计生产日期</summary>
+    public DateTime? ScheduledProductionDate { get; set; }
+    /// <summary>预定批次</summary>
+    public string? ScheduledBatch { get; set; }
+    /// <summary>Po残</summary>
+    public string? PoRemainder { get; set; }
+    /// <summary>结余</summary>
+    public string? Balance { get; set; }
+    /// <summary>旧品处理</summary>
+    public string? OldProductHandling { get; set; }
+    /// <summary>采购订单发行日期</summary>
+    public DateTime? PurchaseOrderIssueDate { get; set; }
+    /// <summary>供应商</summary>
+    public string? Supplier { get; set; }
+    /// <summary>采购订单号码</summary>
+    public string? PurchaseOrderNo { get; set; }
+    /// <summary>受检单号</summary>
+    public string? IqcOrderNo { get; set; }
+    /// <summary>检验日期</summary>
+    public DateTime? InspectionDate { get; set; }
+    /// <summary>出库批次</summary>
+    public string? OutboundBatch { get; set; }
+    /// <summary>出库日期</summary>
+    public DateTime? OutboundDate { get; set; }
+    /// <summary>生产日期</summary>
+    public DateTime? ProductionDate { get; set; }
+    /// <summary>生产批次</summary>
+    public string? ProductionBatch { get; set; }
+    /// <summary>出库单号</summary>
+    public string? OutboundOrderNo { get; set; }
+    /// <summary>生产班组</summary>
+    public string? ProductionTeam { get; set; }
+    /// <summary>实施日期</summary>
+    public DateTime? ImplementationDate { get; set; }
+    /// <summary>检验批次</summary>
+    public string? InspectionBatch { get; set; }
+    /// <summary>抽样号码</summary>
+    public string? SamplingNo { get; set; }
+    /// <summary>是否更新 SOP（0=否 1=是）</summary>
+    public int IsSopUpdated { get; set; }
+}
+
+/// <summary>
+/// 设变部门视图查询 DTO
+/// </summary>
+public class TaktEcDeptViewQueryDto : TaktPagedQuery
+{
+    /// <summary>设变单号</summary>
+    public string? EcNo { get; set; }
+    /// <summary>型号</summary>
+    public string? EcModel { get; set; }
+    /// <summary>是否实施</summary>
+    public int? IsImplemented { get; set; }
+    /// <summary>旧料号</summary>
+    public string? EcOldItem { get; set; }
+    /// <summary>新料号</summary>
+    public string? EcNewItem { get; set; }
+}
+
+/// <summary>
+/// 设变部门视图更新 DTO
+/// </summary>
+public class TaktEcDeptViewUpdateDto
+{
+    /// <summary>设变明细 ID</summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcDetailId { get; set; }
+    /// <summary>是否实施</summary>
+    public int IsImplemented { get; set; }
+    /// <summary>内容</summary>
+    public string? Content { get; set; }
+    /// <summary>预计生产日期</summary>
+    public DateTime? ScheduledProductionDate { get; set; }
+    /// <summary>预定批次</summary>
+    public string? ScheduledBatch { get; set; }
+    /// <summary>Po残</summary>
+    public string? PoRemainder { get; set; }
+    /// <summary>结余</summary>
+    public string? Balance { get; set; }
+    /// <summary>旧品处理</summary>
+    public string? OldProductHandling { get; set; }
+    /// <summary>采购订单发行日期</summary>
+    public DateTime? PurchaseOrderIssueDate { get; set; }
+    /// <summary>供应商</summary>
+    public string? Supplier { get; set; }
+    /// <summary>采购订单号码</summary>
+    public string? PurchaseOrderNo { get; set; }
+    /// <summary>受检单号</summary>
+    public string? IqcOrderNo { get; set; }
+    /// <summary>检验日期</summary>
+    public DateTime? InspectionDate { get; set; }
+    /// <summary>出库批次</summary>
+    public string? OutboundBatch { get; set; }
+    /// <summary>出库日期</summary>
+    public DateTime? OutboundDate { get; set; }
+    /// <summary>生产日期</summary>
+    public DateTime? ProductionDate { get; set; }
+    /// <summary>生产批次</summary>
+    public string? ProductionBatch { get; set; }
+    /// <summary>出库单号</summary>
+    public string? OutboundOrderNo { get; set; }
+    /// <summary>生产班组</summary>
+    public string? ProductionTeam { get; set; }
+    /// <summary>实施日期</summary>
+    public DateTime? ImplementationDate { get; set; }
+    /// <summary>检验批次</summary>
+    public string? InspectionBatch { get; set; }
+    /// <summary>抽样号码</summary>
+    public string? SamplingNo { get; set; }
+    /// <summary>是否更新 SOP</summary>
+    public int IsSopUpdated { get; set; }
+    /// <summary>备注</summary>
+    public string? Remark { get; set; }
+}
+
+// ========================================
+// 设变看板
+// ========================================
+
+/// <summary>
+/// 设变看板行（按设变单汇总各部门实施进度）
+/// </summary>
+public class TaktEcKanbanDto : TaktCompanyDtoBase
+{
+    /// <summary>设变主表 ID</summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcId { get; set; }
+    /// <summary>设变单号</summary>
+    public string EcNo { get; set; } = string.Empty;
+    /// <summary>设变主题</summary>
+    public string EcTitle { get; set; } = string.Empty;
+    /// <summary>变更状态</summary>
+    public int ChangeStatus { get; set; }
+    /// <summary>设变状态</summary>
+    public int EcStatus { get; set; }
+    /// <summary>负责人</summary>
+    public string EcLeader { get; set; } = string.Empty;
+    /// <summary>生效日期</summary>
+    public DateTime EffectiveDate { get; set; }
+    /// <summary>明细行数</summary>
+    public int DetailCount { get; set; }
+    /// <summary>各部门实施汇总</summary>
+    public List<TaktEcKanbanDeptStageDto> DeptStages { get; set; } = [];
+}
+
+/// <summary>
+/// 看板部门阶段
+/// </summary>
+public class TaktEcKanbanDeptStageDto
+{
+    /// <summary>部门编码</summary>
+    public string DeptCode { get; set; } = string.Empty;
+    /// <summary>已实施明细数</summary>
+    public int ImplementedCount { get; set; }
+    /// <summary>明细总数</summary>
+    public int TotalCount { get; set; }
+}
+
+/// <summary>
+/// 设变看板查询 DTO
+/// </summary>
+public class TaktEcKanbanQueryDto : TaktPagedQuery
+{
+    /// <summary>设变单号</summary>
+    public string? EcNo { get; set; }
+    /// <summary>变更状态</summary>
+    public int? ChangeStatus { get; set; }
+    /// <summary>设变状态</summary>
+    public int? EcStatus { get; set; }
+}
+
+// ========================================
+// 投入批次
+// ========================================
+
+/// <summary>
+/// 投入批次视图行
+/// </summary>
+public class TaktEcBatchDto : TaktCompanyDtoBase
+{
+    /// <summary>设变明细 ID</summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcDetailId { get; set; }
+    /// <summary>设变单号</summary>
+    public string EcNo { get; set; } = string.Empty;
+    /// <summary>行号</summary>
+    public int LineNumber { get; set; }
+    /// <summary>型号</summary>
+    public string EcModel { get; set; } = string.Empty;
+    /// <summary>新料号</summary>
+    public string? EcNewItem { get; set; }
+    /// <summary>预定批次（生管）</summary>
+    public string? ScheduledBatch { get; set; }
+    /// <summary>生产批次（制二）</summary>
+    public string? ProductionBatch { get; set; }
+    /// <summary>预计生产日期</summary>
+    public DateTime? ScheduledProductionDate { get; set; }
+    /// <summary>生产日期</summary>
+    public DateTime? ProductionDate { get; set; }
+}
+
+/// <summary>
+/// 投入批次查询 DTO
+/// </summary>
+public class TaktEcBatchQueryDto : TaktPagedQuery
+{
+    /// <summary>设变单号</summary>
+    public string? EcNo { get; set; }
+    /// <summary>批次号（预定/生产批次模糊）</summary>
+    public string? BatchNo { get; set; }
+    /// <summary>型号</summary>
+    public string? EcModel { get; set; }
+}
+
+/// <summary>
+/// 投入批次更新 DTO
+/// </summary>
+public class TaktEcBatchUpdateDto
+{
+    /// <summary>设变明细 ID</summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcDetailId { get; set; }
+    /// <summary>预定批次</summary>
+    public string? ScheduledBatch { get; set; }
+    /// <summary>生产批次</summary>
+    public string? ProductionBatch { get; set; }
+    /// <summary>预计生产日期</summary>
+    public DateTime? ScheduledProductionDate { get; set; }
+    /// <summary>生产日期</summary>
+    public DateTime? ProductionDate { get; set; }
+}
+
+// ========================================
+// 物料确认
+// ========================================
+
+/// <summary>
+/// 物料确认视图行
+/// </summary>
+public class TaktEcKakuninDto : TaktCompanyDtoBase
+{
+    /// <summary>设变明细 ID</summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcDetailId { get; set; }
+    /// <summary>设变单号</summary>
+    public string EcNo { get; set; } = string.Empty;
+    /// <summary>行号</summary>
+    public int LineNumber { get; set; }
+    /// <summary>型号</summary>
+    public string EcModel { get; set; } = string.Empty;
+    /// <summary>旧料号</summary>
+    public string? EcOldItem { get; set; }
+    /// <summary>新料号</summary>
+    public string? EcNewItem { get; set; }
+    /// <summary>是否检查（0=否 1=是）</summary>
+    public int IsCheck { get; set; }
+    /// <summary>是否采购（0=否 1=是）</summary>
+    public int IsProcurement { get; set; }
+    /// <summary>变更内容</summary>
+    public string? EcChange { get; set; }
+    /// <summary>备注</summary>
+    public string? EcNote { get; set; }
+}
+
+/// <summary>
+/// 物料确认查询 DTO
+/// </summary>
+public class TaktEcKakuninQueryDto : TaktPagedQuery
+{
+    /// <summary>设变单号</summary>
+    public string? EcNo { get; set; }
+    /// <summary>是否检查</summary>
+    public int? IsCheck { get; set; }
+    /// <summary>型号</summary>
+    public string? EcModel { get; set; }
+    /// <summary>新料号</summary>
+    public string? EcNewItem { get; set; }
+}
+
+/// <summary>
+/// 物料确认更新 DTO
+/// </summary>
+public class TaktEcKakuninUpdateDto
+{
+    /// <summary>设变明细 ID</summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcDetailId { get; set; }
+    /// <summary>是否检查</summary>
+    public int IsCheck { get; set; }
+    /// <summary>是否采购</summary>
+    public int IsProcurement { get; set; }
+    /// <summary>备注</summary>
+    public string? EcNote { get; set; }
+}
+
+// ========================================
+// 旧品管制
+// ========================================
+
+/// <summary>
+/// 旧品管制视图行
+/// </summary>
+public class TaktEcLegacyProductDto : TaktCompanyDtoBase
+{
+    /// <summary>设变明细 ID</summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcDetailId { get; set; }
+    /// <summary>设变单号</summary>
+    public string EcNo { get; set; } = string.Empty;
+    /// <summary>行号</summary>
+    public int LineNumber { get; set; }
+    /// <summary>型号</summary>
+    public string EcModel { get; set; } = string.Empty;
+    /// <summary>旧料号</summary>
+    public string? EcOldItem { get; set; }
+    /// <summary>旧料号描述</summary>
+    public string? EcOldText { get; set; }
+    /// <summary>旧数量</summary>
+    public decimal? EcOldQty { get; set; }
+    /// <summary>新料号</summary>
+    public string? EcNewItem { get; set; }
+    /// <summary>旧品处理（生管部门字段）</summary>
+    public string? OldProductHandling { get; set; }
+    /// <summary>EOL（0=否 1=是）</summary>
+    public int IsEndOfLine { get; set; }
+}
+
+/// <summary>
+/// 旧品管制查询 DTO
+/// </summary>
+public class TaktEcLegacyProductQueryDto : TaktPagedQuery
+{
+    /// <summary>设变单号</summary>
+    public string? EcNo { get; set; }
+    /// <summary>旧料号</summary>
+    public string? EcOldItem { get; set; }
+    /// <summary>型号</summary>
+    public string? EcModel { get; set; }
+}
+
+/// <summary>
+/// 旧品管制更新 DTO
+/// </summary>
+public class TaktEcLegacyProductUpdateDto
+{
+    /// <summary>设变明细 ID</summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcDetailId { get; set; }
+    /// <summary>旧品处理</summary>
+    public string? OldProductHandling { get; set; }
+    /// <summary>EOL</summary>
+    public int IsEndOfLine { get; set; }
+    /// <summary>备注</summary>
+    public string? Remark { get; set; }
+}

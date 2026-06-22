@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/src/api/logistics/materials
+// 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：supplier.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
-// 功能描述：logistics/materials 模块 API（自动生成，请勿手改路由常量）
+// 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -21,7 +21,7 @@ import type {
   SupplierSort,
   SupplierStatus,
   SupplierUpdate
-} from '@/types/logistics/materials/supplier';
+} from '@/types/logistics/procurement/supplier';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -42,9 +42,7 @@ export function getSupplierList(queryDto: any): Promise<TaktPagedResult<Supplier
   return request<TaktPagedResult<Supplier>>({
     url: `${SUPPLIER_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -114,7 +112,7 @@ export function deleteSupplierBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新供货商信息状态
- * @param {SupplierStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {SupplierStatus} dto 状态 DTO
  * @returns {Promise<Supplier>} 供货商信息DTO
  */
 export function updateSupplierStatus(dto: SupplierStatus): Promise<Supplier> {
@@ -214,7 +212,7 @@ export function exportSupplier(
     url: `${SUPPLIER_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

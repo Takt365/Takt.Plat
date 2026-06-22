@@ -37,6 +37,13 @@ public interface ITaktFileUploadEngine
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// 获取上传策略（含 MaxChunkCount、ChunkRelativePath；可选按 totalSize 返回分片计划）
+    /// </summary>
+    /// <param name="totalSizeBytes">文件总大小；为空时仅返回全局配置</param>
+    /// <returns>上传策略</returns>
+    TaktFileUploadPolicyResult GetUploadPolicy(long? totalSizeBytes = null);
+
+    /// <summary>
     /// 检查分片是否已上传（断点续传）
     /// </summary>
     /// <param name="request">检查参数</param>
@@ -110,6 +117,16 @@ public interface ITaktFileUploadEngine
     /// <param name="descriptor">存储定位</param>
     /// <param name="cancellationToken">取消令牌</param>
     Task DeleteStoredFileAsync(
+        TaktFileStorageDescriptor descriptor,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 将本地物理文件重命名为带删除标记的文件名（xxx.ext → xxx.del.ext），并返回新相对路径
+    /// </summary>
+    /// <param name="descriptor">存储定位</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>重命名后的相对路径；已标记或源文件不存在时返回原路径</returns>
+    Task<string> MarkStoredFileDeletedAsync(
         TaktFileStorageDescriptor descriptor,
         CancellationToken cancellationToken = default);
 }

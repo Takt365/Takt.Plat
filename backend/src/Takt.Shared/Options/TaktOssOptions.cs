@@ -4,7 +4,7 @@
 // 文件名称：TaktOssOptions.cs
 // 创建时间：2026-06-05
 // 创建人：Takt365(Cursor AI)
-// 功能描述：OSS 对象存储配置选项，绑定 appsettings <c>Oss:{provider}</c>（与字典 sys_oss_provider 一致）
+// 功能描述：OSS 对象存储配置选项，绑定 appsettings <c>Oss:{provider}</c>（与字典 sys_oss_provider_type 一致）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

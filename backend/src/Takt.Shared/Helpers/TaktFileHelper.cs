@@ -680,40 +680,277 @@ public static class TaktFileHelper
     }
 
     /// <summary>
-    /// 获取文件分类
+    /// 根据 MIME 类型（FileType）推断文件分类
+    /// </summary>
+    /// <param name="fileType">MIME 类型，如 image/png、application/pdf</param>
+    /// <returns>文件分类（0=文档，1=图片，2=视频，3=音频，4=压缩包，5=其他）</returns>
+    public static FileCategory GetFileCategoryFromMimeType(string fileType)
+    {
+        if (string.IsNullOrWhiteSpace(fileType))
+        {
+            return FileCategory.Other;
+        }
+
+        var mime = fileType.Trim().Split(';')[0].Trim().ToLowerInvariant();
+        if (mime.StartsWith("image/", StringComparison.Ordinal))
+        {
+            return FileCategory.Image;
+        }
+
+        if (mime.StartsWith("video/", StringComparison.Ordinal))
+        {
+            return FileCategory.Video;
+        }
+
+        if (mime.StartsWith("audio/", StringComparison.Ordinal))
+        {
+            return FileCategory.Audio;
+        }
+
+        if (mime is "application/zip" or "application/x-zip-compressed"
+            or "application/x-rar-compressed" or "application/vnd.rar"
+            or "application/x-7z-compressed" or "application/gzip"
+            or "application/x-gzip" or "application/x-tar"
+            or "application/x-bzip2" or "application/x-xz"
+            or "application/vnd.ms-cab-compressed")
+        {
+            return FileCategory.Archive;
+        }
+
+        if (mime.StartsWith("text/", StringComparison.Ordinal)
+            || mime is "application/pdf"
+            || mime.StartsWith("application/vnd.", StringComparison.Ordinal)
+            || mime is "application/msword"
+            || mime is "application/vnd.ms-excel"
+            || mime is "application/vnd.ms-powerpoint"
+            || mime is "application/rtf")
+        {
+            return FileCategory.Document;
+        }
+
+        return FileCategory.Other;
+    }
+
+    /// <summary>
+    /// 根据文件名推断文件分类（内部先解析 MIME 再分类）
     /// </summary>
     /// <param name="fileName">文件名或文件路径</param>
     /// <returns>文件分类</returns>
     public static FileCategory GetFileCategory(string fileName)
     {
         if (string.IsNullOrWhiteSpace(fileName))
+        {
             return FileCategory.Other;
+        }
 
-        var extension = Path.GetExtension(fileName)?.TrimStart('.')?.ToLowerInvariant();
-        if (string.IsNullOrWhiteSpace(extension))
-            return FileCategory.Other;
+        return GetFileCategoryFromMimeType(GetMimeType(fileName));
+    }
 
-        // 图片
-        if (new[] { "jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "ico", "tiff", "tif" }.Contains(extension))
-            return FileCategory.Image;
+    /// <summary>
+    /// 按文件分类返回存储子目录段（与历史字典 sys_storage_directory 目录名对齐）
+    /// </summary>
+    /// <param name="category">文件分类</param>
+    /// <returns>目录段，如 images、documents；Other 为 default</returns>
+    public static string GetStorageDirectorySegment(FileCategory category)
+    {
+        switch (category)
+        {
+            case FileCategory.Document:
+                return "documents";
+            case FileCategory.Image:
+                return "images";
+            case FileCategory.Video:
+                return "videos";
+            case FileCategory.Audio:
+                return "audios";
+            case FileCategory.Archive:
+                return "archives";
+            default:
+                return "default";
+        }
+    }
 
-        // 视频
-        if (new[] { "mp4", "avi", "mov", "wmv", "flv", "mkv", "webm", "m4v", "3gp", "rm", "rmvb" }.Contains(extension))
-            return FileCategory.Video;
+    /// <summary>
+    /// 按文件分类整型返回存储子目录段
+    /// </summary>
+    /// <param name="fileCategory">文件分类 0~5</param>
+    /// <returns>目录段</returns>
+    public static string GetStorageDirectorySegment(int fileCategory)
+    {
+        if (fileCategory < 0 || fileCategory > 5)
+        {
+            return "default";
+        }
 
-        // 音频
-        if (new[] { "mp3", "wav", "flac", "aac", "ogg", "wma", "m4a", "ape", "amr" }.Contains(extension))
-            return FileCategory.Audio;
+        return GetStorageDirectorySegment((FileCategory)fileCategory);
+    }
 
-        // 压缩包
-        if (new[] { "zip", "rar", "7z", "tar", "gz", "bz2", "xz", "cab", "iso" }.Contains(extension))
-            return FileCategory.Archive;
+    /// <summary>
+    /// 生成文件业务编码（租户+公司内唯一索引；与磁盘存储名 FileName 无关）
+    /// </summary>
+    /// <returns>业务编码，长度不超过 50</returns>
+    public static string GenerateFileCode()
+    {
+        var stamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+        var suffix = Guid.NewGuid().ToString("N")[..12];
+        return $"FILE{stamp}{suffix}";
+    }
 
-        // 文档（默认）
-        if (new[] { "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "rtf", "odt", "ods", "odp" }.Contains(extension))
-            return FileCategory.Document;
+    /// <summary>
+    /// 规范化前端传入的 storageNaming（字典 sys_storage_naming_config：0/1/2）
+    /// </summary>
+    /// <param name="storageNaming">表单传入值；为空时使用 defaultValue</param>
+    /// <param name="defaultValue">缺省或非法时返回值，默认 0=原文件+哈希</param>
+    /// <returns>0、1 或 2</returns>
+    public static int NormalizeStorageNamingValue(int? storageNaming, int defaultValue = 0)
+    {
+        if (!storageNaming.HasValue)
+        {
+            return defaultValue;
+        }
 
-        return FileCategory.Other;
+        return NormalizeStorageNaming(storageNaming.Value, defaultValue);
+    }
+
+    /// <summary>
+    /// 按字典 sys_storage_naming_config 解析磁盘存储文件名（与 FileCode 业务编码无关）
+    /// </summary>
+    /// <param name="storageNaming">0=原文件+哈希，1=自动生成 GUID 文件名，2=自定义 targetFileName</param>
+    /// <param name="originalFileName">原始文件名（含扩展名）</param>
+    /// <param name="fileHash">文件 MD5；规则 0 时使用</param>
+    /// <param name="targetFileName">自定义目标名；规则 2 时使用</param>
+    /// <returns>磁盘存储文件名</returns>
+    /// <exception cref="ArgumentException">originalFileName 为空</exception>
+    public static string ResolveStoredFileName(
+        int storageNaming,
+        string originalFileName,
+        string? fileHash,
+        string? targetFileName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(originalFileName);
+        var fileExtension = Path.GetExtension(originalFileName)?.TrimStart('.')?.ToLowerInvariant() ?? string.Empty;
+        var naming = NormalizeStorageNaming(storageNaming, 0);
+        if (naming == 2)
+        {
+            return ResolveTargetOrAutoStoredFileName(fileExtension, targetFileName);
+        }
+
+        if (naming == 1)
+        {
+            return GenerateAutoStoredFileName(fileExtension);
+        }
+
+        var baseName = SanitizeStoredFileBaseName(originalFileName);
+        var hashSegment = string.IsNullOrWhiteSpace(fileHash)
+            ? Guid.NewGuid().ToString("N")
+            : fileHash.Trim().ToLowerInvariant();
+        return string.IsNullOrEmpty(fileExtension)
+            ? $"{baseName}_{hashSegment}"
+            : $"{baseName}_{hashSegment}.{fileExtension}";
+    }
+
+    /// <summary>
+    /// 自动生成磁盘存储文件名（GUID + 扩展名）
+    /// </summary>
+    /// <param name="fileExtension">扩展名（不含点）</param>
+    /// <returns>磁盘文件名</returns>
+    public static string GenerateAutoStoredFileName(string fileExtension)
+    {
+        var token = Guid.NewGuid().ToString("N");
+        return string.IsNullOrEmpty(fileExtension)
+            ? token
+            : $"{token}.{fileExtension}";
+    }
+
+    /// <summary>
+    /// 清洗原文件名基名（去除非法字符并限制长度）
+    /// </summary>
+    /// <param name="originalFileName">原始文件名（含扩展名）</param>
+    /// <returns>可用于存储文件名的基名</returns>
+    /// <exception cref="ArgumentException">originalFileName 为空</exception>
+    public static string SanitizeStoredFileBaseName(string originalFileName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(originalFileName);
+        var baseName = Path.GetFileNameWithoutExtension(originalFileName);
+        if (string.IsNullOrWhiteSpace(baseName))
+        {
+            baseName = "file";
+        }
+
+        var invalidChars = Path.GetInvalidFileNameChars();
+        var builder = new StringBuilder(baseName.Length);
+        foreach (var character in baseName)
+        {
+            builder.Append(Array.IndexOf(invalidChars, character) >= 0 ? '_' : character);
+        }
+
+        var sanitized = builder.ToString().Trim().Trim('_');
+        if (string.IsNullOrEmpty(sanitized))
+        {
+            sanitized = "file";
+        }
+
+        const int maxBaseLength = 100;
+        if (sanitized.Length > maxBaseLength)
+        {
+            sanitized = sanitized[..maxBaseLength];
+        }
+
+        return sanitized;
+    }
+
+    /// <summary>
+    /// 由文件编码与存储文件名生成 FileDescription 默认摘要
+    /// </summary>
+    /// <param name="fileCode">文件业务编码</param>
+    /// <param name="fileName">存储文件名</param>
+    /// <returns>编码与名称组合摘要</returns>
+    /// <exception cref="ArgumentException">fileCode 或 fileName 为空</exception>
+    public static string BuildFileCodeNameDescription(string fileCode, string fileName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(fileCode);
+        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+        return $"编码: {fileCode.Trim()} | 名称: {fileName.Trim()}";
+    }
+
+    /// <summary>
+    /// 由上传原文件信息生成 FileDescription 默认摘要
+    /// </summary>
+    /// <param name="originalFileName">原始文件名（含扩展名）</param>
+    /// <param name="fileSize">文件大小（字节）</param>
+    /// <param name="fileType">MIME 类型</param>
+    /// <param name="fileExtension">扩展名（不含点）</param>
+    /// <returns>原文件信息摘要</returns>
+    /// <exception cref="ArgumentException">originalFileName 为空</exception>
+    public static string BuildOriginalFileInfoDescription(
+        string originalFileName,
+        long fileSize,
+        string? fileType,
+        string? fileExtension)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(originalFileName);
+        if (fileSize < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(fileSize), fileSize, "文件大小不能为负数");
+        }
+
+        var safeOriginalName = Path.GetFileName(originalFileName.Trim());
+        var extension = string.IsNullOrWhiteSpace(fileExtension)
+            ? Path.GetExtension(safeOriginalName)?.TrimStart('.') ?? string.Empty
+            : fileExtension.Trim().TrimStart('.');
+        var mime = string.IsNullOrWhiteSpace(fileType) ? string.Empty : fileType.Trim();
+        var parts = new List<string> { $"原文件: {safeOriginalName}", $"大小: {fileSize} 字节" };
+        if (!string.IsNullOrEmpty(mime))
+        {
+            parts.Add($"类型: {mime}");
+        }
+
+        if (!string.IsNullOrEmpty(extension))
+        {
+            parts.Add($"扩展名: {extension}");
+        }
+
+        return string.Join(" | ", parts);
     }
 
     /// <summary>
@@ -821,12 +1058,9 @@ public static class TaktFileHelper
     /// <returns>唯一文件名</returns>
     public static string GenerateUniqueFileName(string originalFileName)
     {
-        if (string.IsNullOrWhiteSpace(originalFileName))
-            return $"{Guid.NewGuid():N}";
-
-        var extension = Path.GetExtension(originalFileName);
-        var fileCode = Guid.NewGuid().ToString("N");
-        return $"{fileCode}{extension}";
+        ArgumentException.ThrowIfNullOrWhiteSpace(originalFileName);
+        var extension = Path.GetExtension(originalFileName)?.TrimStart('.')?.ToLowerInvariant() ?? string.Empty;
+        return GenerateAutoStoredFileName(extension);
     }
 
     /// <summary>
@@ -869,30 +1103,42 @@ public static class TaktFileHelper
             return Path.Combine(contentRootPath, "wwwroot");
         }
         
-        // 使用提供的 baseDirectory 或默认的 AppContext.BaseDirectory
+        // 使用提供的 baseDirectory 或默认的 AppContext.BaseDirectory，向上逐级查找 wwwroot（兼容 bin/Debug/net9.0 启动）
         var dir = string.IsNullOrEmpty(baseDirectory) ? AppContext.BaseDirectory : baseDirectory;
-        var wwwrootPath = Path.Combine(dir, "wwwroot");
-        
-        // 如果 wwwroot 不存在，尝试向上一级目录查找
-        if (!Directory.Exists(wwwrootPath))
+        var current = new DirectoryInfo(dir);
+        while (current != null)
         {
-            var parentDir = Directory.GetParent(dir);
-            if (parentDir != null)
-            {
-                wwwrootPath = Path.Combine(parentDir.FullName, "wwwroot");
-                if (!Directory.Exists(wwwrootPath))
-                {
-                    // 再向上一级
-                    var grandParentDir = Directory.GetParent(parentDir.FullName);
-                    if (grandParentDir != null)
-                    {
-                        wwwrootPath = Path.Combine(grandParentDir.FullName, "wwwroot");
-                    }
-                }
-            }
+            var candidate = Path.Combine(current.FullName, "wwwroot");
+            if (Directory.Exists(candidate))
+                return candidate;
+            current = current.Parent;
         }
-        
-        return wwwrootPath;
+        return Path.Combine(dir, "wwwroot");
+    }
+
+    /// <summary>
+    /// 从 Web 内容根或基础目录向上查找仓库根路径（同时存在 backend 与 frontend 子目录）。
+    /// </summary>
+    /// <param name="contentRootPath">Web 内容根路径（可空）</param>
+    /// <param name="baseDirectory">基础目录（可空，默认 AppContext.BaseDirectory）</param>
+    /// <returns>仓库根目录绝对路径</returns>
+    /// <exception cref="InvalidOperationException">未找到符合条件的仓库根目录</exception>
+    public static string GetSolutionRootPath(string? contentRootPath = null, string? baseDirectory = null)
+    {
+        var startDir = !string.IsNullOrWhiteSpace(contentRootPath)
+            ? contentRootPath
+            : (string.IsNullOrWhiteSpace(baseDirectory) ? AppContext.BaseDirectory : baseDirectory);
+        var current = new DirectoryInfo(startDir);
+        while (current != null)
+        {
+            var backendDir = Path.Combine(current.FullName, "backend");
+            var frontendDir = Path.Combine(current.FullName, "frontend");
+            if (Directory.Exists(backendDir) && Directory.Exists(frontendDir))
+                return current.FullName;
+            current = current.Parent;
+        }
+        throw new InvalidOperationException(
+            $"未找到项目根目录（需同时存在 backend 与 frontend 子目录），起始路径：{startDir}");
     }
 
     /// <summary>
@@ -1022,6 +1268,107 @@ public static class TaktFileHelper
     {
         await CopyFileAsync(sourcePath, destinationPath, overwrite);
         await DeleteFileAsync(sourcePath, throwIfNotExists: true);
+    }
+
+    /// <summary>
+    /// 物理删除标记（插入扩展名前，如 report.xlsx → report.del.xlsx）
+    /// </summary>
+    public const string DeletedPhysicalFileMarker = ".del";
+
+    /// <summary>
+    /// 构建带删除标记的物理文件名（xxx.ext → xxx.del.ext；无扩展名时 xxx → xxx.del）
+    /// </summary>
+    /// <param name="fileName">原物理文件名（不含目录）</param>
+    /// <returns>带删除标记的文件名</returns>
+    /// <exception cref="ArgumentException">fileName 为空</exception>
+    public static string BuildDeletedPhysicalFileName(string fileName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+        var extension = Path.GetExtension(fileName);
+        if (string.IsNullOrEmpty(extension))
+        {
+            return $"{fileName}{DeletedPhysicalFileMarker}";
+        }
+
+        var baseName = Path.GetFileNameWithoutExtension(fileName);
+        return $"{baseName}{DeletedPhysicalFileMarker}{extension}";
+    }
+
+    /// <summary>
+    /// 判断物理文件名是否已带删除标记
+    /// </summary>
+    /// <param name="fileName">物理文件名（不含目录）</param>
+    /// <returns>已带 .del 标记时为 true</returns>
+    /// <exception cref="ArgumentException">fileName 为空</exception>
+    public static bool IsDeletedPhysicalFileName(string fileName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+        var extension = Path.GetExtension(fileName);
+        if (string.IsNullOrEmpty(extension))
+        {
+            return fileName.EndsWith(DeletedPhysicalFileMarker, StringComparison.OrdinalIgnoreCase);
+        }
+
+        var baseName = Path.GetFileNameWithoutExtension(fileName);
+        return baseName.EndsWith(DeletedPhysicalFileMarker, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// 将相对路径末段文件名替换为带删除标记的文件名
+    /// </summary>
+    /// <param name="relativePath">存储相对路径</param>
+    /// <returns>替换文件名后的相对路径</returns>
+    /// <exception cref="ArgumentException">relativePath 为空</exception>
+    public static string BuildDeletedPhysicalRelativePath(string relativePath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(relativePath);
+        var normalized = relativePath.Replace('\\', '/').Trim('/');
+        var fileName = Path.GetFileName(normalized);
+        var deletedFileName = BuildDeletedPhysicalFileName(fileName);
+        var directory = Path.GetDirectoryName(normalized.Replace('/', Path.DirectorySeparatorChar));
+        if (string.IsNullOrWhiteSpace(directory))
+        {
+            return deletedFileName;
+        }
+
+        return $"{directory.Replace('\\', '/')}/{deletedFileName}";
+    }
+
+    /// <summary>
+    /// 将 storageNaming 约束到 0~2
+    /// </summary>
+    /// <param name="storageNaming">原始值</param>
+    /// <param name="fallback">越界时的回退值</param>
+    /// <returns>0、1 或 2</returns>
+    private static int NormalizeStorageNaming(int storageNaming, int fallback)
+    {
+        return storageNaming switch
+        {
+            0 or 1 or 2 => storageNaming,
+            _ => fallback is 0 or 1 or 2 ? fallback : 0,
+        };
+    }
+
+    /// <summary>
+    /// 解析 targetFileName 或回退为独立 GUID 存储名
+    /// </summary>
+    /// <param name="fileExtension">扩展名（不含点）</param>
+    /// <param name="targetFileName">目标文件名（可选）</param>
+    /// <returns>磁盘文件名</returns>
+    private static string ResolveTargetOrAutoStoredFileName(string fileExtension, string? targetFileName)
+    {
+        if (!string.IsNullOrWhiteSpace(targetFileName))
+        {
+            var trimmed = Path.GetFileName(targetFileName.Trim());
+            if (string.IsNullOrEmpty(Path.GetExtension(trimmed)) && !string.IsNullOrEmpty(fileExtension))
+            {
+                return $"{trimmed}.{fileExtension}";
+            }
+
+            return trimmed;
+        }
+
+        return GenerateAutoStoredFileName(fileExtension);
     }
 
     #endregion

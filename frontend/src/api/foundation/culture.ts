@@ -42,9 +42,7 @@ export function getCultureList(queryDto: any): Promise<TaktPagedResult<Culture>>
   return request<TaktPagedResult<Culture>>({
     url: `${CULTURE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportCulture(
     url: `${CULTURE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

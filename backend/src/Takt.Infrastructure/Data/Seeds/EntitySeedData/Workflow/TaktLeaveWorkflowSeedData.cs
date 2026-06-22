@@ -351,7 +351,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         {
             new { field = "employeeId", title = "员工ID", type = "input", props = new { disabled = true } },
             new { field = "employeeName", title = "员工姓名", type = "input", props = new { disabled = true } },
-            new { field = "leaveType", title = "请假类型", type = "select", props = new { dictType = "sys_leave_category" } },
+            new { field = "leaveType", title = "请假类型", type = "select", props = new { dictType = "sys_leave_type" } },
             new { field = "startDate", title = "开始日期", type = "datePicker", props = new { valueFormat = "YYYY-MM-DD" } },
             new { field = "endDate", title = "结束日期", type = "datePicker", props = new { valueFormat = "YYYY-MM-DD" } },
             new { field = "reason", title = "请假事由", type = "textarea", props = new { rows = 3 } }
@@ -370,7 +370,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             {
                 new { dbColumnName = "employee_id", csharpColumnName = "employeeId", columnDescription = "员工ID", dataType = "bigint", displayType = "input" },
                 new { dbColumnName = "employee_name", csharpColumnName = "employeeName", columnDescription = "员工姓名", dataType = "nvarchar", displayType = "input" },
-                new { dbColumnName = "leave_type", csharpColumnName = "leaveType", columnDescription = "请假类型", dataType = "nvarchar", displayType = "select", dictTypeCode = "sys_leave_category" },
+                new { dbColumnName = "leave_type", csharpColumnName = "leaveType", columnDescription = "请假类型", dataType = "nvarchar", displayType = "select", dictTypeCode = "sys_leave_type" },
                 new { dbColumnName = "start_date", csharpColumnName = "startDate", columnDescription = "开始日期", dataType = "date", displayType = "date" },
                 new { dbColumnName = "end_date", csharpColumnName = "endDate", columnDescription = "结束日期", dataType = "date", displayType = "date" },
                 new { dbColumnName = "reason", csharpColumnName = "reason", columnDescription = "请假事由", dataType = "nvarchar", displayType = "textarea" }
@@ -413,7 +413,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 FormConfig = formConfig,
                 FormVersion = "v1.0.0",
                 IsDatasource = 1,
-                RelatedDataBaseName = "TaktSqlSugarContext",
+                RelatedDataBaseName = tenantCode,
                 RelatedTableName = "takt_human_resource_attendance_leave",
                 RelatedFormField = relatedField,
                 SortOrder = 10,
@@ -428,7 +428,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         form.FormConfig = formConfig;
         form.FormVersion = "v1.0.0";
         form.IsDatasource = 1;
-        form.RelatedDataBaseName = "TaktSqlSugarContext";
+        form.RelatedDataBaseName = tenantCode;
         form.RelatedTableName = "takt_human_resource_attendance_leave";
         form.RelatedFormField = relatedField;
         form.SortOrder = 10;

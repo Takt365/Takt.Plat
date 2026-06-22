@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -21,7 +22,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
@@ -29,15 +30,13 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.accountTitle.parentid')"
+                :label="t('entity.accounttitle.parentid')"
                 name="parentId"
-                :label-col="{ span: 4 }"
-                :wrapper-col="{ span: 20 }"
               >
                 <TaktTreeSelect
                   v-model:value="formState.parentId"
-                  api-url="/api/TaktAccountTitles/tree-options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.parentid') })"
+                  api-url="TaktAccountTitles/tree-options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.parentid') })"
                   allow-clear
                   :field-names="{ label: 'dictLabel', value: 'dictValue' }"
                 />
@@ -53,10 +52,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
-                
-                :disabled="!!formData?.accountTitleId"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -68,10 +66,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
-                
-                :disabled="!!formData?.accountTitleId"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -83,134 +80,98 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
-                
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.titlecode')"
+                :label="t('entity.accounttitle.titlecode')"
                 name="titleCode"
               >
                 <a-input
                   v-model:value="formState.titleCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titlecode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlecode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
-                
-                :disabled="!!formData?.accountTitleId"
+                  :disabled="!!formData?.accountTitleId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.titlename')"
+                :label="t('entity.accounttitle.titlename')"
                 name="titleName"
               >
                 <a-input
                   v-model:value="formState.titleName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titlename') })"
-                  size="small"
-                  allow-clear
-                
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.accountTitle.shortname')"
-                name="shortName"
-              >
-                <a-input
-                  v-model:value="formState.shortName"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.accountTitle.shortname') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.accountTitle.titledesc')"
-                name="titleDesc"
-              >
-                <a-textarea
-                  v-model:value="formState.titleDesc"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.accountTitle.titledesc') })"
-                  :rows="3"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlename') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.titletype')"
+                :label="t('entity.accounttitle.titletype')"
                 name="titleType"
               >
                 <a-input-number
                   v-model:value="formState.titleType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titletype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titletype') })"
                   style="width: 100%"
-                
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.balancedirection')"
+                :label="t('entity.accounttitle.balancedirection')"
                 name="balanceDirection"
               >
                 <a-input-number
                   v-model:value="formState.balanceDirection"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.balancedirection') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.balancedirection') })"
                   style="width: 100%"
-                
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.titlelevel')"
+                :label="t('entity.accounttitle.titlelevel')"
                 name="titleLevel"
               >
                 <a-input-number
                   v-model:value="formState.titleLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titlelevel') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlelevel') })"
                   style="width: 100%"
-                
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.isauxiliary')"
+                :label="t('entity.accounttitle.isauxiliary')"
                 name="isAuxiliary"
               >
                 <a-input-number
                   v-model:value="formState.isAuxiliary"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isauxiliary') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.isauxiliary') })"
                   style="width: 100%"
-                
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.auxiliarytype')"
+                :label="t('entity.accounttitle.auxiliarytype')"
                 name="auxiliaryType"
               >
                 <a-input-number
                   v-model:value="formState.auxiliaryType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.auxiliarytype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.auxiliarytype') })"
                   style="width: 100%"
-                
                 />
               </a-form-item>
             </a-col>
@@ -219,162 +180,137 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.isquantity')"
+                :label="t('entity.accounttitle.isquantity')"
                 name="isQuantity"
               >
                 <a-input-number
                   v-model:value="formState.isQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isquantity') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.isquantity') })"
                   style="width: 100%"
-                
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.iscurrency')"
+                :label="t('entity.accounttitle.iscurrency')"
                 name="isCurrency"
               >
                 <a-input-number
                   v-model:value="formState.isCurrency"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.iscurrency') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.iscurrency') })"
                   style="width: 100%"
-                
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.iscash')"
+                :label="t('entity.accounttitle.iscash')"
                 name="isCash"
               >
                 <a-input-number
                   v-model:value="formState.isCash"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.iscash') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.iscash') })"
                   style="width: 100%"
-                
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.isbank')"
+                :label="t('entity.accounttitle.isbank')"
                 name="isBank"
               >
                 <a-input-number
                   v-model:value="formState.isBank"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.isbank') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.isbank') })"
                   style="width: 100%"
-                
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.relatedplant')"
+                :label="t('entity.accounttitle.relatedplant')"
                 name="relatedPlant"
               >
                 <a-input
                   v-model:value="formState.relatedPlant"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.relatedplant') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accounttitle.relatedplant') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
-                
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.titlestatus')"
+                :label="t('entity.accounttitle.titlestatus')"
                 name="titleStatus"
               >
                 <TaktSelect
                   v-model:value="formState.titleStatus"
-                  dict-type="sys_normal_disable"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accountTitle.titlestatus') })"
-                  size="small"
-                
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.titlestatus') })"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.validfrom')"
+                :label="t('entity.accounttitle.validfrom')"
                 name="validFrom"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.validFrom"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.validfrom') })"
-                  size="small"
-                  allow-clear
-                
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validfrom') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.accountTitle.validto')"
+                :label="t('entity.accounttitle.validto')"
                 name="validTo"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.validTo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.accountTitle.validto') })"
-                  size="small"
-                  allow-clear
-                
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.accountTitle.sortorder')"
-                name="sortOrder"
-              >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.ordernumhint', { field: t('entity.accountTitle.sortorder') })"
-                  :min="0"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validto') })"
+                  value-format="YYYY-MM-DD"
                   style="width: 100%"
-                
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
-                
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -383,9 +319,10 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
-                
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -401,12 +338,14 @@
  * 会计科目实体维护表单 · 由 generate-vue-tree-from-api.cjs 根据 types/api 生成
  * @module views/accounting/financial/account-title/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import TaktTreeSelect from '@/components/business/takt-tree-select/index.vue'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { AccountTitleCreate } from '@/types/accounting/financial/account-title'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -439,7 +378,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","titleCode","titleName","shortName","titleDesc","parentId","titleType","balanceDirection","titleLevel","isAuxiliary","auxiliaryType","isQuantity","isCurrency","isCash","isBank","relatedPlant","titleStatus","validFrom","validTo","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","titleCode","titleName","titleType","balanceDirection","titleLevel","isAuxiliary","auxiliaryType","isQuantity","isCurrency","isCash","isBank","relatedPlant","titleStatus","validFrom","validTo","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -450,26 +389,62 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
 /** a-form 实例 ref */
 const formRef = ref()
 /** 表单双向绑定模型 */
-const formState = reactive<Record<string, any>>({})
+const formState = reactive<Record<string, any>>({ parentId: '0' })
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  titleStatus: 1
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 树表 parentId：空值归一为根节点 0（string，与后端 ParentId=0 一致） */
+function normalizeTreeParentId(target: Record<string, unknown>) {
+  const raw = target.parentId
+  target.parentId = raw === '' || raw === undefined || raw === null ? '0' : String(raw)
+}
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+  normalizeTreeParentId(target)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 accountTitleId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.accountTitleId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      normalizeTreeParentId(formState)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -488,119 +463,165 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   parentId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.parentid') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.accounttitle.parentid') }),
       trigger: 'change'
     }
   ],
   titleCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titlecode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlecode') }),
       trigger: 'blur'
     }
   ],
   titleName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.accountTitle.titlename') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.accounttitle.titlename') }),
       trigger: 'blur'
     }
   ],
-  parentId: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.accountTitle.parentid') }),
-      trigger: 'blur'
-    }
-  ],
-  titleType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.titletype') }),
-      trigger: 'change'
-    }
-  ],
-  balanceDirection: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.balancedirection') }),
-      trigger: 'change'
-    }
-  ],
-  titleLevel: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.titlelevel') }),
-      trigger: 'change'
-    }
-  ],
-  isAuxiliary: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.isauxiliary') }),
-      trigger: 'change'
-    }
-  ],
-  auxiliaryType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.auxiliarytype') }),
-      trigger: 'change'
-    }
-  ],
-  isQuantity: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.isquantity') }),
-      trigger: 'change'
-    }
-  ],
-  isCurrency: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.iscurrency') }),
-      trigger: 'change'
-    }
-  ],
-  isCash: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.iscash') }),
-      trigger: 'change'
-    }
-  ],
-  isBank: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.isbank') }),
-      trigger: 'change'
-    }
-  ],
-  titleStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.titlestatus') }),
-      trigger: 'change'
-    }
-  ],
+  titleType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.titletype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.titletype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  balanceDirection: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.balancedirection') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.balancedirection') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  titleLevel: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.titlelevel') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.titlelevel') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isAuxiliary: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isauxiliary') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isauxiliary') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  auxiliaryType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.auxiliarytype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.auxiliarytype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isquantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isquantity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isCurrency: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.iscurrency') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.iscurrency') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isCash: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.iscash') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.iscash') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isBank: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isbank') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.isbank') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  titleStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.titlestatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.accounttitle.titlestatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   validFrom: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.accountTitle.validfrom') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validfrom') }),
+      trigger: 'change'
     }
   ],
   validTo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.accountTitle.validto') }),
-      trigger: 'blur'
-    }
-  ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.accountTitle.sortorder') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.accounttitle.validto') }),
       trigger: 'change'
     }
   ],
@@ -614,15 +635,66 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('titleType' in payload) {
+    const rawtitleType = payload.titleType
+    payload.titleType = typeof rawtitleType === 'number' ? rawtitleType : Number(rawtitleType)
+  }
+  if ('balanceDirection' in payload) {
+    const rawbalanceDirection = payload.balanceDirection
+    payload.balanceDirection = typeof rawbalanceDirection === 'number' ? rawbalanceDirection : Number(rawbalanceDirection)
+  }
+  if ('titleLevel' in payload) {
+    const rawtitleLevel = payload.titleLevel
+    payload.titleLevel = typeof rawtitleLevel === 'number' ? rawtitleLevel : Number(rawtitleLevel)
+  }
+  if ('isAuxiliary' in payload) {
+    const rawisAuxiliary = payload.isAuxiliary
+    payload.isAuxiliary = typeof rawisAuxiliary === 'number' ? rawisAuxiliary : Number(rawisAuxiliary)
+  }
+  if ('auxiliaryType' in payload) {
+    const rawauxiliaryType = payload.auxiliaryType
+    payload.auxiliaryType = typeof rawauxiliaryType === 'number' ? rawauxiliaryType : Number(rawauxiliaryType)
+  }
+  if ('isQuantity' in payload) {
+    const rawisQuantity = payload.isQuantity
+    payload.isQuantity = typeof rawisQuantity === 'number' ? rawisQuantity : Number(rawisQuantity)
+  }
+  if ('isCurrency' in payload) {
+    const rawisCurrency = payload.isCurrency
+    payload.isCurrency = typeof rawisCurrency === 'number' ? rawisCurrency : Number(rawisCurrency)
+  }
+  if ('isCash' in payload) {
+    const rawisCash = payload.isCash
+    payload.isCash = typeof rawisCash === 'number' ? rawisCash : Number(rawisCash)
+  }
+  if ('isBank' in payload) {
+    const rawisBank = payload.isBank
+    payload.isBank = typeof rawisBank === 'number' ? rawisBank : Number(rawisBank)
+  }
+  if ('titleStatus' in payload) {
+    const rawtitleStatus = payload.titleStatus
+    payload.titleStatus = typeof rawtitleStatus === 'number' ? rawtitleStatus : Number(rawtitleStatus)
+  }
+  const parentRaw = payload.parentId
+  const parentId = parentRaw === '' || parentRaw === undefined || parentRaw === null ? '0' : String(parentRaw)
+  payload.parentId = parentId
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
 /** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.accountTitleId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

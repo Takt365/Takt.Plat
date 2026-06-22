@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktServiceContractDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-16
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceContract 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktServiceContract 生成，请按需审阅）
 // 
@@ -289,7 +289,7 @@ public class TaktServiceContractQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -419,11 +419,6 @@ public class TaktServiceContractCreateDto
     public string? AccountManager { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 服务订单列表（外键在子表 TaktServiceOrder.ServiceContractId）（子表，级联保存）
     /// </summary>
     public List<TaktServiceOrderCreateDto>? ServiceOrders { get; set; }
@@ -436,7 +431,7 @@ public class TaktServiceContractCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -596,7 +591,7 @@ public class TaktServiceContractTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -689,7 +684,7 @@ public class TaktServiceContractImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -818,7 +813,7 @@ public class TaktServiceContractExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

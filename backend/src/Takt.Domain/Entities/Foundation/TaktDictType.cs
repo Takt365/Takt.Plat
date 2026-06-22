@@ -28,9 +28,9 @@ namespace Takt.Domain.Entities.Foundation;
 public class TaktDictType : TaktTenantEntityBase
 {
     /// <summary>
-    /// 字典类型编码（唯一索引：租户内唯一，见 ix_dict_type_code_unique；如 order_status, user_type）
+    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
-    [SugarColumn(ColumnName = "dict_type_code", ColumnDescription = "字典类型编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "dict_type_code", ColumnDescription = "字典类型编码", ColumnDataType = "varchar", Length = 80, IsNullable = false)]
     public string DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -66,7 +66,7 @@ public class TaktDictType : TaktTenantEntityBase
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "dict_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int DictStatus { get; set; } = 1;

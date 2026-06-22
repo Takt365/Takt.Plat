@@ -193,14 +193,26 @@ public class TaktEquipment : TaktCompanyEntityBase
     public int WarrantyStatus { get; set; } = 0;
 
     /// <summary>
-    /// 设备状态（0=运行中，1=停机，2=维修中，3=故障，4=待报废，5=已报废）
+    /// 设备状态（字典 sys_equipment_status）
     /// </summary>
     [SugarColumn(ColumnName = "equipment_status", ColumnDescription = "设备状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EquipmentStatus { get; set; } = 0;
 
     /// <summary>
-    /// 维护记录列表（外键：子表 TaktMaintenance.EquipmentId 关联本表 Id）
+    /// 维护通知单列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktMaintenance.EquipmentId))]
-    public List<TaktMaintenance>? MaintenanceRecords { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktMaintenanceNotification.EquipmentId))]
+    public List<TaktMaintenanceNotification>? MaintenanceNotifications { get; set; }
+
+    /// <summary>
+    /// 维护工单列表
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktMaintenanceWorkOrder.EquipmentId))]
+    public List<TaktMaintenanceWorkOrder>? MaintenanceWorkOrders { get; set; }
+
+    /// <summary>
+    /// 维护履历列表（由维护工单完工归档生成，只读）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktMaintenanceHistory.EquipmentId))]
+    public List<TaktMaintenanceHistory>? MaintenanceHistories { get; set; }
 }

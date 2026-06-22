@@ -603,12 +603,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('common.page.entity.ExtField')"
+                name="ExtField"
               >
                 <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                   size="small"
                   allow-clear
                 />
@@ -676,7 +676,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","plantCode","plantName","plantShortName","codeAlias","defaultCulture","plantType","relatedCompany","enterpriseNature","industryAttribute","enterpriseScale","businessScope","registrationAddress1","registrationAddress2","registrationAddress3","registrationRegion","registrationProvince","registrationCity","businessRegion","businessProvince","businessCity","businessAddress1","businessAddress2","businessAddress3","plantAddress1","plantAddress2","plantAddress3","plantPhone","plantEmail","plantFax","plantWebsite","unifiedSocialCreditCode","taxRegistrationNumber","legalRepresentative","plantManager","registeredCapital","establishmentDate","closingDate","plantExistence","plantStatus","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","plantCode","plantName","plantShortName","codeAlias","defaultCulture","plantType","relatedCompany","enterpriseNature","industryAttribute","enterpriseScale","businessScope","registrationAddress1","registrationAddress2","registrationAddress3","registrationRegion","registrationProvince","registrationCity","businessRegion","businessProvince","businessCity","businessAddress1","businessAddress2","businessAddress3","plantAddress1","plantAddress2","plantAddress3","plantPhone","plantEmail","plantFax","plantWebsite","unifiedSocialCreditCode","taxRegistrationNumber","legalRepresentative","plantManager","registeredCapital","establishmentDate","closingDate","plantExistence","plantStatus","sortOrder","ExtField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */

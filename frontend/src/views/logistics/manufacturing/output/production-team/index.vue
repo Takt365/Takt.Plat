@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-manufacturing-output-production-team">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'productionTeamId'"
       table-mode="single"
@@ -69,19 +69,20 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'status'">
-          <TaktDictTag
-            :value="getProductionTeamField(record, 'status')"
-            dict-type="sys_normal_disable"
+          <a-switch
+            :checked="getProductionTeamField(record, 'status') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleStatusChange(record, Boolean(checked))"
           />
         </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -101,6 +102,7 @@
       @cancel="handleFormCancel"
     >
       <ProductionTeamForm
+        :key="formData?.productionTeamId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -118,92 +120,108 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.productionTeam.plantcode')">
+      <a-form-item :label="t('entity.productionteam.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionTeam.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('teamCode')">
-      <a-form-item :label="t('entity.productionTeam.teamcode')">
+      <a-form-item :label="t('entity.productionteam.teamcode')">
         <a-input
           v-model:value="advancedQueryForm.teamCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionTeam.teamcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamcode') })"
+          show-count
+          :maxlength="32"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('teamName')">
-      <a-form-item :label="t('entity.productionTeam.teamname')">
+      <a-form-item :label="t('entity.productionteam.teamname')">
         <a-input
           v-model:value="advancedQueryForm.teamName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionTeam.teamname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamname') })"
+          show-count
+          :maxlength="64"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('teamCategory')">
-      <a-form-item :label="t('entity.productionTeam.teamcategory')">
+      <a-form-item :label="t('entity.productionteam.teamcategory')">
         <a-input
           v-model:value="advancedQueryForm.teamCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionTeam.teamcategory') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamcategory') })"
+          show-count
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('teamCategoryName')">
-      <a-form-item :label="t('entity.productionTeam.teamcategoryname')">
+      <a-form-item :label="t('entity.productionteam.teamcategoryname')">
         <a-input
           v-model:value="advancedQueryForm.teamCategoryName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionTeam.teamcategoryname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamcategoryname') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('productionLine')">
-      <a-form-item :label="t('entity.productionTeam.productionline')">
+      <a-form-item :label="t('entity.productionteam.productionline')">
         <a-input
           v-model:value="advancedQueryForm.productionLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionTeam.productionline') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.productionline') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('teamLeaderId')">
-      <a-form-item :label="t('entity.productionTeam.teamleaderid')">
+      <a-form-item :label="t('entity.productionteam.teamleaderid')">
         <a-input
           v-model:value="advancedQueryForm.teamLeaderId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionTeam.teamleaderid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamleaderid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('teamLeaderName')">
-      <a-form-item :label="t('entity.productionTeam.teamleadername')">
+      <a-form-item :label="t('entity.productionteam.teamleadername')">
         <a-input
           v-model:value="advancedQueryForm.teamLeaderName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionTeam.teamleadername') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.teamleadername') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shiftNo')">
-      <a-form-item :label="t('entity.productionTeam.shiftno')">
+      <a-form-item :label="t('entity.productionteam.shiftno')">
         <a-input-number
           v-model:value="advancedQueryForm.shiftNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionTeam.shiftno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionteam.shiftno') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('status')">
-      <a-form-item :label="t('entity.productionTeam.status')">
+      <a-form-item :label="t('entity.productionteam.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.status"
-          dict-type="sys_normal_disable"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionTeam.status') })"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionteam.status') })"
           allow-clear
         />
       </a-form-item>
@@ -230,12 +248,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -244,8 +281,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -255,14 +294,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.productionTeam._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.productionteam._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.productionTeam._self"
+        entity-i18n-key="entity.productionteam._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -298,12 +337,14 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ProductionTeamForm from './components/production-team-form.vue'
-import { getProductionTeamList, getProductionTeamById, createProductionTeam, updateProductionTeam, deleteProductionTeamById, deleteProductionTeamBatch, getProductionTeamTemplate, importProductionTeam, exportProductionTeam } from '@/api/logistics/manufacturing/output/production-team'
-import type { ProductionTeam, ProductionTeamQuery, ProductionTeamCreate, ProductionTeamUpdate } from '@/types/logistics/manufacturing/output/production-team'
+import { getProductionTeamList, getProductionTeamById, createProductionTeam, updateProductionTeam, deleteProductionTeamById, deleteProductionTeamBatch, getProductionTeamTemplate, importProductionTeam, exportProductionTeam, updateProductionTeamStatus } from '@/api/logistics/manufacturing/output/production-team'
+import type { ProductionTeam, ProductionTeamQuery } from '@/types/logistics/manufacturing/output/production-team'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -311,7 +352,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktProductionTeam')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.productionTeam._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.productionteam._self') })
 )
 
 /** 快捷查询关键字 */
@@ -321,9 +362,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<ProductionTeam[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -338,11 +379,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<ProductionTeam>>({})
+const formData = ref<Partial<ProductionTeam> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -358,24 +401,24 @@ const advancedQueryForm = ref({
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.productionTeam.plantcode') },
-  { key: 'teamCode', label: t('entity.productionTeam.teamcode') },
-  { key: 'teamName', label: t('entity.productionTeam.teamname') },
-  { key: 'teamCategory', label: t('entity.productionTeam.teamcategory') },
-  { key: 'teamCategoryName', label: t('entity.productionTeam.teamcategoryname') },
-  { key: 'productionLine', label: t('entity.productionTeam.productionline') },
-  { key: 'teamLeaderId', label: t('entity.productionTeam.teamleaderid') },
-  { key: 'teamLeaderName', label: t('entity.productionTeam.teamleadername') },
-  { key: 'shiftNo', label: t('entity.productionTeam.shiftno') },
-  { key: 'status', label: t('entity.productionTeam.status') },
+  { key: 'plantCode', label: t('entity.productionteam.plantcode') },
+  { key: 'teamCode', label: t('entity.productionteam.teamcode') },
+  { key: 'teamName', label: t('entity.productionteam.teamname') },
+  { key: 'teamCategory', label: t('entity.productionteam.teamcategory') },
+  { key: 'teamCategoryName', label: t('entity.productionteam.teamcategoryname') },
+  { key: 'productionLine', label: t('entity.productionteam.productionline') },
+  { key: 'teamLeaderId', label: t('entity.productionteam.teamleaderid') },
+  { key: 'teamLeaderName', label: t('entity.productionteam.teamleadername') },
+  { key: 'shiftNo', label: t('entity.productionteam.shiftno') },
+  { key: 'status', label: t('entity.productionteam.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -393,11 +436,59 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {ProductionTeamQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<ProductionTeamQuery>): ProductionTeamQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: ProductionTeamQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof ProductionTeamQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('teamCode', form.teamCode)
+  assignTrimmed('teamName', form.teamName)
+  assignTrimmed('teamCategory', form.teamCategory)
+  assignTrimmed('teamCategoryName', form.teamCategoryName)
+  assignTrimmed('productionLine', form.productionLine)
+  assignTrimmed('teamLeaderId', form.teamLeaderId)
+  assignTrimmed('teamLeaderName', form.teamLeaderName)
+  if (form.shiftNo !== undefined && form.shiftNo !== null) {
+    query.shiftNo = form.shiftNo
+  }
+  if (form.status !== undefined && form.status !== null) {
+    query.status = form.status
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -417,7 +508,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'productionTeamId') ?? ''
   },
   {
-    title: t('entity.productionTeam.plantcode'),
+    title: t('entity.productionteam.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -426,7 +517,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.productionTeam.teamcode'),
+    title: t('entity.productionteam.teamcode'),
     dataIndex: 'teamCode',
     key: 'teamCode',
     width: 120,
@@ -435,7 +526,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamCode') ?? ''
   },
   {
-    title: t('entity.productionTeam.teamname'),
+    title: t('entity.productionteam.teamname'),
     dataIndex: 'teamName',
     key: 'teamName',
     width: 120,
@@ -444,7 +535,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamName') ?? ''
   },
   {
-    title: t('entity.productionTeam.teamcategory'),
+    title: t('entity.productionteam.teamcategory'),
     dataIndex: 'teamCategory',
     key: 'teamCategory',
     width: 120,
@@ -453,7 +544,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamCategory') ?? ''
   },
   {
-    title: t('entity.productionTeam.teamcategoryname'),
+    title: t('entity.productionteam.teamcategoryname'),
     dataIndex: 'teamCategoryName',
     key: 'teamCategoryName',
     width: 120,
@@ -462,7 +553,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamCategoryName') ?? ''
   },
   {
-    title: t('entity.productionTeam.productionline'),
+    title: t('entity.productionteam.productionline'),
     dataIndex: 'productionLine',
     key: 'productionLine',
     width: 120,
@@ -471,7 +562,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'productionLine') ?? ''
   },
   {
-    title: t('entity.productionTeam.teamleaderid'),
+    title: t('entity.productionteam.teamleaderid'),
     dataIndex: 'teamLeaderId',
     key: 'teamLeaderId',
     width: 120,
@@ -480,7 +571,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamLeaderId') ?? ''
   },
   {
-    title: t('entity.productionTeam.teamleadername'),
+    title: t('entity.productionteam.teamleadername'),
     dataIndex: 'teamLeaderName',
     key: 'teamLeaderName',
     width: 120,
@@ -489,7 +580,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'teamLeaderName') ?? ''
   },
   {
-    title: t('entity.productionTeam.shiftno'),
+    title: t('entity.productionteam.shiftno'),
     dataIndex: 'shiftNo',
     key: 'shiftNo',
     width: 120,
@@ -498,7 +589,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionTeamField(record, 'shiftNo') ?? ''
   },
   {
-    title: t('entity.productionTeam.status'),
+    title: t('entity.productionteam.status'),
     dataIndex: 'status',
     key: 'status',
     width: 120,
@@ -535,6 +626,7 @@ const getProductionTeamId = (record: any): string => record?.[entityIdName] ?? '
  * @param field 字段名
  */
 const getProductionTeamField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -578,16 +670,7 @@ const onClickRow = (record: ProductionTeam) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: ProductionTeamQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getProductionTeamList(params)
+    const res = await getProductionTeamList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -605,7 +688,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -625,22 +708,23 @@ function handleReset() {
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.productionTeam._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.productionteam._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: ProductionTeam) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.productionTeam._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.productionteam._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -650,7 +734,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.productionTeam._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.productionteam._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -668,12 +752,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateProductionTeam(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.productionTeam._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.productionteam._self') }))
     } else {
       await createProductionTeam(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.productionTeam._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.productionteam._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -683,6 +769,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -714,16 +802,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: ProductionTeamQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportProductionTeam(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportProductionTeam(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -742,10 +825,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.productionTeam._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.productionteam._self') }))
   } catch (error: any) {
     logger.error('[ProductionTeam] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.productionTeam._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.productionteam._self') }))
   } finally {
     loading.value = false
   }
@@ -754,12 +837,12 @@ async function handleExport() {
 async function handleDeleteOne(record: ProductionTeam) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.productionTeam._self'), name: t('common.tip.this.target', { target: t('entity.productionTeam._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.productionteam._self'), name: t('common.tip.this.target', { target: t('entity.productionteam._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteProductionTeamById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.productionTeam._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.productionteam._self') }))
       loadData()
     }
   })
@@ -767,21 +850,45 @@ async function handleDeleteOne(record: ProductionTeam) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.productionTeam._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.productionteam._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.productionTeam._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.productionteam._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteProductionTeamBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.productionTeam._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.productionteam._self') }))
       loadData()
     }
   })
+}
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleStatusChange(record: ProductionTeam, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getProductionTeamField(record, 'status')
+  const id = getProductionTeamId(record)
+  const row = dataSource.value.find((item) => getProductionTeamId(item) === id)
+  if (row) {
+    row.status = newVal
+  }
+  try {
+    await updateProductionTeamStatus({ productionTeamId: id, status: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.status = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
 }
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
@@ -791,7 +898,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -809,7 +916,7 @@ function handleAdvancedQueryReset() {
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -839,23 +946,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.logistics-manufacturing-output-production-team {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/src/api/logistics/manufacturing/bom
+// 命名空间：frontend/src/api/logistics/materials
 // 文件名称：model-destination.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
-// 功能描述：logistics/manufacturing/bom 模块 API（自动生成，请勿手改路由常量）
+// 功能描述：logistics/materials 模块 API（自动生成，请勿手改路由常量）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -20,7 +20,7 @@ import type {
   ModelDestinationCreate,
   ModelDestinationSort,
   ModelDestinationUpdate
-} from '@/types/logistics/manufacturing/bom/model-destination';
+} from '@/types/logistics/materials/model-destination';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -41,9 +41,7 @@ export function getModelDestinationList(queryDto: any): Promise<TaktPagedResult<
   return request<TaktPagedResult<ModelDestination>>({
     url: `${MODEL_DESTINATION_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportModelDestination(
     url: `${MODEL_DESTINATION_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

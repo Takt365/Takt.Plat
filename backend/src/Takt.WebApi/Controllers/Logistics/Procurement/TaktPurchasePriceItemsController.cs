@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.WebApi.Controllers.Logistics.Materials
+// 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchasePriceItemsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格明细控制器
 // 
@@ -11,11 +11,11 @@
 // ========================================
 
 using Microsoft.AspNetCore.Mvc;
-using Takt.Application.Dtos.Logistics.Materials;
-using Takt.Application.Services.Logistics.Materials;
+using Takt.Application.Dtos.Logistics.Procurement;
+using Takt.Application.Services.Logistics.Procurement;
 using Takt.Shared.Constants;
 
-namespace Takt.WebApi.Controllers.Logistics.Materials;
+namespace Takt.WebApi.Controllers.Logistics.Procurement;
 
 /// <summary>
 /// 采购价格明细控制器
@@ -41,7 +41,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:list", "采购价格明细列表")]
+    [TaktPermission("logistics:procurement:purchaseprice:list", "采购价格明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPurchasePriceItemListAsync([FromQuery] TaktPurchasePriceItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购价格明细ID</param>
     /// <returns>采购价格明细DTO</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:query", "采购价格明细详情")]
+    [TaktPermission("logistics:procurement:purchaseprice:query", "采购价格明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPurchasePriceItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// 获取采购价格明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:query", "采购价格明细选项")]
+    [TaktPermission("logistics:procurement:purchaseprice:query", "采购价格明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPurchasePriceItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>采购价格明细DTO</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:create", "创建采购价格明细")]
+    [TaktPermission("logistics:procurement:purchaseprice:create", "创建采购价格明细")]
     [HttpPost]
     public async Task<IActionResult> CreatePurchasePriceItemAsync([FromBody] TaktPurchasePriceItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// <param name="id">采购价格明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>采购价格明细DTO</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:update", "更新采购价格明细")]
+    [TaktPermission("logistics:procurement:purchaseprice:update", "更新采购价格明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePurchasePriceItemAsync(long id, [FromBody] TaktPurchasePriceItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购价格明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:delete", "删除采购价格明细")]
+    [TaktPermission("logistics:procurement:purchaseprice:delete", "删除采购价格明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePurchasePriceItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:delete", "批量删除采购价格明细")]
+    [TaktPermission("logistics:procurement:purchaseprice:delete", "批量删除采购价格明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePurchasePriceItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>采购价格明细DTO</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:update", "更新采购价格明细排序")]
+    [TaktPermission("logistics:procurement:purchaseprice:update", "更新采购价格明细排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdatePurchasePriceItemSortAsync([FromBody] TaktPurchasePriceItemSortDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:import", "获取采购价格明细导入模板")]
+    [TaktPermission("logistics:procurement:purchaseprice:import", "获取采购价格明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPurchasePriceItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:import", "导入采购价格明细")]
+    [TaktPermission("logistics:procurement:purchaseprice:import", "导入采购价格明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPurchasePriceItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
     /// 导出采购价格明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:purchasepriceitem:export", "导出采购价格明细")]
+    [TaktPermission("logistics:procurement:purchaseprice:export", "导出采购价格明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPurchasePriceItemAsync([FromQuery] TaktPurchasePriceItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

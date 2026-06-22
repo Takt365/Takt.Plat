@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Controlling
 // 文件名称：TaktProfitCentersController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：利润中心控制器
 // 
@@ -13,6 +13,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Accounting.Controlling;
 using Takt.Application.Services.Accounting.Controlling;
+using Takt.Shared.Constants;
 
 namespace Takt.WebApi.Controllers.Accounting.Controlling;
 
@@ -40,7 +41,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("accounting:controlling:profitcenter:list", "利润中心列表")]
+    [TaktPermission("accounting:controlling:profit:center:list", "利润中心列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetProfitCenterListAsync([FromQuery] TaktProfitCenterQueryDto queryDto)
     {
@@ -60,7 +61,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// </summary>
     /// <param name="id">利润中心ID</param>
     /// <returns>利润中心DTO</returns>
-    [TaktPermission("accounting:controlling:profitcenter:query", "利润中心详情")]
+    [TaktPermission("accounting:controlling:profit:center:query", "利润中心详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProfitCenterByIdAsync(long id)
     {
@@ -83,7 +84,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// 获取利润中心树形选项列表
     /// </summary>
     /// <returns>树形选项</returns>
-    [TaktPermission("accounting:controlling:profitcenter:query", "利润中心树形选项")]
+    [TaktPermission("accounting:controlling:profit:center:query", "利润中心树形选项")]
     [HttpGet("tree-options")]
     public async Task<IActionResult> GetProfitCenterTreeOptionsAsync()
     {
@@ -101,9 +102,9 @@ public class TaktProfitCentersController : TaktControllerBase
     /// <summary>
     /// 获取利润中心树形列表
     /// </summary>
-    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 1）</param>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
     /// <returns>树形数据</returns>
-    [TaktPermission("accounting:controlling:profitcenter:query", "利润中心树")]
+    [TaktPermission("accounting:controlling:profit:center:query", "利润中心树")]
     [HttpGet("tree")]
     public async Task<IActionResult> GetProfitCenterTreeAsync([FromQuery] long parentId = 0, [FromQuery] bool includeDisabled = false)
     {
@@ -123,7 +124,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>利润中心DTO</returns>
-    [TaktPermission("accounting:controlling:profitcenter:create", "创建利润中心")]
+    [TaktPermission("accounting:controlling:profit:center:create", "创建利润中心")]
     [HttpPost]
     public async Task<IActionResult> CreateProfitCenterAsync([FromBody] TaktProfitCenterCreateDto dto)
     {
@@ -144,7 +145,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// <param name="id">利润中心ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>利润中心DTO</returns>
-    [TaktPermission("accounting:controlling:profitcenter:update", "更新利润中心")]
+    [TaktPermission("accounting:controlling:profit:center:update", "更新利润中心")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProfitCenterAsync(long id, [FromBody] TaktProfitCenterUpdateDto dto)
     {
@@ -164,7 +165,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// </summary>
     /// <param name="id">利润中心ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:profitcenter:delete", "删除利润中心")]
+    [TaktPermission("accounting:controlling:profit:center:delete", "删除利润中心")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProfitCenterByIdAsync(long id)
     {
@@ -184,7 +185,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:profitcenter:delete", "批量删除利润中心")]
+    [TaktPermission("accounting:controlling:profit:center:delete", "批量删除利润中心")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteProfitCenterBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -202,9 +203,9 @@ public class TaktProfitCentersController : TaktControllerBase
     /// <summary>
     /// 更新利润中心状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>利润中心DTO</returns>
-    [TaktPermission("accounting:controlling:profitcenter:update", "更新利润中心状态")]
+    [TaktPermission("accounting:controlling:profit:center:update", "更新利润中心状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateProfitCenterStatusAsync([FromBody] TaktProfitCenterStatusDto dto)
     {
@@ -224,7 +225,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>利润中心DTO</returns>
-    [TaktPermission("accounting:controlling:profitcenter:update", "更新利润中心排序")]
+    [TaktPermission("accounting:controlling:profit:center:update", "更新利润中心排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateProfitCenterSortAsync([FromBody] TaktProfitCenterSortDto dto)
     {
@@ -243,7 +244,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:controlling:profitcenter:import", "获取利润中心导入模板")]
+    [TaktPermission("accounting:controlling:profit:center:import", "获取利润中心导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetProfitCenterTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -263,7 +264,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("accounting:controlling:profitcenter:import", "导入利润中心")]
+    [TaktPermission("accounting:controlling:profit:center:import", "导入利润中心")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportProfitCenterAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -293,7 +294,7 @@ public class TaktProfitCentersController : TaktControllerBase
     /// 导出利润中心
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:controlling:profitcenter:export", "导出利润中心")]
+    [TaktPermission("accounting:controlling:profit:center:export", "导出利润中心")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportProfitCenterAsync([FromQuery] TaktProfitCenterQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

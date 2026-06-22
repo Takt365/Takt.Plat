@@ -59,6 +59,7 @@
 
 <script setup lang="ts">
 import { createLogger } from '@/utils/logger'
+import { TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK } from '@/utils/table-scroll'
 
 const treeLeftTableLogger = createLogger('takt-tree-left-table')
 
@@ -95,7 +96,7 @@ interface Props {
   selectable?: boolean
   /** 是否开启虚拟滚动(由页面控制,大数据展开时建议开启) */
   virtual?: boolean
-  /** 虚拟滚动列表高度(px),不传则按容器高度计算 */
+  /** 虚拟滚动列表高度(px)；传入则覆盖视口测量结果 */
   height?: number
   /** 虚拟滚动单项高度(px),不传则使用组件默认 */
   itemHeight?: number
@@ -127,8 +128,11 @@ const measuredHeight = ref(0)
 
 const computedVirtualHeight = computed(() => {
   if (!props.virtual) return undefined
-  const h = measuredHeight.value > 0 ? measuredHeight.value : (props.height ?? 400)
-  return h > 0 ? h : 400
+  if (props.height != null && props.height > 0) {
+    return props.height
+  }
+  const h = measuredHeight.value > 0 ? measuredHeight.value : TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK
+  return h > 0 ? h : TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK
 })
 
 /** 按视口动态计算：从本组件内容区顶部到视口底部的距离作为虚拟列表高度，不依赖父级或树内容高度 */

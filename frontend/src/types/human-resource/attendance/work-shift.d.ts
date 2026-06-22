@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/attendance
 // 文件名称：work-shift.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -131,7 +131,7 @@ export interface WorkShiftQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -188,11 +188,6 @@ export interface WorkShiftCreate {
   crossMidnight: number;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 关联工厂
    */
   relatedPlant?: string;
@@ -200,7 +195,7 @@ export interface WorkShiftCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -286,11 +281,6 @@ export interface WorkShiftTemplate {
   crossMidnight?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 关联工厂
    */
   relatedPlant?: string;
@@ -298,7 +288,7 @@ export interface WorkShiftTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -355,11 +345,6 @@ export interface WorkShiftImport {
   crossMidnight?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 关联工厂
    */
   relatedPlant?: string;
@@ -367,7 +352,7 @@ export interface WorkShiftImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -431,7 +416,7 @@ export interface WorkShiftExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

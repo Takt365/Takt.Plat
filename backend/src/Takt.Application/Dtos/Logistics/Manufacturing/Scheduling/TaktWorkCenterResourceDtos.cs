@@ -1,0 +1,503 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Scheduling
+// 文件名称：TaktWorkCenterResourceDtos.cs
+// 创建时间：2026-06-22
+// 创建人：Takt365(Auto Generated)
+// 功能描述：WorkCenterResource 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktWorkCenterResource 生成，请按需审阅）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using System.ComponentModel.DataAnnotations;
+using Mapster;
+using Takt.Shared.Helpers;
+using Takt.Shared.Models;
+
+namespace Takt.Application.Dtos.Logistics.Manufacturing.Scheduling;
+
+// ========================================
+// WorkCenterResource 响应 DTO
+// ========================================
+
+/// <summary>
+/// 工作中心资源（设备/人员/模具等）
+/// 对应前端 TaktWorkCenterResourceDto
+/// 继承 TaktCompanyDtoBase
+/// </summary>
+public class TaktWorkCenterResourceDto : TaktCompanyDtoBase
+{
+    /// <summary>
+    /// WorkCenterResourceID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long WorkCenterResourceId { get; set; }
+
+    /// <summary>
+    /// 工作中心 ID（主子表关系）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long WorkCenterId { get; set; }
+
+    /// <summary>
+    /// 工作中心 名称（填充字段）
+    /// </summary>
+    public string? WorkCenterName { get; set; }
+
+    /// <summary>
+    /// 工作中心编码（冗余）
+    /// </summary>
+    public string WorkCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源编码
+    /// </summary>
+    public string ResourceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源名称
+    /// </summary>
+    public string ResourceName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源类型（字典 work_center_resource_type；0=设备，1=人员，2=模具）
+    /// </summary>
+    public int ResourceType { get; set; } = 0;
+
+    /// <summary>
+    /// 并行能力（可同时加工任务数）
+    /// </summary>
+    public int ParallelCapacity { get; set; } = 0;
+
+    /// <summary>
+    /// 效率系数（1.0=标准）
+    /// </summary>
+    public decimal EfficiencyRate { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
+    /// </summary>
+    public int ResourceStatus { get; set; } = 0;
+
+}
+
+// ========================================
+// WorkCenterResource 查询 DTO
+// ========================================
+
+/// <summary>
+/// WorkCenterResource 分页查询 DTO
+/// 继承 TaktPagedQuery
+/// </summary>
+public class TaktWorkCenterResourceQueryDto : TaktPagedQuery
+{
+    /// <summary>
+    /// 租户编码
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工作中心 ID（主子表关系）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? WorkCenterId { get; set; }
+
+    /// <summary>
+    /// 工作中心编码（冗余）
+    /// </summary>
+    public string? WorkCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源编码
+    /// </summary>
+    public string? ResourceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源名称
+    /// </summary>
+    public string? ResourceName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源类型（字典 work_center_resource_type；0=设备，1=人员，2=模具）
+    /// </summary>
+    public int? ResourceType { get; set; }
+
+    /// <summary>
+    /// 并行能力（可同时加工任务数）
+    /// </summary>
+    public int? ParallelCapacity { get; set; }
+
+    /// <summary>
+    /// 效率系数（1.0=标准）
+    /// </summary>
+    public decimal? EfficiencyRate { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
+    /// </summary>
+    public int? ResourceStatus { get; set; }
+
+    /// <summary>
+    /// 创建时间（范围查询-开始）
+    /// </summary>
+    public DateTime? CreatedAtStart { get; set; }
+
+    /// <summary>
+    /// 创建时间（范围查询-结束）
+    /// </summary>
+    public DateTime? CreatedAtEnd { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtField { get; set; }
+
+    /// <summary>
+    /// 备注（模糊查询）
+    /// </summary>
+    public string? Remark { get; set; }
+}
+
+// ========================================
+// 创建WorkCenterResource DTO
+// ========================================
+
+/// <summary>
+/// 创建WorkCenterResource DTO
+/// </summary>
+public class TaktWorkCenterResourceCreateDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// </summary>
+    public string CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工作中心 ID（主子表关系）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long WorkCenterId { get; set; }
+
+    /// <summary>
+    /// 工作中心编码（冗余）
+    /// </summary>
+    [Required(ErrorMessage = "工作中心编码（冗余）不能为空")]
+    public string WorkCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源编码
+    /// </summary>
+    [Required(ErrorMessage = "资源编码不能为空")]
+    public string ResourceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源名称
+    /// </summary>
+    [Required(ErrorMessage = "资源名称不能为空")]
+    public string ResourceName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源类型（字典 work_center_resource_type；0=设备，1=人员，2=模具）
+    /// </summary>
+    public int ResourceType { get; set; } = 0;
+
+    /// <summary>
+    /// 并行能力（可同时加工任务数）
+    /// </summary>
+    public int ParallelCapacity { get; set; } = 0;
+
+    /// <summary>
+    /// 效率系数（1.0=标准）
+    /// </summary>
+    public decimal EfficiencyRate { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
+    /// </summary>
+    public int ResourceStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtField { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 更新WorkCenterResource DTO
+// ========================================
+
+/// <summary>
+/// 更新WorkCenterResource DTO
+/// 继承 TaktWorkCenterResourceCreateDto，添加 WorkCenterResourceId 字段
+/// </summary>
+public class TaktWorkCenterResourceUpdateDto : TaktWorkCenterResourceCreateDto
+{
+    /// <summary>
+    /// WorkCenterResourceID（标识要更新的实体）
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long WorkCenterResourceId { get; set; }
+
+}
+
+// ========================================
+// WorkCenterResource 状态 DTO
+// ========================================
+
+/// <summary>
+/// WorkCenterResource 状态更新 DTO
+/// </summary>
+public class TaktWorkCenterResourceStatusDto
+{
+    /// <summary>
+    /// WorkCenterResourceID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long WorkCenterResourceId { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
+    /// </summary>
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
+    public int ResourceStatus { get; set; } = 0;
+}
+
+// ========================================
+// 导入 DTO
+// ========================================
+
+/// <summary>
+/// WorkCenterResource 导入模板行 DTO
+/// </summary>
+public class TaktWorkCenterResourceTemplateDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工作中心 ID（主子表关系）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? WorkCenterId { get; set; }
+
+    /// <summary>
+    /// 工作中心编码（冗余）
+    /// </summary>
+    public string? WorkCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源编码
+    /// </summary>
+    public string? ResourceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源名称
+    /// </summary>
+    public string? ResourceName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源类型（字典 work_center_resource_type；0=设备，1=人员，2=模具）
+    /// </summary>
+    public int? ResourceType { get; set; }
+
+    /// <summary>
+    /// 并行能力（可同时加工任务数）
+    /// </summary>
+    public int? ParallelCapacity { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
+    /// </summary>
+    public int? ResourceStatus { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtField { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+/// <summary>
+/// WorkCenterResource 导入 DTO（独立实现，不继承 TemplateDto）
+/// </summary>
+public class TaktWorkCenterResourceImportDto
+{
+    /// <summary>
+    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+    /// </summary>
+    public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// </summary>
+    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工作中心 ID（主子表关系）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? WorkCenterId { get; set; }
+
+    /// <summary>
+    /// 工作中心编码（冗余）
+    /// </summary>
+    public string? WorkCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源编码
+    /// </summary>
+    public string? ResourceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源名称
+    /// </summary>
+    public string? ResourceName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源类型（字典 work_center_resource_type；0=设备，1=人员，2=模具）
+    /// </summary>
+    public int? ResourceType { get; set; }
+
+    /// <summary>
+    /// 并行能力（可同时加工任务数）
+    /// </summary>
+    public int? ParallelCapacity { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
+    /// </summary>
+    public int? ResourceStatus { get; set; }
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtField { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+}
+
+// ========================================
+// 导出 DTO
+// ========================================
+
+/// <summary>
+/// WorkCenterResource 导出 DTO（独立实现，不继承响应 Dto）
+/// </summary>
+public class TaktWorkCenterResourceExportDto
+{
+    /// <summary>
+    /// WorkCenterResourceID
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long WorkCenterResourceId { get; set; }
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工作中心 ID（主子表关系）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long WorkCenterId { get; set; }
+
+    /// <summary>
+    /// 工作中心编码（冗余）
+    /// </summary>
+    public string WorkCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源编码
+    /// </summary>
+    public string ResourceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源名称
+    /// </summary>
+    public string ResourceName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资源类型（字典 work_center_resource_type；0=设备，1=人员，2=模具）
+    /// </summary>
+    public int ResourceType { get; set; } = 0;
+
+    /// <summary>
+    /// 并行能力（可同时加工任务数）
+    /// </summary>
+    public int ParallelCapacity { get; set; } = 0;
+
+    /// <summary>
+    /// 效率系数（1.0=标准）
+    /// </summary>
+    public decimal EfficiencyRate { get; set; }
+
+    /// <summary>
+    /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
+    /// </summary>
+    public int ResourceStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 扩展字段JSON
+    /// </summary>
+    public string? ExtField { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string? Remark { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    public DateTime CreatedAt { get; set; }
+}

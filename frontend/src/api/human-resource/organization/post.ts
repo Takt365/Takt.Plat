@@ -17,6 +17,7 @@ import type {
 } from '@/types/common';
 import type {
   Post,
+  PostBuiltIn,
   PostCreate,
   PostSort,
   PostStatus,
@@ -42,9 +43,7 @@ export function getPostList(queryDto: any): Promise<TaktPagedResult<Post>> {
   return request<TaktPagedResult<Post>>({
     url: `${POST_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -120,6 +119,19 @@ export function deletePostBatch(ids: string[]): Promise<void> {
 export function updatePostStatus(dto: PostStatus): Promise<Post> {
   return request<Post>({
     url: `${POST_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新岗位是否内置
+ * @param {PostBuiltIn} dto 是否内置 DTO
+ * @returns {Promise<Post>} 岗位DTO
+ */
+export function updatePostBuiltIn(dto: PostBuiltIn): Promise<Post> {
+  return request<Post>({
+    url: `${POST_API_BASE}/built-in`,
     method: 'put',
     data: dto,
   });
@@ -214,7 +226,7 @@ export function exportPost(
     url: `${POST_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

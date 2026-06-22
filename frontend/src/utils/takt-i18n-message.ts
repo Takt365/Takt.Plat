@@ -64,7 +64,15 @@ export function resolveLocaleMessageFromTree(
     node = node[segment];
   }
 
-  return typeof node === 'string' ? node : undefined;
+  if (typeof node === 'string') {
+    return node;
+  }
+
+  if (typeof node === 'object' && node !== null && typeof node._self === 'string') {
+    return node._self;
+  }
+
+  return undefined;
 }
 
 /**
@@ -111,6 +119,19 @@ export function translateLocaleMessage(
 }
 
 /**
+ * 实体字段标签翻译（兼容字段键与子键共存，如 entity.file.category 与 entity.file.category.0）
+ * @param key entity.* 点分键
+ * @param params 插值参数
+ * @returns 本地化文案；未命中时返回键本身
+ */
+export function translateEntityLabel(
+  key: string,
+  params?: Record<string, string | number>
+): string {
+  return translateLocaleMessage(key, params);
+}
+
+/**
  * 将点分 i18nKey 映射为 vue-i18n 嵌套 messages
  * @param flatMessages 键值对（如 common.confirm → 确定）
  * @returns 嵌套消息对象
@@ -123,7 +144,7 @@ export function buildNestedLocaleMessages(flatMessages: Record<string, string>):
     .sort(([leftKey], [rightKey]) => {
       const leftDepth = leftKey.split('.').filter(Boolean).length;
       const rightDepth = rightKey.split('.').filter(Boolean).length;
-      return rightDepth - leftDepth;
+      return leftDepth - rightDepth;
     });
 
   sortedEntries.forEach(([key, text]) => {
@@ -141,6 +162,7 @@ export function buildNestedLocaleMessages(flatMessages: Record<string, string>):
       if (isLeaf) {
         const existing = node[segment];
         if (typeof existing === 'object' && existing !== null) {
+          existing._self = text;
           return;
         }
         node[segment] = text;
@@ -149,7 +171,9 @@ export function buildNestedLocaleMessages(flatMessages: Record<string, string>):
 
       const current = node[segment];
 
-      if (typeof current !== 'object' || current === null) {
+      if (typeof current === 'string') {
+        node[segment] = { _self: current };
+      } else if (typeof current !== 'object' || current === null) {
         node[segment] = {};
       }
 

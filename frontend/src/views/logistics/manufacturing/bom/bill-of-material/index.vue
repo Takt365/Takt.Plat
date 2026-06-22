@@ -2,14 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/bill-of-material -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt物料清单管理页：上主下从（底部明细独立CRUD）+ 弹窗级联（主表与子表 Tab 一次保存） -->
+<!-- 功能描述：Takt物料清单实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-manufacturing-bom-bill-of-material flex flex-col min-h-0 h-full">
-    <div class="master-section flex flex-col min-h-0 flex-1">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -53,37 +52,35 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'billOfMaterialId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getBillOfMaterialId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
-    />
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getBillOfMaterialId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="billOfMaterialId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #detail>
+        <BillOfMaterialItemPanel
+          ref="billOfMaterialItemPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
+      </template>
+    </TaktMasterDetailTableLr>
 
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
-    </div>
-
-    <!-- 底部：BOM 明细独立 CRUD（上主下从） -->
-    <BillOfMaterialItemPanel ref="itemPanelRef" />
-
-    <!-- 新增/编辑对话框（主表 + 子表级联 Save） -->
+    <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
@@ -93,13 +90,8 @@
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <a-alert
-        type="info"
-        show-icon
-        class="mb-3"
-        :message="t('logistics.manufacturing.bom.bill-of-material.page.modalCascadeHint')"
-      />
       <BillOfMaterialForm
+        :key="formData?.billOfMaterialId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -117,178 +109,187 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.billOfMaterial.plantcode')">
+      <a-form-item :label="t('entity.billofmaterial.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.plantcode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('bomCode')">
-      <a-form-item :label="t('entity.billOfMaterial.bomcode')">
+      <a-form-item :label="t('entity.billofmaterial.bomcode')">
         <a-input
           v-model:value="advancedQueryForm.bomCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomcode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('bomName')">
-      <a-form-item :label="t('entity.billOfMaterial.bomname')">
+      <a-form-item :label="t('entity.billofmaterial.bomname')">
         <a-input
           v-model:value="advancedQueryForm.bomName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomname') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('parentMaterialId')">
-      <a-form-item :label="t('entity.billOfMaterial.parentmaterialid')">
+      <a-form-item :label="t('entity.billofmaterial.parentmaterialid')">
         <a-input
           v-model:value="advancedQueryForm.parentMaterialId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('parentMaterialCode')">
-      <a-form-item :label="t('entity.billOfMaterial.parentmaterialcode')">
+      <a-form-item :label="t('entity.billofmaterial.parentmaterialcode')">
         <a-input
           v-model:value="advancedQueryForm.parentMaterialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('parentMaterialName')">
-      <a-form-item :label="t('entity.billOfMaterial.parentmaterialname')">
+      <a-form-item :label="t('entity.billofmaterial.parentmaterialname')">
         <a-input
           v-model:value="advancedQueryForm.parentMaterialName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialname') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('bomVersion')">
-      <a-form-item :label="t('entity.billOfMaterial.bomversion')">
+      <a-form-item :label="t('entity.billofmaterial.bomversion')">
         <a-input
           v-model:value="advancedQueryForm.bomVersion"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomversion') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomversion') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('bomType')">
-      <a-form-item :label="t('entity.billOfMaterial.bomtype')">
+      <a-form-item :label="t('entity.billofmaterial.bomtype')">
         <a-input-number
           v-model:value="advancedQueryForm.bomType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomtype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomtype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('alternativeBomNumber')">
-      <a-form-item :label="t('entity.billOfMaterial.alternativebomnumber')">
+      <a-form-item :label="t('entity.billofmaterial.alternativebomnumber')">
         <a-input
           v-model:value="advancedQueryForm.alternativeBomNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.alternativebomnumber') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.alternativebomnumber') })"
+          show-count
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveDateStart')">
-      <a-form-item :label="t('entity.billOfMaterial.effectivedatestart')">
+      <a-form-item :label="t('entity.billofmaterial.effectivedatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.effectivedatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.effectivedatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveDateEnd')">
-      <a-form-item :label="t('entity.billOfMaterial.effectivedateend')">
+      <a-form-item :label="t('entity.billofmaterial.effectivedateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.effectivedateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.effectivedateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDateStart')">
-      <a-form-item :label="t('entity.billOfMaterial.expirydatestart')">
+      <a-form-item :label="t('entity.billofmaterial.expirydatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.expiryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.expirydatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.expirydatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDateEnd')">
-      <a-form-item :label="t('entity.billOfMaterial.expirydateend')">
+      <a-form-item :label="t('entity.billofmaterial.expirydateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.expiryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.expirydateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.expirydateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('parentMaterialUnit')">
-      <a-form-item :label="t('entity.billOfMaterial.parentmaterialunit')">
+      <a-form-item :label="t('entity.billofmaterial.parentmaterialunit')">
         <a-input
           v-model:value="advancedQueryForm.parentMaterialUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialunit') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialunit') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('parentMaterialQuantity')">
-      <a-form-item :label="t('entity.billOfMaterial.parentmaterialquantity')">
+      <a-form-item :label="t('entity.billofmaterial.parentmaterialquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.parentMaterialQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialquantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialquantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isEnabled')">
-      <a-form-item :label="t('entity.billOfMaterial.isenabled')">
+      <a-form-item :label="t('entity.billofmaterial.isenabled')">
         <a-input-number
           v-model:value="advancedQueryForm.isEnabled"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.isenabled') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.isenabled') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('bomStatus')">
-      <a-form-item :label="t('entity.billOfMaterial.bomstatus')">
+      <a-form-item :label="t('entity.billofmaterial.bomstatus')">
         <a-input-number
           v-model:value="advancedQueryForm.bomStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomstatus') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomstatus') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('bomDescription')">
-      <a-form-item :label="t('entity.billOfMaterial.bomdescription')">
+      <a-form-item :label="t('entity.billofmaterial.bomdescription')">
         <a-textarea
           v-model:value="advancedQueryForm.bomDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.billOfMaterial.bomdescription') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.billofmaterial.bomdescription') })"
           :rows="2"
           allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.billOfMaterial.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.sortorder') })"
-          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -314,11 +315,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('entity.billofmaterial.extfield')">
+        <a-textarea
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.billofmaterial.extfield') })"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -328,8 +330,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -339,14 +343,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.billOfMaterial._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.billofmaterial._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.billOfMaterial._self"
+        entity-i18n-key="entity.billofmaterial._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -382,26 +386,23 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import BillOfMaterialForm from './components/bill-of-material-form.vue'
 import BillOfMaterialItemPanel from './components/bill-of-material-item-panel.vue'
 import { provideBillOfMaterialMasterContext } from './composables/use-bill-of-material-master-context'
-import { getBillOfMaterialList, getBillOfMaterialById, createBillOfMaterial, updateBillOfMaterial, deleteBillOfMaterialById, deleteBillOfMaterialBatch, getBillOfMaterialTemplate, importBillOfMaterial, exportBillOfMaterial } from '@/api/logistics/manufacturing/bom/bill-of-material'
-import type { BillOfMaterial, BillOfMaterialQuery, BillOfMaterialCreate, BillOfMaterialUpdate } from '@/types/logistics/manufacturing/bom/bill-of-material'
+import { getBillOfMaterialList, getBillOfMaterialById, createBillOfMaterial, updateBillOfMaterial, deleteBillOfMaterialById, deleteBillOfMaterialBatch, getBillOfMaterialTemplate, importBillOfMaterial, exportBillOfMaterial, updateBillOfMaterialStatus } from '@/api/logistics/manufacturing/bom/bill-of-material'
+import type { BillOfMaterial, BillOfMaterialQuery } from '@/types/logistics/manufacturing/bom/bill-of-material'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-/** 主表选中行上下文（底部明细面板读取） */
-const { selectedMasterRow } = provideBillOfMaterialMasterContext()
-/** 底部 BOM 明细面板 ref */
-const itemPanelRef = ref<InstanceType<typeof BillOfMaterialItemPanel> | null>(null)
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktBillOfMaterial')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.billOfMaterial._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.billofmaterial._self') })
 )
 
 /** 快捷查询关键字 */
@@ -411,9 +412,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<BillOfMaterial[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -428,11 +429,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<BillOfMaterial>>({})
+const formData = ref<Partial<BillOfMaterial> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -454,36 +457,34 @@ const advancedQueryForm = ref({
   isEnabled: undefined as number | undefined,
   bomStatus: undefined as number | undefined,
   bomDescription: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.billOfMaterial.plantcode') },
-  { key: 'bomCode', label: t('entity.billOfMaterial.bomcode') },
-  { key: 'bomName', label: t('entity.billOfMaterial.bomname') },
-  { key: 'parentMaterialId', label: t('entity.billOfMaterial.parentmaterialid') },
-  { key: 'parentMaterialCode', label: t('entity.billOfMaterial.parentmaterialcode') },
-  { key: 'parentMaterialName', label: t('entity.billOfMaterial.parentmaterialname') },
-  { key: 'bomVersion', label: t('entity.billOfMaterial.bomversion') },
-  { key: 'bomType', label: t('entity.billOfMaterial.bomtype') },
-  { key: 'alternativeBomNumber', label: t('entity.billOfMaterial.alternativebomnumber') },
-  { key: 'effectiveDateStart', label: t('entity.billOfMaterial.effectivedatestart') },
-  { key: 'effectiveDateEnd', label: t('entity.billOfMaterial.effectivedateend') },
-  { key: 'expiryDateStart', label: t('entity.billOfMaterial.expirydatestart') },
-  { key: 'expiryDateEnd', label: t('entity.billOfMaterial.expirydateend') },
-  { key: 'parentMaterialUnit', label: t('entity.billOfMaterial.parentmaterialunit') },
-  { key: 'parentMaterialQuantity', label: t('entity.billOfMaterial.parentmaterialquantity') },
-  { key: 'isEnabled', label: t('entity.billOfMaterial.isenabled') },
-  { key: 'bomStatus', label: t('entity.billOfMaterial.bomstatus') },
-  { key: 'bomDescription', label: t('entity.billOfMaterial.bomdescription') },
-  { key: 'sortOrder', label: t('entity.billOfMaterial.sortorder') },
+  { key: 'plantCode', label: t('entity.billofmaterial.plantcode') },
+  { key: 'bomCode', label: t('entity.billofmaterial.bomcode') },
+  { key: 'bomName', label: t('entity.billofmaterial.bomname') },
+  { key: 'parentMaterialId', label: t('entity.billofmaterial.parentmaterialid') },
+  { key: 'parentMaterialCode', label: t('entity.billofmaterial.parentmaterialcode') },
+  { key: 'parentMaterialName', label: t('entity.billofmaterial.parentmaterialname') },
+  { key: 'bomVersion', label: t('entity.billofmaterial.bomversion') },
+  { key: 'bomType', label: t('entity.billofmaterial.bomtype') },
+  { key: 'alternativeBomNumber', label: t('entity.billofmaterial.alternativebomnumber') },
+  { key: 'effectiveDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.billofmaterial.effectivedate')) },
+  { key: 'effectiveDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.billofmaterial.effectivedate')) },
+  { key: 'expiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.billofmaterial.expirydate')) },
+  { key: 'expiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.billofmaterial.expirydate')) },
+  { key: 'parentMaterialUnit', label: t('entity.billofmaterial.parentmaterialunit') },
+  { key: 'parentMaterialQuantity', label: t('entity.billofmaterial.parentmaterialquantity') },
+  { key: 'isEnabled', label: t('entity.billofmaterial.isenabled') },
+  { key: 'bomStatus', label: t('entity.billofmaterial.bomstatus') },
+  { key: 'bomDescription', label: t('entity.billofmaterial.bomdescription') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('entity.billofmaterial.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -501,15 +502,100 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideBillOfMaterialMasterContext()
+const billOfMaterialItemPanelRef = ref<InstanceType<typeof BillOfMaterialItemPanel> | null>(null)
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {BillOfMaterialQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<BillOfMaterialQuery>): BillOfMaterialQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: BillOfMaterialQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof BillOfMaterialQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('bomCode', form.bomCode)
+  assignTrimmed('bomName', form.bomName)
+  assignTrimmed('parentMaterialId', form.parentMaterialId)
+  assignTrimmed('parentMaterialCode', form.parentMaterialCode)
+  assignTrimmed('parentMaterialName', form.parentMaterialName)
+  assignTrimmed('bomVersion', form.bomVersion)
+  if (form.bomType !== undefined && form.bomType !== null) {
+    query.bomType = form.bomType
+  }
+  assignTrimmed('alternativeBomNumber', form.alternativeBomNumber)
+  assignTrimmed('effectiveDateStart', form.effectiveDateStart)
+  assignTrimmed('effectiveDateEnd', form.effectiveDateEnd)
+  assignTrimmed('expiryDateStart', form.expiryDateStart)
+  assignTrimmed('expiryDateEnd', form.expiryDateEnd)
+  assignTrimmed('parentMaterialUnit', form.parentMaterialUnit)
+  if (form.parentMaterialQuantity !== undefined && form.parentMaterialQuantity !== null) {
+    query.parentMaterialQuantity = form.parentMaterialQuantity
+  }
+  if (form.isEnabled !== undefined && form.isEnabled !== null) {
+    query.isEnabled = form.isEnabled
+  }
+  if (form.bomStatus !== undefined && form.bomStatus !== null) {
+    query.bomStatus = form.bomStatus
+  }
+  assignTrimmed('bomDescription', form.bomDescription)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 同步主表选中行到底部明细上下文并刷新子表 */
+
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
 function syncMasterSelection(record: BillOfMaterial | null) {
   selectedMasterRow.value = record
-  itemPanelRef.value?.reload()
+  selectedMasterKey.value = record ? getBillOfMaterialId(record) : ''
+}
+
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as BillOfMaterial
+  const key = getBillOfMaterialId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
+}
+
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
 }
 
 /** 加载主表详情并回填当前页 dataSource */
@@ -530,6 +616,7 @@ async function loadBillOfMaterialDetail(record: BillOfMaterial): Promise<BillOfM
     return null
   }
 }
+
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
@@ -543,7 +630,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'billOfMaterialId') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.plantcode'),
+    title: t('entity.billofmaterial.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -552,7 +639,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.bomcode'),
+    title: t('entity.billofmaterial.bomcode'),
     dataIndex: 'bomCode',
     key: 'bomCode',
     width: 120,
@@ -561,7 +648,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'bomCode') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.bomname'),
+    title: t('entity.billofmaterial.bomname'),
     dataIndex: 'bomName',
     key: 'bomName',
     width: 120,
@@ -570,7 +657,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'bomName') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.parentmaterialid'),
+    title: t('entity.billofmaterial.parentmaterialid'),
     dataIndex: 'parentMaterialId',
     key: 'parentMaterialId',
     width: 120,
@@ -579,7 +666,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'parentMaterialId') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.parentmaterialcode'),
+    title: t('entity.billofmaterial.parentmaterialcode'),
     dataIndex: 'parentMaterialCode',
     key: 'parentMaterialCode',
     width: 120,
@@ -588,7 +675,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'parentMaterialCode') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.parentmaterialname'),
+    title: t('entity.billofmaterial.parentmaterialname'),
     dataIndex: 'parentMaterialName',
     key: 'parentMaterialName',
     width: 120,
@@ -597,7 +684,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'parentMaterialName') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.bomversion'),
+    title: t('entity.billofmaterial.bomversion'),
     dataIndex: 'bomVersion',
     key: 'bomVersion',
     width: 120,
@@ -606,7 +693,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'bomVersion') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.bomtype'),
+    title: t('entity.billofmaterial.bomtype'),
     dataIndex: 'bomType',
     key: 'bomType',
     width: 120,
@@ -615,7 +702,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'bomType') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.alternativebomnumber'),
+    title: t('entity.billofmaterial.alternativebomnumber'),
     dataIndex: 'alternativeBomNumber',
     key: 'alternativeBomNumber',
     width: 120,
@@ -624,7 +711,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'alternativeBomNumber') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.effectivedate'),
+    title: t('entity.billofmaterial.effectivedate'),
     dataIndex: 'effectiveDate',
     key: 'effectiveDate',
     width: 120,
@@ -633,7 +720,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'effectiveDate') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.expirydate'),
+    title: t('entity.billofmaterial.expirydate'),
     dataIndex: 'expiryDate',
     key: 'expiryDate',
     width: 120,
@@ -642,7 +729,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'expiryDate') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.parentmaterialunit'),
+    title: t('entity.billofmaterial.parentmaterialunit'),
     dataIndex: 'parentMaterialUnit',
     key: 'parentMaterialUnit',
     width: 120,
@@ -651,7 +738,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'parentMaterialUnit') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.parentmaterialquantity'),
+    title: t('entity.billofmaterial.parentmaterialquantity'),
     dataIndex: 'parentMaterialQuantity',
     key: 'parentMaterialQuantity',
     width: 120,
@@ -660,7 +747,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'parentMaterialQuantity') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.isenabled'),
+    title: t('entity.billofmaterial.isenabled'),
     dataIndex: 'isEnabled',
     key: 'isEnabled',
     width: 120,
@@ -669,7 +756,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'isEnabled') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.bomstatus'),
+    title: t('entity.billofmaterial.bomstatus'),
     dataIndex: 'bomStatus',
     key: 'bomStatus',
     width: 120,
@@ -678,7 +765,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getBillOfMaterialField(record, 'bomStatus') ?? ''
   },
   {
-    title: t('entity.billOfMaterial.bomdescription'),
+    title: t('entity.billofmaterial.bomdescription'),
     dataIndex: 'bomDescription',
     key: 'bomDescription',
     width: 120,
@@ -717,6 +804,7 @@ const getBillOfMaterialId = (record: any): string => record?.[entityIdName] ?? '
  */
 const getBillOfMaterialField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -724,7 +812,11 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
-    syncMasterSelection(rows.length === 1 ? (rows[0] ?? null) : null)
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: BillOfMaterial, selected: boolean) => {
     if (selected) {
@@ -741,31 +833,11 @@ const rowSelection = computed(() => ({
   }
 }))
 
-/** 行点击：单选当前行并加载底部明细（对齐 Vue.NetCore MES_Bom_Main.rowClick） */
-const onClickRow = (record: BillOfMaterial) => ({
-  onClick: () => {
-    const key = getBillOfMaterialId(record)
-    selectedRowKeys.value = [key]
-    selectedRows.value = [record]
-    selectedRow.value = record
-    syncMasterSelection(record)
-  }
-})
-
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: BillOfMaterialQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getBillOfMaterialList(params)
+    const res = await getBillOfMaterialList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -783,7 +855,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -809,25 +881,25 @@ function handleReset() {
   isEnabled: undefined as number | undefined,
   bomStatus: undefined as number | undefined,
   bomDescription: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.billOfMaterial._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.billofmaterial._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: BillOfMaterial) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.billOfMaterial._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.billofmaterial._self') })
   formLoading.value = true
   try {
     const detail = await loadBillOfMaterialDetail(record)
@@ -843,7 +915,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.billOfMaterial._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.billofmaterial._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -861,12 +933,17 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateBillOfMaterial(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.billOfMaterial._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.billofmaterial._self') }))
     } else {
       await createBillOfMaterial(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.billOfMaterial._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.billofmaterial._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  billOfMaterialItemPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -876,6 +953,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -907,16 +986,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: BillOfMaterialQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportBillOfMaterial(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportBillOfMaterial(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -935,10 +1009,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.billOfMaterial._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.billofmaterial._self') }))
   } catch (error: any) {
     logger.error('[BillOfMaterial] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.billOfMaterial._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.billofmaterial._self') }))
   } finally {
     loading.value = false
   }
@@ -947,12 +1021,16 @@ async function handleExport() {
 async function handleDeleteOne(record: BillOfMaterial) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.billOfMaterial._self'), name: t('common.tip.this.target', { target: t('entity.billOfMaterial._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.billofmaterial._self'), name: t('common.tip.this.target', { target: t('entity.billofmaterial._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteBillOfMaterialById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.billOfMaterial._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.billofmaterial._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -960,18 +1038,22 @@ async function handleDeleteOne(record: BillOfMaterial) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.billOfMaterial._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.billofmaterial._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.billOfMaterial._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.billofmaterial._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteBillOfMaterialBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.billOfMaterial._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.billofmaterial._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -984,7 +1066,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1008,10 +1090,9 @@ function handleAdvancedQueryReset() {
   isEnabled: undefined as number | undefined,
   bomStatus: undefined as number | undefined,
   bomDescription: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -1040,28 +1121,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-manufacturing-bom-bill-of-material {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  height: 100%;
-}
-.master-section {
-  min-height: 280px;
-}
-</style>

@@ -1,4 +1,4 @@
-<!-- ======================================== -->
+﻿<!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/code/database/data-clone -->
 <!-- 文件名称：index.vue -->
@@ -10,19 +10,19 @@
 <template>
   <div class="p-4 flex flex-col gap-4 min-h-0">
     <a-typography-title :level="4" class="!mb-0">
-      {{ t('code.database.dataClone.page.title') }}
+      {{ t('code.database.data-clone.page.title') }}
     </a-typography-title>
     <a-typography-text type="secondary">
-      {{ t('code.database.dataClone.page.subtitle') }}
+      {{ t('code.database.data-clone.page.subtitle') }}
     </a-typography-text>
 
-    <a-card :title="t('code.database.dataClone.page.section.source')">
+    <a-card :title="t('code.database.data-clone.page.section.source')">
       <a-row :gutter="16">
         <a-col :xs="24" :md="12">
-          <a-form-item :label="t('code.database.dataClone.page.field.tenant')" required>
+          <a-form-item :label="t('code.database.data-clone.page.field.tenant')" required>
             <a-select
               v-model:value="form.sourceTenantCode"
-              :placeholder="t('common.page.form.placeholder.select', { field: t('code.database.dataClone.page.field.tenant') })"
+              :placeholder="t('common.page.form.placeholder.select', { field: t('code.database.data-clone.page.field.tenant') })"
               :loading="databaseInfoLoading"
               show-search
               option-filter-prop="label"
@@ -41,15 +41,15 @@
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="12">
-          <a-form-item :label="t('code.database.dataClone.page.field.database')">
+          <a-form-item :label="t('code.database.data-clone.page.field.database')">
             <a-input :value="sourceDatabaseName" disabled />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="12">
-          <a-form-item :label="t('code.database.dataClone.page.field.table')" required>
+          <a-form-item :label="t('code.database.data-clone.page.field.table')" required>
             <a-select
               v-model:value="form.sourceTableName"
-              :placeholder="t('common.page.form.placeholder.select', { field: t('code.database.dataClone.page.field.table') })"
+              :placeholder="t('common.page.form.placeholder.select', { field: t('code.database.data-clone.page.field.table') })"
               :disabled="!form.sourceTenantCode"
               :loading="isTablesLoading(form.sourceTenantCode)"
               show-search
@@ -68,25 +68,25 @@
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="12">
-          <a-form-item :label="t('code.database.dataClone.page.field.company')" required>
+          <a-form-item :label="t('code.database.data-clone.page.field.company')" required>
             <a-input
               v-model:value="form.sourceCompanyCode"
               :maxlength="4"
               show-count
-              :placeholder="t('common.page.form.placeholder.required', { field: t('code.database.dataClone.page.field.company') })"
+              :placeholder="t('common.page.form.placeholder.required', { field: t('code.database.data-clone.page.field.company') })"
             />
           </a-form-item>
         </a-col>
       </a-row>
     </a-card>
 
-    <a-card :title="t('code.database.dataClone.page.section.target')">
+    <a-card :title="t('code.database.data-clone.page.section.target')">
       <a-row :gutter="16">
         <a-col :xs="24" :md="12">
-          <a-form-item :label="t('code.database.dataClone.page.field.tenant')" required>
+          <a-form-item :label="t('code.database.data-clone.page.field.tenant')" required>
             <a-select
               v-model:value="form.targetTenantCode"
-              :placeholder="t('common.page.form.placeholder.select', { field: t('code.database.dataClone.page.field.tenant') })"
+              :placeholder="t('common.page.form.placeholder.select', { field: t('code.database.data-clone.page.field.tenant') })"
               :loading="databaseInfoLoading"
               show-search
               option-filter-prop="label"
@@ -105,15 +105,15 @@
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="12">
-          <a-form-item :label="t('code.database.dataClone.page.field.database')">
+          <a-form-item :label="t('code.database.data-clone.page.field.database')">
             <a-input :value="targetDatabaseName" disabled />
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="12">
-          <a-form-item :label="t('code.database.dataClone.page.field.table')" required>
+          <a-form-item :label="t('code.database.data-clone.page.field.table')" required>
             <a-select
               v-model:value="form.targetTableName"
-              :placeholder="t('common.page.form.placeholder.select', { field: t('code.database.dataClone.page.field.table') })"
+              :placeholder="t('common.page.form.placeholder.select', { field: t('code.database.data-clone.page.field.table') })"
               :disabled="!form.targetTenantCode"
               :loading="isTablesLoading(form.targetTenantCode)"
               show-search
@@ -132,21 +132,21 @@
           </a-form-item>
         </a-col>
         <a-col :xs="24" :md="12">
-          <a-form-item :label="t('code.database.dataClone.page.field.company')" required>
+          <a-form-item :label="t('code.database.data-clone.page.field.company')" required>
             <a-input
               v-model:value="form.targetCompanyCode"
               :maxlength="4"
               show-count
-              :placeholder="t('common.page.form.placeholder.required', { field: t('code.database.dataClone.page.field.company') })"
+              :placeholder="t('common.page.form.placeholder.required', { field: t('code.database.data-clone.page.field.company') })"
             />
           </a-form-item>
         </a-col>
       </a-row>
     </a-card>
 
-    <a-card :title="t('code.database.dataClone.page.section.options')">
+    <a-card :title="t('code.database.data-clone.page.section.options')">
       <a-checkbox v-model:checked="form.preserveIdentityValues">
-        {{ t('code.database.dataClone.page.field.preserveIdentity') }}
+        {{ t('code.database.data-clone.page.field.preserveidentity') }}
       </a-checkbox>
       <div class="mt-4">
         <a-button
@@ -156,68 +156,68 @@
           :disabled="!canSubmitForm"
           @click="handleOpenBackupWindow"
         >
-          {{ t('code.database.dataClone.page.action.startClone') }}
+          {{ t('code.database.data-clone.page.action.startclone') }}
         </a-button>
       </div>
     </a-card>
 
     <a-card
       v-if="cloneResult"
-      :title="t('code.database.dataClone.page.section.result')"
+      :title="t('code.database.data-clone.page.section.result')"
     >
       <a-descriptions bordered :column="2" size="small">
-        <a-descriptions-item :label="t('code.database.dataClone.page.result.backupTable')">
+        <a-descriptions-item :label="t('code.database.data-clone.page.result.backuptable')">
           {{ cloneResult.backupTableName }}
         </a-descriptions-item>
-        <a-descriptions-item :label="t('code.database.dataClone.page.result.backedUpRows')">
+        <a-descriptions-item :label="t('code.database.data-clone.page.result.backeduprows')">
           {{ cloneResult.backedUpRowCount }}
         </a-descriptions-item>
-        <a-descriptions-item :label="t('code.database.dataClone.page.result.clearedRows')">
+        <a-descriptions-item :label="t('code.database.data-clone.page.result.clearedrows')">
           {{ cloneResult.clearedRowCount }}
         </a-descriptions-item>
-        <a-descriptions-item :label="t('code.database.dataClone.page.result.sourceRows')">
+        <a-descriptions-item :label="t('code.database.data-clone.page.result.sourcerows')">
           {{ cloneResult.sourceRowCount }}
         </a-descriptions-item>
-        <a-descriptions-item :label="t('code.database.dataClone.page.result.clonedRows')">
+        <a-descriptions-item :label="t('code.database.data-clone.page.result.clonedrows')">
           {{ cloneResult.clonedRowCount }}
         </a-descriptions-item>
-        <a-descriptions-item :label="t('code.database.dataClone.page.result.commonColumns')">
+        <a-descriptions-item :label="t('code.database.data-clone.page.result.commoncolumns')">
           {{ cloneResult.commonColumnCount }}
         </a-descriptions-item>
-        <a-descriptions-item :span="2" :label="t('code.database.dataClone.page.result.summary')">
-          {{ cloneResult.backupSummaryMessage }}
+        <a-descriptions-item :span="2" :label="t('code.database.data-clone.page.result.summary')">
+          {{ cloneResultSummaryText }}
         </a-descriptions-item>
       </a-descriptions>
     </a-card>
 
     <takt-modal
       v-model:open="backupModalVisible"
-      :title="t('code.database.dataClone.page.backupModalTitle')"
+      :title="t('code.database.data-clone.page.backupmodaltitle')"
       :use-viewport-size="false"
       width="640px"
       @cancel="handleCloseBackupModal"
     >
       <div v-if="backupPreview" class="flex flex-col gap-3">
-        <a-alert type="warning" :message="backupPreview.warningMessage" show-icon />
-        <a-typography-text strong>{{ t('code.database.dataClone.page.backupSummary') }}</a-typography-text>
-        <a-typography-paragraph>{{ backupPreview.backupDescription }}</a-typography-paragraph>
-        <a-typography-paragraph>{{ backupPreview.clearDescription }}</a-typography-paragraph>
+        <a-alert type="warning" :message="backupWarningText" show-icon />
+        <a-typography-text strong>{{ t('code.database.data-clone.page.backupsummary') }}</a-typography-text>
+        <a-typography-paragraph>{{ backupDescText }}</a-typography-paragraph>
+        <a-typography-paragraph>{{ clearDescText }}</a-typography-paragraph>
         <a-descriptions bordered size="small" :column="1">
-          <a-descriptions-item :label="t('code.database.dataClone.page.field.table')">
+          <a-descriptions-item :label="t('code.database.data-clone.page.field.table')">
             {{ backupPreview.targetTableName }}
           </a-descriptions-item>
-          <a-descriptions-item :label="t('code.database.dataClone.page.field.company')">
+          <a-descriptions-item :label="t('code.database.data-clone.page.field.company')">
             {{ backupPreview.targetCompanyCode }}
           </a-descriptions-item>
-          <a-descriptions-item :label="t('code.database.dataClone.page.result.targetRows')">
+          <a-descriptions-item :label="t('code.database.data-clone.page.result.targetrows')">
             {{ backupPreview.targetRowCount }}
           </a-descriptions-item>
-          <a-descriptions-item :label="t('code.database.dataClone.page.result.plannedBackupTable')">
+          <a-descriptions-item :label="t('code.database.data-clone.page.result.plannedbackuptable')">
             {{ backupPreview.plannedBackupTableName }}
           </a-descriptions-item>
         </a-descriptions>
         <a-checkbox v-model:checked="backupConfirmed">
-          {{ backupPreview.confirmHint }}
+          {{ t('code.database.data-clone.page.preview.confirmhint') }}
         </a-checkbox>
       </div>
       <template #footer>
@@ -232,7 +232,7 @@
             :disabled="!backupConfirmed"
             @click="handleConfirmClone"
           >
-            {{ t('code.database.dataClone.page.action.confirmExecute') }}
+            {{ t('code.database.data-clone.page.action.confirmexecute') }}
           </a-button>
         </div>
       </template>
@@ -251,6 +251,9 @@ import { useI18n } from 'vue-i18n'
 import { cloneData, getDataClonePreview } from '@/api/code/database/data-clone'
 import { useDatabaseInfoCatalog } from '@/composables/use-database-info-catalog'
 import type { DataClonePreview, DataCloneRequest, DataCloneResult } from '@/types/code/database/data-clone'
+
+/** 备份预览文案键前缀 */
+const DATA_PREVIEW_KEY = 'code.database.data-clone.page.preview'
 
 /** i18n */
 const { t } = useI18n()
@@ -289,6 +292,73 @@ const backupPreview = ref<DataClonePreview | null>(null)
 const backupConfirmed = ref(false)
 /** 克隆结果 */
 const cloneResult = ref<DataCloneResult | null>(null)
+
+/** 克隆结果备份摘要 */
+const cloneResultSummaryText = computed(() => {
+  const result = cloneResult.value
+  if (!result) return ''
+  const targetTableName = form.targetTableName.trim()
+  const targetCompanyCode = form.targetCompanyCode.trim()
+  const backupPart =
+    result.backedUpRowCount > 0
+      ? t(`${DATA_PREVIEW_KEY}.resultbackupwithrows`, {
+          tableName: targetTableName,
+          companyCode: targetCompanyCode,
+          rowCount: result.backedUpRowCount,
+          backupTable: result.backupTableName,
+        })
+      : t(`${DATA_PREVIEW_KEY}.resultbackupempty`, {
+          tableName: targetTableName,
+          companyCode: targetCompanyCode,
+          backupTable: result.backupTableName,
+        })
+  const clearPart = t(`${DATA_PREVIEW_KEY}.resultdeleted`, {
+    tableName: targetTableName,
+    companyCode: targetCompanyCode,
+    rowCount: result.clearedRowCount,
+  })
+  return t(`${DATA_PREVIEW_KEY}.resultsummary`, { backupPart, clearPart })
+})
+
+/** 备份窗口风险提示 */
+const backupWarningText = computed(() => {
+  const preview = backupPreview.value
+  if (!preview) return ''
+  return t(`${DATA_PREVIEW_KEY}.warning`, {
+    tableName: preview.targetTableName,
+    companyCode: preview.targetCompanyCode,
+  })
+})
+
+/** 备份窗口备份步骤说明 */
+const backupDescText = computed(() => {
+  const preview = backupPreview.value
+  if (!preview) return ''
+  if (preview.targetRowCount > 0) {
+    return t(`${DATA_PREVIEW_KEY}.backupwithrows`, {
+      tableName: preview.targetTableName,
+      companyCode: preview.targetCompanyCode,
+      rowCount: preview.targetRowCount,
+      backupTable: preview.plannedBackupTableName,
+    })
+  }
+  return t(`${DATA_PREVIEW_KEY}.backupempty`, {
+    tableName: preview.targetTableName,
+    companyCode: preview.targetCompanyCode,
+    backupTable: preview.plannedBackupTableName,
+  })
+})
+
+/** 备份窗口清空步骤说明 */
+const clearDescText = computed(() => {
+  const preview = backupPreview.value
+  if (!preview) return ''
+  return t(`${DATA_PREVIEW_KEY}.cleardelete`, {
+    tableName: preview.targetTableName,
+    companyCode: preview.targetCompanyCode,
+    rowCount: preview.targetRowCount,
+  })
+})
 
 /** 源库展示名 */
 const sourceDatabaseName = computed(() => resolveDatabaseDisplayName(form.sourceTenantCode))
@@ -382,7 +452,7 @@ async function handleTargetTenantChange() {
 async function handleOpenBackupWindow() {
   if (!canSubmitForm.value) {
     if (isSameScope()) {
-      message.warning(t('code.database.dataClone.page.sameScopeError'))
+      message.warning(t('code.database.data-clone.page.samescopeerror'))
     }
     return
   }
@@ -392,7 +462,7 @@ async function handleOpenBackupWindow() {
     backupPreview.value = await getDataClonePreview(buildRequest(false))
     backupModalVisible.value = true
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : t('code.database.dataClone.page.cloneFailed')
+    const msg = error instanceof Error ? error.message : t('code.database.data-clone.page.clonefailed')
     message.error(msg)
   } finally {
     previewLoading.value = false
@@ -412,17 +482,17 @@ function handleCloseBackupModal() {
  */
 async function handleConfirmClone() {
   if (!backupConfirmed.value || !backupPreview.value) {
-    message.warning(t('code.database.dataClone.page.previewRequired'))
+    message.warning(t('code.database.data-clone.page.previewrequired'))
     return
   }
   cloneLoading.value = true
   try {
     cloneResult.value = await cloneData(buildRequest(true))
-    message.success(t('code.database.dataClone.page.cloneSuccess'))
+    message.success(t('code.database.data-clone.page.clonesuccess'))
     backupModalVisible.value = false
     backupConfirmed.value = false
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : t('code.database.dataClone.page.cloneFailed')
+    const msg = error instanceof Error ? error.message : t('code.database.data-clone.page.clonefailed')
     message.error(msg)
   } finally {
     cloneLoading.value = false

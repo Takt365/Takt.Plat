@@ -49,7 +49,7 @@ export interface BenefitItem extends CompanyDtoBase {
   benefitType: number;
 
   /**
-   * 发放周期（字典 hr_benefit_payment_cycle）
+   * 发放周期（字典 hr_benefit_payment_cycle_type）
    */
   paymentCycle: number;
 
@@ -74,7 +74,7 @@ export interface BenefitItem extends CompanyDtoBase {
   employeeRatio: number;
 
   /**
-   * 是否强制福利（字典 sys_yes_no）
+   * 是否强制福利（字典 sys_yes_no_type）
    */
   isMandatory: number;
 
@@ -84,7 +84,7 @@ export interface BenefitItem extends CompanyDtoBase {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus: number;
 
@@ -134,7 +134,7 @@ export interface BenefitItemQuery extends TaktPagedQuery {
   benefitType?: number;
 
   /**
-   * 发放周期（字典 hr_benefit_payment_cycle）
+   * 发放周期（字典 hr_benefit_payment_cycle_type）
    */
   paymentCycle?: number;
 
@@ -159,7 +159,7 @@ export interface BenefitItemQuery extends TaktPagedQuery {
   employeeRatio?: number;
 
   /**
-   * 是否强制福利（字典 sys_yes_no）
+   * 是否强制福利（字典 sys_yes_no_type）
    */
   isMandatory?: number;
 
@@ -169,7 +169,7 @@ export interface BenefitItemQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus?: number;
 
@@ -191,7 +191,7 @@ export interface BenefitItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -243,7 +243,7 @@ export interface BenefitItemCreate {
   benefitType: number;
 
   /**
-   * 发放周期（字典 hr_benefit_payment_cycle）
+   * 发放周期（字典 hr_benefit_payment_cycle_type）
    */
   paymentCycle: number;
 
@@ -268,7 +268,7 @@ export interface BenefitItemCreate {
   employeeRatio: number;
 
   /**
-   * 是否强制福利（字典 sys_yes_no）
+   * 是否强制福利（字典 sys_yes_no_type）
    */
   isMandatory: number;
 
@@ -278,7 +278,7 @@ export interface BenefitItemCreate {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus: number;
 
@@ -290,7 +290,7 @@ export interface BenefitItemCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -327,7 +327,7 @@ export interface BenefitItemStatus {
   benefitItemId: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus: number;
 
@@ -390,12 +390,12 @@ export interface BenefitItemTemplate {
   benefitType?: number;
 
   /**
-   * 发放周期（字典 hr_benefit_payment_cycle）
+   * 发放周期（字典 hr_benefit_payment_cycle_type）
    */
   paymentCycle?: number;
 
   /**
-   * 是否强制福利（字典 sys_yes_no）
+   * 是否强制福利（字典 sys_yes_no_type）
    */
   isMandatory?: number;
 
@@ -405,7 +405,7 @@ export interface BenefitItemTemplate {
   sortOrder?: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus?: number;
 
@@ -417,7 +417,7 @@ export interface BenefitItemTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -469,12 +469,12 @@ export interface BenefitItemImport {
   benefitType?: number;
 
   /**
-   * 发放周期（字典 hr_benefit_payment_cycle）
+   * 发放周期（字典 hr_benefit_payment_cycle_type）
    */
   paymentCycle?: number;
 
   /**
-   * 是否强制福利（字典 sys_yes_no）
+   * 是否强制福利（字典 sys_yes_no_type）
    */
   isMandatory?: number;
 
@@ -484,7 +484,7 @@ export interface BenefitItemImport {
   sortOrder?: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus?: number;
 
@@ -496,7 +496,7 @@ export interface BenefitItemImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -543,7 +543,7 @@ export interface BenefitItemExport {
   benefitType: number;
 
   /**
-   * 发放周期（字典 hr_benefit_payment_cycle）
+   * 发放周期（字典 hr_benefit_payment_cycle_type）
    */
   paymentCycle: number;
 
@@ -568,7 +568,7 @@ export interface BenefitItemExport {
   employeeRatio: number;
 
   /**
-   * 是否强制福利（字典 sys_yes_no）
+   * 是否强制福利（字典 sys_yes_no_type）
    */
   isMandatory: number;
 
@@ -578,7 +578,7 @@ export interface BenefitItemExport {
   sortOrder: number;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   itemStatus: number;
 
@@ -590,7 +590,7 @@ export interface BenefitItemExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

@@ -27,12 +27,12 @@ export type TaktThemeColorPreset =
   | 'tiffany-blue'
   | 'chinese-red'
   | 'titian-red'
-  | 'burgundy'
-  | 'bordeaux'
+  | 'burgundy-red'
+  | 'bordeaux-red'
   | 'klein-blue'
-  | 'van-dyke-brown'
+  | 'vandyke-brown'
   | 'prussian-blue'
-  | 'senelier-yellow'
+  | 'sennelier-yellow'
   | 'memorial-gray';
 
 /**
@@ -44,12 +44,12 @@ export const themeColorPresetKeys: readonly TaktThemeColorPreset[] = [
   'tiffany-blue',
   'chinese-red',
   'titian-red',
-  'burgundy',
-  'bordeaux',
+  'burgundy-red',
+  'bordeaux-red',
   'klein-blue',
-  'van-dyke-brown',
+  'vandyke-brown',
   'prussian-blue',
-  'senelier-yellow',
+  'sennelier-yellow',
   'memorial-gray',
 ] as const;
 
@@ -59,13 +59,30 @@ export const themeColorMap: Record<TaktThemeColorPreset, string> = {
   'tiffany-blue': '#00a0b0',
   'chinese-red': '#ff0000',
   'titian-red': '#ff6347',
-  burgundy: '#990033',
-  bordeaux: '#8c1515',
+  'burgundy-red': '#990033',
+  'bordeaux-red': '#8c1515',
   'klein-blue': '#002fa7',
-  'van-dyke-brown': '#4c2b18',
+  'vandyke-brown': '#4c2b18',
   'prussian-blue': '#003153',
-  'senelier-yellow': '#f9dc24',
+  'sennelier-yellow': '#f4d35e',
   'memorial-gray': '#808080',
+};
+
+/**
+ * 主题色预设（存储/CSS 用连字符 slug）→ common.page.color.* 翻译键后缀（仅小写点分段，禁止连字符）
+ */
+export const themeColorPresetI18nKeyMap: Record<TaktThemeColorPreset, string> = {
+  'mars-green': 'mars.green',
+  'tiffany-blue': 'tiffany.blue',
+  'chinese-red': 'chinese.red',
+  'titian-red': 'titian.red',
+  'burgundy-red': 'burgundy.red',
+  'bordeaux-red': 'bordeaux.red',
+  'klein-blue': 'klein.blue',
+  'vandyke-brown': 'vandyke.brown',
+  'prussian-blue': 'prussian.blue',
+  'sennelier-yellow': 'sennelier.yellow',
+  'memorial-gray': 'memorial.gray',
 };
 
 /** 默认预设（列表首项） */
@@ -120,16 +137,36 @@ export function initTaktThemeDom(): void {
   applyThemeDom(resolveThemeMode(readStoredThemeMode()));
 }
 
+/** 旧版 preset / 后端假日主题键 → 现行 preset（著名色统一 *-red 后缀） */
+const legacyThemeColorPresetMap: Record<string, TaktThemeColorPreset> = {
+  burgundy: 'burgundy-red',
+  bordeaux: 'bordeaux-red',
+  'van-dyke-brown': 'vandyke-brown',
+  'senelier-yellow': 'sennelier-yellow',
+};
+
+/**
+ * 解析主题色预设键（含 localStorage / 后端假日主题旧键兼容）
+ * @param stored 原始键名
+ * @returns 现行 preset，无法识别时返回 null
+ */
+export function resolveThemeColorPreset(stored: string | null | undefined): TaktThemeColorPreset | null {
+  const key = stored?.trim();
+  if (!key) {
+    return null;
+  }
+  if (key in themeColorMap) {
+    return key as TaktThemeColorPreset;
+  }
+  return legacyThemeColorPresetMap[key] ?? null;
+}
+
 /**
  * 读取已持久化的主题色预设
  * @returns 主题色预设
  */
 export function readStoredThemeColorPreset(): TaktThemeColorPreset {
-  const stored = localStorage.getItem(TAKT_THEME_COLOR_STORAGE_KEY);
-  if (stored && stored in themeColorMap) {
-    return stored as TaktThemeColorPreset;
-  }
-  return defaultThemeColorPreset;
+  return resolveThemeColorPreset(localStorage.getItem(TAKT_THEME_COLOR_STORAGE_KEY)) ?? defaultThemeColorPreset;
 }
 
 /**

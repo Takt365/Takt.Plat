@@ -62,10 +62,10 @@
           layout="vertical"
           @finish="handleEmailStepSubmit"
         >
-          <a-form-item :label="t('login.page.field.usernameOrEmail.label')" name="userEmail">
+          <a-form-item :label="t('login.page.field.username.or.email.label')" name="userEmail">
             <a-input
               v-model:value="formState.userEmail"
-              :placeholder="t('login.page.field.usernameOrEmail.placeholder')"
+              :placeholder="t('login.page.field.username.or.email.placeholder')"
               size="large"
               show-count
               :maxlength="EMAIL_MAX_LENGTH"
@@ -139,7 +139,7 @@
       <div v-else-if="currentStep === FORGOT_STEP_DONE">
         <a-result
           status="success"
-          :title="t('login.page.forgot.emailSent')"
+          :title="t('login.page.forgot.email.sent')"
         >
           <template #extra>
             <a-button type="primary" @click="goToLogin">
@@ -162,6 +162,7 @@ import { RiMailLine, RiLockPasswordLine } from '@remixicon/vue';
 import type { Rule } from 'ant-design-vue/es/form';
 import LoginBrand from '@/views/login/components/login-brand.vue';
 import {
+  isTaktCaptchaDisabledError,
   probeSessionCaptchaRequiredAsync,
   useTaktLoginCaptcha,
   type TaktCaptchaPanelExpose,
@@ -222,6 +223,7 @@ const {
   challenge: captchaChallenge,
   panelRef,
   registerOnVerified: registerCaptchaOnVerified,
+  registerOnCaptchaSkipped: registerCaptchaOnCaptchaSkipped,
   isSlider: captchaIsSlider,
   loadChallengeAsync: loadCaptchaChallengeAsync,
   handleCanSubmitChange: handleCaptchaCanSubmitChange,
@@ -253,7 +255,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   userEmail: [
     {
       required: true,
-      message: t('login.page.validate.usernameOrEmailRequired'),
+      message: t('login.page.validate.username.or.email.required'),
       trigger: 'blur',
     },
     {
@@ -263,16 +265,16 @@ const rules = computed<Record<string, Rule[]>>(() => ({
           return Promise.resolve();
         }
         if (!isValidEmail(trimmed)) {
-          return Promise.reject(t('login.page.validate.usernameOrEmailInvalid'));
+          return Promise.reject(t('login.page.validate.username.or.email.invalid'));
         }
         if (trimmed.length < EMAIL_MIN_LENGTH) {
           return Promise.reject(
-            t('login.page.validate.usernameOrEmailTooShort', { min: EMAIL_MIN_LENGTH })
+            t('login.page.validate.username.or.email.too.short', { min: EMAIL_MIN_LENGTH })
           );
         }
         if (trimmed.length > EMAIL_MAX_LENGTH) {
           return Promise.reject(
-            t('login.page.validate.usernameOrEmailTooLong', { max: EMAIL_MAX_LENGTH })
+            t('login.page.validate.username.or.email.too.long', { max: EMAIL_MAX_LENGTH })
           );
         }
         return Promise.resolve();
@@ -294,7 +296,7 @@ function resolveForgotPasswordErrorMessage(error: unknown): string {
         ? String((error.data as { code?: string }).code)
         : '';
     if (code === 'ProtectedUser') {
-      return t('login.page.forgot.resetUnavailable');
+      return t('login.page.forgot.reset.unavailable');
     }
     if (code === 'EmailNotFound') {
       return t('login.page.forgot.emailnotregistered');
@@ -317,7 +319,7 @@ async function doForgotPasswordAsync(): Promise<void> {
   try {
     loading.value = true;
     await forgotPassword({ usernameOrEmail: formState.userEmail.trim() });
-    message.success(t('login.page.forgot.emailSent'));
+    message.success(t('login.page.forgot.email.sent'));
     formState.userEmail = '';
     currentStep.value = FORGOT_STEP_DONE;
     captchaSessionActive.value = false;
@@ -384,11 +386,15 @@ async function handleEmailStepSubmit(): Promise<void> {
     }
     await doForgotPasswordAsync();
   } catch (error: unknown) {
+    if (isTaktCaptchaDisabledError(error)) {
+      await doForgotPasswordAsync();
+      return;
+    }
     forgotLogger.error('获取验证码挑战失败', { action: 'probeCaptcha' }, error);
     message.error(
       error instanceof Error && error.message
         ? error.message
-        : t('login.page.validate.captchaRequired'),
+        : t('login.page.validate.captcha.required'),
     );
   } finally {
     loading.value = false;
@@ -396,6 +402,10 @@ async function handleEmailStepSubmit(): Promise<void> {
 }
 
 registerCaptchaOnVerified(handleCaptchaConfirm);
+
+registerCaptchaOnCaptchaSkipped(async () => {
+  await doForgotPasswordAsync();
+});
 
 /** 返回登录主表单或路由 */
 function goToLogin(): void {

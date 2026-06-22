@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-manufacturing-output-personnel-operation-rate">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'personnelOperationRateId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <PersonnelOperationRateForm
+        :key="formData?.personnelOperationRateId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,293 +110,305 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.personnelOperationRate.plantcode')">
+      <a-form-item :label="t('entity.personneloperationrate.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('timeCategory')">
-      <a-form-item :label="t('entity.personnelOperationRate.timecategory')">
+      <a-form-item :label="t('entity.personneloperationrate.timecategory')">
         <a-input-number
           v-model:value="advancedQueryForm.timeCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.timecategory') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.timecategory') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startDateStart')">
-      <a-form-item :label="t('entity.personnelOperationRate.startdatestart')">
+      <a-form-item :label="t('entity.personneloperationrate.startdatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.startDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personnelOperationRate.startdatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationrate.startdatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startDateEnd')">
-      <a-form-item :label="t('entity.personnelOperationRate.startdateend')">
+      <a-form-item :label="t('entity.personneloperationrate.startdateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.startDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personnelOperationRate.startdateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationrate.startdateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endDateStart')">
-      <a-form-item :label="t('entity.personnelOperationRate.enddatestart')">
+      <a-form-item :label="t('entity.personneloperationrate.enddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.endDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personnelOperationRate.enddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationrate.enddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endDateEnd')">
-      <a-form-item :label="t('entity.personnelOperationRate.enddateend')">
+      <a-form-item :label="t('entity.personneloperationrate.enddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.endDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personnelOperationRate.enddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.personneloperationrate.enddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('weekNumber')">
-      <a-form-item :label="t('entity.personnelOperationRate.weeknumber')">
+      <a-form-item :label="t('entity.personneloperationrate.weeknumber')">
         <a-input-number
           v-model:value="advancedQueryForm.weekNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.weeknumber') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.weeknumber') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('monthNumber')">
-      <a-form-item :label="t('entity.personnelOperationRate.monthnumber')">
+      <a-form-item :label="t('entity.personneloperationrate.monthnumber')">
         <a-input-number
           v-model:value="advancedQueryForm.monthNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.monthnumber') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.monthnumber') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('productionLine')">
-      <a-form-item :label="t('entity.personnelOperationRate.productionline')">
+      <a-form-item :label="t('entity.personneloperationrate.productionline')">
         <a-input
           v-model:value="advancedQueryForm.productionLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.productionline') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.productionline') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('productionLineName')">
-      <a-form-item :label="t('entity.personnelOperationRate.productionlinename')">
+      <a-form-item :label="t('entity.personneloperationrate.productionlinename')">
         <a-input
           v-model:value="advancedQueryForm.productionLineName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.productionlinename') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.productionlinename') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shiftNo')">
-      <a-form-item :label="t('entity.personnelOperationRate.shiftno')">
+      <a-form-item :label="t('entity.personneloperationrate.shiftno')">
         <a-input-number
           v-model:value="advancedQueryForm.shiftNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.shiftno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.shiftno') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedDirectPersonnelCount')">
-      <a-form-item :label="t('entity.personnelOperationRate.planneddirectpersonnelcount')">
+      <a-form-item :label="t('entity.personneloperationrate.planneddirectpersonnelcount')">
         <a-input-number
           v-model:value="advancedQueryForm.plannedDirectPersonnelCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.planneddirectpersonnelcount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.planneddirectpersonnelcount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualDirectPersonnelCount')">
-      <a-form-item :label="t('entity.personnelOperationRate.actualdirectpersonnelcount')">
+      <a-form-item :label="t('entity.personneloperationrate.actualdirectpersonnelcount')">
         <a-input-number
           v-model:value="advancedQueryForm.actualDirectPersonnelCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.actualdirectpersonnelcount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.actualdirectpersonnelcount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedIndirectPersonnelCount')">
-      <a-form-item :label="t('entity.personnelOperationRate.plannedindirectpersonnelcount')">
+      <a-form-item :label="t('entity.personneloperationrate.plannedindirectpersonnelcount')">
         <a-input-number
           v-model:value="advancedQueryForm.plannedIndirectPersonnelCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.plannedindirectpersonnelcount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.plannedindirectpersonnelcount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualIndirectPersonnelCount')">
-      <a-form-item :label="t('entity.personnelOperationRate.actualindirectpersonnelcount')">
+      <a-form-item :label="t('entity.personneloperationrate.actualindirectpersonnelcount')">
         <a-input-number
           v-model:value="advancedQueryForm.actualIndirectPersonnelCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.actualindirectpersonnelcount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.actualindirectpersonnelcount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedWorkTime')">
-      <a-form-item :label="t('entity.personnelOperationRate.plannedworktime')">
+      <a-form-item :label="t('entity.personneloperationrate.plannedworktime')">
         <a-input-number
           v-model:value="advancedQueryForm.plannedWorkTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.plannedworktime') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.plannedworktime') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualWorkTime')">
-      <a-form-item :label="t('entity.personnelOperationRate.actualworktime')">
+      <a-form-item :label="t('entity.personneloperationrate.actualworktime')">
         <a-input-number
           v-model:value="advancedQueryForm.actualWorkTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.actualworktime') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.actualworktime') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('breakTime')">
-      <a-form-item :label="t('entity.personnelOperationRate.breaktime')">
+      <a-form-item :label="t('entity.personneloperationrate.breaktime')">
         <a-input-number
           v-model:value="advancedQueryForm.breakTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.breaktime') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.breaktime') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('idleTime')">
-      <a-form-item :label="t('entity.personnelOperationRate.idletime')">
+      <a-form-item :label="t('entity.personneloperationrate.idletime')">
         <a-input-number
           v-model:value="advancedQueryForm.idleTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.idletime') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.idletime') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('personnelOperationRate')">
-      <a-form-item :label="t('entity.personnelOperationRate.personneloperationrate')">
+      <a-form-item :label="t('entity.personneloperationrate.personneloperationrate')">
         <a-input-number
           v-model:value="advancedQueryForm.personnelOperationRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.personneloperationrate') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.personneloperationrate') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedOutput')">
-      <a-form-item :label="t('entity.personnelOperationRate.plannedoutput')">
+      <a-form-item :label="t('entity.personneloperationrate.plannedoutput')">
         <a-input-number
           v-model:value="advancedQueryForm.plannedOutput"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.plannedoutput') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.plannedoutput') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualOutput')">
-      <a-form-item :label="t('entity.personnelOperationRate.actualoutput')">
+      <a-form-item :label="t('entity.personneloperationrate.actualoutput')">
         <a-input-number
           v-model:value="advancedQueryForm.actualOutput"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.actualoutput') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.actualoutput') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('qualifiedQuantity')">
-      <a-form-item :label="t('entity.personnelOperationRate.qualifiedquantity')">
+      <a-form-item :label="t('entity.personneloperationrate.qualifiedquantity')">
         <a-input-number
           v-model:value="advancedQueryForm.qualifiedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.qualifiedquantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.qualifiedquantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('defectiveQuantity')">
-      <a-form-item :label="t('entity.personnelOperationRate.defectivequantity')">
+      <a-form-item :label="t('entity.personneloperationrate.defectivequantity')">
         <a-input-number
           v-model:value="advancedQueryForm.defectiveQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.defectivequantity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.defectivequantity') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('yieldRate')">
-      <a-form-item :label="t('entity.personnelOperationRate.yieldrate')">
+      <a-form-item :label="t('entity.personneloperationrate.yieldrate')">
         <a-input-number
           v-model:value="advancedQueryForm.yieldRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.yieldrate') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.yieldrate') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('workEfficiency')">
-      <a-form-item :label="t('entity.personnelOperationRate.workefficiency')">
+      <a-form-item :label="t('entity.personneloperationrate.workefficiency')">
         <a-input-number
           v-model:value="advancedQueryForm.workEfficiency"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.workefficiency') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.workefficiency') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('idleReasonType')">
-      <a-form-item :label="t('entity.personnelOperationRate.idlereasontype')">
+      <a-form-item :label="t('entity.personneloperationrate.idlereasontype')">
         <a-input-number
           v-model:value="advancedQueryForm.idleReasonType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.idlereasontype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.idlereasontype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('idleReason')">
-      <a-form-item :label="t('entity.personnelOperationRate.idlereason')">
+      <a-form-item :label="t('entity.personneloperationrate.idlereason')">
         <a-input
           v-model:value="advancedQueryForm.idleReason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.idlereason') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.idlereason') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('overtimeHours')">
-      <a-form-item :label="t('entity.personnelOperationRate.overtimehours')">
+      <a-form-item :label="t('entity.personneloperationrate.overtimehours')">
         <a-input-number
           v-model:value="advancedQueryForm.overtimeHours"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.overtimehours') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.overtimehours') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('teamLeader')">
-      <a-form-item :label="t('entity.personnelOperationRate.teamleader')">
+      <a-form-item :label="t('entity.personneloperationrate.teamleader')">
         <a-input
           v-model:value="advancedQueryForm.teamLeader"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.teamleader') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.teamleader') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('supervisor')">
-      <a-form-item :label="t('entity.personnelOperationRate.supervisor')">
+      <a-form-item :label="t('entity.personneloperationrate.supervisor')">
         <a-input
           v-model:value="advancedQueryForm.supervisor"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.supervisor') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.supervisor') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('status')">
-      <a-form-item :label="t('entity.personnelOperationRate.status')">
+      <a-form-item :label="t('entity.personneloperationrate.status')">
         <a-input-number
           v-model:value="advancedQueryForm.status"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personnelOperationRate.status') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.personneloperationrate.status') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -422,12 +435,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -436,8 +468,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -447,14 +481,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.personnelOperationRate._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.personneloperationrate._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.personnelOperationRate._self"
+        entity-i18n-key="entity.personneloperationrate._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -490,12 +524,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PersonnelOperationRateForm from './components/personnel-operation-rate-form.vue'
-import { getPersonnelOperationRateList, getPersonnelOperationRateById, createPersonnelOperationRate, updatePersonnelOperationRate, deletePersonnelOperationRateById, deletePersonnelOperationRateBatch, getPersonnelOperationRateTemplate, importPersonnelOperationRate, exportPersonnelOperationRate } from '@/api/logistics/manufacturing/output/personnel-operation-rate'
-import type { PersonnelOperationRate, PersonnelOperationRateQuery, PersonnelOperationRateCreate, PersonnelOperationRateUpdate } from '@/types/logistics/manufacturing/output/personnel-operation-rate'
+import { getPersonnelOperationRateList, getPersonnelOperationRateById, createPersonnelOperationRate, updatePersonnelOperationRate, deletePersonnelOperationRateById, deletePersonnelOperationRateBatch, getPersonnelOperationRateTemplate, importPersonnelOperationRate, exportPersonnelOperationRate, updatePersonnelOperationRateStatus } from '@/api/logistics/manufacturing/output/personnel-operation-rate'
+import type { PersonnelOperationRate, PersonnelOperationRateQuery } from '@/types/logistics/manufacturing/output/personnel-operation-rate'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -503,7 +538,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktPersonnelOperationRate')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.personnelOperationRate._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.personneloperationrate._self') })
 )
 
 /** 快捷查询关键字 */
@@ -513,9 +548,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<PersonnelOperationRate[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -530,11 +565,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<PersonnelOperationRate>>({})
+const formData = ref<Partial<PersonnelOperationRate> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -572,46 +609,46 @@ const advancedQueryForm = ref({
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.personnelOperationRate.plantcode') },
-  { key: 'timeCategory', label: t('entity.personnelOperationRate.timecategory') },
-  { key: 'startDateStart', label: t('entity.personnelOperationRate.startdatestart') },
-  { key: 'startDateEnd', label: t('entity.personnelOperationRate.startdateend') },
-  { key: 'endDateStart', label: t('entity.personnelOperationRate.enddatestart') },
-  { key: 'endDateEnd', label: t('entity.personnelOperationRate.enddateend') },
-  { key: 'weekNumber', label: t('entity.personnelOperationRate.weeknumber') },
-  { key: 'monthNumber', label: t('entity.personnelOperationRate.monthnumber') },
-  { key: 'productionLine', label: t('entity.personnelOperationRate.productionline') },
-  { key: 'productionLineName', label: t('entity.personnelOperationRate.productionlinename') },
-  { key: 'shiftNo', label: t('entity.personnelOperationRate.shiftno') },
-  { key: 'plannedDirectPersonnelCount', label: t('entity.personnelOperationRate.planneddirectpersonnelcount') },
-  { key: 'actualDirectPersonnelCount', label: t('entity.personnelOperationRate.actualdirectpersonnelcount') },
-  { key: 'plannedIndirectPersonnelCount', label: t('entity.personnelOperationRate.plannedindirectpersonnelcount') },
-  { key: 'actualIndirectPersonnelCount', label: t('entity.personnelOperationRate.actualindirectpersonnelcount') },
-  { key: 'plannedWorkTime', label: t('entity.personnelOperationRate.plannedworktime') },
-  { key: 'actualWorkTime', label: t('entity.personnelOperationRate.actualworktime') },
-  { key: 'breakTime', label: t('entity.personnelOperationRate.breaktime') },
-  { key: 'idleTime', label: t('entity.personnelOperationRate.idletime') },
-  { key: 'personnelOperationRate', label: t('entity.personnelOperationRate.personneloperationrate') },
-  { key: 'plannedOutput', label: t('entity.personnelOperationRate.plannedoutput') },
-  { key: 'actualOutput', label: t('entity.personnelOperationRate.actualoutput') },
-  { key: 'qualifiedQuantity', label: t('entity.personnelOperationRate.qualifiedquantity') },
-  { key: 'defectiveQuantity', label: t('entity.personnelOperationRate.defectivequantity') },
-  { key: 'yieldRate', label: t('entity.personnelOperationRate.yieldrate') },
-  { key: 'workEfficiency', label: t('entity.personnelOperationRate.workefficiency') },
-  { key: 'idleReasonType', label: t('entity.personnelOperationRate.idlereasontype') },
-  { key: 'idleReason', label: t('entity.personnelOperationRate.idlereason') },
-  { key: 'overtimeHours', label: t('entity.personnelOperationRate.overtimehours') },
-  { key: 'teamLeader', label: t('entity.personnelOperationRate.teamleader') },
-  { key: 'supervisor', label: t('entity.personnelOperationRate.supervisor') },
-  { key: 'status', label: t('entity.personnelOperationRate.status') },
+  { key: 'plantCode', label: t('entity.personneloperationrate.plantcode') },
+  { key: 'timeCategory', label: t('entity.personneloperationrate.timecategory') },
+  { key: 'startDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.personneloperationrate.startdate')) },
+  { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.personneloperationrate.startdate')) },
+  { key: 'endDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.personneloperationrate.enddate')) },
+  { key: 'endDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.personneloperationrate.enddate')) },
+  { key: 'weekNumber', label: t('entity.personneloperationrate.weeknumber') },
+  { key: 'monthNumber', label: t('entity.personneloperationrate.monthnumber') },
+  { key: 'productionLine', label: t('entity.personneloperationrate.productionline') },
+  { key: 'productionLineName', label: t('entity.personneloperationrate.productionlinename') },
+  { key: 'shiftNo', label: t('entity.personneloperationrate.shiftno') },
+  { key: 'plannedDirectPersonnelCount', label: t('entity.personneloperationrate.planneddirectpersonnelcount') },
+  { key: 'actualDirectPersonnelCount', label: t('entity.personneloperationrate.actualdirectpersonnelcount') },
+  { key: 'plannedIndirectPersonnelCount', label: t('entity.personneloperationrate.plannedindirectpersonnelcount') },
+  { key: 'actualIndirectPersonnelCount', label: t('entity.personneloperationrate.actualindirectpersonnelcount') },
+  { key: 'plannedWorkTime', label: t('entity.personneloperationrate.plannedworktime') },
+  { key: 'actualWorkTime', label: t('entity.personneloperationrate.actualworktime') },
+  { key: 'breakTime', label: t('entity.personneloperationrate.breaktime') },
+  { key: 'idleTime', label: t('entity.personneloperationrate.idletime') },
+  { key: 'personnelOperationRate', label: t('entity.personneloperationrate.personneloperationrate') },
+  { key: 'plannedOutput', label: t('entity.personneloperationrate.plannedoutput') },
+  { key: 'actualOutput', label: t('entity.personneloperationrate.actualoutput') },
+  { key: 'qualifiedQuantity', label: t('entity.personneloperationrate.qualifiedquantity') },
+  { key: 'defectiveQuantity', label: t('entity.personneloperationrate.defectivequantity') },
+  { key: 'yieldRate', label: t('entity.personneloperationrate.yieldrate') },
+  { key: 'workEfficiency', label: t('entity.personneloperationrate.workefficiency') },
+  { key: 'idleReasonType', label: t('entity.personneloperationrate.idlereasontype') },
+  { key: 'idleReason', label: t('entity.personneloperationrate.idlereason') },
+  { key: 'overtimeHours', label: t('entity.personneloperationrate.overtimehours') },
+  { key: 'teamLeader', label: t('entity.personneloperationrate.teamleader') },
+  { key: 'supervisor', label: t('entity.personneloperationrate.supervisor') },
+  { key: 'status', label: t('entity.personneloperationrate.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -630,10 +667,117 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {PersonnelOperationRateQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<PersonnelOperationRateQuery>): PersonnelOperationRateQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: PersonnelOperationRateQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof PersonnelOperationRateQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  if (form.timeCategory !== undefined && form.timeCategory !== null) {
+    query.timeCategory = form.timeCategory
+  }
+  assignTrimmed('startDateStart', form.startDateStart)
+  assignTrimmed('startDateEnd', form.startDateEnd)
+  assignTrimmed('endDateStart', form.endDateStart)
+  assignTrimmed('endDateEnd', form.endDateEnd)
+  if (form.weekNumber !== undefined && form.weekNumber !== null) {
+    query.weekNumber = form.weekNumber
+  }
+  if (form.monthNumber !== undefined && form.monthNumber !== null) {
+    query.monthNumber = form.monthNumber
+  }
+  assignTrimmed('productionLine', form.productionLine)
+  assignTrimmed('productionLineName', form.productionLineName)
+  if (form.shiftNo !== undefined && form.shiftNo !== null) {
+    query.shiftNo = form.shiftNo
+  }
+  if (form.plannedDirectPersonnelCount !== undefined && form.plannedDirectPersonnelCount !== null) {
+    query.plannedDirectPersonnelCount = form.plannedDirectPersonnelCount
+  }
+  if (form.actualDirectPersonnelCount !== undefined && form.actualDirectPersonnelCount !== null) {
+    query.actualDirectPersonnelCount = form.actualDirectPersonnelCount
+  }
+  if (form.plannedIndirectPersonnelCount !== undefined && form.plannedIndirectPersonnelCount !== null) {
+    query.plannedIndirectPersonnelCount = form.plannedIndirectPersonnelCount
+  }
+  if (form.actualIndirectPersonnelCount !== undefined && form.actualIndirectPersonnelCount !== null) {
+    query.actualIndirectPersonnelCount = form.actualIndirectPersonnelCount
+  }
+  if (form.plannedWorkTime !== undefined && form.plannedWorkTime !== null) {
+    query.plannedWorkTime = form.plannedWorkTime
+  }
+  if (form.actualWorkTime !== undefined && form.actualWorkTime !== null) {
+    query.actualWorkTime = form.actualWorkTime
+  }
+  if (form.breakTime !== undefined && form.breakTime !== null) {
+    query.breakTime = form.breakTime
+  }
+  if (form.idleTime !== undefined && form.idleTime !== null) {
+    query.idleTime = form.idleTime
+  }
+  if (form.personnelOperationRate !== undefined && form.personnelOperationRate !== null) {
+    query.personnelOperationRate = form.personnelOperationRate
+  }
+  if (form.plannedOutput !== undefined && form.plannedOutput !== null) {
+    query.plannedOutput = form.plannedOutput
+  }
+  if (form.actualOutput !== undefined && form.actualOutput !== null) {
+    query.actualOutput = form.actualOutput
+  }
+  if (form.qualifiedQuantity !== undefined && form.qualifiedQuantity !== null) {
+    query.qualifiedQuantity = form.qualifiedQuantity
+  }
+  if (form.defectiveQuantity !== undefined && form.defectiveQuantity !== null) {
+    query.defectiveQuantity = form.defectiveQuantity
+  }
+  if (form.yieldRate !== undefined && form.yieldRate !== null) {
+    query.yieldRate = form.yieldRate
+  }
+  if (form.workEfficiency !== undefined && form.workEfficiency !== null) {
+    query.workEfficiency = form.workEfficiency
+  }
+  if (form.idleReasonType !== undefined && form.idleReasonType !== null) {
+    query.idleReasonType = form.idleReasonType
+  }
+  assignTrimmed('idleReason', form.idleReason)
+  if (form.overtimeHours !== undefined && form.overtimeHours !== null) {
+    query.overtimeHours = form.overtimeHours
+  }
+  assignTrimmed('teamLeader', form.teamLeader)
+  assignTrimmed('supervisor', form.supervisor)
+  if (form.status !== undefined && form.status !== null) {
+    query.status = form.status
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -653,7 +797,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'personnelOperationRateId') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.plantcode'),
+    title: t('entity.personneloperationrate.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -662,7 +806,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.timecategory'),
+    title: t('entity.personneloperationrate.timecategory'),
     dataIndex: 'timeCategory',
     key: 'timeCategory',
     width: 120,
@@ -671,7 +815,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'timeCategory') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.startdate'),
+    title: t('entity.personneloperationrate.startdate'),
     dataIndex: 'startDate',
     key: 'startDate',
     width: 120,
@@ -680,7 +824,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'startDate') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.enddate'),
+    title: t('entity.personneloperationrate.enddate'),
     dataIndex: 'endDate',
     key: 'endDate',
     width: 120,
@@ -689,7 +833,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'endDate') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.weeknumber'),
+    title: t('entity.personneloperationrate.weeknumber'),
     dataIndex: 'weekNumber',
     key: 'weekNumber',
     width: 120,
@@ -698,7 +842,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'weekNumber') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.monthnumber'),
+    title: t('entity.personneloperationrate.monthnumber'),
     dataIndex: 'monthNumber',
     key: 'monthNumber',
     width: 120,
@@ -707,7 +851,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'monthNumber') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.productionline'),
+    title: t('entity.personneloperationrate.productionline'),
     dataIndex: 'productionLine',
     key: 'productionLine',
     width: 120,
@@ -716,7 +860,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'productionLine') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.productionlinename'),
+    title: t('entity.personneloperationrate.productionlinename'),
     dataIndex: 'productionLineName',
     key: 'productionLineName',
     width: 120,
@@ -725,7 +869,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'productionLineName') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.shiftno'),
+    title: t('entity.personneloperationrate.shiftno'),
     dataIndex: 'shiftNo',
     key: 'shiftNo',
     width: 120,
@@ -734,7 +878,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'shiftNo') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.planneddirectpersonnelcount'),
+    title: t('entity.personneloperationrate.planneddirectpersonnelcount'),
     dataIndex: 'plannedDirectPersonnelCount',
     key: 'plannedDirectPersonnelCount',
     width: 120,
@@ -743,7 +887,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'plannedDirectPersonnelCount') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.actualdirectpersonnelcount'),
+    title: t('entity.personneloperationrate.actualdirectpersonnelcount'),
     dataIndex: 'actualDirectPersonnelCount',
     key: 'actualDirectPersonnelCount',
     width: 120,
@@ -752,7 +896,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'actualDirectPersonnelCount') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.plannedindirectpersonnelcount'),
+    title: t('entity.personneloperationrate.plannedindirectpersonnelcount'),
     dataIndex: 'plannedIndirectPersonnelCount',
     key: 'plannedIndirectPersonnelCount',
     width: 120,
@@ -761,7 +905,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'plannedIndirectPersonnelCount') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.actualindirectpersonnelcount'),
+    title: t('entity.personneloperationrate.actualindirectpersonnelcount'),
     dataIndex: 'actualIndirectPersonnelCount',
     key: 'actualIndirectPersonnelCount',
     width: 120,
@@ -770,7 +914,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'actualIndirectPersonnelCount') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.plannedworktime'),
+    title: t('entity.personneloperationrate.plannedworktime'),
     dataIndex: 'plannedWorkTime',
     key: 'plannedWorkTime',
     width: 120,
@@ -779,7 +923,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'plannedWorkTime') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.actualworktime'),
+    title: t('entity.personneloperationrate.actualworktime'),
     dataIndex: 'actualWorkTime',
     key: 'actualWorkTime',
     width: 120,
@@ -788,7 +932,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'actualWorkTime') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.breaktime'),
+    title: t('entity.personneloperationrate.breaktime'),
     dataIndex: 'breakTime',
     key: 'breakTime',
     width: 120,
@@ -797,7 +941,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'breakTime') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.idletime'),
+    title: t('entity.personneloperationrate.idletime'),
     dataIndex: 'idleTime',
     key: 'idleTime',
     width: 120,
@@ -806,7 +950,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'idleTime') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.personneloperationrate'),
+    title: t('entity.personneloperationrate.personneloperationrate'),
     dataIndex: 'personnelOperationRate',
     key: 'personnelOperationRate',
     width: 120,
@@ -815,7 +959,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'personnelOperationRate') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.plannedoutput'),
+    title: t('entity.personneloperationrate.plannedoutput'),
     dataIndex: 'plannedOutput',
     key: 'plannedOutput',
     width: 120,
@@ -824,7 +968,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'plannedOutput') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.actualoutput'),
+    title: t('entity.personneloperationrate.actualoutput'),
     dataIndex: 'actualOutput',
     key: 'actualOutput',
     width: 120,
@@ -833,7 +977,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'actualOutput') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.qualifiedquantity'),
+    title: t('entity.personneloperationrate.qualifiedquantity'),
     dataIndex: 'qualifiedQuantity',
     key: 'qualifiedQuantity',
     width: 120,
@@ -842,7 +986,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'qualifiedQuantity') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.defectivequantity'),
+    title: t('entity.personneloperationrate.defectivequantity'),
     dataIndex: 'defectiveQuantity',
     key: 'defectiveQuantity',
     width: 120,
@@ -851,7 +995,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'defectiveQuantity') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.yieldrate'),
+    title: t('entity.personneloperationrate.yieldrate'),
     dataIndex: 'yieldRate',
     key: 'yieldRate',
     width: 120,
@@ -860,7 +1004,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'yieldRate') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.workefficiency'),
+    title: t('entity.personneloperationrate.workefficiency'),
     dataIndex: 'workEfficiency',
     key: 'workEfficiency',
     width: 120,
@@ -869,7 +1013,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'workEfficiency') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.idlereasontype'),
+    title: t('entity.personneloperationrate.idlereasontype'),
     dataIndex: 'idleReasonType',
     key: 'idleReasonType',
     width: 120,
@@ -878,7 +1022,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'idleReasonType') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.idlereason'),
+    title: t('entity.personneloperationrate.idlereason'),
     dataIndex: 'idleReason',
     key: 'idleReason',
     width: 120,
@@ -887,7 +1031,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'idleReason') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.overtimehours'),
+    title: t('entity.personneloperationrate.overtimehours'),
     dataIndex: 'overtimeHours',
     key: 'overtimeHours',
     width: 120,
@@ -896,7 +1040,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'overtimeHours') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.teamleader'),
+    title: t('entity.personneloperationrate.teamleader'),
     dataIndex: 'teamLeader',
     key: 'teamLeader',
     width: 120,
@@ -905,7 +1049,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'teamLeader') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.supervisor'),
+    title: t('entity.personneloperationrate.supervisor'),
     dataIndex: 'supervisor',
     key: 'supervisor',
     width: 120,
@@ -914,7 +1058,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPersonnelOperationRateField(record, 'supervisor') ?? ''
   },
   {
-    title: t('entity.personnelOperationRate.status'),
+    title: t('entity.personneloperationrate.status'),
     dataIndex: 'status',
     key: 'status',
     width: 120,
@@ -952,6 +1096,7 @@ const getPersonnelOperationRateId = (record: any): string => record?.[entityIdNa
  * @param field 字段名
  */
 const getPersonnelOperationRateField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -995,16 +1140,7 @@ const onClickRow = (record: PersonnelOperationRate) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: PersonnelOperationRateQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getPersonnelOperationRateList(params)
+    const res = await getPersonnelOperationRateList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1022,7 +1158,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1064,22 +1200,23 @@ function handleReset() {
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.personnelOperationRate._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.personneloperationrate._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: PersonnelOperationRate) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.personnelOperationRate._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.personneloperationrate._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -1089,7 +1226,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.personnelOperationRate._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.personneloperationrate._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1107,12 +1244,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updatePersonnelOperationRate(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.personnelOperationRate._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.personneloperationrate._self') }))
     } else {
       await createPersonnelOperationRate(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.personnelOperationRate._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.personneloperationrate._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -1122,6 +1261,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1153,16 +1294,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: PersonnelOperationRateQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportPersonnelOperationRate(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportPersonnelOperationRate(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1181,10 +1317,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.personnelOperationRate._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.personneloperationrate._self') }))
   } catch (error: any) {
     logger.error('[PersonnelOperationRate] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.personnelOperationRate._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.personneloperationrate._self') }))
   } finally {
     loading.value = false
   }
@@ -1193,12 +1329,12 @@ async function handleExport() {
 async function handleDeleteOne(record: PersonnelOperationRate) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.personnelOperationRate._self'), name: t('common.tip.this.target', { target: t('entity.personnelOperationRate._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.personneloperationrate._self'), name: t('common.tip.this.target', { target: t('entity.personneloperationrate._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deletePersonnelOperationRateById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.personnelOperationRate._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.personneloperationrate._self') }))
       loadData()
     }
   })
@@ -1206,18 +1342,18 @@ async function handleDeleteOne(record: PersonnelOperationRate) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.personnelOperationRate._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.personneloperationrate._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.personnelOperationRate._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.personneloperationrate._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deletePersonnelOperationRateBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.personnelOperationRate._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.personneloperationrate._self') }))
       loadData()
     }
   })
@@ -1230,7 +1366,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1270,7 +1406,7 @@ function handleAdvancedQueryReset() {
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1300,23 +1436,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.logistics-manufacturing-output-personnel-operation-rate {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

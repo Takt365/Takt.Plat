@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktCostElementDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostElement 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCostElement 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Accounting.Controlling;
 
@@ -47,16 +46,6 @@ public class TaktCostElementDto : TaktCompanyDtoBase
     public string CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本要素描述
-    /// </summary>
-    public string? CostElementDesc { get; set; } = string.Empty;
-
-    /// <summary>
     /// 成本要素类型（0=初级，1=次级）
     /// </summary>
     public int CostElementType { get; set; } = 0;
@@ -80,7 +69,7 @@ public class TaktCostElementDto : TaktCompanyDtoBase
     /// <summary>
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
-    public int CostElementStatus { get; set; }
+    public int CostElementStatus { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -96,6 +85,12 @@ public class TaktCostElementDto : TaktCompanyDtoBase
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）
+    /// （子表：TaktCostElementChangeLog）
+    /// </summary>
+    public List<TaktCostElementChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -144,16 +139,6 @@ public class TaktCostElementQueryDto : TaktPagedQuery
     /// 成本要素名称
     /// </summary>
     public string? CostElementName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本要素简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本要素描述
-    /// </summary>
-    public string? CostElementDesc { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本要素类型（0=初级，1=次级）
@@ -219,7 +204,7 @@ public class TaktCostElementQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -264,16 +249,6 @@ public class TaktCostElementCreateDto
     public string CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本要素描述
-    /// </summary>
-    public string? CostElementDesc { get; set; } = string.Empty;
-
-    /// <summary>
     /// 成本要素类型（0=初级，1=次级）
     /// </summary>
     public int CostElementType { get; set; } = 0;
@@ -297,7 +272,7 @@ public class TaktCostElementCreateDto
     /// <summary>
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
-    public int CostElementStatus { get; set; }
+    public int CostElementStatus { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -310,14 +285,14 @@ public class TaktCostElementCreateDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 排序号
+    /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
     /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public List<TaktCostElementChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -367,7 +342,7 @@ public class TaktCostElementStatusDto
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "成本要素状态（1=启用，0=禁用）不能为空")]
-    public int CostElementStatus { get; set; }
+    public int CostElementStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -424,16 +399,6 @@ public class TaktCostElementTemplateDto
     public string? CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本要素描述
-    /// </summary>
-    public string? CostElementDesc { get; set; } = string.Empty;
-
-    /// <summary>
     /// 成本要素类型（0=初级，1=次级）
     /// </summary>
     public int? CostElementType { get; set; }
@@ -460,14 +425,9 @@ public class TaktCostElementTemplateDto
     public int? CostElementStatus { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -507,16 +467,6 @@ public class TaktCostElementImportDto
     public string? CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本要素描述
-    /// </summary>
-    public string? CostElementDesc { get; set; } = string.Empty;
-
-    /// <summary>
     /// 成本要素类型（0=初级，1=次级）
     /// </summary>
     public int? CostElementType { get; set; }
@@ -543,14 +493,9 @@ public class TaktCostElementImportDto
     public int? CostElementStatus { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -591,16 +536,6 @@ public class TaktCostElementExportDto
     public string CostElementName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本要素简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本要素描述
-    /// </summary>
-    public string? CostElementDesc { get; set; } = string.Empty;
-
-    /// <summary>
     /// 成本要素类型（0=初级，1=次级）
     /// </summary>
     public int CostElementType { get; set; } = 0;
@@ -624,7 +559,7 @@ public class TaktCostElementExportDto
     /// <summary>
     /// 成本要素状态（1=启用，0=禁用）
     /// </summary>
-    public int CostElementStatus { get; set; }
+    public int CostElementStatus { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -644,7 +579,7 @@ public class TaktCostElementExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

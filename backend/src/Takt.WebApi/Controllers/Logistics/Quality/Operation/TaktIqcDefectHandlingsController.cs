@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Operation
 // 文件名称：TaktIqcDefectHandlingsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：进货检验不良处理记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:list", "进货检验不良处理记录列表")]
+    [TaktPermission("logistics:quality:operation:iqcorder:list", "进货检验不良处理记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetIqcDefectHandlingListAsync([FromQuery] TaktIqcDefectHandlingQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">进货检验不良处理记录ID</param>
     /// <returns>进货检验不良处理记录DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:query", "进货检验不良处理记录详情")]
+    [TaktPermission("logistics:quality:operation:iqcorder:query", "进货检验不良处理记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetIqcDefectHandlingByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// 获取进货检验不良处理记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:query", "进货检验不良处理记录选项")]
+    [TaktPermission("logistics:quality:operation:iqcorder:query", "进货检验不良处理记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetIqcDefectHandlingOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>进货检验不良处理记录DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:create", "创建进货检验不良处理记录")]
+    [TaktPermission("logistics:quality:operation:iqcorder:create", "创建进货检验不良处理记录")]
     [HttpPost]
     public async Task<IActionResult> CreateIqcDefectHandlingAsync([FromBody] TaktIqcDefectHandlingCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// <param name="id">进货检验不良处理记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>进货检验不良处理记录DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:update", "更新进货检验不良处理记录")]
+    [TaktPermission("logistics:quality:operation:iqcorder:update", "更新进货检验不良处理记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateIqcDefectHandlingAsync(long id, [FromBody] TaktIqcDefectHandlingUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">进货检验不良处理记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:delete", "删除进货检验不良处理记录")]
+    [TaktPermission("logistics:quality:operation:iqcorder:delete", "删除进货检验不良处理记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteIqcDefectHandlingByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:delete", "批量删除进货检验不良处理记录")]
+    [TaktPermission("logistics:quality:operation:iqcorder:delete", "批量删除进货检验不良处理记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteIqcDefectHandlingBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>进货检验不良处理记录DTO</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:update", "更新进货检验不良处理记录状态")]
+    [TaktPermission("logistics:quality:operation:iqcorder:update", "更新进货检验不良处理记录状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateIqcDefectHandlingStatusAsync([FromBody] TaktIqcDefectHandlingStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:import", "获取进货检验不良处理记录导入模板")]
+    [TaktPermission("logistics:quality:operation:iqcorder:import", "获取进货检验不良处理记录导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetIqcDefectHandlingTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:import", "导入进货检验不良处理记录")]
+    [TaktPermission("logistics:quality:operation:iqcorder:import", "导入进货检验不良处理记录")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportIqcDefectHandlingAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktIqcDefectHandlingsController : TaktControllerBase
     /// 导出进货检验不良处理记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:iqcdefecthandling:export", "导出进货检验不良处理记录")]
+    [TaktPermission("logistics:quality:operation:iqcorder:export", "导出进货检验不良处理记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportIqcDefectHandlingAsync([FromQuery] TaktIqcDefectHandlingQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

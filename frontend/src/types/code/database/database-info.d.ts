@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+import type { TaktPagedQuery } from '@/types/common';
 
 /**
  * 数据库摘要（可连接租户业务库，与 appsettings Database:TenantCodes / ConnectionStrings:Tenant_* 对齐）
@@ -48,6 +49,12 @@ export interface DatabaseTableInfo {
 
 }
 
+/**
+ * 数据库表摘要分页查询（租户取自当前登录上下文）
+ * @description 对应后端 TaktDatabaseTableInfoQueryDto
+ */
+export interface DatabaseTableInfoQuery extends TaktPagedQuery {
+}
 
 /**
  * 数据库表列摘要（指定物理表列 introspect 结果）

@@ -40,9 +40,7 @@ export function getIpqcOrderChangeLogList(queryDto: any): Promise<TaktPagedResul
   return request<TaktPagedResult<IpqcOrderChangeLog>>({
     url: `${IPQC_ORDER_CHANGE_LOG_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -145,7 +143,7 @@ export function exportIpqcOrderChangeLog(
     url: `${IPQC_ORDER_CHANGE_LOG_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

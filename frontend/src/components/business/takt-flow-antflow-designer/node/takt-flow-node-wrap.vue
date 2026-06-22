@@ -117,7 +117,7 @@
                     <span
                       class="priority-title"
                       @click="openConditionDrawer(item.priorityLevel ?? 0)"
-                    >优先级{{ item.priorityLevel }}</span>
+                    >{{ t('workflow.designer.page.prioritylabel') }}{{ item.priorityLevel }}</span>
                     <i
                       v-if="!readonly"
                       class="close"
@@ -328,18 +328,20 @@ const defaultText = computed(() => {
 const showText = computed(() => {
   const n = props.nodeConfig
   if (!n) return ''
-  if (n.nodeType === 1) return (n.nodeApproveList?.length ? n.nodeApproveList.map((x) => x.name).join('、') : '') || '所有人'
-  if (n.nodeType === 4) return setApproverStr(n)
-  if (n.nodeType === 6) return copyerStr(n)
+  if (n.nodeType === 1) {
+    return (n.nodeApproveList?.length ? n.nodeApproveList.map((x) => x.name).join('、') : '') || t('workflow.designer.page.everyone')
+  }
+  if (n.nodeType === 4) return setApproverStr(n, t)
+  if (n.nodeType === 6) return copyerStr(n, t)
   return ''
 })
 
 function parallelShowText(node: FlowTreeNode): string {
-  return setApproverStr(node)
+  return setApproverStr(node, t)
 }
 
 function conditionStrFor(index: number): string {
-  return props.nodeConfig ? conditionStr(props.nodeConfig, index) : '请设置条件'
+  return props.nodeConfig ? conditionStr(props.nodeConfig, index, t) : t('workflow.designer.page.setcondition')
 }
 
 function openDrawerForNode() {
@@ -389,9 +391,10 @@ function updateCurrentChildNode(value: FlowTreeNode | null) {
 }
 
 function resetConditionNodesTitle(gateway: FlowTreeNode, index: number): string {
-  if (gateway.isDynamicCondition === true) return `动态条件${index + 1}`
-  if (gateway.isParallel === true) return `并行条件${index + 1}`
-  return `条件${index + 1}`
+  const n = String(index + 1)
+  if (gateway.isDynamicCondition === true) return t('workflow.designer.page.dynamicconditionnamewithindex', { n })
+  if (gateway.isParallel === true) return t('workflow.designer.page.parallelconditionnamewithindex', { n })
+  return t('workflow.designer.page.conditionnamewithindex', { n })
 }
 
 function reData(data: FlowTreeNode, addData: FlowTreeNode): void {
@@ -415,8 +418,8 @@ function addTerm() {
   } else if (nc.nodeType === 7 && nc.parallelNodes) {
     if (nc.parallelNodes.length >= MAX_BRANCH_COUNT) return
     const len = nc.parallelNodes.length + 1
-    const n_name = `并行审核人${len}`
-    nc.parallelNodes.push(createParallelBranchApproverNode(n_name, null, len, 0))
+    const n_name = t('workflow.designer.page.parallelapprovernwithindex', { n: String(len) })
+    nc.parallelNodes.push(createParallelBranchApproverNode(n_name, null, len, 0, t))
     emit('update:nodeConfig', { ...nc })
   }
 }
@@ -448,7 +451,7 @@ function delTerm(index: number) {
     nc.parallelNodes.splice(index, 1)
     nc.parallelNodes.forEach((item, i) => {
       item.priorityLevel = i + 1
-      item.nodeName = `审批人${i + 1}`
+      item.nodeName = t('workflow.designer.page.approvernwithindex', { n: String(i + 1) })
     })
     if (nc.parallelNodes.length === 1) {
       const only = nc.parallelNodes[0]

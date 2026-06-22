@@ -93,7 +93,7 @@ public class TaktEmpBenefitPlanService : TaktServiceBase, ITaktEmpBenefitPlanSer
         EnsureThreeLayerContext();
         var list = await _empBenefitPlanRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EmpBenefitStatus == 1,
-            x => x.EmployeeName,
+            x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -276,7 +276,7 @@ public class TaktEmpBenefitPlanService : TaktServiceBase, ITaktEmpBenefitPlanSer
                 || (x.PlanCode != null && x.PlanCode.Contains(keywords))
                 || SqlFunc.ToString(x.EmpBenefitStatus).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EnrollmentDate).Contains(keywords)
                 || SqlFunc.ToString(x.ExpiryDate).Contains(keywords)
@@ -314,9 +314,9 @@ public class TaktEmpBenefitPlanService : TaktServiceBase, ITaktEmpBenefitPlanSer
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

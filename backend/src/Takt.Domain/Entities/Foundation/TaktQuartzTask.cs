@@ -115,7 +115,7 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     public int TaskStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否允许并发执行（字典 sys_yes_no；0=否 1=是）
+    /// 是否允许并发执行（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     [SugarColumn(ColumnName = "concurrent", ColumnDescription = "是否并发", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int Concurrent { get; set; } = 0;

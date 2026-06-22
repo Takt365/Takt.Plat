@@ -20,13 +20,10 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="statistics:logging:deltalog:create"
-      update-permission="statistics:logging:deltalog:update"
       delete-permission="statistics:logging:deltalog:delete"
-
       export-permission="statistics:logging:deltalog:export"
-      :show-create="true"
-      :show-update="true"
+      :show-create="false"
+      :show-update="false"
       :show-delete="true"
       :show-import="false"
       :show-export="true"
@@ -35,17 +32,10 @@
       :show-column-setting="true"
       :show-fullscreen="true"
       :show-refresh="true"
-      :create-disabled="false"
-      :create-loading="loading"
-      :update-disabled="updateDisabled"
-      :update-loading="loading"
       :delete-disabled="deleteDisabled"
       :delete-loading="loading"
       :refresh-loading="loading"
-      @create="handleCreate"
-      @update="handleUpdate"
       @delete="handleDelete"
-
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
@@ -81,22 +71,21 @@
       @show-size-change="handlePaginationSizeChange"
     />
 
-    <!-- 新增/编辑对话框 -->
+    <!-- 详情对话框 -->
     <TaktModal
-      v-model:open="formVisible"
-      :title="formTitle"
+      v-model:open="detailVisible"
+      :title="t('common.dialog.title.detail', { entity: t('entity.deltalog._self') })"
       width="50%"
       wrap-class-name="takt-form-modal-resizable"
-      :confirm-loading="formLoading"
-      @ok="handleFormSubmit"
-      @cancel="handleFormCancel"
+      :footer="null"
+      :cancel-text="t('common.page.button.close')"
+      @cancel="handleDetailClose"
     >
-      <DeltaLogForm
-        ref="formRef"
-        :form-data="formData"
-        :loading="formLoading"
-      />
+      <a-spin :spinning="detailLoading">
+        <DeltaLogDetail :detail="detailData" />
+      </a-spin>
     </TaktModal>
+
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
@@ -251,11 +240,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -289,6 +278,7 @@
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 差异日志实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/statistics/logging/delta-log
@@ -298,12 +288,12 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
-import DeltaLogForm from './components/delta-log-form.vue'
-import { getDeltaLogList, getDeltaLogById, createDeltaLog, updateDeltaLog, deleteDeltaLogById, deleteDeltaLogBatch, exportDeltaLog } from '@/api/statistics/logging/delta-log'
-import type { DeltaLog, DeltaLogQuery, DeltaLogCreate, DeltaLogUpdate } from '@/types/statistics/logging/delta-log'
+import DeltaLogDetail from './components/delta-log-detail.vue'
+import { getDeltaLogList, getDeltaLogById, deleteDeltaLogById, deleteDeltaLogBatch, exportDeltaLog } from '@/api/statistics/logging/delta-log'
+import type { DeltaLog, DeltaLogQuery } from '@/types/statistics/logging/delta-log'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEyeLine, RiDeleteBinLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -321,9 +311,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<DeltaLog[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -333,16 +323,7 @@ const selectedRows = ref<DeltaLog[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
-/** 新增/编辑弹窗是否打开 */
-const formVisible = ref(false)
-/** 弹窗标题（新增/编辑） */
-const formTitle = ref('')
-/** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<DeltaLog>>({})
-/** 表单提交 loading */
-const formLoading = ref(false)
-/** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -361,7 +342,7 @@ const advancedQueryForm = ref({
   elapsedTime: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -381,7 +362,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'elapsedTime', label: t('entity.deltalog.elapsedtime') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -392,10 +373,14 @@ const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'deltaLogId'
-/** 工具栏「编辑」是否禁用（须恰好选中一行） */
-const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
+/** 详情弹窗是否打开 */
+const detailVisible = ref(false)
+/** 详情加载中 */
+const detailLoading = ref(false)
+/** 详情数据 */
+const detailData = ref<DeltaLog | null>(null)
 
 
 /** 页面挂载后加载分页列表 */
@@ -529,14 +514,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getDeltaLogField(record, 'elapsedTime') ?? ''
   },
   CreateActionColumn({
+    width: 148,
     actions: [
       {
-        key: 'update',
-        label: t('common.page.button.edit'),
+        key: 'detail',
+        label: t('common.page.button.detail'),
         shape: 'plain',
-        icon: RiEditLine,
-        permission: 'statistics:logging:deltalog:update',
-        onClick: (record: DeltaLog) => handleEdit(record)
+        icon: RiEyeLine,
+        permission: 'statistics:logging:deltalog:query',
+        onClick: (record: DeltaLog) => handleShowDetail(record),
       },
       {
         key: 'delete',
@@ -626,6 +612,32 @@ async function loadData() {
 /** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
 useTableRefresh(loadData)
 
+/** 打开详情弹窗 */
+async function handleShowDetail(record: DeltaLog) {
+  const id = getDeltaLogId(record)
+  if (!id) {
+    return
+  }
+  detailVisible.value = true
+  detailLoading.value = true
+  detailData.value = null
+  try {
+    detailData.value = await getDeltaLogById(id)
+  } catch (error: unknown) {
+    const err = error as { message?: string }
+    message.error(err?.message || t('common.feedback.load.data.failed'))
+    detailVisible.value = false
+  } finally {
+    detailLoading.value = false
+  }
+}
+
+/** 关闭详情弹窗 */
+function handleDetailClose() {
+  detailVisible.value = false
+  detailData.value = null
+}
+
 /** 快捷查询 */
 function handleSearch() {
   currentPage.value = 1
@@ -651,65 +663,13 @@ function handleReset() {
   elapsedTime: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
   currentPage.value = 1
   loadData()
 }
 
-/** 打开新增弹窗 */
-function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.deltalog._self') })
-  formData.value = {}
-  formVisible.value = true
-}
-/** 打开编辑弹窗 */
-function handleEdit(record: DeltaLog) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.deltalog._self') })
-  formData.value = { ...record }
-  formVisible.value = true
-}
-
-/** 工具栏编辑：打开当前单选行 */
-function handleUpdate() {
-  if (selectedRow.value) {
-    handleEdit(selectedRow.value)
-  } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.deltalog._self') }))
-  }
-}
-/** 提交新增/编辑表单 */
-async function handleFormSubmit() {
-  const refInst = formRef.value
-  if (!refInst?.validate) return
-  try {
-    await refInst.validate()
-  } catch {
-    return
-  }
-  formLoading.value = true
-  try {
-    const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
-    const id = (formData.value as any)?.[entityIdName]
-    if (id) {
-      await updateDeltaLog(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.deltalog._self') }))
-    } else {
-      await createDeltaLog(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.deltalog._self') }))
-    }
-    formVisible.value = false
-    loadData()
-  } finally {
-    formLoading.value = false
-  }
-}
-
-/** 关闭新增/编辑弹窗（不提交） */
-function handleFormCancel() {
-  formVisible.value = false
-}
 /** 导出当前查询条件下的 Excel */
 async function handleExport() {
   try {
@@ -812,7 +772,7 @@ function handleAdvancedQueryReset() {
   elapsedTime: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }

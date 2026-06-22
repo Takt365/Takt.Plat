@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerComplaint 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerComplaint 生成，请按需审阅）
 // 
@@ -297,7 +297,7 @@ public class TaktCustomerComplaintQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -431,11 +431,6 @@ public class TaktCustomerComplaintCreateDto
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 客诉明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktCustomerComplaintItemCreateDto>? Items { get; set; }
@@ -443,7 +438,7 @@ public class TaktCustomerComplaintCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -605,7 +600,7 @@ public class TaktCustomerComplaintTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -700,7 +695,7 @@ public class TaktCustomerComplaintImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -836,7 +831,7 @@ public class TaktCustomerComplaintExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

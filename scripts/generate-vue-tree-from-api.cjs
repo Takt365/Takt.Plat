@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-vue-tree-from-api.cjs
 // 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
@@ -15,10 +15,17 @@ const { findDomainEntityFile } = require('./generate-script-common.cjs');
 const { buildTreeIndexStateRefs, buildFormScriptStateBlock } = require('./generate-vue-script-docs.cjs');
 const {
   FORM_TAB_FIELDS_PER_TAB,
+  resolveFormFieldColSpan,
+  buildFormRowMarkup,
+  buildFormFieldColItems,
   fieldLabelTExpr,
   fieldPlaceholderTExpr,
   renderQueryFormItem,
   renderFormControl,
+  renderFormItemOpening,
+  buildExtFieldIconImportLine,
+  buildRemixIconImportLine,
+  buildQueryFieldMetaLine,
   computeFormTabCount,
   buildFormTabLabelAttr,
   buildFormContentClassComputedExpr,
@@ -29,6 +36,17 @@ const {
   loadVueModuleContext,
   writeVueModuleOutputs,
   resolveFieldTranslationKey,
+  fieldsUseDictSelect,
+  buildDictDataStoreImportLine,
+  buildDictDataStoreIndexSetup,
+  buildGeneratedFormVueScriptFragments,
+  buildResetPeriodListMapperScriptBlock,
+  buildListDictTagValueExpr,
+  resolveListSwitchAndDictColsForIndex,
+  buildListSwitchBodyCellLine,
+  buildListSwitchHandlersBlock,
+  INDEX_FORM_RESET_NEXT_TICK,
+  buildFormResetScopeDefaultsBlock,
 } = require('./generate-vue-common.cjs');
 
 /**
@@ -136,6 +154,7 @@ function generateTreeIndexVue(ctx, helpers) {
     entityCamel,
     entityI18nSlug,
     entityKebab,
+    viewEntityKebab,
     modulePath,
     viewModulePath,
     permissionPrefix,
@@ -160,13 +179,24 @@ function generateTreeIndexVue(ctx, helpers) {
     caps.apiGetTemplate,
     caps.apiImport,
     caps.apiExport,
+    caps.apiUpdateStatus,
+    caps.apiUpdateBuiltIn,
   ].filter(Boolean);
   const listCols = fields.listFields.filter((f) => f.name !== caps.entityIdName && f.name !== 'children');
-  const dictListCols = listCols.filter((f) => f.dictType);
+  const { switchListCols, dictTagListCols } = resolveListSwitchAndDictColsForIndex(
+    listCols.filter((f) => f.dictType || f.isListSwitch),
+    caps,
+  );
+  const needsDictInIndex = fieldsUseDictSelect(fields.queryFields)
+    || fieldsUseDictSelect(fields.formFields)
+    || dictTagListCols.length > 0;
+  const indexDictImport = needsDictInIndex ? buildDictDataStoreImportLine() : '';
+  const indexDictSetup = needsDictInIndex ? buildDictDataStoreIndexSetup() : '';
+  const indexDictOnMounted = needsDictInIndex ? '  void dictDataStore.loadAllDictDataAsync()\n' : '';
   const searchPlaceholderFields = (treeMeta.searchFieldLabels || [])
     .map((key) => `t('${key}')`).join(', ');
   const queryItems = fields.queryFields.map((f) => helpers.renderQueryFormItem(f)).join('\n');
-  const queryFieldsMetaBlock = fields.queryFields.map((f) => `  { key: '${f.name}', label: ${fieldLabelTExpr(f)} },`).join('\n');
+  const queryFieldsMetaBlock = fields.queryFields.map((f) => buildQueryFieldMetaLine(f, entityI18nSlug)).join('\n');
   const queryFieldStorageKey = `takt-query-fields-${viewModulePath.replace(/\//g, '-')}`;
   const queryInit = fields.queryFields.map((f) => {
     const val = f.type === 'number' ? 'undefined as number | undefined' : "''";
@@ -203,27 +233,50 @@ function generateTreeIndexVue(ctx, helpers) {
     customRender: ({ record }: { record: Record<string, unknown> }) => get${entityPascal}Field(record, '${f.name}') ?? ''
   },`;
   }).join('\n');
-  const dictBodyCellExtra = dictListCols.filter((f) => f.name !== titleField).map((f, i) => `          <template ${i === 0 ? 'v-if' : 'v-else-if'}="column.key === '${f.name}'">
+  const resetPeriodListMapperBlock = buildResetPeriodListMapperScriptBlock(dictTagListCols);
+  const switchBodyCellExtra = switchListCols
+    .filter((f) => f.name !== titleField)
+    .map((f, i) => {
+      const branch = titleField ? 'v-else-if' : (i === 0 ? 'v-if' : 'v-else-if');
+      return buildListSwitchBodyCellLine(f, entityPascal, branch);
+    })
+    .join('\n');
+  const dictBodyCellExtra = dictTagListCols.filter((f) => f.name !== titleField).map((f, i) => {
+    const priorCount = (titleField ? 1 : 0) + switchListCols.filter((sf) => sf.name !== titleField).length;
+    const branch = priorCount === 0 && i === 0 ? 'v-if' : 'v-else-if';
+    const valueExpr = f.name === 'resetPeriod'
+      ? `mapResetPeriodDictValue(get${entityPascal}DictValue(record, '${f.name}') as string | number | undefined)`
+      : `get${entityPascal}DictValue(record, '${f.name}')`;
+    return `          <template ${branch}="column.key === '${f.name}'">
             <TaktDictTag
-              :value="get${entityPascal}DictValue(record, '${f.name}')"
+              :value="${valueExpr}"
               dict-type="${f.dictType}"
             />
-          </template>`).join('\n');
-  const titleBodyCell = `          <template v-if="column.key === '${titleField}'">
+          </template>`;
+  }).join('\n');
+  const listSwitchHandlersBlock = buildListSwitchHandlersBlock(
+    switchListCols,
+    entityPascal,
+    caps,
+    { reloadAfterSuccess: true, recordType: `${entityPascal}RowRecord` },
+  );
+  const titleBodyCell = titleField ? `          <template v-if="column.key === '${titleField}'">
             <span
               class="inline-block"
               :style="{ paddingLeft: \`\${(record._treeDepth ?? 0) * 16}px\` }"
             >
               {{ get${entityPascal}Field(record, '${titleField}') }}
             </span>
-          </template>`;
-  const bodyCellBlock = (titleField || dictListCols.length)
+          </template>` : '';
+  const bodyCellBlock = (titleField || switchListCols.length || dictTagListCols.length)
     ? `        <!-- 自定义列渲染 -->
         <template #bodyCell="{ column, record }">
 ${titleBodyCell}
+${switchBodyCellExtra}
 ${dictBodyCellExtra}
         </template>`
     : '';
+  const idField = caps.entityIdName;
   const actionItems = [];
   if (caps.hasUpdate) {
     actionItems.push(`      {
@@ -257,6 +310,7 @@ ${dictBodyCellExtra}
       @cancel="handleFormCancel"
     >
       <${entityPascal}Form
+        :key="formData?.${idField} ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -284,7 +338,6 @@ ${dictBodyCellExtra}
         @success="handleImportSuccess"
       />
     </TaktModal>` : '';
-  const idField = caps.entityIdName;
   const needsUserStoreForTreeDrop = caps.hasUpdate && updateDtoFields.some((p) => p.name === 'companyDefaultCulture');
   const treeUpdateDtoBlock = caps.hasUpdate
     ? buildTreeUpdateDtoFunction(entityPascal, entityCamel, idField, updateDtoFields)
@@ -300,6 +353,10 @@ ${dictBodyCellExtra}
     needsUserStore: needsUserStoreForTreeDrop,
     needsExcelNames: caps.hasImport || caps.hasExport,
     entityClassName: caps.entityClassName,
+  });
+  const remixIconImport = buildRemixIconImportLine({
+    includeActionIcons: caps.hasUpdate || caps.hasDelete,
+    queryFields: fields.queryFields,
   });
   return `<!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
@@ -447,11 +504,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
-${(caps.hasCreate || caps.hasUpdate) ? `import ${entityPascal}Form from './components/${entityKebab}-form.vue'\n` : ''}import { ${importApiNames.join(', ')} } from '@/api/${modulePath}/${entityKebab}'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+${(caps.hasCreate || caps.hasUpdate) ? `import ${entityPascal}Form from './components/${viewEntityKebab}-form.vue'\n` : ''}import { ${importApiNames.join(', ')} } from '@/api/${modulePath}/${entityKebab}'
 import type { ${entityPascal}, ${caps.entityTreeType}, ${entityPascal}Update } from '@/types/${modulePath}/${entityKebab}'
 import type { TreeDropPayload } from '@/components/business/takt-tree-left-table/index.vue'
-${(caps.hasImport || caps.hasExport) ? "import { taktExcelEntityNames } from '@/utils/naming'\n" : ''}${caps.hasExport ? "import { resolveExportDownloadFileName } from '@/utils/export-download-name'\n" : ''}${(caps.hasUpdate || caps.hasDelete) ? "import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'\n" : ''}${needsUserStoreForTreeDrop ? "import { useUserStore } from '@/stores/identity/user'\n" : ''}
+${indexDictImport}${(caps.hasImport || caps.hasExport) ? "import { taktExcelEntityNames } from '@/utils/naming'\n" : ''}${caps.hasExport ? "import { resolveExportDownloadFileName } from '@/utils/export-download-name'\n" : ''}${remixIconImport}${needsUserStoreForTreeDrop ? "import { useUserStore } from '@/stores/identity/user'\n" : ''}
 ${treeStateBlock}
+${indexDictSetup}
 /** 解析树节点 key（与列表 ${idField}、左侧树 key 一致） */
 function resolve${entityPascal}NodeKey(node: Record<string, unknown>): string {
   const raw = node.key ?? node.${idField} ?? node.id
@@ -631,13 +690,13 @@ const paginatedFlatTableRows = computed(() => {
 
 /** 左侧选中节点或查询变化时，右侧拍平列表重置到第一页 */
 watch(tableTreeData, () => {
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 })
 
 /** 左侧树选中：重置右侧分页到第一页 */
 const handleTreeSelect = (selectedKeys: (string | number)[]) => {
   selectedTreeKeys.value = selectedKeys
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 ${treeUpdateDtoBlock ? `${treeUpdateDtoBlock}\n\n` : ''}/** 从树结构中查找节点 key 的父级 key 与在同级中的序号（用于 parentId / sortOrder） */
@@ -737,6 +796,7 @@ const get${entityPascal}DictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
+${resetPeriodListMapperBlock}
 
 /** 从异常对象提取用户可见消息 */
 const getErrorMessage = (error: unknown, fallback: string): string => {
@@ -818,7 +878,7 @@ async function loadData() {
 
 /** 右侧查询（客户端过滤，不请求接口） */
 const handleSearch = () => {
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /** 右侧重置（不影响左侧树与 fullTableTree） */
@@ -827,8 +887,10 @@ const handleReset = () => {
   advancedQueryForm.value = {
 ${queryInit}
   }
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
+
+${listSwitchHandlersBlock}
 
 ${caps.hasCreate ? `/** 新增：默认 parentId 为当前左侧选中节点 */
 function handleCreate() {
@@ -837,7 +899,7 @@ function handleCreate() {
   formData.value = {
     parentId: keys.length > 0 ? String(keys[keys.length - 1]) : '0',
   }
-  formVisible.value = true
+  formVisible.value = true${INDEX_FORM_RESET_NEXT_TICK}
 }` : ''}
 
 ${caps.hasUpdate ? `/** 打开编辑弹窗 */
@@ -877,6 +939,7 @@ ${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)
       message.success(t('common.feedback.created', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
     }
     formVisible.value = false
+    formData.value = null${INDEX_FORM_RESET_NEXT_TICK}
     await loadData()
   } finally {
     formLoading.value = false
@@ -886,6 +949,7 @@ ${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null${INDEX_FORM_RESET_NEXT_TICK}
 }` : ''}
 
 ${caps.hasDelete ? `/** 删除单行 */
@@ -990,7 +1054,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置右侧分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /** 重置高级查询表单（不自动查询） */
@@ -1025,9 +1089,10 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 
-/** 页面挂载后加载树数据 */
-onMounted(() => {
-  void loadData()
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉树数据 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+${indexDictOnMounted}  void loadData()
 })
 </script>
 
@@ -1059,30 +1124,22 @@ onMounted(() => {
 }
 
 function generateTreeFormBase(ctx) {
-  const { entityPascal, entityCamel, entityKebab, modulePath, viewModulePath, fields, comment } = ctx;
+  const { entityPascal, entityCamel, entityKebab, viewEntityKebab, modulePath, viewModulePath, fields, comment } = ctx;
   const generatorScript = 'generate-vue-tree-from-api.cjs';
   const mdFormParts = { tabs: '', script: '', needsTaktSelect: false };
   const hasMasterDetail = false;
   const formFields = fields.formFields;
-  const tabCount = computeFormTabCount(formFields.length);
+  const treeFormFields = formFields.filter((f) => f.name !== 'parentId');
+  const entityIdField = `${entityCamel}Id`;
+  const formCodeControlOptions = { entityIdField };
+  const tabCount = computeFormTabCount(treeFormFields.length);
   const formContentClassExpr = buildFormContentClassComputedExpr();
   const tabs = [];
   for (let tabIndex = 1; tabIndex <= tabCount; tabIndex += 1) {
     const start = (tabIndex - 1) * FORM_TAB_FIELDS_PER_TAB;
     const end = tabIndex * FORM_TAB_FIELDS_PER_TAB;
-    const tabFields = formFields.slice(start, end);
-    const items = tabFields.map((f) => {
-      const colSpan = f.htmlType === 'textarea' ? 24 : 12;
-      const control = renderFormControl(f, 'formState.', '                ');
-      return `            <a-col :span="${colSpan}">
-              <a-form-item
-                :label="${fieldLabelTExpr(f)}"
-                name="${f.name}"
-              >
-${control}
-              </a-form-item>
-            </a-col>`;
-    }).join('\n');
+    const tabFields = treeFormFields.slice(start, end);
+    const rowBlock = buildFormRowMarkup(buildFormFieldColItems(tabFields, formCodeControlOptions), '        ');
     const tabLabel = buildFormTabLabelAttr(tabIndex, tabCount);
     const tabComment = tabIndex === 1 && hasMasterDetail ? '      <!-- 主表 -->\n' : '';
     tabs.push(`${tabComment}      <a-tab-pane
@@ -1091,16 +1148,13 @@ ${control}
         force-render
       >
         <div :class="formContentClass">
-          <a-row :gutter="24">
-${items}
-          </a-row>
+${rowBlock}
         </div>
       </a-tab-pane>`);
   }
-  const needsTaktSelect = formFields.some((f) => f.htmlType === 'select' && f.dictType) || mdFormParts.needsTaktSelect;
+  const needsTaktSelect = treeFormFields.some((f) => f.htmlType === 'select' && f.dictType) || mdFormParts.needsTaktSelect;
   const masterDetailChildren = fields.masterDetailChildren || [];
-  const hasScopeContextFields = hasScopeContextFormFields(formFields, masterDetailChildren);
-  const entityIdField = `${pascalToCamel(entityPascal)}Id`;
+  const hasScopeContextFields = hasScopeContextFormFields(treeFormFields, masterDetailChildren);
   const scopeStoreImports = hasScopeContextFields
     ? "import { useTenantStore } from '@/stores/identity/tenant'\nimport { useUserStore } from '@/stores/identity/user'\n"
     : '';
@@ -1152,28 +1206,23 @@ watch(
   const resetChildRows = hasMasterDetail
     ? (fields.masterDetailChildren || []).map((c) => `  child${c.childPascal}Rows.value = []`).join('\n')
     : '';
-  const getValuesBody = hasMasterDetail ? '  return buildSubmitPayload()' : '  return { ...formState }';
   const taktSelectImport = needsTaktSelect
     ? "import TaktSelect from '@/components/business/takt-select/index.vue'\n"
     : '';
-  const requiredRules = formFields
-    .filter((f) => !f.optional && f.name !== 'remark' && !f.readOnly)
-    .map((f) => {
-      const trigger = f.htmlType === 'select' || f.htmlType === 'date' || f.htmlType === 'switch' ? 'change' : 'blur';
-      const placeholderKey = f.htmlType === 'select' || f.htmlType === 'date'
-        ? 'common.page.form.placeholder.select'
-        : 'common.page.form.placeholder.required';
-      return `  ${f.name}: [
-    {
-      required: true,
-      message: ${fieldPlaceholderTExpr(f, placeholderKey)},
-      trigger: '${trigger}'
-    }
-  ],`;
-    }).join('\n');
+  const extFieldIconImport = buildExtFieldIconImportLine(treeFormFields);
+  const formScriptFragments = buildGeneratedFormVueScriptFragments({
+    formFields: treeFormFields,
+    entityIdField,
+    childFieldStrip,
+    hasScopeContextFields,
+    watchSyncChild,
+    useBuildSubmitPayload: hasMasterDetail,
+  });
+  const resetScopeDefaultsLine = buildFormResetScopeDefaultsBlock(entityIdField, hasScopeContextFields);
+  const getValuesBody = formScriptFragments.getValuesBody;
   const formScriptState = buildFormScriptStateBlock({
     formContentClassExpr,
-    formFieldsJson: JSON.stringify(formFields.map((f) => f.name)),
+    formFieldsJson: JSON.stringify(treeFormFields.map((f) => f.name)),
     mdScript: mdFormParts.script,
     scopeStoreScript: hasScopeContextFields ? scopeStoreScript : '',
     entityPascal,
@@ -1182,7 +1231,7 @@ watch(
   return `<!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/${viewModulePath}/components -->
-<!-- 文件名称：${entityKebab}-form.vue -->
+<!-- 文件名称：${viewEntityKebab}-form.vue -->
 <!-- 功能描述：${comment}维护弹窗内嵌表单。由 ${generatorScript} 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
@@ -1191,6 +1240,7 @@ watch(
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -1198,7 +1248,7 @@ watch(
   >
     <a-tabs
       v-model:active-key="activeTab"
-      class="${entityKebab}-form-tabs"
+      class="${viewEntityKebab}-form-tabs"
     >
 ${tabs.join('\n')}
 ${mdFormParts.tabs}
@@ -1211,28 +1261,20 @@ ${mdFormParts.tabs}
  * ${comment}维护表单 · 由 ${generatorScript} 根据 types/api 生成
  * @module views/${viewModulePath}/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+${formScriptFragments.vueImportLine}
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { ${typeImportLine} } from '@/types/${modulePath}/${entityKebab}'
-${taktSelectImport}${scopeStoreImports}
+${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${scopeStoreImports}
 ${formScriptState}
-
-/** 编辑态灌入 formData；新增态 reset */
-watch(
-  () => props.formData,
-  (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
-${childFieldStrip}
-${hasScopeContextFields ? '    applyScopeDefaults(next)\n' : ''}    Object.assign(formState, next)
-${watchSyncChild}  },
-  { immediate: true, deep: true }
-)
+${formScriptFragments.defaultsBlock}
+${formScriptFragments.normalizerBlock}
+${formScriptFragments.dictBootstrap}
+${formScriptFragments.watchBlock}
 ${scopeContextWatch}
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-${requiredRules}
+${formScriptFragments.requiredRules}
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -1247,11 +1289,16 @@ ${getValuesBody}
 }
 
 /** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
-${resetChildRows}
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+${resetScopeDefaultsLine}${resetChildRows}
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
@@ -1270,6 +1317,96 @@ defineExpose({ validate, getValues, resetFields })
 }
 
 /**
+ * 树表表单 parentId 默认根节点 0（无树数据 / tree-options 为空时，参照 dept-form.vue）
+ * @param {string} content
+ * @returns {string}
+ */
+function patchTreeFormParentIdHandling(content) {
+  if (content.includes('function normalizeTreeParentId')) {
+    let next = content;
+    if (/const FORM_FIELD_DEFAULTS:/.test(next) && !/parentId:\s*'0'/.test(next)) {
+      next = next.replace(
+        /const FORM_FIELD_DEFAULTS: Record<string, string \| number> = \{\n/,
+        "const FORM_FIELD_DEFAULTS: Record<string, string | number> = {\n  parentId: '0',\n",
+      );
+    }
+    if (!/normalizeTreeParentId\(target\)/.test(next)) {
+      next = next.replace(
+        'function applyFormDefaults(target: Record<string, unknown>) {\n  Object.assign(target, FORM_FIELD_DEFAULTS)\n}',
+        `function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+  normalizeTreeParentId(target)
+}`,
+      );
+    }
+    return next;
+  }
+  const normalizeHelper = `
+/** 树表 parentId：空值归一为根节点 0（string，与后端 ParentId=0 一致） */
+function normalizeTreeParentId(target: Record<string, unknown>) {
+  const raw = target.parentId
+  target.parentId = raw === '' || raw === undefined || raw === null ? '0' : String(raw)
+}
+`;
+  let next = content.replace(
+    'const formState = reactive<Record<string, any>>({})',
+    "const formState = reactive<Record<string, any>>({ parentId: '0' })",
+  );
+  if (/const FORM_FIELD_DEFAULTS:/.test(next) && !/parentId:\s*'0'/.test(next)) {
+    next = next.replace(
+      /const FORM_FIELD_DEFAULTS: Record<string, string \| number> = \{\n/,
+      "const FORM_FIELD_DEFAULTS: Record<string, string | number> = {\n  parentId: '0',\n",
+    );
+  }
+  if (/\/\*\* 表单字段默认值（无字典默认项） \*\//.test(next)) {
+    next = next.replace(
+      /\/\*\* 表单字段默认值（无字典默认项） \*\/\nfunction applyFormDefaults\(target: Record<string, unknown>\) \{\n  void target\n\}/,
+      `/** 表单字段默认值（树表 parentId 根节点） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  parentId: '0',
+}
+${normalizeHelper}
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+  normalizeTreeParentId(target)
+}`,
+    );
+  } else {
+    if (!next.includes('function normalizeTreeParentId')) {
+      next = next.replace(
+        /\/\*\* 写入表单默认值/,
+        `${normalizeHelper}/** 写入表单默认值`,
+      );
+    }
+    next = next.replace(
+      'function applyFormDefaults(target: Record<string, unknown>) {\n  Object.assign(target, FORM_FIELD_DEFAULTS)\n}',
+      `function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+  normalizeTreeParentId(target)
+}`,
+    );
+  }
+  if (!next.includes('payload.parentId = parentId')) {
+    next = next.replace(
+      /  if \('sortOrder' in payload\) delete payload\.sortOrder\n  return payload/,
+      `  const parentRaw = payload.parentId
+  const parentId = parentRaw === '' || parentRaw === undefined || parentRaw === null ? '0' : String(parentRaw)
+  payload.parentId = parentId
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload`,
+    );
+  }
+  next = next.replace(
+    '      Object.assign(formState, next)\n      formRef.value?.clearValidate()',
+    `      Object.assign(formState, next)
+      normalizeTreeParentId(formState)
+      formRef.value?.clearValidate()`,
+  );
+  return next;
+}
+
+/**
  * 生成树表 *-form.vue（含 TaktTreeSelect parentId，参照 dept-form.vue）
  * @param {object} ctx
  * @param {object} helpers
@@ -1281,6 +1418,7 @@ function generateTreeFormVue(ctx, helpers) {
     entityCamel,
     entityI18nSlug,
     entityKebab,
+    viewEntityKebab,
     modulePath,
     viewModulePath,
     apiBase,
@@ -1288,18 +1426,16 @@ function generateTreeFormVue(ctx, helpers) {
     fields,
     comment,
   } = ctx;
-  const { fieldLabelTExpr, fieldPlaceholderTExpr, renderFormControl } = helpers;
+  const { fieldLabelTExpr, fieldPlaceholderTExpr, renderFormControl, renderFormItemOpening, buildFormFieldColItems } = helpers;
   const formFields = fields.formFields.filter((f) => f.name !== 'parentId');
   const parentIdField = fields.formFields.find((f) => f.name === 'parentId')
     || { name: 'parentId', i18nKey: resolveFieldTranslationKey('parentId', entityI18nSlug), optional: false };
   const entityIdField = `${entityCamel}Id`;
-  const treeOptionsUrl = `/api/${apiBase}/tree-options`;
+  const treeOptionsUrl = `${apiBase}/tree-options`;
   const parentIdRow = `            <a-col :span="24">
               <a-form-item
                 :label="${fieldLabelTExpr(parentIdField)}"
                 name="parentId"
-                :label-col="{ span: 4 }"
-                :wrapper-col="{ span: 20 }"
               >
                 <TaktTreeSelect
                   v-model:value="formState.parentId"
@@ -1328,29 +1464,8 @@ function generateTreeFormVue(ctx, helpers) {
     const start = (tabIndex - 1) * helpers.FORM_TAB_FIELDS_PER_TAB;
     const end = tabIndex * helpers.FORM_TAB_FIELDS_PER_TAB;
     const tabFields = formFields.slice(start, end);
-    const items = tabFields.map((f) => {
-      const colSpan = f.htmlType === 'textarea' ? 24 : 12;
-      const control = f.name === 'sortOrder'
-        ? `                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="${fieldPlaceholderTExpr(f, 'common.page.form.placeholder.ordernumhint')}"
-                  :min="0"
-                  size="small"
-                  style="width: 100%"
-                />`
-        : renderFormControl(f, 'formState.', '                ');
-      const disabledAttr = f.name.endsWith('Code') && f.name !== 'parentId'
-        ? `\n                :disabled="!!formData?.${entityIdField}"`
-        : '';
-      return `            <a-col :span="${colSpan}">
-              <a-form-item
-                :label="${fieldLabelTExpr(f)}"
-                name="${f.name}"
-              >
-${control.replace('/>', `${disabledAttr}\n                />`)}
-              </a-form-item>
-            </a-col>`;
-    }).join('\n');
+    const formCodeControlOptions = { entityIdField };
+    const items = buildFormFieldColItems(tabFields, formCodeControlOptions);
     const tabLabel = helpers.buildFormTabLabelAttr(tabIndex, tabCount);
     const parentInsert = tabIndex === 1 ? `\n          <a-row :gutter="24">\n${parentIdRow}\n          </a-row>\n` : '';
     tabs.push(`      <a-tab-pane
@@ -1369,7 +1484,7 @@ ${items}
     /<a-tabs[\s\S]*?<\/a-tabs>/,
     `<a-tabs
       v-model:active-key="activeTab"
-      class="${entityKebab}-form-tabs"
+      class="${viewEntityKebab}-form-tabs"
     >
 ${tabs.join('\n')}
     </a-tabs>`,
@@ -1387,13 +1502,7 @@ ${tabs.join('\n')}
       `const rules = computed<Record<string, Rule[]>>(() => ({\n${rulesInsert}`,
     );
   }
-  if (!content.includes('formState.parentId')) {
-    content = content.replace(
-      'const formState = reactive<Record<string, any>>({})',
-      "const formState = reactive<Record<string, any>>({ parentId: '0' })",
-    );
-  }
-  return content;
+  return patchTreeFormParentIdHandling(content);
 }
 
 /**
@@ -1418,7 +1527,7 @@ function processTreeApiModule(apiFilePath, options, registry) {
   console.log(`  树表: ${bundle.fullCtx.caps.apiGetTree}（左树右表，参照 dept/index.vue）`);
   console.log(`  entityScope: ${bundle.fullCtx.fields.entityScope} ← Takt${bundle.entityShort}`);
   const treeFieldMetaRaw = resolveTreeFieldMeta(
-    bundle.interfaces,
+    bundle.ifaceMap,
     bundle.entityShort,
     bundle.fullCtx.entityCamel,
     bundle.fullCtx.fields.listFields,
@@ -1434,6 +1543,8 @@ function processTreeApiModule(apiFilePath, options, registry) {
     fieldPlaceholderTExpr,
     renderQueryFormItem,
     renderFormControl,
+    renderFormItemOpening,
+    buildFormFieldColItems,
     computeFormTabCount,
     buildFormTabLabelAttr,
     FORM_TAB_FIELDS_PER_TAB,
@@ -1450,6 +1561,7 @@ module.exports = {
   resolveTreeFieldMeta,
   generateTreeIndexVue,
   generateTreeFormVue,
+  patchTreeFormParentIdHandling,
   processTreeApiModule,
 };
 

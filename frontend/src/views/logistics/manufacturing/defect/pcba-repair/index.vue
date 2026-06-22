@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-manufacturing-defect-pcba-repair">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,64 +52,46 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'pcbaRepairId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getPcbaRepairId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getPcbaRepairId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="pcbaRepairId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.pcbaRepairDetail._self') }}</div>
-          <a-table
-            v-if="hasPcbaRepairDetailRows(record)"
-            :columns="pcbaRepairDetailExpandColumns"
-            :data-source="getPcbaRepairDetailRows(record)"
-            :row-key="(row: PcbaRepairDetail, index?: number) => row?.pcbaRepairDetailId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <PcbaRepairDetailPanel
+          ref="pcbaRepairDetailPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <PcbaRepairForm
+        :key="formData?.pcbaRepairId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -127,111 +109,125 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.pcbaRepair.plantcode')">
+      <a-form-item :label="t('entity.pcbarepair.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodCategory')">
-      <a-form-item :label="t('entity.pcbaRepair.prodcategory')">
+      <a-form-item :label="t('entity.pcbarepair.prodcategory')">
         <a-input
           v-model:value="advancedQueryForm.prodCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodcategory') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodcategory') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodDateStart')">
-      <a-form-item :label="t('entity.pcbaRepair.proddatestart')">
+      <a-form-item :label="t('entity.pcbarepair.proddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.prodDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaRepair.proddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.proddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodDateEnd')">
-      <a-form-item :label="t('entity.pcbaRepair.proddateend')">
+      <a-form-item :label="t('entity.pcbarepair.proddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.prodDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaRepair.proddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.proddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodLine')">
-      <a-form-item :label="t('entity.pcbaRepair.prodline')">
+      <a-form-item :label="t('entity.pcbarepair.prodline')">
         <a-input
           v-model:value="advancedQueryForm.prodLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodline') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodline') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shiftNo')">
-      <a-form-item :label="t('entity.pcbaRepair.shiftno')">
+      <a-form-item :label="t('entity.pcbarepair.shiftno')">
         <a-input-number
           v-model:value="advancedQueryForm.shiftNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.shiftno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.shiftno') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodOrderCode')">
-      <a-form-item :label="t('entity.pcbaRepair.prodordercode')">
+      <a-form-item :label="t('entity.pcbarepair.prodordercode')">
         <a-input
           v-model:value="advancedQueryForm.prodOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodordercode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodordercode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodOrderQty')">
-      <a-form-item :label="t('entity.pcbaRepair.prodorderqty')">
+      <a-form-item :label="t('entity.pcbarepair.prodorderqty')">
         <a-input-number
           v-model:value="advancedQueryForm.prodOrderQty"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.prodorderqty') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodorderqty') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('modelCode')">
-      <a-form-item :label="t('entity.pcbaRepair.modelcode')">
+      <a-form-item :label="t('entity.pcbarepair.modelcode')">
         <a-input
           v-model:value="advancedQueryForm.modelCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.modelcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.modelcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="t('entity.pcbaRepair.batchno')">
+      <a-form-item :label="t('entity.pcbarepair.batchno')">
         <a-input
           v-model:value="advancedQueryForm.batchNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.batchno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.batchno') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.pcbaRepair.materialcode')">
+      <a-form-item :label="t('entity.pcbarepair.materialcode')">
         <a-input
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.materialcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.materialcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('status')">
-      <a-form-item :label="t('entity.pcbaRepair.status')">
+      <a-form-item :label="t('entity.pcbarepair.status')">
         <a-input-number
           v-model:value="advancedQueryForm.status"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaRepair.status') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.status') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -258,12 +254,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -272,8 +287,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -283,14 +300,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.pcbaRepair._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.pcbarepair._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.pcbaRepair._self"
+        entity-i18n-key="entity.pcbarepair._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -326,14 +343,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PcbaRepairForm from './components/pcba-repair-form.vue'
-import { getPcbaRepairList, getPcbaRepairById, createPcbaRepair, updatePcbaRepair, deletePcbaRepairById, deletePcbaRepairBatch, getPcbaRepairTemplate, importPcbaRepair, exportPcbaRepair } from '@/api/logistics/manufacturing/defect/pcba-repair'
-import * as pcbaRepairDetailApi from '@/api/logistics/manufacturing/defect/pcba-repair-detail'
-import type { PcbaRepairDetail, PcbaRepairDetailQuery } from '@/types/logistics/manufacturing/defect/pcba-repair-detail'
-import type { PcbaRepair, PcbaRepairQuery, PcbaRepairCreate, PcbaRepairUpdate } from '@/types/logistics/manufacturing/defect/pcba-repair'
+import PcbaRepairDetailPanel from './components/pcba-repair-detail-panel.vue'
+import { providePcbaRepairMasterContext } from './composables/use-pcba-repair-master-context'
+import { getPcbaRepairList, getPcbaRepairById, createPcbaRepair, updatePcbaRepair, deletePcbaRepairById, deletePcbaRepairBatch, getPcbaRepairTemplate, importPcbaRepair, exportPcbaRepair, updatePcbaRepairStatus } from '@/api/logistics/manufacturing/defect/pcba-repair'
+import type { PcbaRepair, PcbaRepairQuery } from '@/types/logistics/manufacturing/defect/pcba-repair'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -341,7 +359,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktPcbaRepair')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.pcbaRepair._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.pcbarepair._self') })
 )
 
 /** 快捷查询关键字 */
@@ -351,9 +369,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<PcbaRepair[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -368,11 +386,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<PcbaRepair>>({})
+const formData = ref<Partial<PcbaRepair> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -390,26 +410,26 @@ const advancedQueryForm = ref({
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.pcbaRepair.plantcode') },
-  { key: 'prodCategory', label: t('entity.pcbaRepair.prodcategory') },
-  { key: 'prodDateStart', label: t('entity.pcbaRepair.proddatestart') },
-  { key: 'prodDateEnd', label: t('entity.pcbaRepair.proddateend') },
-  { key: 'prodLine', label: t('entity.pcbaRepair.prodline') },
-  { key: 'shiftNo', label: t('entity.pcbaRepair.shiftno') },
-  { key: 'prodOrderCode', label: t('entity.pcbaRepair.prodordercode') },
-  { key: 'prodOrderQty', label: t('entity.pcbaRepair.prodorderqty') },
-  { key: 'modelCode', label: t('entity.pcbaRepair.modelcode') },
-  { key: 'batchNo', label: t('entity.pcbaRepair.batchno') },
-  { key: 'materialCode', label: t('entity.pcbaRepair.materialcode') },
-  { key: 'status', label: t('entity.pcbaRepair.status') },
+  { key: 'plantCode', label: t('entity.pcbarepair.plantcode') },
+  { key: 'prodCategory', label: t('entity.pcbarepair.prodcategory') },
+  { key: 'prodDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.pcbarepair.proddate')) },
+  { key: 'prodDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.pcbarepair.proddate')) },
+  { key: 'prodLine', label: t('entity.pcbarepair.prodline') },
+  { key: 'shiftNo', label: t('entity.pcbarepair.shiftno') },
+  { key: 'prodOrderCode', label: t('entity.pcbarepair.prodordercode') },
+  { key: 'prodOrderQty', label: t('entity.pcbarepair.prodorderqty') },
+  { key: 'modelCode', label: t('entity.pcbarepair.modelcode') },
+  { key: 'batchNo', label: t('entity.pcbarepair.batchno') },
+  { key: 'materialCode', label: t('entity.pcbarepair.materialcode') },
+  { key: 'status', label: t('entity.pcbarepair.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -427,76 +447,93 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = providePcbaRepairMasterContext()
+const pcbaRepairDetailPanelRef = ref<InstanceType<typeof PcbaRepairDetailPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {PcbaRepairQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<PcbaRepairQuery>): PcbaRepairQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: PcbaRepairQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof PcbaRepairQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('prodCategory', form.prodCategory)
+  assignTrimmed('prodDateStart', form.prodDateStart)
+  assignTrimmed('prodDateEnd', form.prodDateEnd)
+  assignTrimmed('prodLine', form.prodLine)
+  if (form.shiftNo !== undefined && form.shiftNo !== null) {
+    query.shiftNo = form.shiftNo
+  }
+  assignTrimmed('prodOrderCode', form.prodOrderCode)
+  if (form.prodOrderQty !== undefined && form.prodOrderQty !== null) {
+    query.prodOrderQty = form.prodOrderQty
+  }
+  assignTrimmed('modelCode', form.modelCode)
+  assignTrimmed('batchNo', form.batchNo)
+  assignTrimmed('materialCode', form.materialCode)
+  if (form.status !== undefined && form.status !== null) {
+    query.status = form.status
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：pcbaRepairDetail 列 */
-const pcbaRepairDetailExpandColumns = computed(() => [
-  {
-    title: t('entity.pcbaRepairDetail.pcbarepairname'),
-    dataIndex: 'pcbaRepairName',
-    key: 'pcbaRepairName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaRepairDetail.prodordercode'),
-    dataIndex: 'prodOrderCode',
-    key: 'prodOrderCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaRepairDetail.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaRepairDetail.pcbaboardtype'),
-    dataIndex: 'pcbaBoardType',
-    key: 'pcbaBoardType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaRepairDetail.prodactualqty'),
-    dataIndex: 'prodActualQty',
-    key: 'prodActualQty',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaRepairDetail.prodline'),
-    dataIndex: 'prodLine',
-    key: 'prodLine',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaRepairDetail.cardno'),
-    dataIndex: 'cardNo',
-    key: 'cardNo',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaRepairDetail.defectsymptom'),
-    dataIndex: 'defectSymptom',
-    key: 'defectSymptom',
-    ellipsis: true,
-  },
-])
 
-/** 读取主表行上的 pcbaRepairDetail 子表缓存 */
-function getPcbaRepairDetailRows(record: PcbaRepair): PcbaRepairDetail[] {
-  return (record as any)?.pcbaRepairDetails ?? []
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: PcbaRepair | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getPcbaRepairId(record) : ''
 }
 
-/** 主表行是否已加载 pcbaRepairDetail 子表 */
-function hasPcbaRepairDetailRows(record: PcbaRepair): boolean {
-  return getPcbaRepairDetailRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as PcbaRepair
+  const key = getPcbaRepairId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadPcbaRepairDetail(record: PcbaRepair): Promise<PcbaRepair | null> {
@@ -516,52 +553,6 @@ async function loadPcbaRepairDetail(record: PcbaRepair): Promise<PcbaRepair | nu
     return null
   }
 }
-/** 懒加载 pcbaRepairDetail 子表（PcbaRepairDetailQuery + pcbaRepairDetailApi，与主表 PcbaRepairQuery 分离） */
-async function loadPcbaRepairDetailForPcbaRepair(record: PcbaRepair): Promise<PcbaRepairDetail[]> {
-  const masterId = getPcbaRepairId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: PcbaRepairDetailQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      pcbaRepairId: masterId,
-    }
-    const result = await pcbaRepairDetailApi.getPcbaRepairDetailList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getPcbaRepairId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, pcbaRepairDetails: rows } as PcbaRepair
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensurePcbaRepairChildrenLoaded(record: PcbaRepair) {
-  if (!hasPcbaRepairDetailRows(record)) {
-    await loadPcbaRepairDetailForPcbaRepair(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: PcbaRepair) {
-  const key = getPcbaRepairId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensurePcbaRepairChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -576,7 +567,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'pcbaRepairId') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.plantcode'),
+    title: t('entity.pcbarepair.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -585,7 +576,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.prodcategory'),
+    title: t('entity.pcbarepair.prodcategory'),
     dataIndex: 'prodCategory',
     key: 'prodCategory',
     width: 120,
@@ -594,7 +585,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'prodCategory') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.proddate'),
+    title: t('entity.pcbarepair.proddate'),
     dataIndex: 'prodDate',
     key: 'prodDate',
     width: 120,
@@ -603,7 +594,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'prodDate') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.prodline'),
+    title: t('entity.pcbarepair.prodline'),
     dataIndex: 'prodLine',
     key: 'prodLine',
     width: 120,
@@ -612,7 +603,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'prodLine') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.shiftno'),
+    title: t('entity.pcbarepair.shiftno'),
     dataIndex: 'shiftNo',
     key: 'shiftNo',
     width: 120,
@@ -621,7 +612,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'shiftNo') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.prodordercode'),
+    title: t('entity.pcbarepair.prodordercode'),
     dataIndex: 'prodOrderCode',
     key: 'prodOrderCode',
     width: 120,
@@ -630,7 +621,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'prodOrderCode') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.prodorderqty'),
+    title: t('entity.pcbarepair.prodorderqty'),
     dataIndex: 'prodOrderQty',
     key: 'prodOrderQty',
     width: 120,
@@ -639,7 +630,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'prodOrderQty') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.modelcode'),
+    title: t('entity.pcbarepair.modelcode'),
     dataIndex: 'modelCode',
     key: 'modelCode',
     width: 120,
@@ -648,7 +639,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'modelCode') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.batchno'),
+    title: t('entity.pcbarepair.batchno'),
     dataIndex: 'batchNo',
     key: 'batchNo',
     width: 120,
@@ -657,7 +648,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'batchNo') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.materialcode'),
+    title: t('entity.pcbarepair.materialcode'),
     dataIndex: 'materialCode',
     key: 'materialCode',
     width: 120,
@@ -666,7 +657,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaRepairField(record, 'materialCode') ?? ''
   },
   {
-    title: t('entity.pcbaRepair.status'),
+    title: t('entity.pcbarepair.status'),
     dataIndex: 'status',
     key: 'status',
     width: 120,
@@ -705,6 +696,7 @@ const getPcbaRepairId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getPcbaRepairField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -712,51 +704,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: PcbaRepair, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getPcbaRepairId(selectedRow.value) === getPcbaRepairId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: PcbaRepair[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: PcbaRepair) => ({
-  onClick: () => {
-    const key = getPcbaRepairId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getPcbaRepairId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: PcbaRepairQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getPcbaRepairList(params)
+    const res = await getPcbaRepairList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -774,7 +747,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -796,22 +769,23 @@ function handleReset() {
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.pcbaRepair._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.pcbarepair._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: PcbaRepair) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.pcbaRepair._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.pcbarepair._self') })
   formLoading.value = true
   try {
     const detail = await loadPcbaRepairDetail(record)
@@ -827,7 +801,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.pcbaRepair._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.pcbarepair._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -845,12 +819,17 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updatePcbaRepair(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.pcbaRepair._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.pcbarepair._self') }))
     } else {
       await createPcbaRepair(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.pcbaRepair._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.pcbarepair._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  pcbaRepairDetailPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -860,6 +839,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -891,16 +872,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: PcbaRepairQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportPcbaRepair(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportPcbaRepair(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -919,10 +895,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.pcbaRepair._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.pcbarepair._self') }))
   } catch (error: any) {
     logger.error('[PcbaRepair] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.pcbaRepair._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.pcbarepair._self') }))
   } finally {
     loading.value = false
   }
@@ -931,12 +907,16 @@ async function handleExport() {
 async function handleDeleteOne(record: PcbaRepair) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.pcbaRepair._self'), name: t('common.tip.this.target', { target: t('entity.pcbaRepair._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.pcbarepair._self'), name: t('common.tip.this.target', { target: t('entity.pcbarepair._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deletePcbaRepairById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.pcbaRepair._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.pcbarepair._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -944,18 +924,22 @@ async function handleDeleteOne(record: PcbaRepair) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.pcbaRepair._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.pcbarepair._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.pcbaRepair._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.pcbarepair._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deletePcbaRepairBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.pcbaRepair._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.pcbarepair._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -968,7 +952,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -988,7 +972,7 @@ function handleAdvancedQueryReset() {
   status: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1017,24 +1001,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-manufacturing-defect-pcba-repair {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

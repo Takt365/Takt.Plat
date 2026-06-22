@@ -42,9 +42,7 @@ export function getKnowledgeList(queryDto: any): Promise<TaktPagedResult<Knowled
   return request<TaktPagedResult<Knowledge>>({
     url: `${KNOWLEDGE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportKnowledge(
     url: `${KNOWLEDGE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

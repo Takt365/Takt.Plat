@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：manufacturer.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -296,7 +296,7 @@ export interface ManufacturerQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -438,11 +438,6 @@ export interface ManufacturerCreate {
   manufacturerStatus: number;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 导航属性：制造商物料明细列表（子表，级联保存）
    */
   manufacturerMaterials?: ManufacturerMaterialCreate[];
@@ -450,7 +445,7 @@ export interface ManufacturerCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -592,7 +587,7 @@ export interface ManufacturerTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -686,7 +681,7 @@ export interface ManufacturerImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -830,7 +825,7 @@ export interface ManufacturerExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

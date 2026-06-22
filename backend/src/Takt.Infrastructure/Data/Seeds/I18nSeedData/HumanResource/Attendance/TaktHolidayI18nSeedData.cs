@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktHolidayI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktHoliday 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,92 +75,92 @@ public class TaktHolidayI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktHoliday 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.holiday._self / entity.holiday.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.holiday._self / entity.holiday.{{field}}；ResourceGroup=Attendance；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetHolidayTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.holiday._self
-            new TranslationSeedItem("entity.holiday._self", "en-US", "Holiday Information", "实体名称"),
+            new TranslationSeedItem("entity.holiday._self", "en-US", "Holiday Information_us", "实体名称"),
             // entity.holiday._self
-            new TranslationSeedItem("entity.holiday._self", "ja-JP", "假日信息", "实体名称"),
+            new TranslationSeedItem("entity.holiday._self", "ja-JP", "假日信息_jp", "实体名称"),
             // entity.holiday._self
             new TranslationSeedItem("entity.holiday._self", "zh-CN", "假日信息", "实体名称"),
             // entity.holiday._self
-            new TranslationSeedItem("entity.holiday._self", "zh-HK", "假日信息", "实体名称"),
+            new TranslationSeedItem("entity.holiday._self", "zh-HK", "假日信息_hk", "实体名称"),
 
             // entity.holiday.name
-            new TranslationSeedItem("entity.holiday.name", "en-US", "假日名称", "假日名称"),
+            new TranslationSeedItem("entity.holiday.name", "en-US", "假日名称_us", "假日名称"),
             // entity.holiday.name
-            new TranslationSeedItem("entity.holiday.name", "ja-JP", "假日名称", "假日名称"),
+            new TranslationSeedItem("entity.holiday.name", "ja-JP", "假日名称_jp", "假日名称"),
             // entity.holiday.name
             new TranslationSeedItem("entity.holiday.name", "zh-CN", "假日名称", "假日名称"),
             // entity.holiday.name
-            new TranslationSeedItem("entity.holiday.name", "zh-HK", "假日名称", "假日名称"),
+            new TranslationSeedItem("entity.holiday.name", "zh-HK", "假日名称_hk", "假日名称"),
 
             // entity.holiday.type
-            new TranslationSeedItem("entity.holiday.type", "en-US", "假日类型", "假日类型（字典 hr_holiday_type）"),
+            new TranslationSeedItem("entity.holiday.type", "en-US", "假日类型_us", "假日类型（字典 hr_holiday_category）"),
             // entity.holiday.type
-            new TranslationSeedItem("entity.holiday.type", "ja-JP", "假日类型", "假日类型（字典 hr_holiday_type）"),
+            new TranslationSeedItem("entity.holiday.type", "ja-JP", "假日类型_jp", "假日类型（字典 hr_holiday_category）"),
             // entity.holiday.type
-            new TranslationSeedItem("entity.holiday.type", "zh-CN", "假日类型", "假日类型（字典 hr_holiday_type）"),
+            new TranslationSeedItem("entity.holiday.type", "zh-CN", "假日类型", "假日类型（字典 hr_holiday_category）"),
             // entity.holiday.type
-            new TranslationSeedItem("entity.holiday.type", "zh-HK", "假日类型", "假日类型（字典 hr_holiday_type）"),
+            new TranslationSeedItem("entity.holiday.type", "zh-HK", "假日类型_hk", "假日类型（字典 hr_holiday_category）"),
 
             // entity.holiday.startdate
-            new TranslationSeedItem("entity.holiday.startdate", "en-US", "假日开始日期", "假日开始日期"),
+            new TranslationSeedItem("entity.holiday.startdate", "en-US", "假日开始日期_us", "假日开始日期"),
             // entity.holiday.startdate
-            new TranslationSeedItem("entity.holiday.startdate", "ja-JP", "假日开始日期", "假日开始日期"),
+            new TranslationSeedItem("entity.holiday.startdate", "ja-JP", "假日开始日期_jp", "假日开始日期"),
             // entity.holiday.startdate
             new TranslationSeedItem("entity.holiday.startdate", "zh-CN", "假日开始日期", "假日开始日期"),
             // entity.holiday.startdate
-            new TranslationSeedItem("entity.holiday.startdate", "zh-HK", "假日开始日期", "假日开始日期"),
+            new TranslationSeedItem("entity.holiday.startdate", "zh-HK", "假日开始日期_hk", "假日开始日期"),
 
             // entity.holiday.enddate
-            new TranslationSeedItem("entity.holiday.enddate", "en-US", "假日结束日期", "假日结束日期"),
+            new TranslationSeedItem("entity.holiday.enddate", "en-US", "假日结束日期_us", "假日结束日期"),
             // entity.holiday.enddate
-            new TranslationSeedItem("entity.holiday.enddate", "ja-JP", "假日结束日期", "假日结束日期"),
+            new TranslationSeedItem("entity.holiday.enddate", "ja-JP", "假日结束日期_jp", "假日结束日期"),
             // entity.holiday.enddate
             new TranslationSeedItem("entity.holiday.enddate", "zh-CN", "假日结束日期", "假日结束日期"),
             // entity.holiday.enddate
-            new TranslationSeedItem("entity.holiday.enddate", "zh-HK", "假日结束日期", "假日结束日期"),
+            new TranslationSeedItem("entity.holiday.enddate", "zh-HK", "假日结束日期_hk", "假日结束日期"),
 
             // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "en-US", "是否工作日", "是否工作日（字典 hr_holiday_is_working_day）"),
+            new TranslationSeedItem("entity.holiday.isworkingday", "en-US", "是否工作日_us", "是否工作日（字典 hr_holiday_working_day_type）"),
             // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "ja-JP", "是否工作日", "是否工作日（字典 hr_holiday_is_working_day）"),
+            new TranslationSeedItem("entity.holiday.isworkingday", "ja-JP", "是否工作日_jp", "是否工作日（字典 hr_holiday_working_day_type）"),
             // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "zh-CN", "是否工作日", "是否工作日（字典 hr_holiday_is_working_day）"),
+            new TranslationSeedItem("entity.holiday.isworkingday", "zh-CN", "是否工作日", "是否工作日（字典 hr_holiday_working_day_type）"),
             // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "zh-HK", "是否工作日", "是否工作日（字典 hr_holiday_is_working_day）"),
+            new TranslationSeedItem("entity.holiday.isworkingday", "zh-HK", "是否工作日_hk", "是否工作日（字典 hr_holiday_working_day_type）"),
 
             // entity.holiday.greeting
-            new TranslationSeedItem("entity.holiday.greeting", "en-US", "假日问候语", "假日问候语（简短，用于界面问候展示）"),
+            new TranslationSeedItem("entity.holiday.greeting", "en-US", "假日问候语_us", "假日问候语（简短，用于界面问候展示）"),
             // entity.holiday.greeting
-            new TranslationSeedItem("entity.holiday.greeting", "ja-JP", "假日问候语", "假日问候语（简短，用于界面问候展示）"),
+            new TranslationSeedItem("entity.holiday.greeting", "ja-JP", "假日问候语_jp", "假日问候语（简短，用于界面问候展示）"),
             // entity.holiday.greeting
             new TranslationSeedItem("entity.holiday.greeting", "zh-CN", "假日问候语", "假日问候语（简短，用于界面问候展示）"),
             // entity.holiday.greeting
-            new TranslationSeedItem("entity.holiday.greeting", "zh-HK", "假日问候语", "假日问候语（简短，用于界面问候展示）"),
+            new TranslationSeedItem("entity.holiday.greeting", "zh-HK", "假日问候语_hk", "假日问候语（简短，用于界面问候展示）"),
 
             // entity.holiday.quote
-            new TranslationSeedItem("entity.holiday.quote", "en-US", "假日引用", "假日引用/诗句（用于引用区展示）"),
+            new TranslationSeedItem("entity.holiday.quote", "en-US", "假日引用_us", "假日引用/诗句（用于引用区展示）"),
             // entity.holiday.quote
-            new TranslationSeedItem("entity.holiday.quote", "ja-JP", "假日引用", "假日引用/诗句（用于引用区展示）"),
+            new TranslationSeedItem("entity.holiday.quote", "ja-JP", "假日引用_jp", "假日引用/诗句（用于引用区展示）"),
             // entity.holiday.quote
             new TranslationSeedItem("entity.holiday.quote", "zh-CN", "假日引用", "假日引用/诗句（用于引用区展示）"),
             // entity.holiday.quote
-            new TranslationSeedItem("entity.holiday.quote", "zh-HK", "假日引用", "假日引用/诗句（用于引用区展示）"),
+            new TranslationSeedItem("entity.holiday.quote", "zh-HK", "假日引用_hk", "假日引用/诗句（用于引用区展示）"),
 
             // entity.holiday.theme
-            new TranslationSeedItem("entity.holiday.theme", "en-US", "假日主题", "假日主题（对应前端主题色 key，用于日历等非工作日展示）"),
+            new TranslationSeedItem("entity.holiday.theme", "en-US", "假日主题_us", "假日主题（对应前端主题色 key，用于日历等非工作日展示）"),
             // entity.holiday.theme
-            new TranslationSeedItem("entity.holiday.theme", "ja-JP", "假日主题", "假日主题（对应前端主题色 key，用于日历等非工作日展示）"),
+            new TranslationSeedItem("entity.holiday.theme", "ja-JP", "假日主题_jp", "假日主题（对应前端主题色 key，用于日历等非工作日展示）"),
             // entity.holiday.theme
             new TranslationSeedItem("entity.holiday.theme", "zh-CN", "假日主题", "假日主题（对应前端主题色 key，用于日历等非工作日展示）"),
             // entity.holiday.theme
-            new TranslationSeedItem("entity.holiday.theme", "zh-HK", "假日主题", "假日主题（对应前端主题色 key，用于日历等非工作日展示）"),
+            new TranslationSeedItem("entity.holiday.theme", "zh-HK", "假日主题_hk", "假日主题（对应前端主题色 key，用于日历等非工作日展示）"),
         };
     }
 
@@ -178,10 +178,10 @@ public class TaktHolidayI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Attendance";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktNumberingValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Numbering 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktNumbering 生成，请按需审阅）
 // 
@@ -12,7 +12,6 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Foundation;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Foundation;
 
@@ -32,42 +31,39 @@ public class TaktNumberingCreateValidator : AbstractValidator<TaktNumberingCreat
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.RuleCode)
             .NotEmpty().WithMessage("规则编码不能为空")
-            .MaximumLength(40).WithMessage("规则编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("规则编码长度不能超过50个字符");
         RuleFor(x => x.RuleName)
             .NotEmpty().WithMessage("规则名称不能为空")
-            .MaximumLength(40).WithMessage("规则名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("规则名称长度不能超过100个字符");
         RuleFor(x => x.DocumentType)
-            .IsInEnum().WithMessage("单据类型无效");
+            .NotEmpty().WithMessage("业务领域不能为空")
+            .MaximumLength(40).WithMessage("业务领域长度不能超过40个字符");
         RuleFor(x => x.DepartmentCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(40).WithMessage("部门编码长度不能超过40个字符");
-        RuleFor(x => x.Prefix)
-            .MaximumLength(20).WithMessage("前缀长度不能超过20个字符");
+            .MaximumLength(50).WithMessage("部门编码长度不能超过50个字符");
+        RuleFor(x => x.PrefixCode)
+            .MaximumLength(4).WithMessage("前缀编码长度不能超过4个字符");
         RuleFor(x => x.DateFormat)
             .MaximumLength(20).WithMessage("日期格式长度不能超过20个字符");
-        RuleFor(x => x.Suffix)
-            .MaximumLength(20).WithMessage("后缀长度不能超过20个字符");
+        RuleFor(x => x.SuffixCode)
+            .MaximumLength(4).WithMessage("后缀编码长度不能超过4个字符");
         RuleFor(x => x.ResetPeriod)
             .NotEmpty().WithMessage("重置周期不能为空")
             .MaximumLength(20).WithMessage("重置周期长度不能超过20个字符");
         RuleFor(x => x.ExampleCode)
-            .MaximumLength(40).WithMessage("示例编码长度不能超过40个字符");
+            .NotEmpty().WithMessage("起始编码不能为空")
+            .MaximumLength(100).WithMessage("起始编码长度不能超过100个字符");
         RuleFor(x => x.Separator)
-            .NotEmpty().WithMessage("分隔符不能为空")
             .MaximumLength(1).WithMessage("分隔符长度不能超过1个字符");
-        RuleFor(x => x.IsBuiltIn)
-            .IsInEnum().WithMessage("是否内置无效");
-        RuleFor(x => x.Status)
-            .IsInEnum().WithMessage("状态无效");
         RuleFor(x => x.Description)
-            .MaximumLength(500).WithMessage("描述说明；可选配置编码段顺序，格式：segments:DocumentType,长度不能超过500个字符");
-        RuleFor(x => x.ExtFieldJson)
+            .MaximumLength(500).WithMessage("描述说明；可选配置编码段顺序，格式：segments:CompanyCode,D长度不能超过500个字符");
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -108,33 +104,35 @@ public class TaktNumberingImportValidator : AbstractValidator<TaktNumberingImpor
     public TaktNumberingImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.RuleCode)
             .NotEmpty().WithMessage("规则编码不能为空")
-            .MaximumLength(40).WithMessage("规则编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("规则编码长度不能超过50个字符");
         RuleFor(x => x.RuleName)
             .NotEmpty().WithMessage("规则名称不能为空")
-            .MaximumLength(40).WithMessage("规则名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("规则名称长度不能超过100个字符");
         RuleFor(x => x.DocumentType)
-            .IsInEnum().WithMessage("单据类型无效");
+            .NotEmpty().WithMessage("业务领域不能为空")
+            .MaximumLength(40).WithMessage("业务领域长度不能超过40个字符");
         RuleFor(x => x.DepartmentCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(40).WithMessage("部门编码长度不能超过40个字符");
-        RuleFor(x => x.Prefix)
-            .MaximumLength(20).WithMessage("前缀长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.Prefix));
+            .MaximumLength(50).WithMessage("部门编码长度不能超过50个字符");
+        RuleFor(x => x.PrefixCode)
+            .MaximumLength(4).WithMessage("前缀编码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PrefixCode));
         RuleFor(x => x.DateFormat)
             .MaximumLength(20).WithMessage("日期格式长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.DateFormat));
-        RuleFor(x => x.Suffix)
-            .MaximumLength(20).WithMessage("后缀长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.Suffix));
+        RuleFor(x => x.SuffixCode)
+            .MaximumLength(4).WithMessage("后缀编码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.SuffixCode));
         RuleFor(x => x.ResetPeriod)
             .NotEmpty().WithMessage("重置周期不能为空")
             .MaximumLength(20).WithMessage("重置周期长度不能超过20个字符");
         RuleFor(x => x.ExampleCode)
-            .MaximumLength(40).WithMessage("示例编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.ExampleCode));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+            .NotEmpty().WithMessage("起始编码不能为空")
+            .MaximumLength(100).WithMessage("起始编码长度不能超过100个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

@@ -47,9 +47,7 @@ export function getUserList(query: any): Promise<TaktPagedResult<User>> {
   return request<TaktPagedResult<User>>({
     url: `${USER_API_BASE}/list`,
     method: 'get',
-    params: {
-      query
-    },
+    params: query,
   });
 }
 
@@ -292,7 +290,7 @@ export function exportUserData(
     url: `${USER_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

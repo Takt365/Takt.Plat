@@ -128,7 +128,7 @@
                         v-if="!dragCompleted"
                         class="takt-captcha-shine"
                       >
-                        {{ t('login.page.captcha.dragHint') }}
+                        {{ t('login.page.captcha.drag.hint') }}
                       </a-typography-text>
                       <a-typography-text
                         v-else

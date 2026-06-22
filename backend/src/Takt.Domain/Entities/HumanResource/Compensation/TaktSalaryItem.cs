@@ -44,7 +44,7 @@ public class TaktSalaryItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "item_type", ColumnDescription = "项目类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ItemType { get; set; } = 0;
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method：固定金额/按比例/按公式）
+    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
     /// </summary>
     [SugarColumn(ColumnName = "calc_method", ColumnDescription = "计算方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CalcMethod { get; set; } = 0;
@@ -75,22 +75,22 @@ public class TaktSalaryItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "vesting_years", ColumnDescription = "默认归属年限", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int VestingYears { get; set; }
     /// <summary>
-    /// 是否扣款项（字典 sys_yes_no）
+    /// 是否扣款项（字典 sys_yes_no_type）
     /// </summary>
     [SugarColumn(ColumnName = "is_deduction", ColumnDescription = "是否扣款项", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsDeduction { get; set; } = 0;
     /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no）
+    /// 是否计入应税所得（字典 sys_yes_no_type）
     /// </summary>
     [SugarColumn(ColumnName = "is_taxable", ColumnDescription = "是否计入应税所得", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsTaxable { get; set; } = 0;
     /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no）
+    /// 是否计入社保基数（字典 sys_yes_no_type）
     /// </summary>
     [SugarColumn(ColumnName = "include_social_security_base", ColumnDescription = "是否计入社保基数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IncludeSocialSecurityBase { get; set; } = 0;
     /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no）
+    /// 是否计入公积金基数（字典 sys_yes_no_type）
     /// </summary>
     [SugarColumn(ColumnName = "include_housing_fund_base", ColumnDescription = "是否计入公积金基数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IncludeHousingFundBase { get; set; } = 0;
@@ -100,7 +100,7 @@ public class TaktSalaryItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     [SugarColumn(ColumnName = "item_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ItemStatus { get; set; } = 1;

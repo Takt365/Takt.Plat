@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/customer-service
 // 文件名称：service-request.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -89,7 +89,7 @@ export interface ServiceRequest extends CompanyDtoBase {
   sourceChannel: number;
 
   /**
-   * 优先级（0=低，1=中，2=高，3=紧急）
+   * 优先级（字典 sys_priority_level_category）
    */
   priority: number;
 
@@ -244,7 +244,7 @@ export interface ServiceRequestQuery extends TaktPagedQuery {
   sourceChannel?: number;
 
   /**
-   * 优先级（0=低，1=中，2=高，3=紧急）
+   * 优先级（字典 sys_priority_level_category）
    */
   priority?: number;
 
@@ -331,7 +331,7 @@ export interface ServiceRequestQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -418,7 +418,7 @@ export interface ServiceRequestCreate {
   sourceChannel: number;
 
   /**
-   * 优先级（0=低，1=中，2=高，3=紧急）
+   * 优先级（字典 sys_priority_level_category）
    */
   priority: number;
 
@@ -478,11 +478,6 @@ export interface ServiceRequestCreate {
   closedAt?: string;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId）（子表，级联保存）
    */
   tickets?: ServiceTicketCreate[];
@@ -490,7 +485,7 @@ export interface ServiceRequestCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -615,7 +610,7 @@ export interface ServiceRequestTemplate {
   sourceChannel?: number;
 
   /**
-   * 优先级（0=低，1=中，2=高，3=紧急）
+   * 优先级（字典 sys_priority_level_category）
    */
   priority?: number;
 
@@ -632,7 +627,7 @@ export interface ServiceRequestTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -709,7 +704,7 @@ export interface ServiceRequestImport {
   sourceChannel?: number;
 
   /**
-   * 优先级（0=低，1=中，2=高，3=紧急）
+   * 优先级（字典 sys_priority_level_category）
    */
   priority?: number;
 
@@ -726,7 +721,7 @@ export interface ServiceRequestImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -808,7 +803,7 @@ export interface ServiceRequestExport {
   sourceChannel: number;
 
   /**
-   * 优先级（0=低，1=中，2=高，3=紧急）
+   * 优先级（字典 sys_priority_level_category）
    */
   priority: number;
 
@@ -875,7 +870,7 @@ export interface ServiceRequestExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

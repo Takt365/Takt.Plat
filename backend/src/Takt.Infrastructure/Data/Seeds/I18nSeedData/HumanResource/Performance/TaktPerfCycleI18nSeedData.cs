@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Performance
 // 文件名称：TaktPerfCycleI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPerfCycle 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,164 +75,164 @@ public class TaktPerfCycleI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktPerfCycle 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.perfcycle._self / entity.perfcycle.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.perfcycle._self / entity.perfcycle.{{field}}；ResourceGroup=Performance；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetPerfCycleTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.perfcycle._self
-            new TranslationSeedItem("entity.perfcycle._self", "en-US", "Perf Cycle Information", "实体名称"),
+            new TranslationSeedItem("entity.perfcycle._self", "en-US", "Perf Cycle Information_us", "实体名称"),
             // entity.perfcycle._self
-            new TranslationSeedItem("entity.perfcycle._self", "ja-JP", "绩效考核周期日程安排信息", "实体名称"),
+            new TranslationSeedItem("entity.perfcycle._self", "ja-JP", "绩效考核周期日程安排信息_jp", "实体名称"),
             // entity.perfcycle._self
             new TranslationSeedItem("entity.perfcycle._self", "zh-CN", "绩效考核周期日程安排信息", "实体名称"),
             // entity.perfcycle._self
-            new TranslationSeedItem("entity.perfcycle._self", "zh-HK", "绩效考核周期日程安排信息", "实体名称"),
+            new TranslationSeedItem("entity.perfcycle._self", "zh-HK", "绩效考核周期日程安排信息_hk", "实体名称"),
 
             // entity.perfcycle.cyclecode
-            new TranslationSeedItem("entity.perfcycle.cyclecode", "en-US", "周期编码", "周期编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.perfcycle.cyclecode", "en-US", "周期编码_us", "周期编码（租户+公司内唯一）"),
             // entity.perfcycle.cyclecode
-            new TranslationSeedItem("entity.perfcycle.cyclecode", "ja-JP", "周期编码", "周期编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.perfcycle.cyclecode", "ja-JP", "周期编码_jp", "周期编码（租户+公司内唯一）"),
             // entity.perfcycle.cyclecode
             new TranslationSeedItem("entity.perfcycle.cyclecode", "zh-CN", "周期编码", "周期编码（租户+公司内唯一）"),
             // entity.perfcycle.cyclecode
-            new TranslationSeedItem("entity.perfcycle.cyclecode", "zh-HK", "周期编码", "周期编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.perfcycle.cyclecode", "zh-HK", "周期编码_hk", "周期编码（租户+公司内唯一）"),
 
             // entity.perfcycle.cyclename
-            new TranslationSeedItem("entity.perfcycle.cyclename", "en-US", "周期名称", "周期名称"),
+            new TranslationSeedItem("entity.perfcycle.cyclename", "en-US", "周期名称_us", "周期名称"),
             // entity.perfcycle.cyclename
-            new TranslationSeedItem("entity.perfcycle.cyclename", "ja-JP", "周期名称", "周期名称"),
+            new TranslationSeedItem("entity.perfcycle.cyclename", "ja-JP", "周期名称_jp", "周期名称"),
             // entity.perfcycle.cyclename
             new TranslationSeedItem("entity.perfcycle.cyclename", "zh-CN", "周期名称", "周期名称"),
             // entity.perfcycle.cyclename
-            new TranslationSeedItem("entity.perfcycle.cyclename", "zh-HK", "周期名称", "周期名称"),
+            new TranslationSeedItem("entity.perfcycle.cyclename", "zh-HK", "周期名称_hk", "周期名称"),
 
             // entity.perfcycle.cycletype
-            new TranslationSeedItem("entity.perfcycle.cycletype", "en-US", "周期类型", "周期类型（月度/季度/半年度/年度）"),
+            new TranslationSeedItem("entity.perfcycle.cycletype", "en-US", "周期类型_us", "周期类型（月度/季度/半年度/年度）"),
             // entity.perfcycle.cycletype
-            new TranslationSeedItem("entity.perfcycle.cycletype", "ja-JP", "周期类型", "周期类型（月度/季度/半年度/年度）"),
+            new TranslationSeedItem("entity.perfcycle.cycletype", "ja-JP", "周期类型_jp", "周期类型（月度/季度/半年度/年度）"),
             // entity.perfcycle.cycletype
             new TranslationSeedItem("entity.perfcycle.cycletype", "zh-CN", "周期类型", "周期类型（月度/季度/半年度/年度）"),
             // entity.perfcycle.cycletype
-            new TranslationSeedItem("entity.perfcycle.cycletype", "zh-HK", "周期类型", "周期类型（月度/季度/半年度/年度）"),
+            new TranslationSeedItem("entity.perfcycle.cycletype", "zh-HK", "周期类型_hk", "周期类型（月度/季度/半年度/年度）"),
 
             // entity.perfcycle.cycleyear
-            new TranslationSeedItem("entity.perfcycle.cycleyear", "en-US", "周期年度", "周期年度"),
+            new TranslationSeedItem("entity.perfcycle.cycleyear", "en-US", "周期年度_us", "周期年度"),
             // entity.perfcycle.cycleyear
-            new TranslationSeedItem("entity.perfcycle.cycleyear", "ja-JP", "周期年度", "周期年度"),
+            new TranslationSeedItem("entity.perfcycle.cycleyear", "ja-JP", "周期年度_jp", "周期年度"),
             // entity.perfcycle.cycleyear
             new TranslationSeedItem("entity.perfcycle.cycleyear", "zh-CN", "周期年度", "周期年度"),
             // entity.perfcycle.cycleyear
-            new TranslationSeedItem("entity.perfcycle.cycleyear", "zh-HK", "周期年度", "周期年度"),
+            new TranslationSeedItem("entity.perfcycle.cycleyear", "zh-HK", "周期年度_hk", "周期年度"),
 
             // entity.perfcycle.cyclesequence
-            new TranslationSeedItem("entity.perfcycle.cyclesequence", "en-US", "周期序号", "周期序号"),
+            new TranslationSeedItem("entity.perfcycle.cyclesequence", "en-US", "周期序号_us", "周期序号"),
             // entity.perfcycle.cyclesequence
-            new TranslationSeedItem("entity.perfcycle.cyclesequence", "ja-JP", "周期序号", "周期序号"),
+            new TranslationSeedItem("entity.perfcycle.cyclesequence", "ja-JP", "周期序号_jp", "周期序号"),
             // entity.perfcycle.cyclesequence
             new TranslationSeedItem("entity.perfcycle.cyclesequence", "zh-CN", "周期序号", "周期序号"),
             // entity.perfcycle.cyclesequence
-            new TranslationSeedItem("entity.perfcycle.cyclesequence", "zh-HK", "周期序号", "周期序号"),
+            new TranslationSeedItem("entity.perfcycle.cyclesequence", "zh-HK", "周期序号_hk", "周期序号"),
 
             // entity.perfcycle.startdate
-            new TranslationSeedItem("entity.perfcycle.startdate", "en-US", "开始日期", "开始日期"),
+            new TranslationSeedItem("entity.perfcycle.startdate", "en-US", "开始日期_us", "开始日期"),
             // entity.perfcycle.startdate
-            new TranslationSeedItem("entity.perfcycle.startdate", "ja-JP", "开始日期", "开始日期"),
+            new TranslationSeedItem("entity.perfcycle.startdate", "ja-JP", "开始日期_jp", "开始日期"),
             // entity.perfcycle.startdate
             new TranslationSeedItem("entity.perfcycle.startdate", "zh-CN", "开始日期", "开始日期"),
             // entity.perfcycle.startdate
-            new TranslationSeedItem("entity.perfcycle.startdate", "zh-HK", "开始日期", "开始日期"),
+            new TranslationSeedItem("entity.perfcycle.startdate", "zh-HK", "开始日期_hk", "开始日期"),
 
             // entity.perfcycle.enddate
-            new TranslationSeedItem("entity.perfcycle.enddate", "en-US", "结束日期", "结束日期"),
+            new TranslationSeedItem("entity.perfcycle.enddate", "en-US", "结束日期_us", "结束日期"),
             // entity.perfcycle.enddate
-            new TranslationSeedItem("entity.perfcycle.enddate", "ja-JP", "结束日期", "结束日期"),
+            new TranslationSeedItem("entity.perfcycle.enddate", "ja-JP", "结束日期_jp", "结束日期"),
             // entity.perfcycle.enddate
             new TranslationSeedItem("entity.perfcycle.enddate", "zh-CN", "结束日期", "结束日期"),
             // entity.perfcycle.enddate
-            new TranslationSeedItem("entity.perfcycle.enddate", "zh-HK", "结束日期", "结束日期"),
+            new TranslationSeedItem("entity.perfcycle.enddate", "zh-HK", "结束日期_hk", "结束日期"),
 
             // entity.perfcycle.goalsettingduedate
-            new TranslationSeedItem("entity.perfcycle.goalsettingduedate", "en-US", "目标设定截止日期", "目标设定截止日期"),
+            new TranslationSeedItem("entity.perfcycle.goalsettingduedate", "en-US", "目标设定截止日期_us", "目标设定截止日期"),
             // entity.perfcycle.goalsettingduedate
-            new TranslationSeedItem("entity.perfcycle.goalsettingduedate", "ja-JP", "目标设定截止日期", "目标设定截止日期"),
+            new TranslationSeedItem("entity.perfcycle.goalsettingduedate", "ja-JP", "目标设定截止日期_jp", "目标设定截止日期"),
             // entity.perfcycle.goalsettingduedate
             new TranslationSeedItem("entity.perfcycle.goalsettingduedate", "zh-CN", "目标设定截止日期", "目标设定截止日期"),
             // entity.perfcycle.goalsettingduedate
-            new TranslationSeedItem("entity.perfcycle.goalsettingduedate", "zh-HK", "目标设定截止日期", "目标设定截止日期"),
+            new TranslationSeedItem("entity.perfcycle.goalsettingduedate", "zh-HK", "目标设定截止日期_hk", "目标设定截止日期"),
 
             // entity.perfcycle.selfevaluationduedate
-            new TranslationSeedItem("entity.perfcycle.selfevaluationduedate", "en-US", "自评截止日期", "自评截止日期"),
+            new TranslationSeedItem("entity.perfcycle.selfevaluationduedate", "en-US", "自评截止日期_us", "自评截止日期"),
             // entity.perfcycle.selfevaluationduedate
-            new TranslationSeedItem("entity.perfcycle.selfevaluationduedate", "ja-JP", "自评截止日期", "自评截止日期"),
+            new TranslationSeedItem("entity.perfcycle.selfevaluationduedate", "ja-JP", "自评截止日期_jp", "自评截止日期"),
             // entity.perfcycle.selfevaluationduedate
             new TranslationSeedItem("entity.perfcycle.selfevaluationduedate", "zh-CN", "自评截止日期", "自评截止日期"),
             // entity.perfcycle.selfevaluationduedate
-            new TranslationSeedItem("entity.perfcycle.selfevaluationduedate", "zh-HK", "自评截止日期", "自评截止日期"),
+            new TranslationSeedItem("entity.perfcycle.selfevaluationduedate", "zh-HK", "自评截止日期_hk", "自评截止日期"),
 
             // entity.perfcycle.supervisorreviewduedate
-            new TranslationSeedItem("entity.perfcycle.supervisorreviewduedate", "en-US", "主管评审截止日期", "主管评审截止日期"),
+            new TranslationSeedItem("entity.perfcycle.supervisorreviewduedate", "en-US", "主管评审截止日期_us", "主管评审截止日期"),
             // entity.perfcycle.supervisorreviewduedate
-            new TranslationSeedItem("entity.perfcycle.supervisorreviewduedate", "ja-JP", "主管评审截止日期", "主管评审截止日期"),
+            new TranslationSeedItem("entity.perfcycle.supervisorreviewduedate", "ja-JP", "主管评审截止日期_jp", "主管评审截止日期"),
             // entity.perfcycle.supervisorreviewduedate
             new TranslationSeedItem("entity.perfcycle.supervisorreviewduedate", "zh-CN", "主管评审截止日期", "主管评审截止日期"),
             // entity.perfcycle.supervisorreviewduedate
-            new TranslationSeedItem("entity.perfcycle.supervisorreviewduedate", "zh-HK", "主管评审截止日期", "主管评审截止日期"),
+            new TranslationSeedItem("entity.perfcycle.supervisorreviewduedate", "zh-HK", "主管评审截止日期_hk", "主管评审截止日期"),
 
             // entity.perfcycle.interviewduedate
-            new TranslationSeedItem("entity.perfcycle.interviewduedate", "en-US", "面谈截止日期", "面谈截止日期"),
+            new TranslationSeedItem("entity.perfcycle.interviewduedate", "en-US", "面谈截止日期_us", "面谈截止日期"),
             // entity.perfcycle.interviewduedate
-            new TranslationSeedItem("entity.perfcycle.interviewduedate", "ja-JP", "面谈截止日期", "面谈截止日期"),
+            new TranslationSeedItem("entity.perfcycle.interviewduedate", "ja-JP", "面谈截止日期_jp", "面谈截止日期"),
             // entity.perfcycle.interviewduedate
             new TranslationSeedItem("entity.perfcycle.interviewduedate", "zh-CN", "面谈截止日期", "面谈截止日期"),
             // entity.perfcycle.interviewduedate
-            new TranslationSeedItem("entity.perfcycle.interviewduedate", "zh-HK", "面谈截止日期", "面谈截止日期"),
+            new TranslationSeedItem("entity.perfcycle.interviewduedate", "zh-HK", "面谈截止日期_hk", "面谈截止日期"),
 
             // entity.perfcycle.resultconfirmationduedate
-            new TranslationSeedItem("entity.perfcycle.resultconfirmationduedate", "en-US", "结果确认截止日期", "结果确认截止日期"),
+            new TranslationSeedItem("entity.perfcycle.resultconfirmationduedate", "en-US", "结果确认截止日期_us", "结果确认截止日期"),
             // entity.perfcycle.resultconfirmationduedate
-            new TranslationSeedItem("entity.perfcycle.resultconfirmationduedate", "ja-JP", "结果确认截止日期", "结果确认截止日期"),
+            new TranslationSeedItem("entity.perfcycle.resultconfirmationduedate", "ja-JP", "结果确认截止日期_jp", "结果确认截止日期"),
             // entity.perfcycle.resultconfirmationduedate
             new TranslationSeedItem("entity.perfcycle.resultconfirmationduedate", "zh-CN", "结果确认截止日期", "结果确认截止日期"),
             // entity.perfcycle.resultconfirmationduedate
-            new TranslationSeedItem("entity.perfcycle.resultconfirmationduedate", "zh-HK", "结果确认截止日期", "结果确认截止日期"),
+            new TranslationSeedItem("entity.perfcycle.resultconfirmationduedate", "zh-HK", "结果确认截止日期_hk", "结果确认截止日期"),
 
             // entity.perfcycle.applicabledepartment
-            new TranslationSeedItem("entity.perfcycle.applicabledepartment", "en-US", "适用部门", "适用部门"),
+            new TranslationSeedItem("entity.perfcycle.applicabledepartment", "en-US", "适用部门_us", "适用部门"),
             // entity.perfcycle.applicabledepartment
-            new TranslationSeedItem("entity.perfcycle.applicabledepartment", "ja-JP", "适用部门", "适用部门"),
+            new TranslationSeedItem("entity.perfcycle.applicabledepartment", "ja-JP", "适用部门_jp", "适用部门"),
             // entity.perfcycle.applicabledepartment
             new TranslationSeedItem("entity.perfcycle.applicabledepartment", "zh-CN", "适用部门", "适用部门"),
             // entity.perfcycle.applicabledepartment
-            new TranslationSeedItem("entity.perfcycle.applicabledepartment", "zh-HK", "适用部门", "适用部门"),
+            new TranslationSeedItem("entity.perfcycle.applicabledepartment", "zh-HK", "适用部门_hk", "适用部门"),
 
             // entity.perfcycle.description
-            new TranslationSeedItem("entity.perfcycle.description", "en-US", "周期说明", "周期说明"),
+            new TranslationSeedItem("entity.perfcycle.description", "en-US", "周期说明_us", "周期说明"),
             // entity.perfcycle.description
-            new TranslationSeedItem("entity.perfcycle.description", "ja-JP", "周期说明", "周期说明"),
+            new TranslationSeedItem("entity.perfcycle.description", "ja-JP", "周期说明_jp", "周期说明"),
             // entity.perfcycle.description
             new TranslationSeedItem("entity.perfcycle.description", "zh-CN", "周期说明", "周期说明"),
             // entity.perfcycle.description
-            new TranslationSeedItem("entity.perfcycle.description", "zh-HK", "周期说明", "周期说明"),
+            new TranslationSeedItem("entity.perfcycle.description", "zh-HK", "周期说明_hk", "周期说明"),
 
             // entity.perfcycle.cycleschedulestatus
-            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "en-US", "状态", "状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
+            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "en-US", "状态_us", "状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
             // entity.perfcycle.cycleschedulestatus
-            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "ja-JP", "状态", "状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
+            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "ja-JP", "状态_jp", "状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
             // entity.perfcycle.cycleschedulestatus
             new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "zh-CN", "状态", "状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
             // entity.perfcycle.cycleschedulestatus
-            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "zh-HK", "状态", "状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
+            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "zh-HK", "状态_hk", "状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
 
             // entity.perfcycle.relatedplant
-            new TranslationSeedItem("entity.perfcycle.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.perfcycle.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.perfcycle.relatedplant
-            new TranslationSeedItem("entity.perfcycle.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.perfcycle.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.perfcycle.relatedplant
             new TranslationSeedItem("entity.perfcycle.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.perfcycle.relatedplant
-            new TranslationSeedItem("entity.perfcycle.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.perfcycle.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -250,10 +250,10 @@ public class TaktPerfCycleI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Performance";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

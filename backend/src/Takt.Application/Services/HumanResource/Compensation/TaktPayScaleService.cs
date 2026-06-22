@@ -97,7 +97,7 @@ public class TaktPayScaleService : TaktServiceBase, ITaktPayScaleService
         EnsureThreeLayerContext();
         var list = await _payScaleRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ScaleStatus == 1,
-            x => x.ScaleName,
+            x => x.ScaleName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -343,7 +343,7 @@ public class TaktPayScaleService : TaktServiceBase, ITaktPayScaleService
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.ScaleStatus).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -394,9 +394,9 @@ public class TaktPayScaleService : TaktServiceBase, ITaktPayScaleService
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

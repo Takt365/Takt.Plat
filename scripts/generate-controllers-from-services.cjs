@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-controllers-from-services.cjs
 // 创建时间：2026-05-23
 // 创建人：Takt365(Cursor AI)
@@ -19,6 +19,7 @@ const {
   shouldExcludeStandaloneService,
   RBAC_ASSOCIATION_ENTITY_SHORT_NAMES,
 } = require('./generate-entity-exclusions.cjs');
+const { buildPermissionBase } = require('./permission-base.cjs');
 const { transposedClassNames } = require('./generate-transposed-support.cjs');
 const { isSharedEnumType } = require('./generate-enum-common.cjs');
 
@@ -191,103 +192,6 @@ function shouldExcludeInterface(interfaceFile, entityName) {
     return true;
   }
   return false;
-}
-
-/**
- * 实体短名 → 权限段（小写连写，如 GenTable→gentable、DictType→dicttype）
- * @param {string} entityShort
- * @returns {string}
- */
-function entityShortToPermissionSlug(entityShort) {
-  return entityShort.replace(/([a-z0-9])([A-Z])/g, '$1$2').toLowerCase();
-}
-
-/**
- * 特殊控制器权限前缀（与菜单种子、前端 v-permission 约定一致，优先于默认规则）
- * - Code/Generator → code:generator（无实体中段，如 code:generator:query）
- * - Code/Database → code:database:{实体}
- * - Foundation 字典（DictType/DictData）→ foundation:dict（如 foundation:dict:query）
- * - Foundation 国际化（Culture/Translation）→ foundation:i18n（如 foundation:i18n:query）
- * @param {string[]} pathParts 相对 Services 的目录段
- * @param {string} entityShort 如 GenTable、DictType、Translation
- * @returns {string|null} 命中则返回前缀，否则 null 走默认 buildPermissionBaseDefault
- */
-function buildSpecialPermissionBase(pathParts, entityShort) {
-  if (!pathParts.length) {
-    return null;
-  }
-  const domain = pathParts[0];
-  const entitySlug = entityShortToPermissionSlug(entityShort);
-
-  if (domain === 'Code') {
-    if (pathParts[1] === 'Generator') {
-      return 'code:generator';
-    }
-    if (pathParts[1] === 'Database') {
-      return `code:database:${entitySlug}`;
-    }
-  }
-
-  if (domain === 'Foundation') {
-    if (entityShort === 'DictType' || entityShort === 'DictData') {
-      return 'foundation:dict';
-    }
-    if (entityShort === 'Translation' || entityShort === 'Culture') {
-      return 'foundation:i18n';
-    }
-  }
-
-  if (domain === 'Logistics' && pathParts[1] === 'CustomerService') {
-    return `logistics:service:${entitySlug}`;
-  }
-
-  if (domain === 'Workflow') {
-    if (entityShort === 'FlowScheme') {
-      return 'workflow:scheme';
-    }
-    if (entityShort === 'FlowForm') {
-      return 'workflow:form';
-    }
-    if (entityShort === 'FlowInstance') {
-      return 'workflow:instance';
-    }
-  }
-
-  return null;
-}
-
-/**
- * 默认权限前缀（通用模块）
- * - Identity → identity:user
- * - Statistics/Logging → statistics:logging:loginlog
- * - HumanResource/Attendance → humanresource:attendance:holiday
- */
-function buildPermissionBaseDefault(pathParts, entityShort) {
-  const domain = pathParts[0].toLowerCase();
-  const entitySlug = entityShortToPermissionSlug(entityShort);
-
-  if (pathParts.length <= 1) {
-    return `${domain}:${entitySlug}`;
-  }
-
-  const subdirs = pathParts.slice(1).map((p) => p.toLowerCase());
-
-  if (subdirs.length === 1) {
-    return `${domain}:${subdirs[0]}:${entitySlug}`;
-  }
-
-  return `${domain}:${subdirs.join(':')}:${entitySlug}`;
-}
-
-/**
- * 权限前缀：特殊控制器优先，否则默认规则
- * @param {string[]} pathParts
- * @param {string} entityShort
- * @returns {string}
- */
-function buildPermissionBase(pathParts, entityShort) {
-  return buildSpecialPermissionBase(pathParts, entityShort)
-    ?? buildPermissionBaseDefault(pathParts, entityShort);
 }
 
 /**

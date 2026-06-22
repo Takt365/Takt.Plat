@@ -1,10 +1,12 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-entity-i18n-seed.cjs
 // 创建时间：2026-05-23
 // 创建人：Takt365(Cursor AI)
-// 功能描述：根据 Domain 实体生成 Takt{Entity}I18nSeedData.cs（英/日/中三语翻译种子）
+// 功能描述：根据 Domain 实体全量生成 Takt{Entity}I18nSeedData.cs（英/日/中三语翻译种子）
+// TranslationText：基准文案 + 语言后缀（en-US/_us、ja-JP/_jp、zh-CN/_cn、zh-HK/_hk）
+// 用法: node scripts/generate-entity-i18n-seed.cjs [--all|-all]
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -21,8 +23,9 @@ const {
   ENTITY_PROPERTY_I18N_SEGMENT_BY_SLUG,
   entityClassToSlug,
   buildEntityI18nKey,
-  resolveTaktModuleInt,
-  TAKT_APP_SIDE_INT,
+  buildTranslationResourceGroup,
+  TRANSLATION_RESOURCE_TYPE_FRONTEND,
+  parseAllOnlyGenerateArgs,
 } = require('./generate-script-common.cjs');
 
 const CONFIG = {
@@ -39,6 +42,32 @@ const CONFIG = {
   cultures: ['en-US', 'ja-JP', 'zh-CN', 'zh-HK'],
 };
 
+/** 各语言 TranslationText 后缀（与 zh-CN 基准文案拼接，便于区分多语言种子） */
+const CULTURE_TRANSLATION_SUFFIX = {
+  'en-US': '_us',
+  'ja-JP': '_jp',
+  'zh-CN': '',
+  'zh-HK': '_hk',
+};
+
+/**
+ * 为 TranslationText 追加语言后缀（如 状态 → 状态_us）
+ * @param {string} text 基准文案
+ * @param {string} culture BCP47
+ * @returns {string}
+ */
+function withCultureTranslationSuffix(text, culture) {
+  const base = (text || '').trim();
+  if (!base) {
+    return base;
+  }
+  const suffix = CULTURE_TRANSLATION_SUFFIX[culture];
+  if (!suffix || base.endsWith(suffix)) {
+    return base;
+  }
+  return `${base}${suffix}`;
+}
+
 /**
  * 按 CONFIG.cultures 创建空语言映射
  * @returns {Record<string, Record<string, string>>}
@@ -52,7 +81,7 @@ const ENTITY_BASE_FIELDS = new Set([
   'Id',
   'TenantCode',
   'CompanyCode',
-  'ExtFieldJson',
+  'ExtField',
   'Remark',
   'CreatedBy',
   'CreatedAt',
@@ -617,7 +646,7 @@ function buildTranslationTuples(entity) {
       tuples.push({
         i18nKey: buildEntityI18nKey(entity.slug, '_self'),
         culture,
-        text: selfTexts[culture],
+        text: withCultureTranslationSuffix(selfTexts[culture], culture),
         contextNote: '实体名称',
         sortOrder: sortOrder,
       });
@@ -643,7 +672,7 @@ function buildTranslationTuples(entity) {
       tuples.push({
         i18nKey,
         culture,
-        text: texts[culture],
+        text: withCultureTranslationSuffix(texts[culture], culture),
         contextNote: sanitizeXmlDocPlainText(prop.summary || prop.name),
         sortOrder,
       });
@@ -686,8 +715,8 @@ function generateSeedClassContent(entity, translationData) {
   lines.push('using Takt.Shared.Helpers;');
   lines.push('');
   lines.push(`namespace ${entity.seedNamespace};`);
-  const resourceGroupInt = resolveTaktModuleInt(entity.taktModule);
-  const resourceTypeInt = TAKT_APP_SIDE_INT.Frontend;
+  const resourceGroup = buildTranslationResourceGroup(entity.seedDirParts);
+  const resourceType = TRANSLATION_RESOURCE_TYPE_FRONTEND;
   lines.push('');
   lines.push('/// <summary>');
   lines.push(`/// ${entity.className} 实体国际化翻译种子（键前缀 entity.${entity.slug}.*）`);
@@ -745,7 +774,7 @@ function generateSeedClassContent(entity, translationData) {
   lines.push('');
   lines.push('    /// <summary>');
   lines.push(`    /// ${entity.className} 实体翻译列表（${CONFIG.cultures.join(' / ')}）`);
-  lines.push(`    /// I18nKey：entity.${entity.slug}._self / entity.${entity.slug}.{{field}}；ResourceGroup=${resourceGroupInt}；ResourceType=${resourceTypeInt}`);
+  lines.push(`    /// I18nKey：entity.${entity.slug}._self / entity.${entity.slug}.{{field}}；ResourceGroup=${resourceGroup}；ResourceType=${resourceType}`);
   lines.push('    /// </summary>');
   lines.push(`    private static List<TranslationSeedItem> Get${entity.className.replace(/^Takt/, '')}Translations()`);
   lines.push('    {');
@@ -782,10 +811,10 @@ function generateSeedClassContent(entity, translationData) {
   lines.push('        translation.CultureCode = item.CultureCode;');
   lines.push('        translation.I18nKey = item.I18nKey;');
   lines.push('        translation.TranslationText = item.TranslationText;');
-  lines.push(`        translation.ResourceGroup = ${resourceGroupInt};`);
-  lines.push(`        translation.ResourceType = ${resourceTypeInt};`);
+  lines.push(`        translation.ResourceGroup = "${resourceGroup}";`);
+  lines.push(`        translation.ResourceType = "${resourceType}";`);
   lines.push('        translation.ContextNote = item.ContextNote;');
-  lines.push('        translation.ExtFieldJson = null;');
+  lines.push('        translation.ExtField = null;');
   lines.push('        translation.Remark = null;');
   lines.push('        translation.IsDeleted = 0;');
   lines.push('        translation.DeletedBy = null;');
@@ -856,7 +885,7 @@ function scanEntities() {
   return results;
 }
 
-function generateForEntity(entity, options) {
+function generateForEntity(entity) {
   const { outFile, outDir } = resolveSeedOutput(entity);
   const translationData = buildTranslationTuples(entity);
   const content = generateSeedClassContent(entity, translationData);
@@ -874,75 +903,37 @@ function generateForEntity(entity, options) {
 
 function printUsage() {
   console.log(`
-用法: node scripts/generate-entity-i18n-seed.cjs [参数]
-
-参数:
-  --all              显式全量（与默认行为相同，可省略）
-  --force            保留兼容（已存在文件默认覆盖更新）
-  --dry-run          仅打印将生成的键，不写文件
+用法:
+  node scripts/generate-entity-i18n-seed.cjs [--all|-all]
 
 说明:
-  - 本脚本始终全量扫描 Domain/Entities 下全部 Takt* 实体，无排除项
-  - 从 generate-all 传入的 --<实体名> 会被忽略（i18n 种子固定全量重建）
-
-输出:
-  backend/src/Takt.Infrastructure/Data/Seeds/I18nSeedData/{与实体相同路径}/Takt{Entity}I18nSeedData.cs
-  例: Entities/Accounting/Financial/TaktCompany.cs
-      → I18nSeedData/Accounting/Financial/TaktCompanyI18nSeedData.cs
-
-翻译键规则:
-  entity.{slug}._self              slug=类名去 Takt 后全小写（TaktAssyDefectDetail→assydefectdetail）
-  entity.{slug}.{fieldSegment}     字段末段=属性 camelCase 去 slug 前缀后全小写（defectCategory→defectcategory）
-
-语言:
-  ${CONFIG.cultures.join('、')}（缺省语言文件时回退 zh-CN 文案，请人工校对）
+  - 本脚本固定全量扫描 Domain/Entities 下全部 Takt* 实体
+  - 仅支持无参或 --all / -all，不支持其它参数
 
 示例:
   node scripts/generate-entity-i18n-seed.cjs
-  node scripts/generate-entity-i18n-seed.cjs --all --dry-run
+  node scripts/generate-entity-i18n-seed.cjs --all
 `);
 }
 
 /**
- * 解析 CLI：始终全量（--all）；仅识别 --force / --dry-run / --all
- * @returns {{ force: boolean, dryRun: boolean }}
+ * 解析 CLI：仅允许无参或 --all / -all
  */
 function parseArgs() {
-  const options = { force: false, dryRun: false };
-  for (const arg of process.argv.slice(2)) {
-    if (arg === '--force') {
-      options.force = true;
-      continue;
-    }
-    if (arg === '--dry-run') {
-      options.dryRun = true;
-      continue;
-    }
-    if (arg === '--all' || arg === '--ALL') {
-      continue;
-    }
-    if (arg.startsWith('--')) {
-      console.warn(`⚠️  忽略参数 ${arg}：本脚本固定 --all 全量生成，不支持单实体过滤`);
-      continue;
-    }
-    console.error(`❌ 未知参数: ${arg}`);
-    printUsage();
-    process.exit(1);
-  }
-  return options;
+  parseAllOnlyGenerateArgs(printUsage);
 }
 
 // ========================================
 // 主流程
 // ========================================
 
-console.log('🚀 从实体生成 Entity I18n 种子（全量 --all，无排除）...\n');
+console.log('🚀 从实体全量生成 Entity I18n 种子（--all）...\n');
 logGeneratedFileWritePolicy();
 
 try {
   loadTaktEnumTypeNames();
   loadTaktEntityClassNames();
-  const options = parseArgs();
+  parseArgs();
   const entities = scanEntities();
   if (entities.length === 0) {
     console.error('❌ 未找到任何可解析实体');
@@ -955,22 +946,7 @@ try {
   let updated = 0;
 
   entities.forEach((entity) => {
-    if (options.dryRun) {
-      const data = buildTranslationTuples(entity);
-      const { outFile } = resolveSeedOutput(entity);
-      console.log(`\n📄 [dry-run] ${outFile}`);
-      console.log(`📦 ${entity.className} → entity.${entity.slug}.* (${data.tuples.length} 条)`);
-      const keys = [...new Set(data.tuples.map((t) => t.i18nKey))];
-      keys.slice(0, 8).forEach((k) => {
-        const zh = data.tuples.find((t) => t.i18nKey === k && t.culture === 'zh-CN');
-        console.log(`   ${k}  zh-CN="${zh?.text}"`);
-      });
-      if (keys.length > 8) {
-        console.log(`   ... 共 ${keys.length} 个键`);
-      }
-      return;
-    }
-    const r = generateForEntity(entity, options);
+    const r = generateForEntity(entity);
     if (r.updated) {
       updated += 1;
     } else {

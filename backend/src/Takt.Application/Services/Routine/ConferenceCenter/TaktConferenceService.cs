@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.ConferenceCenter
 // 文件名称：TaktConferenceService.cs
-// 创建时间：2026-06-11
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
-// 功能描述：会议应用服务实现
+// 功能描述：会议中心应用服务实现
 // 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -21,36 +21,29 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Routine.ConferenceCenter;
 
 /// <summary>
-/// 会议应用服务
+/// 会议中心应用服务
 /// </summary>
 public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
 {
     private readonly ITaktApprovalRepository<TaktConference> _conferenceRepository;
     private readonly ITaktCompanyRepository<TaktConferenceParticipant> _conferenceParticipantRepository;
-    private readonly ITaktCompanyRepository<TaktConferenceAgenda> _conferenceAgendaRepository;
-    private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="conferenceRepository">会议仓储</param>
+    /// <param name="conferenceRepository">会议中心仓储</param>
     /// <param name="conferenceParticipantRepository">ConferenceParticipant仓储</param>
-    /// <param name="conferenceAgendaRepository">ConferenceAgenda仓储</param>
-    /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktConferenceService(
         ITaktApprovalRepository<TaktConference> conferenceRepository,
         ITaktCompanyRepository<TaktConferenceParticipant> conferenceParticipantRepository,
-        ITaktCompanyRepository<TaktConferenceAgenda> conferenceAgendaRepository,
-        ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
@@ -58,13 +51,11 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
     {
         _conferenceRepository = conferenceRepository;
         _conferenceParticipantRepository = conferenceParticipantRepository;
-        _conferenceAgendaRepository = conferenceAgendaRepository;
-        _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取会议列表（分页）
+    /// 获取会议中心列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
@@ -83,9 +74,9 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
     }
 
     /// <summary>
-    /// 根据ID获取会议
+    /// 根据ID获取会议中心
     /// </summary>
-    /// <param name="id">会议ID</param>
+    /// <param name="id">会议中心ID</param>
     /// <returns>DTO</returns>
     public async Task<TaktConferenceDto?> GetConferenceByIdAsync(long id)
     {
@@ -99,15 +90,15 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
         return dto;    }
 
     /// <summary>
-    /// 获取会议中心主选项列表
+    /// 获取会议中心选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetConferenceOptionsAsync()
     {
         EnsureThreeLayerContext();
         var list = await _conferenceRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.OrganizerName,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ConferenceStatus == 1,
+            x => x.OrganizerName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -117,7 +108,7 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
     }
 
     /// <summary>
-    /// 创建会议
+    /// 创建会议中心
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
@@ -129,7 +120,7 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
             x => x.ConferenceCode == entity.ConferenceCode);
         if (!isUnique_ix_conference_code_unique)
         {
-            throw new TaktBusinessException("会议的ConferenceCode已存在");
+            throw new TaktBusinessException("会议中心的ConferenceCode已存在");
         }
         entity = await _conferenceRepository.CreateAsync(entity);
                 await SaveConferenceChildrenAsync(entity, dto);
@@ -137,9 +128,9 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
     }
 
     /// <summary>
-    /// 更新会议
+    /// 更新会议中心
     /// </summary>
-    /// <param name="id">会议ID</param>
+    /// <param name="id">会议中心ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
     public async Task<TaktConferenceDto> UpdateConferenceAsync(long id, TaktConferenceUpdateDto dto)
@@ -147,7 +138,7 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
         var entity = await _conferenceRepository.GetByIdAsync(id);
         if (entity == null)
         {
-            throw new TaktBusinessException("会议不存在");
+            throw new TaktBusinessException("会议中心不存在");
         }
         dto.Adapt(entity);
         var isUnique_ix_conference_code_unique = await _uniqueValidator.IsUniqueAsync(
@@ -156,36 +147,35 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
             id);
         if (!isUnique_ix_conference_code_unique)
         {
-            throw new TaktBusinessException("会议的ConferenceCode已存在");
+            throw new TaktBusinessException("会议中心的ConferenceCode已存在");
         }
         await _conferenceRepository.UpdateAsync(entity);
                 await SaveConferenceChildrenAsync(entity, dto);
-        return await GetConferenceByIdAsync(id) ?? throw new TaktBusinessException("会议不存在");
+        return await GetConferenceByIdAsync(id) ?? throw new TaktBusinessException("会议中心不存在");
     }
 
     /// <summary>
-    /// 删除会议
+    /// 删除会议中心
     /// </summary>
-    /// <param name="id">会议ID</param>
+    /// <param name="id">会议中心ID</param>
     /// <returns>任务</returns>
     public async Task DeleteConferenceByIdAsync(long id)
     {
         var entity = await _conferenceRepository.GetByIdAsync(id);
         if (entity == null)
         {
-            throw new TaktBusinessException("会议不存在或已删除");
+            throw new TaktBusinessException("会议中心不存在或已删除");
         }
         await _conferenceParticipantRepository.DeleteAsync(x => x.ConferenceId == entity.Id);
-        await _conferenceAgendaRepository.DeleteAsync(x => x.ConferenceId == entity.Id);
         var deleted = await _conferenceRepository.DeleteAsync(id);
         if (!deleted)
         {
-            throw new TaktBusinessException("会议不存在或已删除");
+            throw new TaktBusinessException("会议中心不存在或已删除");
         }
     }
 
     /// <summary>
-    /// 批量删除会议
+    /// 批量删除会议中心
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
@@ -203,7 +193,7 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
     }
 
     /// <summary>
-    /// 更新会议状态
+    /// 更新会议中心状态
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
@@ -212,11 +202,11 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
         var entity = await _conferenceRepository.GetByIdAsync(dto.ConferenceId);
         if (entity == null)
         {
-            throw new TaktBusinessException("会议不存在");
+            throw new TaktBusinessException("会议中心不存在");
         }
         entity.ConferenceStatus = dto.ConferenceStatus;
         await _conferenceRepository.UpdateAsync(entity);
-        return await GetConferenceByIdAsync(dto.ConferenceId) ?? throw new TaktBusinessException("会议不存在");
+        return await GetConferenceByIdAsync(dto.ConferenceId) ?? throw new TaktBusinessException("会议中心不存在");
     }
 
     /// <summary>
@@ -228,12 +218,12 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
     public async Task<(string fileName, byte[] content)> GetConferenceTemplateAsync(string? sheetName = null, string? fileName = null)
     {
         return await TaktExcelHelper.GenerateTemplateAsync<TaktConferenceTemplateDto>(
-            sheetName ?? "会议导入模板",
-            fileName ?? "会议导入模板.xlsx");
+            sheetName ?? "会议中心导入模板",
+            fileName ?? "会议中心导入模板.xlsx");
     }
 
     /// <summary>
-    /// 导入会议
+    /// 导入会议中心
     /// </summary>
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
@@ -243,7 +233,7 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
-        var rows = await TaktExcelHelper.ImportAsync<TaktConferenceImportDto>(fileStream, sheetName ?? "会议导入模板");
+        var rows = await TaktExcelHelper.ImportAsync<TaktConferenceImportDto>(fileStream, sheetName ?? "会议中心导入模板");
         if (rows == null || rows.Count == 0)
         {
             errors.Add("Excel文件中没有数据");
@@ -265,7 +255,7 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
                     x => x.ConferenceCode == entity.ConferenceCode);
                 if (!isUnique_ix_conference_code_unique)
                 {
-                    throw new TaktBusinessException("会议的ConferenceCode已存在");
+                    throw new TaktBusinessException("会议中心的ConferenceCode已存在");
                 }
                 await _conferenceRepository.CreateAsync(entity);
                 success += 1;
@@ -280,7 +270,7 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
     }
 
     /// <summary>
-    /// 导出会议
+    /// 导出会议中心
     /// </summary>
     /// <param name="query">查询条件</param>
     /// <param name="sheetName">工作表名称</param>
@@ -294,14 +284,14 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
         {
             return await TaktExcelHelper.ExportAsync(
                 new List<TaktConferenceExportDto>(),
-                sheetName ?? "会议数据",
-                fileName ?? "会议导出.xlsx");
+                sheetName ?? "会议中心数据",
+                fileName ?? "会议中心导出.xlsx");
         }
         var exportData = list.Adapt<List<TaktConferenceExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
-            sheetName ?? "会议数据",
-            fileName ?? "会议导出.xlsx");
+            sheetName ?? "会议中心数据",
+            fileName ?? "会议中心导出.xlsx");
     }
 
     // ========================================
@@ -309,7 +299,7 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
     // ========================================
 
     /// <summary>
-    /// 填充会议详情（加载 OneToMany 子表：会议参与人、会议议程纪要）
+    /// 填充会议中心详情（加载 OneToMany 子表：会议参与人）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -323,13 +313,10 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
         // 会议参与人 → dto.Participants
         var participants = await _conferenceParticipantRepository.GetListAsync(x => x.ConferenceId == entity.Id);
         dto.Participants = participants.Adapt<List<TaktConferenceParticipantDto>>();
-        // 会议议程纪要 → dto.AgendaRecords
-        var agendarecords = await _conferenceAgendaRepository.GetListAsync(x => x.ConferenceId == entity.Id);
-        dto.AgendaRecords = agendarecords.Adapt<List<TaktConferenceAgendaDto>>();
     }
 
     /// <summary>
-    /// 保存会议子表级联（会议参与人、会议议程纪要；Create/Update 后按主表 Id 先删后插）
+    /// 保存会议中心子表级联（会议参与人；Create/Update 后按主表 Id 先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -372,48 +359,13 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
             }
             await _conferenceParticipantRepository.CreateRangeAsync(participants);
         }
-        // 会议议程纪要（AgendaRecords）
-        if (dto.AgendaRecords is not { Count: > 0 })
-        {
-            await _conferenceAgendaRepository.DeleteAsync(x => x.ConferenceId == entity.Id);
-        }
-        else
-        {
-            var agendarecords = dto.AgendaRecords.Adapt<List<TaktConferenceAgenda>>();
-            foreach (var child in agendarecords)
-            {
-                child.ConferenceId = entity.Id;
-            }
-            var agendarecordsNeedLine = agendarecords.Where(c => c.LineNumber <= 0).ToList();
-            if (agendarecordsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.ConferenceCode) ? entity.ConferenceCode : entity.Id.ToString();
-                var maxLine = await _conferenceAgendaRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ConferenceId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, agendarecordsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in agendarecords)
-                {
-                    if (child.LineNumber <= 0)
-                    {
-                        child.LineNumber = lineSeq[lineIdx++];
-                    }
-                }
-            }
-            await _conferenceAgendaRepository.DeleteAsync(x => x.ConferenceId == entity.Id);
-            foreach (var child in agendarecords)
-            {
-            }
-            await _conferenceAgendaRepository.CreateRangeAsync(agendarecords);
-        }
     }
     // ========================================
     // 查询表达式
     // ========================================
 
     /// <summary>
-    /// 构建会议查询表达式
+    /// 构建会议中心查询表达式
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>查询表达式</returns>
@@ -429,10 +381,11 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
                 || (x.Title != null && x.Title.Contains(keywords))
                 || SqlFunc.ToString(x.ConferenceType).Contains(keywords)
                 || SqlFunc.ToString(x.ConferenceStatus).Contains(keywords)
-                || SqlFunc.ToString(x.ConferenceRoomId).Contains(keywords)
-                || (x.ConferenceRoomName != null && x.ConferenceRoomName.Contains(keywords))
                 || (x.Location != null && x.Location.Contains(keywords))
                 || (x.MeetingLink != null && x.MeetingLink.Contains(keywords))
+                || (x.Agenda != null && x.Agenda.Contains(keywords))
+                || (x.Content != null && x.Content.Contains(keywords))
+                || (x.Summary != null && x.Summary.Contains(keywords))
                 || (x.Tags != null && x.Tags.Contains(keywords))
                 || SqlFunc.ToString(x.OrganizerId).Contains(keywords)
                 || (x.OrganizerName != null && x.OrganizerName.Contains(keywords))
@@ -440,8 +393,9 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || SqlFunc.ToString(x.MaxParticipants).Contains(keywords)
                 || SqlFunc.ToString(x.ReminderMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.FlowInstanceId).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || SqlFunc.ToString(x.ConferenceRoomId).Contains(keywords)
+                || (x.ConferenceRoomName != null && x.ConferenceRoomName.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.StartTime).Contains(keywords)
                 || SqlFunc.ToString(x.EndTime).Contains(keywords)
@@ -469,16 +423,6 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
             exp = exp.And(x => x.ConferenceStatus == queryDto.ConferenceStatus);
         }
 
-        if (queryDto?.ConferenceRoomId.HasValue == true)
-        {
-            exp = exp.And(x => x.ConferenceRoomId == queryDto.ConferenceRoomId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ConferenceRoomName))
-        {
-            exp = exp.And(x => x.ConferenceRoomName != null && x.ConferenceRoomName.Contains(queryDto.ConferenceRoomName));
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.Location))
         {
             exp = exp.And(x => x.Location != null && x.Location.Contains(queryDto.Location));
@@ -487,6 +431,21 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
         if (!string.IsNullOrEmpty(queryDto?.MeetingLink))
         {
             exp = exp.And(x => x.MeetingLink != null && x.MeetingLink.Contains(queryDto.MeetingLink));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Agenda))
+        {
+            exp = exp.And(x => x.Agenda != null && x.Agenda.Contains(queryDto.Agenda));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Content))
+        {
+            exp = exp.And(x => x.Content != null && x.Content.Contains(queryDto.Content));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Summary))
+        {
+            exp = exp.And(x => x.Summary != null && x.Summary.Contains(queryDto.Summary));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Tags))
@@ -524,14 +483,19 @@ public class TaktConferenceService : TaktServiceBase, ITaktConferenceService
             exp = exp.And(x => x.ReminderMinutes == queryDto.ReminderMinutes);
         }
 
-        if (queryDto?.FlowInstanceId.HasValue == true)
+        if (queryDto?.ConferenceRoomId.HasValue == true)
         {
-            exp = exp.And(x => x.FlowInstanceId == queryDto.FlowInstanceId);
+            exp = exp.And(x => x.ConferenceRoomId == queryDto.ConferenceRoomId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ConferenceRoomName))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ConferenceRoomName != null && x.ConferenceRoomName.Contains(queryDto.ConferenceRoomName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        {
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

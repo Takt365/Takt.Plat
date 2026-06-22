@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
-// 文件名称：TaktQualityOperationIncomingService.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityAssuranceIncomingService.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务来料检验费用明细应用服务实现
 // 
@@ -27,33 +27,33 @@ namespace Takt.Application.Services.Logistics.Quality.Cost;
 /// <summary>
 /// 品质业务来料检验费用明细应用服务
 /// </summary>
-public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQualityOperationIncomingService
+public class TaktQualityAssuranceIncomingService : TaktServiceBase, ITaktQualityAssuranceIncomingService
 {
-    private readonly ITaktCompanyRepository<TaktQualityOperationIncoming> _qualityOperationIncomingRepository;
-    private readonly ITaktCompanyRepository<TaktQualityOperation> _qualityOperationRepository;
+    private readonly ITaktCompanyRepository<TaktQualityAssuranceIncoming> _qualityAssuranceIncomingRepository;
+    private readonly ITaktCompanyRepository<TaktQualityAssurance> _qualityAssuranceRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="qualityOperationIncomingRepository">品质业务来料检验费用明细仓储</param>
-    /// <param name="qualityOperationRepository">品质业务主仓储</param>
+    /// <param name="qualityAssuranceIncomingRepository">品质业务来料检验费用明细仓储</param>
+    /// <param name="qualityAssuranceRepository">品质业务主仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
-    public TaktQualityOperationIncomingService(
-        ITaktCompanyRepository<TaktQualityOperationIncoming> qualityOperationIncomingRepository,
-        ITaktCompanyRepository<TaktQualityOperation> qualityOperationRepository,
+    public TaktQualityAssuranceIncomingService(
+        ITaktCompanyRepository<TaktQualityAssuranceIncoming> qualityAssuranceIncomingRepository,
+        ITaktCompanyRepository<TaktQualityAssurance> qualityAssuranceRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
-        _qualityOperationIncomingRepository = qualityOperationIncomingRepository;
-        _qualityOperationRepository = qualityOperationRepository;
+        _qualityAssuranceIncomingRepository = qualityAssuranceIncomingRepository;
+        _qualityAssuranceRepository = qualityAssuranceRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -63,15 +63,15 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    public async Task<TaktPagedResult<TaktQualityOperationIncomingDto>> GetQualityOperationIncomingListAsync(TaktQualityOperationIncomingQueryDto queryDto)
+    public async Task<TaktPagedResult<TaktQualityAssuranceIncomingDto>> GetQualityAssuranceIncomingListAsync(TaktQualityAssuranceIncomingQueryDto queryDto)
     {
         var predicate = QueryExpression(queryDto);
-        var (data, total) = await _qualityOperationIncomingRepository.GetPagedAsync(
+        var (data, total) = await _qualityAssuranceIncomingRepository.GetPagedAsync(
             queryDto.PageIndex,
             queryDto.PageSize,
             predicate);
-        return TaktPagedResult<TaktQualityOperationIncomingDto>.Create(
-            data.Adapt<List<TaktQualityOperationIncomingDto>>(),
+        return TaktPagedResult<TaktQualityAssuranceIncomingDto>.Create(
+            data.Adapt<List<TaktQualityAssuranceIncomingDto>>(),
             total,
             queryDto.PageIndex,
             queryDto.PageSize);
@@ -82,31 +82,31 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="id">品质业务来料检验费用明细ID</param>
     /// <returns>DTO</returns>
-    public async Task<TaktQualityOperationIncomingDto?> GetQualityOperationIncomingByIdAsync(long id)
+    public async Task<TaktQualityAssuranceIncomingDto?> GetQualityAssuranceIncomingByIdAsync(long id)
     {
-        var entity = await _qualityOperationIncomingRepository.GetByIdAsync(id);
+        var entity = await _qualityAssuranceIncomingRepository.GetByIdAsync(id);
         if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
         {
             return null;
         }
-        return entity.Adapt<TaktQualityOperationIncomingDto>();
+        return entity.Adapt<TaktQualityAssuranceIncomingDto>();
     }
 
     /// <summary>
     /// 获取品质业务来料检验费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetQualityOperationIncomingOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetQualityAssuranceIncomingOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _qualityOperationIncomingRepository.GetListAsync(
+        var list = await _qualityAssuranceIncomingRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.QualityOperationCode,
+            x => x.QualityAssuranceCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.QualityOperationCode ?? e.Id.ToString(),
+            DictLabel = e.QualityAssuranceCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -115,28 +115,28 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktQualityOperationIncomingDto> CreateQualityOperationIncomingAsync(TaktQualityOperationIncomingCreateDto dto)
+    public async Task<TaktQualityAssuranceIncomingDto> CreateQualityAssuranceIncomingAsync(TaktQualityAssuranceIncomingCreateDto dto)
     {
-        var entity = dto.Adapt<TaktQualityOperationIncoming>();
-        await StampQualityOperationIncomingQualityOperationAsync(entity, dto);
-        var isUnique_ix_takt_logistics_quality_operation_incoming_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _qualityOperationIncomingRepository,
-            x => x.QualityOperationId == entity.QualityOperationId
+        var entity = dto.Adapt<TaktQualityAssuranceIncoming>();
+        await StampQualityAssuranceIncomingQualityAssuranceAsync(entity, dto);
+        var isUnique_ix_takt_logistics_quality_assurance_incoming_line_unique = await _uniqueValidator.IsUniqueAsync(
+            _qualityAssuranceIncomingRepository,
+            x => x.QualityAssuranceId == entity.QualityAssuranceId
                 && x.LineNumber == entity.LineNumber);
-        if (!isUnique_ix_takt_logistics_quality_operation_incoming_line_unique)
+        if (!isUnique_ix_takt_logistics_quality_assurance_incoming_line_unique)
         {
-            throw new TaktBusinessException("品质业务来料检验费用明细的QualityOperationId、LineNumber已存在");
+            throw new TaktBusinessException("品质业务来料检验费用明细的QualityAssuranceId、LineNumber已存在");
         }
         if (entity.LineNumber <= 0)
         {
-            var maxLine = await _qualityOperationIncomingRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityOperationId == entity.QualityOperationId,
+            var maxLine = await _qualityAssuranceIncomingRepository.GetMaxIntAsync(
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityAssuranceId == entity.QualityAssuranceId,
                 x => x.LineNumber);
-            var businessCode = !string.IsNullOrWhiteSpace(entity.QualityOperationCode) ? entity.QualityOperationCode : entity.QualityOperationId.ToString();
+            var businessCode = !string.IsNullOrWhiteSpace(entity.QualityAssuranceCode) ? entity.QualityAssuranceCode : entity.QualityAssuranceId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
-        entity = await _qualityOperationIncomingRepository.CreateAsync(entity);
-        return await GetQualityOperationIncomingByIdAsync(entity.Id) ?? entity.Adapt<TaktQualityOperationIncomingDto>();
+        entity = await _qualityAssuranceIncomingRepository.CreateAsync(entity);
+        return await GetQualityAssuranceIncomingByIdAsync(entity.Id) ?? entity.Adapt<TaktQualityAssuranceIncomingDto>();
     }
 
     /// <summary>
@@ -145,26 +145,26 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// <param name="id">品质业务来料检验费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktQualityOperationIncomingDto> UpdateQualityOperationIncomingAsync(long id, TaktQualityOperationIncomingUpdateDto dto)
+    public async Task<TaktQualityAssuranceIncomingDto> UpdateQualityAssuranceIncomingAsync(long id, TaktQualityAssuranceIncomingUpdateDto dto)
     {
-        var entity = await _qualityOperationIncomingRepository.GetByIdAsync(id);
+        var entity = await _qualityAssuranceIncomingRepository.GetByIdAsync(id);
         if (entity == null)
         {
             throw new TaktBusinessException("品质业务来料检验费用明细不存在");
         }
         dto.Adapt(entity);
-        await StampQualityOperationIncomingQualityOperationAsync(entity, dto);
-        var isUnique_ix_takt_logistics_quality_operation_incoming_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _qualityOperationIncomingRepository,
-            x => x.QualityOperationId == entity.QualityOperationId
+        await StampQualityAssuranceIncomingQualityAssuranceAsync(entity, dto);
+        var isUnique_ix_takt_logistics_quality_assurance_incoming_line_unique = await _uniqueValidator.IsUniqueAsync(
+            _qualityAssuranceIncomingRepository,
+            x => x.QualityAssuranceId == entity.QualityAssuranceId
                 && x.LineNumber == entity.LineNumber,
             id);
-        if (!isUnique_ix_takt_logistics_quality_operation_incoming_line_unique)
+        if (!isUnique_ix_takt_logistics_quality_assurance_incoming_line_unique)
         {
-            throw new TaktBusinessException("品质业务来料检验费用明细的QualityOperationId、LineNumber已存在");
+            throw new TaktBusinessException("品质业务来料检验费用明细的QualityAssuranceId、LineNumber已存在");
         }
-        await _qualityOperationIncomingRepository.UpdateAsync(entity);
-        return await GetQualityOperationIncomingByIdAsync(id) ?? throw new TaktBusinessException("品质业务来料检验费用明细不存在");
+        await _qualityAssuranceIncomingRepository.UpdateAsync(entity);
+        return await GetQualityAssuranceIncomingByIdAsync(id) ?? throw new TaktBusinessException("品质业务来料检验费用明细不存在");
     }
 
     /// <summary>
@@ -172,9 +172,9 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="id">品质业务来料检验费用明细ID</param>
     /// <returns>任务</returns>
-    public async Task DeleteQualityOperationIncomingByIdAsync(long id)
+    public async Task DeleteQualityAssuranceIncomingByIdAsync(long id)
     {
-        var deleted = await _qualityOperationIncomingRepository.DeleteAsync(id);
+        var deleted = await _qualityAssuranceIncomingRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("品质业务来料检验费用明细不存在或已删除");
@@ -186,7 +186,7 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    public async Task DeleteQualityOperationIncomingBatchAsync(IEnumerable<long> ids)
+    public async Task DeleteQualityAssuranceIncomingBatchAsync(IEnumerable<long> ids)
     {
         var idList = ids?.Distinct().ToList() ?? new List<long>();
         if (idList.Count == 0)
@@ -195,7 +195,7 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
         }
         foreach (var id in idList)
         {
-            await DeleteQualityOperationIncomingByIdAsync(id);
+            await DeleteQualityAssuranceIncomingByIdAsync(id);
         }
     }
 
@@ -205,9 +205,9 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public async Task<(string fileName, byte[] content)> GetQualityOperationIncomingTemplateAsync(string? sheetName = null, string? fileName = null)
+    public async Task<(string fileName, byte[] content)> GetQualityAssuranceIncomingTemplateAsync(string? sheetName = null, string? fileName = null)
     {
-        return await TaktExcelHelper.GenerateTemplateAsync<TaktQualityOperationIncomingTemplateDto>(
+        return await TaktExcelHelper.GenerateTemplateAsync<TaktQualityAssuranceIncomingTemplateDto>(
             sheetName ?? "品质业务来料检验费用明细导入模板",
             fileName ?? "品质业务来料检验费用明细导入模板.xlsx");
     }
@@ -218,12 +218,12 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    public async Task<(int success, int fail, List<string> errors)> ImportQualityOperationIncomingAsync(Stream fileStream, string? sheetName = null)
+    public async Task<(int success, int fail, List<string> errors)> ImportQualityAssuranceIncomingAsync(Stream fileStream, string? sheetName = null)
     {
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
-        var rows = await TaktExcelHelper.ImportAsync<TaktQualityOperationIncomingImportDto>(fileStream, sheetName ?? "品质业务来料检验费用明细导入模板");
+        var rows = await TaktExcelHelper.ImportAsync<TaktQualityAssuranceIncomingImportDto>(fileStream, sheetName ?? "品质业务来料检验费用明细导入模板");
         if (rows == null || rows.Count == 0)
         {
             errors.Add("Excel文件中没有数据");
@@ -234,31 +234,31 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
         {
             try
             {
-                var entity = rows[i].Adapt<TaktQualityOperationIncoming>();
-                var importDto = rows[i].Adapt<TaktQualityOperationIncomingCreateDto>();
-                await StampQualityOperationIncomingQualityOperationAsync(entity, importDto);
-                var importKey = $"{entity.QualityOperationId}|{entity.LineNumber}";
+                var entity = rows[i].Adapt<TaktQualityAssuranceIncoming>();
+                var importDto = rows[i].Adapt<TaktQualityAssuranceIncomingCreateDto>();
+                await StampQualityAssuranceIncomingQualityAssuranceAsync(entity, importDto);
+                var importKey = $"{entity.QualityAssuranceId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（QualityOperationId、LineNumber）");
+                    throw new TaktBusinessException("与Excel中其他行重复（QualityAssuranceId、LineNumber）");
                 }
-                var isUnique_ix_takt_logistics_quality_operation_incoming_line_unique = await _uniqueValidator.IsUniqueAsync(
-                    _qualityOperationIncomingRepository,
-                    x => x.QualityOperationId == entity.QualityOperationId
+                var isUnique_ix_takt_logistics_quality_assurance_incoming_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    _qualityAssuranceIncomingRepository,
+                    x => x.QualityAssuranceId == entity.QualityAssuranceId
                         && x.LineNumber == entity.LineNumber);
-                if (!isUnique_ix_takt_logistics_quality_operation_incoming_line_unique)
+                if (!isUnique_ix_takt_logistics_quality_assurance_incoming_line_unique)
                 {
-                    throw new TaktBusinessException("品质业务来料检验费用明细的QualityOperationId、LineNumber已存在");
+                    throw new TaktBusinessException("品质业务来料检验费用明细的QualityAssuranceId、LineNumber已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
-                    var maxLine = await _qualityOperationIncomingRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityOperationId == entity.QualityOperationId,
+                    var maxLine = await _qualityAssuranceIncomingRepository.GetMaxIntAsync(
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityAssuranceId == entity.QualityAssuranceId,
                         x => x.LineNumber);
-                    var businessCode = !string.IsNullOrWhiteSpace(entity.QualityOperationCode) ? entity.QualityOperationCode : entity.QualityOperationId.ToString();
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.QualityAssuranceCode) ? entity.QualityAssuranceCode : entity.QualityAssuranceId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
-                await _qualityOperationIncomingRepository.CreateAsync(entity);
+                await _qualityAssuranceIncomingRepository.CreateAsync(entity);
                 success += 1;
             }
             catch (Exception ex)
@@ -277,18 +277,18 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public async Task<(string fileName, byte[] fileContent)> ExportQualityOperationIncomingAsync(TaktQualityOperationIncomingQueryDto? query = null, string? sheetName = null, string? fileName = null)
+    public async Task<(string fileName, byte[] fileContent)> ExportQualityAssuranceIncomingAsync(TaktQualityAssuranceIncomingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktQualityOperationIncomingQueryDto());
-        var list = await _qualityOperationIncomingRepository.GetListAsync(predicate);
+        var predicate = QueryExpression(query ?? new TaktQualityAssuranceIncomingQueryDto());
+        var list = await _qualityAssuranceIncomingRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(
-                new List<TaktQualityOperationIncomingExportDto>(),
+                new List<TaktQualityAssuranceIncomingExportDto>(),
                 sheetName ?? "品质业务来料检验费用明细数据",
                 fileName ?? "品质业务来料检验费用明细导出.xlsx");
         }
-        var exportData = list.Adapt<List<TaktQualityOperationIncomingExportDto>>();
+        var exportData = list.Adapt<List<TaktQualityAssuranceIncomingExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
             sheetName ?? "品质业务来料检验费用明细数据",
@@ -305,18 +305,18 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// <param name="entity">当前实体</param>
     /// <param name="dto">创建 DTO</param>
     /// <returns>任务</returns>
-    private async Task StampQualityOperationIncomingQualityOperationAsync(TaktQualityOperationIncoming entity, TaktQualityOperationIncomingCreateDto dto)
+    private async Task StampQualityAssuranceIncomingQualityAssuranceAsync(TaktQualityAssuranceIncoming entity, TaktQualityAssuranceIncomingCreateDto dto)
     {
-        if (dto.QualityOperationId <= 0)
+        if (dto.QualityAssuranceId <= 0)
         {
             return;
         }
-        var master = await _qualityOperationRepository.GetByIdAsync(dto.QualityOperationId);
+        var master = await _qualityAssuranceRepository.GetByIdAsync(dto.QualityAssuranceId);
         if (master == null)
         {
             throw new TaktBusinessException("品质业务主不存在");
         }
-        entity.QualityOperationId = master.Id;
+        entity.QualityAssuranceId = master.Id;
     }
     // ========================================
     // 查询表达式
@@ -327,16 +327,16 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>查询表达式</returns>
-    private static Expression<Func<TaktQualityOperationIncoming, bool>> QueryExpression(TaktQualityOperationIncomingQueryDto? queryDto)
+    private static Expression<Func<TaktQualityAssuranceIncoming, bool>> QueryExpression(TaktQualityAssuranceIncomingQueryDto? queryDto)
     {
-        var exp = Expressionable.Create<TaktQualityOperationIncoming>();
+        var exp = Expressionable.Create<TaktQualityAssuranceIncoming>();
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                SqlFunc.ToString(x.QualityOperationId).Contains(keywords)
-                || (x.QualityOperationCode != null && x.QualityOperationCode.Contains(keywords))
+                SqlFunc.ToString(x.QualityAssuranceId).Contains(keywords)
+                || (x.QualityAssuranceCode != null && x.QualityAssuranceCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || SqlFunc.ToString(x.DirectManpowerCostPerMinute).Contains(keywords)
                 || SqlFunc.ToString(x.IncomingInspectionCost).Contains(keywords)
@@ -344,20 +344,20 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
                 || SqlFunc.ToString(x.TravelCost).Contains(keywords)
                 || SqlFunc.ToString(x.OtherExpenses).Contains(keywords)
                 || (x.IncomingNote != null && x.IncomingNote.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.QualityOperationId.HasValue == true)
+        if (queryDto?.QualityAssuranceId.HasValue == true)
         {
-            exp = exp.And(x => x.QualityOperationId == queryDto.QualityOperationId);
+            exp = exp.And(x => x.QualityAssuranceId == queryDto.QualityAssuranceId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityOperationCode))
+        if (!string.IsNullOrEmpty(queryDto?.QualityAssuranceCode))
         {
-            exp = exp.And(x => x.QualityOperationCode != null && x.QualityOperationCode.Contains(queryDto.QualityOperationCode));
+            exp = exp.And(x => x.QualityAssuranceCode != null && x.QualityAssuranceCode.Contains(queryDto.QualityAssuranceCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
@@ -395,9 +395,9 @@ public class TaktQualityOperationIncomingService : TaktServiceBase, ITaktQuality
             exp = exp.And(x => x.IncomingNote != null && x.IncomingNote.Contains(queryDto.IncomingNote));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

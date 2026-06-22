@@ -47,7 +47,7 @@ public class TaktVocabularyDto : TaktTenantDtoBase
     public int WordCategory { get; set; } = 0;
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
     /// </summary>
     public int FilterLevel { get; set; } = 0;
 
@@ -89,7 +89,7 @@ public class TaktVocabularyQueryDto : TaktPagedQuery
     public int? WordCategory { get; set; }
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
     /// </summary>
     public int? FilterLevel { get; set; }
 
@@ -116,7 +116,7 @@ public class TaktVocabularyQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -150,7 +150,7 @@ public class TaktVocabularyCreateDto
     public int WordCategory { get; set; } = 0;
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
     /// </summary>
     public int FilterLevel { get; set; } = 0;
 
@@ -167,7 +167,7 @@ public class TaktVocabularyCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -245,7 +245,7 @@ public class TaktVocabularyTemplateDto
     public int? WordCategory { get; set; }
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
     /// </summary>
     public int? FilterLevel { get; set; }
 
@@ -262,7 +262,7 @@ public class TaktVocabularyTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -292,7 +292,7 @@ public class TaktVocabularyImportDto
     public int? WordCategory { get; set; }
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
     /// </summary>
     public int? FilterLevel { get; set; }
 
@@ -309,7 +309,7 @@ public class TaktVocabularyImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -345,7 +345,7 @@ public class TaktVocabularyExportDto
     public int WordCategory { get; set; } = 0;
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
     /// </summary>
     public int FilterLevel { get; set; } = 0;
 
@@ -362,7 +362,7 @@ public class TaktVocabularyExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -391,7 +391,7 @@ public class TaktVocabularyFilterRequestDto
     public string Text { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最低过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）；为空时匹配全部启用词条
+    /// 最低过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）；为空时匹配全部启用词条
     /// </summary>
     public int? MinFilterLevel { get; set; }
 }

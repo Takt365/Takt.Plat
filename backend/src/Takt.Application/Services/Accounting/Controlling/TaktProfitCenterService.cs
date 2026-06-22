@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktProfitCenterService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：利润中心应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Accounting.Controlling;
 
@@ -31,6 +30,7 @@ namespace Takt.Application.Services.Accounting.Controlling;
 public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
 {
     private readonly ITaktCompanyRepository<TaktProfitCenter> _profitCenterRepository;
+    private readonly ITaktCompanyRepository<TaktProfitCenterChangeLog> _profitCenterChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,12 +38,14 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
     /// 构造函数
     /// </summary>
     /// <param name="profitCenterRepository">利润中心仓储</param>
+    /// <param name="profitCenterChangeLogRepository">ProfitCenterChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktProfitCenterService(
         ITaktCompanyRepository<TaktProfitCenter> profitCenterRepository,
+        ITaktCompanyRepository<TaktProfitCenterChangeLog> profitCenterChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -51,6 +53,7 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
         : base(userContext, localizationService)
     {
         _profitCenterRepository = profitCenterRepository;
+        _profitCenterChangeLogRepository = profitCenterChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -86,8 +89,9 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
         {
             return null;
         }
-        return entity.Adapt<TaktProfitCenterDto>();
-    }
+        var dto = entity.Adapt<TaktProfitCenterDto>();
+        await FillProfitCenterDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取利润中心树形选项列表
@@ -186,6 +190,7 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
             entity.SortOrder = _sortOrderGenerator.GenerateNext(entity.ParentId, maxSort);
         }
         entity = await _profitCenterRepository.CreateAsync(entity);
+                await SaveProfitCenterChildrenAsync(entity, dto);
         return await GetProfitCenterByIdAsync(entity.Id) ?? entity.Adapt<TaktProfitCenterDto>();
     }
 
@@ -212,6 +217,7 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
             throw new TaktBusinessException("利润中心的ProfitCenterCode已存在");
         }
         await _profitCenterRepository.UpdateAsync(entity);
+                await SaveProfitCenterChildrenAsync(entity, dto);
         return await GetProfitCenterByIdAsync(id) ?? throw new TaktBusinessException("利润中心不存在");
     }
 
@@ -222,12 +228,12 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
     /// <returns>任务</returns>
     public async Task DeleteProfitCenterByIdAsync(long id)
     {
-
-        var hasChildren = await _profitCenterRepository.ExistsAsync(x => x.ParentId == id);
-        if (hasChildren)
+        var entity = await _profitCenterRepository.GetByIdAsync(id);
+        if (entity == null)
         {
-            throw new TaktBusinessException("存在子节点，无法删除");
+            throw new TaktBusinessException("利润中心不存在或已删除");
         }
+        await _profitCenterChangeLogRepository.DeleteAsync(x => x.ProfitCenterId == entity.Id);
         var deleted = await _profitCenterRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -380,6 +386,54 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充利润中心详情（加载 OneToMany 子表：利润中心变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillProfitCenterDetailsAsync(TaktProfitCenterDto dto, TaktProfitCenter entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 利润中心变更记录 → dto.ChangeLogs
+        var changelogs = await _profitCenterChangeLogRepository.GetListAsync(x => x.ProfitCenterId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktProfitCenterChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存利润中心子表级联（利润中心变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveProfitCenterChildrenAsync(TaktProfitCenter entity, TaktProfitCenterCreateDto dto)
+    {
+        // 利润中心变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _profitCenterChangeLogRepository.DeleteAsync(x => x.ProfitCenterId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktProfitCenterChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.ProfitCenterId = entity.Id;
+            }
+            await _profitCenterChangeLogRepository.DeleteAsync(x => x.ProfitCenterId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _profitCenterChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -398,7 +452,6 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
             exp = exp.And(x =>
                 (x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(keywords))
                 || (x.ProfitCenterName != null && x.ProfitCenterName.Contains(keywords))
-                || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ParentId).Contains(keywords)
                 || SqlFunc.ToString(x.ManagerId).Contains(keywords)
                 || (x.ManagerName != null && x.ManagerName.Contains(keywords))
@@ -408,7 +461,7 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || SqlFunc.ToString(x.ProfitCenterStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
                 || SqlFunc.ToString(x.ValidTo).Contains(keywords)
@@ -424,16 +477,6 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
         if (!string.IsNullOrEmpty(queryDto?.ProfitCenterName))
         {
             exp = exp.And(x => x.ProfitCenterName != null && x.ProfitCenterName.Contains(queryDto.ProfitCenterName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ShortName))
-        {
-            exp = exp.And(x => x.ProfitCenterName != null && x.ProfitCenterName.Contains(queryDto.ShortName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ProfitCenterDesc))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.ProfitCenterDesc));
         }
 
         if (queryDto?.ParentId.HasValue == true)
@@ -481,9 +524,9 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

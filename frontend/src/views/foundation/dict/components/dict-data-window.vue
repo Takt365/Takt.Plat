@@ -25,7 +25,7 @@
     >
       <div style="margin-bottom: 16px; font-weight: bold; color: #1890ff">
         {{
-          t('routine.dict.type.dataWindow.dictTypeLine', {
+          t('foundation.dict.page.data.window.dicttype.line', {
             name: dictType.dictTypeName,
             code: dictType.dictTypeCode
           })
@@ -35,7 +35,7 @@
       <!-- 查询栏 -->
       <TaktQueryBar
         v-model="queryKeyword"
-        :placeholder="t('routine.dict.type.placeholders.searchDictData')"
+        :placeholder="t('common.page.form.placeholder.search', { keyword: t('entity.dictdata.dictlabel') + t('common.tip.or') + t('entity.dictdata.dictvalue') })"
         :loading="loading"
         @search="handleSearch"
         @reset="handleReset"
@@ -278,10 +278,10 @@
         @submit="handleAdvancedQuerySubmit"
         @reset="handleAdvancedQueryReset"
       >
-        <a-form-item :label="t('entity.dictData.dictlabel')">
+        <a-form-item :label="t('entity.dictdata.dictlabel')">
           <a-input v-model:value="advancedQueryForm.dictLabel" />
         </a-form-item>
-        <a-form-item :label="t('entity.dictData.dictvalue')">
+        <a-form-item :label="t('entity.dictdata.dictvalue')">
           <a-input v-model:value="advancedQueryForm.dictValue" />
         </a-form-item>
       </TaktQueryDrawer>
@@ -312,6 +312,7 @@ import type { DictType } from '@/types/foundation/dict-type'
 import type { DictData, DictDataQuery, DictDataCreate, DictDataUpdate } from '@/types/foundation/dict-data'
 import { CreateActionColumn } from '@/components/business/takt-action-column'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 
 const { t } = useI18n()
 
@@ -394,8 +395,8 @@ const emit = defineEmits<{
 
 const localVisible = ref(props.visible)
 const queryKeyword = ref('')
-const currentPage = ref(1)
-const pageSize = ref(20)
+const currentPage = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const dataSource = ref<DictData[]>([])
 const loading = ref(false)
@@ -436,9 +437,9 @@ const originalRecord = ref<Partial<DictData>>({})
 // 窗口标题（组合文案走 routine 静态补全，后端未提供时可显示）
 const windowTitle = computed(() => {
   if (!props.dictType) {
-    return t('routine.dict.type.dataWindow.windowTitleDefault')
+    return t('entity.dictdata._self')
   }
-  return t('routine.dict.type.dataWindow.windowTitle', {
+  return t('foundation.dict.page.data.window.title', {
     name: props.dictType.dictTypeName ?? '',
     code: props.dictType.dictTypeCode ?? ''
   })
@@ -458,64 +459,64 @@ const columns = computed<TableColumnsType<DictData>>(() => [
     fixed: 'left'
   },
   {
-    title: t('entity.dictData.dicttypeid'),
+    title: t('entity.dictdata.dicttypeid'),
     dataIndex: 'dictTypeId',
     key: 'dictTypeId',
     width: 120
   },
   {
-    title: t('entity.dictData.dicttypecode'),
+    title: t('entity.dictdata.dicttypecode'),
     dataIndex: 'dictTypeCode',
     key: 'dictTypeCode',
     width: 150
   },
   {
-    title: t('entity.dictData.dictlabel'),
+    title: t('entity.dictdata.dictlabel'),
     dataIndex: 'dictLabel',
     key: 'dictLabel',
     width: 150
   },
   {
-    title: t('entity.dictData.i18nkey'),
+    title: t('entity.dictdata.i18nkey'),
     dataIndex: 'i18nKey',
     key: 'i18nKey',
     width: 200,
     ellipsis: true
   },
   {
-    title: t('entity.dictData.dictvalue'),
+    title: t('entity.dictdata.dictvalue'),
     dataIndex: 'dictValue',
     key: 'dictValue',
     width: 150
   },
   {
-    title: t('entity.dictData.cssclass'),
+    title: t('entity.dictdata.cssclass'),
     dataIndex: 'cssClass',
     key: 'cssClass',
     width: 100
   },
   {
-    title: t('entity.dictData.listclass'),
+    title: t('entity.dictdata.listclass'),
     dataIndex: 'listClass',
     key: 'listClass',
     width: 100
   },
   {
-    title: t('entity.dictData.extlabel'),
+    title: t('entity.dictdata.extlabel'),
     dataIndex: 'extLabel',
     key: 'extLabel',
     width: 150,
     ellipsis: true
   },
   {
-    title: t('entity.dictData.extvalue'),
+    title: t('entity.dictdata.extvalue'),
     dataIndex: 'extValue',
     key: 'extValue',
     width: 150,
     ellipsis: true
   },
   {
-    title: t('entity.dictData.sortorder'),
+    title: t('entity.dictdata.sortorder'),
     dataIndex: 'sortOrder',
     key: 'sortOrder',
     width: 100
@@ -664,7 +665,7 @@ const loadData = async () => {
     total.value = result.total || 0
   } catch (error) {
     logger.error('[DictData] 加载数据失败', { action: 'loadData' }, error)
-    message.error(t('common.page.msg.loadtargetfail', { target: t('entity.dictData._self') }))
+    message.error(t('common.feedback.load.failed', { target: t('entity.dictdata._self') }))
   } finally {
     loading.value = false
   }
@@ -690,7 +691,7 @@ const handleReset = () => {
 
 // 新增
 const handleCreate = () => {
-  formTitle.value = t('routine.dict.type.dataWindow.formCreate')
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.dictdata._self') })
   formData.value = null
   formVisible.value = true
 }
@@ -699,12 +700,12 @@ const handleCreate = () => {
 const handleUpdate = () => {
   if (!selectedRow.value) {
     message.warning(
-      t('common.page.action.warnselecttoaction', { action: t('common.page.button.edit'), entity: t('entity.dictData._self') })
+      t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.dictdata._self') })
     )
     return
   }
   
-  formTitle.value = t('routine.dict.type.dataWindow.formEdit')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.dictdata._self') })
   formData.value = { ...selectedRow.value }
   formVisible.value = true
 }
@@ -712,7 +713,7 @@ const handleUpdate = () => {
 // 编辑单条记录（操作列使用）
 const handleEditOne = (record: DictData) => {
   selectedRow.value = record
-  formTitle.value = t('routine.dict.type.dataWindow.formEdit')
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.dictdata._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -721,14 +722,14 @@ const handleEditOne = (record: DictData) => {
 const handleDelete = async () => {
   if (selectedRows.value.length === 0) {
     message.warning(
-      t('common.page.action.warnselecttoaction', { action: t('common.page.button.delete'), entity: t('entity.dictData._self') })
+      t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.dictdata._self') })
     )
     return
   }
   
   const ids = selectedRows.value.map(row => row.dictDataId).filter(Boolean)
   if (ids.length === 0) {
-    message.warning(t('common.page.msg.entityidrequired', { entity: t('entity.dictData._self') }))
+    message.warning(t('common.validation.invalid', { field: t('common.page.entity.id') }))
     return
   }
   
@@ -744,14 +745,14 @@ const handleDelete = async () => {
         await dictDataApi.deleteDictDataById(id)
       }
     }
-    message.success(t('common.page.msg.deletesuccess'))
+    message.success(t('common.feedback.deleted'))
     await loadData()
     selectedRowKeys.value = []
     selectedRows.value = []
     selectedRow.value = null
   } catch (error) {
     logger.error('[DictData] 删除失败', { action: 'deleteBatch' }, error)
-    message.error(t('common.page.msg.deletefail'))
+    message.error(t('common.feedback.delete.failed'))
   } finally {
     loading.value = false
   }
@@ -760,14 +761,14 @@ const handleDelete = async () => {
 // 删除单条记录（操作列使用）
 const handleDeleteOne = async (record: DictData) => {
   if (!record.dictDataId) {
-    message.warning(t('common.page.msg.entityidrequired', { entity: t('entity.dictData._self') }))
+    message.warning(t('common.validation.invalid', { field: t('common.page.entity.id') }))
     return
   }
   
   try {
     loading.value = true
     await dictDataApi.deleteDictDataById(record.dictDataId)
-    message.success(t('common.page.msg.deletesuccess'))
+    message.success(t('common.feedback.deleted'))
     await loadData()
     if (selectedRow.value?.dictDataId === record.dictDataId) {
       selectedRow.value = null
@@ -776,7 +777,7 @@ const handleDeleteOne = async (record: DictData) => {
     selectedRows.value = selectedRows.value.filter(r => r.dictDataId !== record.dictDataId)
   } catch (error) {
     logger.error('[DictData] 删除失败', { action: 'deleteOne' }, error)
-    message.error(t('common.page.msg.deletefail'))
+    message.error(t('common.feedback.delete.failed'))
   } finally {
     loading.value = false
   }
@@ -799,11 +800,11 @@ const handleExport = async () => {
     const blob = await dictDataApi.exportDictData(
       query,
       undefined,
-      t('routine.dict.type.dataWindow.exportFilePrefix')
+      t('entity.dictdata._self')
     )
     const ts = new Date()
     const padNum = (n: number, w = 2) => String(n).padStart(w, '0')
-    const fileName = `${t('routine.dict.type.dataWindow.exportFilePrefix')}_${ts.getFullYear()}${padNum(ts.getMonth() + 1)}${padNum(ts.getDate())}${padNum(ts.getHours())}${padNum(ts.getMinutes())}${padNum(ts.getSeconds())}.xlsx`
+    const fileName = `${t('entity.dictdata._self')}_${ts.getFullYear()}${padNum(ts.getMonth() + 1)}${padNum(ts.getDate())}${padNum(ts.getHours())}${padNum(ts.getMinutes())}${padNum(ts.getSeconds())}.xlsx`
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
@@ -812,10 +813,10 @@ const handleExport = async () => {
     link.click()
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
-    message.success(t('common.page.msg.exportsuccess'))
+    message.success(t('common.feedback.export.success'))
   } catch (error) {
     logger.error('[DictData] 导出失败', { action: 'export' }, error)
-    message.error(t('common.page.msg.exportfail'))
+    message.error(t('common.feedback.export.failed'))
   } finally {
     loading.value = false
   }
@@ -870,21 +871,21 @@ const handleFormSubmit = async () => {
     if ('dictDataId' in formDataValue && formDataValue.dictDataId) {
       // 更新
       await dictDataApi.updateDictData(formDataValue.dictDataId, formDataValue as DictDataUpdate)
-      message.success(t('common.page.msg.updatesuccess'))
+      message.success(t('common.feedback.updated'))
     } else {
       // 新增
       await dictDataApi.createDictData(formDataValue as DictDataCreate)
-      message.success(t('common.page.msg.createsuccess'))
+      message.success(t('common.feedback.created'))
     }
     
     formVisible.value = false
     await loadData()
   } catch (error: any) {
     if (error?.errorFields) {
-      message.warning(t('routine.dict.type.messages.checkForm'))
+      message.warning(t('common.feedback.failed'))
     } else {
       logger.error('[DictData] 保存失败', { action: 'saveForm' }, error)
-      message.error(t('common.page.msg.operatefail'))
+      message.error(t('common.feedback.failed'))
     }
   } finally {
     formLoading.value = false
@@ -951,8 +952,8 @@ const handleSaveCell = async (record: DictData, field: DictDataEditableField) =>
   if ((field === 'dictLabel' || field === 'dictValue') && !newValue) {
     message.warning(
       field === 'dictLabel'
-        ? t('routine.dict.type.rules.dictLabelEmpty')
-        : t('routine.dict.type.rules.dictValueEmpty')
+        ? t('common.validation.required', { field: t('entity.dictdata.dictlabel') })
+        : t('common.validation.required', { field: t('entity.dictdata.dictvalue') })
     )
     handleCancelEdit()
     return
@@ -998,13 +999,13 @@ const handleSaveCell = async (record: DictData, field: DictDataEditableField) =>
     } as DictDataUpdate
     
     await dictDataApi.updateDictData(record.dictDataId, updateData)
-    message.success(t('routine.dict.type.messages.cellSaveSuccess'))
+    message.success(t('common.feedback.saved'))
     editingKey.value = ''
     editingRecord.value = emptyInlineEditState()
     originalRecord.value = {}
   } catch (error) {
     logger.error('[DictData] 保存失败', { action: 'saveCell' }, error)
-    message.error(t('common.page.msg.operatefail'))
+    message.error(t('common.feedback.failed'))
     // 恢复原值
     const rollbackRow = dataSource.value[index]
     if (rollbackRow) {

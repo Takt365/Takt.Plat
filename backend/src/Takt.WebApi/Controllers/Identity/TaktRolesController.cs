@@ -201,6 +201,26 @@ public class TaktRolesController : TaktControllerBase
     }
 
     /// <summary>
+    /// 更新角色是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>角色DTO</returns>
+    [TaktPermission("identity:role:update", "更新角色是否内置")]
+    [HttpPut("built-in")]
+    public async Task<IActionResult> UpdateRoleBuiltInAsync([FromBody] TaktRoleBuiltInDto dto)
+    {
+        try
+        {
+            var result = await _roleService.UpdateRoleBuiltInAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 更新角色排序
     /// </summary>
     /// <param name="dto">排序DTO</param>

@@ -115,7 +115,7 @@ public class TaktFlowInstanceService : TaktServiceBase, ITaktFlowInstanceService
         EnsureThreeLayerContext();
         var list = await _flowInstanceRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.ProcessName,
+            x => x.ProcessName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -496,7 +496,7 @@ public class TaktFlowInstanceService : TaktServiceBase, ITaktFlowInstanceService
                 || SqlFunc.ToString(x.FormId).Contains(keywords)
                 || (x.FormCode != null && x.FormCode.Contains(keywords))
                 || (x.ProcessContentSnapshot != null && x.ProcessContentSnapshot.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.StartTime).Contains(keywords)
                 || SqlFunc.ToString(x.EndTime).Contains(keywords)
@@ -596,7 +596,7 @@ public class TaktFlowInstanceService : TaktServiceBase, ITaktFlowInstanceService
 
         if (!string.IsNullOrEmpty(queryDto?.FormCode))
         {
-            exp = exp.And(x => x.FormCode.Contains(queryDto.FormCode));
+            exp = exp.And(x => x.FormCode != null && x.FormCode.Contains(queryDto.FormCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ProcessContentSnapshot))
@@ -604,9 +604,9 @@ public class TaktFlowInstanceService : TaktServiceBase, ITaktFlowInstanceService
             exp = exp.And(x => x.ProcessContentSnapshot != null && x.ProcessContentSnapshot.Contains(queryDto.ProcessContentSnapshot));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

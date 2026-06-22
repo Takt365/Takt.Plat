@@ -56,7 +56,7 @@ public class TaktBenefitItemDto : TaktCompanyDtoBase
     public int BenefitType { get; set; } = 0;
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle）
+    /// 发放周期（字典 hr_benefit_payment_cycle_type）
     /// </summary>
     public int PaymentCycle { get; set; } = 0;
 
@@ -81,7 +81,7 @@ public class TaktBenefitItemDto : TaktCompanyDtoBase
     public decimal EmployeeRatio { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no）
+    /// 是否强制福利（字典 sys_yes_no_type）
     /// </summary>
     public int IsMandatory { get; set; } = 0;
 
@@ -91,7 +91,7 @@ public class TaktBenefitItemDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
@@ -143,7 +143,7 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     public int? BenefitType { get; set; }
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle）
+    /// 发放周期（字典 hr_benefit_payment_cycle_type）
     /// </summary>
     public int? PaymentCycle { get; set; }
 
@@ -168,7 +168,7 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     public decimal? EmployeeRatio { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no）
+    /// 是否强制福利（字典 sys_yes_no_type）
     /// </summary>
     public int? IsMandatory { get; set; }
 
@@ -178,7 +178,7 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ItemStatus { get; set; }
 
@@ -200,7 +200,7 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -255,7 +255,7 @@ public class TaktBenefitItemCreateDto
     public int BenefitType { get; set; } = 0;
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle）
+    /// 发放周期（字典 hr_benefit_payment_cycle_type）
     /// </summary>
     public int PaymentCycle { get; set; } = 0;
 
@@ -280,7 +280,7 @@ public class TaktBenefitItemCreateDto
     public decimal EmployeeRatio { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no）
+    /// 是否强制福利（字典 sys_yes_no_type）
     /// </summary>
     public int IsMandatory { get; set; } = 0;
 
@@ -290,7 +290,7 @@ public class TaktBenefitItemCreateDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
@@ -302,7 +302,7 @@ public class TaktBenefitItemCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -349,9 +349,9 @@ public class TaktBenefitItemStatusDto
     public long BenefitItemId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
     public int ItemStatus { get; set; } = 0;
 }
 
@@ -419,12 +419,12 @@ public class TaktBenefitItemTemplateDto
     public int? BenefitType { get; set; }
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle）
+    /// 发放周期（字典 hr_benefit_payment_cycle_type）
     /// </summary>
     public int? PaymentCycle { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no）
+    /// 是否强制福利（字典 sys_yes_no_type）
     /// </summary>
     public int? IsMandatory { get; set; }
 
@@ -434,7 +434,7 @@ public class TaktBenefitItemTemplateDto
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ItemStatus { get; set; }
 
@@ -446,7 +446,7 @@ public class TaktBenefitItemTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -496,12 +496,12 @@ public class TaktBenefitItemImportDto
     public int? BenefitType { get; set; }
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle）
+    /// 发放周期（字典 hr_benefit_payment_cycle_type）
     /// </summary>
     public int? PaymentCycle { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no）
+    /// 是否强制福利（字典 sys_yes_no_type）
     /// </summary>
     public int? IsMandatory { get; set; }
 
@@ -511,7 +511,7 @@ public class TaktBenefitItemImportDto
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ItemStatus { get; set; }
 
@@ -523,7 +523,7 @@ public class TaktBenefitItemImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -574,7 +574,7 @@ public class TaktBenefitItemExportDto
     public int BenefitType { get; set; } = 0;
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle）
+    /// 发放周期（字典 hr_benefit_payment_cycle_type）
     /// </summary>
     public int PaymentCycle { get; set; } = 0;
 
@@ -599,7 +599,7 @@ public class TaktBenefitItemExportDto
     public decimal EmployeeRatio { get; set; }
 
     /// <summary>
-    /// 是否强制福利（字典 sys_yes_no）
+    /// 是否强制福利（字典 sys_yes_no_type）
     /// </summary>
     public int IsMandatory { get; set; } = 0;
 
@@ -609,7 +609,7 @@ public class TaktBenefitItemExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ItemStatus { get; set; } = 0;
 
@@ -621,7 +621,7 @@ public class TaktBenefitItemExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

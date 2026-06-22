@@ -17,28 +17,28 @@
       size="small"
       :column="1"
     >
-      <a-descriptions-item :label="t('entity.flowInstance.instancecode')">
+      <a-descriptions-item :label="t('entity.flowinstance.instancecode')">
         {{ detail.instanceCode }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowInstance.processname')">
+      <a-descriptions-item :label="t('entity.flowinstance.processname')">
         {{ detail.processName }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowInstance.processtitle')">
+      <a-descriptions-item :label="t('entity.flowinstance.processtitle')">
         {{ detail.processTitle }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowInstance.instancestatus')">
+      <a-descriptions-item :label="t('entity.flowinstance.instancestatus')">
         {{ statusText(detail.instanceStatus) }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowInstance.currentactivityname')">
+      <a-descriptions-item :label="t('entity.flowinstance.currentactivityname')">
         {{ detail.currentActivityName ?? '-' }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowInstance.startusername')">
+      <a-descriptions-item :label="t('entity.flowinstance.startusername')">
         {{ detail.startUserName }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowInstance.starttime')">
+      <a-descriptions-item :label="t('entity.flowinstance.starttime')">
         {{ detail.startTime }}
       </a-descriptions-item>
-      <a-descriptions-item :label="t('entity.flowInstance.historicactivities')">
+      <a-descriptions-item :label="t('entity.flowinstance.historicactivities')">
         <div
           v-for="(h, i) in historyItems"
           :key="i"
@@ -47,7 +47,7 @@
           {{ h.fromNodeName }} -> {{ h.toNodeName }} ({{ h.transitionUserName }}, {{ h.transitionTime }})
           <span v-if="h.transitionComment">: {{ h.transitionComment }}</span>
         </div>
-        <span v-if="!historyItems.length">{{ t('workflow.instance.page.noHistory') }}</span>
+        <span v-if="!historyItems.length">{{ t('workflow.instance.page.no.history') }}</span>
       </a-descriptions-item>
     </a-descriptions>
     <takt-flow-pending-add-approvers-panel

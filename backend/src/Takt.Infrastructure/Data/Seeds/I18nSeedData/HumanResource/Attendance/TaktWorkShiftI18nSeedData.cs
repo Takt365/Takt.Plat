@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktWorkShiftI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktWorkShift 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,83 +75,83 @@ public class TaktWorkShiftI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktWorkShift 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.workshift._self / entity.workshift.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.workshift._self / entity.workshift.{{field}}；ResourceGroup=Attendance；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetWorkShiftTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.workshift._self
-            new TranslationSeedItem("entity.workshift._self", "en-US", "Work Shift Information", "实体名称"),
+            new TranslationSeedItem("entity.workshift._self", "en-US", "Work Shift Information_us", "实体名称"),
             // entity.workshift._self
-            new TranslationSeedItem("entity.workshift._self", "ja-JP", "班次定义信息", "实体名称"),
+            new TranslationSeedItem("entity.workshift._self", "ja-JP", "班次定义信息_jp", "实体名称"),
             // entity.workshift._self
             new TranslationSeedItem("entity.workshift._self", "zh-CN", "班次定义信息", "实体名称"),
             // entity.workshift._self
-            new TranslationSeedItem("entity.workshift._self", "zh-HK", "班次定义信息", "实体名称"),
+            new TranslationSeedItem("entity.workshift._self", "zh-HK", "班次定义信息_hk", "实体名称"),
 
             // entity.workshift.shiftcode
-            new TranslationSeedItem("entity.workshift.shiftcode", "en-US", "班次编码", "班次编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.workshift.shiftcode", "en-US", "班次编码_us", "班次编码（租户+公司内唯一）"),
             // entity.workshift.shiftcode
-            new TranslationSeedItem("entity.workshift.shiftcode", "ja-JP", "班次编码", "班次编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.workshift.shiftcode", "ja-JP", "班次编码_jp", "班次编码（租户+公司内唯一）"),
             // entity.workshift.shiftcode
             new TranslationSeedItem("entity.workshift.shiftcode", "zh-CN", "班次编码", "班次编码（租户+公司内唯一）"),
             // entity.workshift.shiftcode
-            new TranslationSeedItem("entity.workshift.shiftcode", "zh-HK", "班次编码", "班次编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.workshift.shiftcode", "zh-HK", "班次编码_hk", "班次编码（租户+公司内唯一）"),
 
             // entity.workshift.shiftname
-            new TranslationSeedItem("entity.workshift.shiftname", "en-US", "班次名称", "班次名称"),
+            new TranslationSeedItem("entity.workshift.shiftname", "en-US", "班次名称_us", "班次名称"),
             // entity.workshift.shiftname
-            new TranslationSeedItem("entity.workshift.shiftname", "ja-JP", "班次名称", "班次名称"),
+            new TranslationSeedItem("entity.workshift.shiftname", "ja-JP", "班次名称_jp", "班次名称"),
             // entity.workshift.shiftname
             new TranslationSeedItem("entity.workshift.shiftname", "zh-CN", "班次名称", "班次名称"),
             // entity.workshift.shiftname
-            new TranslationSeedItem("entity.workshift.shiftname", "zh-HK", "班次名称", "班次名称"),
+            new TranslationSeedItem("entity.workshift.shiftname", "zh-HK", "班次名称_hk", "班次名称"),
 
             // entity.workshift.starttime
-            new TranslationSeedItem("entity.workshift.starttime", "en-US", "开始时间", "当班开始时间（HH:mm）"),
+            new TranslationSeedItem("entity.workshift.starttime", "en-US", "开始时间_us", "当班开始时间（HH:mm）"),
             // entity.workshift.starttime
-            new TranslationSeedItem("entity.workshift.starttime", "ja-JP", "开始时间", "当班开始时间（HH:mm）"),
+            new TranslationSeedItem("entity.workshift.starttime", "ja-JP", "开始时间_jp", "当班开始时间（HH:mm）"),
             // entity.workshift.starttime
             new TranslationSeedItem("entity.workshift.starttime", "zh-CN", "开始时间", "当班开始时间（HH:mm）"),
             // entity.workshift.starttime
-            new TranslationSeedItem("entity.workshift.starttime", "zh-HK", "开始时间", "当班开始时间（HH:mm）"),
+            new TranslationSeedItem("entity.workshift.starttime", "zh-HK", "开始时间_hk", "当班开始时间（HH:mm）"),
 
             // entity.workshift.endtime
-            new TranslationSeedItem("entity.workshift.endtime", "en-US", "结束时间", "当班结束时间（HH:mm）"),
+            new TranslationSeedItem("entity.workshift.endtime", "en-US", "结束时间_us", "当班结束时间（HH:mm）"),
             // entity.workshift.endtime
-            new TranslationSeedItem("entity.workshift.endtime", "ja-JP", "结束时间", "当班结束时间（HH:mm）"),
+            new TranslationSeedItem("entity.workshift.endtime", "ja-JP", "结束时间_jp", "当班结束时间（HH:mm）"),
             // entity.workshift.endtime
             new TranslationSeedItem("entity.workshift.endtime", "zh-CN", "结束时间", "当班结束时间（HH:mm）"),
             // entity.workshift.endtime
-            new TranslationSeedItem("entity.workshift.endtime", "zh-HK", "结束时间", "当班结束时间（HH:mm）"),
+            new TranslationSeedItem("entity.workshift.endtime", "zh-HK", "结束时间_hk", "当班结束时间（HH:mm）"),
 
             // entity.workshift.crossmidnight
-            new TranslationSeedItem("entity.workshift.crossmidnight", "en-US", "是否跨日", "是否跨自然日（0=否 1=是）"),
+            new TranslationSeedItem("entity.workshift.crossmidnight", "en-US", "是否跨日_us", "是否跨自然日（0=否 1=是）"),
             // entity.workshift.crossmidnight
-            new TranslationSeedItem("entity.workshift.crossmidnight", "ja-JP", "是否跨日", "是否跨自然日（0=否 1=是）"),
+            new TranslationSeedItem("entity.workshift.crossmidnight", "ja-JP", "是否跨日_jp", "是否跨自然日（0=否 1=是）"),
             // entity.workshift.crossmidnight
             new TranslationSeedItem("entity.workshift.crossmidnight", "zh-CN", "是否跨日", "是否跨自然日（0=否 1=是）"),
             // entity.workshift.crossmidnight
-            new TranslationSeedItem("entity.workshift.crossmidnight", "zh-HK", "是否跨日", "是否跨自然日（0=否 1=是）"),
+            new TranslationSeedItem("entity.workshift.crossmidnight", "zh-HK", "是否跨日_hk", "是否跨自然日（0=否 1=是）"),
 
             // entity.workshift.sortorder
-            new TranslationSeedItem("entity.workshift.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.workshift.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.workshift.sortorder
-            new TranslationSeedItem("entity.workshift.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.workshift.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.workshift.sortorder
             new TranslationSeedItem("entity.workshift.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.workshift.sortorder
-            new TranslationSeedItem("entity.workshift.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.workshift.sortorder", "zh-HK", "排序号_hk", "排序号"),
 
             // entity.workshift.relatedplant
-            new TranslationSeedItem("entity.workshift.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.workshift.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.workshift.relatedplant
-            new TranslationSeedItem("entity.workshift.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.workshift.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.workshift.relatedplant
             new TranslationSeedItem("entity.workshift.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.workshift.relatedplant
-            new TranslationSeedItem("entity.workshift.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.workshift.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -169,10 +169,10 @@ public class TaktWorkShiftI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Attendance";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

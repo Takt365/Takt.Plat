@@ -2,9 +2,8 @@
 // 项目名称：节拍数字工厂 · Takt Plat (TDF)
 // 命名空间：@/views/logistics/manufacturing/defect/assy-defect/composables
 // 文件名称：use-assy-defect-master-context.ts
-// 功能描述：组立不良主表选中行上下文（供右侧明细面板读取）
+// 功能描述：组立不良日报实体主表选中行上下文（供右侧明细面板读取）
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
-// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
@@ -12,14 +11,14 @@ import type { AssyDefect } from '@/types/logistics/manufacturing/defect/assy-def
 
 /** 主表选中行上下文 */
 export interface AssyDefectMasterContext {
-  /** 当前选中的组立不良主表行（右侧明细依赖） */
+  /** 当前选中的主表行（右侧明细依赖） */
   selectedMasterRow: Ref<AssyDefect | null>
 }
 
-const assyDefectMasterContextKey: InjectionKey<AssyDefectMasterContext> = Symbol('assyDefectMasterContext')
+const assyDefectMasterContextKey: InjectionKey<AssyDefectMasterContext> = Symbol('assy-defectMasterContext')
 
 /**
- * 在组立不良主表页 provide 选中行上下文
+ * 在主表页 provide 选中行上下文
  * @returns {AssyDefectMasterContext} 主表上下文
  */
 export function provideAssyDefectMasterContext(): AssyDefectMasterContext {
@@ -30,7 +29,7 @@ export function provideAssyDefectMasterContext(): AssyDefectMasterContext {
 }
 
 /**
- * 在组立不良明细面板 inject 主表选中行
+ * 在明细面板 inject 主表选中行
  * @returns {AssyDefectMasterContext} 主表上下文
  */
 export function useAssyDefectMasterContext(): AssyDefectMasterContext {

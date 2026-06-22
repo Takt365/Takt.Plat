@@ -41,9 +41,7 @@ export function getAssetList(queryDto: any): Promise<TaktPagedResult<Asset>> {
   return request<TaktPagedResult<Asset>>({
     url: `${ASSET_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportAsset(
     url: `${ASSET_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

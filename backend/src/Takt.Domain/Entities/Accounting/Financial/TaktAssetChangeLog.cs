@@ -25,9 +25,10 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 public class TaktAssetChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 资产 ID
+    /// 资产 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [SugarColumn(ColumnName = "asset_id", ColumnDescription = "资产ID", ColumnDataType = "bigint", IsNullable = false)]
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long AssetId { get; set; }
     /// <summary>
     /// 资产编码（冗余）
@@ -54,4 +55,9 @@ public class TaktAssetChangeLog : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "change_reason", ColumnDescription = "变更原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? ChangeReason { get; set; }
+    /// <summary>
+    /// 资产主表
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(AssetId))]
+    public TaktAsset? Asset { get; set; }
 }

@@ -30,8 +30,8 @@ public class TaktSalesInvoice : TaktCompanyEntityBase
     /// <summary>
     /// 工厂代码
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? PlantCode { get; set; }
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票编码（唯一索引）
@@ -82,13 +82,13 @@ public class TaktSalesInvoice : TaktCompanyEntityBase
     public decimal ActualAmount { get; set; } = 0;
 
     /// <summary>
-    /// 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
     /// </summary>
     [SugarColumn(ColumnName = "invoice_status", ColumnDescription = "发票状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int InvoiceStatus { get; set; } = 0;
 
     /// <summary>
-    /// 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "payment_method", ColumnDescription = "收款方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentMethod { get; set; } = 0;

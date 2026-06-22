@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Attendance
 // 文件名称：TaktCalendarService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工厂日历应用服务实现
 // 
@@ -93,7 +93,7 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
         EnsureThreeLayerContext();
         var list = await _calendarRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.RelatedPlant,
+            x => x.RelatedPlant ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -288,7 +288,7 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
                 || SqlFunc.ToString(x.HolidayId).Contains(keywords)
                 || SqlFunc.ToString(x.ShiftId).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CalendarDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -315,9 +315,9 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

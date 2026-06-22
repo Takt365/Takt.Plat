@@ -11,6 +11,7 @@
 // ========================================
 
 using Takt.Application.Dtos.Code.Database;
+using Takt.Shared.Models;
 
 namespace Takt.Application.Services.Code.Database;
 
@@ -31,6 +32,13 @@ public interface ITaktDatabaseInfoService
     /// <param name="tenantCode">租户编码（3 位）</param>
     /// <returns>表摘要列表</returns>
     Task<List<TaktDatabaseTableInfoDto>> GetDatabaseTableInfoListAsync(string tenantCode);
+
+    /// <summary>
+    /// 分页获取当前登录租户业务库下用户表摘要
+    /// </summary>
+    /// <param name="queryDto">分页与关键字查询</param>
+    /// <returns>分页结果</returns>
+    Task<TaktPagedResult<TaktDatabaseTableInfoDto>> GetDatabaseTableInfoPageListAsync(TaktDatabaseTableInfoQueryDto queryDto);
 
     /// <summary>
     /// 获取指定物理表的列摘要

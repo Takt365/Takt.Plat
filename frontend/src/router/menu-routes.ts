@@ -28,6 +28,20 @@ export const LAYOUT_ROUTE_NAME = 'Layout';
 /** 404 路由名（须在动态路由之后注册） */
 export const NOT_FOUND_ROUTE_NAME = 'NotFound';
 
+/** 非菜单注册的 Layout 子路由（执行页等） */
+const AUXILIARY_LAYOUT_ROUTES: RouteRecordRaw[] = [
+  {
+    path: 'statistics/report/configurable/run',
+    name: 'Menu_STATISTICS_REPORT_CONFIGURABLE_RUN',
+    component: () => import('@/views/statistics/report/configurable/components/configurable-sqvi-run.vue'),
+    meta: {
+      titleKey: 'statistics.report.configurable.page.runreport',
+      permission: 'statistics:report:configurable:run',
+      requiresAuth: true,
+    },
+  },
+];
+
 /** views 懒加载表（构建期收集） */
 const viewModules = import.meta.glob('@/views/**/*.vue');
 
@@ -39,9 +53,9 @@ let pendingMissingComponentPaths: string[] = [];
 
 /**
  * 菜单节点是否可用于侧栏展示（与 menu store 一致）
- * @param {TaktMenuTreeDto} menu 菜单节点
+ * @param {MenuTree} menu 菜单节点
  */
-function isNavigableMenuNode(menu: TaktMenuTreeDto): boolean {
+function isNavigableMenuNode(menu: MenuTree): boolean {
   if (menu.menuType === TaktMenuType.Button) {
     return false;
   }
@@ -59,9 +73,9 @@ function isNavigableMenuNode(menu: TaktMenuTreeDto): boolean {
 
 /**
  * 菜单是否注册为页面路由
- * @param {TaktMenuTreeDto} menu 菜单节点
+ * @param {MenuTree} menu 菜单节点
  */
-function isRoutableMenu(menu: TaktMenuTreeDto): boolean {
+function isRoutableMenu(menu: MenuTree): boolean {
   if (!isNavigableMenuNode(menu)) {
     return false;
   }
@@ -124,10 +138,10 @@ export function resolveMenuViewComponent(componentPath: string): NonNullable<Rou
 
 /**
  * 构建单条页面菜单路由
- * @param {TaktMenuTreeDto} menu 菜单节点
+ * @param {MenuTree} menu 菜单节点
  * @param {Set<string>} usedNames 已占用路由名
  */
-function createMenuLeafRoute(menu: TaktMenuTreeDto, usedNames: Set<string>): RouteRecordRaw {
+function createMenuLeafRoute(menu: MenuTree, usedNames: Set<string>): RouteRecordRaw {
   const path = toLayoutChildPath(menu.routePath);
   const baseName = `Menu_${menu.menuCode}`;
   let routeName = baseName;
@@ -159,13 +173,13 @@ function createMenuLeafRoute(menu: TaktMenuTreeDto, usedNames: Set<string>): Rou
 /**
  * 扁平收集所有页面菜单路由（直接挂 Layout，path 与菜单 routePath 一致）
  * @description 禁止按菜单树嵌套 children：子级 routePath 已是绝对路径，嵌套会导致路径重复拼接（如 /dashboard/dashboard/workspace）
- * @param {TaktMenuTreeDto[]} menus 菜单树
+ * @param {MenuTree[]} menus 菜单树
  * @param {Set<string>} usedNames 已占用路由名
  */
-function collectFlatMenuRoutes(menus: TaktMenuTreeDto[], usedNames: Set<string>): RouteRecordRaw[] {
+function collectFlatMenuRoutes(menus: MenuTree[], usedNames: Set<string>): RouteRecordRaw[] {
   const routes: RouteRecordRaw[] = [];
 
-  const walk = (nodes: TaktMenuTreeDto[]): void => {
+  const walk = (nodes: MenuTree[]): void => {
     nodes
       .slice()
       .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
@@ -190,21 +204,21 @@ function collectFlatMenuRoutes(menus: TaktMenuTreeDto[], usedNames: Set<string>)
 
 /**
  * 由菜单树生成 Layout 子路由（扁平注册，与后端 RoutePath 一一对应）
- * @param {TaktMenuTreeDto[]} menus 菜单树
+ * @param {MenuTree[]} menus 菜单树
  */
-export function buildMenuRouteRecords(menus: TaktMenuTreeDto[]): RouteRecordRaw[] {
+export function buildMenuRouteRecords(menus: MenuTree[]): RouteRecordRaw[] {
   beginResolveViewBatch();
   return collectFlatMenuRoutes(menus, new Set<string>());
 }
 
 /**
  * 获取默认进入路径
- * @param {TaktMenuTreeDto[]} menus 菜单树
+ * @param {MenuTree[]} menus 菜单树
  */
-export function resolveDefaultMenuPath(menus: TaktMenuTreeDto[]): string | undefined {
+export function resolveDefaultMenuPath(menus: MenuTree[]): string | undefined {
   const entries: { menuCode: string; path: string }[] = [];
 
-  const walk = (nodes: TaktMenuTreeDto[]): void => {
+  const walk = (nodes: MenuTree[]): void => {
     nodes
       .slice()
       .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
@@ -270,9 +284,9 @@ function registerNotFoundRoute(router: Router): void {
 /**
  * 将菜单动态路由注册到 Layout 下
  * @param {Router} router 路由实例
- * @param {TaktMenuTreeDto[]} menus 菜单树
+ * @param {MenuTree[]} menus 菜单树
  */
-export function registerDynamicRoutes(router: Router, menus: TaktMenuTreeDto[]): RouteRecordRaw[] {
+export function registerDynamicRoutes(router: Router, menus: MenuTree[]): RouteRecordRaw[] {
   resetDynamicRoutes(router);
 
   const routes = buildMenuRouteRecords(menus);
@@ -286,11 +300,18 @@ export function registerDynamicRoutes(router: Router, menus: TaktMenuTreeDto[]):
     }
   });
 
+  AUXILIARY_LAYOUT_ROUTES.forEach((route) => {
+    router.addRoute(LAYOUT_ROUTE_NAME, route);
+    if (route.name) {
+      registeredRouteNames.push(String(route.name));
+    }
+  });
+
   registerNotFoundRoute(router);
 
   menuRoutesLogger.info('动态路由已注册', {
     action: 'register',
-    count: routes.length,
+    count: routes.length + AUXILIARY_LAYOUT_ROUTES.length,
     missingComponentCount,
   });
   return routes;

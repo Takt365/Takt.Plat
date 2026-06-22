@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：account-title.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -37,16 +37,6 @@ export interface AccountTitle extends CompanyDtoBase {
    * 科目名称
    */
   titleName: string;
-
-  /**
-   * 科目简称
-   */
-  shortName?: string;
-
-  /**
-   * 科目描述
-   */
-  titleDesc?: string;
 
   /**
    * 父级 ID
@@ -128,6 +118,11 @@ export interface AccountTitle extends CompanyDtoBase {
    */
   sortOrder: number;
 
+  /**
+   * 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId） （子表：TaktAccountTitleChangeLog）
+   */
+  changeLogs?: AccountTitleChangeLog[];
+
 }
 
 
@@ -172,16 +167,6 @@ export interface AccountTitleQuery extends TaktPagedQuery {
    * 科目名称
    */
   titleName?: string;
-
-  /**
-   * 科目简称
-   */
-  shortName?: string;
-
-  /**
-   * 科目描述
-   */
-  titleDesc?: string;
 
   /**
    * 父级 ID
@@ -286,7 +271,7 @@ export interface AccountTitleQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -326,16 +311,6 @@ export interface AccountTitleCreate {
    * 科目名称
    */
   titleName: string;
-
-  /**
-   * 科目简称
-   */
-  shortName?: string;
-
-  /**
-   * 科目描述
-   */
-  titleDesc?: string;
 
   /**
    * 父级 ID
@@ -408,14 +383,14 @@ export interface AccountTitleCreate {
   validTo: string;
 
   /**
-   * 排序号
+   * 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）（子表，级联保存）
    */
-  sortOrder: number;
+  changeLogs?: AccountTitleChangeLogCreate[];
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -505,16 +480,6 @@ export interface AccountTitleTemplate {
   titleName?: string;
 
   /**
-   * 科目简称
-   */
-  shortName?: string;
-
-  /**
-   * 科目描述
-   */
-  titleDesc?: string;
-
-  /**
    * 父级 ID
    */
   parentId?: string;
@@ -567,7 +532,7 @@ export interface AccountTitleTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -609,16 +574,6 @@ export interface AccountTitleImport {
   titleName?: string;
 
   /**
-   * 科目简称
-   */
-  shortName?: string;
-
-  /**
-   * 科目描述
-   */
-  titleDesc?: string;
-
-  /**
    * 父级 ID
    */
   parentId?: string;
@@ -671,7 +626,7 @@ export interface AccountTitleImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -706,16 +661,6 @@ export interface AccountTitleExport {
    * 科目名称
    */
   titleName: string;
-
-  /**
-   * 科目简称
-   */
-  shortName?: string;
-
-  /**
-   * 科目描述
-   */
-  titleDesc?: string;
 
   /**
    * 父级 ID
@@ -800,7 +745,7 @@ export interface AccountTitleExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

@@ -42,9 +42,7 @@ export function getSalaryFormulaList(queryDto: any): Promise<TaktPagedResult<Sal
   return request<TaktPagedResult<SalaryFormula>>({
     url: `${SALARY_FORMULA_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportSalaryFormula(
     url: `${SALARY_FORMULA_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

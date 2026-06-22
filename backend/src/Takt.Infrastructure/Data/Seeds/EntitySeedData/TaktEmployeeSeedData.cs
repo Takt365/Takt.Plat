@@ -5,7 +5,7 @@
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工档案种子数据初始化（跨租户：DEV/QAS/PRD）
-// 
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -43,7 +43,6 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
     {
         TaktLogger.Information("开始初始化员工档案种子数据...");
 
-        // 参数验证：必须使用协调器传入的租户编码
         if (string.IsNullOrEmpty(tenantCode))
         {
             TaktLogger.Warning("租户编码为空，跳过员工档案种子数据初始化");
@@ -77,11 +76,10 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         foreach (var company in orderedCompanies)
         {
             TaktLogger.Information("正在为公司 {CompanyCode} ({CompanyName}) 初始化员工档案...", company.CompanyCode, company.CompanyName);
-            
             var employees = GetStandardEmployees();
-            
-            foreach (var employeeData in employees)
+            for (var index = 0; index < employees.Count; index++)
             {
+                var employeeData = employees[index];
                 var (employee, i, u) = await CreateOrUpdateEmployeeAsync(
                     repository,
                     sqlSugarContext,
@@ -89,8 +87,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
                     company.CompanyCode,
                     employeeData.EmployeeNo,
                     employeeData.Name,
-                    employeeData.Nickname);
-                
+                    index);
                 insertCount += i;
                 updateCount += u;
             }
@@ -102,45 +99,38 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 获取标准员工档案列表（仅包含员工编号、姓名、昵称）
-    /// 公司代码由调用方动态传入
+    /// 获取标准员工档案列表
     /// </summary>
-    private static List<(string EmployeeNo, string Name, string Nickname)> GetStandardEmployees()
+    private static List<(string EmployeeNo, string Name)> GetStandardEmployees()
     {
-        return new List<(string, string, string)>
+        return new List<(string, string)>
         {
-            ("900001", "管理员", "系统管理员"),
-            ("900002", "访客", "系统访客"),
-            ("900003", "演示用户", "演示账号")
+            ("900001", "管理员"),
+            ("900002", "访客"),
+            ("900003", "演示用户")
         };
     }
 
     /// <summary>
-    /// 从连接字符串中解析当前租户编码
+    /// 填充人事档案必填个人信息（种子演示数据）
     /// </summary>
-    private static string GetCurrentTenantCode(TaktSeedContext sqlSugarContext)
+    private static void ApplySeedPersonalProfile(TaktEmployee employee, int sequence)
     {
-        // 从连接字符串中提取租户编码
-        // 格式：Server=fs03;Database=Takt_{TenantCode}_Dev;...
-        var connectionString = sqlSugarContext.Db.Ado.Connection?.ConnectionString;
-        
-        if (string.IsNullOrEmpty(connectionString))
+        employee.BirthDate = new DateTime(1990, 1, 1).AddDays(sequence);
+        employee.IdCardNo = sequence switch
         {
-            return string.Empty;
-        }
-
-        // 解析 Database=Takt_XXX_Dev 中的 XXX
-        var dbMatch = System.Text.RegularExpressions.Regex.Match(
-            connectionString, 
-            @"Database=Takt_(\d{3})_", 
-            System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-        
-        if (dbMatch.Success && dbMatch.Groups.Count > 1)
-        {
-            return dbMatch.Groups[1].Value;
-        }
-
-        return string.Empty;
+            0 => "110101199001011237",
+            1 => "110101199002021242",
+            _ => "110101199003031258"
+        };
+        employee.Mobile = $"1380013800{sequence}";
+        employee.NativePlace = "110000";
+        employee.Ethnicity = 1;
+        employee.PoliticalStatus = 0;
+        employee.MaritalStatus = 0;
+        employee.EmergencyContactName = "紧急联系人";
+        employee.EmergencyContactPhone = $"1390013900{sequence}";
+        employee.HomeAddress = "北京市朝阳区种子路1号";
     }
 
     /// <summary>
@@ -153,43 +143,34 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         string companyCode,
         string employeeNo,
         string name,
-        string nickname)
+        int sequence)
     {
         var employee = await repository.FirstAsync(e => e.TenantCode == tenantCode && e.CompanyCode == companyCode && e.EmployeeNo == employeeNo);
-        
         if (employee == null)
         {
-            // 不存在：创建新记录
             employee = new TaktEmployee
             {
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
                 EmployeeNo = employeeNo,
                 Name = name,
-                Gender = 0,
-                EmployeeStatus = 2, // 2=正式
+                Gender = 1,
+                EmployeeStatus = 2,
                 JoinedDate = DateTime.Now,
                 IsBuiltIn = 1
             };
+            ApplySeedPersonalProfile(employee, sequence);
             employee = await repository.CreateAsync(employee);
             return (employee, 1, 0);
         }
-        else
-        {
-            // 存在：更新记录（排除唯一索引字段）
-            employee.Name = name;
-            employee.EmployeeStatus = 2; // 2=正式
-            employee.IsBuiltIn = 1;
-
-            // 使用 IgnoreColumns 排除唯一索引字段（EmployeeNo），避免更新时触发唯一约束冲突
-            // 唯一索引: ix_employee_no (TenantCode + CompanyCode + EmployeeNo)
-            // WHERE条件需要 TenantCode 和 CompanyCode，所以只能排除 EmployeeNo
-            await sqlSugarContext.Db.Updateable(employee)
-                .IgnoreColumns(x => x.EmployeeNo)
-                .Where(x => x.TenantCode == tenantCode && x.CompanyCode == companyCode)
-                .ExecuteCommandAsync();
-            
-            return (employee, 0, 1);
-        }
+        employee.Name = name;
+        employee.EmployeeStatus = 2;
+        employee.IsBuiltIn = 1;
+        ApplySeedPersonalProfile(employee, sequence);
+        await sqlSugarContext.Db.Updateable(employee)
+            .IgnoreColumns(x => x.EmployeeNo)
+            .Where(x => x.TenantCode == tenantCode && x.CompanyCode == companyCode)
+            .ExecuteCommandAsync();
+        return (employee, 0, 1);
     }
 }

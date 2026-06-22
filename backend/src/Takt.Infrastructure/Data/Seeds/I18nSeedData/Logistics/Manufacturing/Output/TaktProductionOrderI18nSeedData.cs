@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionOrderI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,164 +75,209 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktProductionOrder 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.productionorder._self / entity.productionorder.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.productionorder._self / entity.productionorder.{{field}}；ResourceGroup=Output；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetProductionOrderTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.productionorder._self
-            new TranslationSeedItem("entity.productionorder._self", "en-US", "Production Order Information", "实体名称"),
+            new TranslationSeedItem("entity.productionorder._self", "en-US", "Production Order Information_us", "实体名称"),
             // entity.productionorder._self
-            new TranslationSeedItem("entity.productionorder._self", "ja-JP", "生产工单信息", "实体名称"),
+            new TranslationSeedItem("entity.productionorder._self", "ja-JP", "生产工单信息_jp", "实体名称"),
             // entity.productionorder._self
             new TranslationSeedItem("entity.productionorder._self", "zh-CN", "生产工单信息", "实体名称"),
             // entity.productionorder._self
-            new TranslationSeedItem("entity.productionorder._self", "zh-HK", "生产工单信息", "实体名称"),
+            new TranslationSeedItem("entity.productionorder._self", "zh-HK", "生产工单信息_hk", "实体名称"),
 
             // entity.productionorder.plantcode
-            new TranslationSeedItem("entity.productionorder.plantcode", "en-US", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.productionorder.plantcode", "en-US", "工厂代码_us", "工厂代码"),
             // entity.productionorder.plantcode
-            new TranslationSeedItem("entity.productionorder.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.productionorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
             // entity.productionorder.plantcode
             new TranslationSeedItem("entity.productionorder.plantcode", "zh-CN", "工厂代码", "工厂代码"),
             // entity.productionorder.plantcode
-            new TranslationSeedItem("entity.productionorder.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.productionorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
 
             // entity.productionorder.prodordertype
-            new TranslationSeedItem("entity.productionorder.prodordertype", "en-US", "生产工单类型", "生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA"),
+            new TranslationSeedItem("entity.productionorder.prodordertype", "en-US", "生产工单类型_us", "生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA"),
             // entity.productionorder.prodordertype
-            new TranslationSeedItem("entity.productionorder.prodordertype", "ja-JP", "生产工单类型", "生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA"),
+            new TranslationSeedItem("entity.productionorder.prodordertype", "ja-JP", "生产工单类型_jp", "生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA"),
             // entity.productionorder.prodordertype
             new TranslationSeedItem("entity.productionorder.prodordertype", "zh-CN", "生产工单类型", "生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA"),
             // entity.productionorder.prodordertype
-            new TranslationSeedItem("entity.productionorder.prodordertype", "zh-HK", "生产工单类型", "生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA"),
+            new TranslationSeedItem("entity.productionorder.prodordertype", "zh-HK", "生产工单类型_hk", "生产工单类型 ZDTA=製造指図：DTA通常生産 ZDTB=製造指図：DTA改造改修 ZDTC=製造指図：DTA開発試作 ZDTD=製造指図：DTA通常生産 PCBA ZDTE=製造指図：DTA改造改修 PCBA ZDTF=製造指図：DTA開発試作 PCBA"),
 
             // entity.productionorder.prodordercode
-            new TranslationSeedItem("entity.productionorder.prodordercode", "en-US", "生产工单号", "生产工单号"),
+            new TranslationSeedItem("entity.productionorder.prodordercode", "en-US", "生产工单号_us", "生产工单号"),
             // entity.productionorder.prodordercode
-            new TranslationSeedItem("entity.productionorder.prodordercode", "ja-JP", "生产工单号", "生产工单号"),
+            new TranslationSeedItem("entity.productionorder.prodordercode", "ja-JP", "生产工单号_jp", "生产工单号"),
             // entity.productionorder.prodordercode
             new TranslationSeedItem("entity.productionorder.prodordercode", "zh-CN", "生产工单号", "生产工单号"),
             // entity.productionorder.prodordercode
-            new TranslationSeedItem("entity.productionorder.prodordercode", "zh-HK", "生产工单号", "生产工单号"),
+            new TranslationSeedItem("entity.productionorder.prodordercode", "zh-HK", "生产工单号_hk", "生产工单号"),
 
             // entity.productionorder.materialcode
-            new TranslationSeedItem("entity.productionorder.materialcode", "en-US", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.productionorder.materialcode", "en-US", "物料编码_us", "物料编码"),
             // entity.productionorder.materialcode
-            new TranslationSeedItem("entity.productionorder.materialcode", "ja-JP", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.productionorder.materialcode", "ja-JP", "物料编码_jp", "物料编码"),
             // entity.productionorder.materialcode
             new TranslationSeedItem("entity.productionorder.materialcode", "zh-CN", "物料编码", "物料编码"),
             // entity.productionorder.materialcode
-            new TranslationSeedItem("entity.productionorder.materialcode", "zh-HK", "物料编码", "物料编码"),
+            new TranslationSeedItem("entity.productionorder.materialcode", "zh-HK", "物料编码_hk", "物料编码"),
 
             // entity.productionorder.prodorderqty
-            new TranslationSeedItem("entity.productionorder.prodorderqty", "en-US", "生产工单数量", "生产工单数量"),
+            new TranslationSeedItem("entity.productionorder.prodorderqty", "en-US", "生产工单数量_us", "生产工单数量"),
             // entity.productionorder.prodorderqty
-            new TranslationSeedItem("entity.productionorder.prodorderqty", "ja-JP", "生产工单数量", "生产工单数量"),
+            new TranslationSeedItem("entity.productionorder.prodorderqty", "ja-JP", "生产工单数量_jp", "生产工单数量"),
             // entity.productionorder.prodorderqty
             new TranslationSeedItem("entity.productionorder.prodorderqty", "zh-CN", "生产工单数量", "生产工单数量"),
             // entity.productionorder.prodorderqty
-            new TranslationSeedItem("entity.productionorder.prodorderqty", "zh-HK", "生产工单数量", "生产工单数量"),
+            new TranslationSeedItem("entity.productionorder.prodorderqty", "zh-HK", "生产工单数量_hk", "生产工单数量"),
 
             // entity.productionorder.producedqty
-            new TranslationSeedItem("entity.productionorder.producedqty", "en-US", "已生产数量", "已生产数量"),
+            new TranslationSeedItem("entity.productionorder.producedqty", "en-US", "已生产数量_us", "已生产数量"),
             // entity.productionorder.producedqty
-            new TranslationSeedItem("entity.productionorder.producedqty", "ja-JP", "已生产数量", "已生产数量"),
+            new TranslationSeedItem("entity.productionorder.producedqty", "ja-JP", "已生产数量_jp", "已生产数量"),
             // entity.productionorder.producedqty
             new TranslationSeedItem("entity.productionorder.producedqty", "zh-CN", "已生产数量", "已生产数量"),
             // entity.productionorder.producedqty
-            new TranslationSeedItem("entity.productionorder.producedqty", "zh-HK", "已生产数量", "已生产数量"),
+            new TranslationSeedItem("entity.productionorder.producedqty", "zh-HK", "已生产数量_hk", "已生产数量"),
 
             // entity.productionorder.unitofmeasure
-            new TranslationSeedItem("entity.productionorder.unitofmeasure", "en-US", "计量单位", "计量单位"),
+            new TranslationSeedItem("entity.productionorder.unitofmeasure", "en-US", "计量单位_us", "计量单位"),
             // entity.productionorder.unitofmeasure
-            new TranslationSeedItem("entity.productionorder.unitofmeasure", "ja-JP", "计量单位", "计量单位"),
+            new TranslationSeedItem("entity.productionorder.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位"),
             // entity.productionorder.unitofmeasure
             new TranslationSeedItem("entity.productionorder.unitofmeasure", "zh-CN", "计量单位", "计量单位"),
             // entity.productionorder.unitofmeasure
-            new TranslationSeedItem("entity.productionorder.unitofmeasure", "zh-HK", "计量单位", "计量单位"),
+            new TranslationSeedItem("entity.productionorder.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位"),
 
             // entity.productionorder.actualstartdate
-            new TranslationSeedItem("entity.productionorder.actualstartdate", "en-US", "实际开始日期", "实际开始日期"),
+            new TranslationSeedItem("entity.productionorder.actualstartdate", "en-US", "实际开始日期_us", "实际开始日期"),
             // entity.productionorder.actualstartdate
-            new TranslationSeedItem("entity.productionorder.actualstartdate", "ja-JP", "实际开始日期", "实际开始日期"),
+            new TranslationSeedItem("entity.productionorder.actualstartdate", "ja-JP", "实际开始日期_jp", "实际开始日期"),
             // entity.productionorder.actualstartdate
             new TranslationSeedItem("entity.productionorder.actualstartdate", "zh-CN", "实际开始日期", "实际开始日期"),
             // entity.productionorder.actualstartdate
-            new TranslationSeedItem("entity.productionorder.actualstartdate", "zh-HK", "实际开始日期", "实际开始日期"),
+            new TranslationSeedItem("entity.productionorder.actualstartdate", "zh-HK", "实际开始日期_hk", "实际开始日期"),
 
             // entity.productionorder.actualenddate
-            new TranslationSeedItem("entity.productionorder.actualenddate", "en-US", "实际完成日期", "实际完成日期"),
+            new TranslationSeedItem("entity.productionorder.actualenddate", "en-US", "实际完成日期_us", "实际完成日期"),
             // entity.productionorder.actualenddate
-            new TranslationSeedItem("entity.productionorder.actualenddate", "ja-JP", "实际完成日期", "实际完成日期"),
+            new TranslationSeedItem("entity.productionorder.actualenddate", "ja-JP", "实际完成日期_jp", "实际完成日期"),
             // entity.productionorder.actualenddate
             new TranslationSeedItem("entity.productionorder.actualenddate", "zh-CN", "实际完成日期", "实际完成日期"),
             // entity.productionorder.actualenddate
-            new TranslationSeedItem("entity.productionorder.actualenddate", "zh-HK", "实际完成日期", "实际完成日期"),
+            new TranslationSeedItem("entity.productionorder.actualenddate", "zh-HK", "实际完成日期_hk", "实际完成日期"),
 
             // entity.productionorder.priority
-            new TranslationSeedItem("entity.productionorder.priority", "en-US", "优先级", "优先级（1=低，2=中，3=高，4=紧急）"),
+            new TranslationSeedItem("entity.productionorder.priority", "en-US", "优先级_us", "优先级（1=低，2=中，3=高，4=紧急）"),
             // entity.productionorder.priority
-            new TranslationSeedItem("entity.productionorder.priority", "ja-JP", "优先级", "优先级（1=低，2=中，3=高，4=紧急）"),
+            new TranslationSeedItem("entity.productionorder.priority", "ja-JP", "优先级_jp", "优先级（1=低，2=中，3=高，4=紧急）"),
             // entity.productionorder.priority
             new TranslationSeedItem("entity.productionorder.priority", "zh-CN", "优先级", "优先级（1=低，2=中，3=高，4=紧急）"),
             // entity.productionorder.priority
-            new TranslationSeedItem("entity.productionorder.priority", "zh-HK", "优先级", "优先级（1=低，2=中，3=高，4=紧急）"),
+            new TranslationSeedItem("entity.productionorder.priority", "zh-HK", "优先级_hk", "优先级（1=低，2=中，3=高，4=紧急）"),
 
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "en-US", "工作中心", "工作中心"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "en-US", "工作中心_us", "工作中心"),
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "ja-JP", "工作中心", "工作中心"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "ja-JP", "工作中心_jp", "工作中心"),
             // entity.productionorder.workcenter
             new TranslationSeedItem("entity.productionorder.workcenter", "zh-CN", "工作中心", "工作中心"),
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "zh-HK", "工作中心", "工作中心"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "zh-HK", "工作中心_hk", "工作中心"),
 
             // entity.productionorder.prodline
-            new TranslationSeedItem("entity.productionorder.prodline", "en-US", "生产线", "生产线"),
+            new TranslationSeedItem("entity.productionorder.prodline", "en-US", "生产线_us", "生产线"),
             // entity.productionorder.prodline
-            new TranslationSeedItem("entity.productionorder.prodline", "ja-JP", "生产线", "生产线"),
+            new TranslationSeedItem("entity.productionorder.prodline", "ja-JP", "生产线_jp", "生产线"),
             // entity.productionorder.prodline
             new TranslationSeedItem("entity.productionorder.prodline", "zh-CN", "生产线", "生产线"),
             // entity.productionorder.prodline
-            new TranslationSeedItem("entity.productionorder.prodline", "zh-HK", "生产线", "生产线"),
+            new TranslationSeedItem("entity.productionorder.prodline", "zh-HK", "生产线_hk", "生产线"),
 
             // entity.productionorder.prodbatch
-            new TranslationSeedItem("entity.productionorder.prodbatch", "en-US", "生产批次", "生产批次"),
+            new TranslationSeedItem("entity.productionorder.prodbatch", "en-US", "生产批次_us", "生产批次"),
             // entity.productionorder.prodbatch
-            new TranslationSeedItem("entity.productionorder.prodbatch", "ja-JP", "生产批次", "生产批次"),
+            new TranslationSeedItem("entity.productionorder.prodbatch", "ja-JP", "生产批次_jp", "生产批次"),
             // entity.productionorder.prodbatch
             new TranslationSeedItem("entity.productionorder.prodbatch", "zh-CN", "生产批次", "生产批次"),
             // entity.productionorder.prodbatch
-            new TranslationSeedItem("entity.productionorder.prodbatch", "zh-HK", "生产批次", "生产批次"),
+            new TranslationSeedItem("entity.productionorder.prodbatch", "zh-HK", "生产批次_hk", "生产批次"),
 
             // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "en-US", "序列号", "序列号"),
+            new TranslationSeedItem("entity.productionorder.serialno", "en-US", "序列号_us", "序列号"),
             // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "ja-JP", "序列号", "序列号"),
+            new TranslationSeedItem("entity.productionorder.serialno", "ja-JP", "序列号_jp", "序列号"),
             // entity.productionorder.serialno
             new TranslationSeedItem("entity.productionorder.serialno", "zh-CN", "序列号", "序列号"),
             // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "zh-HK", "序列号", "序列号"),
+            new TranslationSeedItem("entity.productionorder.serialno", "zh-HK", "序列号_hk", "序列号"),
 
             // entity.productionorder.routingcode
-            new TranslationSeedItem("entity.productionorder.routingcode", "en-US", "工艺路线编码", "工艺路线编码"),
+            new TranslationSeedItem("entity.productionorder.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码"),
             // entity.productionorder.routingcode
-            new TranslationSeedItem("entity.productionorder.routingcode", "ja-JP", "工艺路线编码", "工艺路线编码"),
+            new TranslationSeedItem("entity.productionorder.routingcode", "ja-JP", "工艺路线编码_jp", "工艺路线编码"),
             // entity.productionorder.routingcode
             new TranslationSeedItem("entity.productionorder.routingcode", "zh-CN", "工艺路线编码", "工艺路线编码"),
             // entity.productionorder.routingcode
-            new TranslationSeedItem("entity.productionorder.routingcode", "zh-HK", "工艺路线编码", "工艺路线编码"),
+            new TranslationSeedItem("entity.productionorder.routingcode", "zh-HK", "工艺路线编码_hk", "工艺路线编码"),
+
+            // entity.productionorder.plannedorderid
+            new TranslationSeedItem("entity.productionorder.plannedorderid", "en-US", "来源计划订单ID_us", "来源计划订单 ID（可选）"),
+            // entity.productionorder.plannedorderid
+            new TranslationSeedItem("entity.productionorder.plannedorderid", "ja-JP", "来源计划订单ID_jp", "来源计划订单 ID（可选）"),
+            // entity.productionorder.plannedorderid
+            new TranslationSeedItem("entity.productionorder.plannedorderid", "zh-CN", "来源计划订单ID", "来源计划订单 ID（可选）"),
+            // entity.productionorder.plannedorderid
+            new TranslationSeedItem("entity.productionorder.plannedorderid", "zh-HK", "来源计划订单ID_hk", "来源计划订单 ID（可选）"),
+
+            // entity.productionorder.apsorderid
+            new TranslationSeedItem("entity.productionorder.apsorderid", "en-US", "来源APS订单ID_us", "来源 APS 订单 ID（可选）"),
+            // entity.productionorder.apsorderid
+            new TranslationSeedItem("entity.productionorder.apsorderid", "ja-JP", "来源APS订单ID_jp", "来源 APS 订单 ID（可选）"),
+            // entity.productionorder.apsorderid
+            new TranslationSeedItem("entity.productionorder.apsorderid", "zh-CN", "来源APS订单ID", "来源 APS 订单 ID（可选）"),
+            // entity.productionorder.apsorderid
+            new TranslationSeedItem("entity.productionorder.apsorderid", "zh-HK", "来源APS订单ID_hk", "来源 APS 订单 ID（可选）"),
+
+            // entity.productionorder.plannedstarttime
+            new TranslationSeedItem("entity.productionorder.plannedstarttime", "en-US", "计划开工时间_us", "计划开工时间"),
+            // entity.productionorder.plannedstarttime
+            new TranslationSeedItem("entity.productionorder.plannedstarttime", "ja-JP", "计划开工时间_jp", "计划开工时间"),
+            // entity.productionorder.plannedstarttime
+            new TranslationSeedItem("entity.productionorder.plannedstarttime", "zh-CN", "计划开工时间", "计划开工时间"),
+            // entity.productionorder.plannedstarttime
+            new TranslationSeedItem("entity.productionorder.plannedstarttime", "zh-HK", "计划开工时间_hk", "计划开工时间"),
+
+            // entity.productionorder.plannedendtime
+            new TranslationSeedItem("entity.productionorder.plannedendtime", "en-US", "计划完工时间_us", "计划完工时间"),
+            // entity.productionorder.plannedendtime
+            new TranslationSeedItem("entity.productionorder.plannedendtime", "ja-JP", "计划完工时间_jp", "计划完工时间"),
+            // entity.productionorder.plannedendtime
+            new TranslationSeedItem("entity.productionorder.plannedendtime", "zh-CN", "计划完工时间", "计划完工时间"),
+            // entity.productionorder.plannedendtime
+            new TranslationSeedItem("entity.productionorder.plannedendtime", "zh-HK", "计划完工时间_hk", "计划完工时间"),
 
             // entity.productionorder.status
-            new TranslationSeedItem("entity.productionorder.status", "en-US", "状态", "状态（0=正常，1=生产中，2=已完成）"),
+            new TranslationSeedItem("entity.productionorder.status", "en-US", "状态_us", "状态（0=正常，1=生产中，2=已完成）"),
             // entity.productionorder.status
-            new TranslationSeedItem("entity.productionorder.status", "ja-JP", "状态", "状态（0=正常，1=生产中，2=已完成）"),
+            new TranslationSeedItem("entity.productionorder.status", "ja-JP", "状态_jp", "状态（0=正常，1=生产中，2=已完成）"),
             // entity.productionorder.status
             new TranslationSeedItem("entity.productionorder.status", "zh-CN", "状态", "状态（0=正常，1=生产中，2=已完成）"),
             // entity.productionorder.status
-            new TranslationSeedItem("entity.productionorder.status", "zh-HK", "状态", "状态（0=正常，1=生产中，2=已完成）"),
+            new TranslationSeedItem("entity.productionorder.status", "zh-HK", "状态_hk", "状态（0=正常，1=生产中，2=已完成）"),
+
+            // entity.productionorder.changelogs
+            new TranslationSeedItem("entity.productionorder.changelogs", "en-US", "生产工单变更记录列表_us", "生产工单变更记录列表（外键在子表 TaktProductionOrderChangeLog.ProductionOrderId）"),
+            // entity.productionorder.changelogs
+            new TranslationSeedItem("entity.productionorder.changelogs", "ja-JP", "生产工单变更记录列表_jp", "生产工单变更记录列表（外键在子表 TaktProductionOrderChangeLog.ProductionOrderId）"),
+            // entity.productionorder.changelogs
+            new TranslationSeedItem("entity.productionorder.changelogs", "zh-CN", "生产工单变更记录列表", "生产工单变更记录列表（外键在子表 TaktProductionOrderChangeLog.ProductionOrderId）"),
+            // entity.productionorder.changelogs
+            new TranslationSeedItem("entity.productionorder.changelogs", "zh-HK", "生产工单变更记录列表_hk", "生产工单变更记录列表（外键在子表 TaktProductionOrderChangeLog.ProductionOrderId）"),
         };
     }
 
@@ -250,10 +295,10 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Output";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

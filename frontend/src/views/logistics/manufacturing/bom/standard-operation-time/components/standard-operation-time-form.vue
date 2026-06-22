@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,98 +63,104 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationTime.plantcode')"
+                :label="t('entity.standardoperationtime.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.plantcode') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.standardOperationTimeId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationTime.materialcode')"
+                :label="t('entity.standardoperationtime.materialcode')"
                 name="materialCode"
               >
                 <a-input
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.materialcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.materialcode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.standardOperationTimeId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationTime.workcenter')"
+                :label="t('entity.standardoperationtime.workcenter')"
                 name="workCenter"
               >
                 <a-input
                   v-model:value="formState.workCenter"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.workcenter') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.workcenter') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationTime.operationdesc')"
+                :label="t('entity.standardoperationtime.operationdesc')"
                 name="operationDesc"
               >
                 <a-input
                   v-model:value="formState.operationDesc"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.operationdesc') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.operationdesc') })"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationTime.standardminutes')"
+                :label="t('entity.standardoperationtime.standardminutes')"
                 name="standardMinutes"
               >
                 <a-input-number
                   v-model:value="formState.standardMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.standardminutes') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.standardminutes') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationTime.timeunit')"
+                :label="t('entity.standardoperationtime.timeunit')"
                 name="timeUnit"
               >
                 <a-input
                   v-model:value="formState.timeUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.timeunit') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.timeunit') })"
+                  show-count
+                  :maxlength="3"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.standardOperationTime.standardshorts')"
+                :label="t('entity.standardoperationtime.standardshorts')"
                 name="standardShorts"
               >
                 <a-input-number
                   v-model:value="formState.standardShorts"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.standardshorts') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.standardshorts') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -166,83 +175,79 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.standardOperationTime.pointsunit')"
+                :label="t('entity.standardoperationtime.pointsunit')"
                 name="pointsUnit"
               >
                 <a-input
                   v-model:value="formState.pointsUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.pointsunit') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.pointsunit') })"
+                  show-count
+                  :maxlength="5"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.standardOperationTime.pointstominutesrate')"
+                :label="t('entity.standardoperationtime.pointstominutesrate')"
                 name="pointsToMinutesRate"
               >
                 <a-input-number
                   v-model:value="formState.pointsToMinutesRate"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.pointstominutesrate') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.pointstominutesrate') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.standardOperationTime.convertedminutes')"
+                :label="t('entity.standardoperationtime.convertedminutes')"
                 name="convertedMinutes"
               >
                 <a-input-number
                   v-model:value="formState.convertedMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.convertedminutes') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.convertedminutes') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.standardOperationTime.effectivedate')"
+                :label="t('entity.standardoperationtime.effectivedate')"
                 name="effectiveDate"
               >
                 <a-date-picker
                   v-model:value="formState.effectiveDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.effectivedate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.effectivedate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.standardOperationTime.expirydate')"
+                :label="t('entity.standardoperationtime.expirydate')"
                 name="expiryDate"
               >
                 <a-date-picker
                   v-model:value="formState.expiryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.expirydate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.expirydate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('entity.standardoperationtime.extfield')"
+                name="ExtField"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
-                  allow-clear
+                <a-textarea
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.standardoperationtime.extfield') })"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -254,15 +259,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -308,7 +314,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","materialCode","workCenter","operationDesc","standardMinutes","timeUnit","standardShorts","pointsUnit","pointsToMinutesRate","convertedMinutes","effectiveDate","expiryDate","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","materialCode","workCenter","operationDesc","standardMinutes","timeUnit","standardShorts","pointsUnit","pointsToMinutesRate","convertedMinutes","effectiveDate","expiryDate","ExtField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -319,7 +325,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -327,18 +333,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 standardOperationTimeId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.standardOperationTimeId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -357,70 +379,94 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.plantcode') }),
       trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.materialcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.materialcode') }),
       trigger: 'blur'
     }
   ],
   workCenter: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.workcenter') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.workcenter') }),
       trigger: 'blur'
     }
   ],
-  standardMinutes: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.standardminutes') }),
-      trigger: 'change'
-    }
-  ],
+  standardMinutes: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.standardminutes') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.standardminutes') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   timeUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.timeunit') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.timeunit') }),
       trigger: 'blur'
     }
   ],
-  standardShorts: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.standardshorts') }),
-      trigger: 'change'
-    }
-  ],
+  standardShorts: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.standardshorts') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.standardshorts') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   pointsUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.pointsunit') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.pointsunit') }),
       trigger: 'blur'
     }
   ],
-  pointsToMinutesRate: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.pointstominutesrate') }),
-      trigger: 'change'
-    }
-  ],
-  convertedMinutes: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.convertedminutes') }),
-      trigger: 'change'
-    }
-  ],
+  pointsToMinutesRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.pointstominutesrate') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.pointstominutesrate') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  convertedMinutes: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.convertedminutes') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.convertedminutes') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   effectiveDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.effectivedate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.effectivedate') }),
       trigger: 'change'
     }
   ],
@@ -434,15 +480,38 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('standardMinutes' in payload) {
+    const rawstandardMinutes = payload.standardMinutes
+    payload.standardMinutes = typeof rawstandardMinutes === 'number' ? rawstandardMinutes : Number(rawstandardMinutes)
+  }
+  if ('standardShorts' in payload) {
+    const rawstandardShorts = payload.standardShorts
+    payload.standardShorts = typeof rawstandardShorts === 'number' ? rawstandardShorts : Number(rawstandardShorts)
+  }
+  if ('pointsToMinutesRate' in payload) {
+    const rawpointsToMinutesRate = payload.pointsToMinutesRate
+    payload.pointsToMinutesRate = typeof rawpointsToMinutesRate === 'number' ? rawpointsToMinutesRate : Number(rawpointsToMinutesRate)
+  }
+  if ('convertedMinutes' in payload) {
+    const rawconvertedMinutes = payload.convertedMinutes
+    payload.convertedMinutes = typeof rawconvertedMinutes === 'number' ? rawconvertedMinutes : Number(rawconvertedMinutes)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.standardOperationTimeId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/announcement
 // 文件名称：announcement.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/announcement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -41,9 +41,7 @@ export function getAnnouncementList(queryDto: any): Promise<TaktPagedResult<Anno
   return request<TaktPagedResult<Announcement>>({
     url: `${ANNOUNCEMENT_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -113,7 +111,7 @@ export function deleteAnnouncementBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新公告通知状态
- * @param {AnnouncementStatus} dto 状态 DTO（TaktAnnouncementStatus 枚举）
+ * @param {AnnouncementStatus} dto 状态 DTO
  * @returns {Promise<Announcement>} 公告通知DTO
  */
 export function updateAnnouncementStatus(dto: AnnouncementStatus): Promise<Announcement> {
@@ -121,18 +119,6 @@ export function updateAnnouncementStatus(dto: AnnouncementStatus): Promise<Annou
     url: `${ANNOUNCEMENT_API_BASE}/status`,
     method: 'put',
     data: dto,
-  });
-}
-
-/**
- * 提交公告审批（发起工作流）
- * @param {string} id 公告 ID
- * @returns {Promise<Announcement>} 公告 DTO
- */
-export function submitAnnouncementForApproval(id: string): Promise<Announcement> {
-  return request<Announcement>({
-    url: `${ANNOUNCEMENT_API_BASE}/${id}/submit-approval`,
-    method: 'post',
   });
 }
 
@@ -212,7 +198,7 @@ export function exportAnnouncement(
     url: `${ANNOUNCEMENT_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

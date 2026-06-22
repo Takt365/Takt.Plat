@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Personnel;
+using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -28,26 +29,32 @@ namespace Takt.Application.Services.HumanResource.Personnel;
 /// <summary>
 /// 员工离职应用服务
 /// </summary>
-public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResignationService
+public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResignationService, ITaktApprovalFlowCompletedContributor
 {
+    private static readonly int ApprovedStatus = (int)TaktApprovalStatus.Approved;
+
     private readonly ITaktApprovalRepository<TaktEmployeeResignation> _employeeResignationRepository;
+    private readonly ITaktCompanyRepository<TaktEmployee> _employeeRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="employeeResignationRepository">员工离职仓储</param>
+    /// <param name="employeeRepository">员工仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEmployeeResignationService(
         ITaktApprovalRepository<TaktEmployeeResignation> employeeResignationRepository,
+        ITaktCompanyRepository<TaktEmployee> employeeRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _employeeResignationRepository = employeeResignationRepository;
+        _employeeRepository = employeeRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -94,7 +101,7 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
         EnsureThreeLayerContext();
         var list = await _employeeResignationRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.Reason,
+            x => x.Reason ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -258,7 +265,7 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
                 || SqlFunc.ToString(x.ResignationType).Contains(keywords)
                 || (x.Reason != null && x.Reason.Contains(keywords))
                 || (x.HandoverNotes != null && x.HandoverNotes.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ApplyDate).Contains(keywords)
                 || SqlFunc.ToString(x.LastWorkDate).Contains(keywords)
@@ -287,9 +294,9 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
             exp = exp.And(x => x.HandoverNotes != null && x.HandoverNotes.Contains(queryDto.HandoverNotes));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))
@@ -338,5 +345,47 @@ public class TaktEmployeeResignationService : TaktServiceBase, ITaktEmployeeResi
         }
 
         return exp.ToExpression();
+    }
+
+    /// <inheritdoc />
+    public string RelatedTableName => TaktApprovalEntityTableNames.Of<TaktEmployeeResignation>();
+
+    /// <inheritdoc />
+    public Task OnApprovalFlowCompletedAsync(TaktApprovalFlowCompletedContext context) =>
+        OnEmployeeResignationFlowCompletedAsync(context);
+
+    /// <summary>
+    /// 离职审批通过后回写员工主档离职投影
+    /// </summary>
+    /// <param name="context">回写上下文</param>
+    /// <returns>异步任务</returns>
+    private async Task OnEmployeeResignationFlowCompletedAsync(TaktApprovalFlowCompletedContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        if (context.EntityId <= 0)
+        {
+            return;
+        }
+        var resignation = await _employeeResignationRepository.GetByIdAsync(context.EntityId);
+        if (resignation == null
+            || resignation.TenantCode != context.TenantCode
+            || resignation.CompanyCode != context.CompanyCode
+            || resignation.ApprovalStatus != ApprovedStatus)
+        {
+            return;
+        }
+        var employee = await _employeeRepository.GetByIdAsync(resignation.EmployeeId);
+        if (employee == null
+            || employee.TenantCode != context.TenantCode
+            || employee.CompanyCode != context.CompanyCode)
+        {
+            ThrowBusinessException("员工不存在或无权访问");
+        }
+        employee.TerminationDate = resignation.TerminationDate;
+        employee.LastWorkDate = resignation.LastWorkDate;
+        employee.ResignationType = resignation.ResignationType;
+        employee.ResignationReason = resignation.Reason;
+        employee.EmployeeStatus = resignation.ResignationType == 3 ? 4 : 3;
+        await _employeeRepository.UpdateAsync(employee);
     }
 }

@@ -403,22 +403,22 @@
                 :label="t('entity.news.status')"
                 name="newsStatus"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.newsStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.news.status') })"
-                  size="small"
+                  dict-type="sys_publish_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.news.status') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('common.page.entity.ExtField')"
+                name="ExtField"
               >
                 <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                   size="small"
                   allow-clear
                 />
@@ -540,10 +540,10 @@
                 style="width: 100%"
               />
             </template>
-            <template v-else-if="column.key === 'extFieldJson'">
+            <template v-else-if="column.key === 'ExtField'">
               <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                v-model:value="record.ExtField"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                 size="small"
                 allow-clear
               />
@@ -740,10 +740,10 @@
                 allow-clear
               />
             </template>
-            <template v-else-if="column.key === 'extFieldJson'">
+            <template v-else-if="column.key === 'ExtField'">
               <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                v-model:value="record.ExtField"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                 size="small"
                 allow-clear
               />
@@ -832,10 +832,10 @@
                 allow-clear
               />
             </template>
-            <template v-else-if="column.key === 'extFieldJson'">
+            <template v-else-if="column.key === 'ExtField'">
               <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                v-model:value="record.ExtField"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                 size="small"
                 allow-clear
               />
@@ -924,10 +924,10 @@
                 allow-clear
               />
             </template>
-            <template v-else-if="column.key === 'extFieldJson'">
+            <template v-else-if="column.key === 'ExtField'">
               <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                v-model:value="record.ExtField"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                 size="small"
                 allow-clear
               />
@@ -1024,10 +1024,10 @@
                 allow-clear
               />
             </template>
-            <template v-else-if="column.key === 'extFieldJson'">
+            <template v-else-if="column.key === 'ExtField'">
               <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                v-model:value="record.ExtField"
+                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                 size="small"
                 allow-clear
               />
@@ -1093,7 +1093,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","newsCode","newsCategory","newsTitle","newsSummary","tags","newsContent","newsCoverImage","isTop","isRecommended","effectiveTime","expireTime","readCount","likeCount","commentCount","favoriteCount","shareCount","attachmentCount","flowInstanceId","deptId","deptName","publisherId","publisherName","publishTime","sortOrder","newsStatus","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","newsCode","newsCategory","newsTitle","newsSummary","tags","newsContent","newsCoverImage","isTop","isRecommended","effectiveTime","expireTime","readCount","likeCount","commentCount","favoriteCount","shareCount","attachmentCount","flowInstanceId","deptId","deptName","publisherId","publisherName","publishTime","sortOrder","newsStatus","ExtField","remark"]
 
 /** newsAttachment 子表行（表单 Tab 内嵌） */
 const childNewsAttachmentRows = ref<Record<string, unknown>[]>([])
@@ -1171,9 +1171,9 @@ const newsAttachmentFormColumns = computed(() => [
     width: 140,
   },
   {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
+    title: t('common.page.entity.ExtField'),
+    dataIndex: 'ExtField',
+    key: 'ExtField',
     width: 140,
   },
   {
@@ -1299,9 +1299,9 @@ const newsLikeFormColumns = computed(() => [
     width: 140,
   },
   {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
+    title: t('common.page.entity.ExtField'),
+    dataIndex: 'ExtField',
+    key: 'ExtField',
     width: 140,
   },
   {
@@ -1357,9 +1357,9 @@ const newsReadFormColumns = computed(() => [
     width: 140,
   },
   {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
+    title: t('common.page.entity.ExtField'),
+    dataIndex: 'ExtField',
+    key: 'ExtField',
     width: 140,
   },
   {
@@ -1415,9 +1415,9 @@ const newsFavoriteFormColumns = computed(() => [
     width: 140,
   },
   {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
+    title: t('common.page.entity.ExtField'),
+    dataIndex: 'ExtField',
+    key: 'ExtField',
     width: 140,
   },
   {
@@ -1479,9 +1479,9 @@ const newsShareFormColumns = computed(() => [
     width: 140,
   },
   {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
+    title: t('common.page.entity.ExtField'),
+    dataIndex: 'ExtField',
+    key: 'ExtField',
     width: 140,
   },
   {
@@ -1540,7 +1540,7 @@ function handleAddNewsAttachmentRow() {
       fileType: '',
       fileExtension: '',
       sortOrder: 0,
-      extFieldJson: '',
+      ExtField: '',
   })
 }
 
@@ -1582,7 +1582,7 @@ function handleAddNewsLikeRow() {
       userId: '',
       userName: '',
       likeTime: '',
-      extFieldJson: '',
+      ExtField: '',
       remark: '',
   })
 }
@@ -1602,7 +1602,7 @@ function handleAddNewsReadRow() {
       userId: '',
       userName: '',
       readTime: '',
-      extFieldJson: '',
+      ExtField: '',
       remark: '',
   })
 }
@@ -1622,7 +1622,7 @@ function handleAddNewsFavoriteRow() {
       userId: '',
       userName: '',
       favoriteTime: '',
-      extFieldJson: '',
+      ExtField: '',
       remark: '',
   })
 }
@@ -1643,7 +1643,7 @@ function handleAddNewsShareRow() {
       userName: '',
       shareChannel: '',
       shareTime: '',
-      extFieldJson: '',
+      ExtField: '',
       remark: '',
   })
 }

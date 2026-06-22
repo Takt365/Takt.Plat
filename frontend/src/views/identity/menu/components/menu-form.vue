@@ -160,7 +160,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.menuStatus"
-                  dict-type="sys_normal_disable"
+                  dict-type="sys_normal_disable_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.status') })"
                 />
               </a-form-item>
@@ -191,7 +191,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isVisible"
-                  dict-type="sys_yes_no"
+                  dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.isvisible') })"
                 />
               </a-form-item>
@@ -203,7 +203,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isCached"
-                  dict-type="sys_yes_no"
+                  dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.iscached') })"
                 />
               </a-form-item>
@@ -217,7 +217,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isExternal"
-                  dict-type="sys_yes_no"
+                  dict-type="sys_yes_no_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.isexternal') })"
                 />
               </a-form-item>

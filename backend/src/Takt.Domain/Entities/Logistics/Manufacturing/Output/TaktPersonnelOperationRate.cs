@@ -208,4 +208,10 @@ public class TaktPersonnelOperationRate : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int Status { get; set; } = 0;
+
+    /// <summary>
+    /// 人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId))]
+    public List<TaktPersonnelOperationRateChangeLog>? ChangeLogs { get; set; }
 }

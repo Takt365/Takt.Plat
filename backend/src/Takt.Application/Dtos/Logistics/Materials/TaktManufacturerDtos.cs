@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktManufacturerDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Manufacturer 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktManufacturer 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Materials;
 
@@ -144,7 +143,7 @@ public class TaktManufacturerDto : TaktCompanyDtoBase
     /// <summary>
     /// 制造商状态（1=启用，0=禁用）
     /// </summary>
-    public int ManufacturerStatus { get; set; }
+    public int ManufacturerStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -307,7 +306,7 @@ public class TaktManufacturerQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -449,12 +448,7 @@ public class TaktManufacturerCreateDto
     /// <summary>
     /// 制造商状态（1=启用，0=禁用）
     /// </summary>
-    public int ManufacturerStatus { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int ManufacturerStatus { get; set; } = 0;
 
     /// <summary>
     /// 导航属性：制造商物料明细列表（子表，级联保存）
@@ -464,7 +458,7 @@ public class TaktManufacturerCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -514,7 +508,7 @@ public class TaktManufacturerStatusDto
     /// 制造商状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "制造商状态（1=启用，0=禁用）不能为空")]
-    public int ManufacturerStatus { get; set; }
+    public int ManufacturerStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -623,7 +617,7 @@ public class TaktManufacturerTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -715,7 +709,7 @@ public class TaktManufacturerImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -853,7 +847,7 @@ public class TaktManufacturerExportDto
     /// <summary>
     /// 制造商状态（1=启用，0=禁用）
     /// </summary>
-    public int ManufacturerStatus { get; set; }
+    public int ManufacturerStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -863,7 +857,7 @@ public class TaktManufacturerExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

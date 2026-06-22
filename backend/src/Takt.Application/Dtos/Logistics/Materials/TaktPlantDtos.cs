@@ -476,7 +476,7 @@ public class TaktPlantQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -724,7 +724,7 @@ public class TaktPlantCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -818,7 +818,7 @@ public class TaktPlantTemplateDto
     /// <summary>
     /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂名称
@@ -878,7 +878,7 @@ public class TaktPlantTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -900,7 +900,7 @@ public class TaktPlantImportDto
     /// <summary>
     /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂名称
@@ -960,7 +960,7 @@ public class TaktPlantImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -1188,7 +1188,7 @@ public class TaktPlantExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

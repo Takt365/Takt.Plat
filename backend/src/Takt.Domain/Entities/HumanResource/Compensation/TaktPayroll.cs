@@ -55,7 +55,7 @@ public class TaktPayroll : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "expiry_date", ColumnDescription = "失效日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? ExpiryDate { get; set; }
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     [SugarColumn(ColumnName = "payroll_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PayrollStatus { get; set; } = 1;

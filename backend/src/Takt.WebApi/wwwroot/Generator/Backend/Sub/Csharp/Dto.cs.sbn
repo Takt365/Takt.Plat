@@ -30,7 +30,7 @@ public class {{ table.entity_class_name }}Dto : TaktDtosEntityBase
     public {{ table.entity_class_name }}Dto()
     {
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
         {{ col.csharp_column_name }} = string.Empty;
 {{~ end ~}}
 {{~ end ~}}
@@ -44,7 +44,7 @@ public class {{ table.entity_class_name }}Dto : TaktDtosEntityBase
     public long {{ table.entity_class_name | string.replace "Takt" "" }}Id { get; set; }
 
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" ~}}
     /// <summary>
     /// {{ col.comment }}
     /// </summary>
@@ -65,7 +65,7 @@ public class {{ table.entity_class_name }}QueryDto : TaktPagedQuery
     public {{ table.entity_class_name }}QueryDto()
     {
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_query == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_query == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
         {{ col.csharp_column_name }} = string.Empty;
 {{~ end ~}}
 {{~ end ~}}
@@ -73,7 +73,7 @@ public class {{ table.entity_class_name }}QueryDto : TaktPagedQuery
 
     // KeyWords 属性已从基类 TaktPagedQuery 继承，用于模糊查询
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_query == 1 ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_query == 1 ~}}
     /// <summary>
     /// {{ col.comment }}
     /// </summary>
@@ -94,15 +94,15 @@ public class {{ table.entity_class_name }}CreateDto
     public {{ table.entity_class_name }}CreateDto()
     {
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_create == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_create == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
         {{ col.csharp_column_name }} = string.Empty;
 {{~ end ~}}
 {{~ end ~}}
-        ExtFieldJson = string.Empty;
+        ExtField = string.Empty;
         Remark = string.Empty;
     }
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_create == 1 ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_create == 1 ~}}
     /// <summary>
     /// {{ col.comment }}
     /// </summary>
@@ -112,7 +112,7 @@ public class {{ table.entity_class_name }}CreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
     /// <summary>
     /// 备注
     /// </summary>
@@ -156,11 +156,11 @@ public class {{ table.entity_class_name }}UpdateDto
     public {{ table.entity_class_name }}UpdateDto()
     {
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_create == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_create == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
         {{ col.csharp_column_name }} = string.Empty;
 {{~ end ~}}
 {{~ end ~}}
-        ExtFieldJson = string.Empty;
+        ExtField = string.Empty;
         Remark = string.Empty;
     }
 
@@ -172,7 +172,7 @@ public class {{ table.entity_class_name }}UpdateDto
     public long {{ table.entity_class_name | string.replace "Takt" "" }}Id { get; set; }
 
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_create == 1 ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_create == 1 ~}}
     /// <summary>
     /// {{ col.comment }}
     /// </summary>
@@ -182,7 +182,7 @@ public class {{ table.entity_class_name }}UpdateDto
     /// <summary>
     /// 扩展字段JSON（不继承 TaktDtoBase，须显式声明）
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
     /// <summary>
     /// 备注（不继承 TaktDtoBase，须显式声明）
     /// </summary>
@@ -202,15 +202,15 @@ public class {{ table.entity_class_name }}TemplateDto
     public {{ table.entity_class_name }}TemplateDto()
     {
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_create == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_create == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
         {{ col.csharp_column_name }} = string.Empty;
 {{~ end ~}}
 {{~ end ~}}
-        ExtFieldJson = string.Empty;
+        ExtField = string.Empty;
         Remark = string.Empty;
     }
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_create == 1 ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_create == 1 ~}}
     /// <summary>
     /// {{ col.comment }}
     /// </summary>
@@ -220,7 +220,7 @@ public class {{ table.entity_class_name }}TemplateDto
     /// <summary>
     /// 扩展字段JSON（不继承 TaktDtoBase，须显式声明）
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
     /// <summary>
     /// 备注（不继承 TaktDtoBase，须显式声明）
     /// </summary>
@@ -239,15 +239,15 @@ public class {{ table.entity_class_name }}ImportDto
     public {{ table.entity_class_name }}ImportDto()
     {
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_create == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_create == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
         {{ col.csharp_column_name }} = string.Empty;
 {{~ end ~}}
 {{~ end ~}}
-        ExtFieldJson = string.Empty;
+        ExtField = string.Empty;
         Remark = string.Empty;
     }
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_create == 1 ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_create == 1 ~}}
     /// <summary>
     /// {{ col.comment }}
     /// </summary>
@@ -257,7 +257,7 @@ public class {{ table.entity_class_name }}ImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
     /// <summary>
     /// 备注
     /// </summary>
@@ -276,13 +276,13 @@ public class {{ table.entity_class_name }}ExportDto
     public {{ table.entity_class_name }}ExportDto()
     {
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_export == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_export == 1 && (col.csharp_data_type == "string" || col.csharp_data_type == "String") ~}}
         {{ col.csharp_column_name }} = string.Empty;
 {{~ end ~}}
 {{~ end ~}}
     }
 {{~ for col in columns ~}}
-{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtFieldJson" && col.csharp_column_name != "Remark" && col.is_export == 1 ~}}
+{{~ if col.csharp_column_name != "Id" && col.csharp_column_name != "ExtField" && col.csharp_column_name != "Remark" && col.is_export == 1 ~}}
     /// <summary>
     /// {{ col.comment }}
     /// </summary>

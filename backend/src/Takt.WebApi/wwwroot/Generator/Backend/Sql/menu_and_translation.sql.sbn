@@ -5,7 +5,7 @@
 -- 数据源格式：table.data_source =「数据库名:TenantCode」，如 Takt_000_Dev:000
 -- ========================================
 
-{{~ ds = table.data_source | string.default "" ~}}
+{{~ ds = table.data_source ?? "" ~}}
 {{~ ds_parts = ds | string.split ":" ~}}
 {{~ tenant_code = (ds_parts.size > 0 ? ds_parts[ds_parts.size - 1] : "000") | string.strip ~}}
 {{~ tenant_db = (ds_parts.size > 0 ? ds_parts[0] : "Takt_000_Dev") | string.strip ~}}
@@ -39,7 +39,7 @@ INSERT INTO {{ tenant_db }}.dbo.takt_identity_menu (
 INSERT INTO {{ tenant_db }}.dbo.takt_identity_menu (
   id, tenant_code, menu_code, menu_name, i18n_key, icon, parent_id, level, menu_path, is_leaf, menu_type, permission, route_path, component_path, sort_order, is_external, external_url, is_cached, is_visible, menu_status, is_built_in, description, created_by, created_at, is_deleted
 ) VALUES (
-  {{ btn.id }}, N'{{ tenant_code }}', N'{{ btn.menu_code | string.replace "'" "''" }}', N'{{ btn.menu_name | string.replace "'" "''" }}', N'{{ btn.menu_l10n_key | string.replace "'" "''" }}', N'', {{ table.sql_menu_id }}, 3, N'', 1, 2, N'{{ btn.permission | string.replace "'" "''" }}', N'', N'', {{ btn.order_num }}, 0, N'', 0, 1, 1, 0, N'', 0, GETDATE(), 0
+  {{ btn.id }}, N'{{ tenant_code }}', N'{{ btn.menu_code | string.replace "'" "''" }}', N'{{ btn.menu_name | string.replace "'" "''" }}', N'{{ btn.menu_l10n_key | string.replace "'" "''" }}', N'', {{ table.sql_menu_id }}, 3, N'', 1, 2, N'{{ btn.permission | string.replace "'" "''" }}', N'', N'', {{ btn.sort_order }}, 0, N'', 0, 1, 1, 0, N'', 0, GETDATE(), 0
 );
 {{~ end ~}}
 {{~ end ~}}

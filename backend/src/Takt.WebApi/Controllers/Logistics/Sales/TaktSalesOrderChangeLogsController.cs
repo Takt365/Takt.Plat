@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Sales
 // 文件名称：TaktSalesOrderChangeLogsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单变更记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktSalesOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:sales:salesorderchangelog:list", "销售订单变更记录列表")]
+    [TaktPermission("logistics:sales:order:list", "销售订单变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSalesOrderChangeLogListAsync([FromQuery] TaktSalesOrderChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSalesOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">销售订单变更记录ID</param>
     /// <returns>销售订单变更记录DTO</returns>
-    [TaktPermission("logistics:sales:salesorderchangelog:query", "销售订单变更记录详情")]
+    [TaktPermission("logistics:sales:order:query", "销售订单变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSalesOrderChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSalesOrderChangeLogsController : TaktControllerBase
     /// 获取销售订单变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:sales:salesorderchangelog:query", "销售订单变更记录选项")]
+    [TaktPermission("logistics:sales:order:query", "销售订单变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSalesOrderChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSalesOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>销售订单变更记录DTO</returns>
-    [TaktPermission("logistics:sales:salesorderchangelog:create", "创建销售订单变更记录")]
+    [TaktPermission("logistics:sales:order:create", "创建销售订单变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateSalesOrderChangeLogAsync([FromBody] TaktSalesOrderChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSalesOrderChangeLogsController : TaktControllerBase
     /// <param name="id">销售订单变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>销售订单变更记录DTO</returns>
-    [TaktPermission("logistics:sales:salesorderchangelog:update", "更新销售订单变更记录")]
+    [TaktPermission("logistics:sales:order:update", "更新销售订单变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSalesOrderChangeLogAsync(long id, [FromBody] TaktSalesOrderChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSalesOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">销售订单变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:sales:salesorderchangelog:delete", "删除销售订单变更记录")]
+    [TaktPermission("logistics:sales:order:delete", "删除销售订单变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSalesOrderChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSalesOrderChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:sales:salesorderchangelog:delete", "批量删除销售订单变更记录")]
+    [TaktPermission("logistics:sales:order:delete", "批量删除销售订单变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSalesOrderChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktSalesOrderChangeLogsController : TaktControllerBase
     /// 导出销售订单变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:sales:salesorderchangelog:export", "导出销售订单变更记录")]
+    [TaktPermission("logistics:sales:order:export", "导出销售订单变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSalesOrderChangeLogAsync([FromQuery] TaktSalesOrderChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

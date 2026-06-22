@@ -1,6 +1,6 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/manufacturing/bom/packaging/components -->
+<!-- 命名空间：@/views/logistics/materials/packaging/components -->
 <!-- 文件名称：packaging-form.vue -->
 <!-- 功能描述：Takt物料包装信息实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -73,8 +77,10 @@
                 <a-input
                   v-model:value="formState.plantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.plantcode') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.packagingId"
                 />
               </a-form-item>
             </a-col>
@@ -86,7 +92,23 @@
                 <a-input
                   v-model:value="formState.materialCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.materialcode') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.packagingId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.packaging.materialname')"
+                name="materialName"
+              >
+                <a-input
+                  v-model:value="formState.materialName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.materialname') })"
+                  show-count
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
@@ -99,8 +121,10 @@
                 <a-input
                   v-model:value="formState.hsCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.hscode') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.packagingId"
                 />
               </a-form-item>
             </a-col>
@@ -112,7 +136,8 @@
                 <a-input
                   v-model:value="formState.hsName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.hsname') })"
-                  size="small"
+                  show-count
+                  :maxlength="500"
                   allow-clear
                 />
               </a-form-item>
@@ -125,8 +150,10 @@
                 <a-input
                   v-model:value="formState.additionalCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.additionalcode') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.packagingId"
                 />
               </a-form-item>
             </a-col>
@@ -138,21 +165,10 @@
                 <a-input
                   v-model:value="formState.originCountryRegionCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.origincountryregioncode') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.packaging.origincountryregionname')"
-                name="originCountryRegionName"
-              >
-                <a-input
-                  v-model:value="formState.originCountryRegionName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.origincountryregionname') })"
-                  size="small"
-                  allow-clear
+                  :disabled="!!formData?.packagingId"
                 />
               </a-form-item>
             </a-col>
@@ -168,14 +184,30 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
+                :label="t('entity.packaging.origincountryregionname')"
+                name="originCountryRegionName"
+              >
+                <a-input
+                  v-model:value="formState.originCountryRegionName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.origincountryregionname') })"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="t('entity.packaging.destinationcountryregioncode')"
                 name="destinationCountryRegionCode"
               >
                 <a-input
                   v-model:value="formState.destinationCountryRegionCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.destinationcountryregioncode') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.packagingId"
                 />
               </a-form-item>
             </a-col>
@@ -187,7 +219,8 @@
                 <a-input
                   v-model:value="formState.destinationCountryRegionName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.destinationcountryregionname') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -200,8 +233,10 @@
                 <a-input
                   v-model:value="formState.regulatoryConditionCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.regulatoryconditioncode') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.packagingId"
                 />
               </a-form-item>
             </a-col>
@@ -213,7 +248,8 @@
                 <a-input
                   v-model:value="formState.tariffRateType"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.tariffratetype') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -226,7 +262,6 @@
                 <a-input-number
                   v-model:value="formState.grossWeight"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.grossweight') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -239,7 +274,6 @@
                 <a-input-number
                   v-model:value="formState.netWeight"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.netweight') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -252,7 +286,8 @@
                 <a-input
                   v-model:value="formState.weightUnit"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.weightunit') })"
-                  size="small"
+                  show-count
+                  :maxlength="10"
                   allow-clear
                 />
               </a-form-item>
@@ -265,7 +300,6 @@
                 <a-input-number
                   v-model:value="formState.businessVolume"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.businessvolume') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -278,20 +312,8 @@
                 <a-input
                   v-model:value="formState.volumeUnit"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.volumeunit') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.packaging.sizedimension')"
-                name="sizeDimension"
-              >
-                <a-input
-                  v-model:value="formState.sizeDimension"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.sizedimension') })"
-                  size="small"
+                  show-count
+                  :maxlength="10"
                   allow-clear
                 />
               </a-form-item>
@@ -306,7 +328,21 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.packaging.sizedimension')"
+                name="sizeDimension"
+              >
+                <a-input
+                  v-model:value="formState.sizeDimension"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.sizedimension') })"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.packaging.type')"
                 name="packagingType"
@@ -314,12 +350,13 @@
                 <a-input
                   v-model:value="formState.packagingType"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.type') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.packaging.packingunit')"
                 name="packingUnit"
@@ -327,12 +364,13 @@
                 <a-input
                   v-model:value="formState.packingUnit"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.packingunit') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.packaging.quantityperpacking')"
                 name="quantityPerPacking"
@@ -340,12 +378,11 @@
                 <a-input-number
                   v-model:value="formState.quantityPerPacking"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.quantityperpacking') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.packaging.spec')"
                 name="packagingSpec"
@@ -353,7 +390,8 @@
                 <a-input
                   v-model:value="formState.packagingSpec"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.spec') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -367,32 +405,31 @@
                   v-model:value="formState.packagingDescription"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.packaging.description') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.packaging.sortorder')"
-                name="sortOrder"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.packaging.sortorder') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
-              >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -405,15 +442,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -421,12 +459,13 @@
 <script setup lang="ts">
 /**
  * Takt物料包装信息实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
- * @module views/logistics/manufacturing/bom/packaging/components
+ * @module views/logistics/materials/packaging/components
  */
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { PackagingCreate } from '@/types/logistics/manufacturing/bom/packaging'
+import type { PackagingCreate } from '@/types/logistics/materials/packaging'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -459,7 +498,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","materialCode","hsCode","hsName","additionalCode","originCountryRegionCode","originCountryRegionName","destinationCountryRegionCode","destinationCountryRegionName","regulatoryConditionCode","tariffRateType","grossWeight","netWeight","weightUnit","businessVolume","volumeUnit","sizeDimension","packagingType","packingUnit","quantityPerPacking","packagingSpec","packagingDescription","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","materialCode","materialName","hsCode","hsName","additionalCode","originCountryRegionCode","originCountryRegionName","destinationCountryRegionCode","destinationCountryRegionName","regulatoryConditionCode","tariffRateType","grossWeight","netWeight","weightUnit","businessVolume","volumeUnit","sizeDimension","packagingType","packingUnit","quantityPerPacking","packagingSpec","packagingDescription","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -470,7 +509,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -478,18 +517,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 packagingId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.packagingId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -505,10 +560,24 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.packaging.plantcode') }),
+      trigger: 'blur'
+    }
+  ],
   materialCode: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.packaging.materialcode') }),
+      trigger: 'blur'
+    }
+  ],
+  materialName: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.packaging.materialname') }),
       trigger: 'blur'
     }
   ],
@@ -540,13 +609,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.packaging.sortorder') }),
-      trigger: 'change'
-    }
-  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -557,15 +619,38 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('grossWeight' in payload) {
+    const rawgrossWeight = payload.grossWeight
+    payload.grossWeight = typeof rawgrossWeight === 'number' ? rawgrossWeight : Number(rawgrossWeight)
+  }
+  if ('netWeight' in payload) {
+    const rawnetWeight = payload.netWeight
+    payload.netWeight = typeof rawnetWeight === 'number' ? rawnetWeight : Number(rawnetWeight)
+  }
+  if ('businessVolume' in payload) {
+    const rawbusinessVolume = payload.businessVolume
+    payload.businessVolume = typeof rawbusinessVolume === 'number' ? rawbusinessVolume : Number(rawbusinessVolume)
+  }
+  if ('quantityPerPacking' in payload) {
+    const rawquantityPerPacking = payload.quantityPerPacking
+    payload.quantityPerPacking = typeof rawquantityPerPacking === 'number' ? rawquantityPerPacking : Number(rawquantityPerPacking)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.packagingId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

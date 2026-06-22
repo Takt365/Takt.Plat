@@ -1,11 +1,35 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 脚本名称：generate-dict-i18n-seed.cjs
-// 功能描述：从 TaktDictDataSeedData.cs 生成 TaktDictI18nSeedData.cs（dict.* 翻译键）
+// 功能描述：从 TaktDictDataSeedData.cs 全量生成 TaktDictI18nSeedData.cs（dict.* 翻译键）
+// TranslationText：DictLabel + 语言后缀（en-US/_us、ja-JP/_jp、zh-CN/_cn、zh-HK/_hk）
+// 用法: node scripts/generate-dict-i18n-seed.cjs [--all|-all]
 // ========================================
 
 const fs = require('fs');
 const path = require('path');
+const {
+  parseAllOnlyGenerateArgs,
+  TRANSLATION_RESOURCE_TYPE_FRONTEND,
+} = require('./generate-script-common.cjs');
+
+function printUsage() {
+  console.log(`
+用法:
+  node scripts/generate-dict-i18n-seed.cjs [--all|-all]
+
+说明:
+  - 固定从 TaktDictDataSeedData.cs 全量生成 dict.* 翻译种子
+  - 仅支持无参或 --all / -all，不支持其它参数
+
+示例:
+  node scripts/generate-dict-i18n-seed.cjs
+  node scripts/generate-dict-i18n-seed.cjs --all
+`);
+}
+
+parseAllOnlyGenerateArgs(printUsage);
+console.log('🚀 全量生成字典 i18n 种子（--all）...\n');
 
 const root = path.join(__dirname, '..');
 const dictSeedPath = path.join(
@@ -52,24 +76,53 @@ if (unique.length === 0) {
 
 const cultures = ['en-US', 'ja-JP', 'zh-CN', 'zh-HK'];
 
+/** 各语言 TranslationText 后缀（与 DictLabel 基准文案拼接） */
+const CULTURE_TRANSLATION_SUFFIX = {
+  'en-US': '_us',
+  'ja-JP': '_jp',
+  'zh-CN': '',
+  'zh-HK': '_hk',
+};
+
 /** @param {string} s */
 function esc(s) {
   return (s || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 }
 
-/** @param {{ dictLabel: string; dictValue: string }} item @param {string} culture */
+/**
+ * 为 TranslationText 追加语言后缀（如 低 → 低_us）
+ * @param {string} text 基准文案
+ * @param {string} culture BCP47
+ * @returns {string}
+ */
+function withCultureTranslationSuffix(text, culture) {
+  const base = (text || '').trim();
+  if (!base) {
+    return base;
+  }
+  const suffix = CULTURE_TRANSLATION_SUFFIX[culture];
+  if (!suffix || base.endsWith(suffix)) {
+    return base;
+  }
+  return `${base}${suffix}`;
+}
+
+/**
+ * DictLabel 为基准；sys_culture_code 的 TranslationText 与 DictLabel 相同（本族语全球统一展示，不做 UI 语言后缀）
+ * @param {{ dictLabel: string, i18nKey: string }} item
+ * @param {string} culture
+ * @returns {string}
+ */
 function resolveTranslationText(item, culture) {
-  if (culture === 'zh-CN' || culture === 'zh-HK') {
-    return item.dictLabel;
+  if (item.i18nKey.startsWith('dict.sys.culture.code.')) {
+    return (item.dictLabel || '').trim();
   }
-  const value = item.dictValue.trim();
-  if (/^[A-Za-z][A-Za-z0-9_\-.,/ ]*$/.test(value) && !/^\d+$/.test(value)) {
-    return value;
-  }
-  return item.dictLabel;
+  return withCultureTranslationSuffix(item.dictLabel, culture);
 }
 
 const today = new Date().toISOString().slice(0, 10);
+const dictResourceGroup = 'Foundation';
+const dictResourceType = TRANSLATION_RESOURCE_TYPE_FRONTEND;
 const lines = [];
 
 lines.push('// ========================================');
@@ -200,10 +253,10 @@ lines.push('        translation.CultureId = cultureId;');
 lines.push('        translation.CultureCode = item.CultureCode;');
 lines.push('        translation.I18nKey = item.I18nKey;');
 lines.push('        translation.TranslationText = item.TranslationText;');
-lines.push('        translation.ResourceGroup = 8;');
-lines.push('        translation.ResourceType = 0;');
+lines.push(`        translation.ResourceGroup = "${dictResourceGroup}";`);
+lines.push(`        translation.ResourceType = "${dictResourceType}";`);
 lines.push('        translation.ContextNote = item.ContextNote;');
-lines.push('        translation.ExtFieldJson = null;');
+lines.push('        translation.ExtField = null;');
 lines.push('        translation.Remark = null;');
 lines.push('        translation.IsDeleted = 0;');
 lines.push('        translation.DeletedBy = null;');

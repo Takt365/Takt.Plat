@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailureMeetingsController.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityIssueMeetingsController.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题会议调查试验费用明细控制器
 // 
@@ -23,17 +23,17 @@ namespace Takt.WebApi.Controllers.Logistics.Quality.Cost;
 /// </summary>
 [ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "质量问题会议调查试验费用明细")]
-public class TaktQualityFailureMeetingsController : TaktControllerBase
+public class TaktQualityIssueMeetingsController : TaktControllerBase
 {
-    private readonly ITaktQualityFailureMeetingService _qualityFailureMeetingService;
+    private readonly ITaktQualityIssueMeetingService _qualityIssueMeetingService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="qualityFailureMeetingService">质量问题会议调查试验费用明细服务</param>
-    public TaktQualityFailureMeetingsController(ITaktQualityFailureMeetingService qualityFailureMeetingService)
+    /// <param name="qualityIssueMeetingService">质量问题会议调查试验费用明细服务</param>
+    public TaktQualityIssueMeetingsController(ITaktQualityIssueMeetingService qualityIssueMeetingService)
     {
-        _qualityFailureMeetingService = qualityFailureMeetingService;
+        _qualityIssueMeetingService = qualityIssueMeetingService;
     }
 
     /// <summary>
@@ -41,13 +41,13 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailuremeeting:list", "质量问题会议调查试验费用明细列表")]
+    [TaktPermission("logistics:quality:cost:issue:list", "质量问题会议调查试验费用明细列表")]
     [HttpGet("list")]
-    public async Task<IActionResult> GetQualityFailureMeetingListAsync([FromQuery] TaktQualityFailureMeetingQueryDto queryDto)
+    public async Task<IActionResult> GetQualityIssueMeetingListAsync([FromQuery] TaktQualityIssueMeetingQueryDto queryDto)
     {
         try
         {
-            var result = await _qualityFailureMeetingService.GetQualityFailureMeetingListAsync(queryDto);
+            var result = await _qualityIssueMeetingService.GetQualityIssueMeetingListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
         }
         catch (Exception ex)
@@ -61,13 +61,13 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">质量问题会议调查试验费用明细ID</param>
     /// <returns>质量问题会议调查试验费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailuremeeting:query", "质量问题会议调查试验费用明细详情")]
+    [TaktPermission("logistics:quality:cost:issue:query", "质量问题会议调查试验费用明细详情")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetQualityFailureMeetingByIdAsync(long id)
+    public async Task<IActionResult> GetQualityIssueMeetingByIdAsync(long id)
     {
         try
         {
-            var result = await _qualityFailureMeetingService.GetQualityFailureMeetingByIdAsync(id);
+            var result = await _qualityIssueMeetingService.GetQualityIssueMeetingByIdAsync(id);
             if (result == null)
             {
                 return NotFound("质量问题会议调查试验费用明细不存在");
@@ -84,13 +84,13 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
     /// 获取质量问题会议调查试验费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailuremeeting:query", "质量问题会议调查试验费用明细选项")]
+    [TaktPermission("logistics:quality:cost:issue:query", "质量问题会议调查试验费用明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQualityFailureMeetingOptionsAsync()
+    public async Task<IActionResult> GetQualityIssueMeetingOptionsAsync()
     {
         try
         {
-            var result = await _qualityFailureMeetingService.GetQualityFailureMeetingOptionsAsync();
+            var result = await _qualityIssueMeetingService.GetQualityIssueMeetingOptionsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -104,13 +104,13 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>质量问题会议调查试验费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailuremeeting:create", "创建质量问题会议调查试验费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:create", "创建质量问题会议调查试验费用明细")]
     [HttpPost]
-    public async Task<IActionResult> CreateQualityFailureMeetingAsync([FromBody] TaktQualityFailureMeetingCreateDto dto)
+    public async Task<IActionResult> CreateQualityIssueMeetingAsync([FromBody] TaktQualityIssueMeetingCreateDto dto)
     {
         try
         {
-            var result = await _qualityFailureMeetingService.CreateQualityFailureMeetingAsync(dto);
+            var result = await _qualityIssueMeetingService.CreateQualityIssueMeetingAsync(dto);
             return Success(result, "创建成功");
         }
         catch (Exception ex)
@@ -125,13 +125,13 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
     /// <param name="id">质量问题会议调查试验费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>质量问题会议调查试验费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailuremeeting:update", "更新质量问题会议调查试验费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:update", "更新质量问题会议调查试验费用明细")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateQualityFailureMeetingAsync(long id, [FromBody] TaktQualityFailureMeetingUpdateDto dto)
+    public async Task<IActionResult> UpdateQualityIssueMeetingAsync(long id, [FromBody] TaktQualityIssueMeetingUpdateDto dto)
     {
         try
         {
-            var result = await _qualityFailureMeetingService.UpdateQualityFailureMeetingAsync(id, dto);
+            var result = await _qualityIssueMeetingService.UpdateQualityIssueMeetingAsync(id, dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)
@@ -145,13 +145,13 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">质量问题会议调查试验费用明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailuremeeting:delete", "删除质量问题会议调查试验费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:delete", "删除质量问题会议调查试验费用明细")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteQualityFailureMeetingByIdAsync(long id)
+    public async Task<IActionResult> DeleteQualityIssueMeetingByIdAsync(long id)
     {
         try
         {
-            await _qualityFailureMeetingService.DeleteQualityFailureMeetingByIdAsync(id);
+            await _qualityIssueMeetingService.DeleteQualityIssueMeetingByIdAsync(id);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -165,13 +165,13 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailuremeeting:delete", "批量删除质量问题会议调查试验费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:delete", "批量删除质量问题会议调查试验费用明细")]
     [HttpDelete("batch")]
-    public async Task<IActionResult> DeleteQualityFailureMeetingBatchAsync([FromBody] IEnumerable<long> ids)
+    public async Task<IActionResult> DeleteQualityIssueMeetingBatchAsync([FromBody] IEnumerable<long> ids)
     {
         try
         {
-            await _qualityFailureMeetingService.DeleteQualityFailureMeetingBatchAsync(ids);
+            await _qualityIssueMeetingService.DeleteQualityIssueMeetingBatchAsync(ids);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -184,13 +184,13 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailuremeeting:import", "获取质量问题会议调查试验费用明细导入模板")]
+    [TaktPermission("logistics:quality:cost:issue:import", "获取质量问题会议调查试验费用明细导入模板")]
     [HttpGet("template")]
-    public async Task<IActionResult> GetQualityFailureMeetingTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    public async Task<IActionResult> GetQualityIssueMeetingTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
         try
         {
-            var (resultFileName, content) = await _qualityFailureMeetingService.GetQualityFailureMeetingTemplateAsync(sheetName, templateName);
+            var (resultFileName, content) = await _qualityIssueMeetingService.GetQualityIssueMeetingTemplateAsync(sheetName, templateName);
             return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)
@@ -204,9 +204,9 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailuremeeting:import", "导入质量问题会议调查试验费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:import", "导入质量问题会议调查试验费用明细")]
     [HttpPost("import")]
-    public async Task<IActionResult> ImportQualityFailureMeetingAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    public async Task<IActionResult> ImportQualityIssueMeetingAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
         try
         {
@@ -216,7 +216,7 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
             }
 
             await using var stream = file.OpenReadStream();
-            var (success, fail, errors) = await _qualityFailureMeetingService.ImportQualityFailureMeetingAsync(stream, sheetName);
+            var (success, fail, errors) = await _qualityIssueMeetingService.ImportQualityIssueMeetingAsync(stream, sheetName);
             return Success(new
             {
                 SuccessCount = success,
@@ -234,13 +234,13 @@ public class TaktQualityFailureMeetingsController : TaktControllerBase
     /// 导出质量问题会议调查试验费用明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailuremeeting:export", "导出质量问题会议调查试验费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:export", "导出质量问题会议调查试验费用明细")]
     [HttpGet("export")]
-    public async Task<IActionResult> ExportQualityFailureMeetingAsync([FromQuery] TaktQualityFailureMeetingQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    public async Task<IActionResult> ExportQualityIssueMeetingAsync([FromQuery] TaktQualityIssueMeetingQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {
         try
         {
-            var (resultFileName, fileContent) = await _qualityFailureMeetingService.ExportQualityFailureMeetingAsync(query, sheetName, exportName);
+            var (resultFileName, fileContent) = await _qualityIssueMeetingService.ExportQualityIssueMeetingAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

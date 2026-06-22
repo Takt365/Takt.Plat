@@ -41,9 +41,7 @@ export function getBonusPlanList(queryDto: any): Promise<TaktPagedResult<BonusPl
   return request<TaktPagedResult<BonusPlan>>({
     url: `${BONUS_PLAN_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportBonusPlan(
     url: `${BONUS_PLAN_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantService.cs
-// 创建时间：2026-06-11
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议参与人应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Routine.ConferenceCenter;
 
@@ -38,7 +37,7 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
     /// 构造函数
     /// </summary>
     /// <param name="conferenceParticipantRepository">会议参与人仓储</param>
-    /// <param name="conferenceRepository">会议仓储</param>
+    /// <param name="conferenceRepository">会议中心仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
@@ -97,8 +96,8 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
     {
         EnsureThreeLayerContext();
         var list = await _conferenceParticipantRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.UserName,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.AttendanceStatus == 1,
+            x => x.UserName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -298,7 +297,7 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
     // ========================================
 
     /// <summary>
-    /// 同步会议参与人主表外键（ManyToOne → 会议）
+    /// 同步会议参与人主表外键（ManyToOne → 会议中心）
     /// </summary>
     /// <param name="entity">当前实体</param>
     /// <param name="dto">创建 DTO</param>
@@ -312,7 +311,7 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
         var master = await _conferenceRepository.GetByIdAsync(dto.ConferenceId);
         if (master == null)
         {
-            throw new TaktBusinessException("会议不存在");
+            throw new TaktBusinessException("会议中心不存在");
         }
         entity.ConferenceId = master.Id;
     }
@@ -339,7 +338,7 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
                 || SqlFunc.ToString(x.ParticipantRole).Contains(keywords)
                 || SqlFunc.ToString(x.AttendanceStatus).Contains(keywords)
                 || SqlFunc.ToString(x.CheckInMethod).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CheckInTime).Contains(keywords)
                 || SqlFunc.ToString(x.CheckOutTime).Contains(keywords)
@@ -377,9 +376,9 @@ public class TaktConferenceParticipantService : TaktServiceBase, ITaktConference
             exp = exp.And(x => x.CheckInMethod == queryDto.CheckInMethod);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

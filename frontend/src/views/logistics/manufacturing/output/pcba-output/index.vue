@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-manufacturing-output-pcba-output">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,64 +52,46 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'pcbaOutputId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getPcbaOutputId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getPcbaOutputId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="pcbaOutputId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.pcbaOutputDetail._self') }}</div>
-          <a-table
-            v-if="hasPcbaOutputDetailRows(record)"
-            :columns="pcbaOutputDetailExpandColumns"
-            :data-source="getPcbaOutputDetailRows(record)"
-            :row-key="(row: PcbaOutputDetail, index?: number) => row?.pcbaOutputDetailId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <PcbaOutputDetailPanel
+          ref="pcbaOutputDetailPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <PcbaOutputForm
+        :key="formData?.pcbaOutputId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -127,129 +109,143 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.pcbaOutput.plantcode')">
+      <a-form-item :label="t('entity.pcbaoutput.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodCategory')">
-      <a-form-item :label="t('entity.pcbaOutput.prodcategory')">
+      <a-form-item :label="t('entity.pcbaoutput.prodcategory')">
         <a-input
           v-model:value="advancedQueryForm.prodCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.prodcategory') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodcategory') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodDateStart')">
-      <a-form-item :label="t('entity.pcbaOutput.proddatestart')">
+      <a-form-item :label="t('entity.pcbaoutput.proddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.prodDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaOutput.proddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.proddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodDateEnd')">
-      <a-form-item :label="t('entity.pcbaOutput.proddateend')">
+      <a-form-item :label="t('entity.pcbaoutput.proddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.prodDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaOutput.proddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.proddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodLine')">
-      <a-form-item :label="t('entity.pcbaOutput.prodline')">
+      <a-form-item :label="t('entity.pcbaoutput.prodline')">
         <a-input
           v-model:value="advancedQueryForm.prodLine"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.prodline') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodline') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shiftNo')">
-      <a-form-item :label="t('entity.pcbaOutput.shiftno')">
+      <a-form-item :label="t('entity.pcbaoutput.shiftno')">
         <a-input-number
           v-model:value="advancedQueryForm.shiftNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.shiftno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.shiftno') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodOrderCode')">
-      <a-form-item :label="t('entity.pcbaOutput.prodordercode')">
+      <a-form-item :label="t('entity.pcbaoutput.prodordercode')">
         <a-input
           v-model:value="advancedQueryForm.prodOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.prodordercode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodordercode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('modelCode')">
-      <a-form-item :label="t('entity.pcbaOutput.modelcode')">
+      <a-form-item :label="t('entity.pcbaoutput.modelcode')">
         <a-input
           v-model:value="advancedQueryForm.modelCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.modelcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.modelcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="t('entity.pcbaOutput.batchno')">
+      <a-form-item :label="t('entity.pcbaoutput.batchno')">
         <a-input
           v-model:value="advancedQueryForm.batchNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.batchno') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.batchno') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.pcbaOutput.materialcode')">
+      <a-form-item :label="t('entity.pcbaoutput.materialcode')">
         <a-input
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.materialcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.materialcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodOrderQty')">
-      <a-form-item :label="t('entity.pcbaOutput.prodorderqty')">
+      <a-form-item :label="t('entity.pcbaoutput.prodorderqty')">
         <a-input-number
           v-model:value="advancedQueryForm.prodOrderQty"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.prodorderqty') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodorderqty') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('stdMinutes')">
-      <a-form-item :label="t('entity.pcbaOutput.stdminutes')">
+      <a-form-item :label="t('entity.pcbaoutput.stdminutes')">
         <a-input-number
           v-model:value="advancedQueryForm.stdMinutes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.stdminutes') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.stdminutes') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('stdShorts')">
-      <a-form-item :label="t('entity.pcbaOutput.stdshorts')">
+      <a-form-item :label="t('entity.pcbaoutput.stdshorts')">
         <a-input-number
           v-model:value="advancedQueryForm.stdShorts"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.stdshorts') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.stdshorts') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('stdCapacity')">
-      <a-form-item :label="t('entity.pcbaOutput.stdcapacity')">
+      <a-form-item :label="t('entity.pcbaoutput.stdcapacity')">
         <a-input-number
           v-model:value="advancedQueryForm.stdCapacity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaOutput.stdcapacity') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.stdcapacity') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -276,12 +272,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -290,8 +305,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -301,14 +318,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.pcbaOutput._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.pcbaoutput._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.pcbaOutput._self"
+        entity-i18n-key="entity.pcbaoutput._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -344,14 +361,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PcbaOutputForm from './components/pcba-output-form.vue'
+import PcbaOutputDetailPanel from './components/pcba-output-detail-panel.vue'
+import { providePcbaOutputMasterContext } from './composables/use-pcba-output-master-context'
 import { getPcbaOutputList, getPcbaOutputById, createPcbaOutput, updatePcbaOutput, deletePcbaOutputById, deletePcbaOutputBatch, getPcbaOutputTemplate, importPcbaOutput, exportPcbaOutput } from '@/api/logistics/manufacturing/output/pcba-output'
-import * as pcbaOutputDetailApi from '@/api/logistics/manufacturing/output/pcba-output-detail'
-import type { PcbaOutputDetail, PcbaOutputDetailQuery } from '@/types/logistics/manufacturing/output/pcba-output-detail'
-import type { PcbaOutput, PcbaOutputQuery, PcbaOutputCreate, PcbaOutputUpdate } from '@/types/logistics/manufacturing/output/pcba-output'
+import type { PcbaOutput, PcbaOutputQuery } from '@/types/logistics/manufacturing/output/pcba-output'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -359,7 +377,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktPcbaOutput')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.pcbaOutput._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.pcbaoutput._self') })
 )
 
 /** 快捷查询关键字 */
@@ -369,9 +387,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<PcbaOutput[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -386,11 +404,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<PcbaOutput>>({})
+const formData = ref<Partial<PcbaOutput> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -410,28 +430,28 @@ const advancedQueryForm = ref({
   stdCapacity: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.pcbaOutput.plantcode') },
-  { key: 'prodCategory', label: t('entity.pcbaOutput.prodcategory') },
-  { key: 'prodDateStart', label: t('entity.pcbaOutput.proddatestart') },
-  { key: 'prodDateEnd', label: t('entity.pcbaOutput.proddateend') },
-  { key: 'prodLine', label: t('entity.pcbaOutput.prodline') },
-  { key: 'shiftNo', label: t('entity.pcbaOutput.shiftno') },
-  { key: 'prodOrderCode', label: t('entity.pcbaOutput.prodordercode') },
-  { key: 'modelCode', label: t('entity.pcbaOutput.modelcode') },
-  { key: 'batchNo', label: t('entity.pcbaOutput.batchno') },
-  { key: 'materialCode', label: t('entity.pcbaOutput.materialcode') },
-  { key: 'prodOrderQty', label: t('entity.pcbaOutput.prodorderqty') },
-  { key: 'stdMinutes', label: t('entity.pcbaOutput.stdminutes') },
-  { key: 'stdShorts', label: t('entity.pcbaOutput.stdshorts') },
-  { key: 'stdCapacity', label: t('entity.pcbaOutput.stdcapacity') },
+  { key: 'plantCode', label: t('entity.pcbaoutput.plantcode') },
+  { key: 'prodCategory', label: t('entity.pcbaoutput.prodcategory') },
+  { key: 'prodDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.pcbaoutput.proddate')) },
+  { key: 'prodDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.pcbaoutput.proddate')) },
+  { key: 'prodLine', label: t('entity.pcbaoutput.prodline') },
+  { key: 'shiftNo', label: t('entity.pcbaoutput.shiftno') },
+  { key: 'prodOrderCode', label: t('entity.pcbaoutput.prodordercode') },
+  { key: 'modelCode', label: t('entity.pcbaoutput.modelcode') },
+  { key: 'batchNo', label: t('entity.pcbaoutput.batchno') },
+  { key: 'materialCode', label: t('entity.pcbaoutput.materialcode') },
+  { key: 'prodOrderQty', label: t('entity.pcbaoutput.prodorderqty') },
+  { key: 'stdMinutes', label: t('entity.pcbaoutput.stdminutes') },
+  { key: 'stdShorts', label: t('entity.pcbaoutput.stdshorts') },
+  { key: 'stdCapacity', label: t('entity.pcbaoutput.stdcapacity') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -449,76 +469,99 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = providePcbaOutputMasterContext()
+const pcbaOutputDetailPanelRef = ref<InstanceType<typeof PcbaOutputDetailPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {PcbaOutputQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<PcbaOutputQuery>): PcbaOutputQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: PcbaOutputQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof PcbaOutputQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('prodCategory', form.prodCategory)
+  assignTrimmed('prodDateStart', form.prodDateStart)
+  assignTrimmed('prodDateEnd', form.prodDateEnd)
+  assignTrimmed('prodLine', form.prodLine)
+  if (form.shiftNo !== undefined && form.shiftNo !== null) {
+    query.shiftNo = form.shiftNo
+  }
+  assignTrimmed('prodOrderCode', form.prodOrderCode)
+  assignTrimmed('modelCode', form.modelCode)
+  assignTrimmed('batchNo', form.batchNo)
+  assignTrimmed('materialCode', form.materialCode)
+  if (form.prodOrderQty !== undefined && form.prodOrderQty !== null) {
+    query.prodOrderQty = form.prodOrderQty
+  }
+  if (form.stdMinutes !== undefined && form.stdMinutes !== null) {
+    query.stdMinutes = form.stdMinutes
+  }
+  if (form.stdShorts !== undefined && form.stdShorts !== null) {
+    query.stdShorts = form.stdShorts
+  }
+  if (form.stdCapacity !== undefined && form.stdCapacity !== null) {
+    query.stdCapacity = form.stdCapacity
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：pcbaOutputDetail 列 */
-const pcbaOutputDetailExpandColumns = computed(() => [
-  {
-    title: t('entity.pcbaOutputDetail.pcbaoutputname'),
-    dataIndex: 'pcbaOutputName',
-    key: 'pcbaOutputName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaOutputDetail.prodordercode'),
-    dataIndex: 'prodOrderCode',
-    key: 'prodOrderCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaOutputDetail.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaOutputDetail.timeperiod'),
-    dataIndex: 'timePeriod',
-    key: 'timePeriod',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaOutputDetail.shiftno'),
-    dataIndex: 'shiftNo',
-    key: 'shiftNo',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaOutputDetail.pcbboardtype'),
-    dataIndex: 'pcbBoardType',
-    key: 'pcbBoardType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaOutputDetail.panelside'),
-    dataIndex: 'panelSide',
-    key: 'panelSide',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.pcbaOutputDetail.batchqty'),
-    dataIndex: 'batchQty',
-    key: 'batchQty',
-    ellipsis: true,
-  },
-])
 
-/** 读取主表行上的 pcbaOutputDetail 子表缓存 */
-function getPcbaOutputDetailRows(record: PcbaOutput): PcbaOutputDetail[] {
-  return (record as any)?.pcbaOutputDetails ?? []
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: PcbaOutput | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getPcbaOutputId(record) : ''
 }
 
-/** 主表行是否已加载 pcbaOutputDetail 子表 */
-function hasPcbaOutputDetailRows(record: PcbaOutput): boolean {
-  return getPcbaOutputDetailRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as PcbaOutput
+  const key = getPcbaOutputId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadPcbaOutputDetail(record: PcbaOutput): Promise<PcbaOutput | null> {
@@ -538,52 +581,6 @@ async function loadPcbaOutputDetail(record: PcbaOutput): Promise<PcbaOutput | nu
     return null
   }
 }
-/** 懒加载 pcbaOutputDetail 子表（PcbaOutputDetailQuery + pcbaOutputDetailApi，与主表 PcbaOutputQuery 分离） */
-async function loadPcbaOutputDetailForPcbaOutput(record: PcbaOutput): Promise<PcbaOutputDetail[]> {
-  const masterId = getPcbaOutputId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: PcbaOutputDetailQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      pcbaOutputId: masterId,
-    }
-    const result = await pcbaOutputDetailApi.getPcbaOutputDetailList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getPcbaOutputId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, pcbaOutputDetails: rows } as PcbaOutput
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensurePcbaOutputChildrenLoaded(record: PcbaOutput) {
-  if (!hasPcbaOutputDetailRows(record)) {
-    await loadPcbaOutputDetailForPcbaOutput(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: PcbaOutput) {
-  const key = getPcbaOutputId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensurePcbaOutputChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -598,7 +595,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'pcbaOutputId') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.plantcode'),
+    title: t('entity.pcbaoutput.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -607,7 +604,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.prodcategory'),
+    title: t('entity.pcbaoutput.prodcategory'),
     dataIndex: 'prodCategory',
     key: 'prodCategory',
     width: 120,
@@ -616,7 +613,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodCategory') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.proddate'),
+    title: t('entity.pcbaoutput.proddate'),
     dataIndex: 'prodDate',
     key: 'prodDate',
     width: 120,
@@ -625,7 +622,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodDate') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.prodline'),
+    title: t('entity.pcbaoutput.prodline'),
     dataIndex: 'prodLine',
     key: 'prodLine',
     width: 120,
@@ -634,7 +631,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodLine') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.shiftno'),
+    title: t('entity.pcbaoutput.shiftno'),
     dataIndex: 'shiftNo',
     key: 'shiftNo',
     width: 120,
@@ -643,7 +640,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'shiftNo') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.prodordercode'),
+    title: t('entity.pcbaoutput.prodordercode'),
     dataIndex: 'prodOrderCode',
     key: 'prodOrderCode',
     width: 120,
@@ -652,7 +649,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodOrderCode') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.modelcode'),
+    title: t('entity.pcbaoutput.modelcode'),
     dataIndex: 'modelCode',
     key: 'modelCode',
     width: 120,
@@ -661,7 +658,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'modelCode') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.batchno'),
+    title: t('entity.pcbaoutput.batchno'),
     dataIndex: 'batchNo',
     key: 'batchNo',
     width: 120,
@@ -670,7 +667,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'batchNo') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.materialcode'),
+    title: t('entity.pcbaoutput.materialcode'),
     dataIndex: 'materialCode',
     key: 'materialCode',
     width: 120,
@@ -679,7 +676,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'materialCode') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.prodorderqty'),
+    title: t('entity.pcbaoutput.prodorderqty'),
     dataIndex: 'prodOrderQty',
     key: 'prodOrderQty',
     width: 120,
@@ -688,7 +685,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodOrderQty') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.stdminutes'),
+    title: t('entity.pcbaoutput.stdminutes'),
     dataIndex: 'stdMinutes',
     key: 'stdMinutes',
     width: 120,
@@ -697,7 +694,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'stdMinutes') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.stdshorts'),
+    title: t('entity.pcbaoutput.stdshorts'),
     dataIndex: 'stdShorts',
     key: 'stdShorts',
     width: 120,
@@ -706,7 +703,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'stdShorts') ?? ''
   },
   {
-    title: t('entity.pcbaOutput.stdcapacity'),
+    title: t('entity.pcbaoutput.stdcapacity'),
     dataIndex: 'stdCapacity',
     key: 'stdCapacity',
     width: 120,
@@ -745,6 +742,7 @@ const getPcbaOutputId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getPcbaOutputField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -752,51 +750,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: PcbaOutput, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getPcbaOutputId(selectedRow.value) === getPcbaOutputId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: PcbaOutput[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: PcbaOutput) => ({
-  onClick: () => {
-    const key = getPcbaOutputId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getPcbaOutputId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: PcbaOutputQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getPcbaOutputList(params)
+    const res = await getPcbaOutputList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -814,7 +793,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -838,22 +817,23 @@ function handleReset() {
   stdCapacity: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.pcbaOutput._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.pcbaoutput._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: PcbaOutput) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.pcbaOutput._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.pcbaoutput._self') })
   formLoading.value = true
   try {
     const detail = await loadPcbaOutputDetail(record)
@@ -869,7 +849,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.pcbaOutput._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.pcbaoutput._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -887,12 +867,17 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updatePcbaOutput(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.pcbaOutput._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.pcbaoutput._self') }))
     } else {
       await createPcbaOutput(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.pcbaOutput._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.pcbaoutput._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  pcbaOutputDetailPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -902,6 +887,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -933,16 +920,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: PcbaOutputQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportPcbaOutput(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportPcbaOutput(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -961,10 +943,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.pcbaOutput._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.pcbaoutput._self') }))
   } catch (error: any) {
     logger.error('[PcbaOutput] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.pcbaOutput._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.pcbaoutput._self') }))
   } finally {
     loading.value = false
   }
@@ -973,12 +955,16 @@ async function handleExport() {
 async function handleDeleteOne(record: PcbaOutput) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.pcbaOutput._self'), name: t('common.tip.this.target', { target: t('entity.pcbaOutput._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.pcbaoutput._self'), name: t('common.tip.this.target', { target: t('entity.pcbaoutput._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deletePcbaOutputById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.pcbaOutput._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.pcbaoutput._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -986,18 +972,22 @@ async function handleDeleteOne(record: PcbaOutput) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.pcbaOutput._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.pcbaoutput._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.pcbaOutput._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.pcbaoutput._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deletePcbaOutputBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.pcbaOutput._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.pcbaoutput._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1010,7 +1000,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1032,7 +1022,7 @@ function handleAdvancedQueryReset() {
   stdCapacity: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1061,24 +1051,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-manufacturing-output-pcba-output {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

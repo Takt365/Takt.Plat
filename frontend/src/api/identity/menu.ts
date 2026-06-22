@@ -43,9 +43,7 @@ export function getMenuList(queryDto: any): Promise<TaktPagedResult<Menu>> {
   return request<TaktPagedResult<Menu>>({
     url: `${MENU_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -232,7 +230,7 @@ export function exportMenu(
     url: `${MENU_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

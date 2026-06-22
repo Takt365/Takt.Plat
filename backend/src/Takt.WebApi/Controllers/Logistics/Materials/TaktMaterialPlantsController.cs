@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Materials
-// 文件名称：TaktMaterialsController.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktMaterialPlantsController.cs
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：物料控制器
+// 功能描述：工厂物料控制器
 // 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,36 +18,36 @@ using Takt.Shared.Constants;
 namespace Takt.WebApi.Controllers.Logistics.Materials;
 
 /// <summary>
-/// 物料控制器
-/// 提供物料的 REST API
+/// 工厂物料控制器
+/// 提供工厂物料的 REST API
 /// </summary>
 [ApiModule(4, "后勤管理")]
-[Route("api/[controller]", Name = "物料")]
-public class TaktMaterialsController : TaktControllerBase
+[Route("api/[controller]", Name = "工厂物料")]
+public class TaktMaterialPlantsController : TaktControllerBase
 {
-    private readonly ITaktMaterialService _materialService;
+    private readonly ITaktMaterialPlantService _materialPlantService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="materialService">物料服务</param>
-    public TaktMaterialsController(ITaktMaterialService materialService)
+    /// <param name="materialPlantService">工厂物料服务</param>
+    public TaktMaterialPlantsController(ITaktMaterialPlantService materialPlantService)
     {
-        _materialService = materialService;
+        _materialPlantService = materialPlantService;
     }
 
     /// <summary>
-    /// 获取物料列表（分页）
+    /// 获取工厂物料列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:material:list", "物料列表")]
+    [TaktPermission("logistics:materials:materialplant:list", "工厂物料列表")]
     [HttpGet("list")]
-    public async Task<IActionResult> GetMaterialListAsync([FromQuery] TaktMaterialQueryDto queryDto)
+    public async Task<IActionResult> GetMaterialPlantListAsync([FromQuery] TaktMaterialPlantQueryDto queryDto)
     {
         try
         {
-            var result = await _materialService.GetMaterialListAsync(queryDto);
+            var result = await _materialPlantService.GetMaterialPlantListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
         }
         catch (Exception ex)
@@ -57,20 +57,20 @@ public class TaktMaterialsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 根据ID获取物料
+    /// 根据ID获取工厂物料
     /// </summary>
-    /// <param name="id">物料ID</param>
-    /// <returns>物料DTO</returns>
-    [TaktPermission("logistics:materials:material:query", "物料详情")]
+    /// <param name="id">工厂物料ID</param>
+    /// <returns>工厂物料DTO</returns>
+    [TaktPermission("logistics:materials:materialplant:query", "工厂物料详情")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetMaterialByIdAsync(long id)
+    public async Task<IActionResult> GetMaterialPlantByIdAsync(long id)
     {
         try
         {
-            var result = await _materialService.GetMaterialByIdAsync(id);
+            var result = await _materialPlantService.GetMaterialPlantByIdAsync(id);
             if (result == null)
             {
-                return NotFound("物料不存在");
+                return NotFound("工厂物料不存在");
             }
             return Success(result, "查询成功");
         }
@@ -84,13 +84,13 @@ public class TaktMaterialsController : TaktControllerBase
     /// 获取物料选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:material:query", "物料选项")]
+    [TaktPermission("logistics:materials:materialplant:query", "工厂物料选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMaterialOptionsAsync()
+    public async Task<IActionResult> GetMaterialPlantOptionsAsync()
     {
         try
         {
-            var result = await _materialService.GetMaterialOptionsAsync();
+            var result = await _materialPlantService.GetMaterialPlantOptionsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -100,17 +100,17 @@ public class TaktMaterialsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 创建物料
+    /// 创建工厂物料
     /// </summary>
     /// <param name="dto">创建DTO</param>
-    /// <returns>物料DTO</returns>
-    [TaktPermission("logistics:materials:material:create", "创建物料")]
+    /// <returns>工厂物料DTO</returns>
+    [TaktPermission("logistics:materials:materialplant:create", "创建工厂物料")]
     [HttpPost]
-    public async Task<IActionResult> CreateMaterialAsync([FromBody] TaktMaterialCreateDto dto)
+    public async Task<IActionResult> CreateMaterialPlantAsync([FromBody] TaktMaterialPlantCreateDto dto)
     {
         try
         {
-            var result = await _materialService.CreateMaterialAsync(dto);
+            var result = await _materialPlantService.CreateMaterialPlantAsync(dto);
             return Success(result, "创建成功");
         }
         catch (Exception ex)
@@ -120,18 +120,18 @@ public class TaktMaterialsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新物料
+    /// 更新工厂物料
     /// </summary>
-    /// <param name="id">物料ID</param>
+    /// <param name="id">工厂物料ID</param>
     /// <param name="dto">更新DTO</param>
-    /// <returns>物料DTO</returns>
-    [TaktPermission("logistics:materials:material:update", "更新物料")]
+    /// <returns>工厂物料DTO</returns>
+    [TaktPermission("logistics:materials:materialplant:update", "更新工厂物料")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateMaterialAsync(long id, [FromBody] TaktMaterialUpdateDto dto)
+    public async Task<IActionResult> UpdateMaterialPlantAsync(long id, [FromBody] TaktMaterialPlantUpdateDto dto)
     {
         try
         {
-            var result = await _materialService.UpdateMaterialAsync(id, dto);
+            var result = await _materialPlantService.UpdateMaterialPlantAsync(id, dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)
@@ -141,17 +141,17 @@ public class TaktMaterialsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 删除物料
+    /// 删除工厂物料
     /// </summary>
-    /// <param name="id">物料ID</param>
+    /// <param name="id">工厂物料ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:material:delete", "删除物料")]
+    [TaktPermission("logistics:materials:materialplant:delete", "删除工厂物料")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteMaterialByIdAsync(long id)
+    public async Task<IActionResult> DeleteMaterialPlantByIdAsync(long id)
     {
         try
         {
-            await _materialService.DeleteMaterialByIdAsync(id);
+            await _materialPlantService.DeleteMaterialPlantByIdAsync(id);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -161,17 +161,17 @@ public class TaktMaterialsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 批量删除物料
+    /// 批量删除工厂物料
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:material:delete", "批量删除物料")]
+    [TaktPermission("logistics:materials:materialplant:delete", "批量删除工厂物料")]
     [HttpDelete("batch")]
-    public async Task<IActionResult> DeleteMaterialBatchAsync([FromBody] IEnumerable<long> ids)
+    public async Task<IActionResult> DeleteMaterialPlantBatchAsync([FromBody] IEnumerable<long> ids)
     {
         try
         {
-            await _materialService.DeleteMaterialBatchAsync(ids);
+            await _materialPlantService.DeleteMaterialPlantBatchAsync(ids);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -181,17 +181,17 @@ public class TaktMaterialsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新物料状态
+    /// 更新工厂物料状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
-    /// <returns>物料DTO</returns>
-    [TaktPermission("logistics:materials:material:update", "更新物料状态")]
+    /// <param name="dto">状态 DTO</param>
+    /// <returns>工厂物料DTO</returns>
+    [TaktPermission("logistics:materials:materialplant:update", "更新工厂物料状态")]
     [HttpPut("status")]
-    public async Task<IActionResult> UpdateMaterialStatusAsync([FromBody] TaktMaterialStatusDto dto)
+    public async Task<IActionResult> UpdateMaterialPlantStatusAsync([FromBody] TaktMaterialPlantStatusDto dto)
     {
         try
         {
-            var result = await _materialService.UpdateMaterialStatusAsync(dto);
+            var result = await _materialPlantService.UpdateMaterialPlantStatusAsync(dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)
@@ -204,13 +204,13 @@ public class TaktMaterialsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:material:import", "获取物料导入模板")]
+    [TaktPermission("logistics:materials:materialplant:import", "获取工厂物料导入模板")]
     [HttpGet("template")]
-    public async Task<IActionResult> GetMaterialTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    public async Task<IActionResult> GetMaterialPlantTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
         try
         {
-            var (resultFileName, content) = await _materialService.GetMaterialTemplateAsync(sheetName, templateName);
+            var (resultFileName, content) = await _materialPlantService.GetMaterialPlantTemplateAsync(sheetName, templateName);
             return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)
@@ -220,13 +220,13 @@ public class TaktMaterialsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 导入物料
+    /// 导入工厂物料
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:materials:material:import", "导入物料")]
+    [TaktPermission("logistics:materials:materialplant:import", "导入工厂物料")]
     [HttpPost("import")]
-    public async Task<IActionResult> ImportMaterialAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    public async Task<IActionResult> ImportMaterialPlantAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
         try
         {
@@ -236,7 +236,7 @@ public class TaktMaterialsController : TaktControllerBase
             }
 
             await using var stream = file.OpenReadStream();
-            var (success, fail, errors) = await _materialService.ImportMaterialAsync(stream, sheetName);
+            var (success, fail, errors) = await _materialPlantService.ImportMaterialPlantAsync(stream, sheetName);
             return Success(new
             {
                 SuccessCount = success,
@@ -251,16 +251,16 @@ public class TaktMaterialsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 导出物料
+    /// 导出工厂物料
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:material:export", "导出物料")]
+    [TaktPermission("logistics:materials:materialplant:export", "导出工厂物料")]
     [HttpGet("export")]
-    public async Task<IActionResult> ExportMaterialAsync([FromQuery] TaktMaterialQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    public async Task<IActionResult> ExportMaterialPlantAsync([FromQuery] TaktMaterialPlantQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {
         try
         {
-            var (resultFileName, fileContent) = await _materialService.ExportMaterialAsync(query, sheetName, exportName);
+            var (resultFileName, fileContent) = await _materialPlantService.ExportMaterialPlantAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

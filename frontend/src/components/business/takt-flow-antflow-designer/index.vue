@@ -33,18 +33,18 @@
         />
         <span
           class="zoom-out"
-          title="缩小"
+          :title="t('workflow.designer.page.zoomout')"
           @click="zoomOut"
         />
         <span class="zoom-val">{{ nowVal }}%</span>
         <span
           class="zoom-in"
-          title="放大"
+          :title="t('workflow.designer.page.zoomin')"
           @click="zoomIn"
         />
         <span
           class="zoom-reset"
-          title="还原缩放"
+          :title="t('workflow.designer.page.zoomreset')"
           @click="zoomReset"
         >↺</span>
       </div>
@@ -78,7 +78,7 @@
             type="primary"
             @click="initStart"
           >
-            从发起人开始
+            {{ t('workflow.designer.page.startfrompromoter') }}
           </a-button>
         </div>
       </div>
@@ -239,7 +239,7 @@ function toProcessContent(tree: FlowTreeNode | null): string {
 }
 
 function initStart() {
-  nodeConfig.value = createStartNode(null)
+  nodeConfig.value = createStartNode(null, t)
   emitUpdate()
 }
 

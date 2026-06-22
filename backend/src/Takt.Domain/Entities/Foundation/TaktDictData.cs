@@ -36,11 +36,11 @@ public class TaktDictData : TaktTenantEntityBase
     /// <summary>
     /// 字典类型编码（关联 TaktDictType.DictTypeCode）
     /// </summary>
-    [SugarColumn(ColumnName = "dict_type_code", ColumnDescription = "字典类型编码", ColumnDataType = "varchar", Length = 50, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "dict_type_code", ColumnDescription = "字典类型编码", ColumnDataType = "varchar", Length = 80, IsNullable = false, DefaultValue = "")]
     public string DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典项标签（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：待支付、已完成）
+    /// 字典项标签（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）
     /// </summary>
     [SugarColumn(ColumnName = "dict_label", ColumnDescription = "字典项标签", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
     public string DictLabel { get; set; } = string.Empty;
@@ -52,7 +52,7 @@ public class TaktDictData : TaktTenantEntityBase
     public string DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（唯一索引：租户内 DictTypeId+DictLabel+I18nKey 唯一，见 ix_dict_data_type_label_i18n_unique；如：dict.user_type.admin）
+    /// 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
     /// </summary>
     [SugarColumn(ColumnName = "i18n_key", ColumnDescription = "国际化翻译键", ColumnDataType = "varchar", Length = 200, IsNullable = false, DefaultValue = "")]
     public string I18nKey { get; set; } = string.Empty;

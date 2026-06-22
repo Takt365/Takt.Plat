@@ -30,8 +30,8 @@ public class TaktSalesQuotation : TaktCompanyEntityBase
     /// <summary>
     /// 工厂代码
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? PlantCode { get; set; }
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售报价编码（唯一索引）
@@ -100,7 +100,7 @@ public class TaktSalesQuotation : TaktCompanyEntityBase
     public decimal ActualAmount { get; set; } = 0;
 
     /// <summary>
-    /// 报价状态（0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
+    /// 报价状态（字典 logistics_quotation_status；0=草稿，1=已发送，2=已接受，3=已拒绝，4=已过期，5=已作废）
     /// </summary>
     [SugarColumn(ColumnName = "quotation_status", ColumnDescription = "报价状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int QuotationStatus { get; set; } = 0;
@@ -117,4 +117,10 @@ public class TaktSalesQuotation : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktSalesQuotationItem.SalesQuotationId))]
     public List<TaktSalesQuotationItem>? Items { get; set; }
+
+    /// <summary>
+    /// 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktSalesQuotationChangeLog.SalesQuotationId))]
+    public List<TaktSalesQuotationChangeLog>? ChangeLogs { get; set; }
 }

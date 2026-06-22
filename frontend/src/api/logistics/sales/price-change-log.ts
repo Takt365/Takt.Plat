@@ -1,7 +1,7 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
-// 文件名称：sales-price-change-log.ts
+// 文件名称：price-change-log.ts
 // 创建时间：2026-06-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
@@ -19,7 +19,7 @@ import type {
   SalesPriceChangeLog,
   SalesPriceChangeLogCreate,
   SalesPriceChangeLogUpdate
-} from '@/types/logistics/sales/sales-price-change-log';
+} from '@/types/logistics/sales/price-change-log';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -40,9 +40,7 @@ export function getSalesPriceChangeLogList(queryDto: any): Promise<TaktPagedResu
   return request<TaktPagedResult<SalesPriceChangeLog>>({
     url: `${SALES_PRICE_CHANGE_LOG_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -145,7 +143,7 @@ export function exportSalesPriceChangeLog(
     url: `${SALES_PRICE_CHANGE_LOG_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

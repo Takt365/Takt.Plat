@@ -159,7 +159,7 @@ public class TaktNewsDto : TaktApprovalDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 新闻状态
+    /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     public int NewsStatus { get; set; }
 
@@ -360,7 +360,7 @@ public class TaktNewsQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 新闻状态
+    /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     public int? NewsStatus { get; set; }
 
@@ -414,7 +414,7 @@ public class TaktNewsQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -574,7 +574,7 @@ public class TaktNewsCreateDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 新闻状态
+    /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     public int NewsStatus { get; set; }
 
@@ -611,7 +611,7 @@ public class TaktNewsCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -658,7 +658,7 @@ public class TaktNewsStatusDto
     public long NewsId { get; set; }
 
     /// <summary>
-    /// 新闻状态
+    /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     [Required(ErrorMessage = "新闻状态不能为空")]
     public int NewsStatus { get; set; }
@@ -770,7 +770,7 @@ public class TaktNewsTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -862,7 +862,7 @@ public class TaktNewsImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -1011,14 +1011,14 @@ public class TaktNewsExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 新闻状态
+    /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     public int NewsStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

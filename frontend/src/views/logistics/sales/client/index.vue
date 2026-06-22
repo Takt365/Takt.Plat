@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-sales-client">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'clientId'"
       table-mode="single"
@@ -69,19 +69,44 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'clientStatus'">
+          <a-switch
+            :checked="getClientField(record, 'clientStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleClientStatusChange(record, Boolean(checked))"
+          />
+        </template>
+        <template v-else-if="column.key === 'clientType'">
           <TaktDictTag
-            :value="getClientField(record, 'clientStatus')"
-            dict-type="sys_normal_disable"
+            :value="getClientField(record, 'clientType')"
+            dict-type="logistics_client_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'paymentTerms'">
+          <TaktDictTag
+            :value="getClientField(record, 'paymentTerms')"
+            dict-type="logistics_payment_terms_param"
+          />
+        </template>
+        <template v-else-if="column.key === 'salesChannel'">
+          <TaktDictTag
+            :value="getClientField(record, 'salesChannel')"
+            dict-type="logistics_sales_channel_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'clientLevel'">
+          <TaktDictTag
+            :value="getClientField(record, 'clientLevel')"
+            dict-type="logistics_customer_level_category"
           />
         </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -101,6 +126,7 @@
       @cancel="handleFormCancel"
     >
       <ClientForm
+        :key="formData?.clientId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -122,6 +148,8 @@
         <a-input
           v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -131,6 +159,8 @@
         <a-input
           v-model:value="advancedQueryForm.clientCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.code') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -140,6 +170,8 @@
         <a-input
           v-model:value="advancedQueryForm.clientName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.name') })"
+          show-count
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
@@ -149,16 +181,19 @@
         <a-input
           v-model:value="advancedQueryForm.clientShortName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.shortname') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('clientType')">
       <a-form-item :label="t('entity.client.type')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.clientType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.type') })"
-          style="width: 100%"
+          dict-type="logistics_client_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.client.type') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -167,6 +202,8 @@
         <a-input
           v-model:value="advancedQueryForm.industrySector"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.industrysector') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -176,6 +213,8 @@
         <a-input
           v-model:value="advancedQueryForm.clientTaxNumber"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.taxnumber') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -185,6 +224,8 @@
         <a-input
           v-model:value="advancedQueryForm.registrationCountry"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.registrationcountry') })"
+          show-count
+          :maxlength="2"
           allow-clear
         />
       </a-form-item>
@@ -224,6 +265,8 @@
         <a-input
           v-model:value="advancedQueryForm.clientPhone"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.phone') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -233,6 +276,8 @@
         <a-input
           v-model:value="advancedQueryForm.clientFax"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.fax') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -242,6 +287,8 @@
         <a-input
           v-model:value="advancedQueryForm.clientEmail"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.email') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -251,6 +298,8 @@
         <a-input
           v-model:value="advancedQueryForm.clientWebsite"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.website') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -260,6 +309,8 @@
         <a-input
           v-model:value="advancedQueryForm.contactPerson"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.contactperson') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -269,6 +320,8 @@
         <a-input
           v-model:value="advancedQueryForm.contactPhone"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.contactphone') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -278,6 +331,8 @@
         <a-input
           v-model:value="advancedQueryForm.contactEmail"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.contactemail') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -287,25 +342,29 @@
         <a-input
           v-model:value="advancedQueryForm.currencyCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.currencycode') })"
+          show-count
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('paymentTerms')">
       <a-form-item :label="t('entity.client.paymentterms')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.paymentTerms"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.paymentterms') })"
-          style="width: 100%"
+          dict-type="logistics_payment_terms_param"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.client.paymentterms') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesChannel')">
       <a-form-item :label="t('entity.client.saleschannel')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.salesChannel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.saleschannel') })"
-          style="width: 100%"
+          dict-type="logistics_sales_channel_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.client.saleschannel') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -314,6 +373,8 @@
         <a-input
           v-model:value="advancedQueryForm.platformName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.platformname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -323,16 +384,19 @@
         <a-input
           v-model:value="advancedQueryForm.storeName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.storename') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('clientLevel')">
       <a-form-item :label="t('entity.client.level')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.clientLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.level') })"
-          style="width: 100%"
+          dict-type="logistics_customer_level_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.client.level') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -358,18 +422,9 @@
       <a-form-item :label="t('entity.client.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.clientStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.client.status') })"
           allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.client.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.client.sortorder') })"
-          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -395,12 +450,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -409,8 +483,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -463,12 +539,14 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ClientForm from './components/client-form.vue'
-import { getClientList, getClientById, createClient, updateClient, deleteClientById, deleteClientBatch, getClientTemplate, importClient, exportClient } from '@/api/logistics/sales/client'
-import type { Client, ClientQuery, ClientCreate, ClientUpdate } from '@/types/logistics/sales/client'
+import { getClientList, getClientById, createClient, updateClient, deleteClientById, deleteClientBatch, getClientTemplate, importClient, exportClient, updateClientStatus } from '@/api/logistics/sales/client'
+import type { Client, ClientQuery } from '@/types/logistics/sales/client'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -486,9 +564,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Client[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -503,11 +581,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Client>>({})
+const formData = ref<Partial<Client> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -538,10 +618,9 @@ const advancedQueryForm = ref({
   evaluationScore: undefined as number | undefined,
   isQualified: undefined as number | undefined,
   clientStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -573,10 +652,9 @@ const queryFieldsMeta = computed(() => [
   { key: 'evaluationScore', label: t('entity.client.evaluationscore') },
   { key: 'isQualified', label: t('entity.client.isqualified') },
   { key: 'clientStatus', label: t('entity.client.status') },
-  { key: 'sortOrder', label: t('entity.client.sortorder') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -594,11 +672,86 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {ClientQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<ClientQuery>): ClientQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: ClientQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof ClientQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('clientCode', form.clientCode)
+  assignTrimmed('clientName', form.clientName)
+  assignTrimmed('clientShortName', form.clientShortName)
+  if (form.clientType !== undefined && form.clientType !== null) {
+    query.clientType = form.clientType
+  }
+  assignTrimmed('industrySector', form.industrySector)
+  assignTrimmed('clientTaxNumber', form.clientTaxNumber)
+  assignTrimmed('registrationCountry', form.registrationCountry)
+  assignTrimmed('registrationAddress1', form.registrationAddress1)
+  assignTrimmed('registrationAddress2', form.registrationAddress2)
+  assignTrimmed('registrationAddress3', form.registrationAddress3)
+  assignTrimmed('clientPhone', form.clientPhone)
+  assignTrimmed('clientFax', form.clientFax)
+  assignTrimmed('clientEmail', form.clientEmail)
+  assignTrimmed('clientWebsite', form.clientWebsite)
+  assignTrimmed('contactPerson', form.contactPerson)
+  assignTrimmed('contactPhone', form.contactPhone)
+  assignTrimmed('contactEmail', form.contactEmail)
+  assignTrimmed('currencyCode', form.currencyCode)
+  if (form.paymentTerms !== undefined && form.paymentTerms !== null) {
+    query.paymentTerms = form.paymentTerms
+  }
+  if (form.salesChannel !== undefined && form.salesChannel !== null) {
+    query.salesChannel = form.salesChannel
+  }
+  assignTrimmed('platformName', form.platformName)
+  assignTrimmed('storeName', form.storeName)
+  if (form.clientLevel !== undefined && form.clientLevel !== null) {
+    query.clientLevel = form.clientLevel
+  }
+  if (form.evaluationScore !== undefined && form.evaluationScore !== null) {
+    query.evaluationScore = form.evaluationScore
+  }
+  if (form.isQualified !== undefined && form.isQualified !== null) {
+    query.isQualified = form.isQualified
+  }
+  if (form.clientStatus !== undefined && form.clientStatus !== null) {
+    query.clientStatus = form.clientStatus
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -660,7 +813,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getClientField(record, 'clientType') ?? ''
   },
   {
     title: t('entity.client.industrysector'),
@@ -795,7 +947,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getClientField(record, 'paymentTerms') ?? ''
   },
   {
     title: t('entity.client.saleschannel'),
@@ -804,7 +955,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getClientField(record, 'salesChannel') ?? ''
   },
   {
     title: t('entity.client.platformname'),
@@ -831,7 +981,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getClientField(record, 'clientLevel') ?? ''
   },
   {
     title: t('entity.client.evaluationscore'),
@@ -890,6 +1039,7 @@ const getClientId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getClientField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -932,16 +1082,7 @@ const onClickRow = (record: Client) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: ClientQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getClientList(params)
+    const res = await getClientList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -955,11 +1096,11 @@ async function loadData() {
 }
 
 /** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
-
+useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -994,21 +1135,21 @@ function handleReset() {
   evaluationScore: undefined as number | undefined,
   isQualified: undefined as number | undefined,
   clientStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.client._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: Client) {
@@ -1046,6 +1187,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.client._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -1055,6 +1198,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1086,16 +1231,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: ClientQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportClient(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportClient(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1155,6 +1295,30 @@ async function handleDelete() {
     }
   })
 }
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleClientStatusChange(record: Client, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getClientField(record, 'clientStatus')
+  const id = getClientId(record)
+  const row = dataSource.value.find((item) => getClientId(item) === id)
+  if (row) {
+    row.clientStatus = newVal
+  }
+  try {
+    await updateClientStatus({ clientId: id, clientStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.clientStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
+}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -1163,7 +1327,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1196,10 +1360,9 @@ function handleAdvancedQueryReset() {
   evaluationScore: undefined as number | undefined,
   isQualified: undefined as number | undefined,
   clientStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1229,23 +1392,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.logistics-sales-client {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

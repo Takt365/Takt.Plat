@@ -36,6 +36,10 @@ public class TaktTicketSubmitValidator : AbstractValidator<TaktTicketSubmitDto>
         RuleFor(x => x.ItAssetId)
             .GreaterThanOrEqualTo(0).WithMessage("IT设备保修扩展ID不能为负数")
             .When(x => x.ItAssetId.HasValue);
+        RuleFor(x => x.Urgency)
+            .InclusiveBetween(1, 3).WithMessage("紧急度须为1～3");
+        RuleFor(x => x.Impact)
+            .InclusiveBetween(1, 3).WithMessage("影响范围须为1～3");
     }
 }
 

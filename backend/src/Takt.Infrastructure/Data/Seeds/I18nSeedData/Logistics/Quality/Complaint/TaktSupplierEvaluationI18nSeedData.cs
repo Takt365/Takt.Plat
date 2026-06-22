@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplierEvaluation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,254 +75,254 @@ public class TaktSupplierEvaluationI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktSupplierEvaluation 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.supplierevaluation._self / entity.supplierevaluation.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.supplierevaluation._self / entity.supplierevaluation.{{field}}；ResourceGroup=Complaint；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetSupplierEvaluationTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.supplierevaluation._self
-            new TranslationSeedItem("entity.supplierevaluation._self", "en-US", "Supplier Evaluation Information", "实体名称"),
+            new TranslationSeedItem("entity.supplierevaluation._self", "en-US", "Supplier Evaluation Information_us", "实体名称"),
             // entity.supplierevaluation._self
-            new TranslationSeedItem("entity.supplierevaluation._self", "ja-JP", "供应商评价考核主表信息", "实体名称"),
+            new TranslationSeedItem("entity.supplierevaluation._self", "ja-JP", "供应商评价考核主表信息_jp", "实体名称"),
             // entity.supplierevaluation._self
             new TranslationSeedItem("entity.supplierevaluation._self", "zh-CN", "供应商评价考核主表信息", "实体名称"),
             // entity.supplierevaluation._self
-            new TranslationSeedItem("entity.supplierevaluation._self", "zh-HK", "供应商评价考核主表信息", "实体名称"),
+            new TranslationSeedItem("entity.supplierevaluation._self", "zh-HK", "供应商评价考核主表信息_hk", "实体名称"),
 
             // entity.supplierevaluation.code
-            new TranslationSeedItem("entity.supplierevaluation.code", "en-US", "评价表编号", "评价表编号（组合唯一索引）"),
+            new TranslationSeedItem("entity.supplierevaluation.code", "en-US", "评价表编号_us", "评价表编号（组合唯一索引）"),
             // entity.supplierevaluation.code
-            new TranslationSeedItem("entity.supplierevaluation.code", "ja-JP", "评价表编号", "评价表编号（组合唯一索引）"),
+            new TranslationSeedItem("entity.supplierevaluation.code", "ja-JP", "评价表编号_jp", "评价表编号（组合唯一索引）"),
             // entity.supplierevaluation.code
             new TranslationSeedItem("entity.supplierevaluation.code", "zh-CN", "评价表编号", "评价表编号（组合唯一索引）"),
             // entity.supplierevaluation.code
-            new TranslationSeedItem("entity.supplierevaluation.code", "zh-HK", "评价表编号", "评价表编号（组合唯一索引）"),
+            new TranslationSeedItem("entity.supplierevaluation.code", "zh-HK", "评价表编号_hk", "评价表编号（组合唯一索引）"),
 
             // entity.supplierevaluation.supplierid
-            new TranslationSeedItem("entity.supplierevaluation.supplierid", "en-US", "供应商ID", "供应商ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.supplierevaluation.supplierid", "en-US", "供应商ID_us", "供应商ID（序列化为string以避免Javascript精度问题）"),
             // entity.supplierevaluation.supplierid
-            new TranslationSeedItem("entity.supplierevaluation.supplierid", "ja-JP", "供应商ID", "供应商ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.supplierevaluation.supplierid", "ja-JP", "供应商ID_jp", "供应商ID（序列化为string以避免Javascript精度问题）"),
             // entity.supplierevaluation.supplierid
             new TranslationSeedItem("entity.supplierevaluation.supplierid", "zh-CN", "供应商ID", "供应商ID（序列化为string以避免Javascript精度问题）"),
             // entity.supplierevaluation.supplierid
-            new TranslationSeedItem("entity.supplierevaluation.supplierid", "zh-HK", "供应商ID", "供应商ID（序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.supplierevaluation.supplierid", "zh-HK", "供应商ID_hk", "供应商ID（序列化为string以避免Javascript精度问题）"),
 
             // entity.supplierevaluation.suppliername
-            new TranslationSeedItem("entity.supplierevaluation.suppliername", "en-US", "供应商名称", "供应商名称"),
+            new TranslationSeedItem("entity.supplierevaluation.suppliername", "en-US", "供应商名称_us", "供应商名称"),
             // entity.supplierevaluation.suppliername
-            new TranslationSeedItem("entity.supplierevaluation.suppliername", "ja-JP", "供应商名称", "供应商名称"),
+            new TranslationSeedItem("entity.supplierevaluation.suppliername", "ja-JP", "供应商名称_jp", "供应商名称"),
             // entity.supplierevaluation.suppliername
             new TranslationSeedItem("entity.supplierevaluation.suppliername", "zh-CN", "供应商名称", "供应商名称"),
             // entity.supplierevaluation.suppliername
-            new TranslationSeedItem("entity.supplierevaluation.suppliername", "zh-HK", "供应商名称", "供应商名称"),
+            new TranslationSeedItem("entity.supplierevaluation.suppliername", "zh-HK", "供应商名称_hk", "供应商名称"),
 
             // entity.supplierevaluation.suppliercode
-            new TranslationSeedItem("entity.supplierevaluation.suppliercode", "en-US", "供应商编码", "供应商编码"),
+            new TranslationSeedItem("entity.supplierevaluation.suppliercode", "en-US", "供应商编码_us", "供应商编码"),
             // entity.supplierevaluation.suppliercode
-            new TranslationSeedItem("entity.supplierevaluation.suppliercode", "ja-JP", "供应商编码", "供应商编码"),
+            new TranslationSeedItem("entity.supplierevaluation.suppliercode", "ja-JP", "供应商编码_jp", "供应商编码"),
             // entity.supplierevaluation.suppliercode
             new TranslationSeedItem("entity.supplierevaluation.suppliercode", "zh-CN", "供应商编码", "供应商编码"),
             // entity.supplierevaluation.suppliercode
-            new TranslationSeedItem("entity.supplierevaluation.suppliercode", "zh-HK", "供应商编码", "供应商编码"),
+            new TranslationSeedItem("entity.supplierevaluation.suppliercode", "zh-HK", "供应商编码_hk", "供应商编码"),
 
             // entity.supplierevaluation.evaluationdate
-            new TranslationSeedItem("entity.supplierevaluation.evaluationdate", "en-US", "评价日期", "评价日期"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdate", "en-US", "评价日期_us", "评价日期"),
             // entity.supplierevaluation.evaluationdate
-            new TranslationSeedItem("entity.supplierevaluation.evaluationdate", "ja-JP", "评价日期", "评价日期"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdate", "ja-JP", "评价日期_jp", "评价日期"),
             // entity.supplierevaluation.evaluationdate
             new TranslationSeedItem("entity.supplierevaluation.evaluationdate", "zh-CN", "评价日期", "评价日期"),
             // entity.supplierevaluation.evaluationdate
-            new TranslationSeedItem("entity.supplierevaluation.evaluationdate", "zh-HK", "评价日期", "评价日期"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdate", "zh-HK", "评价日期_hk", "评价日期"),
 
             // entity.supplierevaluation.evaluationperiod
-            new TranslationSeedItem("entity.supplierevaluation.evaluationperiod", "en-US", "评价周期", "评价周期（0=月度，1=季度，2=半年度，3=年度）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationperiod", "en-US", "评价周期_us", "评价周期（0=月度，1=季度，2=半年度，3=年度）"),
             // entity.supplierevaluation.evaluationperiod
-            new TranslationSeedItem("entity.supplierevaluation.evaluationperiod", "ja-JP", "评价周期", "评价周期（0=月度，1=季度，2=半年度，3=年度）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationperiod", "ja-JP", "评价周期_jp", "评价周期（0=月度，1=季度，2=半年度，3=年度）"),
             // entity.supplierevaluation.evaluationperiod
             new TranslationSeedItem("entity.supplierevaluation.evaluationperiod", "zh-CN", "评价周期", "评价周期（0=月度，1=季度，2=半年度，3=年度）"),
             // entity.supplierevaluation.evaluationperiod
-            new TranslationSeedItem("entity.supplierevaluation.evaluationperiod", "zh-HK", "评价周期", "评价周期（0=月度，1=季度，2=半年度，3=年度）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationperiod", "zh-HK", "评价周期_hk", "评价周期（0=月度，1=季度，2=半年度，3=年度）"),
 
             // entity.supplierevaluation.evaluationtype
-            new TranslationSeedItem("entity.supplierevaluation.evaluationtype", "en-US", "评价类型", "评价类型（0=常规评价，1=准入评价，2=年度评审，3=专项评价）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationtype", "en-US", "评价类型_us", "评价类型（0=常规评价，1=准入评价，2=年度评审，3=专项评价）"),
             // entity.supplierevaluation.evaluationtype
-            new TranslationSeedItem("entity.supplierevaluation.evaluationtype", "ja-JP", "评价类型", "评价类型（0=常规评价，1=准入评价，2=年度评审，3=专项评价）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationtype", "ja-JP", "评价类型_jp", "评价类型（0=常规评价，1=准入评价，2=年度评审，3=专项评价）"),
             // entity.supplierevaluation.evaluationtype
             new TranslationSeedItem("entity.supplierevaluation.evaluationtype", "zh-CN", "评价类型", "评价类型（0=常规评价，1=准入评价，2=年度评审，3=专项评价）"),
             // entity.supplierevaluation.evaluationtype
-            new TranslationSeedItem("entity.supplierevaluation.evaluationtype", "zh-HK", "评价类型", "评价类型（0=常规评价，1=准入评价，2=年度评审，3=专项评价）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationtype", "zh-HK", "评价类型_hk", "评价类型（0=常规评价，1=准入评价，2=年度评审，3=专项评价）"),
 
             // entity.supplierevaluation.evaluatorby
-            new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "en-US", "评价人", "评价人（人员代码）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "en-US", "评价人_us", "评价人（人员代码）"),
             // entity.supplierevaluation.evaluatorby
-            new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "ja-JP", "评价人", "评价人（人员代码）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "ja-JP", "评价人_jp", "评价人（人员代码）"),
             // entity.supplierevaluation.evaluatorby
             new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "zh-CN", "评价人", "评价人（人员代码）"),
             // entity.supplierevaluation.evaluatorby
-            new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "zh-HK", "评价人", "评价人（人员代码）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "zh-HK", "评价人_hk", "评价人（人员代码）"),
 
             // entity.supplierevaluation.evaluationdept
-            new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "en-US", "评价部门", "评价部门"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "en-US", "评价部门_us", "评价部门"),
             // entity.supplierevaluation.evaluationdept
-            new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "ja-JP", "评价部门", "评价部门"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "ja-JP", "评价部门_jp", "评价部门"),
             // entity.supplierevaluation.evaluationdept
             new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "zh-CN", "评价部门", "评价部门"),
             // entity.supplierevaluation.evaluationdept
-            new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "zh-HK", "评价部门", "评价部门"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "zh-HK", "评价部门_hk", "评价部门"),
 
             // entity.supplierevaluation.overallrating
-            new TranslationSeedItem("entity.supplierevaluation.overallrating", "en-US", "总体评级", "总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
+            new TranslationSeedItem("entity.supplierevaluation.overallrating", "en-US", "总体评级_us", "总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
             // entity.supplierevaluation.overallrating
-            new TranslationSeedItem("entity.supplierevaluation.overallrating", "ja-JP", "总体评级", "总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
+            new TranslationSeedItem("entity.supplierevaluation.overallrating", "ja-JP", "总体评级_jp", "总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
             // entity.supplierevaluation.overallrating
             new TranslationSeedItem("entity.supplierevaluation.overallrating", "zh-CN", "总体评级", "总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
             // entity.supplierevaluation.overallrating
-            new TranslationSeedItem("entity.supplierevaluation.overallrating", "zh-HK", "总体评级", "总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
+            new TranslationSeedItem("entity.supplierevaluation.overallrating", "zh-HK", "总体评级_hk", "总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）"),
 
             // entity.supplierevaluation.totalscore
-            new TranslationSeedItem("entity.supplierevaluation.totalscore", "en-US", "综合评分", "综合评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.totalscore", "en-US", "综合评分_us", "综合评分（0-100分）"),
             // entity.supplierevaluation.totalscore
-            new TranslationSeedItem("entity.supplierevaluation.totalscore", "ja-JP", "综合评分", "综合评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.totalscore", "ja-JP", "综合评分_jp", "综合评分（0-100分）"),
             // entity.supplierevaluation.totalscore
             new TranslationSeedItem("entity.supplierevaluation.totalscore", "zh-CN", "综合评分", "综合评分（0-100分）"),
             // entity.supplierevaluation.totalscore
-            new TranslationSeedItem("entity.supplierevaluation.totalscore", "zh-HK", "综合评分", "综合评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.totalscore", "zh-HK", "综合评分_hk", "综合评分（0-100分）"),
 
             // entity.supplierevaluation.qualityscore
-            new TranslationSeedItem("entity.supplierevaluation.qualityscore", "en-US", "质量评分", "质量评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.qualityscore", "en-US", "质量评分_us", "质量评分（0-100分）"),
             // entity.supplierevaluation.qualityscore
-            new TranslationSeedItem("entity.supplierevaluation.qualityscore", "ja-JP", "质量评分", "质量评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.qualityscore", "ja-JP", "质量评分_jp", "质量评分（0-100分）"),
             // entity.supplierevaluation.qualityscore
             new TranslationSeedItem("entity.supplierevaluation.qualityscore", "zh-CN", "质量评分", "质量评分（0-100分）"),
             // entity.supplierevaluation.qualityscore
-            new TranslationSeedItem("entity.supplierevaluation.qualityscore", "zh-HK", "质量评分", "质量评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.qualityscore", "zh-HK", "质量评分_hk", "质量评分（0-100分）"),
 
             // entity.supplierevaluation.deliveryscore
-            new TranslationSeedItem("entity.supplierevaluation.deliveryscore", "en-US", "交付评分", "交付评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.deliveryscore", "en-US", "交付评分_us", "交付评分（0-100分）"),
             // entity.supplierevaluation.deliveryscore
-            new TranslationSeedItem("entity.supplierevaluation.deliveryscore", "ja-JP", "交付评分", "交付评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.deliveryscore", "ja-JP", "交付评分_jp", "交付评分（0-100分）"),
             // entity.supplierevaluation.deliveryscore
             new TranslationSeedItem("entity.supplierevaluation.deliveryscore", "zh-CN", "交付评分", "交付评分（0-100分）"),
             // entity.supplierevaluation.deliveryscore
-            new TranslationSeedItem("entity.supplierevaluation.deliveryscore", "zh-HK", "交付评分", "交付评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.deliveryscore", "zh-HK", "交付评分_hk", "交付评分（0-100分）"),
 
             // entity.supplierevaluation.pricescore
-            new TranslationSeedItem("entity.supplierevaluation.pricescore", "en-US", "价格评分", "价格评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.pricescore", "en-US", "价格评分_us", "价格评分（0-100分）"),
             // entity.supplierevaluation.pricescore
-            new TranslationSeedItem("entity.supplierevaluation.pricescore", "ja-JP", "价格评分", "价格评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.pricescore", "ja-JP", "价格评分_jp", "价格评分（0-100分）"),
             // entity.supplierevaluation.pricescore
             new TranslationSeedItem("entity.supplierevaluation.pricescore", "zh-CN", "价格评分", "价格评分（0-100分）"),
             // entity.supplierevaluation.pricescore
-            new TranslationSeedItem("entity.supplierevaluation.pricescore", "zh-HK", "价格评分", "价格评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.pricescore", "zh-HK", "价格评分_hk", "价格评分（0-100分）"),
 
             // entity.supplierevaluation.servicescore
-            new TranslationSeedItem("entity.supplierevaluation.servicescore", "en-US", "服务评分", "服务评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.servicescore", "en-US", "服务评分_us", "服务评分（0-100分）"),
             // entity.supplierevaluation.servicescore
-            new TranslationSeedItem("entity.supplierevaluation.servicescore", "ja-JP", "服务评分", "服务评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.servicescore", "ja-JP", "服务评分_jp", "服务评分（0-100分）"),
             // entity.supplierevaluation.servicescore
             new TranslationSeedItem("entity.supplierevaluation.servicescore", "zh-CN", "服务评分", "服务评分（0-100分）"),
             // entity.supplierevaluation.servicescore
-            new TranslationSeedItem("entity.supplierevaluation.servicescore", "zh-HK", "服务评分", "服务评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.servicescore", "zh-HK", "服务评分_hk", "服务评分（0-100分）"),
 
             // entity.supplierevaluation.technicalscore
-            new TranslationSeedItem("entity.supplierevaluation.technicalscore", "en-US", "技术能力评分", "技术能力评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.technicalscore", "en-US", "技术能力评分_us", "技术能力评分（0-100分）"),
             // entity.supplierevaluation.technicalscore
-            new TranslationSeedItem("entity.supplierevaluation.technicalscore", "ja-JP", "技术能力评分", "技术能力评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.technicalscore", "ja-JP", "技术能力评分_jp", "技术能力评分（0-100分）"),
             // entity.supplierevaluation.technicalscore
             new TranslationSeedItem("entity.supplierevaluation.technicalscore", "zh-CN", "技术能力评分", "技术能力评分（0-100分）"),
             // entity.supplierevaluation.technicalscore
-            new TranslationSeedItem("entity.supplierevaluation.technicalscore", "zh-HK", "技术能力评分", "技术能力评分（0-100分）"),
+            new TranslationSeedItem("entity.supplierevaluation.technicalscore", "zh-HK", "技术能力评分_hk", "技术能力评分（0-100分）"),
 
             // entity.supplierevaluation.mainstrengths
-            new TranslationSeedItem("entity.supplierevaluation.mainstrengths", "en-US", "主要优点", "主要优点"),
+            new TranslationSeedItem("entity.supplierevaluation.mainstrengths", "en-US", "主要优点_us", "主要优点"),
             // entity.supplierevaluation.mainstrengths
-            new TranslationSeedItem("entity.supplierevaluation.mainstrengths", "ja-JP", "主要优点", "主要优点"),
+            new TranslationSeedItem("entity.supplierevaluation.mainstrengths", "ja-JP", "主要优点_jp", "主要优点"),
             // entity.supplierevaluation.mainstrengths
             new TranslationSeedItem("entity.supplierevaluation.mainstrengths", "zh-CN", "主要优点", "主要优点"),
             // entity.supplierevaluation.mainstrengths
-            new TranslationSeedItem("entity.supplierevaluation.mainstrengths", "zh-HK", "主要优点", "主要优点"),
+            new TranslationSeedItem("entity.supplierevaluation.mainstrengths", "zh-HK", "主要优点_hk", "主要优点"),
 
             // entity.supplierevaluation.mainissues
-            new TranslationSeedItem("entity.supplierevaluation.mainissues", "en-US", "主要问题", "主要问题/不足"),
+            new TranslationSeedItem("entity.supplierevaluation.mainissues", "en-US", "主要问题_us", "主要问题/不足"),
             // entity.supplierevaluation.mainissues
-            new TranslationSeedItem("entity.supplierevaluation.mainissues", "ja-JP", "主要问题", "主要问题/不足"),
+            new TranslationSeedItem("entity.supplierevaluation.mainissues", "ja-JP", "主要问题_jp", "主要问题/不足"),
             // entity.supplierevaluation.mainissues
             new TranslationSeedItem("entity.supplierevaluation.mainissues", "zh-CN", "主要问题", "主要问题/不足"),
             // entity.supplierevaluation.mainissues
-            new TranslationSeedItem("entity.supplierevaluation.mainissues", "zh-HK", "主要问题", "主要问题/不足"),
+            new TranslationSeedItem("entity.supplierevaluation.mainissues", "zh-HK", "主要问题_hk", "主要问题/不足"),
 
             // entity.supplierevaluation.improvementrequirements
-            new TranslationSeedItem("entity.supplierevaluation.improvementrequirements", "en-US", "改进要求", "改进要求/建议"),
+            new TranslationSeedItem("entity.supplierevaluation.improvementrequirements", "en-US", "改进要求_us", "改进要求/建议"),
             // entity.supplierevaluation.improvementrequirements
-            new TranslationSeedItem("entity.supplierevaluation.improvementrequirements", "ja-JP", "改进要求", "改进要求/建议"),
+            new TranslationSeedItem("entity.supplierevaluation.improvementrequirements", "ja-JP", "改进要求_jp", "改进要求/建议"),
             // entity.supplierevaluation.improvementrequirements
             new TranslationSeedItem("entity.supplierevaluation.improvementrequirements", "zh-CN", "改进要求", "改进要求/建议"),
             // entity.supplierevaluation.improvementrequirements
-            new TranslationSeedItem("entity.supplierevaluation.improvementrequirements", "zh-HK", "改进要求", "改进要求/建议"),
+            new TranslationSeedItem("entity.supplierevaluation.improvementrequirements", "zh-HK", "改进要求_hk", "改进要求/建议"),
 
             // entity.supplierevaluation.evaluationconclusion
-            new TranslationSeedItem("entity.supplierevaluation.evaluationconclusion", "en-US", "考核结论", "考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationconclusion", "en-US", "考核结论_us", "考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）"),
             // entity.supplierevaluation.evaluationconclusion
-            new TranslationSeedItem("entity.supplierevaluation.evaluationconclusion", "ja-JP", "考核结论", "考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationconclusion", "ja-JP", "考核结论_jp", "考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）"),
             // entity.supplierevaluation.evaluationconclusion
             new TranslationSeedItem("entity.supplierevaluation.evaluationconclusion", "zh-CN", "考核结论", "考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）"),
             // entity.supplierevaluation.evaluationconclusion
-            new TranslationSeedItem("entity.supplierevaluation.evaluationconclusion", "zh-HK", "考核结论", "考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationconclusion", "zh-HK", "考核结论_hk", "考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）"),
 
             // entity.supplierevaluation.rectificationdeadline
-            new TranslationSeedItem("entity.supplierevaluation.rectificationdeadline", "en-US", "整改期限", "整改期限（要求完成日期）"),
+            new TranslationSeedItem("entity.supplierevaluation.rectificationdeadline", "en-US", "整改期限_us", "整改期限（要求完成日期）"),
             // entity.supplierevaluation.rectificationdeadline
-            new TranslationSeedItem("entity.supplierevaluation.rectificationdeadline", "ja-JP", "整改期限", "整改期限（要求完成日期）"),
+            new TranslationSeedItem("entity.supplierevaluation.rectificationdeadline", "ja-JP", "整改期限_jp", "整改期限（要求完成日期）"),
             // entity.supplierevaluation.rectificationdeadline
             new TranslationSeedItem("entity.supplierevaluation.rectificationdeadline", "zh-CN", "整改期限", "整改期限（要求完成日期）"),
             // entity.supplierevaluation.rectificationdeadline
-            new TranslationSeedItem("entity.supplierevaluation.rectificationdeadline", "zh-HK", "整改期限", "整改期限（要求完成日期）"),
+            new TranslationSeedItem("entity.supplierevaluation.rectificationdeadline", "zh-HK", "整改期限_hk", "整改期限（要求完成日期）"),
 
             // entity.supplierevaluation.evaluationstatus
-            new TranslationSeedItem("entity.supplierevaluation.evaluationstatus", "en-US", "评价状态", "评价状态（0=草稿，1=评价中，2=已完成，3=已归档）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationstatus", "en-US", "评价状态_us", "评价状态（0=草稿，1=评价中，2=已完成，3=已归档）"),
             // entity.supplierevaluation.evaluationstatus
-            new TranslationSeedItem("entity.supplierevaluation.evaluationstatus", "ja-JP", "评价状态", "评价状态（0=草稿，1=评价中，2=已完成，3=已归档）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationstatus", "ja-JP", "评价状态_jp", "评价状态（0=草稿，1=评价中，2=已完成，3=已归档）"),
             // entity.supplierevaluation.evaluationstatus
             new TranslationSeedItem("entity.supplierevaluation.evaluationstatus", "zh-CN", "评价状态", "评价状态（0=草稿，1=评价中，2=已完成，3=已归档）"),
             // entity.supplierevaluation.evaluationstatus
-            new TranslationSeedItem("entity.supplierevaluation.evaluationstatus", "zh-HK", "评价状态", "评价状态（0=草稿，1=评价中，2=已完成，3=已归档）"),
+            new TranslationSeedItem("entity.supplierevaluation.evaluationstatus", "zh-HK", "评价状态_hk", "评价状态（0=草稿，1=评价中，2=已完成，3=已归档）"),
 
             // entity.supplierevaluation.rectificationstatus
-            new TranslationSeedItem("entity.supplierevaluation.rectificationstatus", "en-US", "整改跟进状态", "整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
+            new TranslationSeedItem("entity.supplierevaluation.rectificationstatus", "en-US", "整改跟进状态_us", "整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
             // entity.supplierevaluation.rectificationstatus
-            new TranslationSeedItem("entity.supplierevaluation.rectificationstatus", "ja-JP", "整改跟进状态", "整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
+            new TranslationSeedItem("entity.supplierevaluation.rectificationstatus", "ja-JP", "整改跟进状态_jp", "整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
             // entity.supplierevaluation.rectificationstatus
             new TranslationSeedItem("entity.supplierevaluation.rectificationstatus", "zh-CN", "整改跟进状态", "整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
             // entity.supplierevaluation.rectificationstatus
-            new TranslationSeedItem("entity.supplierevaluation.rectificationstatus", "zh-HK", "整改跟进状态", "整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
+            new TranslationSeedItem("entity.supplierevaluation.rectificationstatus", "zh-HK", "整改跟进状态_hk", "整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）"),
 
             // entity.supplierevaluation.relatedplant
-            new TranslationSeedItem("entity.supplierevaluation.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.supplierevaluation.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.supplierevaluation.relatedplant
-            new TranslationSeedItem("entity.supplierevaluation.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.supplierevaluation.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.supplierevaluation.relatedplant
             new TranslationSeedItem("entity.supplierevaluation.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.supplierevaluation.relatedplant
-            new TranslationSeedItem("entity.supplierevaluation.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.supplierevaluation.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
 
             // entity.supplierevaluation.sortorder
-            new TranslationSeedItem("entity.supplierevaluation.sortorder", "en-US", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.supplierevaluation.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
             // entity.supplierevaluation.sortorder
-            new TranslationSeedItem("entity.supplierevaluation.sortorder", "ja-JP", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.supplierevaluation.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
             // entity.supplierevaluation.sortorder
             new TranslationSeedItem("entity.supplierevaluation.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.supplierevaluation.sortorder
-            new TranslationSeedItem("entity.supplierevaluation.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.supplierevaluation.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
 
             // entity.supplierevaluation.items
-            new TranslationSeedItem("entity.supplierevaluation.items", "en-US", "评价项目明细列表", "评价项目明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.supplierevaluation.items", "en-US", "评价项目明细列表_us", "评价项目明细列表（主子表关系）"),
             // entity.supplierevaluation.items
-            new TranslationSeedItem("entity.supplierevaluation.items", "ja-JP", "评价项目明细列表", "评价项目明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.supplierevaluation.items", "ja-JP", "评价项目明细列表_jp", "评价项目明细列表（主子表关系）"),
             // entity.supplierevaluation.items
             new TranslationSeedItem("entity.supplierevaluation.items", "zh-CN", "评价项目明细列表", "评价项目明细列表（主子表关系）"),
             // entity.supplierevaluation.items
-            new TranslationSeedItem("entity.supplierevaluation.items", "zh-HK", "评价项目明细列表", "评价项目明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.supplierevaluation.items", "zh-HK", "评价项目明细列表_hk", "评价项目明细列表（主子表关系）"),
         };
     }
 
@@ -340,10 +340,10 @@ public class TaktSupplierEvaluationI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Complaint";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

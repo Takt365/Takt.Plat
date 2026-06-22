@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeJoined 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,146 +75,146 @@ public class TaktEmployeeJoinedI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeJoined 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeejoined._self / entity.employeejoined.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.employeejoined._self / entity.employeejoined.{{field}}；ResourceGroup=Personnel；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeJoinedTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.employeejoined._self
-            new TranslationSeedItem("entity.employeejoined._self", "en-US", "Employee Joined Information", "实体名称"),
+            new TranslationSeedItem("entity.employeejoined._self", "en-US", "Employee Joined Information_us", "实体名称"),
             // entity.employeejoined._self
-            new TranslationSeedItem("entity.employeejoined._self", "ja-JP", "员工入职上岗办理记录信息", "实体名称"),
+            new TranslationSeedItem("entity.employeejoined._self", "ja-JP", "员工入职上岗办理记录信息_jp", "实体名称"),
             // entity.employeejoined._self
             new TranslationSeedItem("entity.employeejoined._self", "zh-CN", "员工入职上岗办理记录信息", "实体名称"),
             // entity.employeejoined._self
-            new TranslationSeedItem("entity.employeejoined._self", "zh-HK", "员工入职上岗办理记录信息", "实体名称"),
+            new TranslationSeedItem("entity.employeejoined._self", "zh-HK", "员工入职上岗办理记录信息_hk", "实体名称"),
 
             // entity.employeejoined.employeeid
-            new TranslationSeedItem("entity.employeejoined.employeeid", "en-US", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeejoined.employeeid", "en-US", "员工ID_us", "员工ID"),
             // entity.employeejoined.employeeid
-            new TranslationSeedItem("entity.employeejoined.employeeid", "ja-JP", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeejoined.employeeid", "ja-JP", "员工ID_jp", "员工ID"),
             // entity.employeejoined.employeeid
             new TranslationSeedItem("entity.employeejoined.employeeid", "zh-CN", "员工ID", "员工ID"),
             // entity.employeejoined.employeeid
-            new TranslationSeedItem("entity.employeejoined.employeeid", "zh-HK", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeejoined.employeeid", "zh-HK", "员工ID_hk", "员工ID"),
 
             // entity.employeejoined.onboardingid
-            new TranslationSeedItem("entity.employeejoined.onboardingid", "en-US", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
+            new TranslationSeedItem("entity.employeejoined.onboardingid", "en-US", "入职待办ID_us", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
             // entity.employeejoined.onboardingid
-            new TranslationSeedItem("entity.employeejoined.onboardingid", "ja-JP", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
+            new TranslationSeedItem("entity.employeejoined.onboardingid", "ja-JP", "入职待办ID_jp", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
             // entity.employeejoined.onboardingid
             new TranslationSeedItem("entity.employeejoined.onboardingid", "zh-CN", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
             // entity.employeejoined.onboardingid
-            new TranslationSeedItem("entity.employeejoined.onboardingid", "zh-HK", "入职待办ID", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
+            new TranslationSeedItem("entity.employeejoined.onboardingid", "zh-HK", "入职待办ID_hk", "入职待办ID（由入职待办办结后生成上岗单时回填，可空）"),
 
             // entity.employeejoined.joineddate
-            new TranslationSeedItem("entity.employeejoined.joineddate", "en-US", "实际上岗日期", "实际上岗日期（JoinedDate：我去上班）"),
+            new TranslationSeedItem("entity.employeejoined.joineddate", "en-US", "实际上岗日期_us", "实际上岗日期（JoinedDate：我去上班）"),
             // entity.employeejoined.joineddate
-            new TranslationSeedItem("entity.employeejoined.joineddate", "ja-JP", "实际上岗日期", "实际上岗日期（JoinedDate：我去上班）"),
+            new TranslationSeedItem("entity.employeejoined.joineddate", "ja-JP", "实际上岗日期_jp", "实际上岗日期（JoinedDate：我去上班）"),
             // entity.employeejoined.joineddate
             new TranslationSeedItem("entity.employeejoined.joineddate", "zh-CN", "实际上岗日期", "实际上岗日期（JoinedDate：我去上班）"),
             // entity.employeejoined.joineddate
-            new TranslationSeedItem("entity.employeejoined.joineddate", "zh-HK", "实际上岗日期", "实际上岗日期（JoinedDate：我去上班）"),
+            new TranslationSeedItem("entity.employeejoined.joineddate", "zh-HK", "实际上岗日期_hk", "实际上岗日期（JoinedDate：我去上班）"),
 
             // entity.employeejoined.probationenddate
-            new TranslationSeedItem("entity.employeejoined.probationenddate", "en-US", "试用期结束日期", "试用期结束日期"),
+            new TranslationSeedItem("entity.employeejoined.probationenddate", "en-US", "试用期结束日期_us", "试用期结束日期"),
             // entity.employeejoined.probationenddate
-            new TranslationSeedItem("entity.employeejoined.probationenddate", "ja-JP", "试用期结束日期", "试用期结束日期"),
+            new TranslationSeedItem("entity.employeejoined.probationenddate", "ja-JP", "试用期结束日期_jp", "试用期结束日期"),
             // entity.employeejoined.probationenddate
             new TranslationSeedItem("entity.employeejoined.probationenddate", "zh-CN", "试用期结束日期", "试用期结束日期"),
             // entity.employeejoined.probationenddate
-            new TranslationSeedItem("entity.employeejoined.probationenddate", "zh-HK", "试用期结束日期", "试用期结束日期"),
+            new TranslationSeedItem("entity.employeejoined.probationenddate", "zh-HK", "试用期结束日期_hk", "试用期结束日期"),
 
             // entity.employeejoined.regulardate
-            new TranslationSeedItem("entity.employeejoined.regulardate", "en-US", "转正日期", "转正日期"),
+            new TranslationSeedItem("entity.employeejoined.regulardate", "en-US", "转正日期_us", "转正日期"),
             // entity.employeejoined.regulardate
-            new TranslationSeedItem("entity.employeejoined.regulardate", "ja-JP", "转正日期", "转正日期"),
+            new TranslationSeedItem("entity.employeejoined.regulardate", "ja-JP", "转正日期_jp", "转正日期"),
             // entity.employeejoined.regulardate
             new TranslationSeedItem("entity.employeejoined.regulardate", "zh-CN", "转正日期", "转正日期"),
             // entity.employeejoined.regulardate
-            new TranslationSeedItem("entity.employeejoined.regulardate", "zh-HK", "转正日期", "转正日期"),
+            new TranslationSeedItem("entity.employeejoined.regulardate", "zh-HK", "转正日期_hk", "转正日期"),
 
             // entity.employeejoined.deptid
-            new TranslationSeedItem("entity.employeejoined.deptid", "en-US", "上岗部门ID", "上岗部门ID"),
+            new TranslationSeedItem("entity.employeejoined.deptid", "en-US", "上岗部门ID_us", "上岗部门ID"),
             // entity.employeejoined.deptid
-            new TranslationSeedItem("entity.employeejoined.deptid", "ja-JP", "上岗部门ID", "上岗部门ID"),
+            new TranslationSeedItem("entity.employeejoined.deptid", "ja-JP", "上岗部门ID_jp", "上岗部门ID"),
             // entity.employeejoined.deptid
             new TranslationSeedItem("entity.employeejoined.deptid", "zh-CN", "上岗部门ID", "上岗部门ID"),
             // entity.employeejoined.deptid
-            new TranslationSeedItem("entity.employeejoined.deptid", "zh-HK", "上岗部门ID", "上岗部门ID"),
+            new TranslationSeedItem("entity.employeejoined.deptid", "zh-HK", "上岗部门ID_hk", "上岗部门ID"),
 
             // entity.employeejoined.deptname
-            new TranslationSeedItem("entity.employeejoined.deptname", "en-US", "上岗部门名称", "上岗部门名称"),
+            new TranslationSeedItem("entity.employeejoined.deptname", "en-US", "上岗部门名称_us", "上岗部门名称"),
             // entity.employeejoined.deptname
-            new TranslationSeedItem("entity.employeejoined.deptname", "ja-JP", "上岗部门名称", "上岗部门名称"),
+            new TranslationSeedItem("entity.employeejoined.deptname", "ja-JP", "上岗部门名称_jp", "上岗部门名称"),
             // entity.employeejoined.deptname
             new TranslationSeedItem("entity.employeejoined.deptname", "zh-CN", "上岗部门名称", "上岗部门名称"),
             // entity.employeejoined.deptname
-            new TranslationSeedItem("entity.employeejoined.deptname", "zh-HK", "上岗部门名称", "上岗部门名称"),
+            new TranslationSeedItem("entity.employeejoined.deptname", "zh-HK", "上岗部门名称_hk", "上岗部门名称"),
 
             // entity.employeejoined.postid
-            new TranslationSeedItem("entity.employeejoined.postid", "en-US", "上岗岗位ID", "上岗岗位ID"),
+            new TranslationSeedItem("entity.employeejoined.postid", "en-US", "上岗岗位ID_us", "上岗岗位ID"),
             // entity.employeejoined.postid
-            new TranslationSeedItem("entity.employeejoined.postid", "ja-JP", "上岗岗位ID", "上岗岗位ID"),
+            new TranslationSeedItem("entity.employeejoined.postid", "ja-JP", "上岗岗位ID_jp", "上岗岗位ID"),
             // entity.employeejoined.postid
             new TranslationSeedItem("entity.employeejoined.postid", "zh-CN", "上岗岗位ID", "上岗岗位ID"),
             // entity.employeejoined.postid
-            new TranslationSeedItem("entity.employeejoined.postid", "zh-HK", "上岗岗位ID", "上岗岗位ID"),
+            new TranslationSeedItem("entity.employeejoined.postid", "zh-HK", "上岗岗位ID_hk", "上岗岗位ID"),
 
             // entity.employeejoined.postname
-            new TranslationSeedItem("entity.employeejoined.postname", "en-US", "上岗岗位名称", "上岗岗位名称"),
+            new TranslationSeedItem("entity.employeejoined.postname", "en-US", "上岗岗位名称_us", "上岗岗位名称"),
             // entity.employeejoined.postname
-            new TranslationSeedItem("entity.employeejoined.postname", "ja-JP", "上岗岗位名称", "上岗岗位名称"),
+            new TranslationSeedItem("entity.employeejoined.postname", "ja-JP", "上岗岗位名称_jp", "上岗岗位名称"),
             // entity.employeejoined.postname
             new TranslationSeedItem("entity.employeejoined.postname", "zh-CN", "上岗岗位名称", "上岗岗位名称"),
             // entity.employeejoined.postname
-            new TranslationSeedItem("entity.employeejoined.postname", "zh-HK", "上岗岗位名称", "上岗岗位名称"),
+            new TranslationSeedItem("entity.employeejoined.postname", "zh-HK", "上岗岗位名称_hk", "上岗岗位名称"),
 
             // entity.employeejoined.jobtitle
-            new TranslationSeedItem("entity.employeejoined.jobtitle", "en-US", "职务", "职务/职称"),
+            new TranslationSeedItem("entity.employeejoined.jobtitle", "en-US", "职务_us", "职务/职称"),
             // entity.employeejoined.jobtitle
-            new TranslationSeedItem("entity.employeejoined.jobtitle", "ja-JP", "职务", "职务/职称"),
+            new TranslationSeedItem("entity.employeejoined.jobtitle", "ja-JP", "职务_jp", "职务/职称"),
             // entity.employeejoined.jobtitle
             new TranslationSeedItem("entity.employeejoined.jobtitle", "zh-CN", "职务", "职务/职称"),
             // entity.employeejoined.jobtitle
-            new TranslationSeedItem("entity.employeejoined.jobtitle", "zh-HK", "职务", "职务/职称"),
+            new TranslationSeedItem("entity.employeejoined.jobtitle", "zh-HK", "职务_hk", "职务/职称"),
 
             // entity.employeejoined.worknature
-            new TranslationSeedItem("entity.employeejoined.worknature", "en-US", "工作性质", "工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）"),
+            new TranslationSeedItem("entity.employeejoined.worknature", "en-US", "工作性质_us", "工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）"),
             // entity.employeejoined.worknature
-            new TranslationSeedItem("entity.employeejoined.worknature", "ja-JP", "工作性质", "工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）"),
+            new TranslationSeedItem("entity.employeejoined.worknature", "ja-JP", "工作性质_jp", "工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）"),
             // entity.employeejoined.worknature
             new TranslationSeedItem("entity.employeejoined.worknature", "zh-CN", "工作性质", "工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）"),
             // entity.employeejoined.worknature
-            new TranslationSeedItem("entity.employeejoined.worknature", "zh-HK", "工作性质", "工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）"),
+            new TranslationSeedItem("entity.employeejoined.worknature", "zh-HK", "工作性质_hk", "工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）"),
 
             // entity.employeejoined.employmenttype
-            new TranslationSeedItem("entity.employeejoined.employmenttype", "en-US", "任职类型", "任职类型（0=主职，1=兼职，2=借调，3=挂职）"),
+            new TranslationSeedItem("entity.employeejoined.employmenttype", "en-US", "任职类型_us", "任职类型（0=主职，1=兼职，2=借调，3=挂职）"),
             // entity.employeejoined.employmenttype
-            new TranslationSeedItem("entity.employeejoined.employmenttype", "ja-JP", "任职类型", "任职类型（0=主职，1=兼职，2=借调，3=挂职）"),
+            new TranslationSeedItem("entity.employeejoined.employmenttype", "ja-JP", "任职类型_jp", "任职类型（0=主职，1=兼职，2=借调，3=挂职）"),
             // entity.employeejoined.employmenttype
             new TranslationSeedItem("entity.employeejoined.employmenttype", "zh-CN", "任职类型", "任职类型（0=主职，1=兼职，2=借调，3=挂职）"),
             // entity.employeejoined.employmenttype
-            new TranslationSeedItem("entity.employeejoined.employmenttype", "zh-HK", "任职类型", "任职类型（0=主职，1=兼职，2=借调，3=挂职）"),
+            new TranslationSeedItem("entity.employeejoined.employmenttype", "zh-HK", "任职类型_hk", "任职类型（0=主职，1=兼职，2=借调，3=挂职）"),
 
             // entity.employeejoined.directmanagerid
-            new TranslationSeedItem("entity.employeejoined.directmanagerid", "en-US", "直属上级员工ID", "直属上级员工ID"),
+            new TranslationSeedItem("entity.employeejoined.directmanagerid", "en-US", "直属上级员工ID_us", "直属上级员工ID"),
             // entity.employeejoined.directmanagerid
-            new TranslationSeedItem("entity.employeejoined.directmanagerid", "ja-JP", "直属上级员工ID", "直属上级员工ID"),
+            new TranslationSeedItem("entity.employeejoined.directmanagerid", "ja-JP", "直属上级员工ID_jp", "直属上级员工ID"),
             // entity.employeejoined.directmanagerid
             new TranslationSeedItem("entity.employeejoined.directmanagerid", "zh-CN", "直属上级员工ID", "直属上级员工ID"),
             // entity.employeejoined.directmanagerid
-            new TranslationSeedItem("entity.employeejoined.directmanagerid", "zh-HK", "直属上级员工ID", "直属上级员工ID"),
+            new TranslationSeedItem("entity.employeejoined.directmanagerid", "zh-HK", "直属上级员工ID_hk", "直属上级员工ID"),
 
             // entity.employeejoined.directmanagername
-            new TranslationSeedItem("entity.employeejoined.directmanagername", "en-US", "直属上级姓名", "直属上级姓名"),
+            new TranslationSeedItem("entity.employeejoined.directmanagername", "en-US", "直属上级姓名_us", "直属上级姓名"),
             // entity.employeejoined.directmanagername
-            new TranslationSeedItem("entity.employeejoined.directmanagername", "ja-JP", "直属上级姓名", "直属上级姓名"),
+            new TranslationSeedItem("entity.employeejoined.directmanagername", "ja-JP", "直属上级姓名_jp", "直属上级姓名"),
             // entity.employeejoined.directmanagername
             new TranslationSeedItem("entity.employeejoined.directmanagername", "zh-CN", "直属上级姓名", "直属上级姓名"),
             // entity.employeejoined.directmanagername
-            new TranslationSeedItem("entity.employeejoined.directmanagername", "zh-HK", "直属上级姓名", "直属上级姓名"),
+            new TranslationSeedItem("entity.employeejoined.directmanagername", "zh-HK", "直属上级姓名_hk", "直属上级姓名"),
         };
     }
 
@@ -232,10 +232,10 @@ public class TaktEmployeeJoinedI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Personnel";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

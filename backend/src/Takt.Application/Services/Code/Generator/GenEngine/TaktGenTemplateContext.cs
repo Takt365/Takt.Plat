@@ -161,7 +161,7 @@ public class TaktGenTemplateContext
         {
             Table = TaktGenTableTemplateModel.From(table) ?? new TaktGenTableTemplateModel(),
             Columns = (columns ?? Array.Empty<TaktGenTableColumn>())
-                .OrderBy(c => c.SortOrder)
+                .OrderBy(c => c.LineNumber)
                 .Select(TaktGenColumnTemplateModel.From)
                 .ToList()
         };
@@ -792,9 +792,53 @@ public class TaktGenTableTemplateModel
         };
     }
 
-    /// <summary>解析 GenFunction 为功能键列表。支持：JSON 对象 {"查看":"View","新增":"Create",...}（取 key 为功能键）；JSON 数组 ["查询","新增",...]；逗号分隔。</summary>
+    /// <summary>GenFunction 别名 → 模板引擎标准键（PascalCase，与 BuildControllerActions / DtoCategoryDescriptors 一致）。</summary>
+    private static readonly Dictionary<string, string> GenFunctionKeyAliases = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["query"] = "Query",
+        ["view"] = "View",
+        ["查询"] = "Query",
+        ["查看"] = "View",
+        ["create"] = "Create",
+        ["新增"] = "Create",
+        ["update"] = "Update",
+        ["更新"] = "Update",
+        ["delete"] = "Delete",
+        ["删除"] = "Delete",
+        ["status"] = "Status",
+        ["状态"] = "Status",
+        ["sort"] = "Sort",
+        ["排序"] = "Sort",
+        ["template"] = "Template",
+        ["模板"] = "Template",
+        ["import"] = "Import",
+        ["导入"] = "Import",
+        ["export"] = "Export",
+        ["导出"] = "Export",
+    };
+
+    /// <summary>将字典 value（小写 query/create）、中文标签或 PascalCase 统一为标准功能键。</summary>
+    /// <param name="raw">原始功能键</param>
+    /// <returns>标准键 Query/Create/…；无法识别时返回 trim 后原值</returns>
+    private static string CanonicalizeGenFunctionKey(string raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+            return string.Empty;
+        var trimmed = raw.Trim();
+        return GenFunctionKeyAliases.TryGetValue(trimmed, out var canonical) ? canonical : trimmed;
+    }
+
+    /// <summary>去重并规范 GenFunction 键列表。</summary>
+    private static List<string> NormalizeGenFunctionKeys(IEnumerable<string> rawKeys) =>
+        rawKeys
+            .Select(CanonicalizeGenFunctionKey)
+            .Where(k => k.Length > 0)
+            .Distinct(StringComparer.Ordinal)
+            .ToList();
+
+    /// <summary>解析 GenFunction 为功能键列表。支持：JSON 对象（取 key 与 string value）；JSON 数组；逗号分隔。字典 gen_function_type 的 value 为小写 query/create，解析后统一为 Query/Create。</summary>
     /// <param name="genFunction">GenFunction 原始字符串（JSON 对象/数组或逗号分隔）</param>
-    /// <returns>功能键列表（如 查询、新增、更新、删除）</returns>
+    /// <returns>标准功能键列表（Query、Create、Update、Delete 等）</returns>
     private static List<string> ParseGenFunctionKeys(string? genFunction)
     {
         if (string.IsNullOrWhiteSpace(genFunction))
@@ -806,10 +850,14 @@ public class TaktGenTableTemplateModel
             try
             {
                 var jobj = JObject.Parse(trimmed);
-                return jobj.Properties()
-                    .Select(p => p.Name)
-                    .Where(s => s.Length > 0)
-                    .ToList();
+                var raw = jobj.Properties().SelectMany(p =>
+                {
+                    var name = p.Name ?? string.Empty;
+                    if (p.Value?.Type == JTokenType.String)
+                        return new[] { name, p.Value.ToString() };
+                    return new[] { name };
+                });
+                return NormalizeGenFunctionKeys(raw);
             }
             catch { }
         }
@@ -819,15 +867,17 @@ public class TaktGenTableTemplateModel
             try
             {
                 var arr = JArray.Parse(trimmed);
-                return arr
+                var raw = arr
                     .Where(el => el?.Type == JTokenType.String)
-                    .Select(el => el.ToString())
-                    .Where(s => s.Length > 0)
-                    .ToList();
+                    .Select(el => el!.ToString());
+                return NormalizeGenFunctionKeys(raw);
             }
             catch { }
         }
-        return trimmed.Split(new[] { ',', '，', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => s.Length > 0).ToList();
+        var split = trimmed.Split(new[] { ',', '，', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(s => s.Trim())
+            .Where(s => s.Length > 0);
+        return NormalizeGenFunctionKeys(split);
     }
 
     /// <summary>功能键列表中是否包含"Query"或"View"，用于生成查询相关 Action/方法。</summary>
@@ -1500,8 +1550,8 @@ public class TaktGenColumnTemplateModel
     /// <summary>字典类型（关联数据字典）</summary>
     public string? DictType { get; set; }
 
-    /// <summary>排序序号</summary>
-    public int SortOrder { get; set; }
+    /// <summary>行号（项号/序号，固定步长=10）</summary>
+    public int LineNumber { get; set; }
 
     /// <summary>帕斯卡转驼峰（供前端列名使用）。</summary>
     private static string ToTsColumnName(string pascal)
@@ -1553,7 +1603,7 @@ public class TaktGenColumnTemplateModel
             QueryType = column.QueryType,
             HtmlType = column.HtmlType,
             DictType = column.DictType,
-            SortOrder = column.SortOrder
+            LineNumber = column.LineNumber
         };
     }
 }

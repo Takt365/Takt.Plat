@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketEvaluationI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicketEvaluation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,83 +75,83 @@ public class TaktTicketEvaluationI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktTicketEvaluation 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.ticketevaluation._self / entity.ticketevaluation.{{field}}；ResourceGroup=2；ResourceType=0
+    /// I18nKey：entity.ticketevaluation._self / entity.ticketevaluation.{{field}}；ResourceGroup=HelpDesk；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetTicketEvaluationTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.ticketevaluation._self
-            new TranslationSeedItem("entity.ticketevaluation._self", "en-US", "Ticket Evaluation Information", "实体名称"),
+            new TranslationSeedItem("entity.ticketevaluation._self", "en-US", "Ticket Evaluation Information_us", "实体名称"),
             // entity.ticketevaluation._self
-            new TranslationSeedItem("entity.ticketevaluation._self", "ja-JP", "工单服务评价信息", "实体名称"),
+            new TranslationSeedItem("entity.ticketevaluation._self", "ja-JP", "工单服务评价信息_jp", "实体名称"),
             // entity.ticketevaluation._self
             new TranslationSeedItem("entity.ticketevaluation._self", "zh-CN", "工单服务评价信息", "实体名称"),
             // entity.ticketevaluation._self
-            new TranslationSeedItem("entity.ticketevaluation._self", "zh-HK", "工单服务评价信息", "实体名称"),
+            new TranslationSeedItem("entity.ticketevaluation._self", "zh-HK", "工单服务评价信息_hk", "实体名称"),
 
             // entity.ticketevaluation.ticketid
-            new TranslationSeedItem("entity.ticketevaluation.ticketid", "en-US", "工单ID", "工单 ID"),
+            new TranslationSeedItem("entity.ticketevaluation.ticketid", "en-US", "工单ID_us", "工单 ID"),
             // entity.ticketevaluation.ticketid
-            new TranslationSeedItem("entity.ticketevaluation.ticketid", "ja-JP", "工单ID", "工单 ID"),
+            new TranslationSeedItem("entity.ticketevaluation.ticketid", "ja-JP", "工单ID_jp", "工单 ID"),
             // entity.ticketevaluation.ticketid
             new TranslationSeedItem("entity.ticketevaluation.ticketid", "zh-CN", "工单ID", "工单 ID"),
             // entity.ticketevaluation.ticketid
-            new TranslationSeedItem("entity.ticketevaluation.ticketid", "zh-HK", "工单ID", "工单 ID"),
+            new TranslationSeedItem("entity.ticketevaluation.ticketid", "zh-HK", "工单ID_hk", "工单 ID"),
 
             // entity.ticketevaluation.score
-            new TranslationSeedItem("entity.ticketevaluation.score", "en-US", "综合评分", "综合评分"),
+            new TranslationSeedItem("entity.ticketevaluation.score", "en-US", "综合评分_us", "综合评分"),
             // entity.ticketevaluation.score
-            new TranslationSeedItem("entity.ticketevaluation.score", "ja-JP", "综合评分", "综合评分"),
+            new TranslationSeedItem("entity.ticketevaluation.score", "ja-JP", "综合评分_jp", "综合评分"),
             // entity.ticketevaluation.score
             new TranslationSeedItem("entity.ticketevaluation.score", "zh-CN", "综合评分", "综合评分"),
             // entity.ticketevaluation.score
-            new TranslationSeedItem("entity.ticketevaluation.score", "zh-HK", "综合评分", "综合评分"),
+            new TranslationSeedItem("entity.ticketevaluation.score", "zh-HK", "综合评分_hk", "综合评分"),
 
             // entity.ticketevaluation.comment
-            new TranslationSeedItem("entity.ticketevaluation.comment", "en-US", "评价内容", "评价内容"),
+            new TranslationSeedItem("entity.ticketevaluation.comment", "en-US", "评价内容_us", "评价内容"),
             // entity.ticketevaluation.comment
-            new TranslationSeedItem("entity.ticketevaluation.comment", "ja-JP", "评价内容", "评价内容"),
+            new TranslationSeedItem("entity.ticketevaluation.comment", "ja-JP", "评价内容_jp", "评价内容"),
             // entity.ticketevaluation.comment
             new TranslationSeedItem("entity.ticketevaluation.comment", "zh-CN", "评价内容", "评价内容"),
             // entity.ticketevaluation.comment
-            new TranslationSeedItem("entity.ticketevaluation.comment", "zh-HK", "评价内容", "评价内容"),
+            new TranslationSeedItem("entity.ticketevaluation.comment", "zh-HK", "评价内容_hk", "评价内容"),
 
             // entity.ticketevaluation.evaluatorid
-            new TranslationSeedItem("entity.ticketevaluation.evaluatorid", "en-US", "评价人ID", "评价人 ID"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatorid", "en-US", "评价人ID_us", "评价人 ID"),
             // entity.ticketevaluation.evaluatorid
-            new TranslationSeedItem("entity.ticketevaluation.evaluatorid", "ja-JP", "评价人ID", "评价人 ID"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatorid", "ja-JP", "评价人ID_jp", "评价人 ID"),
             // entity.ticketevaluation.evaluatorid
             new TranslationSeedItem("entity.ticketevaluation.evaluatorid", "zh-CN", "评价人ID", "评价人 ID"),
             // entity.ticketevaluation.evaluatorid
-            new TranslationSeedItem("entity.ticketevaluation.evaluatorid", "zh-HK", "评价人ID", "评价人 ID"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatorid", "zh-HK", "评价人ID_hk", "评价人 ID"),
 
             // entity.ticketevaluation.evaluatorname
-            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "en-US", "评价人姓名", "评价人姓名"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "en-US", "评价人姓名_us", "评价人姓名"),
             // entity.ticketevaluation.evaluatorname
-            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "ja-JP", "评价人姓名", "评价人姓名"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "ja-JP", "评价人姓名_jp", "评价人姓名"),
             // entity.ticketevaluation.evaluatorname
             new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "zh-CN", "评价人姓名", "评价人姓名"),
             // entity.ticketevaluation.evaluatorname
-            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "zh-HK", "评价人姓名", "评价人姓名"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "zh-HK", "评价人姓名_hk", "评价人姓名"),
 
             // entity.ticketevaluation.evaluatedat
-            new TranslationSeedItem("entity.ticketevaluation.evaluatedat", "en-US", "评价时间", "评价时间"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatedat", "en-US", "评价时间_us", "评价时间"),
             // entity.ticketevaluation.evaluatedat
-            new TranslationSeedItem("entity.ticketevaluation.evaluatedat", "ja-JP", "评价时间", "评价时间"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatedat", "ja-JP", "评价时间_jp", "评价时间"),
             // entity.ticketevaluation.evaluatedat
             new TranslationSeedItem("entity.ticketevaluation.evaluatedat", "zh-CN", "评价时间", "评价时间"),
             // entity.ticketevaluation.evaluatedat
-            new TranslationSeedItem("entity.ticketevaluation.evaluatedat", "zh-HK", "评价时间", "评价时间"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatedat", "zh-HK", "评价时间_hk", "评价时间"),
 
             // entity.ticketevaluation.ticket
-            new TranslationSeedItem("entity.ticketevaluation.ticket", "en-US", "工单", "工单（主表）"),
+            new TranslationSeedItem("entity.ticketevaluation.ticket", "en-US", "工单_us", "工单（主表）"),
             // entity.ticketevaluation.ticket
-            new TranslationSeedItem("entity.ticketevaluation.ticket", "ja-JP", "工单", "工单（主表）"),
+            new TranslationSeedItem("entity.ticketevaluation.ticket", "ja-JP", "工单_jp", "工单（主表）"),
             // entity.ticketevaluation.ticket
             new TranslationSeedItem("entity.ticketevaluation.ticket", "zh-CN", "工单", "工单（主表）"),
             // entity.ticketevaluation.ticket
-            new TranslationSeedItem("entity.ticketevaluation.ticket", "zh-HK", "工单", "工单（主表）"),
+            new TranslationSeedItem("entity.ticketevaluation.ticket", "zh-HK", "工单_hk", "工单（主表）"),
         };
     }
 
@@ -169,10 +169,10 @@ public class TaktTicketEvaluationI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 2;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "HelpDesk";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

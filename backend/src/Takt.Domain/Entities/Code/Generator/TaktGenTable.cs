@@ -108,9 +108,9 @@ public class TaktGenTable : TaktTenantEntityBase
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组
+    /// 菜单权限组（逗号/JSON；<b>仅</b>用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
     /// </summary>
-    [SugarColumn(ColumnName = "menu_button_group", ColumnDescription = "菜单权限组", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
+    [SugarColumn(ColumnName = "menu_button_group", ColumnDescription = "菜单权限组", ColumnDataType = "ntext", IsNullable = true)]
     public string? MenuButtonGroup { get; set; }
 
     /// <summary>
@@ -215,7 +215,7 @@ public class TaktGenTable : TaktTenantEntityBase
     /// <para>- Export → ExportDto（导出传输对象）</para>
     /// <para>- 所有功能 → Dto（基础传输对象，包含所有字段）</para>
     /// </summary>
-    [SugarColumn(ColumnName = "gen_function", ColumnDescription = "生成功能", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
+    [SugarColumn(ColumnName = "gen_function", ColumnDescription = "生成功能", ColumnDataType = "ntext", IsNullable = true)]
     public string? GenFunction { get; set; }
 
     /// <summary>

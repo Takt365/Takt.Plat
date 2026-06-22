@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailureMeetingDtos.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityIssueMeetingDtos.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
-// 功能描述：QualityFailureMeeting 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityFailureMeeting 生成，请按需审阅）
+// 功能描述：QualityIssueMeeting 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityIssueMeeting 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,38 +18,38 @@ using Takt.Shared.Models;
 namespace Takt.Application.Dtos.Logistics.Quality.Cost;
 
 // ========================================
-// QualityFailureMeeting 响应 DTO
+// QualityIssueMeeting 响应 DTO
 // ========================================
 
 /// <summary>
 /// 品质问题应对明细 - 会议/调查/试验费用
-/// 对应前端 TaktQualityFailureMeetingDto
+/// 对应前端 TaktQualityIssueMeetingDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
-public class TaktQualityFailureMeetingDto : TaktCompanyDtoBase
+public class TaktQualityIssueMeetingDto : TaktCompanyDtoBase
 {
     /// <summary>
-    /// QualityFailureMeetingID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// QualityIssueMeetingID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureMeetingId { get; set; }
+    public long QualityIssueMeetingId { get; set; }
 
     /// <summary>
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureId { get; set; }
+    public long QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题主表名称（填充字段）
     /// </summary>
-    public string? QualityFailureName { get; set; }
+    public string? QualityIssueName { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    public string QualityFailureCode { get; set; } = string.Empty;
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -123,21 +123,21 @@ public class TaktQualityFailureMeetingDto : TaktCompanyDtoBase
 
     /// <summary>
     /// 质量问题主表（导航属性）
-    /// （主表：TaktQualityFailure）
+    /// （主表：TaktQualityIssue）
     /// </summary>
-    public TaktQualityFailureDto? Issue { get; set; }
+    public TaktQualityIssueDto? Issue { get; set; }
 
 }
 
 // ========================================
-// QualityFailureMeeting 查询 DTO
+// QualityIssueMeeting 查询 DTO
 // ========================================
 
 /// <summary>
-/// QualityFailureMeeting 分页查询 DTO
+/// QualityIssueMeeting 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
-public class TaktQualityFailureMeetingQueryDto : TaktPagedQuery
+public class TaktQualityIssueMeetingQueryDto : TaktPagedQuery
 {
     /// <summary>
     /// 租户编码
@@ -153,12 +153,12 @@ public class TaktQualityFailureMeetingQueryDto : TaktPagedQuery
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityFailureId { get; set; }
+    public long? QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    public string? QualityFailureCode { get; set; } = string.Empty;
+    public string? QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -243,7 +243,7 @@ public class TaktQualityFailureMeetingQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -252,13 +252,13 @@ public class TaktQualityFailureMeetingQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建QualityFailureMeeting DTO
+// 创建QualityIssueMeeting DTO
 // ========================================
 
 /// <summary>
-/// 创建QualityFailureMeeting DTO
+/// 创建QualityIssueMeeting DTO
 /// </summary>
-public class TaktQualityFailureMeetingCreateDto
+public class TaktQualityIssueMeetingCreateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -279,13 +279,13 @@ public class TaktQualityFailureMeetingCreateDto
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureId { get; set; }
+    public long QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
     [Required(ErrorMessage = "品质问题编码（冗余字段，便于查询）不能为空")]
-    public string QualityFailureCode { get; set; } = string.Empty;
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -360,7 +360,7 @@ public class TaktQualityFailureMeetingCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -370,22 +370,22 @@ public class TaktQualityFailureMeetingCreateDto
 }
 
 // ========================================
-// 更新QualityFailureMeeting DTO
+// 更新QualityIssueMeeting DTO
 // ========================================
 
 /// <summary>
-/// 更新QualityFailureMeeting DTO
-/// 继承 TaktQualityFailureMeetingCreateDto，添加 QualityFailureMeetingId 字段
+/// 更新QualityIssueMeeting DTO
+/// 继承 TaktQualityIssueMeetingCreateDto，添加 QualityIssueMeetingId 字段
 /// </summary>
-public class TaktQualityFailureMeetingUpdateDto : TaktQualityFailureMeetingCreateDto
+public class TaktQualityIssueMeetingUpdateDto : TaktQualityIssueMeetingCreateDto
 {
     /// <summary>
-    /// QualityFailureMeetingID（标识要更新的实体）
+    /// QualityIssueMeetingID（标识要更新的实体）
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureMeetingId { get; set; }
+    public long QualityIssueMeetingId { get; set; }
 
 }
 
@@ -394,9 +394,9 @@ public class TaktQualityFailureMeetingUpdateDto : TaktQualityFailureMeetingCreat
 // ========================================
 
 /// <summary>
-/// QualityFailureMeeting 导入模板行 DTO
+/// QualityIssueMeeting 导入模板行 DTO
 /// </summary>
-public class TaktQualityFailureMeetingTemplateDto
+public class TaktQualityIssueMeetingTemplateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -412,12 +412,12 @@ public class TaktQualityFailureMeetingTemplateDto
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityFailureId { get; set; }
+    public long? QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    public string? QualityFailureCode { get; set; } = string.Empty;
+    public string? QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -462,7 +462,7 @@ public class TaktQualityFailureMeetingTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -472,9 +472,9 @@ public class TaktQualityFailureMeetingTemplateDto
 }
 
 /// <summary>
-/// QualityFailureMeeting 导入 DTO（独立实现，不继承 TemplateDto）
+/// QualityIssueMeeting 导入 DTO（独立实现，不继承 TemplateDto）
 /// </summary>
-public class TaktQualityFailureMeetingImportDto
+public class TaktQualityIssueMeetingImportDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -495,12 +495,12 @@ public class TaktQualityFailureMeetingImportDto
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityFailureId { get; set; }
+    public long? QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    public string? QualityFailureCode { get; set; } = string.Empty;
+    public string? QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -545,7 +545,7 @@ public class TaktQualityFailureMeetingImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -559,16 +559,16 @@ public class TaktQualityFailureMeetingImportDto
 // ========================================
 
 /// <summary>
-/// QualityFailureMeeting 导出 DTO（独立实现，不继承响应 Dto）
+/// QualityIssueMeeting 导出 DTO（独立实现，不继承响应 Dto）
 /// </summary>
-public class TaktQualityFailureMeetingExportDto
+public class TaktQualityIssueMeetingExportDto
 {
     /// <summary>
-    /// QualityFailureMeetingID
+    /// QualityIssueMeetingID
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureMeetingId { get; set; }
+    public long QualityIssueMeetingId { get; set; }
 
     /// <summary>
     /// 公司代码
@@ -579,12 +579,12 @@ public class TaktQualityFailureMeetingExportDto
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureId { get; set; }
+    public long QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    public string QualityFailureCode { get; set; } = string.Empty;
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -659,7 +659,7 @@ public class TaktQualityFailureMeetingExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

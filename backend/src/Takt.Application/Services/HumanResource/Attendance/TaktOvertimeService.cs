@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Attendance
 // 文件名称：TaktOvertimeService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：加班信息应用服务实现
 // 
@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.HumanResource.Attendance;
-using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Takt.Domain.Entities.HumanResource.Attendance;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -22,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.HumanResource.Attendance;
 
@@ -35,7 +33,6 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
     private readonly ITaktCompanyRepository<TaktOvertimeItem> _overtimeItemRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
-    private readonly TaktApprovalFlowSubmitService _approvalFlowSubmitService;
 
     /// <summary>
     /// 构造函数
@@ -44,7 +41,6 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
     /// <param name="overtimeItemRepository">OvertimeItem仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
-    /// <param name="approvalFlowSubmitService">通用提交审批服务</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktOvertimeService(
@@ -52,7 +48,6 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
         ITaktCompanyRepository<TaktOvertimeItem> overtimeItemRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
-        TaktApprovalFlowSubmitService approvalFlowSubmitService,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -61,7 +56,6 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
         _overtimeItemRepository = overtimeItemRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
-        _approvalFlowSubmitService = approvalFlowSubmitService;
     }
 
     /// <summary>
@@ -107,8 +101,8 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
     {
         EnsureThreeLayerContext();
         var list = await _overtimeRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.DeptName,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.OvertimeStatus == 1,
+            x => x.DeptName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -219,17 +213,6 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
         entity.OvertimeStatus = dto.OvertimeStatus;
         await _overtimeRepository.UpdateAsync(entity);
         return await GetOvertimeByIdAsync(dto.OvertimeId) ?? throw new TaktBusinessException("加班信息不存在");
-    }
-
-    /// <summary>
-    /// 提交加班审批（发起 Overtime 流程）
-    /// </summary>
-    /// <param name="id">加班 ID</param>
-    /// <returns>加班 DTO</returns>
-    public async Task<TaktOvertimeDto> SubmitOvertimeForApprovalAsync(long id)
-    {
-        await _approvalFlowSubmitService.SubmitForApprovalByTableAsync("takt_human_resource_attendance_overtime", id);
-        return await GetOvertimeByIdAsync(id) ?? throw new TaktBusinessException("加班信息不存在");
     }
 
     /// <summary>
@@ -426,11 +409,10 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
                 || SqlFunc.ToString(x.OvertimeType).Contains(keywords)
                 || (x.Reason != null && x.Reason.Contains(keywords))
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || SqlFunc.ToString(x.FlowInstanceId).Contains(keywords)
                 || SqlFunc.ToString(x.HandlingBy).Contains(keywords)
                 || (x.HandlingComment != null && x.HandlingComment.Contains(keywords))
                 || SqlFunc.ToString(x.OvertimeStatus).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.OvertimeDate).Contains(keywords)
                 || SqlFunc.ToString(x.PlannedStartTime).Contains(keywords)
@@ -480,11 +462,6 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
-        if (queryDto?.FlowInstanceId.HasValue == true)
-        {
-            exp = exp.And(x => x.FlowInstanceId == queryDto.FlowInstanceId);
-        }
-
         if (queryDto?.HandlingBy.HasValue == true)
         {
             exp = exp.And(x => x.HandlingBy == queryDto.HandlingBy);
@@ -500,9 +477,9 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
             exp = exp.And(x => x.OvertimeStatus == queryDto.OvertimeStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

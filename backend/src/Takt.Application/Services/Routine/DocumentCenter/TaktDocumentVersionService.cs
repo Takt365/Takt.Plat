@@ -97,7 +97,7 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
         EnsureThreeLayerContext();
         var list = await _documentVersionRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.FileName,
+            x => x.FileName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -326,7 +326,7 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
                 || (x.FileExtension != null && x.FileExtension.Contains(keywords))
                 || SqlFunc.ToString(x.RevisedBy).Contains(keywords)
                 || (x.RevisedByName != null && x.RevisedByName.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.RevisedAt).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -388,9 +388,9 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
             exp = exp.And(x => x.RevisedByName != null && x.RevisedByName.Contains(queryDto.RevisedByName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

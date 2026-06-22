@@ -41,9 +41,7 @@ export function getTalentInterviewList(queryDto: any): Promise<TaktPagedResult<T
   return request<TaktPagedResult<TalentInterview>>({
     url: `${TALENT_INTERVIEW_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportTalentInterview(
     url: `${TALENT_INTERVIEW_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

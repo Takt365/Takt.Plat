@@ -46,7 +46,7 @@ export interface TaktDictSelectFieldNames {
   /** 作为 label 的字典字段 */
   labelField: 'dictLabel' | 'extLabel';
   /** 作为 value 的字典字段 */
-  valueField: 'dictValue' | 'extLabel' | 'extValue';
+  valueField: 'dictValue' | 'extLabel' | 'extValue' | 'sortOrder';
 }
 
 /**
@@ -135,6 +135,8 @@ export interface TaktCaptchaPanelExpose {
 export interface UseTaktLoginCaptchaOptions {
   /** 拼图/滑轨验证通过后自动继续（无需点击确认） */
   onVerified?: () => void | Promise<void>;
+  /** 验证码未启用时静默跳过（不提示用户） */
+  onCaptchaSkipped?: () => void | Promise<void>;
 }
 
 /**
@@ -183,8 +185,22 @@ export interface TaktApiResult<T = unknown> {
 }
 
 /**
+ * 分页全局配置（来源 appsettings Paged，由 GET TaktPlatform/pagination 下发）
+ */
+export interface TaktPaginationConfig {
+  /** 默认页码（从 1 开始） */
+  defaultPageIndex: number;
+  /** 默认每页条数 */
+  defaultPageSize: number;
+  /** 列表 pageSize 上限 */
+  maxPageSize: number;
+  /** TaktPagination 可选每页条数 */
+  pageSizeOptions: string[];
+}
+
+/**
  * 分页查询基类
- * 对应后端 TaktPagedQuery
+ * 对应后端 TaktPagedQuery（默认值来自 appsettings Paged）
  */
 export interface TaktPagedQuery {
   /**
@@ -193,7 +209,7 @@ export interface TaktPagedQuery {
   pageIndex: number;
 
   /**
-   * 每页大小
+   * 每页大小（默认见 appsettings Paged:DefaultPageSize）
    */
   pageSize: number;
 
@@ -324,7 +340,7 @@ export interface TaktTenantEntityBase {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -392,7 +408,7 @@ export interface TaktCompanyEntityBase {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -460,7 +476,7 @@ export interface TaktApprovalEntityBase {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

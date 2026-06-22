@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailureMeetingI18nSeedData.cs
-// 创建时间：2026-06-12
+// 文件名称：TaktQualityIssueMeetingI18nSeedData.cs
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktQualityFailureMeeting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktQualityIssueMeeting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -20,10 +20,10 @@ using Takt.Shared.Helpers;
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost;
 
 /// <summary>
-/// TaktQualityFailureMeeting 实体国际化翻译种子（键前缀 entity.qualityfailuremeeting.*）
+/// TaktQualityIssueMeeting 实体国际化翻译种子（键前缀 entity.qualityissuemeeting.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
-public class TaktQualityFailureMeetingI18nSeedData : ITaktSeedDataCoordinator
+public class TaktQualityIssueMeetingI18nSeedData : ITaktSeedDataCoordinator
 {
     /// <summary>
     /// 执行顺序（实体翻译种子，位于部门翻译之后）
@@ -35,7 +35,7 @@ public class TaktQualityFailureMeetingI18nSeedData : ITaktSeedDataCoordinator
     /// </summary>
     public async Task<(int InsertCount, int UpdateCount)> SeedAsync(IServiceProvider serviceProvider, string? tenantCode = null)
     {
-        TaktLogger.Information("开始初始化 TaktQualityFailureMeeting 实体国际化翻译种子...");
+        TaktLogger.Information("开始初始化 TaktQualityIssueMeeting 实体国际化翻译种子...");
 
         if (string.IsNullOrEmpty(tenantCode))
         {
@@ -50,9 +50,9 @@ public class TaktQualityFailureMeetingI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityfailuremeeting 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityissuemeeting 实体翻译...", tenantCode);
 
-        foreach (var item in GetQualityFailureMeetingTranslations())
+        foreach (var item in GetQualityIssueMeetingTranslations())
         {
             if (!cultureIdByCode.TryGetValue(item.CultureCode, out var cultureId))
             {
@@ -69,179 +69,179 @@ public class TaktQualityFailureMeetingI18nSeedData : ITaktSeedDataCoordinator
             updateCount += u;
         }
 
-        TaktLogger.Information("TaktQualityFailureMeeting 实体翻译种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
+        TaktLogger.Information("TaktQualityIssueMeeting 实体翻译种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
         return (insertCount, updateCount);
     }
 
     /// <summary>
-    /// TaktQualityFailureMeeting 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.qualityfailuremeeting._self / entity.qualityfailuremeeting.{{field}}；ResourceGroup=4；ResourceType=0
+    /// TaktQualityIssueMeeting 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
+    /// I18nKey：entity.qualityissuemeeting._self / entity.qualityissuemeeting.{{field}}；ResourceGroup=Cost；ResourceType=frontend
     /// </summary>
-    private static List<TranslationSeedItem> GetQualityFailureMeetingTranslations()
+    private static List<TranslationSeedItem> GetQualityIssueMeetingTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.qualityfailuremeeting._self
-            new TranslationSeedItem("entity.qualityfailuremeeting._self", "en-US", "Quality Failure Meeting Information", "实体名称"),
-            // entity.qualityfailuremeeting._self
-            new TranslationSeedItem("entity.qualityfailuremeeting._self", "ja-JP", "品质问题应对明细 - 会议/调查/试验费用信息", "实体名称"),
-            // entity.qualityfailuremeeting._self
-            new TranslationSeedItem("entity.qualityfailuremeeting._self", "zh-CN", "品质问题应对明细 - 会议/调查/试验费用信息", "实体名称"),
-            // entity.qualityfailuremeeting._self
-            new TranslationSeedItem("entity.qualityfailuremeeting._self", "zh-HK", "品质问题应对明细 - 会议/调查/试验费用信息", "实体名称"),
+            // entity.qualityissuemeeting._self
+            new TranslationSeedItem("entity.qualityissuemeeting._self", "en-US", "Quality Issue Meeting Information_us", "实体名称"),
+            // entity.qualityissuemeeting._self
+            new TranslationSeedItem("entity.qualityissuemeeting._self", "ja-JP", "品质问题应对明细 - 会议/调查/试验费用信息_jp", "实体名称"),
+            // entity.qualityissuemeeting._self
+            new TranslationSeedItem("entity.qualityissuemeeting._self", "zh-CN", "品质问题应对明细 - 会议/调查/试验费用信息", "实体名称"),
+            // entity.qualityissuemeeting._self
+            new TranslationSeedItem("entity.qualityissuemeeting._self", "zh-HK", "品质问题应对明细 - 会议/调查/试验费用信息_hk", "实体名称"),
 
-            // entity.qualityfailuremeeting.qualityfailureid
-            new TranslationSeedItem("entity.qualityfailuremeeting.qualityfailureid", "en-US", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityfailuremeeting.qualityfailureid
-            new TranslationSeedItem("entity.qualityfailuremeeting.qualityfailureid", "ja-JP", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityfailuremeeting.qualityfailureid
-            new TranslationSeedItem("entity.qualityfailuremeeting.qualityfailureid", "zh-CN", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityfailuremeeting.qualityfailureid
-            new TranslationSeedItem("entity.qualityfailuremeeting.qualityfailureid", "zh-HK", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityissuemeeting.qualityissueid
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "en-US", "品质问题主表ID_us", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityissuemeeting.qualityissueid
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "ja-JP", "品质问题主表ID_jp", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityissuemeeting.qualityissueid
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "zh-CN", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityissuemeeting.qualityissueid
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
 
-            // entity.qualityfailuremeeting.qualityfailurecode
-            new TranslationSeedItem("entity.qualityfailuremeeting.qualityfailurecode", "en-US", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
-            // entity.qualityfailuremeeting.qualityfailurecode
-            new TranslationSeedItem("entity.qualityfailuremeeting.qualityfailurecode", "ja-JP", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
-            // entity.qualityfailuremeeting.qualityfailurecode
-            new TranslationSeedItem("entity.qualityfailuremeeting.qualityfailurecode", "zh-CN", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
-            // entity.qualityfailuremeeting.qualityfailurecode
-            new TranslationSeedItem("entity.qualityfailuremeeting.qualityfailurecode", "zh-HK", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityissuemeeting.qualityissuecode
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "en-US", "品质问题编码_us", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityissuemeeting.qualityissuecode
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "ja-JP", "品质问题编码_jp", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityissuemeeting.qualityissuecode
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "zh-CN", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityissuemeeting.qualityissuecode
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "zh-HK", "品质问题编码_hk", "品质问题编码（冗余字段，便于查询）"),
 
-            // entity.qualityfailuremeeting.linenumber
-            new TranslationSeedItem("entity.qualityfailuremeeting.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.qualityfailuremeeting.linenumber
-            new TranslationSeedItem("entity.qualityfailuremeeting.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.qualityfailuremeeting.linenumber
-            new TranslationSeedItem("entity.qualityfailuremeeting.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.qualityfailuremeeting.linenumber
-            new TranslationSeedItem("entity.qualityfailuremeeting.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityissuemeeting.linenumber
+            new TranslationSeedItem("entity.qualityissuemeeting.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityissuemeeting.linenumber
+            new TranslationSeedItem("entity.qualityissuemeeting.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityissuemeeting.linenumber
+            new TranslationSeedItem("entity.qualityissuemeeting.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityissuemeeting.linenumber
+            new TranslationSeedItem("entity.qualityissuemeeting.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
-            // entity.qualityfailuremeeting.directmanpowercostperminute
-            new TranslationSeedItem("entity.qualityfailuremeeting.directmanpowercostperminute", "en-US", "直接人员费率", "直接人员费率（元/分钟）"),
-            // entity.qualityfailuremeeting.directmanpowercostperminute
-            new TranslationSeedItem("entity.qualityfailuremeeting.directmanpowercostperminute", "ja-JP", "直接人员费率", "直接人员费率（元/分钟）"),
-            // entity.qualityfailuremeeting.directmanpowercostperminute
-            new TranslationSeedItem("entity.qualityfailuremeeting.directmanpowercostperminute", "zh-CN", "直接人员费率", "直接人员费率（元/分钟）"),
-            // entity.qualityfailuremeeting.directmanpowercostperminute
-            new TranslationSeedItem("entity.qualityfailuremeeting.directmanpowercostperminute", "zh-HK", "直接人员费率", "直接人员费率（元/分钟）"),
+            // entity.qualityissuemeeting.directmanpowercostperminute
+            new TranslationSeedItem("entity.qualityissuemeeting.directmanpowercostperminute", "en-US", "直接人员费率_us", "直接人员费率（元/分钟）"),
+            // entity.qualityissuemeeting.directmanpowercostperminute
+            new TranslationSeedItem("entity.qualityissuemeeting.directmanpowercostperminute", "ja-JP", "直接人员费率_jp", "直接人员费率（元/分钟）"),
+            // entity.qualityissuemeeting.directmanpowercostperminute
+            new TranslationSeedItem("entity.qualityissuemeeting.directmanpowercostperminute", "zh-CN", "直接人员费率", "直接人员费率（元/分钟）"),
+            // entity.qualityissuemeeting.directmanpowercostperminute
+            new TranslationSeedItem("entity.qualityissuemeeting.directmanpowercostperminute", "zh-HK", "直接人员费率_hk", "直接人员费率（元/分钟）"),
 
-            // entity.qualityfailuremeeting.indirectmanpowercostperminute
-            new TranslationSeedItem("entity.qualityfailuremeeting.indirectmanpowercostperminute", "en-US", "间接人员费率", "间接人员费率（元/分钟）"),
-            // entity.qualityfailuremeeting.indirectmanpowercostperminute
-            new TranslationSeedItem("entity.qualityfailuremeeting.indirectmanpowercostperminute", "ja-JP", "间接人员费率", "间接人员费率（元/分钟）"),
-            // entity.qualityfailuremeeting.indirectmanpowercostperminute
-            new TranslationSeedItem("entity.qualityfailuremeeting.indirectmanpowercostperminute", "zh-CN", "间接人员费率", "间接人员费率（元/分钟）"),
-            // entity.qualityfailuremeeting.indirectmanpowercostperminute
-            new TranslationSeedItem("entity.qualityfailuremeeting.indirectmanpowercostperminute", "zh-HK", "间接人员费率", "间接人员费率（元/分钟）"),
+            // entity.qualityissuemeeting.indirectmanpowercostperminute
+            new TranslationSeedItem("entity.qualityissuemeeting.indirectmanpowercostperminute", "en-US", "间接人员费率_us", "间接人员费率（元/分钟）"),
+            // entity.qualityissuemeeting.indirectmanpowercostperminute
+            new TranslationSeedItem("entity.qualityissuemeeting.indirectmanpowercostperminute", "ja-JP", "间接人员费率_jp", "间接人员费率（元/分钟）"),
+            // entity.qualityissuemeeting.indirectmanpowercostperminute
+            new TranslationSeedItem("entity.qualityissuemeeting.indirectmanpowercostperminute", "zh-CN", "间接人员费率", "间接人员费率（元/分钟）"),
+            // entity.qualityissuemeeting.indirectmanpowercostperminute
+            new TranslationSeedItem("entity.qualityissuemeeting.indirectmanpowercostperminute", "zh-HK", "间接人员费率_hk", "间接人员费率（元/分钟）"),
 
-            // entity.qualityfailuremeeting.meetinginvestigationcontent
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetinginvestigationcontent", "en-US", "讨论调查试验内容", "讨论调查试验内容(会议记录)"),
-            // entity.qualityfailuremeeting.meetinginvestigationcontent
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetinginvestigationcontent", "ja-JP", "讨论调查试验内容", "讨论调查试验内容(会议记录)"),
-            // entity.qualityfailuremeeting.meetinginvestigationcontent
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetinginvestigationcontent", "zh-CN", "讨论调查试验内容", "讨论调查试验内容(会议记录)"),
-            // entity.qualityfailuremeeting.meetinginvestigationcontent
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetinginvestigationcontent", "zh-HK", "讨论调查试验内容", "讨论调查试验内容(会议记录)"),
+            // entity.qualityissuemeeting.meetinginvestigationcontent
+            new TranslationSeedItem("entity.qualityissuemeeting.meetinginvestigationcontent", "en-US", "讨论调查试验内容_us", "讨论调查试验内容(会议记录)"),
+            // entity.qualityissuemeeting.meetinginvestigationcontent
+            new TranslationSeedItem("entity.qualityissuemeeting.meetinginvestigationcontent", "ja-JP", "讨论调查试验内容_jp", "讨论调查试验内容(会议记录)"),
+            // entity.qualityissuemeeting.meetinginvestigationcontent
+            new TranslationSeedItem("entity.qualityissuemeeting.meetinginvestigationcontent", "zh-CN", "讨论调查试验内容", "讨论调查试验内容(会议记录)"),
+            // entity.qualityissuemeeting.meetinginvestigationcontent
+            new TranslationSeedItem("entity.qualityissuemeeting.meetinginvestigationcontent", "zh-HK", "讨论调查试验内容_hk", "讨论调查试验内容(会议记录)"),
 
-            // entity.qualityfailuremeeting.meetinginvestigationcost
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetinginvestigationcost", "en-US", "讨论调查试验费用", "讨论调查试验费用(元)"),
-            // entity.qualityfailuremeeting.meetinginvestigationcost
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetinginvestigationcost", "ja-JP", "讨论调查试验费用", "讨论调查试验费用(元)"),
-            // entity.qualityfailuremeeting.meetinginvestigationcost
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetinginvestigationcost", "zh-CN", "讨论调查试验费用", "讨论调查试验费用(元)"),
-            // entity.qualityfailuremeeting.meetinginvestigationcost
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetinginvestigationcost", "zh-HK", "讨论调查试验费用", "讨论调查试验费用(元)"),
+            // entity.qualityissuemeeting.meetinginvestigationcost
+            new TranslationSeedItem("entity.qualityissuemeeting.meetinginvestigationcost", "en-US", "讨论调查试验费用_us", "讨论调查试验费用(元)"),
+            // entity.qualityissuemeeting.meetinginvestigationcost
+            new TranslationSeedItem("entity.qualityissuemeeting.meetinginvestigationcost", "ja-JP", "讨论调查试验费用_jp", "讨论调查试验费用(元)"),
+            // entity.qualityissuemeeting.meetinginvestigationcost
+            new TranslationSeedItem("entity.qualityissuemeeting.meetinginvestigationcost", "zh-CN", "讨论调查试验费用", "讨论调查试验费用(元)"),
+            // entity.qualityissuemeeting.meetinginvestigationcost
+            new TranslationSeedItem("entity.qualityissuemeeting.meetinginvestigationcost", "zh-HK", "讨论调查试验费用_hk", "讨论调查试验费用(元)"),
 
-            // entity.qualityfailuremeeting.meetingtimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetingtimeminutes", "en-US", "检讨会使用时间", "讨论会使用时间(分钟)"),
-            // entity.qualityfailuremeeting.meetingtimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetingtimeminutes", "ja-JP", "检讨会使用时间", "讨论会使用时间(分钟)"),
-            // entity.qualityfailuremeeting.meetingtimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetingtimeminutes", "zh-CN", "检讨会使用时间", "讨论会使用时间(分钟)"),
-            // entity.qualityfailuremeeting.meetingtimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetingtimeminutes", "zh-HK", "检讨会使用时间", "讨论会使用时间(分钟)"),
+            // entity.qualityissuemeeting.meetingtimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.meetingtimeminutes", "en-US", "检讨会使用时间_us", "讨论会使用时间(分钟)"),
+            // entity.qualityissuemeeting.meetingtimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.meetingtimeminutes", "ja-JP", "检讨会使用时间_jp", "讨论会使用时间(分钟)"),
+            // entity.qualityissuemeeting.meetingtimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.meetingtimeminutes", "zh-CN", "检讨会使用时间", "讨论会使用时间(分钟)"),
+            // entity.qualityissuemeeting.meetingtimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.meetingtimeminutes", "zh-HK", "检讨会使用时间_hk", "讨论会使用时间(分钟)"),
 
-            // entity.qualityfailuremeeting.directparticipantcount
-            new TranslationSeedItem("entity.qualityfailuremeeting.directparticipantcount", "en-US", "直接人员参加人数", "直接人员参加人数"),
-            // entity.qualityfailuremeeting.directparticipantcount
-            new TranslationSeedItem("entity.qualityfailuremeeting.directparticipantcount", "ja-JP", "直接人员参加人数", "直接人员参加人数"),
-            // entity.qualityfailuremeeting.directparticipantcount
-            new TranslationSeedItem("entity.qualityfailuremeeting.directparticipantcount", "zh-CN", "直接人员参加人数", "直接人员参加人数"),
-            // entity.qualityfailuremeeting.directparticipantcount
-            new TranslationSeedItem("entity.qualityfailuremeeting.directparticipantcount", "zh-HK", "直接人员参加人数", "直接人员参加人数"),
+            // entity.qualityissuemeeting.directparticipantcount
+            new TranslationSeedItem("entity.qualityissuemeeting.directparticipantcount", "en-US", "直接人员参加人数_us", "直接人员参加人数"),
+            // entity.qualityissuemeeting.directparticipantcount
+            new TranslationSeedItem("entity.qualityissuemeeting.directparticipantcount", "ja-JP", "直接人员参加人数_jp", "直接人员参加人数"),
+            // entity.qualityissuemeeting.directparticipantcount
+            new TranslationSeedItem("entity.qualityissuemeeting.directparticipantcount", "zh-CN", "直接人员参加人数", "直接人员参加人数"),
+            // entity.qualityissuemeeting.directparticipantcount
+            new TranslationSeedItem("entity.qualityissuemeeting.directparticipantcount", "zh-HK", "直接人员参加人数_hk", "直接人员参加人数"),
 
-            // entity.qualityfailuremeeting.indirectparticipantcount
-            new TranslationSeedItem("entity.qualityfailuremeeting.indirectparticipantcount", "en-US", "间接人员参加人数", "间接人员参加人数"),
-            // entity.qualityfailuremeeting.indirectparticipantcount
-            new TranslationSeedItem("entity.qualityfailuremeeting.indirectparticipantcount", "ja-JP", "间接人员参加人数", "间接人员参加人数"),
-            // entity.qualityfailuremeeting.indirectparticipantcount
-            new TranslationSeedItem("entity.qualityfailuremeeting.indirectparticipantcount", "zh-CN", "间接人员参加人数", "间接人员参加人数"),
-            // entity.qualityfailuremeeting.indirectparticipantcount
-            new TranslationSeedItem("entity.qualityfailuremeeting.indirectparticipantcount", "zh-HK", "间接人员参加人数", "间接人员参加人数"),
+            // entity.qualityissuemeeting.indirectparticipantcount
+            new TranslationSeedItem("entity.qualityissuemeeting.indirectparticipantcount", "en-US", "间接人员参加人数_us", "间接人员参加人数"),
+            // entity.qualityissuemeeting.indirectparticipantcount
+            new TranslationSeedItem("entity.qualityissuemeeting.indirectparticipantcount", "ja-JP", "间接人员参加人数_jp", "间接人员参加人数"),
+            // entity.qualityissuemeeting.indirectparticipantcount
+            new TranslationSeedItem("entity.qualityissuemeeting.indirectparticipantcount", "zh-CN", "间接人员参加人数", "间接人员参加人数"),
+            // entity.qualityissuemeeting.indirectparticipantcount
+            new TranslationSeedItem("entity.qualityissuemeeting.indirectparticipantcount", "zh-HK", "间接人员参加人数_hk", "间接人员参加人数"),
 
-            // entity.qualityfailuremeeting.investigationworktimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.investigationworktimeminutes", "en-US", "调查评价试验工作时间", "调查评价试验工作时间（分钟）"),
-            // entity.qualityfailuremeeting.investigationworktimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.investigationworktimeminutes", "ja-JP", "调查评价试验工作时间", "调查评价试验工作时间（分钟）"),
-            // entity.qualityfailuremeeting.investigationworktimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.investigationworktimeminutes", "zh-CN", "调查评价试验工作时间", "调查评价试验工作时间（分钟）"),
-            // entity.qualityfailuremeeting.investigationworktimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.investigationworktimeminutes", "zh-HK", "调查评价试验工作时间", "调查评价试验工作时间（分钟）"),
+            // entity.qualityissuemeeting.investigationworktimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.investigationworktimeminutes", "en-US", "调查评价试验工作时间_us", "调查评价试验工作时间（分钟）"),
+            // entity.qualityissuemeeting.investigationworktimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.investigationworktimeminutes", "ja-JP", "调查评价试验工作时间_jp", "调查评价试验工作时间（分钟）"),
+            // entity.qualityissuemeeting.investigationworktimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.investigationworktimeminutes", "zh-CN", "调查评价试验工作时间", "调查评价试验工作时间（分钟）"),
+            // entity.qualityissuemeeting.investigationworktimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.investigationworktimeminutes", "zh-HK", "调查评价试验工作时间_hk", "调查评价试验工作时间（分钟）"),
 
-            // entity.qualityfailuremeeting.travelcost
-            new TranslationSeedItem("entity.qualityfailuremeeting.travelcost", "en-US", "交通费旅费", "交通费、旅费（元）"),
-            // entity.qualityfailuremeeting.travelcost
-            new TranslationSeedItem("entity.qualityfailuremeeting.travelcost", "ja-JP", "交通费旅费", "交通费、旅费（元）"),
-            // entity.qualityfailuremeeting.travelcost
-            new TranslationSeedItem("entity.qualityfailuremeeting.travelcost", "zh-CN", "交通费旅费", "交通费、旅费（元）"),
-            // entity.qualityfailuremeeting.travelcost
-            new TranslationSeedItem("entity.qualityfailuremeeting.travelcost", "zh-HK", "交通费旅费", "交通费、旅费（元）"),
+            // entity.qualityissuemeeting.travelcost
+            new TranslationSeedItem("entity.qualityissuemeeting.travelcost", "en-US", "交通费旅费_us", "交通费、旅费（元）"),
+            // entity.qualityissuemeeting.travelcost
+            new TranslationSeedItem("entity.qualityissuemeeting.travelcost", "ja-JP", "交通费旅费_jp", "交通费、旅费（元）"),
+            // entity.qualityissuemeeting.travelcost
+            new TranslationSeedItem("entity.qualityissuemeeting.travelcost", "zh-CN", "交通费旅费", "交通费、旅费（元）"),
+            // entity.qualityissuemeeting.travelcost
+            new TranslationSeedItem("entity.qualityissuemeeting.travelcost", "zh-HK", "交通费旅费_hk", "交通费、旅费（元）"),
 
-            // entity.qualityfailuremeeting.otherexpenses
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherexpenses", "en-US", "其他费用", "其他费用（元）"),
-            // entity.qualityfailuremeeting.otherexpenses
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherexpenses", "ja-JP", "其他费用", "其他费用（元）"),
-            // entity.qualityfailuremeeting.otherexpenses
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherexpenses", "zh-CN", "其他费用", "其他费用（元）"),
-            // entity.qualityfailuremeeting.otherexpenses
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherexpenses", "zh-HK", "其他费用", "其他费用（元）"),
+            // entity.qualityissuemeeting.otherexpenses
+            new TranslationSeedItem("entity.qualityissuemeeting.otherexpenses", "en-US", "其他费用_us", "其他费用（元）"),
+            // entity.qualityissuemeeting.otherexpenses
+            new TranslationSeedItem("entity.qualityissuemeeting.otherexpenses", "ja-JP", "其他费用_jp", "其他费用（元）"),
+            // entity.qualityissuemeeting.otherexpenses
+            new TranslationSeedItem("entity.qualityissuemeeting.otherexpenses", "zh-CN", "其他费用", "其他费用（元）"),
+            // entity.qualityissuemeeting.otherexpenses
+            new TranslationSeedItem("entity.qualityissuemeeting.otherexpenses", "zh-HK", "其他费用_hk", "其他费用（元）"),
 
-            // entity.qualityfailuremeeting.otherworktimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherworktimeminutes", "en-US", "其他作业时间", "其他作业時間（分钟）"),
-            // entity.qualityfailuremeeting.otherworktimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherworktimeminutes", "ja-JP", "其他作业时间", "其他作业時間（分钟）"),
-            // entity.qualityfailuremeeting.otherworktimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherworktimeminutes", "zh-CN", "其他作业时间", "其他作业時間（分钟）"),
-            // entity.qualityfailuremeeting.otherworktimeminutes
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherworktimeminutes", "zh-HK", "其他作业时间", "其他作业時間（分钟）"),
+            // entity.qualityissuemeeting.otherworktimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.otherworktimeminutes", "en-US", "其他作业时间_us", "其他作业時間（分钟）"),
+            // entity.qualityissuemeeting.otherworktimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.otherworktimeminutes", "ja-JP", "其他作业时间_jp", "其他作业時間（分钟）"),
+            // entity.qualityissuemeeting.otherworktimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.otherworktimeminutes", "zh-CN", "其他作业时间", "其他作业時間（分钟）"),
+            // entity.qualityissuemeeting.otherworktimeminutes
+            new TranslationSeedItem("entity.qualityissuemeeting.otherworktimeminutes", "zh-HK", "其他作业时间_hk", "其他作业時間（分钟）"),
 
-            // entity.qualityfailuremeeting.otherapparatuscost
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherapparatuscost", "en-US", "其他设备工程搬运费", "其他设备购入费、工程费、搬运费等（元）"),
-            // entity.qualityfailuremeeting.otherapparatuscost
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherapparatuscost", "ja-JP", "其他设备工程搬运费", "其他设备购入费、工程费、搬运费等（元）"),
-            // entity.qualityfailuremeeting.otherapparatuscost
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherapparatuscost", "zh-CN", "其他设备工程搬运费", "其他设备购入费、工程费、搬运费等（元）"),
-            // entity.qualityfailuremeeting.otherapparatuscost
-            new TranslationSeedItem("entity.qualityfailuremeeting.otherapparatuscost", "zh-HK", "其他设备工程搬运费", "其他设备购入费、工程费、搬运费等（元）"),
+            // entity.qualityissuemeeting.otherapparatuscost
+            new TranslationSeedItem("entity.qualityissuemeeting.otherapparatuscost", "en-US", "其他设备工程搬运费_us", "其他设备购入费、工程费、搬运费等（元）"),
+            // entity.qualityissuemeeting.otherapparatuscost
+            new TranslationSeedItem("entity.qualityissuemeeting.otherapparatuscost", "ja-JP", "其他设备工程搬运费_jp", "其他设备购入费、工程费、搬运费等（元）"),
+            // entity.qualityissuemeeting.otherapparatuscost
+            new TranslationSeedItem("entity.qualityissuemeeting.otherapparatuscost", "zh-CN", "其他设备工程搬运费", "其他设备购入费、工程费、搬运费等（元）"),
+            // entity.qualityissuemeeting.otherapparatuscost
+            new TranslationSeedItem("entity.qualityissuemeeting.otherapparatuscost", "zh-HK", "其他设备工程搬运费_hk", "其他设备购入费、工程费、搬运费等（元）"),
 
-            // entity.qualityfailuremeeting.meetingrecorder
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetingrecorder", "en-US", "品质问题对应记录者", "品质问题対応记录者（会议调查试验记录者）"),
-            // entity.qualityfailuremeeting.meetingrecorder
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetingrecorder", "ja-JP", "品质问题对应记录者", "品质问题対応记录者（会议调查试验记录者）"),
-            // entity.qualityfailuremeeting.meetingrecorder
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetingrecorder", "zh-CN", "品质问题对应记录者", "品质问题対応记录者（会议调查试验记录者）"),
-            // entity.qualityfailuremeeting.meetingrecorder
-            new TranslationSeedItem("entity.qualityfailuremeeting.meetingrecorder", "zh-HK", "品质问题对应记录者", "品质问题対応记录者（会议调查试验记录者）"),
+            // entity.qualityissuemeeting.meetingrecorder
+            new TranslationSeedItem("entity.qualityissuemeeting.meetingrecorder", "en-US", "品质问题对应记录者_us", "品质问题対応记录者（会议调查试验记录者）"),
+            // entity.qualityissuemeeting.meetingrecorder
+            new TranslationSeedItem("entity.qualityissuemeeting.meetingrecorder", "ja-JP", "品质问题对应记录者_jp", "品质问题対応记录者（会议调查试验记录者）"),
+            // entity.qualityissuemeeting.meetingrecorder
+            new TranslationSeedItem("entity.qualityissuemeeting.meetingrecorder", "zh-CN", "品质问题对应记录者", "品质问题対応记录者（会议调查试验记录者）"),
+            // entity.qualityissuemeeting.meetingrecorder
+            new TranslationSeedItem("entity.qualityissuemeeting.meetingrecorder", "zh-HK", "品质问题对应记录者_hk", "品质问题対応记录者（会议调查试验记录者）"),
 
-            // entity.qualityfailuremeeting.issue
-            new TranslationSeedItem("entity.qualityfailuremeeting.issue", "en-US", "质量问题主表", "质量问题主表（导航属性）"),
-            // entity.qualityfailuremeeting.issue
-            new TranslationSeedItem("entity.qualityfailuremeeting.issue", "ja-JP", "质量问题主表", "质量问题主表（导航属性）"),
-            // entity.qualityfailuremeeting.issue
-            new TranslationSeedItem("entity.qualityfailuremeeting.issue", "zh-CN", "质量问题主表", "质量问题主表（导航属性）"),
-            // entity.qualityfailuremeeting.issue
-            new TranslationSeedItem("entity.qualityfailuremeeting.issue", "zh-HK", "质量问题主表", "质量问题主表（导航属性）"),
+            // entity.qualityissuemeeting.issue
+            new TranslationSeedItem("entity.qualityissuemeeting.issue", "en-US", "质量问题主表_us", "质量问题主表（导航属性）"),
+            // entity.qualityissuemeeting.issue
+            new TranslationSeedItem("entity.qualityissuemeeting.issue", "ja-JP", "质量问题主表_jp", "质量问题主表（导航属性）"),
+            // entity.qualityissuemeeting.issue
+            new TranslationSeedItem("entity.qualityissuemeeting.issue", "zh-CN", "质量问题主表", "质量问题主表（导航属性）"),
+            // entity.qualityissuemeeting.issue
+            new TranslationSeedItem("entity.qualityissuemeeting.issue", "zh-HK", "质量问题主表_hk", "质量问题主表（导航属性）"),
         };
     }
 
@@ -259,10 +259,10 @@ public class TaktQualityFailureMeetingI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Cost";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

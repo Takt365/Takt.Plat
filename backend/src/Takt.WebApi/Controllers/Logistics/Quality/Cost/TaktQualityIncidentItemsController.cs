@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentItemsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质事故明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktQualityIncidentItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityincidentitem:list", "品质事故明细列表")]
+    [TaktPermission("logistics:quality:cost:incident:list", "品质事故明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetQualityIncidentItemListAsync([FromQuery] TaktQualityIncidentItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktQualityIncidentItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">品质事故明细ID</param>
     /// <returns>品质事故明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityincidentitem:query", "品质事故明细详情")]
+    [TaktPermission("logistics:quality:cost:incident:query", "品质事故明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetQualityIncidentItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktQualityIncidentItemsController : TaktControllerBase
     /// 获取品质事故明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:cost:qualityincidentitem:query", "品质事故明细选项")]
+    [TaktPermission("logistics:quality:cost:incident:query", "品质事故明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetQualityIncidentItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktQualityIncidentItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>品质事故明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityincidentitem:create", "创建品质事故明细")]
+    [TaktPermission("logistics:quality:cost:incident:create", "创建品质事故明细")]
     [HttpPost]
     public async Task<IActionResult> CreateQualityIncidentItemAsync([FromBody] TaktQualityIncidentItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktQualityIncidentItemsController : TaktControllerBase
     /// <param name="id">品质事故明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>品质事故明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityincidentitem:update", "更新品质事故明细")]
+    [TaktPermission("logistics:quality:cost:incident:update", "更新品质事故明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateQualityIncidentItemAsync(long id, [FromBody] TaktQualityIncidentItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktQualityIncidentItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">品质事故明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityincidentitem:delete", "删除品质事故明细")]
+    [TaktPermission("logistics:quality:cost:incident:delete", "删除品质事故明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteQualityIncidentItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktQualityIncidentItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityincidentitem:delete", "批量删除品质事故明细")]
+    [TaktPermission("logistics:quality:cost:incident:delete", "批量删除品质事故明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteQualityIncidentItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktQualityIncidentItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityincidentitem:import", "获取品质事故明细导入模板")]
+    [TaktPermission("logistics:quality:cost:incident:import", "获取品质事故明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetQualityIncidentItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktQualityIncidentItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityincidentitem:import", "导入品质事故明细")]
+    [TaktPermission("logistics:quality:cost:incident:import", "导入品质事故明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportQualityIncidentItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktQualityIncidentItemsController : TaktControllerBase
     /// 导出品质事故明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityincidentitem:export", "导出品质事故明细")]
+    [TaktPermission("logistics:quality:cost:incident:export", "导出品质事故明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportQualityIncidentItemAsync([FromQuery] TaktQualityIncidentItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

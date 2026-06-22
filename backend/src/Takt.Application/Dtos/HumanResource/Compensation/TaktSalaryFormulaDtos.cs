@@ -67,7 +67,7 @@ public class TaktSalaryFormulaDto : TaktCompanyDtoBase
     public string FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int FormulaStep { get; set; } = 0;
 
@@ -102,7 +102,7 @@ public class TaktSalaryFormulaDto : TaktCompanyDtoBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int FormulaStatus { get; set; } = 0;
 
@@ -160,7 +160,7 @@ public class TaktSalaryFormulaQueryDto : TaktPagedQuery
     public string? FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int? FormulaStep { get; set; }
 
@@ -205,7 +205,7 @@ public class TaktSalaryFormulaQueryDto : TaktPagedQuery
     public DateTime? ExpiryDateEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? FormulaStatus { get; set; }
 
@@ -227,7 +227,7 @@ public class TaktSalaryFormulaQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -290,7 +290,7 @@ public class TaktSalaryFormulaCreateDto
     public string FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int FormulaStep { get; set; } = 0;
 
@@ -327,7 +327,7 @@ public class TaktSalaryFormulaCreateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int FormulaStatus { get; set; } = 0;
 
@@ -339,7 +339,7 @@ public class TaktSalaryFormulaCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -386,9 +386,9 @@ public class TaktSalaryFormulaStatusDto
     public long SalaryFormulaId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
     public int FormulaStatus { get; set; } = 0;
 }
 
@@ -462,7 +462,7 @@ public class TaktSalaryFormulaTemplateDto
     public string? FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int? FormulaStep { get; set; }
 
@@ -487,7 +487,7 @@ public class TaktSalaryFormulaTemplateDto
     public string? StepDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? FormulaStatus { get; set; }
 
@@ -499,7 +499,7 @@ public class TaktSalaryFormulaTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -555,7 +555,7 @@ public class TaktSalaryFormulaImportDto
     public string? FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int? FormulaStep { get; set; }
 
@@ -580,7 +580,7 @@ public class TaktSalaryFormulaImportDto
     public string? StepDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? FormulaStatus { get; set; }
 
@@ -592,7 +592,7 @@ public class TaktSalaryFormulaImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -649,7 +649,7 @@ public class TaktSalaryFormulaExportDto
     public string FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int FormulaStep { get; set; } = 0;
 
@@ -684,7 +684,7 @@ public class TaktSalaryFormulaExportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int FormulaStatus { get; set; } = 0;
 
@@ -696,7 +696,7 @@ public class TaktSalaryFormulaExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

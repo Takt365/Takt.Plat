@@ -69,23 +69,23 @@ export const themeColorMap: Record<Exclude<ThemeColor, 'custom'>, string> = {
   blue: '#002fa7',
   brown: '#4c2b18',
   indigo: '#003153',
-  yellow: '#f9dc24',
+  yellow: '#f4d35e',
   gray: '#808080',
 };
 
-/** 主题色 preset → common.page.color.* 键段（与 locales/common 静态包一致） */
+/** 主题色 preset → common.page.color.* 键后缀（小写点分段；preset slug 本身可含连字符，不得写入 i18n 键） */
 export const themeColorI18nKeyMap: Record<Exclude<ThemeColor, 'custom'>, string> = {
-  green: 'mars-green',
-  cyan: 'tiffany-blue',
-  red: 'chinese-red',
-  orange: 'titian-red',
-  purple: 'burgundy',
-  pink: 'bordeaux',
-  blue: 'klein-blue',
-  brown: 'van-dyke-brown',
-  indigo: 'prussian-blue',
-  yellow: 'senelier-yellow',
-  gray: 'memorial-gray',
+  green: 'mars.green',
+  cyan: 'tiffany.blue',
+  red: 'chinese.red',
+  orange: 'titian.red',
+  purple: 'burgundy.red',
+  pink: 'bordeaux.red',
+  blue: 'klein.blue',
+  brown: 'vandyke.brown',
+  indigo: 'prussian.blue',
+  yellow: 'sennelier.yellow',
+  gray: 'memorial.gray',
 };
 
 /**

@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
+// 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktPackagingDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Packaging 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPackaging 生成，请按需审阅）
 // 
@@ -15,7 +15,7 @@ using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 
-namespace Takt.Application.Dtos.Logistics.Manufacturing.Bom;
+namespace Takt.Application.Dtos.Logistics.Materials;
 
 // ========================================
 // Packaging 响应 DTO
@@ -38,12 +38,17 @@ public class TaktPackagingDto : TaktCompanyDtoBase
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码（关联到物料表）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料名称
+    /// </summary>
+    public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
     /// 海关商品编码（HS Code）
@@ -183,6 +188,11 @@ public class TaktPackagingQueryDto : TaktPagedQuery
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 物料名称
+    /// </summary>
+    public string? MaterialName { get; set; } = string.Empty;
+
+    /// <summary>
     /// 海关商品编码（HS Code）
     /// </summary>
     public string? HsCode { get; set; } = string.Empty;
@@ -300,7 +310,7 @@ public class TaktPackagingQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -335,13 +345,20 @@ public class TaktPackagingCreateDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "工厂代码不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码（关联到物料表）
     /// </summary>
     [Required(ErrorMessage = "物料编码（关联到物料表）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料名称
+    /// </summary>
+    [Required(ErrorMessage = "物料名称不能为空")]
+    public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
     /// 海关商品编码（HS Code）
@@ -448,14 +465,9 @@ public class TaktPackagingCreateDto
     public string? PackagingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -538,6 +550,11 @@ public class TaktPackagingTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 物料名称
+    /// </summary>
+    public string? MaterialName { get; set; } = string.Empty;
+
+    /// <summary>
     /// 海关商品编码（HS Code）
     /// </summary>
     public string? HsCode { get; set; } = string.Empty;
@@ -583,14 +600,9 @@ public class TaktPackagingTemplateDto
     public string? TariffRateType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 重量单位（如：KG、G、T等）
-    /// </summary>
-    public string? WeightUnit { get; set; } = string.Empty;
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -630,6 +642,11 @@ public class TaktPackagingImportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 物料名称
+    /// </summary>
+    public string? MaterialName { get; set; } = string.Empty;
+
+    /// <summary>
     /// 海关商品编码（HS Code）
     /// </summary>
     public string? HsCode { get; set; } = string.Empty;
@@ -675,14 +692,9 @@ public class TaktPackagingImportDto
     public string? TariffRateType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 重量单位（如：KG、G、T等）
-    /// </summary>
-    public string? WeightUnit { get; set; } = string.Empty;
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -715,12 +727,17 @@ public class TaktPackagingExportDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码（关联到物料表）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料名称
+    /// </summary>
+    public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
     /// 海关商品编码（HS Code）
@@ -830,7 +847,7 @@ public class TaktPackagingExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

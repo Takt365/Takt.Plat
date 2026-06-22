@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.WebApi.Controllers.Logistics.Materials
+// 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderItemsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购订单明细控制器
 // 
@@ -11,11 +11,11 @@
 // ========================================
 
 using Microsoft.AspNetCore.Mvc;
-using Takt.Application.Dtos.Logistics.Materials;
-using Takt.Application.Services.Logistics.Materials;
+using Takt.Application.Dtos.Logistics.Procurement;
+using Takt.Application.Services.Logistics.Procurement;
 using Takt.Shared.Constants;
 
-namespace Takt.WebApi.Controllers.Logistics.Materials;
+namespace Takt.WebApi.Controllers.Logistics.Procurement;
 
 /// <summary>
 /// 采购订单明细控制器
@@ -41,7 +41,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:list", "采购订单明细列表")]
+    [TaktPermission("logistics:procurement:purchaseorder:list", "采购订单明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPurchaseOrderItemListAsync([FromQuery] TaktPurchaseOrderItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购订单明细ID</param>
     /// <returns>采购订单明细DTO</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:query", "采购订单明细详情")]
+    [TaktPermission("logistics:procurement:purchaseorder:query", "采购订单明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPurchaseOrderItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// 获取采购订单明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:query", "采购订单明细选项")]
+    [TaktPermission("logistics:procurement:purchaseorder:query", "采购订单明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPurchaseOrderItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>采购订单明细DTO</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:create", "创建采购订单明细")]
+    [TaktPermission("logistics:procurement:purchaseorder:create", "创建采购订单明细")]
     [HttpPost]
     public async Task<IActionResult> CreatePurchaseOrderItemAsync([FromBody] TaktPurchaseOrderItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// <param name="id">采购订单明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>采购订单明细DTO</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:update", "更新采购订单明细")]
+    [TaktPermission("logistics:procurement:purchaseorder:update", "更新采购订单明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePurchaseOrderItemAsync(long id, [FromBody] TaktPurchaseOrderItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购订单明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:delete", "删除采购订单明细")]
+    [TaktPermission("logistics:procurement:purchaseorder:delete", "删除采购订单明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePurchaseOrderItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:delete", "批量删除采购订单明细")]
+    [TaktPermission("logistics:procurement:purchaseorder:delete", "批量删除采购订单明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePurchaseOrderItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>采购订单明细DTO</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:update", "更新采购订单明细状态")]
+    [TaktPermission("logistics:procurement:purchaseorder:update", "更新采购订单明细状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdatePurchaseOrderItemStatusAsync([FromBody] TaktPurchaseOrderItemStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:import", "获取采购订单明细导入模板")]
+    [TaktPermission("logistics:procurement:purchaseorder:import", "获取采购订单明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetPurchaseOrderItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:import", "导入采购订单明细")]
+    [TaktPermission("logistics:procurement:purchaseorder:import", "导入采购订单明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportPurchaseOrderItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktPurchaseOrderItemsController : TaktControllerBase
     /// 导出采购订单明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:purchaseorderitem:export", "导出采购订单明细")]
+    [TaktPermission("logistics:procurement:purchaseorder:export", "导出采购订单明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPurchaseOrderItemAsync([FromQuery] TaktPurchaseOrderItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

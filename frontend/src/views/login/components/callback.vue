@@ -65,13 +65,13 @@ onMounted(async () => {
   const savedState = consumeOAuthState();
 
   if (!code) {
-    message.error(t('login.page.callback.missingCode'));
+    message.error(t('login.page.callback.missing.code'));
     await router.replace('/login');
     return;
   }
 
   if (!state || !savedState || state !== savedState) {
-    message.error(t('login.page.callback.stateMismatch'));
+    message.error(t('login.page.callback.state.mismatch'));
     userStore.logout();
     await router.replace('/login');
     return;
@@ -79,7 +79,7 @@ onMounted(async () => {
 
   const verifier = consumePkceVerifier();
   if (!verifier) {
-    message.error(t('login.page.callback.pkceMissing'));
+    message.error(t('login.page.callback.pkce.missing'));
     userStore.logout();
     await router.replace('/login');
     return;

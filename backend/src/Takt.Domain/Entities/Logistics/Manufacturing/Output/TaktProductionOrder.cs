@@ -123,8 +123,40 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public string? RoutingCode { get; set; }
 
     /// <summary>
+    /// 来源计划订单 ID（可选）
+    /// </summary>
+    [SugarColumn(ColumnName = "planned_order_id", ColumnDescription = "来源计划订单ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PlannedOrderId { get; set; }
+
+    /// <summary>
+    /// 来源 APS 订单 ID（可选）
+    /// </summary>
+    [SugarColumn(ColumnName = "aps_order_id", ColumnDescription = "来源APS订单ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApsOrderId { get; set; }
+
+    /// <summary>
+    /// 计划开工时间
+    /// </summary>
+    [SugarColumn(ColumnName = "planned_start_time", ColumnDescription = "计划开工时间", ColumnDataType = "datetime", IsNullable = true)]
+    public DateTime? PlannedStartTime { get; set; }
+
+    /// <summary>
+    /// 计划完工时间
+    /// </summary>
+    [SugarColumn(ColumnName = "planned_end_time", ColumnDescription = "计划完工时间", ColumnDataType = "datetime", IsNullable = true)]
+    public DateTime? PlannedEndTime { get; set; }
+
+    /// <summary>
     /// 状态（0=正常，1=生产中，2=已完成）
     /// </summary>
     [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int Status { get; set; } = 0;
+
+    /// <summary>
+    /// 生产工单变更记录列表（外键在子表 TaktProductionOrderChangeLog.ProductionOrderId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktProductionOrderChangeLog.ProductionOrderId))]
+    public List<TaktProductionOrderChangeLog>? ChangeLogs { get; set; }
 }

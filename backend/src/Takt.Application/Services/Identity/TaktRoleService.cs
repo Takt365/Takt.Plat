@@ -108,7 +108,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
     {
         var list = await _roleRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
-            x => x.RoleName,
+            x => x.RoleName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -266,6 +266,31 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
     }
 
     /// <summary>
+    /// 更新角色是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktRoleDto> UpdateRoleBuiltInAsync(TaktRoleBuiltInDto dto)
+    {
+        var entity = await _roleRepository.GetByIdAsync(dto.RoleId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("角色不存在");
+        }
+        if (dto.IsBuiltIn is not 0 and not 1)
+        {
+            throw new TaktBusinessException("是否内置必须为字典 sys_yes_no_type 合法值（0=否，1=是）");
+        }
+        if (entity.IsBuiltIn == 1 && dto.IsBuiltIn != 1)
+        {
+            throw new TaktBusinessException("不允许取消内置角色标识");
+        }
+        entity.IsBuiltIn = dto.IsBuiltIn;
+        await _roleRepository.UpdateAsync(entity);
+        return await GetRoleByIdAsync(dto.RoleId) ?? throw new TaktBusinessException("角色不存在");
+    }
+
+    /// <summary>
     /// 更新角色排序
     /// </summary>
     /// <param name="dto">排序DTO</param>
@@ -400,7 +425,7 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || SqlFunc.ToString(x.RoleStatus).Contains(keywords)
                 || (x.Description != null && x.Description.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -441,9 +466,9 @@ public class TaktRoleService : TaktServiceBase, ITaktRoleService
             exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

@@ -49,14 +49,14 @@ export interface Post extends CompanyDtoBase {
   deptName?: string;
 
   /**
-   * 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+   * 岗位类别（字典 sys_post_category：MGT/PRO/TEC/SUP/OPS）
    */
-  postType: number;
+  postCategory: string;
 
   /**
-   * 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+   * 岗位职级（字典 sys_post_level_category：P1~P4、M1~M5）
    */
-  postLevel?: number;
+  postLevel: string;
 
   /**
    * 编制人数
@@ -71,22 +71,22 @@ export interface Post extends CompanyDtoBase {
   /**
    * 岗位职责
    */
-  responsibilities?: string;
+  responsibilities: string;
 
   /**
    * 任职要求
    */
-  requirements?: string;
+  requirements: string;
 
   /**
-   * 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历要求（字典 hr_education_level_category，默认 1）
    */
-  educationRequired?: number;
+  educationRequired: number;
 
   /**
-   * 工作经验要求（年）
+   * 工作经验要求（年，默认 1）
    */
-  experienceYears?: number;
+  experienceYears: number;
 
   /**
    * 薪资范围（最低）
@@ -161,12 +161,12 @@ export interface PostQuery extends TaktPagedQuery {
   /**
    * 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
    */
-  postType?: number;
+  postCategory?: string;
 
   /**
    * 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
    */
-  postLevel?: number;
+  postLevel?: string;
 
   /**
    * 编制人数
@@ -241,7 +241,7 @@ export interface PostQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -288,14 +288,14 @@ export interface PostCreate {
   deptId: string;
 
   /**
-   * 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+   * 岗位类别（字典 sys_post_category：MGT/PRO/TEC/SUP/OPS）
    */
-  postType: number;
+  postCategory: string;
 
   /**
-   * 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+   * 岗位职级（字典 sys_post_level_category：P1~P4、M1~M5）
    */
-  postLevel?: number;
+  postLevel: string;
 
   /**
    * 编制人数
@@ -310,22 +310,22 @@ export interface PostCreate {
   /**
    * 岗位职责
    */
-  responsibilities?: string;
+  responsibilities: string;
 
   /**
    * 任职要求
    */
-  requirements?: string;
+  requirements: string;
 
   /**
-   * 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历要求（字典 hr_education_level_category，默认 1）
    */
-  educationRequired?: number;
+  educationRequired: number;
 
   /**
-   * 工作经验要求（年）
+   * 工作经验要求（年，默认 1）
    */
-  experienceYears?: number;
+  experienceYears: number;
 
   /**
    * 薪资范围（最低）
@@ -365,7 +365,7 @@ export interface PostCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -405,6 +405,25 @@ export interface PostStatus {
    * 状态（1=启用，0=禁用）
    */
   postStatus: number;
+
+}
+
+
+/**
+ * Post 是否内置更新 DTO
+ * 对应前端 PostBuiltIn
+ * @description 对应后端 TaktPostBuiltInDto
+ */
+export interface PostBuiltIn {
+  /**
+   * PostID
+   */
+  postId: string;
+
+  /**
+   * 是否内置（字典 sys_yes_no_type；1=是，0=否）
+   */
+  isBuiltIn: number;
 
 }
 
@@ -462,12 +481,12 @@ export interface PostTemplate {
   /**
    * 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
    */
-  postType?: number;
+  postCategory?: string;
 
   /**
    * 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
    */
-  postLevel?: number;
+  postLevel?: string;
 
   /**
    * 编制人数
@@ -507,7 +526,7 @@ export interface PostTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -556,12 +575,12 @@ export interface PostImport {
   /**
    * 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
    */
-  postType?: number;
+  postCategory?: string;
 
   /**
    * 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
    */
-  postLevel?: number;
+  postLevel?: string;
 
   /**
    * 编制人数
@@ -601,7 +620,7 @@ export interface PostImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -643,14 +662,14 @@ export interface PostExport {
   deptId: string;
 
   /**
-   * 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+   * 岗位类别（字典 sys_post_category：MGT/PRO/TEC/SUP/OPS）
    */
-  postType: number;
+  postCategory: string;
 
   /**
-   * 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+   * 岗位职级（字典 sys_post_level_category：P1~P4、M1~M5）
    */
-  postLevel?: number;
+  postLevel: string;
 
   /**
    * 编制人数
@@ -665,22 +684,22 @@ export interface PostExport {
   /**
    * 岗位职责
    */
-  responsibilities?: string;
+  responsibilities: string;
 
   /**
    * 任职要求
    */
-  requirements?: string;
+  requirements: string;
 
   /**
-   * 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历要求（字典 hr_education_level_category，默认 1）
    */
-  educationRequired?: number;
+  educationRequired: number;
 
   /**
-   * 工作经验要求（年）
+   * 工作经验要求（年，默认 1）
    */
-  experienceYears?: number;
+  experienceYears: number;
 
   /**
    * 薪资范围（最低）
@@ -715,7 +734,7 @@ export interface PostExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

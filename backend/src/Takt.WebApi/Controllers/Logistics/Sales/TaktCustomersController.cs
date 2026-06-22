@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Sales
 // 文件名称：TaktCustomersController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客户信息控制器
 // 
@@ -183,7 +183,7 @@ public class TaktCustomersController : TaktControllerBase
     /// <summary>
     /// 更新客户信息状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>客户信息DTO</returns>
     [TaktPermission("logistics:sales:customer:update", "更新客户信息状态")]
     [HttpPut("status")]

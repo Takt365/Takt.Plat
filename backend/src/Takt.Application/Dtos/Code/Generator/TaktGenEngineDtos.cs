@@ -132,6 +132,30 @@ public partial class TaktInitializeTableFromEntityRequestDto
 }
 
 /// <summary>
+/// 代码生成结果（含 GenMethod 交付：0=zip 字节；1/2=落盘路径与文件列表）
+/// </summary>
+public partial class TaktCodeGenGenerateResultDto
+{
+    /// <summary>生成方式（0=zip，1=自定义路径，2=当前项目）</summary>
+    public int GenMethod { get; set; }
+
+    /// <summary>zip 内容（GenMethod=0，由控制器直接 File 响应）</summary>
+    public byte[]? ZipBytes { get; set; }
+
+    /// <summary>zip 文件名（GenMethod=0）</summary>
+    public string? ZipFileName { get; set; }
+
+    /// <summary>落盘根路径（GenMethod=1/2）</summary>
+    public string? BasePath { get; set; }
+
+    /// <summary>已写入相对路径（GenMethod=1/2）</summary>
+    public List<string> WrittenFilePaths { get; set; } = [];
+
+    /// <summary>文件数</summary>
+    public int FileCount { get; set; }
+}
+
+/// <summary>
 /// 代码生成请求DTO
 /// </summary>
 public partial class TaktGenerateCodeRequestDto
@@ -141,6 +165,12 @@ public partial class TaktGenerateCodeRequestDto
     /// 例如：{ "Entity.cs": "{{ for col in Columns }}..." }
     /// </summary>
     public Dictionary<string, string> Templates { get; set; } = new();
+
+    /// <summary>生成方式覆盖（可空，默认取表配置 GenMethod）</summary>
+    public int? GenMethod { get; set; }
+
+    /// <summary>目标根路径覆盖（GenMethod=1 时使用；GenMethod=2 由服务端解析仓库根）</summary>
+    public string? GenPath { get; set; }
 }
 
 /// <summary>

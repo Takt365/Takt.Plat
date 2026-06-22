@@ -15,3 +15,11 @@ global using SqlSugar;
 
 // JSON 序列化
 global using Newtonsoft.Json;
+
+global using Takt.Shared.Constants;
+global using Takt.Shared.Enums;
+global using Takt.Shared.Exceptions;
+global using Takt.Shared.Extensions;
+global using Takt.Shared.Helpers;
+global using Takt.Shared.Options;
+global using Takt.Shared.Validation;

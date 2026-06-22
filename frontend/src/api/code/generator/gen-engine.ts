@@ -15,13 +15,14 @@ import type {
   GenTable
 } from '@/types/code/generator/gen-table';
 import type {
+  CodeGenGenerateResult,
   CodeGenPreviewResult,
-  CodeGenResult,
   GenerateCodeRequest,
   ImportTableFromDatabaseRequest,
   InitializeTableFromEntityRequest,
   PreviewCodeRequest,
 } from '@/types/code/generator/gen-engine';
+import type { TaktBinaryDownload } from '@/types/common';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -58,13 +59,23 @@ export function initializeTableFromEntity(dto: InitializeTableFromEntityRequest)
 }
 
 /**
- * 根据表配置和模板生成代码
- * @param {string} tableId 代码生成表配置 ID
- * @param {GenerateCodeRequest} dto 生成请求（模板字典可空，空则从 wwwroot/Generator 加载）
- * @returns {Promise<CodeGenResult[]>} 生成的代码文件列表（文件名 + 内容）
+ * 根据表配置和模板生成代码（GenMethod=0 返回 zip；1/2 返回落盘 JSON）
  */
-export function generateCode(tableId: string, dto: GenerateCodeRequest): Promise<CodeGenResult[]> {
-  return request<CodeGenResult[]>({
+export function generateCode(
+  tableId: string,
+  dto: GenerateCodeRequest,
+): Promise<TaktBinaryDownload | CodeGenGenerateResult> {
+  const genMethod = dto.genMethod != null ? Number(dto.genMethod) : 0;
+  if (genMethod === 0) {
+    return request<TaktBinaryDownload>({
+      url: `${GEN_ENGINE_API_BASE}/generate/${tableId}`,
+      method: 'post',
+      data: dto,
+      responseType: 'blob',
+      returnBinaryMeta: true,
+    });
+  }
+  return request<CodeGenGenerateResult>({
     url: `${GEN_ENGINE_API_BASE}/generate/${tableId}`,
     method: 'post',
     data: dto,
@@ -99,5 +110,17 @@ export function importTableFromDatabase(dto: ImportTableFromDatabaseRequest): Pr
     url: `${GEN_ENGINE_API_BASE}/database/import`,
     method: 'post',
     data: dto,
+  });
+}
+
+/**
+ * 从数据库同步指定表的列元数据到代码生成配置（增量更新，保留用户生成配置）
+ * @param {string} tableId 代码生成表配置 ID
+ * @returns {Promise<GenTable>} 同步后的表配置信息（含列列表）
+ */
+export function syncTableColumnsFromDatabase(tableId: string): Promise<GenTable> {
+  return request<GenTable>({
+    url: `${GEN_ENGINE_API_BASE}/database/sync/${tableId}`,
+    method: 'post',
   });
 }

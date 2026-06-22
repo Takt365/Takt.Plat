@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/quality/operation/inspection-standard/components -->
 <!-- 文件名称：inspection-standard-form.vue -->
-<!-- 功能描述：检验标准实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：检验标准实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form inspection-standard-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="inspection-standard-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,99 +63,109 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.inspectionStandard.plantcode')"
+                :label="t('entity.inspectionstandard.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.plantcode') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.inspectionStandardId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.inspectionStandard.standardcode')"
+                :label="t('entity.inspectionstandard.standardcode')"
                 name="standardCode"
               >
                 <a-input
                   v-model:value="formState.standardCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.standardcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardcode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.inspectionStandardId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.inspectionStandard.standardname')"
+                :label="t('entity.inspectionstandard.standardname')"
                 name="standardName"
               >
                 <a-input
                   v-model:value="formState.standardName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.standardname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardname') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.inspectionStandard.inspectiontype')"
+                :label="t('entity.inspectionstandard.inspectiontype')"
                 name="inspectionType"
               >
                 <a-input-number
                   v-model:value="formState.inspectionType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.inspectiontype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.inspectiontype') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.inspectionStandard.materialcategorycode')"
+                :label="t('entity.inspectionstandard.materialcategorycode')"
                 name="materialCategoryCode"
               >
                 <a-input
                   v-model:value="formState.materialCategoryCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.materialcategorycode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.materialcategorycode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.inspectionStandardId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.inspectionStandard.materialcategoryname')"
+                :label="t('entity.inspectionstandard.materialcategoryname')"
                 name="materialCategoryName"
               >
                 <a-input
                   v-model:value="formState.materialCategoryName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.materialcategoryname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.materialcategoryname') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.inspectionStandard.samplingschemecode')"
+                :label="t('entity.inspectionstandard.samplingschemecode')"
                 name="samplingSchemeCode"
               >
                 <a-input
                   v-model:value="formState.samplingSchemeCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.samplingschemecode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.samplingschemecode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.inspectionStandardId"
                 />
               </a-form-item>
             </a-col>
@@ -167,67 +179,78 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.inspectionStandard.samplingschemename')"
+                :label="t('entity.inspectionstandard.samplingschemename')"
                 name="samplingSchemeName"
               >
                 <a-input
                   v-model:value="formState.samplingSchemeName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.samplingschemename') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.samplingschemename') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.inspectionStandard.isenabled')"
+                :label="t('entity.inspectionstandard.isenabled')"
                 name="isEnabled"
               >
                 <a-input-number
                   v-model:value="formState.isEnabled"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.isenabled') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.inspectionStandard.standardstatus')"
-                name="standardStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.standardStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.standardstatus') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.isenabled') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.inspectionStandard.standarddescription')"
+                :label="t('entity.inspectionstandard.standardstatus')"
+                name="standardStatus"
+              >
+                <a-input-number
+                  v-model:value="formState.standardStatus"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardstatus') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.inspectionstandard.standarddescription')"
                 name="standardDescription"
               >
                 <a-textarea
                   v-model:value="formState.standardDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.inspectionStandard.standarddescription') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.inspectionstandard.standarddescription') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -240,131 +263,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：inspectionStandardItem -->
-      <a-tab-pane
-        key="child-items"
-        :tab="t('entity.inspectionStandardItem._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddInspectionStandardItemRow">
-            {{ t('common.page.button.create') }}{{ t('entity.inspectionStandardItem._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="inspectionStandardItemFormColumns"
-          :data-source="childInspectionStandardItemRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandardItem.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'itemCode'">
-              <a-input
-                v-model:value="record.itemCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandardItem.itemcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'itemName'">
-              <a-input
-                v-model:value="record.itemName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandardItem.itemname') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'itemType'">
-              <a-input-number
-                v-model:value="record.itemType"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandardItem.itemtype') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'defectLevel'">
-              <a-input
-                v-model:value="record.defectLevel"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandardItem.defectlevel') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'inspectionMode'">
-              <a-input-number
-                v-model:value="record.inspectionMode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandardItem.inspectionmode') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'standardValue'">
-              <a-input
-                v-model:value="record.standardValue"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandardItem.standardvalue') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'upperLimit'">
-              <a-input
-                v-model:value="record.upperLimit"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandardItem.upperlimit') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveInspectionStandardItemRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 items -->
+    <TaktEditableTable
+      ref="inspectionStandardItemTableRef"
+      v-model="childInspectionStandardItemRows"
+      :columns="inspectionStandardItemFormColumns"
+      :title="t('entity.inspectionstandarditem._self')"
+      :add-button-entity="t('entity.inspectionstandarditem._self')"
+      id-field="inspectionStandardItemId"
+      :default-row="createDefaultInspectionStandardItemRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -376,7 +297,8 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { InspectionStandardCreate, InspectionStandardItemCreate, InspectionStandardItem } from '@/types/logistics/quality/operation/inspection-standard'
+import type { InspectionStandardCreate } from '@/types/logistics/quality/operation/inspection-standard'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -409,123 +331,99 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","standardCode","standardName","inspectionType","materialCategoryCode","materialCategoryName","samplingSchemeCode","samplingSchemeName","isEnabled","standardStatus","standardDescription","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","standardCode","standardName","inspectionType","materialCategoryCode","materialCategoryName","samplingSchemeCode","samplingSchemeName","isEnabled","standardStatus","standardDescription","extField","remark"]
 
-/** inspectionStandardItem 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childInspectionStandardItemRows = ref<Record<string, unknown>[]>([])
+const inspectionStandardItemTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 inspectionStandardItem 表单列定义 */
-const inspectionStandardItemFormColumns = computed(() => [
+/** 子表 inspectionStandardItem 可编辑列 */
+const inspectionStandardItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.inspectionStandardItem.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.inspectionstandarditem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.inspectionStandardItem.itemcode'),
-    dataIndex: 'itemCode',
     key: 'itemCode',
+    title: t('entity.inspectionstandarditem.itemcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.inspectionStandardItem.itemname'),
-    dataIndex: 'itemName',
     key: 'itemName',
+    title: t('entity.inspectionstandarditem.itemname'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.inspectionStandardItem.itemtype'),
-    dataIndex: 'itemType',
     key: 'itemType',
+    title: t('entity.inspectionstandarditem.itemtype'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.inspectionStandardItem.defectlevel'),
-    dataIndex: 'defectLevel',
     key: 'defectLevel',
+    title: t('entity.inspectionstandarditem.defectlevel'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.inspectionStandardItem.inspectionmode'),
-    dataIndex: 'inspectionMode',
     key: 'inspectionMode',
+    title: t('entity.inspectionstandarditem.inspectionmode'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.inspectionStandardItem.standardvalue'),
-    dataIndex: 'standardValue',
     key: 'standardValue',
+    title: t('entity.inspectionstandarditem.standardvalue'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.inspectionStandardItem.upperlimit'),
-    dataIndex: 'upperLimit',
     key: 'upperLimit',
+    title: t('entity.inspectionstandarditem.upperlimit'),
+    editor: 'input',
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<InspectionStandardCreate & { inspectionStandardId?: string }> | null | undefined) {
-  childInspectionStandardItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.inspectionStandardItemId ?? `new-${index}`,
-  }))
+  childInspectionStandardItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 inspectionStandardItem 行 */
-function handleAddInspectionStandardItemRow() {
-  childInspectionStandardItemRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      lineNumber: 0,
-      itemCode: '',
-      itemName: '',
-      itemType: 0,
-      defectLevel: '',
-      inspectionMode: 0,
-      standardValue: '',
-      upperLimit: '',
-  })
-}
-
-/** 表单 Tab 内删除 inspectionStandardItem 行 */
-function handleRemoveInspectionStandardItemRow(index: number) {
-  childInspectionStandardItemRows.value.splice(index, 1)
+function createDefaultInspectionStandardItemRow(): Record<string, unknown> {
+  return {
+    lineNumber: (childInspectionStandardItemRows.value.length + 1) * 10,
+    itemCode: '',
+    itemName: '',
+    itemType: 0,
+    defectLevel: '',
+    inspectionMode: 0,
+    standardValue: '',
+    upperLimit: '',
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.inspectionStandardId ?? ''
   return {
     ...formState,
-    items: childInspectionStandardItemRows.value.map(({ __rowKey, ...rest }) => rest),
+    items: inspectionStandardItemTableRef.value?.getRows?.() ?? childInspectionStandardItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      inspectionStandardId: masterId,
+    })),
   }
 }
 
@@ -537,7 +435,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -545,19 +443,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 inspectionStandardId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.inspectionStandardId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).items
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -573,74 +487,120 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.plantcode') }),
+      trigger: 'blur'
+    }
+  ],
   standardCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.standardcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardcode') }),
       trigger: 'blur'
     }
   ],
   standardName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.standardname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardname') }),
       trigger: 'blur'
     }
   ],
-  inspectionType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.inspectionStandard.inspectiontype') }),
-      trigger: 'change'
-    }
-  ],
+  inspectionType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.inspectiontype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.inspectiontype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   materialCategoryCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.materialcategorycode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.materialcategorycode') }),
       trigger: 'blur'
     }
   ],
   materialCategoryName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.materialcategoryname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.materialcategoryname') }),
       trigger: 'blur'
     }
   ],
-  isEnabled: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.inspectionStandard.isenabled') }),
-      trigger: 'change'
-    }
-  ],
-  standardStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.inspectionStandard.standardstatus') }),
-      trigger: 'change'
-    }
-  ],
+  isEnabled: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.isenabled') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.isenabled') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  standardStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.standardstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.inspectionstandard.standardstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await inspectionStandardItemTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('inspectionType' in payload) {
+    const rawinspectionType = payload.inspectionType
+    payload.inspectionType = typeof rawinspectionType === 'number' ? rawinspectionType : Number(rawinspectionType)
+  }
+  if ('isEnabled' in payload) {
+    const rawisEnabled = payload.isEnabled
+    payload.isEnabled = typeof rawisEnabled === 'number' ? rawisEnabled : Number(rawisEnabled)
+  }
+  if ('standardStatus' in payload) {
+    const rawstandardStatus = payload.standardStatus
+    payload.standardStatus = typeof rawstandardStatus === 'number' ? rawstandardStatus : Number(rawstandardStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.inspectionStandardId)
   childInspectionStandardItemRows.value = []
+  inspectionStandardItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

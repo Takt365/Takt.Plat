@@ -1,11 +1,11 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-validators-from-entity.cjs
 // 创建时间：2026-05-23
 // 创建人：Takt365(Cursor AI)
-// 功能描述：根据 Takt.Domain 实体自动生成 FluentValidation 验证器（Create/Update/Import）
-//
+// 功能描述：根据 Takt.Domain 实体全量自动生成 FluentValidation 验证器（Create/Update/Import）
+// 用法: node scripts/generate-validators-from-entity.cjs [--all|-all]
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -15,7 +15,7 @@ const path = require('path');
 const {
   writeGeneratedFile,
   logGeneratedFileWritePolicy,
-  parseSingleEntityGenerateArgs,
+  parseAllOnlyGenerateArgs,
   sanitizeXmlDocPlainText,
 } = require('./generate-script-common.cjs');
 const { isRbacJunctionEntity } = require('./generate-entity-exclusions.cjs');
@@ -331,7 +331,7 @@ function parseEntityFile(filePath) {
     'Id',
     'TenantCode',
     'CompanyCode',
-    'ExtFieldJson',
+    'ExtField',
     'Remark',
     'CreatedBy',
     'CreatedAt',
@@ -432,12 +432,12 @@ function emitExtFieldAndRemarkRules(mode) {
   const lines = [];
   const extWhen =
     mode === 'import'
-      ? '.When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson))'
+      ? '.When(x => !string.IsNullOrWhiteSpace(x.ExtField))'
       : '';
   const remarkWhen =
     mode === 'import' ? '.When(x => !string.IsNullOrWhiteSpace(x.Remark))' : '';
 
-  lines.push(`        RuleFor(x => x.ExtFieldJson)`);
+  lines.push(`        RuleFor(x => x.ExtField)`);
   lines.push(
     `            .MaximumLength(${EXT_FIELD_JSON_MAX}).WithMessage("扩展字段JSON长度不能超过${EXT_FIELD_JSON_MAX}个字符")${extWhen};`
   );
@@ -569,10 +569,10 @@ function generateValidatorFileContent(entity) {
       createRules.push(rule);
     }
   });
-  if (!createDtoPropNames || createDtoPropNames.has('ExtFieldJson') || createDtoPropNames.has('Remark')) {
+  if (!createDtoPropNames || createDtoPropNames.has('ExtField') || createDtoPropNames.has('Remark')) {
     createRules.push(
       ...emitExtFieldAndRemarkRules('create').filter((line) => {
-        if (createDtoPropNames && line.includes('ExtFieldJson') && !createDtoPropNames.has('ExtFieldJson')) {
+        if (createDtoPropNames && line.includes('ExtField') && !createDtoPropNames.has('ExtField')) {
           return false;
         }
         if (createDtoPropNames && line.includes('Remark') && !createDtoPropNames.has('Remark')) {
@@ -614,12 +614,12 @@ function generateValidatorFileContent(entity) {
       ...emitTenantCompanyScopeRules(entity.entityBase, 'create', updateDtoPropNames),
       ...updateFieldRules,
     ];
-    if (!updateDtoPropNames || updateDtoPropNames.has('ExtFieldJson') || updateDtoPropNames.has('Remark')) {
+    if (!updateDtoPropNames || updateDtoPropNames.has('ExtField') || updateDtoPropNames.has('Remark')) {
       const extRules = emitExtFieldAndRemarkRules('create');
       if (updateDtoPropNames) {
         updateRules.push(
           ...extRules.filter((line) => {
-            if (line.includes('ExtFieldJson') && !updateDtoPropNames.has('ExtFieldJson')) {
+            if (line.includes('ExtField') && !updateDtoPropNames.has('ExtField')) {
               return false;
             }
             if (line.includes('Remark') && !updateDtoPropNames.has('Remark')) {
@@ -659,11 +659,11 @@ function generateValidatorFileContent(entity) {
         importRules.push(rule);
       }
     });
-    if (!importDtoPropNames || importDtoPropNames.has('ExtFieldJson') || importDtoPropNames.has('Remark')) {
+    if (!importDtoPropNames || importDtoPropNames.has('ExtField') || importDtoPropNames.has('Remark')) {
       const extRules = emitExtFieldAndRemarkRules('import');
       importRules.push(
         ...extRules.filter((line) => {
-          if (line.includes('ExtFieldJson') && importDtoPropNames && !importDtoPropNames.has('ExtFieldJson')) {
+          if (line.includes('ExtField') && importDtoPropNames && !importDtoPropNames.has('ExtField')) {
             return false;
           }
           if (line.includes('Remark') && importDtoPropNames && !importDtoPropNames.has('Remark')) {
@@ -757,7 +757,7 @@ function generateRelationValidatorFileContent(entity, dtoContent) {
   return lines.join('\n');
 }
 
-function scanEntities(entityPrefix = null) {
+function scanEntities() {
   const results = [];
 
   function walk(dir) {
@@ -768,10 +768,6 @@ function scanEntities(entityPrefix = null) {
         return;
       }
       if (!entry.name.startsWith('Takt') || !entry.name.endsWith('.cs') || entry.name === 'TaktCompanyEntityBase.cs') {
-        return;
-      }
-      const entityShort = entry.name.replace(/^Takt/, '').replace(/\.cs$/, '');
-      if (entityPrefix && entityShort !== entityPrefix) {
         return;
       }
       const parsed = parseEntityFile(fullPath);
@@ -812,15 +808,12 @@ function generateEntityValidators(entity) {
 
 function printUsage() {
   console.log(`
-用法: node scripts/generate-validators-from-entity.cjs [参数]
-
-参数:
-  --<实体名>         如 --Dept、--User、--UserRole
-  --force            保留兼容（已存在文件默认覆盖更新）
-  --dry-run          仅打印路径
+用法:
+  node scripts/generate-validators-from-entity.cjs [--all|-all]
 
 说明:
-  - 已禁用 --all；每次必须指定一个实体
+  - 全量扫描 Domain/Entities 下全部 Takt* 实体并生成验证器
+  - 仅支持无参或 --all / -all，不支持其它参数
 
 输出: backend/src/Takt.Application/Validators/{与实体相同路径}/Takt{Entity}Validators.cs
   - 聚合实体：Takt{Entity}CreateValidator / UpdateValidator / ImportValidator（*Dtos.cs 中存在的类才生成）
@@ -831,42 +824,33 @@ function printUsage() {
   - resolveDtoClassNames 不为缺失的 Update/Import 做 fallback，避免虚构 DTO 验证器
 
 示例:
-  node scripts/generate-validators-from-entity.cjs --Online
-  node scripts/generate-validators-from-entity.cjs --Dept --force
+  node scripts/generate-validators-from-entity.cjs
+  node scripts/generate-validators-from-entity.cjs --all
 `);
 }
 
 function parseArgs() {
-  return parseSingleEntityGenerateArgs(printUsage);
+  parseAllOnlyGenerateArgs(printUsage);
 }
 
-console.log('🚀 从实体生成 FluentValidation 验证器...\n');
+console.log('🚀 从实体全量生成 FluentValidation 验证器（--all）...\n');
 logGeneratedFileWritePolicy();
 
 try {
-  const options = parseArgs();
-  const entities = scanEntities(options.entityPrefix);
+  parseArgs();
+  const entities = scanEntities();
 
   if (entities.length === 0) {
-    console.error('❌ 未找到匹配的实体文件');
+    console.error('❌ 未找到任何可解析实体');
     process.exit(1);
   }
 
-  console.log(`📦 匹配实体 ${entities.length} 个\n`);
+  console.log(`📦 模式: 全量（--all）共 ${entities.length} 个实体\n`);
 
   let created = 0;
   let updated = 0;
 
   entities.forEach((entity) => {
-    if (options.dryRun) {
-      const entityShort = entity.className.replace(/^Takt/, '');
-      const out = path.join(CONFIG.validatorsRoot, ...entity.dirParts, `Takt${entityShort}Validators.cs`);
-      const dtoFile = findDtoFile(entity);
-      const dtoContent = dtoFile ? fs.readFileSync(dtoFile, 'utf-8') : null;
-      const kind = shouldUseRelationValidator(entityShort, dtoContent) ? '关联/RBAC' : '聚合';
-      console.log(`📄 [dry-run] ${out} ← ${entity.className} (${kind})`);
-      return;
-    }
     const result = generateEntityValidators(entity);
     if (result.updated) {
       updated += 1;

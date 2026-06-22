@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Dtos.Logistics.Materials
+// 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequest 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseRequest 生成，请按需审阅）
 // 
@@ -14,9 +14,8 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
-namespace Takt.Application.Dtos.Logistics.Materials;
+namespace Takt.Application.Dtos.Logistics.Procurement;
 
 // ========================================
 // PurchaseRequest 响应 DTO
@@ -95,17 +94,12 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
-    public int RequestStatus { get; set; }
+    public int RequestStatus { get; set; } = 0;
 
     /// <summary>
     /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 流程实例名称（填充字段）
-    /// </summary>
-    public string? FlowInstanceName { get; set; }
 
     /// <summary>
     /// 申请原因
@@ -218,12 +212,6 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public int? ConvertedStatus { get; set; }
 
     /// <summary>
-    /// 流程实例ID（关联 TaktFlowInstance，发起审批后由业务写入，用于审批流程）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 申请原因
     /// </summary>
     public string? RequestReason { get; set; } = string.Empty;
@@ -231,7 +219,7 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -266,6 +254,12 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public DateTime? ApprovedAtEnd { get; set; }
 
     /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -278,7 +272,7 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -367,18 +361,12 @@ public class TaktPurchaseRequestCreateDto
     /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
-    public int RequestStatus { get; set; }
+    public int RequestStatus { get; set; } = 0;
 
     /// <summary>
     /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 流程实例ID（关联 TaktFlowInstance，发起审批后由业务写入，用于审批流程）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 申请原因
@@ -398,7 +386,7 @@ public class TaktPurchaseRequestCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -448,7 +436,7 @@ public class TaktPurchaseRequestStatusDto
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "申请状态（1=启用，0=禁用）不能为空")]
-    public int RequestStatus { get; set; }
+    public int RequestStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -502,12 +490,6 @@ public class TaktPurchaseRequestTemplateDto
     public int? ConvertedStatus { get; set; }
 
     /// <summary>
-    /// 流程实例ID（关联 TaktFlowInstance，发起审批后由业务写入，用于审批流程）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 申请原因
     /// </summary>
     public string? RequestReason { get; set; } = string.Empty;
@@ -515,7 +497,7 @@ public class TaktPurchaseRequestTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -576,12 +558,6 @@ public class TaktPurchaseRequestImportDto
     public int? ConvertedStatus { get; set; }
 
     /// <summary>
-    /// 流程实例ID（关联 TaktFlowInstance，发起审批后由业务写入，用于审批流程）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 申请原因
     /// </summary>
     public string? RequestReason { get; set; } = string.Empty;
@@ -589,7 +565,7 @@ public class TaktPurchaseRequestImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -668,18 +644,12 @@ public class TaktPurchaseRequestExportDto
     /// <summary>
     /// 申请状态（1=启用，0=禁用）
     /// </summary>
-    public int RequestStatus { get; set; }
+    public int RequestStatus { get; set; } = 0;
 
     /// <summary>
     /// 转订单状态（0=未转订单，1=部分转订单，2=全部转订单）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 流程实例ID（关联 TaktFlowInstance，发起审批后由业务写入，用于审批流程）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 申请原因
@@ -689,7 +659,7 @@ public class TaktPurchaseRequestExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

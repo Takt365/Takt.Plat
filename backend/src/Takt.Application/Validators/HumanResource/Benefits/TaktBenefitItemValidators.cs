@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Benefits
 // 文件名称：TaktBenefitItemValidators.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
-// 功能描述：Benefit 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktBenefitItem 生成，请按需审阅）
+// 功能描述：BenefitItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktBenefitItem 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,16 +16,16 @@ using Takt.Application.Dtos.HumanResource.Benefits;
 namespace Takt.Application.Validators.HumanResource.Benefits;
 
 // ========================================
-// 创建Benefit 验证器
+// 创建BenefitItem 验证器
 // ========================================
 
 /// <summary>
-/// 创建Benefit DTO 验证器
+/// 创建BenefitItem DTO 验证器
 /// </summary>
 public class TaktBenefitItemCreateValidator : AbstractValidator<TaktBenefitItemCreateDto>
 {
     /// <summary>
-    /// 初始化 创建Benefit 校验规则
+    /// 初始化 创建BenefitItem 校验规则
     /// </summary>
     public TaktBenefitItemCreateValidator()
     {
@@ -45,7 +45,7 @@ public class TaktBenefitItemCreateValidator : AbstractValidator<TaktBenefitItemC
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.RelatedPlant)
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -53,35 +53,35 @@ public class TaktBenefitItemCreateValidator : AbstractValidator<TaktBenefitItemC
 }
 
 // ========================================
-// 更新Benefit 验证器
+// 更新BenefitItem 验证器
 // ========================================
 
 /// <summary>
-/// 更新Benefit DTO 验证器
+/// 更新BenefitItem DTO 验证器
 /// </summary>
 public class TaktBenefitItemUpdateValidator : AbstractValidator<TaktBenefitItemUpdateDto>
 {
     /// <summary>
-    /// 初始化 更新Benefit 校验规则
+    /// 初始化 更新BenefitItem 校验规则
     /// </summary>
     public TaktBenefitItemUpdateValidator()
     {
         RuleFor(x => x.BenefitItemId)
-            .GreaterThan(0).WithMessage("BenefitID无效");
+            .GreaterThan(0).WithMessage("BenefitItemID无效");
     }
 }
 
 // ========================================
-// 导入Benefit 验证器
+// 导入BenefitItem 验证器
 // ========================================
 
 /// <summary>
-/// 导入Benefit DTO 验证器
+/// 导入BenefitItem DTO 验证器
 /// </summary>
 public class TaktBenefitItemImportValidator : AbstractValidator<TaktBenefitItemImportDto>
 {
     /// <summary>
-    /// 初始化 导入Benefit 校验规则
+    /// 初始化 导入BenefitItem 校验规则
     /// </summary>
     public TaktBenefitItemImportValidator()
     {
@@ -99,8 +99,8 @@ public class TaktBenefitItemImportValidator : AbstractValidator<TaktBenefitItemI
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.RelatedPlant)
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

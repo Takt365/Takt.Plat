@@ -21,11 +21,6 @@ import { useTranslationStore } from '@/stores/foundation/translation';
 import { EventBus } from '@/utils/event-bus';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
 import {
-  STORE_I18N_ENTITY_MENU_LIST,
-  translateLoadEmpty,
-  translateLoadFailed,
-} from '@/utils/takt-store-i18n';
-import {
   clearRemixIconCache,
   collectMenuIconNames,
   getRemixIconComponent,
@@ -214,7 +209,11 @@ export const useMenuStore = defineStore('menu', () => {
   function syncMenusFromUserProfile(): void {
     const menus = useUserStore().menus ?? [];
     if (menus.length === 0) {
-      throw new Error(translateLoadEmpty(STORE_I18N_ENTITY_MENU_LIST));
+      throw new Error(
+        translateLocaleMessage('common.feedback.load.empty', {
+          target: translateLocaleMessage('common.page.entity.menulist'),
+        }),
+      );
     }
 
     applyMenuList(menus);
@@ -273,7 +272,11 @@ export const useMenuStore = defineStore('menu', () => {
 
           const menus = userStore.menus ?? [];
           if (menus.length === 0) {
-            throw new Error(translateLoadEmpty(STORE_I18N_ENTITY_MENU_LIST));
+            throw new Error(
+        translateLocaleMessage('common.feedback.load.empty', {
+          target: translateLocaleMessage('common.page.entity.menulist'),
+        }),
+      );
           }
 
           applyMenuList(menus);
@@ -284,7 +287,12 @@ export const useMenuStore = defineStore('menu', () => {
 
         EventBus.emit('notification:show', {
           type: 'error',
-          message: error instanceof Error ? error.message : translateLoadFailed(STORE_I18N_ENTITY_MENU_LIST),
+          message:
+            error instanceof Error
+              ? error.message
+              : translateLocaleMessage('common.feedback.load.failed', {
+                  target: translateLocaleMessage('common.page.entity.menulist'),
+                }),
         });
 
         throw error;

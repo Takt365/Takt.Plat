@@ -1,14 +1,14 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/sales/sales-price -->
+<!-- 命名空间：@/views/logistics/sales/price -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt销售价格实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：Takt采购价格实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-sales-sales-price">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,17 +20,17 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:sales:salesprice:create"
-      update-permission="logistics:sales:salesprice:update"
-      delete-permission="logistics:sales:salesprice:delete"
-      import-permission="logistics:sales:salesprice:import"
-      export-permission="logistics:sales:salesprice:export"
+      create-permission="logistics:sales:price:create"
+      update-permission="logistics:sales:price:update"
+      delete-permission="logistics:sales:price:delete"
+      import-permission="logistics:sales:price:import"
+      export-permission="logistics:sales:price:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,85 +52,56 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'salesPriceId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getSalesPriceId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getPurchasePriceId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="purchasePriceId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'priceStatus'">
-          <TaktDictTag
-            :value="getSalesPriceField(record, 'priceStatus')"
-            dict-type="sys_normal_disable"
+          <a-switch
+            :checked="getPurchasePriceField(record, 'priceStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handlePriceStatusChange(record, Boolean(checked))"
           />
         </template>
       </template>
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.salesPriceItem._self') }}</div>
-          <a-table
-            v-if="hasSalesPriceItemRows(record)"
-            :columns="salesPriceItemExpandColumns"
-            :data-source="getSalesPriceItemRows(record)"
-            :row-key="(row: SalesPriceItem, index?: number) => row?.salesPriceItemId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.salesPriceChangeLog._self') }}</div>
-          <a-table
-            v-if="hasSalesPriceChangeLogRows(record)"
-            :columns="salesPriceChangeLogExpandColumns"
-            :data-source="getSalesPriceChangeLogRows(record)"
-            :row-key="(row: SalesPriceChangeLog, index?: number) => row?.salesPriceChangeLogId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <PurchasePriceItemPanel
+          ref="purchasePriceItemPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <SalesPriceForm
+      <PurchasePriceForm
+        :key="formData?.purchasePriceId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -141,94 +112,100 @@
       v-model:open="advancedQueryVisible"
       v-model:visible-field-keys="visibleQueryFieldKeys"
       :fields="queryFieldsMeta"
-      :storage-key="'takt-query-fields-logistics-sales-sales-price'"
+      :storage-key="'takt-query-fields-logistics-sales-price'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.salesPrice.plantcode')">
+      <a-form-item :label="t('entity.purchaseprice.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPrice.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.plantcode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('salesPriceCode')">
-      <a-form-item :label="t('entity.salesPrice.code')">
+      <div v-show="isFieldVisible('purchasePriceCode')">
+      <a-form-item :label="t('entity.purchaseprice.code')">
         <a-input
-          v-model:value="advancedQueryForm.salesPriceCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPrice.code') })"
+          v-model:value="advancedQueryForm.purchasePriceCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.code') })"
+          show-count
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('customerCode')">
-      <a-form-item :label="t('entity.salesPrice.customercode')">
+      <div v-show="isFieldVisible('supplierCode')">
+      <a-form-item :label="t('entity.purchaseprice.suppliercode')">
         <a-input
-          v-model:value="advancedQueryForm.customerCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPrice.customercode') })"
+          v-model:value="advancedQueryForm.supplierCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.suppliercode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priceType')">
-      <a-form-item :label="t('entity.salesPrice.pricetype')">
+      <a-form-item :label="t('entity.purchaseprice.pricetype')">
         <a-input-number
           v-model:value="advancedQueryForm.priceType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesPrice.pricetype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.pricetype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveStartDateStart')">
-      <a-form-item :label="t('entity.salesPrice.effectivestartdatestart')">
+      <a-form-item :label="t('entity.purchaseprice.effectivestartdatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveStartDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesPrice.effectivestartdatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.effectivestartdatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveStartDateEnd')">
-      <a-form-item :label="t('entity.salesPrice.effectivestartdateend')">
+      <a-form-item :label="t('entity.purchaseprice.effectivestartdateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveStartDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesPrice.effectivestartdateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.effectivestartdateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveEndDateStart')">
-      <a-form-item :label="t('entity.salesPrice.effectiveenddatestart')">
+      <a-form-item :label="t('entity.purchaseprice.effectiveenddatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveEndDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesPrice.effectiveenddatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.effectiveenddatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveEndDateEnd')">
-      <a-form-item :label="t('entity.salesPrice.effectiveenddateend')">
+      <a-form-item :label="t('entity.purchaseprice.effectiveenddateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveEndDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesPrice.effectiveenddateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.effectiveenddateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priceStatus')">
-      <a-form-item :label="t('entity.salesPrice.pricestatus')">
+      <a-form-item :label="t('entity.purchaseprice.pricestatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.priceStatus"
-          dict-type="sys_normal_disable"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesPrice.pricestatus') })"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.pricestatus') })"
           allow-clear
         />
       </a-form-item>
@@ -255,11 +232,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('entity.purchaseprice.extfield')">
+        <a-textarea
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.purchaseprice.extfield') })"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -269,8 +247,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -280,14 +260,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.salesPrice._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.purchaseprice._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.salesPrice._self"
+        entity-i18n-key="entity.purchaseprice._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -303,7 +283,7 @@
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
-      :id-column-key="'salesPriceId'"
+      :id-column-key="'purchasePriceId'"
       :action-column-key="'action'"
       entity-scope="company"
       table-mode="single"
@@ -315,21 +295,21 @@
 
 <script setup lang="ts">
 /**
- * Takt销售价格实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
- * @module views/logistics/sales/sales-price
+ * Takt采购价格实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * @module views/logistics/sales/price
  */
 import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
-import SalesPriceForm from './components/sales-price-form.vue'
-import { getSalesPriceList, getSalesPriceById, createSalesPrice, updateSalesPrice, deleteSalesPriceById, deleteSalesPriceBatch, getSalesPriceTemplate, importSalesPrice, exportSalesPrice } from '@/api/logistics/sales/sales-price'
-import * as salesPriceItemApi from '@/api/logistics/sales/sales-price-item'
-import * as salesPriceChangeLogApi from '@/api/logistics/sales/sales-price-change-log'
-import type { SalesPriceItem, SalesPriceItemQuery } from '@/types/logistics/sales/sales-price-item'
-import type { SalesPriceChangeLog, SalesPriceChangeLogQuery } from '@/types/logistics/sales/sales-price-change-log'
-import type { SalesPrice, SalesPriceQuery, SalesPriceCreate, SalesPriceUpdate } from '@/types/logistics/sales/sales-price'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import PurchasePriceForm from './components/price-form.vue'
+import PurchasePriceItemPanel from './components/price-item-panel.vue'
+import { providePurchasePriceMasterContext } from './composables/use-price-master-context'
+import { getPurchasePriceList, getPurchasePriceById, createPurchasePrice, updatePurchasePrice, deletePurchasePriceById, deletePurchasePriceBatch, getPurchasePriceTemplate, importPurchasePrice, exportPurchasePrice, updatePurchasePriceStatus } from '@/api/logistics/procurement/price'
+import type { PurchasePrice, PurchasePriceQuery } from '@/types/logistics/procurement/price'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
@@ -337,10 +317,10 @@ import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
-const excelNames = taktExcelEntityNames('TaktSalesPrice')
+const excelNames = taktExcelEntityNames('TaktPurchasePrice')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.salesPrice._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.purchaseprice._self') })
 )
 
 /** 快捷查询关键字 */
@@ -348,17 +328,17 @@ const queryKeyword = ref('')
 /** 列表 loading */
 const loading = ref(false)
 /** 分页列表数据 */
-const dataSource = ref<SalesPrice[]>([])
+const dataSource = ref<PurchasePrice[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<SalesPrice | null>(null)
+const selectedRow = ref<PurchasePrice | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<SalesPrice[]>([])
+const selectedRows = ref<PurchasePrice[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -367,17 +347,19 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<SalesPrice>>({})
+const formData = ref<Partial<PurchasePrice> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   plantCode: '',
-  salesPriceCode: '',
-  customerCode: '',
+  purchasePriceCode: '',
+  supplierCode: '',
   priceType: undefined as number | undefined,
   effectiveStartDateStart: '',
   effectiveStartDateEnd: '',
@@ -386,23 +368,23 @@ const advancedQueryForm = ref({
   priceStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.salesPrice.plantcode') },
-  { key: 'salesPriceCode', label: t('entity.salesPrice.code') },
-  { key: 'customerCode', label: t('entity.salesPrice.customercode') },
-  { key: 'priceType', label: t('entity.salesPrice.pricetype') },
-  { key: 'effectiveStartDateStart', label: t('entity.salesPrice.effectivestartdatestart') },
-  { key: 'effectiveStartDateEnd', label: t('entity.salesPrice.effectivestartdateend') },
-  { key: 'effectiveEndDateStart', label: t('entity.salesPrice.effectiveenddatestart') },
-  { key: 'effectiveEndDateEnd', label: t('entity.salesPrice.effectiveenddateend') },
-  { key: 'priceStatus', label: t('entity.salesPrice.pricestatus') },
+  { key: 'plantCode', label: t('entity.purchaseprice.plantcode') },
+  { key: 'purchasePriceCode', label: t('entity.purchaseprice.code') },
+  { key: 'supplierCode', label: t('entity.purchaseprice.suppliercode') },
+  { key: 'priceType', label: t('entity.purchaseprice.pricetype') },
+  { key: 'effectiveStartDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchaseprice.effectivestartdate')) },
+  { key: 'effectiveStartDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.purchaseprice.effectivestartdate')) },
+  { key: 'effectiveEndDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchaseprice.effectiveenddate')) },
+  { key: 'effectiveEndDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.purchaseprice.effectiveenddate')) },
+  { key: 'priceStatus', label: t('entity.purchaseprice.pricestatus') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('entity.purchaseprice.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -414,138 +396,109 @@ const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
-const entityIdName = 'salesPriceId'
+const entityIdName = 'purchasePriceId'
 /** 工具栏「编辑」是否禁用（须恰好选中一行） */
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = providePurchasePriceMasterContext()
+const purchasePriceItemPanelRef = ref<InstanceType<typeof PurchasePriceItemPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {PurchasePriceQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<PurchasePriceQuery>): PurchasePriceQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: PurchasePriceQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof PurchasePriceQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('purchasePriceCode', form.purchasePriceCode)
+  assignTrimmed('supplierCode', form.supplierCode)
+  if (form.priceType !== undefined && form.priceType !== null) {
+    query.priceType = form.priceType
+  }
+  assignTrimmed('effectiveStartDateStart', form.effectiveStartDateStart)
+  assignTrimmed('effectiveStartDateEnd', form.effectiveStartDateEnd)
+  assignTrimmed('effectiveEndDateStart', form.effectiveEndDateStart)
+  assignTrimmed('effectiveEndDateEnd', form.effectiveEndDateEnd)
+  if (form.priceStatus !== undefined && form.priceStatus !== null) {
+    query.priceStatus = form.priceStatus
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
-/** 展开行预览：salesPriceItem 列 */
-const salesPriceItemExpandColumns = computed(() => [
-  {
-    title: t('entity.salesPriceItem.salespricename'),
-    dataIndex: 'salesPriceName',
-    key: 'salesPriceName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceItem.salespricecode'),
-    dataIndex: 'salesPriceCode',
-    key: 'salesPriceCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceItem.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceItem.materialcode'),
-    dataIndex: 'materialCode',
-    key: 'materialCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceItem.salesunit'),
-    dataIndex: 'salesUnit',
-    key: 'salesUnit',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceItem.salesprice'),
-    dataIndex: 'salesPrice',
-    key: 'salesPrice',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceItem.minorderquantity'),
-    dataIndex: 'minOrderQuantity',
-    key: 'minOrderQuantity',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceItem.maxorderquantity'),
-    dataIndex: 'maxOrderQuantity',
-    key: 'maxOrderQuantity',
-    ellipsis: true,
-  },
-])
 
-/** 展开行预览：salesPriceChangeLog 列 */
-const salesPriceChangeLogExpandColumns = computed(() => [
-  {
-    title: t('entity.salesPriceChangeLog.salespricename'),
-    dataIndex: 'salesPriceName',
-    key: 'salesPriceName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceChangeLog.changetime'),
-    dataIndex: 'changeTime',
-    key: 'changeTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceChangeLog.changeby'),
-    dataIndex: 'changeBy',
-    key: 'changeBy',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.salesPriceChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    ellipsis: true,
-  },
-])
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
 
-/** 读取主表行上的 salesPriceItem 子表缓存 */
-function getSalesPriceItemRows(record: SalesPrice): SalesPriceItem[] {
-  return (record as any)?.items ?? []
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: PurchasePrice | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getPurchasePriceId(record) : ''
 }
 
-/** 主表行是否已加载 salesPriceItem 子表 */
-function hasSalesPriceItemRows(record: SalesPrice): boolean {
-  return getSalesPriceItemRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as PurchasePrice
+  const key = getPurchasePriceId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
-/** 读取主表行上的 salesPriceChangeLog 子表缓存 */
-function getSalesPriceChangeLogRows(record: SalesPrice): SalesPriceChangeLog[] {
-  return (record as any)?.changeLogs ?? []
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
 }
-
-/** 主表行是否已加载 salesPriceChangeLog 子表 */
-function hasSalesPriceChangeLogRows(record: SalesPrice): boolean {
-  return getSalesPriceChangeLogRows(record).length > 0
-}
-
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadSalesPriceDetail(record: SalesPrice): Promise<SalesPrice | null> {
-  const id = getSalesPriceId(record)
+async function loadPurchasePriceDetail(record: PurchasePrice): Promise<PurchasePrice | null> {
+  const id = getPurchasePriceId(record)
   if (!id) {
     return null
   }
   try {
-    const detail = await getSalesPriceById(id)
-    const index = dataSource.value.findIndex((row) => getSalesPriceId(row) === id)
+    const detail = await getPurchasePriceById(id)
+    const index = dataSource.value.findIndex((row) => getPurchasePriceId(row) === id)
     if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as SalesPrice
+      dataSource.value[index] = { ...dataSource.value[index], ...detail } as PurchasePrice
     }
     return detail
   } catch (error: any) {
@@ -553,150 +506,75 @@ async function loadSalesPriceDetail(record: SalesPrice): Promise<SalesPrice | nu
     return null
   }
 }
-/** 懒加载 salesPriceItem 子表（SalesPriceItemQuery + salesPriceItemApi，与主表 SalesPriceQuery 分离） */
-async function loadSalesPriceItemForSalesPrice(record: SalesPrice): Promise<SalesPriceItem[]> {
-  const masterId = getSalesPriceId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: SalesPriceItemQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      salesPriceId: masterId,
-    }
-    const result = await salesPriceItemApi.getSalesPriceItemList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getSalesPriceId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, items: rows } as SalesPrice
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 salesPriceChangeLog 子表（SalesPriceChangeLogQuery + salesPriceChangeLogApi，与主表 SalesPriceQuery 分离） */
-async function loadSalesPriceChangeLogForSalesPrice(record: SalesPrice): Promise<SalesPriceChangeLog[]> {
-  const masterId = getSalesPriceId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: SalesPriceChangeLogQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      salesPriceId: masterId,
-    }
-    const result = await salesPriceChangeLogApi.getSalesPriceChangeLogList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getSalesPriceId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, changeLogs: rows } as SalesPrice
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureSalesPriceChildrenLoaded(record: SalesPrice) {
-  if (!hasSalesPriceItemRows(record)) {
-    await loadSalesPriceItemForSalesPrice(record)
-  }
-  if (!hasSalesPriceChangeLogRows(record)) {
-    await loadSalesPriceChangeLogForSalesPrice(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: SalesPrice) {
-  const key = getSalesPriceId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureSalesPriceChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
-    dataIndex: 'salesPriceId',
-    key: 'salesPriceId',
+    dataIndex: 'purchasePriceId',
+    key: 'purchasePriceId',
     width: 80,
     resizable: true,
     ellipsis: true,
     fixed: 'left',
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'salesPriceId') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'purchasePriceId') ?? ''
   },
   {
-    title: t('entity.salesPrice.plantcode'),
+    title: t('entity.purchaseprice.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'plantCode') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.salesPrice.code'),
-    dataIndex: 'salesPriceCode',
-    key: 'salesPriceCode',
+    title: t('entity.purchaseprice.code'),
+    dataIndex: 'purchasePriceCode',
+    key: 'purchasePriceCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'salesPriceCode') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'purchasePriceCode') ?? ''
   },
   {
-    title: t('entity.salesPrice.customercode'),
-    dataIndex: 'customerCode',
-    key: 'customerCode',
+    title: t('entity.purchaseprice.suppliercode'),
+    dataIndex: 'supplierCode',
+    key: 'supplierCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'customerCode') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'supplierCode') ?? ''
   },
   {
-    title: t('entity.salesPrice.pricetype'),
+    title: t('entity.purchaseprice.pricetype'),
     dataIndex: 'priceType',
     key: 'priceType',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'priceType') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'priceType') ?? ''
   },
   {
-    title: t('entity.salesPrice.effectivestartdate'),
+    title: t('entity.purchaseprice.effectivestartdate'),
     dataIndex: 'effectiveStartDate',
     key: 'effectiveStartDate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'effectiveStartDate') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'effectiveStartDate') ?? ''
   },
   {
-    title: t('entity.salesPrice.effectiveenddate'),
+    title: t('entity.purchaseprice.effectiveenddate'),
     dataIndex: 'effectiveEndDate',
     key: 'effectiveEndDate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'effectiveEndDate') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'effectiveEndDate') ?? ''
   },
   {
-    title: t('entity.salesPrice.pricestatus'),
+    title: t('entity.purchaseprice.pricestatus'),
     dataIndex: 'priceStatus',
     key: 'priceStatus',
     width: 120,
@@ -710,86 +588,68 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:sales:salesprice:update',
-        onClick: (record: SalesPrice) => handleEdit(record)
+        permission: 'logistics:sales:price:update',
+        onClick: (record: PurchasePrice) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:sales:salesprice:delete',
-        onClick: (record: SalesPrice) => handleDeleteOne(record)
+        permission: 'logistics:sales:price:delete',
+        onClick: (record: PurchasePrice) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getSalesPriceId = (record: any): string => record?.[entityIdName] ?? ''
+const getPurchasePriceId = (record: any): string => record?.[entityIdName] ?? ''
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
-const getSalesPriceField = (record: any, field: string): any => record?.[field]
+const getPurchasePriceField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: SalesPrice[]) => {
+  onChange: (keys: (string | number)[], rows: PurchasePrice[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
-  onSelect: (record: SalesPrice, selected: boolean) => {
+  onSelect: (record: PurchasePrice, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (getSalesPriceId(selectedRow.value) === getSalesPriceId(record)) {
+      syncMasterSelection(record)
+    } else if (getPurchasePriceId(selectedRow.value) === getPurchasePriceId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: SalesPrice[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: PurchasePrice[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: SalesPrice) => ({
-  onClick: () => {
-    const key = getSalesPriceId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getSalesPriceId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: SalesPriceQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getSalesPriceList(params)
+    const res = await getPurchasePriceList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
-    logger.error('[SalesPrice] 加载数据失败', { error })
+    logger.error('[PurchasePrice] 加载数据失败', { error })
     message.error(error?.message || t('common.feedback.load.data.failed'))
     dataSource.value = []
     total.value = 0
@@ -803,7 +663,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -812,8 +672,8 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   plantCode: '',
-  salesPriceCode: '',
-  customerCode: '',
+  purchasePriceCode: '',
+  supplierCode: '',
   priceType: undefined as number | undefined,
   effectiveStartDateStart: '',
   effectiveStartDateEnd: '',
@@ -822,25 +682,26 @@ function handleReset() {
   priceStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.salesPrice._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.purchaseprice._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: SalesPrice) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.salesPrice._self') })
+async function handleEdit(record: PurchasePrice) {
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.purchaseprice._self') })
   formLoading.value = true
   try {
-    const detail = await loadSalesPriceDetail(record)
+    const detail = await loadPurchasePriceDetail(record)
     formData.value = detail ? { ...detail } : { ...record }
     formVisible.value = true
   } finally {
@@ -853,7 +714,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.salesPrice._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.purchaseprice._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -870,13 +731,18 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-      await updateSalesPrice(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.salesPrice._self') }))
+      await updatePurchasePrice(id, payload as any)
+      message.success(t('common.feedback.updated', { target: t('entity.purchaseprice._self') }))
     } else {
-      await createSalesPrice(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.salesPrice._self') }))
+      await createPurchasePrice(payload as any)
+      message.success(t('common.feedback.created', { target: t('entity.purchaseprice._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  purchasePriceItemPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -886,6 +752,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -894,13 +762,13 @@ function handleImport() {
 
 /** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getSalesPriceTemplate(sheetName, fileName)
+  const res = await getPurchasePriceTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
 /** 上传并导入 Excel 文件 */
 async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importSalesPrice(file, sheetName)
+  return await importPurchasePrice(file, sheetName)
 }
 
 /** 导入完成回调：刷新列表并可选关闭对话框 */
@@ -917,16 +785,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: SalesPriceQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportSalesPrice(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportPurchasePrice(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -945,24 +808,28 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.salesPrice._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.purchaseprice._self') }))
   } catch (error: any) {
-    logger.error('[SalesPrice] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.salesPrice._self') }))
+    logger.error('[PurchasePrice] 导出失败', { error })
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.purchaseprice._self') }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: SalesPrice) {
+async function handleDeleteOne(record: PurchasePrice) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.salesPrice._self'), name: t('common.tip.this.target', { target: t('entity.salesPrice._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.purchaseprice._self'), name: t('common.tip.this.target', { target: t('entity.purchaseprice._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await deleteSalesPriceById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.salesPrice._self') }))
+      await deletePurchasePriceById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: t('entity.purchaseprice._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -970,21 +837,49 @@ async function handleDeleteOne(record: SalesPrice) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.salesPrice._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.purchaseprice._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.salesPrice._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.purchaseprice._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteSalesPriceBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.salesPrice._self') }))
+      await deletePurchasePriceBatch(ids)
+      message.success(t('common.feedback.deleted', { target: t('entity.purchaseprice._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
+}
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handlePriceStatusChange(record: PurchasePrice, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getPurchasePriceField(record, 'priceStatus')
+  const id = getPurchasePriceId(record)
+  const row = dataSource.value.find((item) => getPurchasePriceId(item) === id)
+  if (row) {
+    row.priceStatus = newVal
+  }
+  try {
+    await updatePurchasePriceStatus({ purchasePriceId: id, priceStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.priceStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
 }
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
@@ -994,15 +889,15 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
-  salesPriceCode: '',
-  customerCode: '',
+  purchasePriceCode: '',
+  supplierCode: '',
   priceType: undefined as number | undefined,
   effectiveStartDateStart: '',
   effectiveStartDateEnd: '',
@@ -1011,7 +906,7 @@ function handleAdvancedQueryReset() {
   priceStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -1040,24 +935,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-sales-sales-price {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

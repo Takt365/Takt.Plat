@@ -42,9 +42,7 @@ export function getSelfServiceList(queryDto: any): Promise<TaktPagedResult<SelfS
   return request<TaktPagedResult<SelfService>>({
     url: `${SELF_SERVICE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportSelfService(
     url: `${SELF_SERVICE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

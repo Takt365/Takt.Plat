@@ -28,6 +28,7 @@ import {
   resolveDefaultMenuPath,
 } from '@/router/menu-routes';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
+import { ensureTaktPaginationConfigAsync } from '@/config/takt-pagination';
 import { useLocaleStore } from '@/stores/foundation/locale';
 
 /** 静态常量路由（业务页由菜单动态注册；404 在动态路由之后追加） */
@@ -120,6 +121,7 @@ router.beforeEach(async (to) => {
   }
 
   useTenantStore().restoreTenantCodeFromStorage();
+  await ensureTaktPaginationConfigAsync();
 
   try {
     await userStore.loadUserProfile();

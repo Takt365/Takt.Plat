@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.WebApi.Controllers.Logistics.Materials
+// 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestChangeLogsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购申请变更记录控制器
 // 
@@ -11,11 +11,11 @@
 // ========================================
 
 using Microsoft.AspNetCore.Mvc;
-using Takt.Application.Dtos.Logistics.Materials;
-using Takt.Application.Services.Logistics.Materials;
+using Takt.Application.Dtos.Logistics.Procurement;
+using Takt.Application.Services.Logistics.Procurement;
 using Takt.Shared.Constants;
 
-namespace Takt.WebApi.Controllers.Logistics.Materials;
+namespace Takt.WebApi.Controllers.Logistics.Procurement;
 
 /// <summary>
 /// 采购申请变更记录控制器
@@ -41,7 +41,7 @@ public class TaktPurchaseRequestChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:purchaserequestchangelog:list", "采购申请变更记录列表")]
+    [TaktPermission("logistics:procurement:purchaserequest:list", "采购申请变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetPurchaseRequestChangeLogListAsync([FromQuery] TaktPurchaseRequestChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktPurchaseRequestChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购申请变更记录ID</param>
     /// <returns>采购申请变更记录DTO</returns>
-    [TaktPermission("logistics:materials:purchaserequestchangelog:query", "采购申请变更记录详情")]
+    [TaktPermission("logistics:procurement:purchaserequest:query", "采购申请变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPurchaseRequestChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktPurchaseRequestChangeLogsController : TaktControllerBase
     /// 获取采购申请变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:purchaserequestchangelog:query", "采购申请变更记录选项")]
+    [TaktPermission("logistics:procurement:purchaserequest:query", "采购申请变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetPurchaseRequestChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktPurchaseRequestChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>采购申请变更记录DTO</returns>
-    [TaktPermission("logistics:materials:purchaserequestchangelog:create", "创建采购申请变更记录")]
+    [TaktPermission("logistics:procurement:purchaserequest:create", "创建采购申请变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreatePurchaseRequestChangeLogAsync([FromBody] TaktPurchaseRequestChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktPurchaseRequestChangeLogsController : TaktControllerBase
     /// <param name="id">采购申请变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>采购申请变更记录DTO</returns>
-    [TaktPermission("logistics:materials:purchaserequestchangelog:update", "更新采购申请变更记录")]
+    [TaktPermission("logistics:procurement:purchaserequest:update", "更新采购申请变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePurchaseRequestChangeLogAsync(long id, [FromBody] TaktPurchaseRequestChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktPurchaseRequestChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">采购申请变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:purchaserequestchangelog:delete", "删除采购申请变更记录")]
+    [TaktPermission("logistics:procurement:purchaserequest:delete", "删除采购申请变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePurchaseRequestChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktPurchaseRequestChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:purchaserequestchangelog:delete", "批量删除采购申请变更记录")]
+    [TaktPermission("logistics:procurement:purchaserequest:delete", "批量删除采购申请变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeletePurchaseRequestChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktPurchaseRequestChangeLogsController : TaktControllerBase
     /// 导出采购申请变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:purchaserequestchangelog:export", "导出采购申请变更记录")]
+    [TaktPermission("logistics:procurement:purchaserequest:export", "导出采购申请变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportPurchaseRequestChangeLogAsync([FromQuery] TaktPurchaseRequestChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

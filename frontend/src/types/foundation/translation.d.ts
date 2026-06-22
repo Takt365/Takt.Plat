@@ -56,12 +56,12 @@ export interface Translation extends TenantDtoBase {
   /**
    * 资源分组（用于分类管理翻译）
    */
-  resourceGroup: number;
+  resourceGroup: string;
 
   /**
    * 资源类别（0=前端，1=后端）
    */
-  resourceType: number;
+  resourceType: string;
 
   /**
    * 上下文注释（帮助翻译人员理解使用场景）
@@ -111,12 +111,12 @@ export interface TranslationQuery extends TaktPagedQuery {
   /**
    * 资源分组（用于分类管理翻译）
    */
-  resourceGroup?: number;
+  resourceGroup?: string;
 
   /**
    * 资源类别（0=前端，1=后端）
    */
-  resourceType?: number;
+  resourceType?: string;
 
   /**
    * 上下文注释（帮助翻译人员理解使用场景）
@@ -136,7 +136,7 @@ export interface TranslationQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -180,12 +180,12 @@ export interface TranslationCreate {
   /**
    * 资源分组（用于分类管理翻译）
    */
-  resourceGroup: number;
+  resourceGroup: string;
 
   /**
    * 资源类别（0=前端，1=后端）
    */
-  resourceType: number;
+  resourceType: string;
 
   /**
    * 上下文注释（帮助翻译人员理解使用场景）
@@ -195,7 +195,7 @@ export interface TranslationCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -254,12 +254,12 @@ export interface TranslationTemplate {
   /**
    * 资源分组（用于分类管理翻译）
    */
-  resourceGroup?: number;
+  resourceGroup?: string;
 
   /**
    * 资源类别（0=前端，1=后端）
    */
-  resourceType?: number;
+  resourceType?: string;
 
   /**
    * 上下文注释（帮助翻译人员理解使用场景）
@@ -269,7 +269,7 @@ export interface TranslationTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -313,12 +313,12 @@ export interface TranslationImport {
   /**
    * 资源分组（用于分类管理翻译）
    */
-  resourceGroup?: number;
+  resourceGroup?: string;
 
   /**
    * 资源类别（0=前端，1=后端）
    */
-  resourceType?: number;
+  resourceType?: string;
 
   /**
    * 上下文注释（帮助翻译人员理解使用场景）
@@ -328,7 +328,7 @@ export interface TranslationImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -372,12 +372,12 @@ export interface TranslationExport {
   /**
    * 资源分组（用于分类管理翻译）
    */
-  resourceGroup: number;
+  resourceGroup: string;
 
   /**
    * 资源类别（0=前端，1=后端）
    */
-  resourceType: number;
+  resourceType: string;
 
   /**
    * 上下文注释（帮助翻译人员理解使用场景）
@@ -387,7 +387,7 @@ export interface TranslationExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -421,12 +421,12 @@ export interface TranslationTransposed {
   /**
    * 资源分组
    */
-  resourceGroup: number;
+  resourceGroup: string;
 
   /**
    * 资源类别
    */
-  resourceType: number;
+  resourceType: string;
 
   /**
    * 上下文注释
@@ -475,12 +475,12 @@ export interface TranslationTransposedQuery extends TaktPagedQuery {
   /**
    * 资源分组
    */
-  resourceGroup?: number;
+  resourceGroup?: string;
 
   /**
    * 资源类别
    */
-  resourceType?: number;
+  resourceType?: string;
 
   /**
    * 上下文注释
@@ -499,7 +499,12 @@ export interface TranslationTransposedResult {
   /**
    * 分页数据
    */
-  paged: number;
+  paged: {
+    data: TranslationTransposed[];
+    total: number;
+    pageIndex: number;
+    pageSize: number;
+  };
 
   /**
    * 语言列顺序（表头从左到右），如 zh-CN、en-US 等

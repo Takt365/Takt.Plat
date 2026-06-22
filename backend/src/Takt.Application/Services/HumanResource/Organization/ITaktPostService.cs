@@ -78,6 +78,13 @@ public interface ITaktPostService
     Task<TaktPostDto> UpdatePostStatusAsync(TaktPostStatusDto dto);
 
     /// <summary>
+    /// 更新岗位是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktPostDto> UpdatePostBuiltInAsync(TaktPostBuiltInDto dto);
+
+    /// <summary>
     /// 更新岗位排序
     /// </summary>
     /// <param name="dto">排序DTO</param>

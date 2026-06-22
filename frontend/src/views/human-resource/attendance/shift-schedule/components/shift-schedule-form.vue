@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,99 +63,115 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.shiftSchedule.scheduletype')"
+                :label="t('entity.shiftschedule.scheduletype')"
                 name="scheduleType"
               >
                 <a-input-number
                   v-model:value="formState.scheduleType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.scheduletype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.scheduletype') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.shiftSchedule.deptid')"
+                :label="t('entity.shiftschedule.deptid')"
                 name="deptId"
               >
                 <a-input
                   v-model:value="formState.deptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.deptid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.deptid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.shiftSchedule.employeeid')"
+                :label="t('entity.shiftschedule.employeeid')"
                 name="employeeId"
               >
                 <a-input
                   v-model:value="formState.employeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.employeeid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.employeeid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.shiftSchedule.scheduledate')"
+                :label="t('entity.shiftschedule.scheduledate')"
                 name="scheduleDate"
               >
                 <a-date-picker
                   v-model:value="formState.scheduleDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.shiftSchedule.scheduledate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.shiftschedule.scheduledate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.shiftSchedule.shiftid')"
+                :label="t('entity.shiftschedule.shiftid')"
                 name="shiftId"
               >
                 <a-input
                   v-model:value="formState.shiftId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.shiftid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.shiftid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.shiftSchedule.relatedplant')"
+                :label="t('entity.shiftschedule.relatedplant')"
                 name="relatedPlant"
               >
                 <a-input
                   v-model:value="formState.relatedPlant"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.relatedplant') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.relatedplant') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -175,15 +194,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -197,6 +217,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { ShiftScheduleCreate } from '@/types/human-resource/attendance/shift-schedule'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -229,7 +250,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","scheduleType","deptId","employeeId","scheduleDate","shiftId","relatedPlant","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","scheduleType","deptId","employeeId","scheduleDate","shiftId","relatedPlant","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -240,7 +261,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -248,18 +269,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 shiftScheduleId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.shiftScheduleId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -275,24 +312,30 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  scheduleType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.shiftSchedule.scheduletype') }),
-      trigger: 'change'
-    }
-  ],
+  scheduleType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.shiftschedule.scheduletype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.shiftschedule.scheduletype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   scheduleDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.shiftSchedule.scheduledate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.shiftschedule.scheduledate') }),
       trigger: 'change'
     }
   ],
   shiftId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.shiftid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.shiftid') }),
       trigger: 'blur'
     }
   ],
@@ -306,15 +349,26 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('scheduleType' in payload) {
+    const rawscheduleType = payload.scheduleType
+    payload.scheduleType = typeof rawscheduleType === 'number' ? rawscheduleType : Number(rawscheduleType)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.shiftScheduleId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

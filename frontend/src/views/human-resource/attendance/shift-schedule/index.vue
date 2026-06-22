@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-attendance-shift-schedule">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'shiftScheduleId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <ShiftScheduleForm
+        :key="formData?.shiftScheduleId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,66 +110,74 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('scheduleType')">
-      <a-form-item :label="t('entity.shiftSchedule.scheduletype')">
+      <a-form-item :label="t('entity.shiftschedule.scheduletype')">
         <a-input-number
           v-model:value="advancedQueryForm.scheduleType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.scheduletype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.scheduletype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptId')">
-      <a-form-item :label="t('entity.shiftSchedule.deptid')">
+      <a-form-item :label="t('entity.shiftschedule.deptid')">
         <a-input
           v-model:value="advancedQueryForm.deptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.deptid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.deptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.shiftSchedule.employeeid')">
+      <a-form-item :label="t('entity.shiftschedule.employeeid')">
         <a-input
           v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.employeeid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.employeeid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scheduleDateStart')">
-      <a-form-item :label="t('entity.shiftSchedule.scheduledatestart')">
+      <a-form-item :label="t('entity.shiftschedule.scheduledatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.scheduleDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.shiftSchedule.scheduledatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.shiftschedule.scheduledatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scheduleDateEnd')">
-      <a-form-item :label="t('entity.shiftSchedule.scheduledateend')">
+      <a-form-item :label="t('entity.shiftschedule.scheduledateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.scheduleDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.shiftSchedule.scheduledateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.shiftschedule.scheduledateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shiftId')">
-      <a-form-item :label="t('entity.shiftSchedule.shiftid')">
+      <a-form-item :label="t('entity.shiftschedule.shiftid')">
         <a-input
           v-model:value="advancedQueryForm.shiftId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.shiftid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.shiftid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="t('entity.shiftSchedule.relatedplant')">
+      <a-form-item :label="t('entity.shiftschedule.relatedplant')">
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftSchedule.relatedplant') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.shiftschedule.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -195,12 +204,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -209,8 +237,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -220,14 +250,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.shiftSchedule._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.shiftschedule._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.shiftSchedule._self"
+        entity-i18n-key="entity.shiftschedule._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -263,12 +293,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ShiftScheduleForm from './components/shift-schedule-form.vue'
 import { getShiftScheduleList, getShiftScheduleById, createShiftSchedule, updateShiftSchedule, deleteShiftScheduleById, deleteShiftScheduleBatch, getShiftScheduleTemplate, importShiftSchedule, exportShiftSchedule } from '@/api/human-resource/attendance/shift-schedule'
-import type { ShiftSchedule, ShiftScheduleQuery, ShiftScheduleCreate, ShiftScheduleUpdate } from '@/types/human-resource/attendance/shift-schedule'
+import type { ShiftSchedule, ShiftScheduleQuery } from '@/types/human-resource/attendance/shift-schedule'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -276,7 +307,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktShiftSchedule')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.shiftSchedule._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.shiftschedule._self') })
 )
 
 /** 快捷查询关键字 */
@@ -286,9 +317,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<ShiftSchedule[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -303,11 +334,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<ShiftSchedule>>({})
+const formData = ref<Partial<ShiftSchedule> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -320,21 +353,21 @@ const advancedQueryForm = ref({
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'scheduleType', label: t('entity.shiftSchedule.scheduletype') },
-  { key: 'deptId', label: t('entity.shiftSchedule.deptid') },
-  { key: 'employeeId', label: t('entity.shiftSchedule.employeeid') },
-  { key: 'scheduleDateStart', label: t('entity.shiftSchedule.scheduledatestart') },
-  { key: 'scheduleDateEnd', label: t('entity.shiftSchedule.scheduledateend') },
-  { key: 'shiftId', label: t('entity.shiftSchedule.shiftid') },
-  { key: 'relatedPlant', label: t('entity.shiftSchedule.relatedplant') },
+  { key: 'scheduleType', label: t('entity.shiftschedule.scheduletype') },
+  { key: 'deptId', label: t('entity.shiftschedule.deptid') },
+  { key: 'employeeId', label: t('entity.shiftschedule.employeeid') },
+  { key: 'scheduleDateStart', label: t('entity.shiftschedule.scheduledatestart') },
+  { key: 'scheduleDateEnd', label: t('entity.shiftschedule.scheduledateend') },
+  { key: 'shiftId', label: t('entity.shiftschedule.shiftid') },
+  { key: 'relatedPlant', label: t('entity.shiftschedule.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -353,10 +386,50 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {ShiftScheduleQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<ShiftScheduleQuery>): ShiftScheduleQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: ShiftScheduleQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof ShiftScheduleQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  if (form.scheduleType !== undefined && form.scheduleType !== null) {
+    query.scheduleType = form.scheduleType
+  }
+  assignTrimmed('deptId', form.deptId)
+  assignTrimmed('employeeId', form.employeeId)
+  assignTrimmed('scheduleDateStart', form.scheduleDateStart)
+  assignTrimmed('scheduleDateEnd', form.scheduleDateEnd)
+  assignTrimmed('shiftId', form.shiftId)
+  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -376,7 +449,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getShiftScheduleField(record, 'shiftScheduleId') ?? ''
   },
   {
-    title: t('entity.shiftSchedule.scheduletype'),
+    title: t('entity.shiftschedule.scheduletype'),
     dataIndex: 'scheduleType',
     key: 'scheduleType',
     width: 120,
@@ -385,7 +458,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getShiftScheduleField(record, 'scheduleType') ?? ''
   },
   {
-    title: t('entity.shiftSchedule.deptid'),
+    title: t('entity.shiftschedule.deptid'),
     dataIndex: 'deptId',
     key: 'deptId',
     width: 120,
@@ -394,16 +467,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getShiftScheduleField(record, 'deptId') ?? ''
   },
   {
-    title: t('entity.shiftSchedule.deptname'),
-    dataIndex: 'deptName',
-    key: 'deptName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getShiftScheduleField(record, 'deptName') ?? ''
-  },
-  {
-    title: t('entity.shiftSchedule.employeeid'),
+    title: t('entity.shiftschedule.employeeid'),
     dataIndex: 'employeeId',
     key: 'employeeId',
     width: 120,
@@ -412,16 +476,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getShiftScheduleField(record, 'employeeId') ?? ''
   },
   {
-    title: t('entity.shiftSchedule.employeename'),
-    dataIndex: 'employeeName',
-    key: 'employeeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getShiftScheduleField(record, 'employeeName') ?? ''
-  },
-  {
-    title: t('entity.shiftSchedule.scheduledate'),
+    title: t('entity.shiftschedule.scheduledate'),
     dataIndex: 'scheduleDate',
     key: 'scheduleDate',
     width: 120,
@@ -430,7 +485,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getShiftScheduleField(record, 'scheduleDate') ?? ''
   },
   {
-    title: t('entity.shiftSchedule.shiftid'),
+    title: t('entity.shiftschedule.shiftid'),
     dataIndex: 'shiftId',
     key: 'shiftId',
     width: 120,
@@ -439,16 +494,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getShiftScheduleField(record, 'shiftId') ?? ''
   },
   {
-    title: t('entity.shiftSchedule.shiftname'),
-    dataIndex: 'shiftName',
-    key: 'shiftName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getShiftScheduleField(record, 'shiftName') ?? ''
-  },
-  {
-    title: t('entity.shiftSchedule.relatedplant'),
+    title: t('entity.shiftschedule.relatedplant'),
     dataIndex: 'relatedPlant',
     key: 'relatedPlant',
     width: 120,
@@ -486,6 +532,7 @@ const getShiftScheduleId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getShiftScheduleField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -529,16 +576,7 @@ const onClickRow = (record: ShiftSchedule) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: ShiftScheduleQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getShiftScheduleList(params)
+    const res = await getShiftScheduleList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -556,7 +594,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -573,22 +611,23 @@ function handleReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.shiftSchedule._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.shiftschedule._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: ShiftSchedule) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.shiftSchedule._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.shiftschedule._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -598,7 +637,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.shiftSchedule._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.shiftschedule._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -616,12 +655,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateShiftSchedule(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.shiftSchedule._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.shiftschedule._self') }))
     } else {
       await createShiftSchedule(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.shiftSchedule._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.shiftschedule._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -631,6 +672,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -662,16 +705,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: ShiftScheduleQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportShiftSchedule(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportShiftSchedule(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -690,10 +728,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.shiftSchedule._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.shiftschedule._self') }))
   } catch (error: any) {
     logger.error('[ShiftSchedule] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.shiftSchedule._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.shiftschedule._self') }))
   } finally {
     loading.value = false
   }
@@ -702,12 +740,12 @@ async function handleExport() {
 async function handleDeleteOne(record: ShiftSchedule) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.shiftSchedule._self'), name: t('common.tip.this.target', { target: t('entity.shiftSchedule._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.shiftschedule._self'), name: t('common.tip.this.target', { target: t('entity.shiftschedule._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteShiftScheduleById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.shiftSchedule._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.shiftschedule._self') }))
       loadData()
     }
   })
@@ -715,18 +753,18 @@ async function handleDeleteOne(record: ShiftSchedule) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.shiftSchedule._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.shiftschedule._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.shiftSchedule._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.shiftschedule._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteShiftScheduleBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.shiftSchedule._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.shiftschedule._self') }))
       loadData()
     }
   })
@@ -739,7 +777,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -754,7 +792,7 @@ function handleAdvancedQueryReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -784,23 +822,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.human-resource-attendance-shift-schedule {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

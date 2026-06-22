@@ -31,8 +31,8 @@ public class TaktSalesOrder : TaktCompanyEntityBase
     /// <summary>
     /// 工厂代码
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? PlantCode { get; set; }
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售订单编码（唯一索引）
@@ -131,19 +131,19 @@ public class TaktSalesOrder : TaktCompanyEntityBase
     public int OrderStatus { get; set; } = 1;
 
     /// <summary>
-    /// 交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_status", ColumnDescription = "交货状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
-    /// 交货方式（0=自提，1=送货上门，2=物流配送，3=快递）
+    /// 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门，2=物流配送，3=快递）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_method", ColumnDescription = "交货方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryMethod { get; set; } = 0;
 
     /// <summary>
-    /// 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "payment_method", ColumnDescription = "收款方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentMethod { get; set; } = 0;

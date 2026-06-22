@@ -1,0 +1,56 @@
+/* ========================================
+ * 项目名称：节拍工厂·Takt Plat
+ * 命名空间：frontend/src/styles
+ * 文件名称：menu-base.css
+ * 创建时间：2026-06-01
+ * 创建人：Takt365(Cursor AI)
+ * 功能描述：侧栏/混合/顶栏导航菜单图标与文本间距（takt-side-menu、takt-mix-menu、takt-top-menu）
+ *
+ * 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+ * 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+ * ======================================== */
+
+/** 内联子菜单容器不叠加缩进，仅由 a-menu inlineIndent（每级 4px）控制 */
+.takt-side-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline,
+.takt-mix-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+  padding-inline-start: 0 !important;
+}
+
+/** 图标与文本间隔 2px（覆盖 Ant Design 默认 gap / marginInlineStart） */
+.takt-side-menu .ant-menu-item,
+.takt-side-menu .ant-menu-submenu-title,
+.takt-mix-menu .ant-menu-item,
+.takt-mix-menu .ant-menu-submenu-title,
+.takt-top-menu .ant-menu-item,
+.takt-top-menu .ant-menu-submenu-title {
+  gap: 2px !important;
+}
+
+.takt-side-menu .ant-menu-item .anticon + span,
+.takt-side-menu .ant-menu-item .ant-menu-item-icon + span,
+.takt-side-menu .ant-menu-submenu-title .anticon + span,
+.takt-side-menu .ant-menu-submenu-title .ant-menu-item-icon + span,
+.takt-mix-menu .ant-menu-item .anticon + span,
+.takt-mix-menu .ant-menu-item .ant-menu-item-icon + span,
+.takt-mix-menu .ant-menu-submenu-title .anticon + span,
+.takt-mix-menu .ant-menu-submenu-title .ant-menu-item-icon + span,
+.takt-top-menu .ant-menu-item .anticon + span,
+.takt-top-menu .ant-menu-item .ant-menu-item-icon + span,
+.takt-top-menu .ant-menu-submenu-title .anticon + span,
+.takt-top-menu .ant-menu-submenu-title .ant-menu-item-icon + span {
+  margin-inline-start: 2px !important;
+}
+
+.takt-side-menu .ant-menu-item .ant-menu-item-icon,
+.takt-side-menu .ant-menu-submenu-title .ant-menu-item-icon,
+.takt-mix-menu .ant-menu-item .ant-menu-item-icon,
+.takt-mix-menu .ant-menu-submenu-title .ant-menu-item-icon,
+.takt-top-menu .ant-menu-item .ant-menu-item-icon,
+.takt-top-menu .ant-menu-submenu-title .ant-menu-item-icon {
+  margin-inline-end: 2px !important;
+}
+
+.takt-top-menu .ant-menu-submenu-popup .ant-menu-item,
+.takt-top-menu .ant-menu-submenu-popup .ant-menu-submenu-title {
+  gap: 2px !important;
+}

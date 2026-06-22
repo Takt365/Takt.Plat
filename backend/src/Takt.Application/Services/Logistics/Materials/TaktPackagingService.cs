@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
+// 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktPackagingService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料包装信息应用服务实现
 // 
@@ -13,8 +13,8 @@
 using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
-using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
-using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
+using Takt.Application.Dtos.Logistics.Materials;
+using Takt.Domain.Entities.Logistics.Materials;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -22,7 +22,7 @@ using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
 
-namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
+namespace Takt.Application.Services.Logistics.Materials;
 
 /// <summary>
 /// 物料包装信息应用服务
@@ -97,7 +97,7 @@ public class TaktPackagingService : TaktServiceBase, ITaktPackagingService
         EnsureThreeLayerContext();
         var list = await _packagingRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.HsName,
+            x => x.HsName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -114,11 +114,11 @@ public class TaktPackagingService : TaktServiceBase, ITaktPackagingService
     public async Task<TaktPackagingDto> CreatePackagingAsync(TaktPackagingCreateDto dto)
     {
         var entity = dto.Adapt<TaktPackaging>();
-        var isUnique_ix_takt_logistics_manufacturing_packaging_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_materials_packaging_unique = await _uniqueValidator.IsUniqueAsync(
             _packagingRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.MaterialCode == entity.MaterialCode);
-        if (!isUnique_ix_takt_logistics_manufacturing_packaging_unique)
+        if (!isUnique_ix_takt_logistics_materials_packaging_unique)
         {
             throw new TaktBusinessException("物料包装信息的PlantCode、MaterialCode已存在");
         }
@@ -147,12 +147,12 @@ public class TaktPackagingService : TaktServiceBase, ITaktPackagingService
             throw new TaktBusinessException("物料包装信息不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_packaging_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_materials_packaging_unique = await _uniqueValidator.IsUniqueAsync(
             _packagingRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.MaterialCode == entity.MaterialCode,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_packaging_unique)
+        if (!isUnique_ix_takt_logistics_materials_packaging_unique)
         {
             throw new TaktBusinessException("物料包装信息的PlantCode、MaterialCode已存在");
         }
@@ -253,11 +253,11 @@ public class TaktPackagingService : TaktServiceBase, ITaktPackagingService
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（PlantCode、MaterialCode）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_packaging_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_materials_packaging_unique = await _uniqueValidator.IsUniqueAsync(
                     _packagingRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.MaterialCode == entity.MaterialCode);
-                if (!isUnique_ix_takt_logistics_manufacturing_packaging_unique)
+                if (!isUnique_ix_takt_logistics_materials_packaging_unique)
                 {
                     throw new TaktBusinessException("物料包装信息的PlantCode、MaterialCode已存在");
                 }
@@ -322,6 +322,7 @@ public class TaktPackagingService : TaktServiceBase, ITaktPackagingService
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
+                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
                 || (x.HsCode != null && x.HsCode.Contains(keywords))
                 || (x.HsName != null && x.HsName.Contains(keywords))
                 || (x.AdditionalCode != null && x.AdditionalCode.Contains(keywords))
@@ -343,7 +344,7 @@ public class TaktPackagingService : TaktServiceBase, ITaktPackagingService
                 || (x.PackagingSpec != null && x.PackagingSpec.Contains(keywords))
                 || (x.PackagingDescription != null && x.PackagingDescription.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -357,6 +358,11 @@ public class TaktPackagingService : TaktServiceBase, ITaktPackagingService
         if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
         {
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        {
+            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.HsCode))
@@ -464,9 +470,9 @@ public class TaktPackagingService : TaktServiceBase, ITaktPackagingService
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

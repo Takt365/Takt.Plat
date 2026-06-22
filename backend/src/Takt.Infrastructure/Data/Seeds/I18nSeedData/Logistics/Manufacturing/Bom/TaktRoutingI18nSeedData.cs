@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRouting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,137 +75,137 @@ public class TaktRoutingI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktRouting 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.routing._self / entity.routing.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.routing._self / entity.routing.{{field}}；ResourceGroup=Bom；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetRoutingTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.routing._self
-            new TranslationSeedItem("entity.routing._self", "en-US", "Routing Information", "实体名称"),
+            new TranslationSeedItem("entity.routing._self", "en-US", "Routing Information_us", "实体名称"),
             // entity.routing._self
-            new TranslationSeedItem("entity.routing._self", "ja-JP", "工艺路线主表信息", "实体名称"),
+            new TranslationSeedItem("entity.routing._self", "ja-JP", "工艺路线主表信息_jp", "实体名称"),
             // entity.routing._self
             new TranslationSeedItem("entity.routing._self", "zh-CN", "工艺路线主表信息", "实体名称"),
             // entity.routing._self
-            new TranslationSeedItem("entity.routing._self", "zh-HK", "工艺路线主表信息", "实体名称"),
+            new TranslationSeedItem("entity.routing._self", "zh-HK", "工艺路线主表信息_hk", "实体名称"),
 
             // entity.routing.plantcode
-            new TranslationSeedItem("entity.routing.plantcode", "en-US", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.routing.plantcode", "en-US", "工厂代码_us", "工厂代码"),
             // entity.routing.plantcode
-            new TranslationSeedItem("entity.routing.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.routing.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
             // entity.routing.plantcode
             new TranslationSeedItem("entity.routing.plantcode", "zh-CN", "工厂代码", "工厂代码"),
             // entity.routing.plantcode
-            new TranslationSeedItem("entity.routing.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.routing.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
 
             // entity.routing.workcenter
-            new TranslationSeedItem("entity.routing.workcenter", "en-US", "工作中心", "工作中心"),
+            new TranslationSeedItem("entity.routing.workcenter", "en-US", "工作中心_us", "工作中心"),
             // entity.routing.workcenter
-            new TranslationSeedItem("entity.routing.workcenter", "ja-JP", "工作中心", "工作中心"),
+            new TranslationSeedItem("entity.routing.workcenter", "ja-JP", "工作中心_jp", "工作中心"),
             // entity.routing.workcenter
             new TranslationSeedItem("entity.routing.workcenter", "zh-CN", "工作中心", "工作中心"),
             // entity.routing.workcenter
-            new TranslationSeedItem("entity.routing.workcenter", "zh-HK", "工作中心", "工作中心"),
+            new TranslationSeedItem("entity.routing.workcenter", "zh-HK", "工作中心_hk", "工作中心"),
 
             // entity.routing.code
-            new TranslationSeedItem("entity.routing.code", "en-US", "工艺路线编码", "工艺路线编码"),
+            new TranslationSeedItem("entity.routing.code", "en-US", "工艺路线编码_us", "工艺路线编码"),
             // entity.routing.code
-            new TranslationSeedItem("entity.routing.code", "ja-JP", "工艺路线编码", "工艺路线编码"),
+            new TranslationSeedItem("entity.routing.code", "ja-JP", "工艺路线编码_jp", "工艺路线编码"),
             // entity.routing.code
             new TranslationSeedItem("entity.routing.code", "zh-CN", "工艺路线编码", "工艺路线编码"),
             // entity.routing.code
-            new TranslationSeedItem("entity.routing.code", "zh-HK", "工艺路线编码", "工艺路线编码"),
+            new TranslationSeedItem("entity.routing.code", "zh-HK", "工艺路线编码_hk", "工艺路线编码"),
 
             // entity.routing.name
-            new TranslationSeedItem("entity.routing.name", "en-US", "工艺路线名称", "工艺路线名称"),
+            new TranslationSeedItem("entity.routing.name", "en-US", "工艺路线名称_us", "工艺路线名称"),
             // entity.routing.name
-            new TranslationSeedItem("entity.routing.name", "ja-JP", "工艺路线名称", "工艺路线名称"),
+            new TranslationSeedItem("entity.routing.name", "ja-JP", "工艺路线名称_jp", "工艺路线名称"),
             // entity.routing.name
             new TranslationSeedItem("entity.routing.name", "zh-CN", "工艺路线名称", "工艺路线名称"),
             // entity.routing.name
-            new TranslationSeedItem("entity.routing.name", "zh-HK", "工艺路线名称", "工艺路线名称"),
+            new TranslationSeedItem("entity.routing.name", "zh-HK", "工艺路线名称_hk", "工艺路线名称"),
 
             // entity.routing.purpose
-            new TranslationSeedItem("entity.routing.purpose", "en-US", "用途", "用途（1=生产，2=工程/设计，3=万能，4=工厂维护）"),
+            new TranslationSeedItem("entity.routing.purpose", "en-US", "用途_us", "用途（1=生产，2=工程/设计，3=万能，4=工厂维护）"),
             // entity.routing.purpose
-            new TranslationSeedItem("entity.routing.purpose", "ja-JP", "用途", "用途（1=生产，2=工程/设计，3=万能，4=工厂维护）"),
+            new TranslationSeedItem("entity.routing.purpose", "ja-JP", "用途_jp", "用途（1=生产，2=工程/设计，3=万能，4=工厂维护）"),
             // entity.routing.purpose
             new TranslationSeedItem("entity.routing.purpose", "zh-CN", "用途", "用途（1=生产，2=工程/设计，3=万能，4=工厂维护）"),
             // entity.routing.purpose
-            new TranslationSeedItem("entity.routing.purpose", "zh-HK", "用途", "用途（1=生产，2=工程/设计，3=万能，4=工厂维护）"),
+            new TranslationSeedItem("entity.routing.purpose", "zh-HK", "用途_hk", "用途（1=生产，2=工程/设计，3=万能，4=工厂维护）"),
 
             // entity.routing.materialcode
-            new TranslationSeedItem("entity.routing.materialcode", "en-US", "物料编码", "适用物料编码"),
+            new TranslationSeedItem("entity.routing.materialcode", "en-US", "物料编码_us", "适用物料编码"),
             // entity.routing.materialcode
-            new TranslationSeedItem("entity.routing.materialcode", "ja-JP", "物料编码", "适用物料编码"),
+            new TranslationSeedItem("entity.routing.materialcode", "ja-JP", "物料编码_jp", "适用物料编码"),
             // entity.routing.materialcode
             new TranslationSeedItem("entity.routing.materialcode", "zh-CN", "物料编码", "适用物料编码"),
             // entity.routing.materialcode
-            new TranslationSeedItem("entity.routing.materialcode", "zh-HK", "物料编码", "适用物料编码"),
+            new TranslationSeedItem("entity.routing.materialcode", "zh-HK", "物料编码_hk", "适用物料编码"),
 
             // entity.routing.version
-            new TranslationSeedItem("entity.routing.version", "en-US", "版本号", "版本号"),
+            new TranslationSeedItem("entity.routing.version", "en-US", "版本号_us", "版本号"),
             // entity.routing.version
-            new TranslationSeedItem("entity.routing.version", "ja-JP", "版本号", "版本号"),
+            new TranslationSeedItem("entity.routing.version", "ja-JP", "版本号_jp", "版本号"),
             // entity.routing.version
             new TranslationSeedItem("entity.routing.version", "zh-CN", "版本号", "版本号"),
             // entity.routing.version
-            new TranslationSeedItem("entity.routing.version", "zh-HK", "版本号", "版本号"),
+            new TranslationSeedItem("entity.routing.version", "zh-HK", "版本号_hk", "版本号"),
 
             // entity.routing.status
-            new TranslationSeedItem("entity.routing.status", "en-US", "状态", "状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））"),
+            new TranslationSeedItem("entity.routing.status", "en-US", "状态_us", "状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））"),
             // entity.routing.status
-            new TranslationSeedItem("entity.routing.status", "ja-JP", "状态", "状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））"),
+            new TranslationSeedItem("entity.routing.status", "ja-JP", "状态_jp", "状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））"),
             // entity.routing.status
             new TranslationSeedItem("entity.routing.status", "zh-CN", "状态", "状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））"),
             // entity.routing.status
-            new TranslationSeedItem("entity.routing.status", "zh-HK", "状态", "状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））"),
+            new TranslationSeedItem("entity.routing.status", "zh-HK", "状态_hk", "状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））"),
 
             // entity.routing.effectivedate
-            new TranslationSeedItem("entity.routing.effectivedate", "en-US", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.routing.effectivedate", "en-US", "生效日期_us", "生效日期"),
             // entity.routing.effectivedate
-            new TranslationSeedItem("entity.routing.effectivedate", "ja-JP", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.routing.effectivedate", "ja-JP", "生效日期_jp", "生效日期"),
             // entity.routing.effectivedate
             new TranslationSeedItem("entity.routing.effectivedate", "zh-CN", "生效日期", "生效日期"),
             // entity.routing.effectivedate
-            new TranslationSeedItem("entity.routing.effectivedate", "zh-HK", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.routing.effectivedate", "zh-HK", "生效日期_hk", "生效日期"),
 
             // entity.routing.expirydate
-            new TranslationSeedItem("entity.routing.expirydate", "en-US", "失效日期", "失效日期"),
+            new TranslationSeedItem("entity.routing.expirydate", "en-US", "失效日期_us", "失效日期"),
             // entity.routing.expirydate
-            new TranslationSeedItem("entity.routing.expirydate", "ja-JP", "失效日期", "失效日期"),
+            new TranslationSeedItem("entity.routing.expirydate", "ja-JP", "失效日期_jp", "失效日期"),
             // entity.routing.expirydate
             new TranslationSeedItem("entity.routing.expirydate", "zh-CN", "失效日期", "失效日期"),
             // entity.routing.expirydate
-            new TranslationSeedItem("entity.routing.expirydate", "zh-HK", "失效日期", "失效日期"),
+            new TranslationSeedItem("entity.routing.expirydate", "zh-HK", "失效日期_hk", "失效日期"),
 
             // entity.routing.description
-            new TranslationSeedItem("entity.routing.description", "en-US", "工艺路线说明", "工艺路线说明"),
+            new TranslationSeedItem("entity.routing.description", "en-US", "工艺路线说明_us", "工艺路线说明"),
             // entity.routing.description
-            new TranslationSeedItem("entity.routing.description", "ja-JP", "工艺路线说明", "工艺路线说明"),
+            new TranslationSeedItem("entity.routing.description", "ja-JP", "工艺路线说明_jp", "工艺路线说明"),
             // entity.routing.description
             new TranslationSeedItem("entity.routing.description", "zh-CN", "工艺路线说明", "工艺路线说明"),
             // entity.routing.description
-            new TranslationSeedItem("entity.routing.description", "zh-HK", "工艺路线说明", "工艺路线说明"),
+            new TranslationSeedItem("entity.routing.description", "zh-HK", "工艺路线说明_hk", "工艺路线说明"),
 
             // entity.routing.items
-            new TranslationSeedItem("entity.routing.items", "en-US", "工艺路线明细列表", "工艺路线明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.routing.items", "en-US", "工艺路线明细列表_us", "工艺路线明细列表（主子表关系）"),
             // entity.routing.items
-            new TranslationSeedItem("entity.routing.items", "ja-JP", "工艺路线明细列表", "工艺路线明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.routing.items", "ja-JP", "工艺路线明细列表_jp", "工艺路线明细列表（主子表关系）"),
             // entity.routing.items
             new TranslationSeedItem("entity.routing.items", "zh-CN", "工艺路线明细列表", "工艺路线明细列表（主子表关系）"),
             // entity.routing.items
-            new TranslationSeedItem("entity.routing.items", "zh-HK", "工艺路线明细列表", "工艺路线明细列表（主子表关系）"),
+            new TranslationSeedItem("entity.routing.items", "zh-HK", "工艺路线明细列表_hk", "工艺路线明细列表（主子表关系）"),
 
             // entity.routing.changelogs
-            new TranslationSeedItem("entity.routing.changelogs", "en-US", "变更日志列表", "变更日志列表（主子表关系）"),
+            new TranslationSeedItem("entity.routing.changelogs", "en-US", "变更日志列表_us", "变更日志列表（主子表关系）"),
             // entity.routing.changelogs
-            new TranslationSeedItem("entity.routing.changelogs", "ja-JP", "变更日志列表", "变更日志列表（主子表关系）"),
+            new TranslationSeedItem("entity.routing.changelogs", "ja-JP", "变更日志列表_jp", "变更日志列表（主子表关系）"),
             // entity.routing.changelogs
             new TranslationSeedItem("entity.routing.changelogs", "zh-CN", "变更日志列表", "变更日志列表（主子表关系）"),
             // entity.routing.changelogs
-            new TranslationSeedItem("entity.routing.changelogs", "zh-HK", "变更日志列表", "变更日志列表（主子表关系）"),
+            new TranslationSeedItem("entity.routing.changelogs", "zh-HK", "变更日志列表_hk", "变更日志列表（主子表关系）"),
         };
     }
 
@@ -223,10 +223,10 @@ public class TaktRoutingI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Bom";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

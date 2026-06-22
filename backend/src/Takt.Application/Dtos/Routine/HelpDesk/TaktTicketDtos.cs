@@ -56,14 +56,24 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public string? AttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单状态（见 TaktTicketStatus：0=新建，1=已指派，2=处理中，3=等待用户回复，4=已解决，5=已关闭，6=重新打开）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
-    public int Priority { get; set; } = 0;
+    public int Priority { get; set; } = 3;
+
+    /// <summary>
+    /// 紧急度（字典 sys_urgency_level_category）
+    /// </summary>
+    public int Urgency { get; set; } = 3;
+
+    /// <summary>
+    /// 影响范围（字典 sys_impact_level_category）
+    /// </summary>
+    public int Impact { get; set; } = 3;
 
     /// <summary>
     /// 分类编码（如 incident/request 等）
@@ -253,9 +263,19 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public int? TicketStatus { get; set; }
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 紧急度（字典 sys_urgency_level_category）
+    /// </summary>
+    public int? Urgency { get; set; }
+
+    /// <summary>
+    /// 影响范围（字典 sys_impact_level_category）
+    /// </summary>
+    public int? Impact { get; set; }
 
     /// <summary>
     /// 分类编码（如 incident/request 等）
@@ -398,7 +418,7 @@ public class TaktTicketQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -453,14 +473,24 @@ public class TaktTicketCreateDto
     public string? AttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单状态（见 TaktTicketStatus：0=新建，1=已指派，2=处理中，3=等待用户回复，4=已解决，5=已关闭，6=重新打开）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
-    public int Priority { get; set; } = 0;
+    public int Priority { get; set; } = 3;
+
+    /// <summary>
+    /// 紧急度（字典 sys_urgency_level_category）
+    /// </summary>
+    public int Urgency { get; set; } = 3;
+
+    /// <summary>
+    /// 影响范围（字典 sys_impact_level_category）
+    /// </summary>
+    public int Impact { get; set; } = 3;
 
     /// <summary>
     /// 分类编码（如 incident/request 等）
@@ -578,7 +608,7 @@ public class TaktTicketCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -676,9 +706,19 @@ public class TaktTicketTemplateDto
     public int? TicketStatus { get; set; }
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 紧急度（字典 sys_urgency_level_category）
+    /// </summary>
+    public int? Urgency { get; set; }
+
+    /// <summary>
+    /// 影响范围（字典 sys_impact_level_category）
+    /// </summary>
+    public int? Impact { get; set; }
 
     /// <summary>
     /// 分类编码（如 incident/request 等）
@@ -726,7 +766,7 @@ public class TaktTicketTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -781,9 +821,19 @@ public class TaktTicketImportDto
     public int? TicketStatus { get; set; }
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 紧急度（字典 sys_urgency_level_category）
+    /// </summary>
+    public int? Urgency { get; set; }
+
+    /// <summary>
+    /// 影响范围（字典 sys_impact_level_category）
+    /// </summary>
+    public int? Impact { get; set; }
 
     /// <summary>
     /// 分类编码（如 incident/request 等）
@@ -831,7 +881,7 @@ public class TaktTicketImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -882,14 +932,24 @@ public class TaktTicketExportDto
     public string? AttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单状态（见 TaktTicketStatus：0=新建，1=已指派，2=处理中，3=等待用户回复，4=已解决，5=已关闭，6=重新打开）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
-    public int Priority { get; set; } = 0;
+    public int Priority { get; set; } = 3;
+
+    /// <summary>
+    /// 紧急度（字典 sys_urgency_level_category）
+    /// </summary>
+    public int Urgency { get; set; } = 3;
+
+    /// <summary>
+    /// 影响范围（字典 sys_impact_level_category）
+    /// </summary>
+    public int Impact { get; set; } = 3;
 
     /// <summary>
     /// 分类编码（如 incident/request 等）
@@ -997,7 +1057,7 @@ public class TaktTicketExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

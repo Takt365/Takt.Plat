@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-manufacturing-bom-standard-operation-time">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="approval"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'standardOperationTimeId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <StandardOperationTimeForm
+        :key="formData?.standardOperationTimeId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,195 +110,215 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.standardOperationTime.plantcode')">
+      <a-form-item :label="t('entity.standardoperationtime.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.standardOperationTime.materialcode')">
+      <a-form-item :label="t('entity.standardoperationtime.materialcode')">
         <a-input
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.materialcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.materialcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('workCenter')">
-      <a-form-item :label="t('entity.standardOperationTime.workcenter')">
+      <a-form-item :label="t('entity.standardoperationtime.workcenter')">
         <a-input
           v-model:value="advancedQueryForm.workCenter"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.workcenter') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.workcenter') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('operationDesc')">
-      <a-form-item :label="t('entity.standardOperationTime.operationdesc')">
+      <a-form-item :label="t('entity.standardoperationtime.operationdesc')">
         <a-input
           v-model:value="advancedQueryForm.operationDesc"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.operationdesc') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.operationdesc') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('standardMinutes')">
-      <a-form-item :label="t('entity.standardOperationTime.standardminutes')">
+      <a-form-item :label="t('entity.standardoperationtime.standardminutes')">
         <a-input-number
           v-model:value="advancedQueryForm.standardMinutes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.standardminutes') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.standardminutes') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('timeUnit')">
-      <a-form-item :label="t('entity.standardOperationTime.timeunit')">
+      <a-form-item :label="t('entity.standardoperationtime.timeunit')">
         <a-input
           v-model:value="advancedQueryForm.timeUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.timeunit') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.timeunit') })"
+          show-count
+          :maxlength="3"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('standardShorts')">
-      <a-form-item :label="t('entity.standardOperationTime.standardshorts')">
+      <a-form-item :label="t('entity.standardoperationtime.standardshorts')">
         <a-input-number
           v-model:value="advancedQueryForm.standardShorts"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.standardshorts') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.standardshorts') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('pointsUnit')">
-      <a-form-item :label="t('entity.standardOperationTime.pointsunit')">
+      <a-form-item :label="t('entity.standardoperationtime.pointsunit')">
         <a-input
           v-model:value="advancedQueryForm.pointsUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.pointsunit') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.pointsunit') })"
+          show-count
+          :maxlength="5"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('pointsToMinutesRate')">
-      <a-form-item :label="t('entity.standardOperationTime.pointstominutesrate')">
+      <a-form-item :label="t('entity.standardoperationtime.pointstominutesrate')">
         <a-input-number
           v-model:value="advancedQueryForm.pointsToMinutesRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.pointstominutesrate') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.pointstominutesrate') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('convertedMinutes')">
-      <a-form-item :label="t('entity.standardOperationTime.convertedminutes')">
+      <a-form-item :label="t('entity.standardoperationtime.convertedminutes')">
         <a-input-number
           v-model:value="advancedQueryForm.convertedMinutes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.convertedminutes') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.convertedminutes') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveDateStart')">
-      <a-form-item :label="t('entity.standardOperationTime.effectivedatestart')">
+      <a-form-item :label="t('entity.standardoperationtime.effectivedatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.effectivedatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.effectivedatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveDateEnd')">
-      <a-form-item :label="t('entity.standardOperationTime.effectivedateend')">
+      <a-form-item :label="t('entity.standardoperationtime.effectivedateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.effectivedateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.effectivedateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDateStart')">
-      <a-form-item :label="t('entity.standardOperationTime.expirydatestart')">
+      <a-form-item :label="t('entity.standardoperationtime.expirydatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.expiryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.expirydatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.expirydatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDateEnd')">
-      <a-form-item :label="t('entity.standardOperationTime.expirydateend')">
+      <a-form-item :label="t('entity.standardoperationtime.expirydateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.expiryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.expirydateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.expirydateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.standardOperationTime.approvalstatus')">
+      <a-form-item :label="t('entity.standardoperationtime.approvalstatus')">
         <a-input-number
           v-model:value="advancedQueryForm.approvalStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.approvalstatus') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.approvalstatus') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.standardOperationTime.initiatorid')">
+      <a-form-item :label="t('entity.standardoperationtime.initiatorid')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.initiatorid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.initiatorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.standardOperationTime.initiatedatstart')">
+      <a-form-item :label="t('entity.standardoperationtime.initiatedatstart')">
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.initiatedatstart') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.initiatedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.standardOperationTime.initiatedatend')">
+      <a-form-item :label="t('entity.standardoperationtime.initiatedatend')">
         <a-date-picker
           v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.initiatedatend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.initiatedatend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.standardOperationTime.approvedby')">
+      <a-form-item :label="t('entity.standardoperationtime.approvedby')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.approvedby') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.approvedby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.standardOperationTime.approvedatstart')">
+      <a-form-item :label="t('entity.standardoperationtime.approvedatstart')">
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardOperationTime.approvedatstart') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.approvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.standardOperationTime.approvedatend')">
+      <a-form-item :label="t('entity.standardoperationtime.approvedatend')">
         <a-date-picker
           v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardOperationTime.approvedatend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.approvedatend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
@@ -325,11 +346,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('entity.standardoperationtime.extfield')">
+        <a-textarea
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.standardoperationtime.extfield') })"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -339,8 +361,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -350,14 +374,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.standardOperationTime._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.standardoperationtime._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.standardOperationTime._self"
+        entity-i18n-key="entity.standardoperationtime._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -393,9 +417,10 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import StandardOperationTimeForm from './components/standard-operation-time-form.vue'
 import { getStandardOperationTimeList, getStandardOperationTimeById, createStandardOperationTime, updateStandardOperationTime, deleteStandardOperationTimeById, deleteStandardOperationTimeBatch, getStandardOperationTimeTemplate, importStandardOperationTime, exportStandardOperationTime } from '@/api/logistics/manufacturing/bom/standard-operation-time'
-import type { StandardOperationTime, StandardOperationTimeQuery, StandardOperationTimeCreate, StandardOperationTimeUpdate } from '@/types/logistics/manufacturing/bom/standard-operation-time'
+import type { StandardOperationTime, StandardOperationTimeQuery } from '@/types/logistics/manufacturing/bom/standard-operation-time'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
@@ -406,7 +431,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktStandardOperationTime')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.standardOperationTime._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.standardoperationtime._self') })
 )
 
 /** 快捷查询关键字 */
@@ -416,9 +441,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<StandardOperationTime[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -433,11 +458,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<StandardOperationTime>>({})
+const formData = ref<Partial<StandardOperationTime> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -464,35 +491,35 @@ const advancedQueryForm = ref({
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.standardOperationTime.plantcode') },
-  { key: 'materialCode', label: t('entity.standardOperationTime.materialcode') },
-  { key: 'workCenter', label: t('entity.standardOperationTime.workcenter') },
-  { key: 'operationDesc', label: t('entity.standardOperationTime.operationdesc') },
-  { key: 'standardMinutes', label: t('entity.standardOperationTime.standardminutes') },
-  { key: 'timeUnit', label: t('entity.standardOperationTime.timeunit') },
-  { key: 'standardShorts', label: t('entity.standardOperationTime.standardshorts') },
-  { key: 'pointsUnit', label: t('entity.standardOperationTime.pointsunit') },
-  { key: 'pointsToMinutesRate', label: t('entity.standardOperationTime.pointstominutesrate') },
-  { key: 'convertedMinutes', label: t('entity.standardOperationTime.convertedminutes') },
-  { key: 'effectiveDateStart', label: t('entity.standardOperationTime.effectivedatestart') },
-  { key: 'effectiveDateEnd', label: t('entity.standardOperationTime.effectivedateend') },
-  { key: 'expiryDateStart', label: t('entity.standardOperationTime.expirydatestart') },
-  { key: 'expiryDateEnd', label: t('entity.standardOperationTime.expirydateend') },
-  { key: 'approvalStatus', label: t('entity.standardOperationTime.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.standardOperationTime.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.standardOperationTime.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.standardOperationTime.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.standardOperationTime.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.standardOperationTime.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.standardOperationTime.approvedatend') },
+  { key: 'plantCode', label: t('entity.standardoperationtime.plantcode') },
+  { key: 'materialCode', label: t('entity.standardoperationtime.materialcode') },
+  { key: 'workCenter', label: t('entity.standardoperationtime.workcenter') },
+  { key: 'operationDesc', label: t('entity.standardoperationtime.operationdesc') },
+  { key: 'standardMinutes', label: t('entity.standardoperationtime.standardminutes') },
+  { key: 'timeUnit', label: t('entity.standardoperationtime.timeunit') },
+  { key: 'standardShorts', label: t('entity.standardoperationtime.standardshorts') },
+  { key: 'pointsUnit', label: t('entity.standardoperationtime.pointsunit') },
+  { key: 'pointsToMinutesRate', label: t('entity.standardoperationtime.pointstominutesrate') },
+  { key: 'convertedMinutes', label: t('entity.standardoperationtime.convertedminutes') },
+  { key: 'effectiveDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.standardoperationtime.effectivedate')) },
+  { key: 'effectiveDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.standardoperationtime.effectivedate')) },
+  { key: 'expiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.standardoperationtime.expirydate')) },
+  { key: 'expiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.standardoperationtime.expirydate')) },
+  { key: 'approvalStatus', label: t('entity.standardoperationtime.approvalstatus') },
+  { key: 'initiatorId', label: t('entity.standardoperationtime.initiatorid') },
+  { key: 'initiatedAtStart', label: t('entity.standardoperationtime.initiatedatstart') },
+  { key: 'initiatedAtEnd', label: t('entity.standardoperationtime.initiatedatend') },
+  { key: 'approvedBy', label: t('entity.standardoperationtime.approvedby') },
+  { key: 'approvedAtStart', label: t('entity.standardoperationtime.approvedatstart') },
+  { key: 'approvedAtEnd', label: t('entity.standardoperationtime.approvedatend') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('entity.standardoperationtime.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -511,10 +538,72 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {StandardOperationTimeQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<StandardOperationTimeQuery>): StandardOperationTimeQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: StandardOperationTimeQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof StandardOperationTimeQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('materialCode', form.materialCode)
+  assignTrimmed('workCenter', form.workCenter)
+  assignTrimmed('operationDesc', form.operationDesc)
+  if (form.standardMinutes !== undefined && form.standardMinutes !== null) {
+    query.standardMinutes = form.standardMinutes
+  }
+  assignTrimmed('timeUnit', form.timeUnit)
+  if (form.standardShorts !== undefined && form.standardShorts !== null) {
+    query.standardShorts = form.standardShorts
+  }
+  assignTrimmed('pointsUnit', form.pointsUnit)
+  if (form.pointsToMinutesRate !== undefined && form.pointsToMinutesRate !== null) {
+    query.pointsToMinutesRate = form.pointsToMinutesRate
+  }
+  if (form.convertedMinutes !== undefined && form.convertedMinutes !== null) {
+    query.convertedMinutes = form.convertedMinutes
+  }
+  assignTrimmed('effectiveDateStart', form.effectiveDateStart)
+  assignTrimmed('effectiveDateEnd', form.effectiveDateEnd)
+  assignTrimmed('expiryDateStart', form.expiryDateStart)
+  assignTrimmed('expiryDateEnd', form.expiryDateEnd)
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  assignTrimmed('initiatorId', form.initiatorId)
+  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
+  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
+  assignTrimmed('approvedBy', form.approvedBy)
+  assignTrimmed('approvedAtStart', form.approvedAtStart)
+  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -534,7 +623,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'standardOperationTimeId') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.plantcode'),
+    title: t('entity.standardoperationtime.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -543,7 +632,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.materialcode'),
+    title: t('entity.standardoperationtime.materialcode'),
     dataIndex: 'materialCode',
     key: 'materialCode',
     width: 120,
@@ -552,7 +641,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'materialCode') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.workcenter'),
+    title: t('entity.standardoperationtime.workcenter'),
     dataIndex: 'workCenter',
     key: 'workCenter',
     width: 120,
@@ -561,7 +650,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'workCenter') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.operationdesc'),
+    title: t('entity.standardoperationtime.operationdesc'),
     dataIndex: 'operationDesc',
     key: 'operationDesc',
     width: 120,
@@ -570,7 +659,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'operationDesc') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.standardminutes'),
+    title: t('entity.standardoperationtime.standardminutes'),
     dataIndex: 'standardMinutes',
     key: 'standardMinutes',
     width: 120,
@@ -579,7 +668,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'standardMinutes') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.timeunit'),
+    title: t('entity.standardoperationtime.timeunit'),
     dataIndex: 'timeUnit',
     key: 'timeUnit',
     width: 120,
@@ -588,7 +677,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'timeUnit') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.standardshorts'),
+    title: t('entity.standardoperationtime.standardshorts'),
     dataIndex: 'standardShorts',
     key: 'standardShorts',
     width: 120,
@@ -597,7 +686,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'standardShorts') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.pointsunit'),
+    title: t('entity.standardoperationtime.pointsunit'),
     dataIndex: 'pointsUnit',
     key: 'pointsUnit',
     width: 120,
@@ -606,7 +695,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'pointsUnit') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.pointstominutesrate'),
+    title: t('entity.standardoperationtime.pointstominutesrate'),
     dataIndex: 'pointsToMinutesRate',
     key: 'pointsToMinutesRate',
     width: 120,
@@ -615,7 +704,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'pointsToMinutesRate') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.convertedminutes'),
+    title: t('entity.standardoperationtime.convertedminutes'),
     dataIndex: 'convertedMinutes',
     key: 'convertedMinutes',
     width: 120,
@@ -624,7 +713,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'convertedMinutes') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.effectivedate'),
+    title: t('entity.standardoperationtime.effectivedate'),
     dataIndex: 'effectiveDate',
     key: 'effectiveDate',
     width: 120,
@@ -633,7 +722,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'effectiveDate') ?? ''
   },
   {
-    title: t('entity.standardOperationTime.expirydate'),
+    title: t('entity.standardoperationtime.expirydate'),
     dataIndex: 'expiryDate',
     key: 'expiryDate',
     width: 120,
@@ -671,6 +760,7 @@ const getStandardOperationTimeId = (record: any): string => record?.[entityIdNam
  * @param field 字段名
  */
 const getStandardOperationTimeField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -714,16 +804,7 @@ const onClickRow = (record: StandardOperationTime) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: StandardOperationTimeQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getStandardOperationTimeList(params)
+    const res = await getStandardOperationTimeList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -741,7 +822,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -772,22 +853,23 @@ function handleReset() {
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.standardOperationTime._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.standardoperationtime._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: StandardOperationTime) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.standardOperationTime._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.standardoperationtime._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -797,7 +879,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.standardOperationTime._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.standardoperationtime._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -815,12 +897,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateStandardOperationTime(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.standardOperationTime._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.standardoperationtime._self') }))
     } else {
       await createStandardOperationTime(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.standardOperationTime._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.standardoperationtime._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -830,6 +914,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -861,16 +947,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: StandardOperationTimeQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportStandardOperationTime(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportStandardOperationTime(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -889,10 +970,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.standardOperationTime._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.standardoperationtime._self') }))
   } catch (error: any) {
     logger.error('[StandardOperationTime] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.standardOperationTime._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.standardoperationtime._self') }))
   } finally {
     loading.value = false
   }
@@ -901,12 +982,12 @@ async function handleExport() {
 async function handleDeleteOne(record: StandardOperationTime) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.standardOperationTime._self'), name: t('common.tip.this.target', { target: t('entity.standardOperationTime._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.standardoperationtime._self'), name: t('common.tip.this.target', { target: t('entity.standardoperationtime._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteStandardOperationTimeById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.standardOperationTime._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.standardoperationtime._self') }))
       loadData()
     }
   })
@@ -914,18 +995,18 @@ async function handleDeleteOne(record: StandardOperationTime) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.standardOperationTime._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.standardoperationtime._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.standardOperationTime._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.standardoperationtime._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteStandardOperationTimeBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.standardOperationTime._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.standardoperationtime._self') }))
       loadData()
     }
   })
@@ -938,7 +1019,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -967,7 +1048,7 @@ function handleAdvancedQueryReset() {
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -997,23 +1078,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.logistics-manufacturing-bom-standard-operation-time {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

@@ -25,7 +25,7 @@ namespace Takt.Shared.Helpers;
 public static class TaktFtpHelper
 {
     /// <summary>
-    /// 从配置中读取 FTP 设置（键与字典 <c>sys_ftp_provider</c> 一致，如 <c>teac_cn</c>、<c>teac_jp</c>）。
+    /// 从配置中读取 FTP 设置（键与字典 <c>sys_ftp_provider_type</c> 一致，如 <c>teac_cn</c>、<c>teac_jp</c>）。
     /// </summary>
     /// <param name="configuration">配置</param>
     /// <param name="provider">FTP 提供商标识，对应 <c>Ftp:{provider}</c> 节点</param>
@@ -86,7 +86,25 @@ public static class TaktFtpHelper
     }
 
     /// <summary>
-    /// 上传文件到FTP服务器
+    /// 文件上传引擎（StorageType=FTP）专用：经 FluentFTP 将本地暂存文件推送到 FTP
+    /// </summary>
+    /// <param name="config">FTP 配置（appsettings Ftp:{provider}）</param>
+    /// <param name="localFilePath">本地暂存绝对路径</param>
+    /// <param name="remoteFilePath">远程相对路径（由 BasePath 组合）</param>
+    /// <param name="overwrite">是否覆盖远程已存在文件</param>
+    /// <returns>任务</returns>
+    /// <exception cref="ArgumentNullException">config 为 null</exception>
+    /// <exception cref="ArgumentException">路径为空</exception>
+    /// <exception cref="FileNotFoundException">本地文件不存在</exception>
+    public static Task UploadLocalFileViaFluentFtpAsync(
+        TaktFtpOptions config,
+        string localFilePath,
+        string remoteFilePath,
+        bool overwrite = true) =>
+        UploadFileAsync(config, localFilePath, remoteFilePath, overwrite);
+
+    /// <summary>
+    /// 上传文件到FTP服务器（FluentFTP AsyncFtpClient.UploadFile）
     /// </summary>
     /// <param name="config">FTP配置</param>
     /// <param name="localFilePath">本地文件路径</param>
@@ -789,7 +807,7 @@ public static class TaktFtpHelper
         }
     }
 
-    // ========== 直接使用 IConfiguration 的重载方法（provider 与 sys_ftp_provider 字典值一致） ==========
+    // ========== 直接使用 IConfiguration 的重载方法（provider 与 sys_ftp_provider_type 字典值一致） ==========
 
     /// <summary>
     /// 上传文件到 FTP 服务器（使用配置）

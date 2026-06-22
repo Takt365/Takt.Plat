@@ -56,7 +56,7 @@ public class TaktClient : TaktCompanyEntityBase
     public string? ClientShortName { get; set; }
 
     /// <summary>
-    /// 客户端类型（0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
+    /// 客户端类型（字典 logistics_client_category；0=终端客户，1=分销商，2=零售商，3=电商平台，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "client_type", ColumnDescription = "客户端类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ClientType { get; set; } = 0;
@@ -146,13 +146,13 @@ public class TaktClient : TaktCompanyEntityBase
     public string CurrencyCode { get; set; } = "CNY";
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "payment_terms", ColumnDescription = "付款条件", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 销售渠道（0=直销，1=经销，2=代销，3=电商，4=其他）
+    /// 销售渠道（字典 logistics_sales_channel_type；0=直销，1=经销，2=代销，3=电商，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "sales_channel", ColumnDescription = "销售渠道", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SalesChannel { get; set; } = 0;
@@ -170,7 +170,7 @@ public class TaktClient : TaktCompanyEntityBase
     public string? StoreName { get; set; }
 
     /// <summary>
-    /// 客户端等级（0=普通，1=重要，2=VIP，3=战略）
+    /// 客户端等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
     /// </summary>
     [SugarColumn(ColumnName = "client_level", ColumnDescription = "客户端等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ClientLevel { get; set; } = 0;

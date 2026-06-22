@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
 // 文件名称：TaktConfigurableSourceI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConfigurableSource 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,74 +75,74 @@ public class TaktConfigurableSourceI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktConfigurableSource 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.configurablesource._self / entity.configurablesource.{{field}}；ResourceGroup=9；ResourceType=0
+    /// I18nKey：entity.configurablesource._self / entity.configurablesource.{{field}}；ResourceGroup=Report；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetConfigurableSourceTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.configurablesource._self
-            new TranslationSeedItem("entity.configurablesource._self", "en-US", "Configurable Source Information", "实体名称"),
+            new TranslationSeedItem("entity.configurablesource._self", "en-US", "Configurable Source Information_us", "实体名称"),
             // entity.configurablesource._self
-            new TranslationSeedItem("entity.configurablesource._self", "ja-JP", "自定义报表数据源信息", "实体名称"),
+            new TranslationSeedItem("entity.configurablesource._self", "ja-JP", "自定义报表数据源信息_jp", "实体名称"),
             // entity.configurablesource._self
             new TranslationSeedItem("entity.configurablesource._self", "zh-CN", "自定义报表数据源信息", "实体名称"),
             // entity.configurablesource._self
-            new TranslationSeedItem("entity.configurablesource._self", "zh-HK", "自定义报表数据源信息", "实体名称"),
+            new TranslationSeedItem("entity.configurablesource._self", "zh-HK", "自定义报表数据源信息_hk", "实体名称"),
 
             // entity.configurablesource.configurableid
-            new TranslationSeedItem("entity.configurablesource.configurableid", "en-US", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablesource.configurableid", "en-US", "报表主表ID_us", "关联报表主表 ID（主子表关系）"),
             // entity.configurablesource.configurableid
-            new TranslationSeedItem("entity.configurablesource.configurableid", "ja-JP", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablesource.configurableid", "ja-JP", "报表主表ID_jp", "关联报表主表 ID（主子表关系）"),
             // entity.configurablesource.configurableid
             new TranslationSeedItem("entity.configurablesource.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（主子表关系）"),
             // entity.configurablesource.configurableid
-            new TranslationSeedItem("entity.configurablesource.configurableid", "zh-HK", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablesource.configurableid", "zh-HK", "报表主表ID_hk", "关联报表主表 ID（主子表关系）"),
 
             // entity.configurablesource.sourcealias
-            new TranslationSeedItem("entity.configurablesource.sourcealias", "en-US", "数据源别名", "数据源别名（如 A、B、C，用于 JOIN 与字段引用）"),
+            new TranslationSeedItem("entity.configurablesource.sourcealias", "en-US", "数据源别名_us", "数据源别名（如 A、B、C，用于 JOIN 与字段引用）"),
             // entity.configurablesource.sourcealias
-            new TranslationSeedItem("entity.configurablesource.sourcealias", "ja-JP", "数据源别名", "数据源别名（如 A、B、C，用于 JOIN 与字段引用）"),
+            new TranslationSeedItem("entity.configurablesource.sourcealias", "ja-JP", "数据源别名_jp", "数据源别名（如 A、B、C，用于 JOIN 与字段引用）"),
             // entity.configurablesource.sourcealias
             new TranslationSeedItem("entity.configurablesource.sourcealias", "zh-CN", "数据源别名", "数据源别名（如 A、B、C，用于 JOIN 与字段引用）"),
             // entity.configurablesource.sourcealias
-            new TranslationSeedItem("entity.configurablesource.sourcealias", "zh-HK", "数据源别名", "数据源别名（如 A、B、C，用于 JOIN 与字段引用）"),
+            new TranslationSeedItem("entity.configurablesource.sourcealias", "zh-HK", "数据源别名_hk", "数据源别名（如 A、B、C，用于 JOIN 与字段引用）"),
 
             // entity.configurablesource.tablename
-            new TranslationSeedItem("entity.configurablesource.tablename", "en-US", "物理表名", "物理表名（须为 takt_ 前缀业务表，运行时白名单校验）"),
+            new TranslationSeedItem("entity.configurablesource.tablename", "en-US", "物理表名_us", "物理表名（须为 takt_ 前缀业务表，运行时白名单校验）"),
             // entity.configurablesource.tablename
-            new TranslationSeedItem("entity.configurablesource.tablename", "ja-JP", "物理表名", "物理表名（须为 takt_ 前缀业务表，运行时白名单校验）"),
+            new TranslationSeedItem("entity.configurablesource.tablename", "ja-JP", "物理表名_jp", "物理表名（须为 takt_ 前缀业务表，运行时白名单校验）"),
             // entity.configurablesource.tablename
             new TranslationSeedItem("entity.configurablesource.tablename", "zh-CN", "物理表名", "物理表名（须为 takt_ 前缀业务表，运行时白名单校验）"),
             // entity.configurablesource.tablename
-            new TranslationSeedItem("entity.configurablesource.tablename", "zh-HK", "物理表名", "物理表名（须为 takt_ 前缀业务表，运行时白名单校验）"),
+            new TranslationSeedItem("entity.configurablesource.tablename", "zh-HK", "物理表名_hk", "物理表名（须为 takt_ 前缀业务表，运行时白名单校验）"),
 
             // entity.configurablesource.isprimary
-            new TranslationSeedItem("entity.configurablesource.isprimary", "en-US", "是否主表", "是否主表（驱动 FROM 的第一张表）"),
+            new TranslationSeedItem("entity.configurablesource.isprimary", "en-US", "是否主表_us", "是否主表（驱动 FROM 的第一张表）"),
             // entity.configurablesource.isprimary
-            new TranslationSeedItem("entity.configurablesource.isprimary", "ja-JP", "是否主表", "是否主表（驱动 FROM 的第一张表）"),
+            new TranslationSeedItem("entity.configurablesource.isprimary", "ja-JP", "是否主表_jp", "是否主表（驱动 FROM 的第一张表）"),
             // entity.configurablesource.isprimary
             new TranslationSeedItem("entity.configurablesource.isprimary", "zh-CN", "是否主表", "是否主表（驱动 FROM 的第一张表）"),
             // entity.configurablesource.isprimary
-            new TranslationSeedItem("entity.configurablesource.isprimary", "zh-HK", "是否主表", "是否主表（驱动 FROM 的第一张表）"),
+            new TranslationSeedItem("entity.configurablesource.isprimary", "zh-HK", "是否主表_hk", "是否主表（驱动 FROM 的第一张表）"),
 
             // entity.configurablesource.sortorder
-            new TranslationSeedItem("entity.configurablesource.sortorder", "en-US", "排序号", "排序号（多表 FROM 顺序）"),
+            new TranslationSeedItem("entity.configurablesource.sortorder", "en-US", "排序号_us", "排序号（多表 FROM 顺序）"),
             // entity.configurablesource.sortorder
-            new TranslationSeedItem("entity.configurablesource.sortorder", "ja-JP", "排序号", "排序号（多表 FROM 顺序）"),
+            new TranslationSeedItem("entity.configurablesource.sortorder", "ja-JP", "排序号_jp", "排序号（多表 FROM 顺序）"),
             // entity.configurablesource.sortorder
             new TranslationSeedItem("entity.configurablesource.sortorder", "zh-CN", "排序号", "排序号（多表 FROM 顺序）"),
             // entity.configurablesource.sortorder
-            new TranslationSeedItem("entity.configurablesource.sortorder", "zh-HK", "排序号", "排序号（多表 FROM 顺序）"),
+            new TranslationSeedItem("entity.configurablesource.sortorder", "zh-HK", "排序号_hk", "排序号（多表 FROM 顺序）"),
 
             // entity.configurablesource.configurable
-            new TranslationSeedItem("entity.configurablesource.configurable", "en-US", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablesource.configurable", "en-US", "关联的报表主表_us", "关联的报表主表"),
             // entity.configurablesource.configurable
-            new TranslationSeedItem("entity.configurablesource.configurable", "ja-JP", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablesource.configurable", "ja-JP", "关联的报表主表_jp", "关联的报表主表"),
             // entity.configurablesource.configurable
             new TranslationSeedItem("entity.configurablesource.configurable", "zh-CN", "关联的报表主表", "关联的报表主表"),
             // entity.configurablesource.configurable
-            new TranslationSeedItem("entity.configurablesource.configurable", "zh-HK", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablesource.configurable", "zh-HK", "关联的报表主表_hk", "关联的报表主表"),
         };
     }
 
@@ -160,10 +160,10 @@ public class TaktConfigurableSourceI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 9;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Report";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

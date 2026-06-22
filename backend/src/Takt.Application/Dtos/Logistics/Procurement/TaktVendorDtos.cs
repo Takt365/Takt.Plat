@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Dtos.Logistics.Materials
+// 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktVendorDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Vendor 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktVendor 生成，请按需审阅）
 // 
@@ -14,9 +14,8 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
-namespace Takt.Application.Dtos.Logistics.Materials;
+namespace Takt.Application.Dtos.Logistics.Procurement;
 
 // ========================================
 // Vendor 响应 DTO
@@ -57,7 +56,7 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int VendorType { get; set; } = 0;
 
@@ -132,12 +131,12 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int CreditLevel { get; set; } = 0;
 
@@ -157,7 +156,7 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public string? AgentRegion { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商等级（0=普通，1=核心，2=战略，3=临时）
+    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     public int VendorLevel { get; set; } = 0;
 
@@ -174,7 +173,7 @@ public class TaktVendorDto : TaktCompanyDtoBase
     /// <summary>
     /// 经销商状态（1=启用，0=禁用）
     /// </summary>
-    public int VendorStatus { get; set; }
+    public int VendorStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -224,7 +223,7 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int? VendorType { get; set; }
 
@@ -299,12 +298,12 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int? PaymentTerms { get; set; }
 
     /// <summary>
-    /// 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int? CreditLevel { get; set; }
 
@@ -324,7 +323,7 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public string? AgentRegion { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商等级（0=普通，1=核心，2=战略，3=临时）
+    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     public int? VendorLevel { get; set; }
 
@@ -361,7 +360,7 @@ public class TaktVendorQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -417,7 +416,7 @@ public class TaktVendorCreateDto
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int VendorType { get; set; } = 0;
 
@@ -493,12 +492,12 @@ public class TaktVendorCreateDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int CreditLevel { get; set; } = 0;
 
@@ -518,7 +517,7 @@ public class TaktVendorCreateDto
     public string? AgentRegion { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商等级（0=普通，1=核心，2=战略，3=临时）
+    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     public int VendorLevel { get; set; } = 0;
 
@@ -535,17 +534,12 @@ public class TaktVendorCreateDto
     /// <summary>
     /// 经销商状态（1=启用，0=禁用）
     /// </summary>
-    public int VendorStatus { get; set; }
-
-    /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int VendorStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -595,7 +589,7 @@ public class TaktVendorStatusDto
     /// 经销商状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "经销商状态（1=启用，0=禁用）不能为空")]
-    public int VendorStatus { get; set; }
+    public int VendorStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -662,7 +656,7 @@ public class TaktVendorTemplateDto
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int? VendorType { get; set; }
 
@@ -704,7 +698,7 @@ public class TaktVendorTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -754,7 +748,7 @@ public class TaktVendorImportDto
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int? VendorType { get; set; }
 
@@ -796,7 +790,7 @@ public class TaktVendorImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -847,7 +841,7 @@ public class TaktVendorExportDto
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int VendorType { get; set; } = 0;
 
@@ -922,12 +916,12 @@ public class TaktVendorExportDto
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int CreditLevel { get; set; } = 0;
 
@@ -947,7 +941,7 @@ public class TaktVendorExportDto
     public string? AgentRegion { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商等级（0=普通，1=核心，2=战略，3=临时）
+    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     public int VendorLevel { get; set; } = 0;
 
@@ -964,7 +958,7 @@ public class TaktVendorExportDto
     /// <summary>
     /// 经销商状态（1=启用，0=禁用）
     /// </summary>
-    public int VendorStatus { get; set; }
+    public int VendorStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -974,7 +968,7 @@ public class TaktVendorExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

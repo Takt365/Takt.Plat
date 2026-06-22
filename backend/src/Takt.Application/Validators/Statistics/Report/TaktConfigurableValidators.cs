@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Statistics.Report
 // 文件名称：TaktConfigurableValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Configurable 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktConfigurable 生成，请按需审阅）
 // 
@@ -12,7 +12,6 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Statistics.Report;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Statistics.Report;
 
@@ -32,33 +31,23 @@ public class TaktConfigurableCreateValidator : AbstractValidator<TaktConfigurabl
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.ReportCode)
             .NotEmpty().WithMessage("报表编码不能为空")
-            .MaximumLength(40).WithMessage("报表编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("报表编码长度不能超过50个字符");
         RuleFor(x => x.ReportName)
             .NotEmpty().WithMessage("报表名称不能为空")
-            .MaximumLength(40).WithMessage("报表名称长度不能超过40个字符");
-        RuleFor(x => x.ReportDomain)
-            .IsInEnum().WithMessage("报表业务域无效");
+            .MaximumLength(100).WithMessage("报表名称长度不能超过100个字符");
         RuleFor(x => x.ReportSubCategory)
             .MaximumLength(50).WithMessage("报表子分类长度不能超过50个字符");
-        RuleFor(x => x.DistinctRows)
-            .IsInEnum().WithMessage("是否去重行无效");
-        RuleFor(x => x.OwnerUserId)
-            .GreaterThanOrEqualTo(0).WithMessage("归属用户 ID不能为负数");
-        RuleFor(x => x.IsBuiltIn)
-            .IsInEnum().WithMessage("是否内置无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
-        RuleFor(x => x.ReportStatus)
-            .IsInEnum().WithMessage("报表状态无效");
         RuleFor(x => x.Description)
             .MaximumLength(500).WithMessage("报表描述长度不能超过500个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -99,33 +88,23 @@ public class TaktConfigurableImportValidator : AbstractValidator<TaktConfigurabl
     public TaktConfigurableImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.ReportCode)
             .NotEmpty().WithMessage("报表编码不能为空")
-            .MaximumLength(40).WithMessage("报表编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("报表编码长度不能超过50个字符");
         RuleFor(x => x.ReportName)
             .NotEmpty().WithMessage("报表名称不能为空")
-            .MaximumLength(40).WithMessage("报表名称长度不能超过40个字符");
-        RuleFor(x => x.ReportDomain)
-            .IsInEnum().WithMessage("报表业务域无效");
+            .MaximumLength(100).WithMessage("报表名称长度不能超过100个字符");
         RuleFor(x => x.ReportSubCategory)
             .MaximumLength(50).WithMessage("报表子分类长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.ReportSubCategory));
-        RuleFor(x => x.DistinctRows)
-            .IsInEnum().WithMessage("是否去重行无效");
-        RuleFor(x => x.OwnerUserId)
-            .GreaterThanOrEqualTo(0).WithMessage("归属用户 ID不能为负数");
-        RuleFor(x => x.IsBuiltIn)
-            .IsInEnum().WithMessage("是否内置无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
-        RuleFor(x => x.ReportStatus)
-            .IsInEnum().WithMessage("报表状态无效");
         RuleFor(x => x.Description)
             .MaximumLength(500).WithMessage("报表描述长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Description));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

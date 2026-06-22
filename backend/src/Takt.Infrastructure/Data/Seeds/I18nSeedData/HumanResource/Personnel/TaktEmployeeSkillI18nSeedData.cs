@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeSkillI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeSkill 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,83 +75,83 @@ public class TaktEmployeeSkillI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeSkill 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeeskill._self / entity.employeeskill.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.employeeskill._self / entity.employeeskill.{{field}}；ResourceGroup=Personnel；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeSkillTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.employeeskill._self
-            new TranslationSeedItem("entity.employeeskill._self", "en-US", "Employee Skill Information", "实体名称"),
+            new TranslationSeedItem("entity.employeeskill._self", "en-US", "Employee Skill Information_us", "实体名称"),
             // entity.employeeskill._self
-            new TranslationSeedItem("entity.employeeskill._self", "ja-JP", "员工技能与证书信息", "实体名称"),
+            new TranslationSeedItem("entity.employeeskill._self", "ja-JP", "员工技能与证书信息_jp", "实体名称"),
             // entity.employeeskill._self
             new TranslationSeedItem("entity.employeeskill._self", "zh-CN", "员工技能与证书信息", "实体名称"),
             // entity.employeeskill._self
-            new TranslationSeedItem("entity.employeeskill._self", "zh-HK", "员工技能与证书信息", "实体名称"),
+            new TranslationSeedItem("entity.employeeskill._self", "zh-HK", "员工技能与证书信息_hk", "实体名称"),
 
             // entity.employeeskill.employeeid
-            new TranslationSeedItem("entity.employeeskill.employeeid", "en-US", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeeskill.employeeid", "en-US", "员工ID_us", "员工ID"),
             // entity.employeeskill.employeeid
-            new TranslationSeedItem("entity.employeeskill.employeeid", "ja-JP", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeeskill.employeeid", "ja-JP", "员工ID_jp", "员工ID"),
             // entity.employeeskill.employeeid
             new TranslationSeedItem("entity.employeeskill.employeeid", "zh-CN", "员工ID", "员工ID"),
             // entity.employeeskill.employeeid
-            new TranslationSeedItem("entity.employeeskill.employeeid", "zh-HK", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeeskill.employeeid", "zh-HK", "员工ID_hk", "员工ID"),
 
             // entity.employeeskill.skillname
-            new TranslationSeedItem("entity.employeeskill.skillname", "en-US", "技能名称", "技能名称"),
+            new TranslationSeedItem("entity.employeeskill.skillname", "en-US", "技能名称_us", "技能名称"),
             // entity.employeeskill.skillname
-            new TranslationSeedItem("entity.employeeskill.skillname", "ja-JP", "技能名称", "技能名称"),
+            new TranslationSeedItem("entity.employeeskill.skillname", "ja-JP", "技能名称_jp", "技能名称"),
             // entity.employeeskill.skillname
             new TranslationSeedItem("entity.employeeskill.skillname", "zh-CN", "技能名称", "技能名称"),
             // entity.employeeskill.skillname
-            new TranslationSeedItem("entity.employeeskill.skillname", "zh-HK", "技能名称", "技能名称"),
+            new TranslationSeedItem("entity.employeeskill.skillname", "zh-HK", "技能名称_hk", "技能名称"),
 
             // entity.employeeskill.skilllevel
-            new TranslationSeedItem("entity.employeeskill.skilllevel", "en-US", "技能等级", "技能等级（0=入门，1=熟练，2=精通，3=专家）"),
+            new TranslationSeedItem("entity.employeeskill.skilllevel", "en-US", "技能等级_us", "技能等级（0=入门，1=熟练，2=精通，3=专家）"),
             // entity.employeeskill.skilllevel
-            new TranslationSeedItem("entity.employeeskill.skilllevel", "ja-JP", "技能等级", "技能等级（0=入门，1=熟练，2=精通，3=专家）"),
+            new TranslationSeedItem("entity.employeeskill.skilllevel", "ja-JP", "技能等级_jp", "技能等级（0=入门，1=熟练，2=精通，3=专家）"),
             // entity.employeeskill.skilllevel
             new TranslationSeedItem("entity.employeeskill.skilllevel", "zh-CN", "技能等级", "技能等级（0=入门，1=熟练，2=精通，3=专家）"),
             // entity.employeeskill.skilllevel
-            new TranslationSeedItem("entity.employeeskill.skilllevel", "zh-HK", "技能等级", "技能等级（0=入门，1=熟练，2=精通，3=专家）"),
+            new TranslationSeedItem("entity.employeeskill.skilllevel", "zh-HK", "技能等级_hk", "技能等级（0=入门，1=熟练，2=精通，3=专家）"),
 
             // entity.employeeskill.certificatename
-            new TranslationSeedItem("entity.employeeskill.certificatename", "en-US", "证书名称", "证书名称"),
+            new TranslationSeedItem("entity.employeeskill.certificatename", "en-US", "证书名称_us", "证书名称"),
             // entity.employeeskill.certificatename
-            new TranslationSeedItem("entity.employeeskill.certificatename", "ja-JP", "证书名称", "证书名称"),
+            new TranslationSeedItem("entity.employeeskill.certificatename", "ja-JP", "证书名称_jp", "证书名称"),
             // entity.employeeskill.certificatename
             new TranslationSeedItem("entity.employeeskill.certificatename", "zh-CN", "证书名称", "证书名称"),
             // entity.employeeskill.certificatename
-            new TranslationSeedItem("entity.employeeskill.certificatename", "zh-HK", "证书名称", "证书名称"),
+            new TranslationSeedItem("entity.employeeskill.certificatename", "zh-HK", "证书名称_hk", "证书名称"),
 
             // entity.employeeskill.certificateno
-            new TranslationSeedItem("entity.employeeskill.certificateno", "en-US", "证书编号", "证书编号"),
+            new TranslationSeedItem("entity.employeeskill.certificateno", "en-US", "证书编号_us", "证书编号"),
             // entity.employeeskill.certificateno
-            new TranslationSeedItem("entity.employeeskill.certificateno", "ja-JP", "证书编号", "证书编号"),
+            new TranslationSeedItem("entity.employeeskill.certificateno", "ja-JP", "证书编号_jp", "证书编号"),
             // entity.employeeskill.certificateno
             new TranslationSeedItem("entity.employeeskill.certificateno", "zh-CN", "证书编号", "证书编号"),
             // entity.employeeskill.certificateno
-            new TranslationSeedItem("entity.employeeskill.certificateno", "zh-HK", "证书编号", "证书编号"),
+            new TranslationSeedItem("entity.employeeskill.certificateno", "zh-HK", "证书编号_hk", "证书编号"),
 
             // entity.employeeskill.obtaineddate
-            new TranslationSeedItem("entity.employeeskill.obtaineddate", "en-US", "取得日期", "取得日期"),
+            new TranslationSeedItem("entity.employeeskill.obtaineddate", "en-US", "取得日期_us", "取得日期"),
             // entity.employeeskill.obtaineddate
-            new TranslationSeedItem("entity.employeeskill.obtaineddate", "ja-JP", "取得日期", "取得日期"),
+            new TranslationSeedItem("entity.employeeskill.obtaineddate", "ja-JP", "取得日期_jp", "取得日期"),
             // entity.employeeskill.obtaineddate
             new TranslationSeedItem("entity.employeeskill.obtaineddate", "zh-CN", "取得日期", "取得日期"),
             // entity.employeeskill.obtaineddate
-            new TranslationSeedItem("entity.employeeskill.obtaineddate", "zh-HK", "取得日期", "取得日期"),
+            new TranslationSeedItem("entity.employeeskill.obtaineddate", "zh-HK", "取得日期_hk", "取得日期"),
 
             // entity.employeeskill.expirydate
-            new TranslationSeedItem("entity.employeeskill.expirydate", "en-US", "到期日期", "到期日期"),
+            new TranslationSeedItem("entity.employeeskill.expirydate", "en-US", "到期日期_us", "到期日期"),
             // entity.employeeskill.expirydate
-            new TranslationSeedItem("entity.employeeskill.expirydate", "ja-JP", "到期日期", "到期日期"),
+            new TranslationSeedItem("entity.employeeskill.expirydate", "ja-JP", "到期日期_jp", "到期日期"),
             // entity.employeeskill.expirydate
             new TranslationSeedItem("entity.employeeskill.expirydate", "zh-CN", "到期日期", "到期日期"),
             // entity.employeeskill.expirydate
-            new TranslationSeedItem("entity.employeeskill.expirydate", "zh-HK", "到期日期", "到期日期"),
+            new TranslationSeedItem("entity.employeeskill.expirydate", "zh-HK", "到期日期_hk", "到期日期"),
         };
     }
 
@@ -169,10 +169,10 @@ public class TaktEmployeeSkillI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Personnel";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktServiceOrderService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务订单应用服务实现
 // 
@@ -101,8 +101,8 @@ public class TaktServiceOrderService : TaktServiceBase, ITaktServiceOrderService
     {
         EnsureThreeLayerContext();
         var list = await _serviceOrderRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.ClientName,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.OrderStatus == 1,
+            x => x.ClientName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -449,7 +449,7 @@ public class TaktServiceOrderService : TaktServiceBase, ITaktServiceOrderService
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.ServiceBy != null && x.ServiceBy.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.OrderDate).Contains(keywords)
                 || SqlFunc.ToString(x.PlannedStartDate).Contains(keywords)
@@ -550,9 +550,9 @@ public class TaktServiceOrderService : TaktServiceBase, ITaktServiceOrderService
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

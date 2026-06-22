@@ -268,7 +268,7 @@ public class TaktDeptQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -387,7 +387,7 @@ public class TaktDeptCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -438,6 +438,30 @@ public class TaktDeptStatusDto
     /// </summary>
     [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
     public int DeptStatus { get; set; }
+}
+
+// ========================================
+// Dept 是否内置 DTO
+// ========================================
+
+/// <summary>
+/// Dept 是否内置更新 DTO
+/// </summary>
+public class TaktDeptBuiltInDto
+{
+    /// <summary>
+    /// DeptID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long DeptId { get; set; }
+
+    /// <summary>
+    /// 是否内置（字典 sys_yes_no_type；1=是，0=否）
+    /// </summary>
+    [Required(ErrorMessage = "是否内置不能为空")]
+    public int IsBuiltIn { get; set; }
 }
 
 // ========================================
@@ -548,7 +572,7 @@ public class TaktDeptTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -642,7 +666,7 @@ public class TaktDeptImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -757,7 +781,7 @@ public class TaktDeptExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

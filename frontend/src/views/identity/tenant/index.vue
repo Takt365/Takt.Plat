@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="identity-tenant">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,32 +20,26 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="identity:tenant:create"
       update-permission="identity:tenant:update"
       delete-permission="identity:tenant:delete"
-      import-permission="identity:tenant:import"
       export-permission="identity:tenant:export"
-      :show-create="true"
+      :show-create="false"
       :show-update="true"
       :show-delete="true"
-      :show-import="true"
+      :show-import="false"
       :show-export="true"
       :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
       :show-refresh="true"
-      :create-disabled="false"
-      :create-loading="loading"
       :update-disabled="updateDisabled"
       :update-loading="loading"
       :delete-disabled="deleteDisabled"
       :delete-loading="loading"
       :refresh-loading="loading"
-      @create="handleCreate"
       @update="handleUpdate"
       @delete="handleDelete"
-      @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
@@ -71,17 +65,26 @@
     >
       <!-- 字典列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'tenantStatus'">
+        <template v-if="column.key === 'isBuiltIn'">
+          <TaktDictTag
+            :value="getTenantField(record, 'isBuiltIn')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'tenantStatus'">
           <TaktDictTag
             :value="getTenantField(record, 'tenantStatus')"
-            dict-type="sys_normal_disable"
+            dict-type="sys_normal_disable_status"
           />
+        </template>
+        <template v-else-if="column.key === 'userTenants'">
+          {{ formatTenantUserCount(record) }}
         </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -101,11 +104,20 @@
       @cancel="handleFormCancel"
     >
       <TenantForm
+        :key="formData?.tenantId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
       />
     </TaktModal>
+
+    <!-- 分配可访问用户（RBAC：api/TaktRbacs/tenants/{tenantCode}/users） -->
+    <AssignTenantUsers
+      v-model:open="assignTenantUsersVisible"
+      :tenant="currentAssignTenant"
+      @success="handleAssignTenantUsersSuccess"
+    />
+
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
@@ -210,7 +222,7 @@
       <a-form-item :label="t('entity.tenant.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.tenantStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.tenant.status') })"
           allow-clear
         />
@@ -238,11 +250,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -260,27 +272,6 @@
       </template>
     </TaktQueryDrawer>
 
-    <!-- 导入对话框 -->
-    <TaktModal
-      v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.tenant._self') })"
-      :width="600"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleImportCancel"
-    >
-      <TaktImportFile
-        entity-i18n-key="entity.tenant._self"
-        file-type="xlsx"
-        :sheet-name="excelNames.sheet"
-        :template-file-name="excelNames.fileBase"
-        :download-template="handleDownloadTemplate"
-        :import-file="handleImportFile"
-        :max-size="10"
-        :max-rows="1000"
-        @success="handleImportSuccess"
-      />
-    </TaktModal>
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
@@ -297,6 +288,7 @@
 </template>
 
 <script setup lang="ts">
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 租户实体 代表系统中的独立租户管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/identity/tenant
@@ -307,11 +299,13 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import TenantForm from './components/tenant-form.vue'
-import { getTenantList, getTenantById, createTenant, updateTenant, deleteTenantById, deleteTenantBatch, getTenantTemplate, importTenant, exportTenant } from '@/api/identity/tenant'
-import type { Tenant, TenantQuery, TenantCreate, TenantUpdate } from '@/types/identity/tenant'
+import AssignTenantUsers from './components/assign-tenant-users.vue'
+import { getTenantList,createTenant, updateTenant, deleteTenantById, deleteTenantBatch, exportTenant } from '@/api/identity/tenant'
+import { getTenantUserIds } from '@/api/identity/rbac'
+import type { Tenant, TenantQuery} from '@/types/identity/tenant'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiUserSettingsLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -329,9 +323,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Tenant[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -350,7 +344,8 @@ const formData = ref<Partial<Tenant>>({})
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -366,7 +361,7 @@ const advancedQueryForm = ref({
   tenantStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -383,15 +378,18 @@ const queryFieldsMeta = computed(() => [
   { key: 'tenantStatus', label: t('entity.tenant.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
-/** 导入对话框是否打开 */
-const importVisible = ref(false)
+/** 分配租户用户弹窗 */
+const assignTenantUsersVisible = ref(false)
+const currentAssignTenant = ref<Tenant | null>(null)
+/** 列表行：租户已绑定用户数（key=tenantId，数据来自 getTenantUserIds） */
+const tenantUserCountMap = ref<Record<string, number>>({})
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
@@ -401,9 +399,66 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {TenantQuery} 查询 DTO
+ */
+type TenantQueryTrimmedKey =
+  | 'tenantName'
+  | 'subscriptionStartTimeStart'
+  | 'subscriptionStartTimeEnd'
+  | 'subscriptionEndTimeStart'
+  | 'subscriptionEndTimeEnd'
+  | 'contactName'
+  | 'contactPhone'
+  | 'contactEmail'
+  | 'createdAtStart'
+  | 'createdAtEnd'
+  | 'ExtField'
+  | 'remark'
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+function buildListQuery(overrides?: Partial<TenantQuery>): TenantQuery {
+  const form = advancedQueryForm.value
+  const query: TenantQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: TenantQueryTrimmedKey, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v
+    }
+  }
+  assignTrimmed('tenantName', form.tenantName)
+  assignTrimmed('subscriptionStartTimeStart', form.subscriptionStartTimeStart)
+  assignTrimmed('subscriptionStartTimeEnd', form.subscriptionStartTimeEnd)
+  assignTrimmed('subscriptionEndTimeStart', form.subscriptionEndTimeStart)
+  assignTrimmed('subscriptionEndTimeEnd', form.subscriptionEndTimeEnd)
+  assignTrimmed('contactName', form.contactName)
+  assignTrimmed('contactPhone', form.contactPhone)
+  assignTrimmed('contactEmail', form.contactEmail)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    query.isBuiltIn = form.isBuiltIn
+  }
+  if (form.tenantStatus !== undefined && form.tenantStatus !== null) {
+    query.tenantStatus = form.tenantStatus
+  }
+  return query
+}
+
+/** 页面挂载：加载分页配置后拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
@@ -485,7 +540,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTenantField(record, 'isBuiltIn') ?? ''
   },
   {
     title: t('entity.tenant.status'),
@@ -499,10 +553,9 @@ const columns = computed<TableColumnsType>(() => [
     title: t('entity.tenant.usertenants'),
     dataIndex: 'userTenants',
     key: 'userTenants',
-    width: 120,
+    width: 140,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTenantField(record, 'userTenants') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -513,6 +566,14 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiEditLine,
         permission: 'identity:tenant:update',
         onClick: (record: Tenant) => handleEdit(record)
+      },
+      {
+        key: 'allocate-tenant-user',
+        label: t('common.page.button.allocate') + t('entity.user._self'),
+        shape: 'plain',
+        icon: RiUserSettingsLine,
+        permission: 'identity:tenant:update',
+        onClick: (record: Tenant) => handleAssignTenantUsers(record)
       },
       {
         key: 'delete',
@@ -534,6 +595,58 @@ const getTenantId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getTenantField = (record: any, field: string): any => record?.[field]
+
+/**
+ * 列表展示：可访问该租户的用户数量
+ * @param record 租户行
+ * @returns {string} 展示文案
+ */
+function formatTenantUserCount(record: Tenant): string {
+  const id = getTenantId(record)
+  const count = tenantUserCountMap.value[id]
+  if (count === undefined) return '—'
+  return String(count)
+}
+
+/**
+ * 按当前页租户编码加载 RBAC 用户关联数量
+ * @param rows 当前页租户列表
+ */
+async function loadTenantUserCounts(rows: Tenant[]) {
+  if (!rows.length) {
+    tenantUserCountMap.value = {}
+    return
+  }
+  const results = await Promise.all(
+    rows.map(async (row) => {
+      const id = getTenantId(row)
+      const code = (row.tenantCode ?? '').trim()
+      if (!code) return { id, count: 0 }
+      try {
+        const list = await getTenantUserIds(code)
+        return { id, count: Array.isArray(list) ? list.length : 0 }
+      } catch {
+        return { id, count: 0 }
+      }
+    })
+  )
+  const map: Record<string, number> = {}
+  for (const { id, count } of results) {
+    map[id] = count
+  }
+  tenantUserCountMap.value = map
+}
+
+/** 打开分配租户用户弹窗 */
+function handleAssignTenantUsers(record: Tenant) {
+  currentAssignTenant.value = record
+  assignTenantUsersVisible.value = true
+}
+
+/** 分配租户用户成功后刷新用户数 */
+async function handleAssignTenantUsersSuccess() {
+  await loadTenantUserCounts(dataSource.value)
+}
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -577,18 +690,10 @@ const onClickRow = (record: Tenant) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: TenantQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getTenantList(params)
+    const res = await getTenantList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
+    void loadTenantUserCounts(dataSource.value)
   } catch (error: any) {
     logger.error('[Tenant] 加载数据失败', { error })
     message.error(error?.message || t('common.feedback.load.data.failed'))
@@ -604,7 +709,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -624,10 +729,10 @@ function handleReset() {
   tenantStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -683,46 +788,16 @@ async function handleFormSubmit() {
 function handleFormCancel() {
   formVisible.value = false
 }
-/** 打开导入对话框 */
-function handleImport() {
-  importVisible.value = true
-}
 
-/** 下载导入模板 Excel */
-async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getTenantTemplate(sheetName, fileName)
-  return (res as any)?.data ?? res
-}
-
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importTenant(file, sheetName)
-}
-
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
-  loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
-}
-
-/** 关闭导入对话框 */
-function handleImportCancel() {
-  importVisible.value = false
-}
 /** 导出当前查询条件下的 Excel */
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: TenantQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportTenant(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportTenant(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -790,7 +865,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -808,7 +883,7 @@ function handleAdvancedQueryReset() {
   tenantStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -838,23 +913,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.identity-tenant {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

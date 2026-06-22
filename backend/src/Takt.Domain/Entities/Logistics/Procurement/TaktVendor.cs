@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Materials
+// 命名空间：Takt.Domain.Entities.Logistics.Procurement
 // 文件名称：TaktVendor.cs
 // 创建时间：2026-05-12
 // 创建人：Takt365(Cursor AI)
@@ -22,7 +22,7 @@
 using SqlSugar;
 using Takt.Domain.Entities;
 
-namespace Takt.Domain.Entities.Logistics.Materials;
+namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
 /// Takt经销商实体
@@ -59,7 +59,7 @@ public class TaktVendor : TaktCompanyEntityBase
     public string? VendorShortName { get; set; }
 
     /// <summary>
-    /// 经销商类型（0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "vendor_type", ColumnDescription = "经销商类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int VendorType { get; set; } = 0;
@@ -149,13 +149,13 @@ public class TaktVendor : TaktCompanyEntityBase
     public string CurrencyCode { get; set; } = "CNY";
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "payment_terms", ColumnDescription = "付款条件", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     [SugarColumn(ColumnName = "credit_level", ColumnDescription = "信用等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CreditLevel { get; set; } = 0;
@@ -179,7 +179,7 @@ public class TaktVendor : TaktCompanyEntityBase
     public string? AgentRegion { get; set; }
 
     /// <summary>
-    /// 经销商等级（0=普通，1=核心，2=战略，3=临时）
+    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     [SugarColumn(ColumnName = "vendor_level", ColumnDescription = "经销商等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int VendorLevel { get; set; } = 0;

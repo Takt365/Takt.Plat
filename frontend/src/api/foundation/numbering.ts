@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/foundation
 // 文件名称：numbering.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-17
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,10 +18,6 @@ import type {
 import type {
   Numbering,
   NumberingCreate,
-  NumberingGenerateRequest,
-  NumberingGenerateResult,
-  NumberingPreviewRequest,
-  NumberingPreviewResult,
   NumberingStatus,
   NumberingUpdate
 } from '@/types/foundation/numbering';
@@ -45,9 +41,7 @@ export function getNumberingList(queryDto: any): Promise<TaktPagedResult<Numberi
   return request<TaktPagedResult<Numbering>>({
     url: `${NUMBERING_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -117,7 +111,7 @@ export function deleteNumberingBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新编号规则状态
- * @param {NumberingStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {NumberingStatus} dto 状态 DTO
  * @returns {Promise<Numbering>} 编号规则DTO
  */
 export function updateNumberingStatus(dto: NumberingStatus): Promise<Numbering> {
@@ -204,40 +198,10 @@ export function exportNumbering(
     url: `${NUMBERING_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },
     responseType: 'blob',
-  });
-}
-
-// ========================================
-// 编号预览/生成
-// ========================================
-
-/**
- * 预览业务编号（不占用流水号）
- * @param {NumberingPreviewRequest} dto 预览参数
- * @returns {Promise<NumberingPreviewResult>} 预览结果
- */
-export function previewNumbering(dto: NumberingPreviewRequest): Promise<NumberingPreviewResult> {
-  return request<NumberingPreviewResult>({
-    url: `${NUMBERING_API_BASE}/preview`,
-    method: 'post',
-    data: dto,
-  });
-}
-
-/**
- * 生成下一个业务编号（占用流水号）
- * @param {NumberingGenerateRequest} dto 生成参数
- * @returns {Promise<NumberingGenerateResult>} 生成结果
- */
-export function generateNumbering(dto: NumberingGenerateRequest): Promise<NumberingGenerateResult> {
-  return request<NumberingGenerateResult>({
-    url: `${NUMBERING_API_BASE}/generate`,
-    method: 'post',
-    data: dto,
   });
 }

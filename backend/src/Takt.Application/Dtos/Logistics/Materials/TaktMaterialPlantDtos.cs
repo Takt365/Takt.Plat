@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
-// 文件名称：TaktMaterialDtos.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktMaterialPlantDtos.cs
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
-// 功能描述：Material 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterial 生成，请按需审阅）
+// 功能描述：MaterialPlant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterialPlant 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -14,27 +14,26 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Logistics.Materials;
 
 // ========================================
-// Material 响应 DTO
+// MaterialPlant 响应 DTO
 // ========================================
 
 /// <summary>
-/// Takt物料实体
-/// 对应前端 TaktMaterialDto
+/// Takt工厂物料实体
+/// 对应前端 TaktMaterialPlantDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
-public class TaktMaterialDto : TaktCompanyDtoBase
+public class TaktMaterialPlantDto : TaktCompanyDtoBase
 {
     /// <summary>
-    /// MaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// MaterialPlantID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long MaterialId { get; set; }
+    public long MaterialPlantId { get; set; }
 
     /// <summary>
     /// 工厂代码
@@ -72,7 +71,7 @@ public class TaktMaterialDto : TaktCompanyDtoBase
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码
+    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
     /// </summary>
     public string? MaterialGroupCode { get; set; } = string.Empty;
 
@@ -97,7 +96,7 @@ public class TaktMaterialDto : TaktCompanyDtoBase
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -239,7 +238,7 @@ public class TaktMaterialDto : TaktCompanyDtoBase
     /// <summary>
     /// 物料状态（1=启用，0=禁用）
     /// </summary>
-    public int MaterialStatus { get; set; }
+    public int MaterialStatus { get; set; } = 0;
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）
@@ -259,14 +258,14 @@ public class TaktMaterialDto : TaktCompanyDtoBase
 }
 
 // ========================================
-// Material 查询 DTO
+// MaterialPlant 查询 DTO
 // ========================================
 
 /// <summary>
-/// Material 分页查询 DTO
+/// MaterialPlant 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
-public class TaktMaterialQueryDto : TaktPagedQuery
+public class TaktMaterialPlantQueryDto : TaktPagedQuery
 {
     /// <summary>
     /// 租户编码
@@ -314,7 +313,7 @@ public class TaktMaterialQueryDto : TaktPagedQuery
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码
+    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
     /// </summary>
     public string? MaterialGroupCode { get; set; } = string.Empty;
 
@@ -339,7 +338,7 @@ public class TaktMaterialQueryDto : TaktPagedQuery
     public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -516,7 +515,7 @@ public class TaktMaterialQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -525,13 +524,13 @@ public class TaktMaterialQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建Material DTO
+// 创建MaterialPlant DTO
 // ========================================
 
 /// <summary>
-/// 创建Material DTO
+/// 创建MaterialPlant DTO
 /// </summary>
-public class TaktMaterialCreateDto
+public class TaktMaterialPlantCreateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -587,7 +586,7 @@ public class TaktMaterialCreateDto
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码
+    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
     /// </summary>
     public string? MaterialGroupCode { get; set; } = string.Empty;
 
@@ -613,7 +612,7 @@ public class TaktMaterialCreateDto
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -756,7 +755,7 @@ public class TaktMaterialCreateDto
     /// <summary>
     /// 物料状态（1=启用，0=禁用）
     /// </summary>
-    public int MaterialStatus { get; set; }
+    public int MaterialStatus { get; set; } = 0;
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）
@@ -776,7 +775,7 @@ public class TaktMaterialCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -786,47 +785,47 @@ public class TaktMaterialCreateDto
 }
 
 // ========================================
-// 更新Material DTO
+// 更新MaterialPlant DTO
 // ========================================
 
 /// <summary>
-/// 更新Material DTO
-/// 继承 TaktMaterialCreateDto，添加 MaterialId 字段
+/// 更新MaterialPlant DTO
+/// 继承 TaktMaterialPlantCreateDto，添加 MaterialPlantId 字段
 /// </summary>
-public class TaktMaterialUpdateDto : TaktMaterialCreateDto
+public class TaktMaterialPlantUpdateDto : TaktMaterialPlantCreateDto
 {
     /// <summary>
-    /// MaterialID（标识要更新的实体）
+    /// MaterialPlantID（标识要更新的实体）
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long MaterialId { get; set; }
+    public long MaterialPlantId { get; set; }
 
 }
 
 // ========================================
-// Material 状态 DTO
+// MaterialPlant 状态 DTO
 // ========================================
 
 /// <summary>
-/// Material 状态更新 DTO
+/// MaterialPlant 状态更新 DTO
 /// </summary>
-public class TaktMaterialStatusDto
+public class TaktMaterialPlantStatusDto
 {
     /// <summary>
-    /// MaterialID
+    /// MaterialPlantID
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long MaterialId { get; set; }
+    public long MaterialPlantId { get; set; }
 
     /// <summary>
     /// 物料状态（1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "物料状态（1=启用，0=禁用）不能为空")]
-    public int MaterialStatus { get; set; }
+    public int MaterialStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -834,9 +833,9 @@ public class TaktMaterialStatusDto
 // ========================================
 
 /// <summary>
-/// Material 导入模板行 DTO
+/// MaterialPlant 导入模板行 DTO
 /// </summary>
-public class TaktMaterialTemplateDto
+public class TaktMaterialPlantTemplateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -884,7 +883,7 @@ public class TaktMaterialTemplateDto
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码
+    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
     /// </summary>
     public string? MaterialGroupCode { get; set; } = string.Empty;
 
@@ -911,7 +910,7 @@ public class TaktMaterialTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -921,9 +920,9 @@ public class TaktMaterialTemplateDto
 }
 
 /// <summary>
-/// Material 导入 DTO（独立实现，不继承 TemplateDto）
+/// MaterialPlant 导入 DTO（独立实现，不继承 TemplateDto）
 /// </summary>
-public class TaktMaterialImportDto
+public class TaktMaterialPlantImportDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -976,7 +975,7 @@ public class TaktMaterialImportDto
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码
+    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
     /// </summary>
     public string? MaterialGroupCode { get; set; } = string.Empty;
 
@@ -1003,7 +1002,7 @@ public class TaktMaterialImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -1017,16 +1016,16 @@ public class TaktMaterialImportDto
 // ========================================
 
 /// <summary>
-/// Material 导出 DTO（独立实现，不继承响应 Dto）
+/// MaterialPlant 导出 DTO（独立实现，不继承响应 Dto）
 /// </summary>
-public class TaktMaterialExportDto
+public class TaktMaterialPlantExportDto
 {
     /// <summary>
-    /// MaterialID
+    /// MaterialPlantID
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long MaterialId { get; set; }
+    public long MaterialPlantId { get; set; }
 
     /// <summary>
     /// 公司代码
@@ -1069,7 +1068,7 @@ public class TaktMaterialExportDto
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品目组代码
+    /// 品目组代码（关联 TaktMaterialGroup.MaterialGroupCode）
     /// </summary>
     public string? MaterialGroupCode { get; set; } = string.Empty;
 
@@ -1094,7 +1093,7 @@ public class TaktMaterialExportDto
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -1236,7 +1235,7 @@ public class TaktMaterialExportDto
     /// <summary>
     /// 物料状态（1=启用，0=禁用）
     /// </summary>
-    public int MaterialStatus { get; set; }
+    public int MaterialStatus { get; set; } = 0;
 
     /// <summary>
     /// 物料属性（JSON格式，存储物料自定义属性）
@@ -1256,7 +1255,7 @@ public class TaktMaterialExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

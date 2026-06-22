@@ -39,7 +39,7 @@ export interface Vocabulary extends TenantDtoBase {
   wordCategory: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
    */
   filterLevel: number;
 
@@ -79,7 +79,7 @@ export interface VocabularyQuery extends TaktPagedQuery {
   wordCategory?: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
    */
   filterLevel?: number;
 
@@ -106,7 +106,7 @@ export interface VocabularyQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -138,7 +138,7 @@ export interface VocabularyCreate {
   wordCategory: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
    */
   filterLevel: number;
 
@@ -155,7 +155,7 @@ export interface VocabularyCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -221,7 +221,7 @@ export interface VocabularyTemplate {
   wordCategory?: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
    */
   filterLevel?: number;
 
@@ -238,7 +238,7 @@ export interface VocabularyTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -270,7 +270,7 @@ export interface VocabularyImport {
   wordCategory?: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
    */
   filterLevel?: number;
 
@@ -287,7 +287,7 @@ export interface VocabularyImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -319,7 +319,7 @@ export interface VocabularyExport {
   wordCategory: number;
 
   /**
-   * 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+   * 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
    */
   filterLevel: number;
 
@@ -336,7 +336,7 @@ export interface VocabularyExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -361,7 +361,7 @@ export interface VocabularyFilterRequest {
   text: string;
 
   /**
-   * 最低过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）；为空时匹配全部启用词条
+   * 最低过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）；为空时匹配全部启用词条
    */
   minFilterLevel?: number;
 }

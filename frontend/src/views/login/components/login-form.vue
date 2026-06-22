@@ -31,13 +31,13 @@
         @finish="handleLogin"
       >
         <a-form-item
-          :label="t('login.page.tenantCode')"
+          :label="t('login.page.tenant.code')"
           name="tenantCode"
           :auto-link="false"
         >
           <a-input
             v-model:value="formData.tenantCode"
-            :placeholder="t('login.page.field.tenantCode.placeholder')"
+            :placeholder="t('login.page.field.tenant.code.placeholder')"
             size="large"
             show-count
             :maxlength="TAKT_TENANT_CODE_LENGTH"
@@ -120,7 +120,7 @@
               href="#"
               @click.prevent="emit('forgot')"
             >
-              {{ t('login.page.forgotPassword') }}
+              {{ t('login.page.forgot.password') }}
             </a>
           </div>
         </a-form-item>
@@ -190,6 +190,7 @@ import type { FormInstance } from 'ant-design-vue';
 import type { Rule } from 'ant-design-vue/es/form';
 import { useLoginFieldSync } from '@/composables/use-login-field-sync';
 import {
+  isTaktCaptchaDisabledError,
   probeSessionCaptchaRequiredAsync,
   useTaktLoginCaptcha,
   type TaktCaptchaPanelExpose,
@@ -349,6 +350,7 @@ const {
   loadChallengeAsync: loadCaptchaChallengeAsync,
   handleCanSubmitChange: handleCaptchaCanSubmitChange,
   registerOnVerified: registerCaptchaOnVerified,
+  registerOnCaptchaSkipped: registerCaptchaOnCaptchaSkipped,
   confirmCaptcha,
   cancelCaptcha,
 } = useTaktLoginCaptcha(captchaModalOpen);
@@ -424,13 +426,13 @@ async function buildCipherPasswordAsync(): Promise<string> {
     await loadLoginPublicKeyAsync();
   }
   if (!loginPublicKeyPem.value) {
-    throw new Error(t('login.page.message.publicKeyMissing'));
+    throw new Error(t('login.page.message.public.key.missing'));
   }
 
   const plain = formData.password.trim();
   const cipher = encryptLoginPassword(plain, loginPublicKeyPem.value);
   if (!cipher) {
-    throw new Error(t('login.page.message.encryptFail'));
+    throw new Error(t('login.page.message.encrypt.fail'));
   }
 
   return cipher;
@@ -441,7 +443,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   tenantCode: [
     {
       required: true,
-      message: t('login.page.validate.tenantRequired'),
+      message: t('login.page.validate.tenant.required'),
       trigger: ['blur', 'change'],
     },
     {
@@ -451,7 +453,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
           return Promise.resolve();
         }
         if (!isValidTenantCode(trimmed)) {
-          return Promise.reject(t('login.page.validate.tenantInvalid'));
+          return Promise.reject(t('login.page.validate.tenant.invalid'));
         }
         if (tenantValidating.value) {
           return Promise.resolve();
@@ -460,7 +462,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
           return Promise.resolve();
         }
         if (!tenantValidated.value) {
-          return Promise.reject(t('login.page.message.tenantNotFound'));
+          return Promise.reject(t('login.page.message.tenant.not.found'));
         }
         return Promise.resolve();
       },
@@ -470,7 +472,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   username: [
     {
       required: true,
-      message: t('login.page.validate.usernameRequired'),
+      message: t('login.page.validate.username.required'),
       trigger: 'blur',
     },
     {
@@ -480,7 +482,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
           return Promise.resolve();
         }
         if (!isValidLoginUsername(trimmed)) {
-          return Promise.reject(t('login.page.validate.usernameInvalid'));
+          return Promise.reject(t('login.page.validate.username.invalid'));
         }
         return Promise.resolve();
       },
@@ -490,7 +492,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   password: [
     {
       required: true,
-      message: t('login.page.validate.passwordRequired'),
+      message: t('login.page.validate.password.required'),
       trigger: 'blur',
     },
     {
@@ -500,7 +502,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
           return Promise.resolve();
         }
         if (!isValidPassword(trimmed)) {
-          return Promise.reject(t('login.page.validate.passwordWeak'));
+          return Promise.reject(t('login.page.validate.password.weak'));
         }
         return Promise.resolve();
       },
@@ -575,7 +577,7 @@ function resolveLoginErrorMessage(error: unknown, fallback: string): string {
   ] as const;
 
   if (tenantNoAccessHints.some((hint) => msg.includes(hint))) {
-    return t('login.page.message.tenantNoAccess');
+    return t('login.page.message.tenant.no.access');
   }
 
   const passwordCipherHints = [
@@ -604,7 +606,7 @@ function resolveLoginErrorMessage(error: unknown, fallback: string): string {
   ] as const;
 
   if (invalidCredentialsHints.some((hint) => msg.includes(hint))) {
-    return t('login.page.message.credentialsIncorrect');
+    return t('login.page.message.credentials.incorrect');
   }
 
   return msg;
@@ -656,6 +658,22 @@ async function handleLogin(): Promise<void> {
 
     await completeSignInAsync();
   } catch (error) {
+    if (isTaktCaptchaDisabledError(error)) {
+      try {
+        loading.value = true;
+        signInSubmitting.value = true;
+        await completeSignInAsync();
+        return;
+      } catch (signInError) {
+        loginTicket.value = null;
+        loginSessionContext.value = null;
+        message.error(resolveLoginErrorMessage(signInError, t('login.page.message.fail')));
+        return;
+      } finally {
+        loading.value = false;
+        signInSubmitting.value = false;
+      }
+    }
     loginTicket.value = null;
     loginSessionContext.value = null;
     message.error(resolveLoginErrorMessage(error, t('login.page.message.fail')));
@@ -712,4 +730,19 @@ function handleCaptchaCancel(): void {
 }
 
 registerCaptchaOnVerified(handleCaptchaConfirm);
+
+registerCaptchaOnCaptchaSkipped(async () => {
+  loading.value = true;
+  signInSubmitting.value = true;
+  try {
+    await completeSignInAsync();
+  } catch (error) {
+    loginTicket.value = null;
+    loginSessionContext.value = null;
+    message.error(resolveLoginErrorMessage(error, t('login.page.message.fail')));
+  } finally {
+    loading.value = false;
+    signInSubmitting.value = false;
+  }
+});
 </script>

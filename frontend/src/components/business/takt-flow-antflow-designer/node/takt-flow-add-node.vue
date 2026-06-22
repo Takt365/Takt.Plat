@@ -107,14 +107,9 @@ import {
   RiOrganizationChart
 } from '@remixicon/vue'
 import {
-  createApproveNode,
-  createCopyNode,
-  createGatewayNode,
-  createParallelWayNode,
-  createDynamicConditionWayNode,
-  createParallelConditionWayNode
+  buildCreateNodeMap,
+  type FlowTreeNode
 } from '../config/takt-flow-tree'
-import type { FlowTreeNode } from '../config/takt-flow-tree'
 
 const { t } = useI18n()
 
@@ -130,18 +125,11 @@ function getWorkflowPopupContainer(trigger: HTMLElement): HTMLElement {
 }
 
 /** 与 AntFlow addNode.vue createNodeMap 键 1~6 完全一致 */
-const createNodeMap = new Map<number, (child: FlowTreeNode | null) => FlowTreeNode>([
-  [1, (child) => createApproveNode(child ?? null)],
-  [2, (child) => createCopyNode(child ?? null)],
-  [3, (child) => createParallelWayNode(child ?? null)],
-  [4, (child) => createGatewayNode(child ?? null)],
-  [5, (child) => createDynamicConditionWayNode(child ?? null)],
-  [6, (child) => createParallelConditionWayNode(child ?? null)]
-])
+const createNodeMap = computed(() => buildCreateNodeMap(t))
 
 function addType(type: number) {
   visible.value = false
-  const fn = createNodeMap.get(type)
+  const fn = createNodeMap.value.get(type)
   if (!fn) return
   const newNode = fn(props.childNodeP ?? null)
   emit('update:childNodeP', newNode)

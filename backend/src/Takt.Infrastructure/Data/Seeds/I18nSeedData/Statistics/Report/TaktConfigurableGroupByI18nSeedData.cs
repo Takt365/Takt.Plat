@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
 // 文件名称：TaktConfigurableGroupByI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConfigurableGroupBy 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,65 +75,65 @@ public class TaktConfigurableGroupByI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktConfigurableGroupBy 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.configurablegroupby._self / entity.configurablegroupby.{{field}}；ResourceGroup=9；ResourceType=0
+    /// I18nKey：entity.configurablegroupby._self / entity.configurablegroupby.{{field}}；ResourceGroup=Report；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetConfigurableGroupByTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.configurablegroupby._self
-            new TranslationSeedItem("entity.configurablegroupby._self", "en-US", "Configurable Group By Information", "实体名称"),
+            new TranslationSeedItem("entity.configurablegroupby._self", "en-US", "Configurable Group By Information_us", "实体名称"),
             // entity.configurablegroupby._self
-            new TranslationSeedItem("entity.configurablegroupby._self", "ja-JP", "自定义报表分组字段定义信息", "实体名称"),
+            new TranslationSeedItem("entity.configurablegroupby._self", "ja-JP", "自定义报表分组字段定义信息_jp", "实体名称"),
             // entity.configurablegroupby._self
             new TranslationSeedItem("entity.configurablegroupby._self", "zh-CN", "自定义报表分组字段定义信息", "实体名称"),
             // entity.configurablegroupby._self
-            new TranslationSeedItem("entity.configurablegroupby._self", "zh-HK", "自定义报表分组字段定义信息", "实体名称"),
+            new TranslationSeedItem("entity.configurablegroupby._self", "zh-HK", "自定义报表分组字段定义信息_hk", "实体名称"),
 
             // entity.configurablegroupby.configurableid
-            new TranslationSeedItem("entity.configurablegroupby.configurableid", "en-US", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablegroupby.configurableid", "en-US", "报表主表ID_us", "关联报表主表 ID（主子表关系）"),
             // entity.configurablegroupby.configurableid
-            new TranslationSeedItem("entity.configurablegroupby.configurableid", "ja-JP", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablegroupby.configurableid", "ja-JP", "报表主表ID_jp", "关联报表主表 ID（主子表关系）"),
             // entity.configurablegroupby.configurableid
             new TranslationSeedItem("entity.configurablegroupby.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（主子表关系）"),
             // entity.configurablegroupby.configurableid
-            new TranslationSeedItem("entity.configurablegroupby.configurableid", "zh-HK", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablegroupby.configurableid", "zh-HK", "报表主表ID_hk", "关联报表主表 ID（主子表关系）"),
 
             // entity.configurablegroupby.sourcealias
-            new TranslationSeedItem("entity.configurablegroupby.sourcealias", "en-US", "数据源别名", "数据源别名"),
+            new TranslationSeedItem("entity.configurablegroupby.sourcealias", "en-US", "数据源别名_us", "数据源别名"),
             // entity.configurablegroupby.sourcealias
-            new TranslationSeedItem("entity.configurablegroupby.sourcealias", "ja-JP", "数据源别名", "数据源别名"),
+            new TranslationSeedItem("entity.configurablegroupby.sourcealias", "ja-JP", "数据源别名_jp", "数据源别名"),
             // entity.configurablegroupby.sourcealias
             new TranslationSeedItem("entity.configurablegroupby.sourcealias", "zh-CN", "数据源别名", "数据源别名"),
             // entity.configurablegroupby.sourcealias
-            new TranslationSeedItem("entity.configurablegroupby.sourcealias", "zh-HK", "数据源别名", "数据源别名"),
+            new TranslationSeedItem("entity.configurablegroupby.sourcealias", "zh-HK", "数据源别名_hk", "数据源别名"),
 
             // entity.configurablegroupby.columnname
-            new TranslationSeedItem("entity.configurablegroupby.columnname", "en-US", "列名", "列名"),
+            new TranslationSeedItem("entity.configurablegroupby.columnname", "en-US", "列名_us", "列名"),
             // entity.configurablegroupby.columnname
-            new TranslationSeedItem("entity.configurablegroupby.columnname", "ja-JP", "列名", "列名"),
+            new TranslationSeedItem("entity.configurablegroupby.columnname", "ja-JP", "列名_jp", "列名"),
             // entity.configurablegroupby.columnname
             new TranslationSeedItem("entity.configurablegroupby.columnname", "zh-CN", "列名", "列名"),
             // entity.configurablegroupby.columnname
-            new TranslationSeedItem("entity.configurablegroupby.columnname", "zh-HK", "列名", "列名"),
+            new TranslationSeedItem("entity.configurablegroupby.columnname", "zh-HK", "列名_hk", "列名"),
 
             // entity.configurablegroupby.sortorder
-            new TranslationSeedItem("entity.configurablegroupby.sortorder", "en-US", "排序号", "排序号（GROUP BY 列顺序）"),
+            new TranslationSeedItem("entity.configurablegroupby.sortorder", "en-US", "排序号_us", "排序号（GROUP BY 列顺序）"),
             // entity.configurablegroupby.sortorder
-            new TranslationSeedItem("entity.configurablegroupby.sortorder", "ja-JP", "排序号", "排序号（GROUP BY 列顺序）"),
+            new TranslationSeedItem("entity.configurablegroupby.sortorder", "ja-JP", "排序号_jp", "排序号（GROUP BY 列顺序）"),
             // entity.configurablegroupby.sortorder
             new TranslationSeedItem("entity.configurablegroupby.sortorder", "zh-CN", "排序号", "排序号（GROUP BY 列顺序）"),
             // entity.configurablegroupby.sortorder
-            new TranslationSeedItem("entity.configurablegroupby.sortorder", "zh-HK", "排序号", "排序号（GROUP BY 列顺序）"),
+            new TranslationSeedItem("entity.configurablegroupby.sortorder", "zh-HK", "排序号_hk", "排序号（GROUP BY 列顺序）"),
 
             // entity.configurablegroupby.configurable
-            new TranslationSeedItem("entity.configurablegroupby.configurable", "en-US", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablegroupby.configurable", "en-US", "关联的报表主表_us", "关联的报表主表"),
             // entity.configurablegroupby.configurable
-            new TranslationSeedItem("entity.configurablegroupby.configurable", "ja-JP", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablegroupby.configurable", "ja-JP", "关联的报表主表_jp", "关联的报表主表"),
             // entity.configurablegroupby.configurable
             new TranslationSeedItem("entity.configurablegroupby.configurable", "zh-CN", "关联的报表主表", "关联的报表主表"),
             // entity.configurablegroupby.configurable
-            new TranslationSeedItem("entity.configurablegroupby.configurable", "zh-HK", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablegroupby.configurable", "zh-HK", "关联的报表主表_hk", "关联的报表主表"),
         };
     }
 
@@ -151,10 +151,10 @@ public class TaktConfigurableGroupByI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 9;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Report";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

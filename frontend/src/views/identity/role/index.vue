@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="identity-role">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -71,17 +71,35 @@
     >
       <!-- 字典列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'roleStatus'">
+        <template v-if="column.key === 'dataScope'">
           <TaktDictTag
-            :value="getRoleField(record, 'roleStatus')"
-            dict-type="sys_normal_disable"
+            :value="getRoleField(record, 'dataScope')"
+            dict-type="sys_data_scope_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'isBuiltIn'">
+          <a-switch
+            :checked="getRoleField(record, 'isBuiltIn') === 1"
+            :disabled="getRoleField(record, 'isBuiltIn') === 1"
+            :checked-children="t('dict.sys.yes.no.type.1')"
+            :un-checked-children="t('dict.sys.yes.no.type.0')"
+            @change="(checked: unknown) => handleRoleBuiltInChange(record, Boolean(checked))"
+          />
+        </template>
+        <template v-else-if="column.key === 'roleStatus'">
+          <a-switch
+            :checked="getRoleField(record, 'roleStatus') === 1"
+            :disabled="getRoleField(record, 'isBuiltIn') === 1"
+            :checked-children="t('common.page.button.enable')"
+            :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleRoleStatusChange(record, Boolean(checked))"
           />
         </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -101,11 +119,27 @@
       @cancel="handleFormCancel"
     >
       <RoleForm
+        :key="formData?.roleId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
       />
     </TaktModal>
+
+    <!-- 分配可访问公司（RBAC：api/TaktRbacs/roles/{roleId}/companies） -->
+    <AssignRoleCompanies
+      v-model:open="assignRoleCompaniesVisible"
+      :role="currentAssignRole"
+      @success="handleAssignRoleSuccess"
+    />
+
+    <!-- 分配菜单（RBAC：api/TaktRbacs/roles/{roleId}/menus） -->
+    <AssignRoleMenus
+      v-model:open="assignRoleMenusVisible"
+      :role="currentAssignRole"
+      @success="handleAssignRoleSuccess"
+    />
+
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
@@ -137,10 +171,10 @@
       </div>
       <div v-show="isFieldVisible('dataScope')">
       <a-form-item :label="t('entity.role.datascope')">
-        <a-textarea
+        <TaktSelect
           v-model:value="advancedQueryForm.dataScope"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.role.datascope') })"
-          :rows="2"
+          dict-type="sys_data_scope_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.role.datascope') })"
           allow-clear
         />
       </a-form-item>
@@ -156,10 +190,11 @@
       </div>
       <div v-show="isFieldVisible('isBuiltIn')">
       <a-form-item :label="t('entity.role.isbuiltin')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.role.isbuiltin') })"
-          style="width: 100%"
+          dict-type="sys_yes_no_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.role.isbuiltin') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -167,7 +202,7 @@
       <a-form-item :label="t('entity.role.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.roleStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.role.status') })"
           allow-clear
         />
@@ -205,11 +240,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -264,6 +299,7 @@
 </template>
 
 <script setup lang="ts">
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 角色实体 代表系统角色管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/identity/role
@@ -274,11 +310,13 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import RoleForm from './components/role-form.vue'
-import { getRoleList, getRoleById, createRole, updateRole, deleteRoleById, deleteRoleBatch, getRoleTemplate, importRole, exportRole } from '@/api/identity/role'
+import AssignRoleCompanies from './components/assign-role-companies.vue'
+import AssignRoleMenus from './components/assign-role-menus.vue'
+import { getRoleList, getRoleById, createRole, updateRole, deleteRoleById, deleteRoleBatch, updateRoleStatus, updateRoleBuiltIn, getRoleTemplate, importRole, exportRole } from '@/api/identity/role'
 import type { Role, RoleQuery, RoleCreate, RoleUpdate } from '@/types/identity/role'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiBuilding2Line, RiMenuLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -296,9 +334,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Role[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -317,7 +355,8 @@ const formData = ref<Partial<Role>>({})
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -330,7 +369,7 @@ const advancedQueryForm = ref({
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -344,13 +383,19 @@ const queryFieldsMeta = computed(() => [
   { key: 'description', label: t('entity.role.description') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
+/** 分配角色公司弹窗 */
+const assignRoleCompaniesVisible = ref(false)
+/** 分配角色菜单弹窗 */
+const assignRoleMenusVisible = ref(false)
+/** 当前分配操作的目标角色 */
+const currentAssignRole = ref<Role | null>(null)
 /** 导入对话框是否打开 */
 const importVisible = ref(false)
 /** 表格当前可见列 key */
@@ -362,9 +407,62 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {RoleQuery} 查询 DTO
+ */
+type RoleQueryTrimmedKey =
+  | 'roleCode'
+  | 'roleName'
+  | 'description'
+  | 'createdAtStart'
+  | 'createdAtEnd'
+  | 'ExtField'
+  | 'remark'
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+function buildListQuery(overrides?: Partial<RoleQuery>): RoleQuery {
+  const form = advancedQueryForm.value
+  const query: RoleQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: RoleQueryTrimmedKey, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v
+    }
+  }
+  assignTrimmed('roleCode', form.roleCode)
+  assignTrimmed('roleName', form.roleName)
+  assignTrimmed('description', form.description)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  if (form.dataScope !== undefined && form.dataScope !== null) {
+    query.dataScope = form.dataScope
+  }
+  if (form.sortOrder !== undefined && form.sortOrder !== null) {
+    query.sortOrder = form.sortOrder
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    query.isBuiltIn = form.isBuiltIn
+  }
+  if (form.roleStatus !== undefined && form.roleStatus !== null) {
+    query.roleStatus = form.roleStatus
+  }
+  return query
+}
+
+/** 页面挂载：加载分页配置后拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
@@ -407,10 +505,9 @@ const columns = computed<TableColumnsType>(() => [
     title: t('entity.role.datascope'),
     dataIndex: 'dataScope',
     key: 'dataScope',
-    width: 120,
+    width: 140,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoleField(record, 'dataScope') ?? ''
   },
   {
     title: t('entity.role.isbuiltin'),
@@ -419,7 +516,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoleField(record, 'isBuiltIn') ?? ''
   },
   {
     title: t('entity.role.status'),
@@ -438,42 +534,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getRoleField(record, 'description') ?? ''
   },
-  {
-    title: t('entity.role.menus'),
-    dataIndex: 'roleMenus',
-    key: 'roleMenus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoleField(record, 'roleMenus') ?? ''
-  },
-  {
-    title: t('entity.role.companies'),
-    dataIndex: 'roleCompanies',
-    key: 'roleCompanies',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoleField(record, 'roleCompanies') ?? ''
-  },
-  {
-    title: t('entity.role.depts'),
-    dataIndex: 'roleDepts',
-    key: 'roleDepts',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoleField(record, 'roleDepts') ?? ''
-  },
-  {
-    title: t('entity.role.userroles'),
-    dataIndex: 'userRoles',
-    key: 'userRoles',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoleField(record, 'userRoles') ?? ''
-  },
   CreateActionColumn({
     actions: [
       {
@@ -483,6 +543,22 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiEditLine,
         permission: 'identity:role:update',
         onClick: (record: Role) => handleEdit(record)
+      },
+      {
+        key: 'allocate-role-company',
+        label: t('common.page.button.allocate') + t('entity.company._self'),
+        shape: 'plain',
+        icon: RiBuilding2Line,
+        permission: 'identity:role:update',
+        onClick: (record: Role) => handleAssignRoleCompanies(record)
+      },
+      {
+        key: 'allocate-role-menu',
+        label: t('common.page.button.allocate') + t('entity.menu._self'),
+        shape: 'plain',
+        icon: RiMenuLine,
+        permission: 'identity:role:update',
+        onClick: (record: Role) => handleAssignRoleMenus(record)
       },
       {
         key: 'delete',
@@ -504,6 +580,23 @@ const getRoleId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getRoleField = (record: any, field: string): any => record?.[field]
+
+/** 打开分配角色可访问公司弹窗 */
+function handleAssignRoleCompanies(record: Role) {
+  currentAssignRole.value = record
+  assignRoleCompaniesVisible.value = true
+}
+
+/** 打开分配角色菜单弹窗 */
+function handleAssignRoleMenus(record: Role) {
+  currentAssignRole.value = record
+  assignRoleMenusVisible.value = true
+}
+
+/** 分配角色公司/菜单成功后刷新列表 */
+function handleAssignRoleSuccess() {
+  loadData()
+}
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -547,16 +640,7 @@ const onClickRow = (record: Role) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: RoleQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getRoleList(params)
+    const res = await getRoleList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -574,8 +658,67 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
+}
+
+/**
+ * 表格行内切换角色状态（sys_normal_disable_status：1=启用，0=禁用）
+ * @param record 当前行
+ * @param checked 开关是否选中（启用）
+ */
+async function handleRoleStatusChange(record: Role, checked: boolean) {
+  const id = getRoleId(record)
+  if (!id || getRoleField(record, 'isBuiltIn') === 1) return
+  const newStatus = checked ? 1 : 0
+  const oldStatus = getRoleField(record, 'roleStatus')
+  const row = dataSource.value.find((item) => getRoleId(item) === id)
+  if (row) {
+    row.roleStatus = newStatus
+  }
+  try {
+    await updateRoleStatus({ roleId: id, roleStatus: newStatus })
+    message.success(t('common.feedback.updated'))
+  } catch (error: unknown) {
+    if (row) {
+      row.roleStatus = oldStatus as number
+    }
+    const err = error as { message?: string }
+    logger.error('[Role] 状态更新失败', { error })
+    message.error(err?.message || t('common.feedback.failed'))
+  }
+}
+
+/**
+ * 表格行内切换是否内置（sys_yes_no_type：1=是，0=否；已为内置时不可取消）
+ * @param record 当前行
+ * @param checked 开关是否选中（内置）
+ */
+async function handleRoleBuiltInChange(record: Role, checked: boolean) {
+  const id = getRoleId(record)
+  if (!id || getRoleField(record, 'isBuiltIn') === 1) {
+    return
+  }
+  const newBuiltIn = checked ? 1 : 0
+  if (newBuiltIn === 0) {
+    return
+  }
+  const oldBuiltIn = getRoleField(record, 'isBuiltIn')
+  const row = dataSource.value.find((item) => getRoleId(item) === id)
+  if (row) {
+    row.isBuiltIn = newBuiltIn
+  }
+  try {
+    await updateRoleBuiltIn({ roleId: id, isBuiltIn: newBuiltIn })
+    message.success(t('common.feedback.updated'))
+  } catch (error: unknown) {
+    if (row) {
+      row.isBuiltIn = oldBuiltIn as number
+    }
+    const err = error as { message?: string }
+    logger.error('[Role] 内置标识更新失败', { error })
+    message.error(err?.message || t('common.feedback.failed'))
+  }
 }
 
 /** 重置查询条件并刷新列表 */
@@ -591,10 +734,10 @@ function handleReset() {
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -680,16 +823,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: RoleQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportRole(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportRole(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -757,7 +895,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -772,7 +910,7 @@ function handleAdvancedQueryReset() {
   description: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -802,23 +940,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.identity-role {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

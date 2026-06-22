@@ -37,7 +37,7 @@ public class TaktEmployee : TaktCompanyEntityBase
     /// <summary>
     /// 姓名
     /// </summary>
-    [SugarColumn(ColumnName = "name", ColumnDescription = "姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "name", ColumnDescription = "姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
@@ -47,22 +47,22 @@ public class TaktEmployee : TaktCompanyEntityBase
     public int Gender { get; set; } = 0;
 
     /// <summary>
-    /// 出生日期
+    /// 出生日期（人事档案必填）
     /// </summary>
-    [SugarColumn(ColumnName = "birth_date", ColumnDescription = "出生日期", ColumnDataType = "datetime", IsNullable = true)]
-    public DateTime? BirthDate { get; set; }
+    [SugarColumn(ColumnName = "birth_date", ColumnDescription = "出生日期", ColumnDataType = "datetime", IsNullable = false)]
+    public DateTime BirthDate { get; set; }
 
     /// <summary>
-    /// 身份证号
+    /// 身份证号（人事档案必填）
     /// </summary>
-    [SugarColumn(ColumnName = "id_card_no", ColumnDescription = "身份证号", ColumnDataType = "varchar", Length = 18, IsNullable = true)]
-    public string? IdCardNo { get; set; }
+    [SugarColumn(ColumnName = "id_card_no", ColumnDescription = "身份证号", ColumnDataType = "varchar", Length = 18, IsNullable = false)]
+    public string IdCardNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 手机号码
+    /// 手机号码（人事档案必填）
     /// </summary>
-    [SugarColumn(ColumnName = "mobile", ColumnDescription = "手机号码", ColumnDataType = "varchar", Length = 11, IsNullable = true)]
-    public string? Mobile { get; set; }
+    [SugarColumn(ColumnName = "mobile", ColumnDescription = "手机号码", ColumnDataType = "varchar", Length = 11, IsNullable = false)]
+    public string Mobile { get; set; } = string.Empty;
 
     /// <summary>
     /// 电子邮箱
@@ -71,28 +71,28 @@ public class TaktEmployee : TaktCompanyEntityBase
     public string? Email { get; set; }
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place 编码或文本）
+    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
     /// </summary>
-    [SugarColumn(ColumnName = "native_place", ColumnDescription = "籍贯", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? NativePlace { get; set; }
+    [SugarColumn(ColumnName = "native_place", ColumnDescription = "籍贯", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
+    public string NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_group 编码或文本）
+    /// 民族（字典 hr_ethnic_code，1～56）
     /// </summary>
-    [SugarColumn(ColumnName = "ethnicity", ColumnDescription = "民族", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
-    public string? Ethnicity { get; set; }
+    [SugarColumn(ColumnName = "ethnicity", ColumnDescription = "民族", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int Ethnicity { get; set; } = 1;
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_status 编码或文本）
+    /// 政治面貌（字典 hr_political_status，0～12；人事档案必填）
     /// </summary>
-    [SugarColumn(ColumnName = "political_status", ColumnDescription = "政治面貌", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
-    public string? PoliticalStatus { get; set; }
+    [SugarColumn(ColumnName = "political_status", ColumnDescription = "政治面貌", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int PoliticalStatus { get; set; } = 0;
 
     /// <summary>
-    /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
+    /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
     /// </summary>
-    [SugarColumn(ColumnName = "marital_status", ColumnDescription = "婚姻状况", ColumnDataType = "int", IsNullable = true)]
-    public int? MaritalStatus { get; set; }
+    [SugarColumn(ColumnName = "marital_status", ColumnDescription = "婚姻状况", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
     /// 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
@@ -113,43 +113,43 @@ public class TaktEmployee : TaktCompanyEntityBase
     public string? Major { get; set; }
 
     /// <summary>
-    /// 实际上岗日期（JoinedDate：入职上班；招聘录用见人才管理 TaktTalentOffer）
+    /// 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
     /// </summary>
     [SugarColumn(ColumnName = "joined_date", ColumnDescription = "实际上岗日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? JoinedDate { get; set; }
 
     /// <summary>
-    /// 试用期结束日期
+    /// 试用期结束日期（投影字段，由上岗审批通过后回写）
     /// </summary>
     [SugarColumn(ColumnName = "probation_end_date", ColumnDescription = "试用期结束日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ProbationEndDate { get; set; }
 
     /// <summary>
-    /// 转正日期
+    /// 转正日期（投影字段，由上岗审批通过后回写）
     /// </summary>
     [SugarColumn(ColumnName = "regular_date", ColumnDescription = "转正日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? RegularDate { get; set; }
 
     /// <summary>
-    /// 离职日期
+    /// 离职日期（投影字段，由离职审批通过后回写）
     /// </summary>
     [SugarColumn(ColumnName = "termination_date", ColumnDescription = "离职日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? TerminationDate { get; set; }
 
     /// <summary>
-    /// 最后工作日
+    /// 最后工作日（投影字段，由离职审批通过后回写）
     /// </summary>
     [SugarColumn(ColumnName = "last_work_date", ColumnDescription = "最后工作日", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? LastWorkDate { get; set; }
 
     /// <summary>
-    /// 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+    /// 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
     /// </summary>
     [SugarColumn(ColumnName = "resignation_type", ColumnDescription = "离职类型", ColumnDataType = "int", IsNullable = true)]
     public int? ResignationType { get; set; }
 
     /// <summary>
-    /// 离职原因
+    /// 离职原因（投影字段，由离职审批通过后回写）
     /// </summary>
     [SugarColumn(ColumnName = "resignation_reason", ColumnDescription = "离职原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? ResignationReason { get; set; }
@@ -161,13 +161,13 @@ public class TaktEmployee : TaktCompanyEntityBase
     public int EmployeeStatus { get; set; } = 1;
 
     /// <summary>
-    /// 当前主部门ID（任职快照，与最新已生效上岗单同步）
+    /// 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
     /// </summary>
     [SugarColumn(ColumnName = "primary_dept_id", ColumnDescription = "当前主部门ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? PrimaryDeptId { get; set; }
 
     /// <summary>
-    /// 当前主岗位ID（任职快照）
+    /// 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
     /// </summary>
     [SugarColumn(ColumnName = "primary_post_id", ColumnDescription = "当前主岗位ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? PrimaryPostId { get; set; }
@@ -179,22 +179,22 @@ public class TaktEmployee : TaktCompanyEntityBase
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 紧急联系人姓名
+    /// 紧急联系人姓名（人事档案必填）
     /// </summary>
-    [SugarColumn(ColumnName = "emergency_contact_name", ColumnDescription = "紧急联系人姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? EmergencyContactName { get; set; }
+    [SugarColumn(ColumnName = "emergency_contact_name", ColumnDescription = "紧急联系人姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string EmergencyContactName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 紧急联系人电话
+    /// 紧急联系人电话（人事档案必填）
     /// </summary>
-    [SugarColumn(ColumnName = "emergency_contact_phone", ColumnDescription = "紧急联系人电话", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
-    public string? EmergencyContactPhone { get; set; }
+    [SugarColumn(ColumnName = "emergency_contact_phone", ColumnDescription = "紧急联系人电话", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
+    public string EmergencyContactPhone { get; set; } = string.Empty;
 
     /// <summary>
-    /// 家庭住址
+    /// 家庭住址（人事档案必填）
     /// </summary>
-    [SugarColumn(ColumnName = "home_address", ColumnDescription = "家庭住址", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
-    public string? HomeAddress { get; set; }
+    [SugarColumn(ColumnName = "home_address", ColumnDescription = "家庭住址", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
+    public string HomeAddress { get; set; } = string.Empty;
 
     /// <summary>
     /// 照片URL

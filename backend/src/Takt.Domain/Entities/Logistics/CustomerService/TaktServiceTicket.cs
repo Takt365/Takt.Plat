@@ -104,13 +104,13 @@ public class TaktServiceTicket : TaktCompanyEntityBase
     public int TicketType { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
-    [SugarColumn(ColumnName = "priority", ColumnDescription = "优先级", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int Priority { get; set; } = 1;
+    [SugarColumn(ColumnName = "priority", ColumnDescription = "优先级", ColumnDataType = "int", IsNullable = false, DefaultValue = "3")]
+    public int Priority { get; set; } = 3;
 
     /// <summary>
-    /// 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
     /// </summary>
     [SugarColumn(ColumnName = "ticket_status", ColumnDescription = "工单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int TicketStatus { get; set; } = 0;

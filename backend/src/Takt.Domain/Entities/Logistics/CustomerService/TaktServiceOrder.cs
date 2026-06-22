@@ -170,7 +170,19 @@ public class TaktServiceOrder : TaktCompanyEntityBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 服务工单列表（外键在子表 <see cref="TaktServiceTicket.ServiceOrderId"/>）
+    /// 关联服务合同
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(ServiceContractId))]
+    public TaktServiceContract? ServiceContract { get; set; }
+
+    /// <summary>
+    /// 关联服务请求
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(ServiceRequestId))]
+    public TaktServiceRequest? ServiceRequest { get; set; }
+
+    /// <summary>
+    /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktServiceTicket.ServiceOrderId))]
     public List<TaktServiceTicket>? Tickets { get; set; }

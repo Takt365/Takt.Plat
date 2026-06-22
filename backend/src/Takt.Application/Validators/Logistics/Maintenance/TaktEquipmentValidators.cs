@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Maintenance
 // 文件名称：TaktEquipmentValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Equipment 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEquipment 生成，请按需审阅）
 // 
@@ -31,19 +31,19 @@ public class TaktEquipmentCreateValidator : AbstractValidator<TaktEquipmentCreat
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.EquipmentCode)
             .NotEmpty().WithMessage("设备编码不能为空")
-            .MaximumLength(40).WithMessage("设备编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("设备编码长度不能超过50个字符");
         RuleFor(x => x.EquipmentName)
             .NotEmpty().WithMessage("设备名称不能为空")
-            .MaximumLength(40).WithMessage("设备名称长度不能超过40个字符");
+            .MaximumLength(200).WithMessage("设备名称长度不能超过200个字符");
         RuleFor(x => x.EquipmentModel)
             .MaximumLength(100).WithMessage("设备型号长度不能超过100个字符");
         RuleFor(x => x.EquipmentSpecification)
@@ -76,7 +76,7 @@ public class TaktEquipmentCreateValidator : AbstractValidator<TaktEquipmentCreat
             .MaximumLength(2000).WithMessage("设备图片长度不能超过2000个字符");
         RuleFor(x => x.EquipmentDocuments)
             .MaximumLength(2000).WithMessage("设备文档长度不能超过2000个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -117,18 +117,18 @@ public class TaktEquipmentImportValidator : AbstractValidator<TaktEquipmentImpor
     public TaktEquipmentImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.EquipmentCode)
             .NotEmpty().WithMessage("设备编码不能为空")
-            .MaximumLength(40).WithMessage("设备编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("设备编码长度不能超过50个字符");
         RuleFor(x => x.EquipmentName)
             .NotEmpty().WithMessage("设备名称不能为空")
-            .MaximumLength(40).WithMessage("设备名称长度不能超过40个字符");
+            .MaximumLength(200).WithMessage("设备名称长度不能超过200个字符");
         RuleFor(x => x.EquipmentModel)
             .MaximumLength(100).WithMessage("设备型号长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.EquipmentModel));
         RuleFor(x => x.EquipmentSpecification)
@@ -145,8 +145,8 @@ public class TaktEquipmentImportValidator : AbstractValidator<TaktEquipmentImpor
             .MaximumLength(100).WithMessage("所属车间长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.WorkshopBy));
         RuleFor(x => x.ProductionLineBy)
             .MaximumLength(100).WithMessage("所属产线长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.ProductionLineBy));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

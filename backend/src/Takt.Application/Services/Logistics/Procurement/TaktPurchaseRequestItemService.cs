@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Services.Logistics.Materials
+// 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestItemService.cs
 // 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
@@ -13,8 +13,8 @@
 using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
-using Takt.Application.Dtos.Logistics.Materials;
-using Takt.Domain.Entities.Logistics.Materials;
+using Takt.Application.Dtos.Logistics.Procurement;
+using Takt.Domain.Entities.Logistics.Procurement;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -22,7 +22,7 @@ using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
 
-namespace Takt.Application.Services.Logistics.Materials;
+namespace Takt.Application.Services.Logistics.Procurement;
 
 /// <summary>
 /// 采购申请明细应用服务
@@ -97,7 +97,7 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
         EnsureThreeLayerContext();
         var list = await _purchaseRequestItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MaterialName,
+            x => x.MaterialName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -320,7 +320,7 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
                 || SqlFunc.ToString(x.EstimatedAmount).Contains(keywords)
                 || (x.ReferenceSupplierCode != null && x.ReferenceSupplierCode.Contains(keywords))
                 || (x.ReferenceSupplierName != null && x.ReferenceSupplierName.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -391,9 +391,9 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
             exp = exp.And(x => x.ReferenceSupplierName != null && x.ReferenceSupplierName.Contains(queryDto.ReferenceSupplierName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

@@ -91,4 +91,10 @@ public class TaktProfitCenter : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
+
+    /// <summary>
+    /// 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktProfitCenterChangeLog.ProfitCenterId))]
+    public List<TaktProfitCenterChangeLog>? ChangeLogs { get; set; }
 }

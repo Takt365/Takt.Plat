@@ -4,14 +4,22 @@
 文件名称:index.vue
 创建时间:2025-01-20
 创建人:Takt365(Cursor AI)
-功能描述:单表格组件,支持虚拟滚动、列宽调整、排序、筛选；按实体基类作用域合并租户/公司/审批默认列
+功能描述:单表格组件,支持虚拟滚动、列宽调整、排序、筛选；始终设置 scroll.y（布局高度，与数据有无无关）
 
 版权信息:Copyright (c) 2025 Takt  All rights reserved.
 免责声明:此软件使用 MIT License,作者不承担任何使用风险。
 ======================================== -->
 <template>
-  <div class="takt-single-table">
-    <div class="takt-single-table__body">
+  <div
+    class="takt-single-table"
+    :class="rootExtraClass"
+  >
+    <div
+      ref="tableBodyRef"
+      class="takt-single-table__body"
+      :class="{ 'takt-single-table__body--fixed-y': hasFixedScrollY }"
+      :style="tableBodyStyle"
+    >
       <a-table
         class="ant-table-striped"
         table-layout="fixed"
@@ -21,14 +29,16 @@
         :pagination="false"
         :row-key="rowKey"
         :row-class-name="(_record, index) => (index % 2 === 1 ? 'table-striped' : '')"
-        :scroll="scrollConfig"
         :virtual="shouldUseVirtual"
         :size="size"
         :bordered="bordered"
         v-bind="{
-          ...$attrs,
+          ...tablePassthroughAttrs,
           ...(effectiveRowSelection ? { 'row-selection': effectiveRowSelection } : {})
         }"
+        :custom-row="customRow"
+        :scroll="scrollConfig"
+        :locale="tableLocale"
         @change="handleTableChange"
         @resize-column="handleResizeColumn"
         @expand="(expanded, record) => emit('expand', expanded, record)"
@@ -83,8 +93,13 @@ import {
 import {
   applyTableColumnPresentation,
   resolveTableScrollConfig,
+  resolveVerticalScrollY,
+  type TaktTableScrollLayout,
 } from '@/utils/table-scroll'
+import { useTaktTableViewportScrollY } from '@/composables/use-takt-table-viewport-scroll-y'
+import { useTaktMasterDetailLrScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
 import { useI18n } from 'vue-i18n'
+import { useAttrs, computed, ref } from 'vue'
 
 type TableRecord = Record<string, unknown>
 type TableSorter = {
@@ -110,14 +125,21 @@ interface Props {
   stripe?: boolean
   /** 是否启用虚拟滚动 */
   virtual?: boolean
-  /** 滚动配置 */
+  /** 滚动配置（仅覆盖 x 或显式 y；未传 y 时 innerHeight - 固定 header/footer 与页壳 300px） */
   scroll?: { x?: number | string | true; y?: number | string } | undefined
+  /**
+   * 表格布局场景（决定视口预留与 scroll.y 计算策略）
+   * page：整页列表；treeRight：左树右表；masterDetailLr/Tb*：主子表；editable：表单内嵌可编辑表
+   */
+  scrollLayout?: TaktTableScrollLayout
   /** 表格尺寸 */
   size?: TableProps['size']
   /** 是否显示边框 */
   bordered?: boolean
   /** 行选择配置 */
   rowSelection?: TableProps['rowSelection'] | undefined
+  /** 自定义行属性（点击选中等，对应 a-table customRow） */
+  customRow?: TableProps['customRow']
   /** 是否默认显示行选择列 */
   showRowSelection?: boolean
   /** 是否默认启用列文本省略 */
@@ -161,9 +183,11 @@ const props = withDefaults(defineProps<Props>(), {
   stripe: true,
   virtual: false,
   scroll: undefined,
+  scrollLayout: 'page',
   size: 'middle',
   bordered: false,
   rowSelection: undefined,
+  customRow: undefined,
   showRowSelection: true,
   defaultEllipsis: true,
   showPagination: false,
@@ -189,8 +213,23 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const attrs = useAttrs()
 
-/** 超过此行数时自动启用虚拟滚动（07-overflow-vue） */
+/** 页面传入的 class 挂到根节点（inheritAttrs: false 时不会自动合并） */
+const rootExtraClass = computed(() => attrs.class)
+
+/** 透传给 a-table 的属性（排除 class/style/customRow，避免破坏 scroll 布局或重复绑定） */
+const tablePassthroughAttrs = computed(() => {
+  const { class: _class, style: _style, customRow: _customRow, ...rest } = attrs
+  return rest
+})
+
+/** 空数据占位（高度由 scroll.y 固定，文案居中显示） */
+const tableLocale = computed(() => ({
+  emptyText: t('common.status.empty'),
+}))
+
+/** 超过此行数时自动启用虚拟滚动（07-overflow-vue）；仅影响 virtual，不影响 scroll.y */
 const AUTO_VIRTUAL_ROW_THRESHOLD = 50
 
 /** 是否启用虚拟滚动：显式 true 或数据量超阈值 */
@@ -245,20 +284,57 @@ const resolvedDisplayColumns = computed(() =>
 )
 
 const handleResizeColumn = (w: number, col: ColumnType<unknown>) => {
-  const mutableCol = col as ResizableColumn
+  const mutableCol = col as ResizableColumn & { resizable?: boolean }
+  if (mutableCol.resizable !== true) {
+    return
+  }
   mutableCol.width = w
   emit('resize-column', w, mutableCol)
 }
+
+/** 表格体 DOM（masterDetailLr 布局内由父级统一测量 scroll.y） */
+const tableBodyRef = ref<HTMLElement | null>(null)
+
+/** 左右主子表：使用 takt-master-detail-table-lr provide 的共享 scroll.y */
+const masterDetailLrScrollYPx = useTaktMasterDetailLrScrollY()
+
+/** 视口动态 scroll.y（px）；与 dataSource 行数无关，空表亦保持同一高度 */
+const viewportScrollYPx = useTaktTableViewportScrollY(computed(() => props.scrollLayout))
 
 const scrollConfig = computed(() =>
   resolveTableScrollConfig({
     columns: resolvedDisplayColumns.value,
     scroll: props.scroll,
     includeRowSelection: effectiveRowSelection.value != null,
-    enableVerticalScroll: shouldUseVirtual.value || props.showPagination,
-    verticalScrollHeight: props.showPagination ? 'calc(100vh - 320px)' : 600,
+    enableVerticalScroll: true,
+    scrollLayout: props.scrollLayout,
+    verticalScrollHeight:
+      props.scroll?.y != null && props.scroll.y !== ''
+        ? props.scroll.y
+        : props.scrollLayout === 'masterDetailLr' && masterDetailLrScrollYPx != null
+          ? masterDetailLrScrollYPx.value
+          : resolveVerticalScrollY(undefined, viewportScrollYPx.value),
   }),
 )
+
+/** 是否已配置固定纵向滚动高度 */
+const hasFixedScrollY = computed(() => {
+  const y = scrollConfig.value.y
+  return y != null && y !== ''
+})
+
+/**
+ * 表格体 CSS 变量（兜底固定高度，与 scroll.y 一致）
+ * @returns 绑定到 __body 的 style
+ */
+const tableBodyStyle = computed(() => {
+  const y = scrollConfig.value.y
+  if (y == null || y === '') {
+    return undefined
+  }
+  const px = typeof y === 'number' ? `${y}px` : String(y)
+  return { '--takt-table-scroll-y': px } as Record<string, string>
+})
 
 /**
  * 分页页码变更
@@ -305,21 +381,45 @@ defineExpose({
   display: flex;
   flex-direction: column;
   min-height: 0;
+  flex: 1 1 auto;
+}
+
+.takt-single-table.h-full {
+  height: 100%;
 }
 
 .takt-single-table__body {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
   min-width: 0;
   overflow: hidden;
+  height: 100%;
 }
 
 .takt-single-table__body :deep(.ant-table-wrapper) {
   width: 100%;
+  max-width: 100%;
   min-width: 0;
 }
 
 .takt-single-table__body :deep(.ant-table-container) {
   min-width: 0;
+  max-width: 100%;
+}
+
+.takt-single-table__body :deep(.ant-table-content) {
+  overflow-x: auto;
+}
+
+/** scroll.y 兜底：空数据/少行时亦保持固定表体高度（不随数据撑开） */
+.takt-single-table__body--fixed-y :deep(.ant-table-body) {
+  min-height: var(--takt-table-scroll-y);
+  max-height: var(--takt-table-scroll-y);
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable;
+}
+
+.takt-single-table__body--fixed-y :deep(.ant-table-placeholder) {
+  min-height: calc(var(--takt-table-scroll-y) - 8px);
 }
 </style>

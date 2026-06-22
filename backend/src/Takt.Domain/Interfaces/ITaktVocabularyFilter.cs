@@ -24,7 +24,7 @@ public interface ITaktVocabularyFilter
     /// 检测文本是否包含敏感词
     /// </summary>
     /// <param name="text">待检测文本</param>
-    /// <param name="minFilterLevel">最低过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）；为空时匹配全部启用词条</param>
+    /// <param name="minFilterLevel">最低过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）；为空时匹配全部启用词条</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>是否命中敏感词</returns>
     Task<bool> ContainsSensitiveWordAsync(

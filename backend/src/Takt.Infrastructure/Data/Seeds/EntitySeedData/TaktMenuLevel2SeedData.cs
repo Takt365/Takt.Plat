@@ -47,7 +47,8 @@ public class TaktMenuLevel2SeedData
 
         // 二级菜单:基于一级菜单的ParentId
         // 注意:菜单为租户级实体,由协调器指定租户
-        var tenantCode = specifiedTenantCode;
+        var tenantCode = specifiedTenantCode
+            ?? throw new ArgumentException("二级菜单种子必须指定租户编码。", nameof(specifiedTenantCode));
 
         int insertCount = 0;
         int updateCount = 0;
@@ -321,10 +322,10 @@ public class TaktMenuLevel2SeedData
             insertCount += insertLogistics1;
             updateCount += updateLogistics1;
 
-            var (insertLogistics2, updateLogistics2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MATERIAL", menu =>
+            var (insertLogistics2, updateLogistics2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MATERIALS", menu =>
             {
                 menu.MenuName = "物料管理";
-                menu.MenuCode = "LOGISTICS_MATERIAL";
+                menu.MenuCode = "LOGISTICS_MATERIALS";
                 menu.I18nKey = "menu.logistics.materials._self";
                 menu.Icon = "RiArchiveLine";
                 menu.ParentId = logisticsMenu.Id;
@@ -340,6 +341,25 @@ public class TaktMenuLevel2SeedData
             insertCount += insertLogistics2;
             updateCount += updateLogistics2;
 
+            var (insertLogisticsProcurement, updateLogisticsProcurement) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_PROCUREMENT", menu =>
+            {
+                menu.MenuName = "采购管理";
+                menu.MenuCode = "LOGISTICS_PROCUREMENT";
+                menu.I18nKey = "menu.logistics.procurement._self";
+                menu.Icon = "RiShoppingBagLine";
+                menu.ParentId = logisticsMenu.Id;
+                menu.MenuType = 0;
+                menu.RoutePath = "/logistics/procurement";
+                menu.ComponentPath = "logistics/procurement";
+                menu.SortOrder = 3;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertLogisticsProcurement;
+            updateCount += updateLogisticsProcurement;
+
             var (insertLogistics3, updateLogistics3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING", menu =>
             {
                 menu.MenuName = "生产执行";
@@ -350,7 +370,7 @@ public class TaktMenuLevel2SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/manufacturing";
                 menu.ComponentPath = "logistics/manufacturing";
-                menu.SortOrder = 3;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -369,7 +389,7 @@ public class TaktMenuLevel2SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/quality";
                 menu.ComponentPath = "logistics/quality";
-                menu.SortOrder = 4;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -388,7 +408,7 @@ public class TaktMenuLevel2SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/service";
                 menu.ComponentPath = "logistics/service";
-                menu.SortOrder = 5;
+                menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -407,7 +427,7 @@ public class TaktMenuLevel2SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/maintenance";
                 menu.ComponentPath = "logistics/maintenance";
-                menu.SortOrder = 6;
+                menu.SortOrder = 7;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -426,7 +446,7 @@ public class TaktMenuLevel2SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/serial";
                 menu.ComponentPath = "logistics/serial";
-                menu.SortOrder = 7;
+                menu.SortOrder = 8;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -590,21 +610,6 @@ public class TaktMenuLevel2SeedData
             });
             insertCount += insertHR7;
             updateCount += updateHR7;
-
-            var legacyHrCompensationBenefitsMenus = await sqlSugarContext.Db.Queryable<TaktMenu>()
-                .Where(m => m.TenantCode == tenantCode && m.IsDeleted == 0)
-                .Where(m => m.MenuCode == "HUMANRESOURCE_COMPENSATION_BENEFITS"
-                    || (m.RoutePath != null && m.RoutePath.StartsWith("/human-resource/compensation-benefits")))
-                .ToListAsync();
-            foreach (var legacyMenu in legacyHrCompensationBenefitsMenus)
-            {
-                legacyMenu.IsDeleted = 1;
-                legacyMenu.IsVisible = 0;
-                legacyMenu.UpdatedAt = DateTime.Now;
-                legacyMenu.UpdatedBy = 900001;
-                await menuRepository.UpdateAsync(legacyMenu);
-                updateCount++;
-            }
         }
 
         // ========== 身份认证下的二级菜单 (SortOrder: 7) ==========
@@ -858,17 +863,17 @@ public class TaktMenuLevel2SeedData
             insertCount += insertCodeDb;
             updateCount += updateCodeDb;
 
-            var (insertCodeTableClone, updateCodeTableClone) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "CODE_TABLE_CLONE", menu =>
+            var (insertCodeTableClone, updateCodeTableClone) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "CODE_DATABASE_TABLE_CLONE", menu =>
             {
                 menu.MenuName = "表克隆";
-                menu.MenuCode = "CODE_TABLE_CLONE";
+                menu.MenuCode = "CODE_DATABASE_TABLE_CLONE";
                 menu.I18nKey = "menu.code.database.tableclone";
                 menu.Icon = "RiFileCopy2Line";
                 menu.ParentId = codeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "code:database:table:list";
-                menu.RoutePath = "/code/database/table-data-clone";
-                menu.ComponentPath = "code/database/table-data-clone/index";
+                menu.Permission = "code:database:table:clone:list";
+                menu.RoutePath = "/code/database/table-clone";
+                menu.ComponentPath = "code/database/table-clone/index";
                 menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -878,15 +883,15 @@ public class TaktMenuLevel2SeedData
             insertCount += insertCodeTableClone;
             updateCount += updateCodeTableClone;
 
-            var (insertCodeDataClone, updateCodeDataClone) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "CODE_DATA_CLONE", menu =>
+            var (insertCodeDataClone, updateCodeDataClone) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "CODE_DATABASE_DATA_CLONE", menu =>
             {
                 menu.MenuName = "数据克隆";
-                menu.MenuCode = "CODE_DATA_CLONE";
+                menu.MenuCode = "CODE_DATABASE_DATA_CLONE";
                 menu.I18nKey = "menu.code.database.dataclone";
                 menu.Icon = "RiFileCopyLine";
                 menu.ParentId = codeMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "code:database:data:list";
+                menu.Permission = "code:database:data:clone:list";
                 menu.RoutePath = "/code/database/data-clone";
                 menu.ComponentPath = "code/database/data-clone/index";
                 menu.SortOrder = 4;
@@ -922,6 +927,26 @@ public class TaktMenuLevel2SeedData
             insertCount += insertFoundation1;
             updateCount += updateFoundation1;
 
+            var (insertFoundationIsoCode, updateFoundationIsoCode) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "FOUNDATION_ISO_CODE", menu =>
+            {
+                menu.MenuName = "ISO编码";
+                menu.MenuCode = "FOUNDATION_ISO_CODE";
+                menu.I18nKey = "menu.foundation.isocode";
+                menu.Icon = "RiBuilding4Line";
+                menu.ParentId = foundationMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "foundation:iso:code:list";
+                menu.RoutePath = "/foundation/iso-code";
+                menu.ComponentPath = "foundation/iso-code/index";
+                menu.SortOrder = 2;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertFoundationIsoCode;
+            updateCount += updateFoundationIsoCode;
+
             var (insertFoundation2, updateFoundation2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "FOUNDATION_DICT", menu =>
             {
                 menu.MenuName = "数据字典";
@@ -933,7 +958,7 @@ public class TaktMenuLevel2SeedData
                 menu.Permission = "foundation:dict:list";
                 menu.RoutePath = "/foundation/dict";
                 menu.ComponentPath = "foundation/dict/index";
-                menu.SortOrder = 2;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -953,7 +978,7 @@ public class TaktMenuLevel2SeedData
                 menu.Permission = "foundation:i18n:list";
                 menu.RoutePath = "/foundation/i18n";
                 menu.ComponentPath = "foundation/i18n/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -973,7 +998,7 @@ public class TaktMenuLevel2SeedData
                 menu.Permission = "foundation:file:list";
                 menu.RoutePath = "/foundation/file";
                 menu.ComponentPath = "foundation/file/index";
-                menu.SortOrder = 4;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -993,7 +1018,7 @@ public class TaktMenuLevel2SeedData
                 menu.Permission = "foundation:cache:list";
                 menu.RoutePath = "/foundation/cache";
                 menu.ComponentPath = "foundation/cache/index";
-                menu.SortOrder = 5;
+                menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1014,7 +1039,7 @@ public class TaktMenuLevel2SeedData
                 menu.Permission = "foundation:vocabulary:list";
                 menu.RoutePath = "/foundation/vocabulary";
                 menu.ComponentPath = "foundation/vocabulary/index";
-                menu.SortOrder = 6;
+                menu.SortOrder = 7;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1034,7 +1059,7 @@ public class TaktMenuLevel2SeedData
                 menu.Permission = "foundation:setting:list";
                 menu.RoutePath = "/foundation/setting";
                 menu.ComponentPath = "foundation/setting/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 8;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1054,7 +1079,7 @@ public class TaktMenuLevel2SeedData
                 menu.Permission = "foundation:online:list";
                 menu.RoutePath = "/foundation/online";
                 menu.ComponentPath = "foundation/online/index";
-                menu.SortOrder = 8;
+                menu.SortOrder = 9;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1074,7 +1099,7 @@ public class TaktMenuLevel2SeedData
                 menu.Permission = "foundation:message:list";
                 menu.RoutePath = "/foundation/message";
                 menu.ComponentPath = "foundation/message/index";
-                menu.SortOrder = 9;
+                menu.SortOrder = 10;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;

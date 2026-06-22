@@ -74,6 +74,7 @@ export function getSessionCaptcha(): Promise<TaktCaptchaChallengeDto> {
     method: 'get',
     skipTokenRefresh: true,
     skipLoginAuthError: true,
+    skipErrorNotification: true,
   });
 }
 

@@ -64,7 +64,7 @@ export interface Payroll extends CompanyDtoBase {
   expiryDate?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   payrollStatus: number;
 
@@ -139,7 +139,7 @@ export interface PayrollQuery extends TaktPagedQuery {
   expiryDateEnd?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   payrollStatus?: number;
 
@@ -166,7 +166,7 @@ export interface PayrollQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -228,7 +228,7 @@ export interface PayrollCreate {
   expiryDate?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   payrollStatus: number;
 
@@ -245,7 +245,7 @@ export interface PayrollCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -282,7 +282,7 @@ export interface PayrollStatus {
   payrollId: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   payrollStatus: number;
 
@@ -326,7 +326,7 @@ export interface PayrollTemplate {
   formulaSetCode?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   payrollStatus?: number;
 
@@ -343,7 +343,7 @@ export interface PayrollTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -395,7 +395,7 @@ export interface PayrollImport {
   formulaSetCode?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   payrollStatus?: number;
 
@@ -412,7 +412,7 @@ export interface PayrollImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -469,7 +469,7 @@ export interface PayrollExport {
   expiryDate?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   payrollStatus: number;
 
@@ -486,7 +486,7 @@ export interface PayrollExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

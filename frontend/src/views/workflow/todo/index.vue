@@ -14,7 +14,7 @@
   <div class="workflow-todo">
     <TaktQueryBar
       v-model="queryKeyword"
-      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowInstance.processname'), t('entity.flowInstance.processtitle')].join(t('common.tip.or')) })"
+      :placeholder="searchPlaceholder"
       :loading="loading"
       @search="handleSearch"
       @reset="handleReset"
@@ -66,7 +66,7 @@
       <div class="todo-modal__sections">
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.instance.page.taskFormContent') }}
+            {{ t('workflow.instance.page.task.form.content') }}
           </div>
           <TaskFormContent :detail="taskDetail" />
           <takt-flow-pending-add-approvers-panel
@@ -80,19 +80,19 @@
           class="todo-modal__section"
         >
           <div class="todo-modal__section-title">
-            {{ t('workflow.todo.page.cashierPayoutMethod') }}
+            {{ t('workflow.todo.page.cashier.payout.method') }}
           </div>
           <a-select
             v-model:value="cashierPayoutChannel"
             :options="cashierPayoutOptions"
             allow-clear
-            :placeholder="t('workflow.todo.page.cashierPayoutRequired')"
+            :placeholder="t('workflow.todo.page.cashier.payout.required')"
             style="width: 100%"
           />
         </div>
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.todo.page.taskApproveAction') }}
+            {{ t('workflow.todo.page.task.approve.action') }}
           </div>
           <ApproveForm
             ref="approveFormRef"
@@ -114,7 +114,7 @@
       <div class="todo-modal__sections">
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.instance.page.taskFormContent') }}
+            {{ t('workflow.instance.page.task.form.content') }}
           </div>
           <TaskFormContent :detail="taskDetail" />
           <takt-flow-pending-add-approvers-panel
@@ -125,7 +125,7 @@
         </div>
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.todo.page.taskApproveAction') }}
+            {{ t('workflow.todo.page.task.approve.action') }}
           </div>
           <TransferForm
             ref="transferFormRef"
@@ -148,7 +148,7 @@
       <div class="todo-modal__sections">
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.instance.page.taskFormContent') }}
+            {{ t('workflow.instance.page.task.form.content') }}
           </div>
           <TaskFormContent :detail="taskDetail" />
           <takt-flow-pending-add-approvers-panel
@@ -159,7 +159,7 @@
         </div>
         <div class="todo-modal__section">
           <div class="todo-modal__section-title">
-            {{ t('workflow.todo.page.taskApproveAction') }}
+            {{ t('workflow.todo.page.task.approve.action') }}
           </div>
           <AddSignForm
             ref="addSignFormRef"
@@ -177,25 +177,25 @@
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
-      <a-form-item :label="t('entity.flowInstance.instancecode')">
+      <a-form-item :label="t('entity.flowinstance.instancecode')">
         <a-input v-model:value="advancedQueryForm.instanceCode" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.processkey')">
+      <a-form-item :label="t('entity.flowinstance.processkey')">
         <a-input v-model:value="advancedQueryForm.processKey" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.processname')">
+      <a-form-item :label="t('entity.flowinstance.processname')">
         <a-input v-model:value="advancedQueryForm.processName" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.processtitle')">
+      <a-form-item :label="t('entity.flowinstance.processtitle')">
         <a-input v-model:value="advancedQueryForm.processTitle" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowTask.taskname')">
+      <a-form-item :label="t('entity.flowtask.taskname')">
         <a-input v-model:value="advancedQueryForm.taskName" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.startusername')">
+      <a-form-item :label="t('entity.flowinstance.startusername')">
         <a-input v-model:value="advancedQueryForm.startUserName" allow-clear />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.starttime')">
+      <a-form-item :label="t('entity.flowinstance.starttime')">
         <a-range-picker
           v-model:value="startTimeRange"
           value-format="YYYY-MM-DD HH:mm:ss"
@@ -241,11 +241,16 @@ import AddSignForm from './components/flow-add-sign-form.vue'
 import TaskFormContent from './components/flow-task-form-content.vue'
 import type { FlowTodoItem, FlowInstanceDetail, FlowAddApproverItem, FlowTodoQuery } from '@/types/workflow/flow-engine'
 import type { TaktSelectOption } from '@/types/common'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { useWorkflowSignalRRefresh, WORKFLOW_TABLE_NAMES } from '@/composables/use-workflow-signalr-refresh'
 import { useWorkflowTodoCountStore } from '@/stores/workflow/todo-count'
 const toErrorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error))
 
 const { t } = useI18n()
+/** 列表快捷查询占位文案 */
+const searchPlaceholder = computed(
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.flowtask._self') })
+)
 
 /** 与 `TaktSingleTable` 的 `@resize-column` 第二参数一致（`ResizableColumn`） */
 type TaktResizeColumn = { width?: string | number } & Record<string, unknown>
@@ -260,9 +265,9 @@ function getTaskNodeId(detail: FlowInstanceDetail | null): string | undefined {
 
 const cashierPayoutChannel = ref<number | undefined>(undefined)
 const cashierPayoutOptions = computed(() => [
-  { value: 1, label: t('workflow.todo.page.cashierPayoutBank') },
-  { value: 2, label: t('workflow.todo.page.cashierPayoutCash') },
-  { value: 3, label: t('workflow.todo.page.cashierPayoutRepay') }
+  { value: 1, label: t('workflow.todo.page.cashier.payout.bank') },
+  { value: 2, label: t('workflow.todo.page.cashier.payout.cash') },
+  { value: 3, label: t('workflow.todo.page.cashier.payout.repay') }
 ])
 
 const loading = ref(false)
@@ -280,19 +285,19 @@ const advancedQueryForm = ref({
 /** 发起时间范围（高级查询） */
 const startTimeRange = ref<[string, string] | undefined>(undefined)
 const dataSource = ref<FlowTodoItem[]>([])
-const currentPage = ref(1)
-const pageSize = ref(10)
+const currentPage = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 /** 列可见键（未启用列设置时保持空数组，展示全部列） */
 const visibleColumnKeys = ref<string[]>([])
 
 const columns = computed<TableColumnsType>(() => [
-  { title: t('entity.flowInstance.instancecode'), dataIndex: 'instanceCode', key: 'instanceCode', width: 200, resizable: true, ellipsis: true },
-  { title: t('entity.flowInstance.processname'), dataIndex: 'processName', key: 'processName', width: 120, resizable: true, ellipsis: true },
-  { title: t('entity.flowInstance.processtitle'), dataIndex: 'processTitle', key: 'processTitle', ellipsis: true, resizable: true },
-  { title: t('entity.flowTask.taskname'), dataIndex: 'taskName', key: 'taskName', width: 100, resizable: true, ellipsis: true },
-  { title: t('entity.flowInstance.startusername'), dataIndex: 'startUserName', key: 'startUserName', width: 90, resizable: true, ellipsis: true },
-  { title: t('entity.flowInstance.starttime'), dataIndex: 'startTime', key: 'startTime', width: 170, resizable: true },
+  { title: t('entity.flowinstance.instancecode'), dataIndex: 'instanceCode', key: 'instanceCode', width: 200, resizable: true, ellipsis: true },
+  { title: t('entity.flowinstance.processname'), dataIndex: 'processName', key: 'processName', width: 120, resizable: true, ellipsis: true },
+  { title: t('entity.flowinstance.processtitle'), dataIndex: 'processTitle', key: 'processTitle', ellipsis: true, resizable: true },
+  { title: t('entity.flowtask.taskname'), dataIndex: 'taskName', key: 'taskName', width: 100, resizable: true, ellipsis: true },
+  { title: t('entity.flowinstance.startusername'), dataIndex: 'startUserName', key: 'startUserName', width: 90, resizable: true, ellipsis: true },
+  { title: t('entity.flowinstance.starttime'), dataIndex: 'startTime', key: 'startTime', width: 170, resizable: true },
   CreateActionColumn<FlowTodoItem>({
     width: 148,
     actions: [
@@ -557,7 +562,7 @@ async function handleApproveOk() {
     getTaskNodeId(detail) === CASHIER_ROUTE_NODE_ID &&
     cashierPayoutChannel.value == null
   ) {
-    message.warning(t('workflow.todo.page.cashierPayoutRequired'))
+    message.warning(t('workflow.todo.page.cashier.payout.required'))
     return
   }
   let frmDataPayload: string | undefined

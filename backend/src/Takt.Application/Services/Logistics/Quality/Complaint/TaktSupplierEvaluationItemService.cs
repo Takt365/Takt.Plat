@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供应商评价考核项目明细应用服务实现
 // 
@@ -100,8 +100,8 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
     {
         EnsureThreeLayerContext();
         var list = await _supplierEvaluationItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.ItemName,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.RectificationStatus == 1,
+            x => x.ItemName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -367,7 +367,7 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
                 || (x.ImprovementRequirement != null && x.ImprovementRequirement.Contains(keywords))
                 || SqlFunc.ToString(x.RectificationRequired).Contains(keywords)
                 || SqlFunc.ToString(x.RectificationStatus).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.RectificationDeadline).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -449,9 +449,9 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
             exp = exp.And(x => x.RectificationStatus == queryDto.RectificationStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

@@ -132,7 +132,7 @@ public class TaktAnnouncementWorkflowSeedData : ITaktSeedDataCoordinator
         var rules = new object[]
         {
             new { field = "title", title = "公告标题", type = "input" },
-            new { field = "announcementType", title = "公告类型", type = "select", props = new { dictType = "routine_announcement_type" } },
+            new { field = "announcementType", title = "公告类型", type = "select", props = new { dictType = "sys_announcement_category" } },
             new { field = "summary", title = "摘要", type = "textarea", props = new { rows = 2 } },
             new { field = "content", title = "公告内容", type = "textarea", props = new { rows = 6 } },
             new { field = "targetScope", title = "目标范围", type = "select", props = new { options = new[] { new { label = "全员", value = "all" }, new { label = "本公司", value = "company" } } } },
@@ -189,7 +189,7 @@ public class TaktAnnouncementWorkflowSeedData : ITaktSeedDataCoordinator
                 FormConfig = formConfig,
                 FormVersion = "v1.0.0",
                 IsDatasource = 1,
-                RelatedDataBaseName = "TaktSqlSugarContext",
+                RelatedDataBaseName = tenantCode,
                 RelatedTableName = "takt_routine_announcement",
                 RelatedFormField = relatedField,
                 SortOrder = 12,
@@ -200,6 +200,7 @@ public class TaktAnnouncementWorkflowSeedData : ITaktSeedDataCoordinator
         }
         form.FormName = "公告审批表";
         form.FormConfig = formConfig;
+        form.RelatedDataBaseName = tenantCode;
         form.RelatedTableName = "takt_routine_announcement";
         form.RelatedFormField = relatedField;
         form.IsDatasource = 1;

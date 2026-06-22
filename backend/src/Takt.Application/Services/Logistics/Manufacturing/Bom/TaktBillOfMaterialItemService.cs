@@ -32,7 +32,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
 {
     private readonly ITaktCompanyRepository<TaktBillOfMaterialItem> _billOfMaterialItemRepository;
     private readonly ITaktCompanyRepository<TaktBillOfMaterial> _billOfMaterialRepository;
-    private readonly ITaktCompanyRepository<TaktMaterial> _materialRepository;
+    private readonly ITaktCompanyRepository<TaktMaterialPlant> _materialRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -49,7 +49,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     public TaktBillOfMaterialItemService(
         ITaktCompanyRepository<TaktBillOfMaterialItem> billOfMaterialItemRepository,
         ITaktCompanyRepository<TaktBillOfMaterial> billOfMaterialRepository,
-        ITaktCompanyRepository<TaktMaterial> materialRepository,
+        ITaktCompanyRepository<TaktMaterialPlant> materialRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -106,7 +106,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
         EnsureThreeLayerContext();
         var list = await _billOfMaterialItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MaterialCode,
+            x => x.MaterialCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -382,7 +382,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
                 || SqlFunc.ToString(x.SubstitutePriority).Contains(keywords)
                 || SqlFunc.ToString(x.IsOptional).Contains(keywords)
                 || SqlFunc.ToString(x.IsPhantom).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -468,9 +468,9 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
             exp = exp.And(x => x.IsPhantom == queryDto.IsPhantom);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

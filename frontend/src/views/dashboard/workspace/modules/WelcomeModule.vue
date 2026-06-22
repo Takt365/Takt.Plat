@@ -63,7 +63,6 @@ import { RiLightbulbLine } from '@remixicon/vue'
 import { storeToRefs } from 'pinia'
 import { getCurrentUser } from '@/api/identity/auths'
 import { useUserStore } from '@/stores/identity/user'
-import { useTenantStore } from '@/stores/identity/tenant'
 import { useLocaleStore } from '@/stores/foundation/locale'
 import type { HolidayTheme } from '@/types/human-resource/attendance/holiday'
 import { normalizeUserInfoProfile } from '@/utils/takt-user-profile-normalize'
@@ -163,12 +162,7 @@ async function resolveDisplayName(): Promise<void> {
  * @returns {Promise<void>}
  */
 async function syncHolidayTheme(): Promise<void> {
-  const tenantCode = safeTrim(useTenantStore().tenantCode)
-  const companyCode = safeTrim(useTenantStore().companyCode)
-  if (!tenantCode || !companyCode) {
-    return
-  }
-  await userStore.loadHolidayThemeByCompany(tenantCode, companyCode)
+  await userStore.loadHolidayThemeForCurrentSession()
 }
 
 /**

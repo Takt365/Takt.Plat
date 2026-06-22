@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/src/types/logistics/manufacturing/bom
+// 命名空间：frontend/src/types/logistics/materials
 // 文件名称：packaging.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
-// 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -31,12 +31,17 @@ export interface Packaging extends CompanyDtoBase {
   /**
    * 工厂代码
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 物料编码（关联到物料表）
    */
   materialCode: string;
+
+  /**
+   * 物料名称
+   */
+  materialName: string;
 
   /**
    * 海关商品编码（HS Code）
@@ -174,6 +179,11 @@ export interface PackagingQuery extends TaktPagedQuery {
   materialCode?: string;
 
   /**
+   * 物料名称
+   */
+  materialName?: string;
+
+  /**
    * 海关商品编码（HS Code）
    */
   hsCode?: string;
@@ -291,7 +301,7 @@ export interface PackagingQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -325,12 +335,17 @@ export interface PackagingCreate {
   /**
    * 工厂代码
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 物料编码（关联到物料表）
    */
   materialCode: string;
+
+  /**
+   * 物料名称
+   */
+  materialName: string;
 
   /**
    * 海关商品编码（HS Code）
@@ -433,14 +448,9 @@ export interface PackagingCreate {
   packagingDescription?: string;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -511,6 +521,11 @@ export interface PackagingTemplate {
   materialCode?: string;
 
   /**
+   * 物料名称
+   */
+  materialName?: string;
+
+  /**
    * 海关商品编码（HS Code）
    */
   hsCode?: string;
@@ -556,14 +571,9 @@ export interface PackagingTemplate {
   tariffRateType?: string;
 
   /**
-   * 重量单位（如：KG、G、T等）
-   */
-  weightUnit?: string;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -605,6 +615,11 @@ export interface PackagingImport {
   materialCode?: string;
 
   /**
+   * 物料名称
+   */
+  materialName?: string;
+
+  /**
    * 海关商品编码（HS Code）
    */
   hsCode?: string;
@@ -650,14 +665,9 @@ export interface PackagingImport {
   tariffRateType?: string;
 
   /**
-   * 重量单位（如：KG、G、T等）
-   */
-  weightUnit?: string;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -686,12 +696,17 @@ export interface PackagingExport {
   /**
    * 工厂代码
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 物料编码（关联到物料表）
    */
   materialCode: string;
+
+  /**
+   * 物料名称
+   */
+  materialName: string;
 
   /**
    * 海关商品编码（HS Code）
@@ -801,7 +816,7 @@ export interface PackagingExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

@@ -17,7 +17,7 @@ namespace Takt.Domain.Entities.HumanResource.Benefits;
 /// <summary>
 /// 员工福利方案（非现金福利参与配置）
 /// </summary>
-[SugarTable("takt_human_resource_BENEFITS_EMP_plan", "员工福利方案表")]
+[SugarTable("takt_human_resource_benefits_emp_benefit_plan", "员工福利方案表")]
 [SugarIndex("ix_emp_benefit_plan_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_emp_benefit_plan_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_emp_benefit_plan_employee_benefit", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EmployeeId), OrderByType.Asc, nameof(BenefitItemId), OrderByType.Asc, false)]

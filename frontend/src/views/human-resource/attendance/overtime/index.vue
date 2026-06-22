@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="human-resource-attendance-overtime">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -25,14 +25,12 @@
       delete-permission="humanresource:attendance:overtime:delete"
       import-permission="humanresource:attendance:overtime:import"
       export-permission="humanresource:attendance:overtime:export"
-      start-flow-permission="humanresource:attendance:overtime:update"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-start-flow="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -43,13 +41,10 @@
       :update-loading="loading"
       :delete-disabled="deleteDisabled"
       :delete-loading="loading"
-      :start-flow-disabled="submitApprovalDisabled"
-      :start-flow-loading="submitApprovalLoading"
       :refresh-loading="loading"
       @create="handleCreate"
       @update="handleUpdate"
       @delete="handleDelete"
-      @start-flow="handleSubmitApproval"
       @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
@@ -57,26 +52,27 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="approval"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'overtimeId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getOvertimeId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getOvertimeId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="overtimeId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'overtimeType'">
           <TaktDictTag
@@ -87,49 +83,30 @@
         <template v-else-if="column.key === 'overtimeStatus'">
           <TaktDictTag
             :value="getOvertimeField(record, 'overtimeStatus')"
-            dict-type="hr_overtime_status"
+            dict-type="sys_approval_status"
           />
         </template>
       </template>
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.overtimeItem._self') }}</div>
-          <a-table
-            v-if="hasOvertimeItemRows(record)"
-            :columns="overtimeItemExpandColumns"
-            :data-source="getOvertimeItemRows(record)"
-            :row-key="(row: OvertimeItem, index?: number) => row?.overtimeItemId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <OvertimeItemPanel
+          ref="overtimeItemPanelRef"
+          class="min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <OvertimeForm
+        :key="formData?.overtimeId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -151,6 +128,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.deptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -160,6 +139,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.deptname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -272,6 +253,8 @@
         <a-input
           v-model:value="advancedQueryForm.reason"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.reason') })"
+          show-count
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
@@ -281,15 +264,8 @@
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.relatedplant') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.overtime.flowinstanceid')">
-        <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.flowinstanceid') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -299,6 +275,8 @@
         <a-input
           v-model:value="advancedQueryForm.handlingBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.handlingby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -308,6 +286,8 @@
         <a-input
           v-model:value="advancedQueryForm.handlingAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.handlingatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -317,6 +297,8 @@
         <a-input
           v-model:value="advancedQueryForm.handlingAtEnd"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.handlingatend') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -326,6 +308,8 @@
         <a-input
           v-model:value="advancedQueryForm.handlingComment"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.handlingcomment') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
@@ -334,7 +318,7 @@
       <a-form-item :label="t('entity.overtime.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.overtimeStatus"
-          dict-type="hr_overtime_status"
+          dict-type="sys_approval_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.status') })"
           allow-clear
         />
@@ -354,6 +338,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.initiatorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -363,6 +349,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.initiatedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -382,6 +370,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.approvedby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -391,6 +381,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.approvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -402,6 +394,17 @@
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.approvedatend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('flowInstanceId')">
+      <a-form-item :label="t('entity.overtime.flowinstanceid')">
+        <a-input
+          v-model:value="advancedQueryForm.flowInstanceId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.flowinstanceid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -427,12 +430,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -441,8 +463,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -495,14 +519,16 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import OvertimeForm from './components/overtime-form.vue'
-import { getOvertimeList, getOvertimeById, createOvertime, updateOvertime, deleteOvertimeById, deleteOvertimeBatch, getOvertimeTemplate, importOvertime, exportOvertime, submitOvertimeForApproval } from '@/api/human-resource/attendance/overtime'
-import * as overtimeItemApi from '@/api/human-resource/attendance/overtime-item'
-import type { OvertimeItem, OvertimeItemQuery } from '@/types/human-resource/attendance/overtime-item'
-import type { Overtime, OvertimeQuery, OvertimeCreate, OvertimeUpdate } from '@/types/human-resource/attendance/overtime'
+import OvertimeItemPanel from './components/overtime-item-panel.vue'
+import { provideOvertimeMasterContext } from './composables/use-overtime-master-context'
+import { getOvertimeList, getOvertimeById, createOvertime, updateOvertime, deleteOvertimeById, deleteOvertimeBatch, getOvertimeTemplate, importOvertime, exportOvertime, updateOvertimeStatus } from '@/api/human-resource/attendance/overtime'
+import type { Overtime, OvertimeQuery } from '@/types/human-resource/attendance/overtime'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -520,9 +546,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Overtime[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -537,11 +563,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Overtime>>({})
+const formData = ref<Partial<Overtime> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -559,7 +587,6 @@ const advancedQueryForm = ref({
   overtimeType: undefined as number | undefined,
   reason: '',
   relatedPlant: '',
-  flowInstanceId: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
@@ -572,9 +599,10 @@ const advancedQueryForm = ref({
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -593,7 +621,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'overtimeType', label: t('entity.overtime.type') },
   { key: 'reason', label: t('entity.overtime.reason') },
   { key: 'relatedPlant', label: t('entity.overtime.relatedplant') },
-  { key: 'flowInstanceId', label: t('entity.overtime.flowinstanceid') },
   { key: 'handlingBy', label: t('entity.overtime.handlingby') },
   { key: 'handlingAtStart', label: t('entity.overtime.handlingatstart') },
   { key: 'handlingAtEnd', label: t('entity.overtime.handlingatend') },
@@ -606,9 +633,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'approvedBy', label: t('entity.overtime.approvedby') },
   { key: 'approvedAtStart', label: t('entity.overtime.approvedatstart') },
   { key: 'approvedAtEnd', label: t('entity.overtime.approvedatend') },
+  { key: 'flowInstanceId', label: t('entity.overtime.flowinstanceid') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -625,87 +653,119 @@ const entityIdName = 'overtimeId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
-/** 提交审批：须单行且状态为草稿或已驳回 */
-const submitApprovalDisabled = computed(() => {
-  if (selectedRows.value.length !== 1) {
-    return true
+
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideOvertimeMasterContext()
+const overtimeItemPanelRef = ref<InstanceType<typeof OvertimeItemPanel> | null>(null)
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {OvertimeQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<OvertimeQuery>): OvertimeQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: OvertimeQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
   }
-  const status = Number(getOvertimeField(selectedRows.value[0], 'overtimeStatus'))
-  return status !== 0 && status !== 3
-})
-/** 提交审批 loading */
-const submitApprovalLoading = ref(false)
-
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
-
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof OvertimeQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('deptId', form.deptId)
+  assignTrimmed('deptName', form.deptName)
+  assignTrimmed('overtimeDateStart', form.overtimeDateStart)
+  assignTrimmed('overtimeDateEnd', form.overtimeDateEnd)
+  assignTrimmed('plannedStartTimeStart', form.plannedStartTimeStart)
+  assignTrimmed('plannedStartTimeEnd', form.plannedStartTimeEnd)
+  assignTrimmed('plannedEndTimeStart', form.plannedEndTimeStart)
+  assignTrimmed('plannedEndTimeEnd', form.plannedEndTimeEnd)
+  if (form.totalEmployees !== undefined && form.totalEmployees !== null) {
+    query.totalEmployees = form.totalEmployees
+  }
+  if (form.totalPlannedHours !== undefined && form.totalPlannedHours !== null) {
+    query.totalPlannedHours = form.totalPlannedHours
+  }
+  if (form.totalActualHours !== undefined && form.totalActualHours !== null) {
+    query.totalActualHours = form.totalActualHours
+  }
+  if (form.overtimeType !== undefined && form.overtimeType !== null) {
+    query.overtimeType = form.overtimeType
+  }
+  assignTrimmed('reason', form.reason)
+  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('handlingBy', form.handlingBy)
+  assignTrimmed('handlingAtStart', form.handlingAtStart)
+  assignTrimmed('handlingAtEnd', form.handlingAtEnd)
+  assignTrimmed('handlingComment', form.handlingComment)
+  if (form.overtimeStatus !== undefined && form.overtimeStatus !== null) {
+    query.overtimeStatus = form.overtimeStatus
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  assignTrimmed('initiatorId', form.initiatorId)
+  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
+  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
+  assignTrimmed('approvedBy', form.approvedBy)
+  assignTrimmed('approvedAtStart', form.approvedAtStart)
+  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('flowInstanceId', form.flowInstanceId)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
-/** 展开行预览：overtimeItem 列 */
-const overtimeItemExpandColumns = computed(() => [
-  {
-    title: t('entity.overtimeItem.overtimename'),
-    dataIndex: 'overtimeName',
-    key: 'overtimeName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.overtimeItem.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.overtimeItem.employeeid'),
-    dataIndex: 'employeeId',
-    key: 'employeeId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.overtimeItem.employeename'),
-    dataIndex: 'employeeName',
-    key: 'employeeName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.overtimeItem.plannedhours'),
-    dataIndex: 'plannedHours',
-    key: 'plannedHours',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.overtimeItem.actualstarttime'),
-    dataIndex: 'actualStartTime',
-    key: 'actualStartTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.overtimeItem.actualendtime'),
-    dataIndex: 'actualEndTime',
-    key: 'actualEndTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.overtimeItem.actualhours'),
-    dataIndex: 'actualHours',
-    key: 'actualHours',
-    ellipsis: true,
-  },
-])
 
-/** 读取主表行上的 overtimeItem 子表缓存 */
-function getOvertimeItemRows(record: Overtime): OvertimeItem[] {
-  return (record as any)?.items ?? []
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细并刷新子表 */
+function syncMasterSelection(record: Overtime | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getOvertimeId(record) : ''
+  overtimeItemPanelRef.value?.reload?.()
 }
 
-/** 主表行是否已加载 overtimeItem 子表 */
-function hasOvertimeItemRows(record: Overtime): boolean {
-  return getOvertimeItemRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as Overtime
+  const key = getOvertimeId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadOvertimeDetail(record: Overtime): Promise<Overtime | null> {
@@ -724,52 +784,6 @@ async function loadOvertimeDetail(record: Overtime): Promise<Overtime | null> {
     message.error(error?.message || t('common.feedback.load.data.failed'))
     return null
   }
-}
-/** 懒加载 overtimeItem 子表（OvertimeItemQuery + overtimeItemApi，与主表 OvertimeQuery 分离） */
-async function loadOvertimeItemForOvertime(record: Overtime): Promise<OvertimeItem[]> {
-  const masterId = getOvertimeId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: OvertimeItemQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      overtimeId: masterId,
-    }
-    const result = await overtimeItemApi.getOvertimeItemList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getOvertimeId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, items: rows } as Overtime
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureOvertimeChildrenLoaded(record: Overtime) {
-  if (!hasOvertimeItemRows(record)) {
-    await loadOvertimeItemForOvertime(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: Overtime) {
-  const key = getOvertimeId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureOvertimeChildrenLoaded(record)
-  expandedRowKeys.value = [key]
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
@@ -883,24 +897,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getOvertimeField(record, 'relatedPlant') ?? ''
   },
   {
-    title: t('entity.overtime.flowinstanceid'),
-    dataIndex: 'flowInstanceId',
-    key: 'flowInstanceId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getOvertimeField(record, 'flowInstanceId') ?? ''
-  },
-  {
-    title: t('entity.overtime.flowinstancename'),
-    dataIndex: 'flowInstanceName',
-    key: 'flowInstanceName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getOvertimeField(record, 'flowInstanceName') ?? ''
-  },
-  {
     title: t('entity.overtime.handlingby'),
     dataIndex: 'handlingBy',
     key: 'handlingBy',
@@ -966,6 +962,7 @@ const getOvertimeId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getOvertimeField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -973,51 +970,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: Overtime, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getOvertimeId(selectedRow.value) === getOvertimeId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: Overtime[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Overtime) => ({
-  onClick: () => {
-    const key = getOvertimeId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getOvertimeId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: OvertimeQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getOvertimeList(params)
+    const res = await getOvertimeList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1035,7 +1013,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1057,7 +1035,6 @@ function handleReset() {
   overtimeType: undefined as number | undefined,
   reason: '',
   relatedPlant: '',
-  flowInstanceId: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
@@ -1070,20 +1047,22 @@ function handleReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.overtime._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: Overtime) {
@@ -1127,6 +1106,11 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.overtime._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  overtimeItemPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1136,6 +1120,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1167,16 +1153,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: OvertimeQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportOvertime(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportOvertime(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1213,32 +1194,14 @@ async function handleDeleteOne(record: Overtime) {
     onOk: async () => {
       await deleteOvertimeById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: t('entity.overtime._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
 }
-/** 提交加班审批（发起工作流） */
-async function handleSubmitApproval() {
-  if (submitApprovalDisabled.value || selectedRows.value.length !== 1) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.startflow'), entity: t('entity.overtime._self') }))
-    return
-  }
-  const id = getOvertimeId(selectedRows.value[0])
-  if (!id) {
-    return
-  }
-  submitApprovalLoading.value = true
-  try {
-    await submitOvertimeForApproval(id)
-    message.success(t('common.feedback.updated', { target: t('entity.overtime._self') }))
-    await loadData()
-  } catch (err: unknown) {
-    message.error(err instanceof Error ? err.message : t('common.feedback.failed'))
-  } finally {
-    submitApprovalLoading.value = false
-  }
-}
-
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
@@ -1254,6 +1217,10 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteOvertimeBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.overtime._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1266,7 +1233,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1286,7 +1253,6 @@ function handleAdvancedQueryReset() {
   overtimeType: undefined as number | undefined,
   reason: '',
   relatedPlant: '',
-  flowInstanceId: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
@@ -1299,9 +1265,10 @@ function handleAdvancedQueryReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1330,24 +1297,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.human-resource-attendance-overtime {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

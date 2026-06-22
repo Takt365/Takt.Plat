@@ -34,6 +34,13 @@ public interface ITaktGenWorkflowService
     Task<TaktGenTableDto> ImportTableFromDatabaseAsync(string tenantCode, string tableName, TaktGenTableCreateDto? tableOverrides = null);
 
     /// <summary>
+    /// 从数据库同步指定表的列元数据：已存在列更新库表字段属性，新增列插入，库表已删除列物理移除（保留用户生成配置）
+    /// </summary>
+    /// <param name="tableId">代码生成表配置 ID</param>
+    /// <returns>同步后的表配置 DTO（含列列表）</returns>
+    Task<TaktGenTableDto> SyncTableColumnsFromDatabaseAsync(long tableId);
+
+    /// <summary>
     /// 按实体类型初始化数据表（无表流程：代码生成后，手动指定实体类型全名）。与项目内 TaktTableInitializer 一致，使用 SqlSugar CodeFirst.InitTables。
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
@@ -48,13 +55,13 @@ public interface ITaktGenWorkflowService
     Task<IReadOnlyList<string>> GetAvailableEntityTypeFullNamesAsync();
 
     /// <summary>
-    /// 根据表配置与模板映射生成代码：使用 TaktGenTemplateContext + Scriban 渲染，返回文件名与内容（后端、前端）
+    /// 根据表配置与模板生成代码，并按 GenMethod 交付：0=zip；1=自定义路径；2=当前项目落盘。
     /// </summary>
     /// <param name="tableId">代码生成表配置 ID</param>
-    /// <param name="templates">模板键（如 "Entity.cs"）→ Scriban 模板内容</param>
-    /// <param name="sqlCreateBy">生成 SQL 时写入 create_by 的当前登录用户名（如 admin、user01），未传则用表配置 GenAuthor 或 "admin"</param>
-    /// <returns>生成结果：文件名 → 生成后的内容</returns>
-    Task<List<TaktCodeGenResultDto>> GenerateCodeAsync(long tableId, IReadOnlyDictionary<string, string> templates, string? sqlCreateBy = null);
+    /// <param name="request">生成请求（模板、GenMethod、GenPath 可覆盖表配置）</param>
+    /// <param name="sqlCreateBy">生成 SQL 时写入 create_by</param>
+    /// <returns>生成交付结果</returns>
+    Task<TaktCodeGenGenerateResultDto> GenerateCodeAsync(long tableId, TaktGenerateCodeRequestDto request, string? sqlCreateBy = null);
 
     /// <summary>
     /// 根据表配置与模板映射渲染预览文件（目标相对路径 + 内容 + 是否已存在），仅用于模板正确性校验，不执行落盘生成。
@@ -64,11 +71,13 @@ public interface ITaktGenWorkflowService
     /// <param name="resolveTargetRelativePath">根据模板键解析目标相对路径（可空，为空时使用内置规则）</param>
     /// <param name="targetBasePath">目标根路径（可空；为空时不检查是否已存在）</param>
     /// <param name="sqlCreateBy">生成 SQL 时写入 create_by 的当前登录用户名（可空）</param>
+    /// <param name="pathMappings">路径映射：模板键 → 目标相对路径（可空，优先级高于内置规则）</param>
     /// <returns>预览渲染结果（成功文件 + 校验问题）</returns>
     Task<TaktCodeGenPreviewResultDto> GeneratePreviewFilesAsync(
         long tableId,
         IReadOnlyDictionary<string, string> templates,
         Func<TaktGenTableDto, string, string?>? resolveTargetRelativePath = null,
         string? targetBasePath = null,
-        string? sqlCreateBy = null);
+        string? sqlCreateBy = null,
+        IReadOnlyDictionary<string, string>? pathMappings = null);
 }

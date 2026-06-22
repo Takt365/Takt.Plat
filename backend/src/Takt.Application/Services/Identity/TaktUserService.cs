@@ -634,7 +634,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                 return (0, 0, errors);
             }
 
-            var dictSnapshot = await _dictDataService.CreateDictSnapshotAsync("sys_user_type", "sys_yes_no");
+            var dictSnapshot = await _dictDataService.CreateDictSnapshotAsync("sys_user_type", "sys_yes_no_type");
             var entitiesToInsert = new List<TaktUser>();
 
             for (int i = 0; i < importData.Count; i++)
@@ -701,7 +701,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                     }
 
                     if (!dictSnapshot.TryResolveImportCode("sys_user_type", row.UserType, row.UserTypeName, out var userType, out var dictError)
-                        || !dictSnapshot.TryResolveImportCode("sys_yes_no", row.UserStatus, row.StatusName, out var userStatus, out dictError))
+                        || !dictSnapshot.TryResolveImportCode("sys_yes_no_type", row.UserStatus, row.StatusName, out var userStatus, out dictError))
                     {
                         errors.Add($"第{rowNumber}行：{dictError}");
                         fail++;
@@ -770,7 +770,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                 fileName ?? "用户导出.xlsx");
         }
 
-        var dictSnapshot = await _dictDataService.CreateDictSnapshotAsync("sys_user_type", "sys_yes_no");
+        var dictSnapshot = await _dictDataService.CreateDictSnapshotAsync("sys_user_type", "sys_yes_no_type");
         var employeeIds = list
             .Where(u => u.EmployeeId > 0)
             .Select(u => u.EmployeeId)
@@ -788,7 +788,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         {
             var exportDto = user.Adapt<TaktUserExportDto>();
             exportDto.UserTypeName = dictSnapshot.GetName("sys_user_type", user.UserType, string.Empty);
-            exportDto.StatusName = dictSnapshot.GetName("sys_yes_no", user.UserStatus, string.Empty);
+            exportDto.StatusName = dictSnapshot.GetName("sys_yes_no_type", user.UserStatus, string.Empty);
             if (user.EmployeeId > 0 && employeeNameMap.TryGetValue(user.EmployeeId, out var employeeName))
             {
                 exportDto.EmployeeName = employeeName;
@@ -894,7 +894,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             exp = exp.And(x =>
                 (x.Username != null && x.Username.Contains(keywords))
                 || (x.Nickname != null && x.Nickname.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || (x.DefaultCulture != null && x.DefaultCulture.Contains(keywords))
                 || SqlFunc.ToString(x.UserType).Contains(keywords)
@@ -939,9 +939,9 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             exp = exp.And(x => x.CreatedBy == queryDto.CreatedBy);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

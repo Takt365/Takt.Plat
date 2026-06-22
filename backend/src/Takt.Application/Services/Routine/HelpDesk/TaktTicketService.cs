@@ -20,6 +20,7 @@ using Takt.Domain.Entities.Routine.HelpDesk;
 using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Shared.Constants;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
@@ -160,7 +161,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         EnsureThreeLayerContext();
         var list = await _ticketRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.TicketNo,
+            x => x.TicketNo ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -183,6 +184,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             entity.TicketNo = await GenerateTicketNoAsync();
         }
         await EnsureTicketNoUniqueAsync(entity.TicketNo);
+        ApplyTicketPriorityFromMatrix(entity, dto.Urgency, dto.Impact);
         entity = await _ticketRepository.CreateAsync(entity);
         await TryAutoAssignAsync(entity);
         await AppendChangeLogAsync(
@@ -213,7 +215,8 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         createDto.SubmitterId = CurrentUserId.Value;
         createDto.SubmitterName = CurrentUserName;
         createDto.ApplicantBy = CurrentUserId.Value;
-        createDto.Priority = (int)dto.Priority;
+        createDto.Urgency = dto.Urgency;
+        createDto.Impact = dto.Impact;
         return await CreateTicketAsync(createDto);
     }
 
@@ -226,7 +229,8 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         createDto.CompanyCode = CurrentCompanyCode;
         createDto.TicketNo = await GenerateTicketNoAsync();
         createDto.TicketSource = (int)dto.TicketSource;
-        createDto.Priority = (int)dto.Priority;
+        createDto.Urgency = dto.Urgency;
+        createDto.Impact = dto.Impact;
         if (dto.SubmitterId.HasValue && dto.SubmitterId.Value > 0)
         {
             createDto.SubmitterId = dto.SubmitterId.Value;
@@ -262,6 +266,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         entity.TicketStatus = previousStatus;
         entity.AssigneeId = dto.AssigneeId ?? entity.AssigneeId;
         await ApplyItAssetLinkAsync(entity, dto.ItAssetId, dto.AssetCode);
+        ApplyTicketPriorityFromMatrix(entity, dto.Urgency, dto.Impact);
         await EnsureTicketNoUniqueAsync(entity.TicketNo, id);
         await _ticketRepository.UpdateAsync(entity);
         await SaveTicketChildrenAsync(entity, dto);
@@ -401,7 +406,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         }
         entity.ResolvedAt = null;
         entity.ClosedAt = null;
-        await TransitionTicketStatusAsync(entity, current, 6, "重新打开", dto.Remark);
+        await TransitionTicketStatusAsync(entity, current, TaktTicketStatusConstants.Reopened, "重新打开", dto.Remark);
         return await GetTicketByIdAsync(entity.Id) ?? throw new TaktBusinessException("工单不存在");
     }
 
@@ -524,6 +529,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             {
                 var entity = rows[i].Adapt<TaktTicket>();
                 entity.TicketStatus = TaktTicketWorkflowHelper.MapLegacyImportStatus(entity.TicketStatus);
+                ApplyTicketPriorityFromMatrix(entity, entity.Urgency, entity.Impact);
                 var importKey = $"{entity.TicketNo}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -874,6 +880,19 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     // ========================================
 
     /// <summary>
+    /// 依据 ITSM 矩阵写入紧急度、影响范围并自动计算优先级（忽略客户端传入的 Priority）。
+    /// </summary>
+    /// <param name="entity">工单实体</param>
+    /// <param name="urgency">紧急度</param>
+    /// <param name="impact">影响范围</param>
+    private static void ApplyTicketPriorityFromMatrix(TaktTicket entity, int urgency, int impact)
+    {
+        entity.Urgency = TaktTicketPriorityHelper.NormalizeLevel(urgency);
+        entity.Impact = TaktTicketPriorityHelper.NormalizeLevel(impact);
+        entity.Priority = TaktTicketPriorityHelper.ResolvePriority(entity.Urgency, entity.Impact);
+    }
+
+    /// <summary>
     /// 构建工单查询表达式
     /// </summary>
     private static Expression<Func<TaktTicket, bool>> QueryExpression(TaktTicketQueryDto? queryDto)
@@ -913,6 +932,14 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         if (queryDto?.Priority.HasValue == true)
         {
             exp = exp.And(x => x.Priority == queryDto.Priority.Value);
+        }
+        if (queryDto?.Urgency.HasValue == true)
+        {
+            exp = exp.And(x => x.Urgency == queryDto.Urgency.Value);
+        }
+        if (queryDto?.Impact.HasValue == true)
+        {
+            exp = exp.And(x => x.Impact == queryDto.Impact.Value);
         }
         if (!string.IsNullOrEmpty(queryDto?.CategoryCode))
         {

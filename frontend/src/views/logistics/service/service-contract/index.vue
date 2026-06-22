@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-service-service-contract">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,17 +20,17 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:service:servicecontract:create"
-      update-permission="logistics:service:servicecontract:update"
-      delete-permission="logistics:service:servicecontract:delete"
-      import-permission="logistics:service:servicecontract:import"
-      export-permission="logistics:service:servicecontract:export"
+      create-permission="logistics:service:contract:create"
+      update-permission="logistics:service:contract:update"
+      delete-permission="logistics:service:contract:delete"
+      import-permission="logistics:service:contract:import"
+      export-permission="logistics:service:contract:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,76 +52,46 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'serviceContractId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getServiceContractId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getServiceContractId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="serviceContractId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.serviceOrder._self') }}</div>
-          <a-table
-            v-if="hasServiceOrderRows(record)"
-            :columns="serviceOrderExpandColumns"
-            :data-source="getServiceOrderRows(record)"
-            :row-key="(row: ServiceOrder, index?: number) => row?.serviceOrderId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.serviceRequest._self') }}</div>
-          <a-table
-            v-if="hasServiceRequestRows(record)"
-            :columns="serviceRequestExpandColumns"
-            :data-source="getServiceRequestRows(record)"
-            :row-key="(row: ServiceRequest, index?: number) => row?.serviceRequestId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <ServiceOrderPanel
+          ref="serviceOrderPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <ServiceContractForm
+        :key="formData?.serviceContractId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -139,207 +109,214 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.serviceContract.plantcode')">
+      <a-form-item :label="t('entity.servicecontract.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceContractCode')">
-      <a-form-item :label="t('entity.serviceContract.code')">
+      <a-form-item :label="t('entity.servicecontract.code')">
         <a-input
           v-model:value="advancedQueryForm.serviceContractCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.code') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contractName')">
-      <a-form-item :label="t('entity.serviceContract.contractname')">
+      <a-form-item :label="t('entity.servicecontract.contractname')">
         <a-input
           v-model:value="advancedQueryForm.contractName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.contractname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.contractname') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('clientId')">
-      <a-form-item :label="t('entity.serviceContract.clientid')">
+      <a-form-item :label="t('entity.servicecontract.clientid')">
         <a-input
           v-model:value="advancedQueryForm.clientId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.clientid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.clientid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('clientCode')">
-      <a-form-item :label="t('entity.serviceContract.clientcode')">
+      <a-form-item :label="t('entity.servicecontract.clientcode')">
         <a-input
           v-model:value="advancedQueryForm.clientCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.clientcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.clientcode') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('clientName')">
-      <a-form-item :label="t('entity.serviceContract.clientname')">
+      <a-form-item :label="t('entity.servicecontract.clientname')">
         <a-input
           v-model:value="advancedQueryForm.clientName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.clientname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.clientname') })"
+          show-count
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contractType')">
-      <a-form-item :label="t('entity.serviceContract.contracttype')">
+      <a-form-item :label="t('entity.servicecontract.contracttype')">
         <a-input-number
           v-model:value="advancedQueryForm.contractType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.contracttype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.contracttype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contractStatus')">
-      <a-form-item :label="t('entity.serviceContract.contractstatus')">
+      <a-form-item :label="t('entity.servicecontract.contractstatus')">
         <a-input-number
           v-model:value="advancedQueryForm.contractStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.contractstatus') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.contractstatus') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('signDateStart')">
-      <a-form-item :label="t('entity.serviceContract.signdatestart')">
+      <a-form-item :label="t('entity.servicecontract.signdatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.signDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceContract.signdatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicecontract.signdatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('signDateEnd')">
-      <a-form-item :label="t('entity.serviceContract.signdateend')">
+      <a-form-item :label="t('entity.servicecontract.signdateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.signDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceContract.signdateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicecontract.signdateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveDateStart')">
-      <a-form-item :label="t('entity.serviceContract.effectivedatestart')">
+      <a-form-item :label="t('entity.servicecontract.effectivedatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceContract.effectivedatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicecontract.effectivedatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveDateEnd')">
-      <a-form-item :label="t('entity.serviceContract.effectivedateend')">
+      <a-form-item :label="t('entity.servicecontract.effectivedateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.effectiveDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceContract.effectivedateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicecontract.effectivedateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDateStart')">
-      <a-form-item :label="t('entity.serviceContract.expirydatestart')">
+      <a-form-item :label="t('entity.servicecontract.expirydatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.expiryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceContract.expirydatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicecontract.expirydatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDateEnd')">
-      <a-form-item :label="t('entity.serviceContract.expirydateend')">
+      <a-form-item :label="t('entity.servicecontract.expirydateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.expiryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceContract.expirydateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicecontract.expirydateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contractAmount')">
-      <a-form-item :label="t('entity.serviceContract.contractamount')">
+      <a-form-item :label="t('entity.servicecontract.contractamount')">
         <a-input-number
           v-model:value="advancedQueryForm.contractAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.contractamount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.contractamount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('currencyCode')">
-      <a-form-item :label="t('entity.serviceContract.currencycode')">
+      <a-form-item :label="t('entity.servicecontract.currencycode')">
         <a-input
           v-model:value="advancedQueryForm.currencyCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.currencycode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.currencycode') })"
+          show-count
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('paymentTerms')">
-      <a-form-item :label="t('entity.serviceContract.paymentterms')">
+      <a-form-item :label="t('entity.servicecontract.paymentterms')">
         <a-input-number
           v-model:value="advancedQueryForm.paymentTerms"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.paymentterms') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.paymentterms') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceScope')">
-      <a-form-item :label="t('entity.serviceContract.servicescope')">
+      <a-form-item :label="t('entity.servicecontract.servicescope')">
         <a-textarea
           v-model:value="advancedQueryForm.serviceScope"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.serviceContract.servicescope') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.servicecontract.servicescope') })"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('slaResponseHours')">
-      <a-form-item :label="t('entity.serviceContract.slaresponsehours')">
+      <a-form-item :label="t('entity.servicecontract.slaresponsehours')">
         <a-input-number
           v-model:value="advancedQueryForm.slaResponseHours"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.slaresponsehours') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.slaresponsehours') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('slaResolveHours')">
-      <a-form-item :label="t('entity.serviceContract.slaresolvehours')">
+      <a-form-item :label="t('entity.servicecontract.slaresolvehours')">
         <a-input-number
           v-model:value="advancedQueryForm.slaResolveHours"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.slaresolvehours') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.slaresolvehours') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('accountManager')">
-      <a-form-item :label="t('entity.serviceContract.accountmanager')">
+      <a-form-item :label="t('entity.servicecontract.accountmanager')">
         <a-input
           v-model:value="advancedQueryForm.accountManager"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.accountmanager') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicecontract.accountmanager') })"
+          show-count
+          :maxlength="50"
           allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.serviceContract.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceContract.sortorder') })"
-          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -365,12 +342,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -379,8 +375,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -390,14 +388,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.serviceContract._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.servicecontract._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.serviceContract._self"
+        entity-i18n-key="entity.servicecontract._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -433,16 +431,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ServiceContractForm from './components/service-contract-form.vue'
-import { getServiceContractList, getServiceContractById, createServiceContract, updateServiceContract, deleteServiceContractById, deleteServiceContractBatch, getServiceContractTemplate, importServiceContract, exportServiceContract } from '@/api/logistics/customer-service/service-contract'
-import * as serviceOrderApi from '@/api/logistics/customer-service/service-order'
-import * as serviceRequestApi from '@/api/logistics/customer-service/service-request'
-import type { ServiceOrder, ServiceOrderQuery } from '@/types/logistics/customer-service/service-order'
-import type { ServiceRequest, ServiceRequestQuery } from '@/types/logistics/customer-service/service-request'
-import type { ServiceContract, ServiceContractQuery, ServiceContractCreate, ServiceContractUpdate } from '@/types/logistics/customer-service/service-contract'
+import ServiceOrderPanel from './components/service-order-panel.vue'
+import { provideServiceContractMasterContext } from './composables/use-service-contract-master-context'
+import { getServiceContractList, getServiceContractById, createServiceContract, updateServiceContract, deleteServiceContractById, deleteServiceContractBatch, getServiceContractTemplate, importServiceContract, exportServiceContract, updateServiceContractStatus } from '@/api/logistics/customer-service/service-contract'
+import type { ServiceContract, ServiceContractQuery } from '@/types/logistics/customer-service/service-contract'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -450,7 +447,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktServiceContract')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.serviceContract._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.servicecontract._self') })
 )
 
 /** 快捷查询关键字 */
@@ -460,9 +457,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<ServiceContract[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -477,11 +474,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<ServiceContract>>({})
+const formData = ref<Partial<ServiceContract> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -506,39 +505,37 @@ const advancedQueryForm = ref({
   slaResponseHours: undefined as number | undefined,
   slaResolveHours: undefined as number | undefined,
   accountManager: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.serviceContract.plantcode') },
-  { key: 'serviceContractCode', label: t('entity.serviceContract.code') },
-  { key: 'contractName', label: t('entity.serviceContract.contractname') },
-  { key: 'clientId', label: t('entity.serviceContract.clientid') },
-  { key: 'clientCode', label: t('entity.serviceContract.clientcode') },
-  { key: 'clientName', label: t('entity.serviceContract.clientname') },
-  { key: 'contractType', label: t('entity.serviceContract.contracttype') },
-  { key: 'contractStatus', label: t('entity.serviceContract.contractstatus') },
-  { key: 'signDateStart', label: t('entity.serviceContract.signdatestart') },
-  { key: 'signDateEnd', label: t('entity.serviceContract.signdateend') },
-  { key: 'effectiveDateStart', label: t('entity.serviceContract.effectivedatestart') },
-  { key: 'effectiveDateEnd', label: t('entity.serviceContract.effectivedateend') },
-  { key: 'expiryDateStart', label: t('entity.serviceContract.expirydatestart') },
-  { key: 'expiryDateEnd', label: t('entity.serviceContract.expirydateend') },
-  { key: 'contractAmount', label: t('entity.serviceContract.contractamount') },
-  { key: 'currencyCode', label: t('entity.serviceContract.currencycode') },
-  { key: 'paymentTerms', label: t('entity.serviceContract.paymentterms') },
-  { key: 'serviceScope', label: t('entity.serviceContract.servicescope') },
-  { key: 'slaResponseHours', label: t('entity.serviceContract.slaresponsehours') },
-  { key: 'slaResolveHours', label: t('entity.serviceContract.slaresolvehours') },
-  { key: 'accountManager', label: t('entity.serviceContract.accountmanager') },
-  { key: 'sortOrder', label: t('entity.serviceContract.sortorder') },
+  { key: 'plantCode', label: t('entity.servicecontract.plantcode') },
+  { key: 'serviceContractCode', label: t('entity.servicecontract.code') },
+  { key: 'contractName', label: t('entity.servicecontract.contractname') },
+  { key: 'clientId', label: t('entity.servicecontract.clientid') },
+  { key: 'clientCode', label: t('entity.servicecontract.clientcode') },
+  { key: 'clientName', label: t('entity.servicecontract.clientname') },
+  { key: 'contractType', label: t('entity.servicecontract.contracttype') },
+  { key: 'contractStatus', label: t('entity.servicecontract.contractstatus') },
+  { key: 'signDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.servicecontract.signdate')) },
+  { key: 'signDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.servicecontract.signdate')) },
+  { key: 'effectiveDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.servicecontract.effectivedate')) },
+  { key: 'effectiveDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.servicecontract.effectivedate')) },
+  { key: 'expiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.servicecontract.expirydate')) },
+  { key: 'expiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.servicecontract.expirydate')) },
+  { key: 'contractAmount', label: t('entity.servicecontract.contractamount') },
+  { key: 'currencyCode', label: t('entity.servicecontract.currencycode') },
+  { key: 'paymentTerms', label: t('entity.servicecontract.paymentterms') },
+  { key: 'serviceScope', label: t('entity.servicecontract.servicescope') },
+  { key: 'slaResponseHours', label: t('entity.servicecontract.slaresponsehours') },
+  { key: 'slaResolveHours', label: t('entity.servicecontract.slaresolvehours') },
+  { key: 'accountManager', label: t('entity.servicecontract.accountmanager') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -556,138 +553,108 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideServiceContractMasterContext()
+const serviceOrderPanelRef = ref<InstanceType<typeof ServiceOrderPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {ServiceContractQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<ServiceContractQuery>): ServiceContractQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: ServiceContractQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof ServiceContractQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('serviceContractCode', form.serviceContractCode)
+  assignTrimmed('contractName', form.contractName)
+  assignTrimmed('clientId', form.clientId)
+  assignTrimmed('clientCode', form.clientCode)
+  assignTrimmed('clientName', form.clientName)
+  if (form.contractType !== undefined && form.contractType !== null) {
+    query.contractType = form.contractType
+  }
+  if (form.contractStatus !== undefined && form.contractStatus !== null) {
+    query.contractStatus = form.contractStatus
+  }
+  assignTrimmed('signDateStart', form.signDateStart)
+  assignTrimmed('signDateEnd', form.signDateEnd)
+  assignTrimmed('effectiveDateStart', form.effectiveDateStart)
+  assignTrimmed('effectiveDateEnd', form.effectiveDateEnd)
+  assignTrimmed('expiryDateStart', form.expiryDateStart)
+  assignTrimmed('expiryDateEnd', form.expiryDateEnd)
+  if (form.contractAmount !== undefined && form.contractAmount !== null) {
+    query.contractAmount = form.contractAmount
+  }
+  assignTrimmed('currencyCode', form.currencyCode)
+  if (form.paymentTerms !== undefined && form.paymentTerms !== null) {
+    query.paymentTerms = form.paymentTerms
+  }
+  assignTrimmed('serviceScope', form.serviceScope)
+  if (form.slaResponseHours !== undefined && form.slaResponseHours !== null) {
+    query.slaResponseHours = form.slaResponseHours
+  }
+  if (form.slaResolveHours !== undefined && form.slaResolveHours !== null) {
+    query.slaResolveHours = form.slaResolveHours
+  }
+  assignTrimmed('accountManager', form.accountManager)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：serviceOrder 列 */
-const serviceOrderExpandColumns = computed(() => [
-  {
-    title: t('entity.serviceOrder.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceOrder.code'),
-    dataIndex: 'serviceOrderCode',
-    key: 'serviceOrderCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceOrder.clientid'),
-    dataIndex: 'clientId',
-    key: 'clientId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceOrder.clientcode'),
-    dataIndex: 'clientCode',
-    key: 'clientCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceOrder.clientname'),
-    dataIndex: 'clientName',
-    key: 'clientName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceOrder.servicecontractname'),
-    dataIndex: 'serviceContractName',
-    key: 'serviceContractName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceOrder.servicecontractcode'),
-    dataIndex: 'serviceContractCode',
-    key: 'serviceContractCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceOrder.servicerequestid'),
-    dataIndex: 'serviceRequestId',
-    key: 'serviceRequestId',
-    ellipsis: true,
-  },
-])
 
-/** 展开行预览：serviceRequest 列 */
-const serviceRequestExpandColumns = computed(() => [
-  {
-    title: t('entity.serviceRequest.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceRequest.code'),
-    dataIndex: 'serviceRequestCode',
-    key: 'serviceRequestCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceRequest.clientid'),
-    dataIndex: 'clientId',
-    key: 'clientId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceRequest.clientcode'),
-    dataIndex: 'clientCode',
-    key: 'clientCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceRequest.clientname'),
-    dataIndex: 'clientName',
-    key: 'clientName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceRequest.servicecontractname'),
-    dataIndex: 'serviceContractName',
-    key: 'serviceContractName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceRequest.servicecontractcode'),
-    dataIndex: 'serviceContractCode',
-    key: 'serviceContractCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serviceRequest.requestdate'),
-    dataIndex: 'requestDate',
-    key: 'requestDate',
-    ellipsis: true,
-  },
-])
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
 
-/** 读取主表行上的 serviceOrder 子表缓存 */
-function getServiceOrderRows(record: ServiceContract): ServiceOrder[] {
-  return (record as any)?.serviceOrders ?? []
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: ServiceContract | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getServiceContractId(record) : ''
 }
 
-/** 主表行是否已加载 serviceOrder 子表 */
-function hasServiceOrderRows(record: ServiceContract): boolean {
-  return getServiceOrderRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as ServiceContract
+  const key = getServiceContractId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
-/** 读取主表行上的 serviceRequest 子表缓存 */
-function getServiceRequestRows(record: ServiceContract): ServiceRequest[] {
-  return (record as any)?.serviceRequests ?? []
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
 }
-
-/** 主表行是否已加载 serviceRequest 子表 */
-function hasServiceRequestRows(record: ServiceContract): boolean {
-  return getServiceRequestRows(record).length > 0
-}
-
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadServiceContractDetail(record: ServiceContract): Promise<ServiceContract | null> {
@@ -707,81 +674,6 @@ async function loadServiceContractDetail(record: ServiceContract): Promise<Servi
     return null
   }
 }
-/** 懒加载 serviceOrder 子表（ServiceOrderQuery + serviceOrderApi，与主表 ServiceContractQuery 分离） */
-async function loadServiceOrderForServiceContract(record: ServiceContract): Promise<ServiceOrder[]> {
-  const masterId = getServiceContractId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ServiceOrderQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      serviceContractId: masterId,
-    }
-    const result = await serviceOrderApi.getServiceOrderList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getServiceContractId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, serviceOrders: rows } as ServiceContract
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 serviceRequest 子表（ServiceRequestQuery + serviceRequestApi，与主表 ServiceContractQuery 分离） */
-async function loadServiceRequestForServiceContract(record: ServiceContract): Promise<ServiceRequest[]> {
-  const masterId = getServiceContractId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ServiceRequestQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      serviceContractId: masterId,
-    }
-    const result = await serviceRequestApi.getServiceRequestList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getServiceContractId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, serviceRequests: rows } as ServiceContract
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureServiceContractChildrenLoaded(record: ServiceContract) {
-  if (!hasServiceOrderRows(record)) {
-    await loadServiceOrderForServiceContract(record)
-  }
-  if (!hasServiceRequestRows(record)) {
-    await loadServiceRequestForServiceContract(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: ServiceContract) {
-  const key = getServiceContractId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureServiceContractChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -796,7 +688,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'serviceContractId') ?? ''
   },
   {
-    title: t('entity.serviceContract.plantcode'),
+    title: t('entity.servicecontract.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -805,7 +697,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.serviceContract.code'),
+    title: t('entity.servicecontract.code'),
     dataIndex: 'serviceContractCode',
     key: 'serviceContractCode',
     width: 120,
@@ -814,7 +706,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'serviceContractCode') ?? ''
   },
   {
-    title: t('entity.serviceContract.contractname'),
+    title: t('entity.servicecontract.contractname'),
     dataIndex: 'contractName',
     key: 'contractName',
     width: 120,
@@ -823,7 +715,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'contractName') ?? ''
   },
   {
-    title: t('entity.serviceContract.clientid'),
+    title: t('entity.servicecontract.clientid'),
     dataIndex: 'clientId',
     key: 'clientId',
     width: 120,
@@ -832,7 +724,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'clientId') ?? ''
   },
   {
-    title: t('entity.serviceContract.clientcode'),
+    title: t('entity.servicecontract.clientcode'),
     dataIndex: 'clientCode',
     key: 'clientCode',
     width: 120,
@@ -841,7 +733,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'clientCode') ?? ''
   },
   {
-    title: t('entity.serviceContract.clientname'),
+    title: t('entity.servicecontract.clientname'),
     dataIndex: 'clientName',
     key: 'clientName',
     width: 120,
@@ -850,7 +742,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'clientName') ?? ''
   },
   {
-    title: t('entity.serviceContract.contracttype'),
+    title: t('entity.servicecontract.contracttype'),
     dataIndex: 'contractType',
     key: 'contractType',
     width: 120,
@@ -859,7 +751,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'contractType') ?? ''
   },
   {
-    title: t('entity.serviceContract.contractstatus'),
+    title: t('entity.servicecontract.contractstatus'),
     dataIndex: 'contractStatus',
     key: 'contractStatus',
     width: 120,
@@ -868,7 +760,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'contractStatus') ?? ''
   },
   {
-    title: t('entity.serviceContract.signdate'),
+    title: t('entity.servicecontract.signdate'),
     dataIndex: 'signDate',
     key: 'signDate',
     width: 120,
@@ -877,7 +769,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'signDate') ?? ''
   },
   {
-    title: t('entity.serviceContract.effectivedate'),
+    title: t('entity.servicecontract.effectivedate'),
     dataIndex: 'effectiveDate',
     key: 'effectiveDate',
     width: 120,
@@ -886,7 +778,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'effectiveDate') ?? ''
   },
   {
-    title: t('entity.serviceContract.expirydate'),
+    title: t('entity.servicecontract.expirydate'),
     dataIndex: 'expiryDate',
     key: 'expiryDate',
     width: 120,
@@ -895,7 +787,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'expiryDate') ?? ''
   },
   {
-    title: t('entity.serviceContract.contractamount'),
+    title: t('entity.servicecontract.contractamount'),
     dataIndex: 'contractAmount',
     key: 'contractAmount',
     width: 120,
@@ -904,7 +796,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'contractAmount') ?? ''
   },
   {
-    title: t('entity.serviceContract.currencycode'),
+    title: t('entity.servicecontract.currencycode'),
     dataIndex: 'currencyCode',
     key: 'currencyCode',
     width: 120,
@@ -913,7 +805,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'currencyCode') ?? ''
   },
   {
-    title: t('entity.serviceContract.paymentterms'),
+    title: t('entity.servicecontract.paymentterms'),
     dataIndex: 'paymentTerms',
     key: 'paymentTerms',
     width: 120,
@@ -922,7 +814,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'paymentTerms') ?? ''
   },
   {
-    title: t('entity.serviceContract.servicescope'),
+    title: t('entity.servicecontract.servicescope'),
     dataIndex: 'serviceScope',
     key: 'serviceScope',
     width: 120,
@@ -931,7 +823,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'serviceScope') ?? ''
   },
   {
-    title: t('entity.serviceContract.slaresponsehours'),
+    title: t('entity.servicecontract.slaresponsehours'),
     dataIndex: 'slaResponseHours',
     key: 'slaResponseHours',
     width: 120,
@@ -940,7 +832,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'slaResponseHours') ?? ''
   },
   {
-    title: t('entity.serviceContract.slaresolvehours'),
+    title: t('entity.servicecontract.slaresolvehours'),
     dataIndex: 'slaResolveHours',
     key: 'slaResolveHours',
     width: 120,
@@ -949,7 +841,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getServiceContractField(record, 'slaResolveHours') ?? ''
   },
   {
-    title: t('entity.serviceContract.accountmanager'),
+    title: t('entity.servicecontract.accountmanager'),
     dataIndex: 'accountManager',
     key: 'accountManager',
     width: 120,
@@ -964,7 +856,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:service:servicecontract:update',
+        permission: 'logistics:service:contract:update',
         onClick: (record: ServiceContract) => handleEdit(record)
       },
       {
@@ -972,7 +864,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:service:servicecontract:delete',
+        permission: 'logistics:service:contract:delete',
         onClick: (record: ServiceContract) => handleDeleteOne(record)
       }
     ]
@@ -988,6 +880,7 @@ const getServiceContractId = (record: any): string => record?.[entityIdName] ?? 
  */
 const getServiceContractField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -995,51 +888,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: ServiceContract, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getServiceContractId(selectedRow.value) === getServiceContractId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: ServiceContract[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: ServiceContract) => ({
-  onClick: () => {
-    const key = getServiceContractId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getServiceContractId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: ServiceContractQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getServiceContractList(params)
+    const res = await getServiceContractList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1057,7 +931,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1086,25 +960,25 @@ function handleReset() {
   slaResponseHours: undefined as number | undefined,
   slaResolveHours: undefined as number | undefined,
   accountManager: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.serviceContract._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.servicecontract._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: ServiceContract) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.serviceContract._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.servicecontract._self') })
   formLoading.value = true
   try {
     const detail = await loadServiceContractDetail(record)
@@ -1120,7 +994,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.serviceContract._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.servicecontract._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1138,12 +1012,17 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateServiceContract(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.serviceContract._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.servicecontract._self') }))
     } else {
       await createServiceContract(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.serviceContract._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.servicecontract._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  serviceOrderPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1153,6 +1032,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1184,16 +1065,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: ServiceContractQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportServiceContract(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportServiceContract(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1212,10 +1088,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.serviceContract._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.servicecontract._self') }))
   } catch (error: any) {
     logger.error('[ServiceContract] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.serviceContract._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.servicecontract._self') }))
   } finally {
     loading.value = false
   }
@@ -1224,12 +1100,16 @@ async function handleExport() {
 async function handleDeleteOne(record: ServiceContract) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.serviceContract._self'), name: t('common.tip.this.target', { target: t('entity.serviceContract._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.servicecontract._self'), name: t('common.tip.this.target', { target: t('entity.servicecontract._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteServiceContractById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.serviceContract._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.servicecontract._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1237,18 +1117,22 @@ async function handleDeleteOne(record: ServiceContract) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.serviceContract._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.servicecontract._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.serviceContract._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.servicecontract._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteServiceContractBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.serviceContract._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.servicecontract._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1261,7 +1145,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1288,10 +1172,9 @@ function handleAdvancedQueryReset() {
   slaResponseHours: undefined as number | undefined,
   slaResolveHours: undefined as number | undefined,
   accountManager: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1320,24 +1203,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-service-service-contract {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

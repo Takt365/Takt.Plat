@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
+// 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktModelDestinationDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ModelDestination 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktModelDestination 生成，请按需审阅）
 // 
@@ -15,18 +15,18 @@ using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 
-namespace Takt.Application.Dtos.Logistics.Manufacturing.Bom;
+namespace Takt.Application.Dtos.Logistics.Materials;
 
 // ========================================
 // ModelDestination 响应 DTO
 // ========================================
 
 /// <summary>
-/// Takt型号目的地实体（物料名称、机种名称、仕向地名称）
+/// Takt型号目的地实体（租户级；物料编码/名称、机种编码/名称、仕向地编码/名称）
 /// 对应前端 TaktModelDestinationDto
-/// 继承 TaktCompanyDtoBase
+/// 继承 TaktTenantDtoBase
 /// </summary>
-public class TaktModelDestinationDto : TaktCompanyDtoBase
+public class TaktModelDestinationDto : TaktTenantDtoBase
 {
     /// <summary>
     /// ModelDestinationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -36,9 +36,9 @@ public class TaktModelDestinationDto : TaktCompanyDtoBase
     public long ModelDestinationId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 物料编码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -46,9 +46,19 @@ public class TaktModelDestinationDto : TaktCompanyDtoBase
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 机种编码
+    /// </summary>
+    public string ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 机种名称
     /// </summary>
     public string ModelName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仕向地编码
+    /// </summary>
+    public string DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仕向地名称
@@ -78,14 +88,9 @@ public class TaktModelDestinationQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 物料编码
     /// </summary>
-    public string? CompanyCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -93,9 +98,19 @@ public class TaktModelDestinationQueryDto : TaktPagedQuery
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 机种编码
+    /// </summary>
+    public string? ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 机种名称
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仕向地编码
+    /// </summary>
+    public string? DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仕向地名称
@@ -120,7 +135,7 @@ public class TaktModelDestinationQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -143,19 +158,10 @@ public class TaktModelDestinationCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 物料编码
     /// </summary>
-    public string CompanyCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-    /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "物料编码不能为空")]
+    public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -164,10 +170,22 @@ public class TaktModelDestinationCreateDto
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 机种编码
+    /// </summary>
+    [Required(ErrorMessage = "机种编码不能为空")]
+    public string ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 机种名称
     /// </summary>
     [Required(ErrorMessage = "机种名称不能为空")]
     public string ModelName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仕向地编码
+    /// </summary>
+    [Required(ErrorMessage = "仕向地编码不能为空")]
+    public string DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仕向地名称
@@ -176,14 +194,9 @@ public class TaktModelDestinationCreateDto
     public string DestinationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -251,14 +264,9 @@ public class TaktModelDestinationTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 物料编码
     /// </summary>
-    public string? CompanyCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -266,9 +274,19 @@ public class TaktModelDestinationTemplateDto
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 机种编码
+    /// </summary>
+    public string? ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 机种名称
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仕向地编码
+    /// </summary>
+    public string? DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仕向地名称
@@ -276,14 +294,9 @@ public class TaktModelDestinationTemplateDto
     public string? DestinationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -303,19 +316,9 @@ public class TaktModelDestinationImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 物料编码
     /// </summary>
-    public string? CompanyCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 当前公司默认区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-    /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -323,9 +326,19 @@ public class TaktModelDestinationImportDto
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 机种编码
+    /// </summary>
+    public string? ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 机种名称
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仕向地编码
+    /// </summary>
+    public string? DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仕向地名称
@@ -333,14 +346,9 @@ public class TaktModelDestinationImportDto
     public string? DestinationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -366,14 +374,9 @@ public class TaktModelDestinationExportDto
     public long ModelDestinationId { get; set; }
 
     /// <summary>
-    /// 公司代码
+    /// 物料编码
     /// </summary>
-    public string CompanyCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料名称
@@ -381,9 +384,19 @@ public class TaktModelDestinationExportDto
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 机种编码
+    /// </summary>
+    public string ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 机种名称
     /// </summary>
     public string ModelName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仕向地编码
+    /// </summary>
+    public string DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仕向地名称
@@ -398,7 +411,7 @@ public class TaktModelDestinationExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

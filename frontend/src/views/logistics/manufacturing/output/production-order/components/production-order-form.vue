@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,98 +63,105 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.plantcode')"
+                :label="t('entity.productionorder.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.plantcode') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.productionOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.prodordertype')"
+                :label="t('entity.productionorder.prodordertype')"
                 name="prodOrderType"
               >
                 <a-input
                   v-model:value="formState.prodOrderType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.prodordertype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodordertype') })"
+                  show-count
+                  :maxlength="10"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.prodordercode')"
+                :label="t('entity.productionorder.prodordercode')"
                 name="prodOrderCode"
               >
                 <a-input
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.prodordercode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodordercode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.productionOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.materialcode')"
+                :label="t('entity.productionorder.materialcode')"
                 name="materialCode"
               >
                 <a-input
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.materialcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.materialcode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.productionOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.prodorderqty')"
+                :label="t('entity.productionorder.prodorderqty')"
                 name="prodOrderQty"
               >
                 <a-input-number
                   v-model:value="formState.prodOrderQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.prodorderqty') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodorderqty') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.producedqty')"
+                :label="t('entity.productionorder.producedqty')"
                 name="producedQty"
               >
                 <a-input-number
                   v-model:value="formState.producedQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.producedqty') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.producedqty') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.unitofmeasure')"
+                :label="t('entity.productionorder.unitofmeasure')"
                 name="unitOfMeasure"
               >
                 <a-input
                   v-model:value="formState.unitOfMeasure"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.unitofmeasure') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.unitofmeasure') })"
+                  show-count
+                  :maxlength="10"
                   allow-clear
                 />
               </a-form-item>
@@ -168,132 +178,147 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.actualstartdate')"
+                :label="t('entity.productionorder.actualstartdate')"
                 name="actualStartDate"
               >
                 <a-date-picker
                   v-model:value="formState.actualStartDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionOrder.actualstartdate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.actualstartdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.actualenddate')"
+                :label="t('entity.productionorder.actualenddate')"
                 name="actualEndDate"
               >
                 <a-date-picker
                   v-model:value="formState.actualEndDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionOrder.actualenddate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionorder.actualenddate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.priority')"
+                :label="t('entity.productionorder.priority')"
                 name="priority"
               >
                 <a-input-number
                   v-model:value="formState.priority"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.priority') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.priority') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.workcenter')"
+                :label="t('entity.productionorder.workcenter')"
                 name="workCenter"
               >
                 <a-input
                   v-model:value="formState.workCenter"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.workcenter') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.workcenter') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.prodline')"
+                :label="t('entity.productionorder.prodline')"
                 name="prodLine"
               >
                 <a-input
                   v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.prodline') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodline') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.prodbatch')"
+                :label="t('entity.productionorder.prodbatch')"
                 name="prodBatch"
               >
                 <a-input
                   v-model:value="formState.prodBatch"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.prodbatch') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodbatch') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.serialno')"
+                :label="t('entity.productionorder.serialno')"
                 name="serialNo"
               >
                 <a-input
                   v-model:value="formState.serialNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.serialno') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.serialno') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.routingcode')"
+                :label="t('entity.productionorder.routingcode')"
                 name="routingCode"
               >
                 <a-input
                   v-model:value="formState.routingCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.routingcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.routingcode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.productionOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionOrder.status')"
+                :label="t('entity.productionorder.status')"
                 name="status"
               >
                 <a-input-number
                   v-model:value="formState.status"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionOrder.status') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionorder.status') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -316,15 +341,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -338,6 +364,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { ProductionOrderCreate } from '@/types/logistics/manufacturing/output/production-order'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -370,7 +397,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodOrderType","prodOrderCode","materialCode","prodOrderQty","producedQty","unitOfMeasure","actualStartDate","actualEndDate","priority","workCenter","prodLine","prodBatch","serialNo","routingCode","status","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodOrderType","prodOrderCode","materialCode","prodOrderQty","producedQty","unitOfMeasure","actualStartDate","actualEndDate","priority","workCenter","prodLine","prodBatch","serialNo","routingCode","status","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -381,7 +408,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -389,18 +416,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 productionOrderId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.productionOrderId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -419,66 +462,90 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.productionOrder.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.productionorder.plantcode') }),
       trigger: 'blur'
     }
   ],
   prodOrderType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.productionOrder.prodordertype') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodordertype') }),
       trigger: 'blur'
     }
   ],
   prodOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.productionOrder.prodordercode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.productionorder.prodordercode') }),
       trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.productionOrder.materialcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.productionorder.materialcode') }),
       trigger: 'blur'
     }
   ],
-  prodOrderQty: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.productionOrder.prodorderqty') }),
-      trigger: 'change'
-    }
-  ],
-  producedQty: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.productionOrder.producedqty') }),
-      trigger: 'change'
-    }
-  ],
+  prodOrderQty: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionorder.prodorderqty') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionorder.prodorderqty') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  producedQty: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionorder.producedqty') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionorder.producedqty') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   unitOfMeasure: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.productionOrder.unitofmeasure') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.productionorder.unitofmeasure') }),
       trigger: 'blur'
     }
   ],
-  priority: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.productionOrder.priority') }),
-      trigger: 'change'
-    }
-  ],
-  status: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.productionOrder.status') }),
-      trigger: 'change'
-    }
-  ],
+  priority: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionorder.priority') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionorder.priority') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  status: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionorder.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionorder.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -489,15 +556,38 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('prodOrderQty' in payload) {
+    const rawprodOrderQty = payload.prodOrderQty
+    payload.prodOrderQty = typeof rawprodOrderQty === 'number' ? rawprodOrderQty : Number(rawprodOrderQty)
+  }
+  if ('producedQty' in payload) {
+    const rawproducedQty = payload.producedQty
+    payload.producedQty = typeof rawproducedQty === 'number' ? rawproducedQty : Number(rawproducedQty)
+  }
+  if ('priority' in payload) {
+    const rawpriority = payload.priority
+    payload.priority = typeof rawpriority === 'number' ? rawpriority : Number(rawpriority)
+  }
+  if ('status' in payload) {
+    const rawstatus = payload.status
+    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.productionOrderId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

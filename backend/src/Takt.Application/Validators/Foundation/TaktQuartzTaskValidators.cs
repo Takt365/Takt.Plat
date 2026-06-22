@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktQuartzTaskValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QuartzTask 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktQuartzTask 生成，请按需审阅）
 // 
@@ -31,50 +31,40 @@ public class TaktQuartzTaskCreateValidator : AbstractValidator<TaktQuartzTaskCre
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.TaskCode)
             .NotEmpty().WithMessage("任务编码不能为空")
-            .MaximumLength(40).WithMessage("任务编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("任务编码长度不能超过50个字符");
         RuleFor(x => x.TaskName)
             .NotEmpty().WithMessage("任务名称不能为空")
-            .MaximumLength(40).WithMessage("任务名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("任务名称长度不能超过100个字符");
         RuleFor(x => x.JobName)
             .NotEmpty().WithMessage("Quartz Job 名称不能为空")
-            .MaximumLength(40).WithMessage("Quartz Job 名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("Quartz Job 名称长度不能超过100个字符");
         RuleFor(x => x.JobGroup)
             .NotEmpty().WithMessage("Quartz Job 分组不能为空")
             .MaximumLength(50).WithMessage("Quartz Job 分组长度不能超过50个字符");
-        RuleFor(x => x.TaskType)
-            .InclusiveBetween(1, 3).WithMessage("任务类型无效");
         RuleFor(x => x.AssemblyName)
             .NotEmpty().WithMessage("程序集名称不能为空")
-            .MaximumLength(40).WithMessage("程序集名称长度不能超过40个字符");
+            .MaximumLength(255).WithMessage("程序集名称长度不能超过255个字符");
         RuleFor(x => x.ClassName)
             .NotEmpty().WithMessage("任务类名不能为空")
-            .MaximumLength(40).WithMessage("任务类名长度不能超过40个字符");
+            .MaximumLength(255).WithMessage("任务类名长度不能超过255个字符");
         RuleFor(x => x.ApiUrl)
             .MaximumLength(255).WithMessage("API 执行地址长度不能超过255个字符");
         RuleFor(x => x.RequestMethod)
             .MaximumLength(10).WithMessage("网络请求方式长度不能超过10个字符");
-        RuleFor(x => x.TriggerType)
-            .InclusiveBetween(0, 1).WithMessage("触发器类型无效");
         RuleFor(x => x.CronExpression)
             .NotEmpty().WithMessage("Cron 表达式不能为空")
             .MaximumLength(100).WithMessage("Cron 表达式长度不能超过100个字符");
         RuleFor(x => x.ExecuteParams)
             .MaximumLength(1000).WithMessage("执行参数长度不能超过1000个字符");
-        RuleFor(x => x.TaskStatus)
-            .InclusiveBetween(0, 1).WithMessage("任务状态无效");
-        RuleFor(x => x.Concurrent)
-            .InclusiveBetween(0, 1).WithMessage("是否允许并发执行无效");
-        RuleFor(x => x.MisfirePolicy)
-            .InclusiveBetween(0, 3).WithMessage("Misfire 策略无效");
         RuleFor(x => x.Description)
             .MaximumLength(500).WithMessage("任务描述长度不能超过500个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -115,40 +105,36 @@ public class TaktQuartzTaskImportValidator : AbstractValidator<TaktQuartzTaskImp
     public TaktQuartzTaskImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.TaskCode)
             .NotEmpty().WithMessage("任务编码不能为空")
-            .MaximumLength(40).WithMessage("任务编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("任务编码长度不能超过50个字符");
         RuleFor(x => x.TaskName)
             .NotEmpty().WithMessage("任务名称不能为空")
-            .MaximumLength(40).WithMessage("任务名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("任务名称长度不能超过100个字符");
         RuleFor(x => x.JobName)
             .NotEmpty().WithMessage("Quartz Job 名称不能为空")
-            .MaximumLength(40).WithMessage("Quartz Job 名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("Quartz Job 名称长度不能超过100个字符");
         RuleFor(x => x.JobGroup)
             .NotEmpty().WithMessage("Quartz Job 分组不能为空")
             .MaximumLength(50).WithMessage("Quartz Job 分组长度不能超过50个字符");
-        RuleFor(x => x.TaskType)
-            .InclusiveBetween(1, 3).WithMessage("任务类型无效");
         RuleFor(x => x.AssemblyName)
             .NotEmpty().WithMessage("程序集名称不能为空")
-            .MaximumLength(40).WithMessage("程序集名称长度不能超过40个字符");
+            .MaximumLength(255).WithMessage("程序集名称长度不能超过255个字符");
         RuleFor(x => x.ClassName)
             .NotEmpty().WithMessage("任务类名不能为空")
-            .MaximumLength(40).WithMessage("任务类名长度不能超过40个字符");
+            .MaximumLength(255).WithMessage("任务类名长度不能超过255个字符");
         RuleFor(x => x.ApiUrl)
             .MaximumLength(255).WithMessage("API 执行地址长度不能超过255个字符").When(x => !string.IsNullOrWhiteSpace(x.ApiUrl));
         RuleFor(x => x.RequestMethod)
             .MaximumLength(10).WithMessage("网络请求方式长度不能超过10个字符").When(x => !string.IsNullOrWhiteSpace(x.RequestMethod));
-        RuleFor(x => x.TriggerType)
-            .InclusiveBetween(0, 1).WithMessage("触发器类型无效");
         RuleFor(x => x.CronExpression)
             .NotEmpty().WithMessage("Cron 表达式不能为空")
             .MaximumLength(100).WithMessage("Cron 表达式长度不能超过100个字符");
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

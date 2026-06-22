@@ -261,12 +261,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('common.page.entity.ExtField')"
+                name="ExtField"
               >
                 <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
                   size="small"
                   allow-clear
                 />
@@ -452,7 +452,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","reqNo","deptId","postId","jobGrade","requestQty","headcountType","reasonCode","replaceEmployeeId","expectedOnboardDate","contractType","workLocation","jobDesc","qualification","budgetYear","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","reqNo","deptId","postId","jobGrade","requestQty","headcountType","reasonCode","replaceEmployeeId","expectedOnboardDate","contractType","workLocation","jobDesc","qualification","budgetYear","ExtField","remark"]
 
 /** talentRecruitmentPlan 子表行（表单 Tab 内嵌） */
 const childTalentRecruitmentPlanRows = ref<Record<string, unknown>[]>([])

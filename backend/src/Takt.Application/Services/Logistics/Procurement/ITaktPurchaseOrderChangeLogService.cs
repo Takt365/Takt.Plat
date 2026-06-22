@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Services.Logistics.Materials
+// 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：ITaktPurchaseOrderChangeLogService.cs
 // 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
@@ -10,11 +10,11 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using Takt.Application.Dtos.Logistics.Materials;
+using Takt.Application.Dtos.Logistics.Procurement;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
 
-namespace Takt.Application.Services.Logistics.Materials;
+namespace Takt.Application.Services.Logistics.Procurement;
 
 /// <summary>
 /// 采购订单变更记录应用服务接口

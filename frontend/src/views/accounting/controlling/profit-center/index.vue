@@ -32,11 +32,11 @@
         @search="loadFullProfitCenterTree"
       />
       <TaktTreeRightToolsBar
-        create-permission="accounting:controlling:profitcenter:create"
-        update-permission="accounting:controlling:profitcenter:update"
-        delete-permission="accounting:controlling:profitcenter:delete"
-        import-permission="accounting:controlling:profitcenter:import"
-        export-permission="accounting:controlling:profitcenter:export"
+        create-permission="accounting:controlling:profit:center:create"
+        update-permission="accounting:controlling:profit:center:update"
+        delete-permission="accounting:controlling:profit:center:delete"
+        import-permission="accounting:controlling:profit:center:import"
+        export-permission="accounting:controlling:profit:center:export"
         :show-create="true"
         :show-update="true"
         :show-delete="true"
@@ -109,12 +109,14 @@
               {{ getProfitCenterField(record, 'profitCenterName') }}
             </span>
           </template>
-          <template v-if="column.key === 'profitCenterStatus'">
-            <TaktDictTag
-              :value="getProfitCenterDictValue(record, 'profitCenterStatus')"
-              dict-type="sys_normal_disable"
-            />
-          </template>
+        <template v-else-if="column.key === 'profitCenterStatus'">
+          <a-switch
+            :checked="getProfitCenterField(record, 'profitCenterStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleProfitCenterStatusChange(record, Boolean(checked))"
+          />
+        </template>
+
         </template>
       </TaktTreeRightTable>
     </div>
@@ -130,6 +132,7 @@
       @cancel="handleFormCancel"
     >
       <ProfitCenterForm
+        :key="formData?.profitCenterId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -147,159 +150,148 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('profitCenterCode')">
-      <a-form-item :label="t('entity.profitCenter.code')">
+      <a-form-item :label="t('entity.profitcenter.code')">
         <a-input
           v-model:value="advancedQueryForm.profitCenterCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitCenter.code') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('profitCenterName')">
-      <a-form-item :label="t('entity.profitCenter.name')">
+      <a-form-item :label="t('entity.profitcenter.name')">
         <a-input
           v-model:value="advancedQueryForm.profitCenterName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitCenter.name') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('shortName')">
-      <a-form-item :label="t('entity.profitCenter.shortname')">
-        <a-input
-          v-model:value="advancedQueryForm.shortName"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.profitCenter.shortname') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('profitCenterDesc')">
-      <a-form-item :label="t('entity.profitCenter.profitcenterdesc')">
-        <a-input
-          v-model:value="advancedQueryForm.profitCenterDesc"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.profitCenter.profitcenterdesc') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.name') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('parentId')">
-      <a-form-item :label="t('entity.profitCenter.parentid')">
+      <a-form-item :label="t('entity.profitcenter.parentid')">
         <a-input
           v-model:value="advancedQueryForm.parentId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitCenter.parentid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.parentid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('managerId')">
-      <a-form-item :label="t('entity.profitCenter.managerid')">
+      <a-form-item :label="t('entity.profitcenter.managerid')">
         <a-input
           v-model:value="advancedQueryForm.managerId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitCenter.managerid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.managerid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('managerName')">
-      <a-form-item :label="t('entity.profitCenter.managername')">
+      <a-form-item :label="t('entity.profitcenter.managername')">
         <a-input
           v-model:value="advancedQueryForm.managerName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitCenter.managername') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.managername') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptId')">
-      <a-form-item :label="t('entity.profitCenter.deptid')">
+      <a-form-item :label="t('entity.profitcenter.deptid')">
         <a-input
           v-model:value="advancedQueryForm.deptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitCenter.deptid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.deptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptName')">
-      <a-form-item :label="t('entity.profitCenter.deptname')">
+      <a-form-item :label="t('entity.profitcenter.deptname')">
         <a-input
           v-model:value="advancedQueryForm.deptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitCenter.deptname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.deptname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('profitCenterLevel')">
-      <a-form-item :label="t('entity.profitCenter.level')">
+      <a-form-item :label="t('entity.profitcenter.level')">
         <a-input-number
           v-model:value="advancedQueryForm.profitCenterLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitCenter.level') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.level') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="t('entity.profitCenter.relatedplant')">
+      <a-form-item :label="t('entity.profitcenter.relatedplant')">
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitCenter.relatedplant') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitcenter.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('profitCenterStatus')">
-      <a-form-item :label="t('entity.profitCenter.status')">
+      <a-form-item :label="t('entity.profitcenter.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.profitCenterStatus"
-          dict-type="sys_normal_disable"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitCenter.status') })"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitcenter.status') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validFromStart')">
-      <a-form-item :label="t('entity.profitCenter.validfromstart')">
+      <a-form-item :label="t('entity.profitcenter.validfromstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.validFromStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitCenter.validfromstart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitcenter.validfromstart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validFromEnd')">
-      <a-form-item :label="t('entity.profitCenter.validfromend')">
+      <a-form-item :label="t('entity.profitcenter.validfromend')">
         <a-date-picker
           v-model:value="advancedQueryForm.validFromEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitCenter.validfromend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitcenter.validfromend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validToStart')">
-      <a-form-item :label="t('entity.profitCenter.validtostart')">
+      <a-form-item :label="t('entity.profitcenter.validtostart')">
         <a-date-picker
           v-model:value="advancedQueryForm.validToStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitCenter.validtostart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitcenter.validtostart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validToEnd')">
-      <a-form-item :label="t('entity.profitCenter.validtoend')">
+      <a-form-item :label="t('entity.profitcenter.validtoend')">
         <a-date-picker
           v-model:value="advancedQueryForm.validToEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitCenter.validtoend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.profitcenter.validtoend') })"
           value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.profitCenter.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.profitCenter.sortorder') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -310,7 +302,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -321,17 +313,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -340,8 +351,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -351,14 +364,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.profitCenter._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.profitcenter._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.profitCenter._self"
+        entity-i18n-key="entity.profitcenter._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -395,13 +408,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ProfitCenterForm from './components/profit-center-form.vue'
-import { getProfitCenterTree, getProfitCenterById, createProfitCenter, updateProfitCenter, deleteProfitCenterById, deleteProfitCenterBatch, getProfitCenterTemplate, importProfitCenter, exportProfitCenter } from '@/api/accounting/controlling/profit-center'
+import { getProfitCenterTree, getProfitCenterById, createProfitCenter, updateProfitCenter, deleteProfitCenterById, deleteProfitCenterBatch, getProfitCenterTemplate, importProfitCenter, exportProfitCenter, updateProfitCenterStatus } from '@/api/accounting/controlling/profit-center'
 import type { ProfitCenter, ProfitCenterTree, ProfitCenterUpdate } from '@/types/accounting/controlling/profit-center'
 import type { TreeDropPayload } from '@/components/business/takt-tree-left-table/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
@@ -413,7 +428,7 @@ const excelNames = taktExcelEntityNames('TaktProfitCenter')
 /** 右侧树表快捷查询占位文案 */
 const tableSearchPlaceholder = computed(() =>
   t('common.page.form.placeholder.search', {
-    keyword: [t('entity.profitCenter.name'), t('entity.profitCenter.code')].join(' / '),
+    keyword: [t('entity.profitcenter.name'), t('entity.profitcenter.code')].join(' / '),
   })
 )
 
@@ -428,9 +443,9 @@ const treeExpandedKeys = ref<(string | number)[]>([])
 /** 右侧表格展开状态（预留） */
 const tableExpanded = ref(false)
 /** 右侧拍平列表当前页码 */
-const tableCurrentPage = ref(1)
+const tableCurrentPage = ref(getTaktDefaultPageIndex())
 /** 右侧拍平列表每页条数 */
-const tablePageSize = ref(20)
+const tablePageSize = ref(getTaktDefaultPageSize())
 /** 页面 loading（树加载、提交、导出等） */
 const loading = ref(false)
 /** 全量树表节点（左侧树与右侧表共用，不受右侧查询过滤） */
@@ -451,19 +466,18 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<ProfitCenter>>({})
+const formData = ref<Partial<ProfitCenter> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   profitCenterCode: '',
   profitCenterName: '',
-  shortName: '',
-  profitCenterDesc: '',
   parentId: '',
   managerId: '',
   managerName: '',
@@ -476,34 +490,30 @@ const advancedQueryForm = ref({
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'profitCenterCode', label: t('entity.profitCenter.code') },
-  { key: 'profitCenterName', label: t('entity.profitCenter.name') },
-  { key: 'shortName', label: t('entity.profitCenter.shortname') },
-  { key: 'profitCenterDesc', label: t('entity.profitCenter.profitcenterdesc') },
-  { key: 'parentId', label: t('entity.profitCenter.parentid') },
-  { key: 'managerId', label: t('entity.profitCenter.managerid') },
-  { key: 'managerName', label: t('entity.profitCenter.managername') },
-  { key: 'deptId', label: t('entity.profitCenter.deptid') },
-  { key: 'deptName', label: t('entity.profitCenter.deptname') },
-  { key: 'profitCenterLevel', label: t('entity.profitCenter.level') },
-  { key: 'relatedPlant', label: t('entity.profitCenter.relatedplant') },
-  { key: 'profitCenterStatus', label: t('entity.profitCenter.status') },
-  { key: 'validFromStart', label: t('entity.profitCenter.validfromstart') },
-  { key: 'validFromEnd', label: t('entity.profitCenter.validfromend') },
-  { key: 'validToStart', label: t('entity.profitCenter.validtostart') },
-  { key: 'validToEnd', label: t('entity.profitCenter.validtoend') },
-  { key: 'sortOrder', label: t('entity.profitCenter.sortorder') },
+  { key: 'profitCenterCode', label: t('entity.profitcenter.code') },
+  { key: 'profitCenterName', label: t('entity.profitcenter.name') },
+  { key: 'parentId', label: t('entity.profitcenter.parentid') },
+  { key: 'managerId', label: t('entity.profitcenter.managerid') },
+  { key: 'managerName', label: t('entity.profitcenter.managername') },
+  { key: 'deptId', label: t('entity.profitcenter.deptid') },
+  { key: 'deptName', label: t('entity.profitcenter.deptname') },
+  { key: 'profitCenterLevel', label: t('entity.profitcenter.level') },
+  { key: 'relatedPlant', label: t('entity.profitcenter.relatedplant') },
+  { key: 'profitCenterStatus', label: t('entity.profitcenter.status') },
+  { key: 'validFromStart', label: t('entity.profitcenter.validfromstart') },
+  { key: 'validFromEnd', label: t('entity.profitcenter.validfromend') },
+  { key: 'validToStart', label: t('entity.profitcenter.validtostart') },
+  { key: 'validToEnd', label: t('entity.profitcenter.validtoend') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -518,6 +528,9 @@ const visibleColumnKeys = ref<string[]>([])
 const entityIdName = 'profitCenterId'
 /** 树节点标题字段名（左侧树 title 与缩进列） */
 const treeTitleField = 'profitCenterName'
+
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
 /** 解析树节点 key（与列表 profitCenterId、左侧树 key 一致） */
 function resolveProfitCenterNodeKey(node: Record<string, unknown>): string {
@@ -678,8 +691,6 @@ function matchesProfitCenterRightQuery(record: Record<string, unknown>): boolean
   }
   if (advancedQueryForm.value.profitCenterCode && !String(record.profitCenterCode ?? '').includes(String(advancedQueryForm.value.profitCenterCode))) return false
   if (advancedQueryForm.value.profitCenterName && !String(record.profitCenterName ?? '').includes(String(advancedQueryForm.value.profitCenterName))) return false
-  if (advancedQueryForm.value.shortName && !String(record.shortName ?? '').includes(String(advancedQueryForm.value.shortName))) return false
-  if (advancedQueryForm.value.profitCenterDesc && !String(record.profitCenterDesc ?? '').includes(String(advancedQueryForm.value.profitCenterDesc))) return false
   if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
   if (advancedQueryForm.value.managerId && !String(record.managerId ?? '').includes(String(advancedQueryForm.value.managerId))) return false
   if (advancedQueryForm.value.managerName && !String(record.managerName ?? '').includes(String(advancedQueryForm.value.managerName))) return false
@@ -692,10 +703,9 @@ function matchesProfitCenterRightQuery(record: Record<string, unknown>): boolean
   if (advancedQueryForm.value.validFromEnd && !String(record.validFromEnd ?? '').includes(String(advancedQueryForm.value.validFromEnd))) return false
   if (advancedQueryForm.value.validToStart && !String(record.validToStart ?? '').includes(String(advancedQueryForm.value.validToStart))) return false
   if (advancedQueryForm.value.validToEnd && !String(record.validToEnd ?? '').includes(String(advancedQueryForm.value.validToEnd))) return false
-  if (advancedQueryForm.value.sortOrder !== undefined && record.sortOrder !== advancedQueryForm.value.sortOrder) return false
   if (advancedQueryForm.value.createdAtStart && !String(record.createdAtStart ?? '').includes(String(advancedQueryForm.value.createdAtStart))) return false
   if (advancedQueryForm.value.createdAtEnd && !String(record.createdAtEnd ?? '').includes(String(advancedQueryForm.value.createdAtEnd))) return false
-  if (advancedQueryForm.value.extFieldJson && !String(record.extFieldJson ?? '').includes(String(advancedQueryForm.value.extFieldJson))) return false
+  if (advancedQueryForm.value.extField && !String(record.extField ?? '').includes(String(advancedQueryForm.value.extField))) return false
   if (advancedQueryForm.value.remark && !String(record.remark ?? '').includes(String(advancedQueryForm.value.remark))) return false
   return true
 }
@@ -714,13 +724,13 @@ const paginatedFlatTableRows = computed(() => {
 
 /** 左侧选中节点或查询变化时，右侧拍平列表重置到第一页 */
 watch(tableTreeData, () => {
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 })
 
 /** 左侧树选中：重置右侧分页到第一页 */
 const handleTreeSelect = (selectedKeys: (string | number)[]) => {
   selectedTreeKeys.value = selectedKeys
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /**
@@ -740,8 +750,6 @@ function buildProfitCenterUpdateDto(
     companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
     profitCenterCode: profitCenter.profitCenterCode,
     profitCenterName: profitCenter.profitCenterName,
-    shortName: profitCenter.shortName,
-    profitCenterDesc: profitCenter.profitCenterDesc,
     parentId: overrides.parentId,
     managerId: profitCenter.managerId,
     managerName: profitCenter.managerName,
@@ -752,8 +760,8 @@ function buildProfitCenterUpdateDto(
     profitCenterStatus: profitCenter.profitCenterStatus,
     validFrom: profitCenter.validFrom,
     validTo: profitCenter.validTo,
-    sortOrder: overrides.sortOrder,
-    extFieldJson: profitCenter.extFieldJson,
+    changeLogs: profitCenter.changeLogs,
+    extField: profitCenter.extField,
     remark: profitCenter.remark,
   }
 }
@@ -796,10 +804,10 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
       parentId: pos.parentId,
       sortOrder: pos.sortOrder,
     }))
-    message.success(t('common.feedback.updated', { target: t('entity.profitCenter._self') }))
+    message.success(t('common.feedback.updated', { target: t('entity.profitcenter._self') }))
     await loadData()
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: t('entity.profitCenter._self') })))
+    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: t('entity.profitcenter._self') })))
     await loadFullProfitCenterTree().catch(() => undefined)
   } finally {
     loading.value = false
@@ -856,6 +864,7 @@ const getProfitCenterDictValue = (
   return String(value)
 }
 
+
 /** 从异常对象提取用户可见消息 */
 const getErrorMessage = (error: unknown, fallback: string): string => {
   if (typeof error === 'object' && error !== null && 'message' in error) {
@@ -881,7 +890,7 @@ watchEffect(() => {
       getProfitCenterField(record, 'profitCenterId') ?? getProfitCenterField(record, 'id') ?? '',
   },
   {
-    title: t('entity.profitCenter.code'),
+    title: t('entity.profitcenter.code'),
     dataIndex: 'profitCenterCode',
     key: 'profitCenterCode',
     width: 120,
@@ -890,7 +899,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'profitCenterCode') ?? ''
   },
   {
-    title: t('entity.profitCenter.name'),
+    title: t('entity.profitcenter.name'),
     dataIndex: 'profitCenterName',
     key: 'profitCenterName',
     width: 160,
@@ -898,25 +907,7 @@ watchEffect(() => {
     ellipsis: true,
   },
   {
-    title: t('entity.profitCenter.shortname'),
-    dataIndex: 'shortName',
-    key: 'shortName',
-    width: 100,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'shortName') ?? ''
-  },
-  {
-    title: t('entity.profitCenter.profitcenterdesc'),
-    dataIndex: 'profitCenterDesc',
-    key: 'profitCenterDesc',
-    width: 160,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'profitCenterDesc') ?? ''
-  },
-  {
-    title: t('entity.profitCenter.parentid'),
+    title: t('entity.profitcenter.parentid'),
     dataIndex: 'parentId',
     key: 'parentId',
     width: 120,
@@ -925,7 +916,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'parentId') ?? ''
   },
   {
-    title: t('entity.profitCenter.managerid'),
+    title: t('entity.profitcenter.managerid'),
     dataIndex: 'managerId',
     key: 'managerId',
     width: 120,
@@ -934,7 +925,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'managerId') ?? ''
   },
   {
-    title: t('entity.profitCenter.managername'),
+    title: t('entity.profitcenter.managername'),
     dataIndex: 'managerName',
     key: 'managerName',
     width: 120,
@@ -943,7 +934,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'managerName') ?? ''
   },
   {
-    title: t('entity.profitCenter.deptid'),
+    title: t('entity.profitcenter.deptid'),
     dataIndex: 'deptId',
     key: 'deptId',
     width: 120,
@@ -952,7 +943,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'deptId') ?? ''
   },
   {
-    title: t('entity.profitCenter.deptname'),
+    title: t('entity.profitcenter.deptname'),
     dataIndex: 'deptName',
     key: 'deptName',
     width: 120,
@@ -961,7 +952,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'deptName') ?? ''
   },
   {
-    title: t('entity.profitCenter.level'),
+    title: t('entity.profitcenter.level'),
     dataIndex: 'profitCenterLevel',
     key: 'profitCenterLevel',
     width: 120,
@@ -970,7 +961,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'profitCenterLevel') ?? ''
   },
   {
-    title: t('entity.profitCenter.relatedplant'),
+    title: t('entity.profitcenter.relatedplant'),
     dataIndex: 'relatedPlant',
     key: 'relatedPlant',
     width: 120,
@@ -979,7 +970,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'relatedPlant') ?? ''
   },
   {
-    title: t('entity.profitCenter.status'),
+    title: t('entity.profitcenter.status'),
     dataIndex: 'profitCenterStatus',
     key: 'profitCenterStatus',
     width: 120,
@@ -987,7 +978,7 @@ watchEffect(() => {
     ellipsis: true,
   },
   {
-    title: t('entity.profitCenter.validfrom'),
+    title: t('entity.profitcenter.validfrom'),
     dataIndex: 'validFrom',
     key: 'validFrom',
     width: 120,
@@ -996,7 +987,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'validFrom') ?? ''
   },
   {
-    title: t('entity.profitCenter.validto'),
+    title: t('entity.profitcenter.validto'),
     dataIndex: 'validTo',
     key: 'validTo',
     width: 120,
@@ -1011,7 +1002,7 @@ watchEffect(() => {
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'accounting:controlling:profitcenter:update',
+        permission: 'accounting:controlling:profit:center:update',
         onClick: (record: ProfitCenter) => handleEdit(record)
       },
       {
@@ -1019,7 +1010,7 @@ watchEffect(() => {
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'accounting:controlling:profitcenter:delete',
+        permission: 'accounting:controlling:profit:center:delete',
         onClick: (record: ProfitCenter) => handleDeleteOne(record)
       }
     ],
@@ -1072,10 +1063,9 @@ async function loadData() {
   }
 }
 
-/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
-useTableRefresh(loadData)
+/** 右侧查询（客户端过滤，不请求接口） */
 const handleSearch = () => {
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /** 右侧重置（不影响左侧树与 fullTableTree） */
@@ -1084,8 +1074,6 @@ const handleReset = () => {
   advancedQueryForm.value = {
   profitCenterCode: '',
   profitCenterName: '',
-  shortName: '',
-  profitCenterDesc: '',
   parentId: '',
   managerId: '',
   managerName: '',
@@ -1098,28 +1086,54 @@ const handleReset = () => {
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
+}
+
+
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleProfitCenterStatusChange(record: ProfitCenterRowRecord, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getProfitCenterField(record, 'profitCenterStatus')
+  const id = getProfitCenterId(record)
+  const row = null
+  if (row) {
+    row.profitCenterStatus = newVal
+  }
+  try {
+    await updateProfitCenterStatus({ profitCenterId: id, profitCenterStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    await loadData()
+  } catch (error: unknown) {
+    if (row) {
+      row.profitCenterStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
 }
 
 /** 新增：默认 parentId 为当前左侧选中节点 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.profitCenter._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.profitcenter._self') })
   const keys = selectedTreeKeys.value
   formData.value = {
     parentId: keys.length > 0 ? String(keys[keys.length - 1]) : '0',
   }
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 
 /** 打开编辑弹窗 */
 function handleEdit(record: ProfitCenter) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.profitCenter._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.profitcenter._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -1129,7 +1143,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.profitCenter._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.profitcenter._self') }))
   }
 }
 
@@ -1148,12 +1162,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateProfitCenter(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.profitCenter._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.profitcenter._self') }))
     } else {
       await createProfitCenter(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.profitCenter._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.profitcenter._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     await loadData()
   } finally {
     formLoading.value = false
@@ -1163,18 +1179,20 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 
 /** 删除单行 */
 async function handleDeleteOne(record: ProfitCenter) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.profitCenter._self'), name: t('common.tip.this.target', { target: t('entity.profitCenter._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.profitcenter._self'), name: t('common.tip.this.target', { target: t('entity.profitcenter._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteProfitCenterById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.profitCenter._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.profitcenter._self') }))
       await loadData()
     }
   })
@@ -1183,18 +1201,18 @@ async function handleDeleteOne(record: ProfitCenter) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.profitCenter._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.profitcenter._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.profitCenter._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.profitcenter._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteProfitCenterBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.profitCenter._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.profitcenter._self') }))
       await loadData()
     }
   })
@@ -1250,10 +1268,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.profitCenter._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.profitcenter._self') }))
   } catch (error: unknown) {
     logger.error('[ProfitCenter] 导出失败', undefined, error)
-    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: t('entity.profitCenter._self') })))
+    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: t('entity.profitcenter._self') })))
   } finally {
     loading.value = false
   }
@@ -1267,7 +1285,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置右侧分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /** 重置高级查询表单（不自动查询） */
@@ -1275,8 +1293,6 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   profitCenterCode: '',
   profitCenterName: '',
-  shortName: '',
-  profitCenterDesc: '',
   parentId: '',
   managerId: '',
   managerName: '',
@@ -1289,10 +1305,9 @@ function handleAdvancedQueryReset() {
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1322,8 +1337,10 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 
-/** 页面挂载后加载树数据 */
-onMounted(() => {
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉树数据 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   void loadData()
 })
 </script>

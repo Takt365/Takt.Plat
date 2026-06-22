@@ -70,7 +70,7 @@ const availableShortcuts = computed(() => menuStore.leafMenus)
 
 const FAMOUS_COLORS: string[] = [
   '#2e8b57', '#00a0b0', '#FF0000', '#FF6347', '#990033',
-  '#8c1515', '#002FA7', '#4c2b18', '#003153', '#F9DC24', '#808080'
+  '#8c1515', '#002FA7', '#4c2b18', '#003153', '#F4D35E', '#808080'
 ]
 
 function getColorForPath(path: string): string {

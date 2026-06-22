@@ -71,7 +71,7 @@ public class TaktPayScaleDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ScaleStatus { get; set; } = 0;
 
@@ -138,7 +138,7 @@ public class TaktPayScaleQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ScaleStatus { get; set; }
 
@@ -160,7 +160,7 @@ public class TaktPayScaleQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -230,7 +230,7 @@ public class TaktPayScaleCreateDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ScaleStatus { get; set; } = 0;
 
@@ -242,7 +242,7 @@ public class TaktPayScaleCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -289,9 +289,9 @@ public class TaktPayScaleStatusDto
     public long PayScaleId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
     public int ScaleStatus { get; set; } = 0;
 }
 
@@ -359,7 +359,7 @@ public class TaktPayScaleTemplateDto
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ScaleStatus { get; set; }
 
@@ -371,7 +371,7 @@ public class TaktPayScaleTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -421,7 +421,7 @@ public class TaktPayScaleImportDto
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? ScaleStatus { get; set; }
 
@@ -433,7 +433,7 @@ public class TaktPayScaleImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -499,7 +499,7 @@ public class TaktPayScaleExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int ScaleStatus { get; set; } = 0;
 
@@ -511,7 +511,7 @@ public class TaktPayScaleExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

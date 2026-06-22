@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
-// 文件名称：TaktQualityOperationCalibrationDtos.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityAssuranceCalibrationDtos.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
-// 功能描述：QualityOperationCalibration 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityOperationCalibration 生成，请按需审阅）
+// 功能描述：QualityAssuranceCalibration 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityAssuranceCalibration 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,38 +18,38 @@ using Takt.Shared.Models;
 namespace Takt.Application.Dtos.Logistics.Quality.Cost;
 
 // ========================================
-// QualityOperationCalibration 响应 DTO
+// QualityAssuranceCalibration 响应 DTO
 // ========================================
 
 /// <summary>
 /// 品质业务明细 - 测定器校正费用
-/// 对应前端 TaktQualityOperationCalibrationDto
+/// 对应前端 TaktQualityAssuranceCalibrationDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
-public class TaktQualityOperationCalibrationDto : TaktCompanyDtoBase
+public class TaktQualityAssuranceCalibrationDto : TaktCompanyDtoBase
 {
     /// <summary>
-    /// QualityOperationCalibrationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// QualityAssuranceCalibrationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationCalibrationId { get; set; }
+    public long QualityAssuranceCalibrationId { get; set; }
 
     /// <summary>
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationId { get; set; }
+    public long QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务主表名称（填充字段）
     /// </summary>
-    public string? QualityOperationName { get; set; }
+    public string? QualityAssuranceName { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    public string QualityOperationCode { get; set; } = string.Empty;
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -83,21 +83,21 @@ public class TaktQualityOperationCalibrationDto : TaktCompanyDtoBase
 
     /// <summary>
     /// 品质业务主表(导航属性)
-    /// （主表：TaktQualityOperation）
+    /// （主表：TaktQualityAssurance）
     /// </summary>
-    public TaktQualityOperationDto? Operation { get; set; }
+    public TaktQualityAssuranceDto? Operation { get; set; }
 
 }
 
 // ========================================
-// QualityOperationCalibration 查询 DTO
+// QualityAssuranceCalibration 查询 DTO
 // ========================================
 
 /// <summary>
-/// QualityOperationCalibration 分页查询 DTO
+/// QualityAssuranceCalibration 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
-public class TaktQualityOperationCalibrationQueryDto : TaktPagedQuery
+public class TaktQualityAssuranceCalibrationQueryDto : TaktPagedQuery
 {
     /// <summary>
     /// 租户编码
@@ -113,12 +113,12 @@ public class TaktQualityOperationCalibrationQueryDto : TaktPagedQuery
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityOperationId { get; set; }
+    public long? QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    public string? QualityOperationCode { get; set; } = string.Empty;
+    public string? QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -163,7 +163,7 @@ public class TaktQualityOperationCalibrationQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -172,13 +172,13 @@ public class TaktQualityOperationCalibrationQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建QualityOperationCalibration DTO
+// 创建QualityAssuranceCalibration DTO
 // ========================================
 
 /// <summary>
-/// 创建QualityOperationCalibration DTO
+/// 创建QualityAssuranceCalibration DTO
 /// </summary>
-public class TaktQualityOperationCalibrationCreateDto
+public class TaktQualityAssuranceCalibrationCreateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -199,13 +199,13 @@ public class TaktQualityOperationCalibrationCreateDto
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationId { get; set; }
+    public long QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
     [Required(ErrorMessage = "品质业务编码（冗余字段,便于查询）不能为空")]
-    public string QualityOperationCode { get; set; } = string.Empty;
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -240,7 +240,7 @@ public class TaktQualityOperationCalibrationCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -250,22 +250,22 @@ public class TaktQualityOperationCalibrationCreateDto
 }
 
 // ========================================
-// 更新QualityOperationCalibration DTO
+// 更新QualityAssuranceCalibration DTO
 // ========================================
 
 /// <summary>
-/// 更新QualityOperationCalibration DTO
-/// 继承 TaktQualityOperationCalibrationCreateDto，添加 QualityOperationCalibrationId 字段
+/// 更新QualityAssuranceCalibration DTO
+/// 继承 TaktQualityAssuranceCalibrationCreateDto，添加 QualityAssuranceCalibrationId 字段
 /// </summary>
-public class TaktQualityOperationCalibrationUpdateDto : TaktQualityOperationCalibrationCreateDto
+public class TaktQualityAssuranceCalibrationUpdateDto : TaktQualityAssuranceCalibrationCreateDto
 {
     /// <summary>
-    /// QualityOperationCalibrationID（标识要更新的实体）
+    /// QualityAssuranceCalibrationID（标识要更新的实体）
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationCalibrationId { get; set; }
+    public long QualityAssuranceCalibrationId { get; set; }
 
 }
 
@@ -274,9 +274,9 @@ public class TaktQualityOperationCalibrationUpdateDto : TaktQualityOperationCali
 // ========================================
 
 /// <summary>
-/// QualityOperationCalibration 导入模板行 DTO
+/// QualityAssuranceCalibration 导入模板行 DTO
 /// </summary>
-public class TaktQualityOperationCalibrationTemplateDto
+public class TaktQualityAssuranceCalibrationTemplateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -292,12 +292,12 @@ public class TaktQualityOperationCalibrationTemplateDto
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityOperationId { get; set; }
+    public long? QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    public string? QualityOperationCode { get; set; } = string.Empty;
+    public string? QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -317,7 +317,7 @@ public class TaktQualityOperationCalibrationTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -327,9 +327,9 @@ public class TaktQualityOperationCalibrationTemplateDto
 }
 
 /// <summary>
-/// QualityOperationCalibration 导入 DTO（独立实现，不继承 TemplateDto）
+/// QualityAssuranceCalibration 导入 DTO（独立实现，不继承 TemplateDto）
 /// </summary>
-public class TaktQualityOperationCalibrationImportDto
+public class TaktQualityAssuranceCalibrationImportDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -350,12 +350,12 @@ public class TaktQualityOperationCalibrationImportDto
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? QualityOperationId { get; set; }
+    public long? QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    public string? QualityOperationCode { get; set; } = string.Empty;
+    public string? QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -375,7 +375,7 @@ public class TaktQualityOperationCalibrationImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -389,16 +389,16 @@ public class TaktQualityOperationCalibrationImportDto
 // ========================================
 
 /// <summary>
-/// QualityOperationCalibration 导出 DTO（独立实现，不继承响应 Dto）
+/// QualityAssuranceCalibration 导出 DTO（独立实现，不继承响应 Dto）
 /// </summary>
-public class TaktQualityOperationCalibrationExportDto
+public class TaktQualityAssuranceCalibrationExportDto
 {
     /// <summary>
-    /// QualityOperationCalibrationID
+    /// QualityAssuranceCalibrationID
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationCalibrationId { get; set; }
+    public long QualityAssuranceCalibrationId { get; set; }
 
     /// <summary>
     /// 公司代码
@@ -409,12 +409,12 @@ public class TaktQualityOperationCalibrationExportDto
     /// 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationId { get; set; }
+    public long QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    public string QualityOperationCode { get; set; } = string.Empty;
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -449,7 +449,7 @@ public class TaktQualityOperationCalibrationExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

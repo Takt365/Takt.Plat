@@ -12,7 +12,11 @@
 
 <template>
   <div class="takt-tree-right-table">
-    <div class="takt-tree-right-table__body">
+    <div
+      class="takt-tree-right-table__body"
+      :class="{ 'takt-tree-right-table__body--fixed-y': hasFixedScrollY }"
+      :style="tableBodyStyle"
+    >
       <a-table
         class="ant-table-striped"
         table-layout="fixed"
@@ -22,11 +26,12 @@
         :pagination="false"
         :row-key="rowKey"
         :row-class-name="rowClassName"
-        :scroll="scrollConfig"
         :virtual="shouldUseVirtual"
         :size="size"
         :bordered="bordered"
         v-bind="{ ...$attrs, ...(effectiveRowSelection ? { 'row-selection': effectiveRowSelection } : {}), 'expanded-row-keys': expandedRowKeys }"
+        :scroll="scrollConfig"
+        :locale="tableLocale"
         @update:expanded-row-keys="(keys) => emit('update:expandedRowKeys', keys)"
         @change="handleTableChange"
         @resize-column="handleResizeColumn"
@@ -73,7 +78,10 @@ import {
 import {
   applyTableColumnPresentation,
   resolveTableScrollConfig,
+  resolveVerticalScrollY,
+  type TaktTableScrollLayout,
 } from '@/utils/table-scroll'
+import { useTaktTableViewportScrollY } from '@/composables/use-takt-table-viewport-scroll-y'
 import { useI18n } from 'vue-i18n'
 
 type TableRecord = Record<string, unknown>
@@ -109,8 +117,10 @@ interface Props {
   stripe?: boolean
   /** 是否启用虚拟滚动 */
   virtual?: boolean
-  /** 滚动配置 */
+  /** 滚动配置（仅覆盖 x 或显式 y；未传 y 时由 scrollLayout 决定默认高度） */
   scroll?: { x?: number | string | true; y?: number | string }
+  /** 表格布局场景（默认 treeRight，与左树右表页面对齐） */
+  scrollLayout?: TaktTableScrollLayout
   /** 表格尺寸 */
   size?: TableProps['size']
   /** 是否显示边框 */
@@ -139,6 +149,8 @@ const props = withDefaults(defineProps<Props>(), {
   rowKey: 'id',
   stripe: true,
   virtual: true,
+  scroll: undefined,
+  scrollLayout: 'treeRight',
   size: 'middle',
   bordered: false,
   showRowSelection: true,
@@ -156,6 +168,11 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { t } = useI18n()
+
+/** 空数据占位（scroll.y 固定布局高度，与行数无关） */
+const tableLocale = computed(() => ({
+  emptyText: t('common.status.empty'),
+}))
 
 /** 超过此行数时自动启用虚拟滚动（07-overflow-vue） */
 const AUTO_VIRTUAL_ROW_THRESHOLD = 50
@@ -223,15 +240,38 @@ const resolvedDisplayColumns = computed(() =>
   applyTableColumnPresentation(displayColumnSource.value, props.defaultEllipsis),
 )
 
+/** 视口动态 scroll.y（px）；与 dataSource 行数无关 */
+const viewportScrollYPx = useTaktTableViewportScrollY(computed(() => props.scrollLayout))
+
 const scrollConfig = computed(() =>
   resolveTableScrollConfig({
     columns: resolvedDisplayColumns.value,
     scroll: props.scroll,
     includeRowSelection: effectiveRowSelection.value != null,
-    enableVerticalScroll: shouldUseVirtual.value || props.showPagination,
-    verticalScrollHeight: props.showPagination ? 'calc(100vh - 320px)' : 600,
+    enableVerticalScroll: true,
+    scrollLayout: props.scrollLayout,
+    verticalScrollHeight: resolveVerticalScrollY(props.scroll?.y, viewportScrollYPx.value),
   }),
 )
+
+/** 是否已配置固定纵向滚动高度 */
+const hasFixedScrollY = computed(() => {
+  const y = scrollConfig.value.y
+  return y != null && y !== ''
+})
+
+/**
+ * 表格体 CSS 变量（兜底固定高度，与 scroll.y 一致）
+ * @returns 绑定到 __body 的 style
+ */
+const tableBodyStyle = computed(() => {
+  const y = scrollConfig.value.y
+  if (y == null || y === '') {
+    return undefined
+  }
+  const px = typeof y === 'number' ? `${y}px` : String(y)
+  return { '--takt-table-scroll-y': px } as Record<string, string>
+})
 
 const handleTableChange = (pagination: TablePaginationConfig, filters: Record<string, FilterValue | null>, sorter: SorterResult<any> | SorterResult<any>[], _extra: TableCurrentDataSource<any>) => {
   const finalSorter = Array.isArray(sorter) ? sorter[0] : sorter
@@ -284,6 +324,7 @@ const handlePaginationSizeChange = (_page: number, size: number) => {
   min-height: 0;
   min-width: 0;
   overflow: hidden;
+  height: 100%;
 }
 
 .takt-tree-right-table__body :deep(.ant-table-wrapper) {
@@ -293,5 +334,16 @@ const handlePaginationSizeChange = (_page: number, size: number) => {
 
 .takt-tree-right-table__body :deep(.ant-table-container) {
   min-width: 0;
+}
+
+/** scroll.y 兜底：空数据/少行时亦保持固定表体高度（不随数据撑开） */
+.takt-tree-right-table__body--fixed-y :deep(.ant-table-body) {
+  min-height: var(--takt-table-scroll-y);
+  max-height: var(--takt-table-scroll-y);
+  overflow-y: auto !important;
+}
+
+.takt-tree-right-table__body--fixed-y :deep(.ant-table-placeholder) {
+  min-height: calc(var(--takt-table-scroll-y) - 8px);
 }
 </style>

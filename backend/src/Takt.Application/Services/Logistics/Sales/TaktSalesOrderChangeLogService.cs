@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesOrderChangeLogService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单变更记录应用服务实现
 // 
@@ -30,23 +30,27 @@ namespace Takt.Application.Services.Logistics.Sales;
 public class TaktSalesOrderChangeLogService : TaktServiceBase, ITaktSalesOrderChangeLogService
 {
     private readonly ITaktCompanyRepository<TaktSalesOrderChangeLog> _salesOrderChangeLogRepository;
+    private readonly ITaktCompanyRepository<TaktSalesOrder> _salesOrderRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="salesOrderChangeLogRepository">销售订单变更记录仓储</param>
+    /// <param name="salesOrderRepository">销售订单仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktSalesOrderChangeLogService(
         ITaktCompanyRepository<TaktSalesOrderChangeLog> salesOrderChangeLogRepository,
+        ITaktCompanyRepository<TaktSalesOrder> salesOrderRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _salesOrderChangeLogRepository = salesOrderChangeLogRepository;
+        _salesOrderRepository = salesOrderRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -93,7 +97,7 @@ public class TaktSalesOrderChangeLogService : TaktServiceBase, ITaktSalesOrderCh
         EnsureThreeLayerContext();
         var list = await _salesOrderChangeLogRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.OrderCode,
+            x => x.OrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -110,6 +114,7 @@ public class TaktSalesOrderChangeLogService : TaktServiceBase, ITaktSalesOrderCh
     public async Task<TaktSalesOrderChangeLogDto> CreateSalesOrderChangeLogAsync(TaktSalesOrderChangeLogCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesOrderChangeLog>();
+        await StampSalesOrderChangeLogSalesOrderAsync(entity, dto);
         entity = await _salesOrderChangeLogRepository.CreateAsync(entity);
         return await GetSalesOrderChangeLogByIdAsync(entity.Id) ?? entity.Adapt<TaktSalesOrderChangeLogDto>();
     }
@@ -128,6 +133,7 @@ public class TaktSalesOrderChangeLogService : TaktServiceBase, ITaktSalesOrderCh
             throw new TaktBusinessException("销售订单变更记录不存在");
         }
         dto.Adapt(entity);
+        await StampSalesOrderChangeLogSalesOrderAsync(entity, dto);
         await _salesOrderChangeLogRepository.UpdateAsync(entity);
         return await GetSalesOrderChangeLogByIdAsync(id) ?? throw new TaktBusinessException("销售订单变更记录不存在");
     }
@@ -190,6 +196,29 @@ public class TaktSalesOrderChangeLogService : TaktServiceBase, ITaktSalesOrderCh
     }
 
     // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步销售订单变更记录主表外键（ManyToOne → 销售订单）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampSalesOrderChangeLogSalesOrderAsync(TaktSalesOrderChangeLog entity, TaktSalesOrderChangeLogCreateDto dto)
+    {
+        if (dto.SalesOrderId <= 0)
+        {
+            return;
+        }
+        var master = await _salesOrderRepository.GetByIdAsync(dto.SalesOrderId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("销售订单不存在");
+        }
+        entity.SalesOrderId = master.Id;
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -211,7 +240,7 @@ public class TaktSalesOrderChangeLogService : TaktServiceBase, ITaktSalesOrderCh
                 || (x.ChangeFields != null && x.ChangeFields.Contains(keywords))
                 || (x.ChangeBy != null && x.ChangeBy.Contains(keywords))
                 || (x.ChangeReason != null && x.ChangeReason.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ChangeTime).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -243,9 +272,9 @@ public class TaktSalesOrderChangeLogService : TaktServiceBase, ITaktSalesOrderCh
             exp = exp.And(x => x.ChangeReason != null && x.ChangeReason.Contains(queryDto.ChangeReason));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

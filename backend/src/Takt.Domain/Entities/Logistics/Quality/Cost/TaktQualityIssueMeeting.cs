@@ -1,7 +1,7 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailureMeeting.cs
+// 文件名称：TaktQualityIssueMeeting.cs
 // 创建时间：2026-05-07
 // 创建人：Takt365(Qoder AI)
 // 功能描述:品质问题应对明细 - 会议/调查/试验费用
@@ -19,25 +19,25 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 /// <summary>
 /// 品质问题应对明细 - 会议/调查/试验费用
 /// </summary>
-[SugarTable("takt_logistics_quality_failure_meeting", "质量问题会议调查试验费用明细表")]
-[SugarIndex("ix_quality_failure_meeting_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_quality_failure_meeting_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_quality_failure_meeting_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(QualityFailureId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_quality_failure_meeting_line_number", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, false)]
-public class TaktQualityFailureMeeting : TaktCompanyEntityBase
+[SugarTable("takt_logistics_quality_issue_meeting", "质量问题会议调查试验费用明细表")]
+[SugarIndex("ix_quality_issue_meeting_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_quality_issue_meeting_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_quality_issue_meeting_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(QualityIssueId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_issue_meeting_line_number", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, false)]
+public class TaktQualityIssueMeeting : TaktCompanyEntityBase
 {
     /// <summary>
     /// 品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)
     /// </summary>
-    [SugarColumn(ColumnName = "quality_failure_id", ColumnDescription = "品质问题主表ID", ColumnDataType = "bigint", IsNullable = false)]
+    [SugarColumn(ColumnName = "quality_issue_id", ColumnDescription = "品质问题主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureId { get; set; }
+    public long QualityIssueId { get; set; }
 
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "quality_failure_code", ColumnDescription = "品质问题编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string QualityFailureCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "quality_issue_code", ColumnDescription = "品质问题编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -127,6 +127,6 @@ public class TaktQualityFailureMeeting : TaktCompanyEntityBase
     /// <summary>
     /// 质量问题主表（导航属性）
     /// </summary>
-    [Navigate(NavigateType.ManyToOne, nameof(QualityFailureId))]
-    public TaktQualityFailure? Issue { get; set; }
+    [Navigate(NavigateType.ManyToOne, nameof(QualityIssueId))]
+    public TaktQualityIssue? Issue { get; set; }
 }

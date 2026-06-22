@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/customer-service
 // 文件名称：service-ticket.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -104,12 +104,12 @@ export interface ServiceTicket extends CompanyDtoBase {
   ticketType: number;
 
   /**
-   * 优先级（0=低，1=中，2=高，3=紧急）
+   * 优先级（字典 sys_priority_level_category）
    */
   priority: number;
 
   /**
-   * 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
    */
   ticketStatus: number;
 
@@ -279,12 +279,12 @@ export interface ServiceTicketQuery extends TaktPagedQuery {
   ticketType?: number;
 
   /**
-   * 优先级（0=低，1=中，2=高，3=紧急）
+   * 优先级（字典 sys_priority_level_category）
    */
   priority?: number;
 
   /**
-   * 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
    */
   ticketStatus?: number;
 
@@ -396,7 +396,7 @@ export interface ServiceTicketQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -488,12 +488,12 @@ export interface ServiceTicketCreate {
   ticketType: number;
 
   /**
-   * 优先级（0=低，1=中，2=高，3=紧急）
+   * 优先级（字典 sys_priority_level_category）
    */
   priority: number;
 
   /**
-   * 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
    */
   ticketStatus: number;
 
@@ -563,14 +563,9 @@ export interface ServiceTicketCreate {
   acceptedAt?: string;
 
   /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -607,7 +602,7 @@ export interface ServiceTicketStatus {
   serviceTicketId: string;
 
   /**
-   * 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
    */
   ticketStatus: number;
 
@@ -712,7 +707,7 @@ export interface ServiceTicketTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -806,7 +801,7 @@ export interface ServiceTicketImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -893,12 +888,12 @@ export interface ServiceTicketExport {
   ticketType: number;
 
   /**
-   * 优先级（0=低，1=中，2=高，3=紧急）
+   * 优先级（字典 sys_priority_level_category）
    */
   priority: number;
 
   /**
-   * 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
    */
   ticketStatus: number;
 
@@ -975,7 +970,7 @@ export interface ServiceTicketExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

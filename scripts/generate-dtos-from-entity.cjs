@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-dtos-from-entity.cjs
 // 创建时间：2026-05-23
 // 创建人：Takt365(Cursor AI)
@@ -46,7 +46,7 @@ const ENTITY_BASE_FIELDS = new Set([
   'Id',
   'TenantCode',
   'CompanyCode',
-  'ExtFieldJson',
+  'ExtField',
   'Remark',
   'CreatedBy',
   'CreatedAt',
@@ -75,6 +75,9 @@ const CREATE_EXCLUDE_NAME_PATTERNS = [
   /^DeptPath$/i,
   /^IsLeaf$/i,
 ];
+
+/** CreateDto / UpdateDto 排除：排序由服务端自动生成或走 TaktXxxSortDto 专用接口 */
+const CREATE_EXCLUDE_PROPERTY_NAMES = new Set(['SortOrder']);
 
 /** 实体基类 → DTO 基类 */
 const ENTITY_BASE_TO_DTO_BASE = {
@@ -294,11 +297,11 @@ function appendTenantCompanyCreateImportProperties(lines, entityBase, options = 
  * 扩展字段与备注（与 CreateDto 一致，用于 Template / Import）
  * @param {string[]} lines
  */
-function appendExtFieldJsonAndRemark(lines) {
+function appendExtFieldAndRemark(lines) {
   lines.push('    /// <summary>');
   lines.push('    /// 扩展字段JSON');
   lines.push('    /// </summary>');
-  lines.push('    public string? ExtFieldJson { get; set; }');
+  lines.push('    public string? ExtField { get; set; }');
   lines.push('');
   lines.push('    /// <summary>');
   lines.push('    /// 备注');
@@ -1044,7 +1047,7 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
   lines.push('    /// <summary>');
   lines.push('    /// 扩展字段JSON');
   lines.push('    /// </summary>');
-  lines.push('    public string? ExtFieldJson { get; set; }');
+  lines.push('    public string? ExtField { get; set; }');
   lines.push('');
   lines.push('    /// <summary>');
   lines.push('    /// 备注（模糊查询）');
@@ -1055,6 +1058,9 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
 
   // Create DTO
   const createProps = entity.properties.filter((p) => {
+    if (CREATE_EXCLUDE_PROPERTY_NAMES.has(p.name)) {
+      return false;
+    }
     if (CREATE_EXCLUDE_NAME_PATTERNS.some((re) => re.test(p.name))) {
       return false;
     }
@@ -1079,7 +1085,7 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
   });
   appendMasterDetailCreateProperties(lines, navigationProperties, entityShort);
   appendInverseRbacCreateFields(lines, entityShort);
-  appendExtFieldJsonAndRemark(lines);
+  appendExtFieldAndRemark(lines);
   lines.push('}');
   lines.push('');
 
@@ -1156,7 +1162,7 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
       templateProps.map((p) => ({ ...p, isNullable: true, csharpType: `${p.bareType}?` })),
       { forceNullable: true }
     );
-    appendExtFieldJsonAndRemark(lines);
+    appendExtFieldAndRemark(lines);
     lines.push('}');
     lines.push('');
     lines.push('/// <summary>');
@@ -1173,7 +1179,7 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
       templateProps.map((p) => ({ ...p, isNullable: true, csharpType: `${p.bareType}?` })),
       { forceNullable: true }
     );
-    appendExtFieldJsonAndRemark(lines);
+    appendExtFieldAndRemark(lines);
     lines.push('}');
     lines.push('');
   }
@@ -1200,7 +1206,7 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
     lines.push('    /// <summary>');
     lines.push('    /// 扩展字段JSON');
     lines.push('    /// </summary>');
-    lines.push('    public string? ExtFieldJson { get; set; }');
+    lines.push('    public string? ExtField { get; set; }');
     lines.push('');
     lines.push('    /// <summary>');
     lines.push('    /// 备注');
@@ -1357,12 +1363,12 @@ function printUsage() {
       1) TenantCode；（公司/审批级）CompanyCode
       2) 业务字段
       3) （审批级）ApprovalStatus、InitiatorId、InitiatedAtStart/End、ApprovedBy、ApprovedAtStart/End
-      4) CreatedAtStart/End、ExtFieldJson、Remark
+      4) CreatedAtStart/End、ExtField、Remark
   - CreateDto / TemplateDto / ImportDto 字段顺序：
       1) TenantCode；（公司/审批级）CompanyCode
       2) （公司/审批级 CreateDto / ImportDto）CompanyDefaultCulture
       3) 业务字段
-      4) ExtFieldJson、Remark
+      4) ExtField、Remark
     租户级（TaktTenantEntityBase）仅 TenantCode；公司/审批级含 TenantCode + CompanyCode；
     CreateDto / ImportDto 另含 CompanyDefaultCulture（TemplateDto 不含）；
     TenantCode / CompanyCode / CompanyDefaultCulture 由登录或公司切换注入，不加 [Required]

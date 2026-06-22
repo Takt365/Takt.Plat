@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/utils
 // 文件名称：notification.ts
@@ -136,8 +136,8 @@ export function closeApiConnectFailNotification(): void {
 export function showApiConnectFail(options?: Partial<NotifyOptions>): void {
   notify({
     type: 'error',
-    message: translate('common.page.api.connectFail'),
-    description: translate('common.page.api.connectFailDescription'),
+    message: translate('common.page.api.connect.fail'),
+    description: translate('common.page.api.connect.description'),
     duration: DEFAULT_DURATION,
     placement: DEFAULT_PLACEMENT,
     key: API_CONNECT_FAIL_KEY,
@@ -171,7 +171,7 @@ export function showApiError(message: string, description?: string): void {
 export function showSignalrConnectFail(options?: Partial<NotifyOptions>): void {
   notify({
     type: 'error',
-    message: translate('common.page.signalr.connectFail'),
+    message: translate('common.page.signalr.connect.fail'),
     placement: DEFAULT_PLACEMENT,
     ...options,
   });
@@ -185,7 +185,7 @@ export function showOnlineNotify(options: Partial<NotifyOptions> & { description
   const { center: centerOverride, ...rest } = options;
   notify({
     type: 'success',
-    message: translate('common.page.signalr.onlineNotify'),
+    message: translate('common.page.signalr.online.notify'),
     placement: DEFAULT_PLACEMENT,
     duration: 5,
     ...rest,
@@ -231,7 +231,7 @@ export function showPrivateMessageNotify(options: {
     : (messageTitle || body);
   notify({
     type: 'info',
-    message: translate('common.page.signalr.newMessage'),
+    message: translate('common.page.signalr.new.message'),
     description: description ? `${sender}: ${description}` : sender,
     placement: DEFAULT_PLACEMENT,
     duration: 5,

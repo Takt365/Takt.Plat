@@ -30,11 +30,7 @@ import {
   resolveTaktCultureCode,
   syncTaktComponentLocales,
 } from '@/utils/takt-locale-sync';
-import {
-  STORE_I18N_ENTITY_CULTURE_LIST,
-  translateLoadEmpty,
-  translateLoadFailed,
-} from '@/utils/takt-store-i18n';
+import { translateLocaleMessage } from '@/utils/takt-i18n-message';
 
 /**
  * 解析发往后端的 Accept-Language（与 vue-i18n 当前 locale 一致）
@@ -89,7 +85,9 @@ function resolveCultureLoadErrorMessage(error: unknown): string {
     return error.message;
   }
 
-  return translateLoadFailed(STORE_I18N_ENTITY_CULTURE_LIST);
+  return translateLocaleMessage('common.feedback.load.failed', {
+    target: translateLocaleMessage('common.page.entity.culturelist'),
+  });
 }
 
 /**
@@ -172,7 +170,11 @@ export const useLocaleStore = defineStore('locale', () => {
         : await getSessionCultureOptions(explicitTenant);
 
       if (list.length === 0) {
-        throw new Error(translateLoadEmpty(STORE_I18N_ENTITY_CULTURE_LIST));
+        throw new Error(
+          translateLocaleMessage('common.feedback.load.empty', {
+            target: translateLocaleMessage('common.page.entity.culturelist'),
+          }),
+        );
       }
 
       cultureOptions.value = list;

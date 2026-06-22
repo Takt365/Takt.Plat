@@ -40,9 +40,7 @@ export function getItAssetChangeLogList(queryDto: any): Promise<TaktPagedResult<
   return request<TaktPagedResult<ItAssetChangeLog>>({
     url: `${IT_ASSET_CHANGE_LOG_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -145,7 +143,7 @@ export function exportItAssetChangeLog(
     url: `${IT_ASSET_CHANGE_LOG_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

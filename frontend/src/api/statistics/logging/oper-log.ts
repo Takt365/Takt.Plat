@@ -41,9 +41,7 @@ export function getOperLogList(queryDto: any): Promise<TaktPagedResult<OperLog>>
   return request<TaktPagedResult<OperLog>>({
     url: `${OPER_LOG_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -159,7 +157,7 @@ export function exportOperLog(
     url: `${OPER_LOG_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

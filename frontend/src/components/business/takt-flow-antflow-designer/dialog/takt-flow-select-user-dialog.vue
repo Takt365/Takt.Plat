@@ -41,6 +41,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { getUserList } from '@/api/identity/user'
 import type { User, UserQuery } from '@/types/identity/user'
 import type { TaktPagedResult } from '@/types/common'
@@ -65,8 +66,8 @@ const openProxy = computed({
 
 const loading = ref(false)
 const keyWords = ref('')
-const pageIndex = ref(1)
-const pageSize = ref(10)
+const pageIndex = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const dataSource = ref<User[]>([])
 const selectedRowKeys = ref<string[]>([])

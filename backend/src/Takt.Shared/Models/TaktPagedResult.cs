@@ -12,6 +12,8 @@
 
 namespace Takt.Shared.Models;
 
+using Takt.Shared.Helpers;
+
 /// <summary>
 /// Takt通用分页结果
 /// </summary>
@@ -31,12 +33,12 @@ public class TaktPagedResult<T>
     /// <summary>
     /// 当前页码（从1开始）
     /// </summary>
-    public int PageIndex { get; set; } = 1;
+    public int PageIndex { get; set; } = TaktPagedClamp.DefaultPageIndex;
 
     /// <summary>
     /// 每页大小
     /// </summary>
-    public int PageSize { get; set; } = 10;
+    public int PageSize { get; set; } = TaktPagedClamp.DefaultPageSize;
 
     /// <summary>
     /// 总页数

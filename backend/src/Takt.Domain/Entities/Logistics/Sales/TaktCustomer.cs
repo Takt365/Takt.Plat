@@ -57,7 +57,7 @@ public class TaktCustomer : TaktCompanyEntityBase
     public string? CustomerShortName { get; set; }
 
     /// <summary>
-    /// 客户类型（0=企业客户，1=个人客户，2=政府机构，3=其他）
+    /// 客户类型（字典 logistics_customer_category；0=企业客户，1=个人客户，2=政府机构，3=其他）
     /// </summary>
     [SugarColumn(ColumnName = "customer_type", ColumnDescription = "客户类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CustomerType { get; set; } = 0;
@@ -147,13 +147,13 @@ public class TaktCustomer : TaktCompanyEntityBase
     public string CurrencyCode { get; set; } = "CNY";
 
     /// <summary>
-    /// 付款条件（0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
+    /// 付款条件（字典 logistics_payment_terms_param；0=款到发货，1=货到付款，2=月结30天，3=月结60天，4=月结90天，5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "payment_terms", ColumnDescription = "付款条件", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentTerms { get; set; } = 0;
 
     /// <summary>
-    /// 信用等级（0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     [SugarColumn(ColumnName = "credit_level", ColumnDescription = "信用等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CreditLevel { get; set; } = 0;
@@ -165,7 +165,7 @@ public class TaktCustomer : TaktCompanyEntityBase
     public decimal CreditAmount { get; set; } = 0;
 
     /// <summary>
-    /// 折扣率（百分比，如：5.5表示5.5%折扣）
+    /// 折扣率（百分比，如 5.5 表示 5.5% 折扣；可选字典 logistics_discount_rate_param 预设）
     /// </summary>
     [SugarColumn(ColumnName = "discount_rate", ColumnDescription = "折扣率", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountRate { get; set; } = 0;
@@ -177,7 +177,7 @@ public class TaktCustomer : TaktCompanyEntityBase
     public string? SalesBy { get; set; }
 
     /// <summary>
-    /// 客户等级（0=普通，1=重要，2=VIP，3=战略）
+    /// 客户等级（字典 logistics_customer_level_category；0=普通，1=重要，2=VIP，3=战略）
     /// </summary>
     [SugarColumn(ColumnName = "customer_level", ColumnDescription = "客户等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CustomerLevel { get; set; } = 0;

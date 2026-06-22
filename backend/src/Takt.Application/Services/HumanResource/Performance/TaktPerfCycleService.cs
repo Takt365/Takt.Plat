@@ -93,7 +93,7 @@ public class TaktPerfCycleService : TaktServiceBase, ITaktPerfCycleService
         EnsureThreeLayerContext();
         var list = await _perfCycleRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CycleScheduleStatus == 1,
-            x => x.CycleName,
+            x => x.CycleName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -307,7 +307,7 @@ public class TaktPerfCycleService : TaktServiceBase, ITaktPerfCycleService
                 || (x.Description != null && x.Description.Contains(keywords))
                 || SqlFunc.ToString(x.CycleScheduleStatus).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.StartDate).Contains(keywords)
                 || SqlFunc.ToString(x.EndDate).Contains(keywords)
@@ -365,9 +365,9 @@ public class TaktPerfCycleService : TaktServiceBase, ITaktPerfCycleService
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

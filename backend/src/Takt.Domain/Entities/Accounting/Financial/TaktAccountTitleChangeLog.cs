@@ -25,9 +25,10 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 public class TaktAccountTitleChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 会计科目 ID
+    /// 会计科目 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [SugarColumn(ColumnName = "account_title_id", ColumnDescription = "会计科目ID", ColumnDataType = "bigint", IsNullable = false)]
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long AccountTitleId { get; set; }
     /// <summary>
     /// 科目编码（冗余）
@@ -54,4 +55,9 @@ public class TaktAccountTitleChangeLog : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "change_reason", ColumnDescription = "变更原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? ChangeReason { get; set; }
+    /// <summary>
+    /// 会计科目主表
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(AccountTitleId))]
+    public TaktAccountTitle? AccountTitle { get; set; }
 }

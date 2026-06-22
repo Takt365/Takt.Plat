@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.VisitorCenter
 // 文件名称：TaktVisitorI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVisitor 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,56 +75,56 @@ public class TaktVisitorI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktVisitor 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.visitor._self / entity.visitor.{{field}}；ResourceGroup=2；ResourceType=0
+    /// I18nKey：entity.visitor._self / entity.visitor.{{field}}；ResourceGroup=VisitorCenter；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetVisitorTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.visitor._self
-            new TranslationSeedItem("entity.visitor._self", "en-US", "Visitor Information", "实体名称"),
+            new TranslationSeedItem("entity.visitor._self", "en-US", "Visitor Information_us", "实体名称"),
             // entity.visitor._self
-            new TranslationSeedItem("entity.visitor._self", "ja-JP", "来访接待主信息", "实体名称"),
+            new TranslationSeedItem("entity.visitor._self", "ja-JP", "来访接待主信息_jp", "实体名称"),
             // entity.visitor._self
             new TranslationSeedItem("entity.visitor._self", "zh-CN", "来访接待主信息", "实体名称"),
             // entity.visitor._self
-            new TranslationSeedItem("entity.visitor._self", "zh-HK", "来访接待主信息", "实体名称"),
+            new TranslationSeedItem("entity.visitor._self", "zh-HK", "来访接待主信息_hk", "实体名称"),
 
             // entity.visitor.companyname
-            new TranslationSeedItem("entity.visitor.companyname", "en-US", "来访公司名称", "来访公司名称"),
+            new TranslationSeedItem("entity.visitor.companyname", "en-US", "来访公司名称_us", "来访公司名称"),
             // entity.visitor.companyname
-            new TranslationSeedItem("entity.visitor.companyname", "ja-JP", "来访公司名称", "来访公司名称"),
+            new TranslationSeedItem("entity.visitor.companyname", "ja-JP", "来访公司名称_jp", "来访公司名称"),
             // entity.visitor.companyname
             new TranslationSeedItem("entity.visitor.companyname", "zh-CN", "来访公司名称", "来访公司名称"),
             // entity.visitor.companyname
-            new TranslationSeedItem("entity.visitor.companyname", "zh-HK", "来访公司名称", "来访公司名称"),
+            new TranslationSeedItem("entity.visitor.companyname", "zh-HK", "来访公司名称_hk", "来访公司名称"),
 
             // entity.visitor.visitstarttime
-            new TranslationSeedItem("entity.visitor.visitstarttime", "en-US", "参访开始时间", "参访开始时间"),
+            new TranslationSeedItem("entity.visitor.visitstarttime", "en-US", "参访开始时间_us", "参访开始时间"),
             // entity.visitor.visitstarttime
-            new TranslationSeedItem("entity.visitor.visitstarttime", "ja-JP", "参访开始时间", "参访开始时间"),
+            new TranslationSeedItem("entity.visitor.visitstarttime", "ja-JP", "参访开始时间_jp", "参访开始时间"),
             // entity.visitor.visitstarttime
             new TranslationSeedItem("entity.visitor.visitstarttime", "zh-CN", "参访开始时间", "参访开始时间"),
             // entity.visitor.visitstarttime
-            new TranslationSeedItem("entity.visitor.visitstarttime", "zh-HK", "参访开始时间", "参访开始时间"),
+            new TranslationSeedItem("entity.visitor.visitstarttime", "zh-HK", "参访开始时间_hk", "参访开始时间"),
 
             // entity.visitor.visitendtime
-            new TranslationSeedItem("entity.visitor.visitendtime", "en-US", "参访结束时间", "参访结束时间"),
+            new TranslationSeedItem("entity.visitor.visitendtime", "en-US", "参访结束时间_us", "参访结束时间"),
             // entity.visitor.visitendtime
-            new TranslationSeedItem("entity.visitor.visitendtime", "ja-JP", "参访结束时间", "参访结束时间"),
+            new TranslationSeedItem("entity.visitor.visitendtime", "ja-JP", "参访结束时间_jp", "参访结束时间"),
             // entity.visitor.visitendtime
             new TranslationSeedItem("entity.visitor.visitendtime", "zh-CN", "参访结束时间", "参访结束时间"),
             // entity.visitor.visitendtime
-            new TranslationSeedItem("entity.visitor.visitendtime", "zh-HK", "参访结束时间", "参访结束时间"),
+            new TranslationSeedItem("entity.visitor.visitendtime", "zh-HK", "参访结束时间_hk", "参访结束时间"),
 
             // entity.visitor.companions
-            new TranslationSeedItem("entity.visitor.companions", "en-US", "来访人员列表", "来访人员列表"),
+            new TranslationSeedItem("entity.visitor.companions", "en-US", "来访人员列表_us", "来访人员列表"),
             // entity.visitor.companions
-            new TranslationSeedItem("entity.visitor.companions", "ja-JP", "来访人员列表", "来访人员列表"),
+            new TranslationSeedItem("entity.visitor.companions", "ja-JP", "来访人员列表_jp", "来访人员列表"),
             // entity.visitor.companions
             new TranslationSeedItem("entity.visitor.companions", "zh-CN", "来访人员列表", "来访人员列表"),
             // entity.visitor.companions
-            new TranslationSeedItem("entity.visitor.companions", "zh-HK", "来访人员列表", "来访人员列表"),
+            new TranslationSeedItem("entity.visitor.companions", "zh-HK", "来访人员列表_hk", "来访人员列表"),
         };
     }
 
@@ -142,10 +142,10 @@ public class TaktVisitorI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 2;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "VisitorCenter";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

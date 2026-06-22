@@ -92,7 +92,12 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.page.button.query", "en-US", "Query", "Common Button"),
             ("common.page.button.query", "ja-JP", "照会", "共通ボタン"),
             ("common.page.button.query", "zh-HK", "查詢", "通用按钮"),
-            
+
+            ("common.page.button.quit", "zh-CN", "退出", "通用按钮"),
+            ("common.page.button.quit", "en-US", "Quit", "Common Button"),
+            ("common.page.button.quit", "ja-JP", "終了", "共通ボタン"),
+            ("common.page.button.quit", "zh-HK", "退出", "通用按钮"),
+
             ("common.page.button.create", "zh-CN", "新增", "通用按钮"),
             ("common.page.button.create", "en-US", "Create", "Common Button"),
             ("common.page.button.create", "ja-JP", "新規作成", "共通ボタン"),
@@ -398,6 +403,11 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.page.button.reset", "en-US", "Reset", "Common Button"),
             ("common.page.button.reset", "ja-JP", "リセット", "共通ボタン"),
             ("common.page.button.reset", "zh-HK", "重置", "通用按钮"),
+            
+            ("common.page.button.all", "zh-CN", "所有", "通用按钮"),
+            ("common.page.button.all", "en-US", "All", "Common Button"),
+            ("common.page.button.all", "ja-JP", "すべて", "共通ボタン"),
+            ("common.page.button.all", "zh-HK", "所有", "通用按钮"),
             
             ("common.page.button.empty", "zh-CN", "清空", "通用按钮"),
             ("common.page.button.empty", "en-US", "Empty", "Common Button"),
@@ -780,6 +790,14 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.page.button.clonerow", "en-US", "Clone Row", "Common Button"),
             ("common.page.button.clonerow", "ja-JP", "行クローン", "共通ボタン"),
             ("common.page.button.clonerow", "zh-HK", "克隆行", "通用按钮"),
+            ("common.page.button.checkall", "zh-CN", "全选", "通用按钮"),
+            ("common.page.button.checkall", "en-US", "Select All", "Common Button"),
+            ("common.page.button.checkall", "ja-JP", "すべて選択", "共通ボタン"),
+            ("common.page.button.checkall", "zh-HK", "全選", "通用按钮"),
+            ("common.page.button.uncheckall", "zh-CN", "取消全选", "通用按钮"),
+            ("common.page.button.uncheckall", "en-US", "Clear All", "Common Button"),
+            ("common.page.button.uncheckall", "ja-JP", "選択解除", "共通ボタン"),
+            ("common.page.button.uncheckall", "zh-HK", "取消全選", "通用按钮"),
             ("common.page.button.copyrow", "zh-CN", "复制行", "通用按钮"),
             ("common.page.button.copyrow", "en-US", "Copy Row", "Common Button"),
             ("common.page.button.copyrow", "ja-JP", "行コピー", "共通ボタン"),
@@ -816,6 +834,10 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.page.button.emptyall", "en-US", "Clear All", "Frontend Button"),
             ("common.page.button.emptyall", "ja-JP", "すべてクリア", "フロントボタン"),
             ("common.page.button.emptyall", "zh-HK", "清空全部", "前端按钮"),
+            ("common.page.button.exit", "zh-CN", "离开", "通用按钮"),
+            ("common.page.button.exit", "en-US", "Exit", "Common Button"),
+            ("common.page.button.exit", "ja-JP", "退出", "共通ボタン"),
+            ("common.page.button.exit", "zh-HK", "離開", "通用按钮"),
             ("common.page.button.exitfullscreen", "zh-CN", "退出全屏", "前端按钮"),
             ("common.page.button.exitfullscreen", "en-US", "Exit Fullscreen", "Frontend Button"),
             ("common.page.button.exitfullscreen", "ja-JP", "全画面終了", "フロントボタン"),
@@ -1059,6 +1081,11 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.page.form.placeholder.optional", "en-US", "Please enter {field} (optional)", "Common Form"),
             ("common.page.form.placeholder.optional", "ja-JP", "{field}を入力してください（任意）", "共通フォーム"),
             ("common.page.form.placeholder.optional", "zh-HK", "請輸入{field}（選填）", "通用表单"),
+            // vue-i18n：{} 用 {'{'}+{'}'}；JSON 示例用 {'{…"'}'}+{'}'}，禁止 {'{'"key"…'}'}
+            ("common.page.form.placeholder.extfield", "zh-CN", "示例：{'{\"customCode\":\"A001\"'}{'}'}（键与字符串值须英文双引号，选填）", "通用表单"),
+            ("common.page.form.placeholder.extfield", "en-US", "e.g. {'{\"customCode\":\"A001\"'}{'}'} (use double quotes for keys/strings)", "Common Form"),
+            ("common.page.form.placeholder.extfield", "ja-JP", "例: {'{\"customCode\":\"A001\"'}{'}'}（キーと文字列値は二重引用符）", "共通フォーム"),
+            ("common.page.form.placeholder.extfield", "zh-HK", "示例：{'{\"customCode\":\"A001\"'}{'}'}（鍵與字串值須英文雙引號，選填）", "通用表单"),
             ("common.page.form.placeholder.input", "zh-CN", "请输入{field}", "通用表单"),
             ("common.page.form.placeholder.input", "en-US", "Please enter {field}", "Common Form"),
             ("common.page.form.placeholder.input", "ja-JP", "{field}を入力してください", "共通フォーム"),
@@ -1107,10 +1134,14 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.page.entity.tenantlist", "en-US", "tenant list", "Common Entity"),
             ("common.page.entity.tenantlist", "ja-JP", "テナントリスト", "共通エンティティ"),
             ("common.page.entity.tenantlist", "zh-HK", "租戶列表", "通用实体"),
-            ("common.page.entity.extfieldjson", "zh-CN", "扩展字段JSON", "通用实体"),
-            ("common.page.entity.extfieldjson", "en-US", "Extended Fields (JSON)", "Common Entity"),
-            ("common.page.entity.extfieldjson", "ja-JP", "拡張フィールドJSON", "共通エンティティ"),
-            ("common.page.entity.extfieldjson", "zh-HK", "擴展字段JSON", "通用实体"),
+            ("common.page.entity.extfield", "zh-CN", "扩展字段", "通用实体"),
+            ("common.page.entity.extfield", "en-US", "Extended Fields", "Common Entity"),
+            ("common.page.entity.extfield", "ja-JP", "拡張フィールド", "共通エンティティ"),
+            ("common.page.entity.extfield", "zh-HK", "擴展字段", "通用实体"),
+            ("common.page.entity.extfieldhint", "zh-CN", "请输入合法 JSON 对象字符串：整体须为 {'{'}{'}'}；键名与字符串值必须使用英文双引号；数字、布尔、null 不加引号。示例：{'{\"customCode\":\"A001\",\"enabled\":true'}{'}'}。不支持数组 [] 或裸字符串。选填，最多 400 字符。", "通用实体"),
+            ("common.page.entity.extfieldhint", "en-US", "Enter a valid JSON object: wrap in {'{'}{'}'}; use double quotes for keys and string values; numbers/booleans/null are unquoted. Example: {'{\"customCode\":\"A001\",\"enabled\":true'}{'}'}. Arrays and plain strings are not supported. Optional, max 400 characters.", "Common Entity"),
+            ("common.page.entity.extfieldhint", "ja-JP", "有効な JSON オブジェクトを入力してください：全体は {'{'}{'}'}；キーと文字列値は二重引用符必須；数値・真偽値・null は引用符なし。例: {'{\"customCode\":\"A001\",\"enabled\":true'}{'}'}。配列 [] や裸の文字列は不可。任意、最大 400 文字。", "共通エンティティ"),
+            ("common.page.entity.extfieldhint", "zh-HK", "請輸入合法 JSON 物件字串：整體須為 {'{'}{'}'}；鍵名與字串值必須使用英文雙引號；數字、布林、null 不加引號。示例：{'{\"customCode\":\"A001\",\"enabled\":true'}{'}'}。不支援陣列 [] 或裸字串。選填，最多 400 字元。", "通用实体"),
             ("common.page.entity.remark", "zh-CN", "备注", "通用实体"),
             ("common.page.entity.remark", "en-US", "Remark", "Common Entity"),
             ("common.page.entity.remark", "ja-JP", "備考", "共通エンティティ"),
@@ -1804,6 +1835,82 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.file.parse.error", "en-US", "Failed to parse file", "File"),
             ("common.file.parse.error", "ja-JP", "ファイルの解析に失敗しました", "ファイル"),
             ("common.file.parse.error", "zh-HK", "文件解析失敗", "文件"),
+            ("validation.file.upload.size.exceeded", "zh-CN", "文件大小超出了限制，系统仅支持{max}Mb", "文件上传"),
+            ("validation.file.upload.size.exceeded", "en-US", "File size exceeds the limit. The system supports up to {max} MB only.", "File upload"),
+            ("validation.file.upload.size.exceeded", "ja-JP", "ファイルサイズが上限を超えています。システムは最大{max}MBまで対応しています。", "ファイルアップロード"),
+            ("validation.file.upload.size.exceeded", "zh-HK", "文件大小超出了限制，系統僅支持{max}Mb", "文件上傳"),
+            ("validation.file.upload.type.unsupported", "zh-CN", "上传的文件不被支持。请联系管理员或重新上传其它文件", "文件上传"),
+            ("validation.file.upload.type.unsupported", "en-US", "This file type is not supported. Please contact the administrator or upload a different file.", "File upload"),
+            ("validation.file.upload.type.unsupported", "ja-JP", "このファイルはサポートされていません。管理者に連絡するか、別のファイルをアップロードしてください。", "ファイルアップロード"),
+            ("validation.file.upload.type.unsupported", "zh-HK", "上傳的文件不被支持。請聯繫管理員或重新上傳其它文件", "文件上傳"),
+            ("validation.file.upload.name.invalid", "zh-CN", "文件名无效", "文件上传"),
+            ("validation.file.upload.name.invalid", "en-US", "Invalid file name", "File upload"),
+            ("validation.file.upload.name.invalid", "ja-JP", "ファイル名が無効です", "ファイルアップロード"),
+            ("validation.file.upload.name.invalid", "zh-HK", "文件名無效", "文件上傳"),
+            ("validation.file.upload.chunk.index.invalid", "zh-CN", "分片序号无效", "文件上传"),
+            ("validation.file.upload.chunk.index.invalid", "en-US", "Invalid chunk index", "File upload"),
+            ("validation.file.upload.chunk.index.invalid", "ja-JP", "チャンク番号が無効です", "ファイルアップロード"),
+            ("validation.file.upload.chunk.index.invalid", "zh-HK", "分片序號無效", "文件上傳"),
+            ("validation.file.upload.chunk.missing", "zh-CN", "分片 {index} 不存在，无法合并", "文件上传"),
+            ("validation.file.upload.chunk.missing", "en-US", "Chunk {index} is missing and cannot be merged", "File upload"),
+            ("validation.file.upload.chunk.missing", "ja-JP", "チャンク {index} が存在せず、マージできません", "ファイルアップロード"),
+            ("validation.file.upload.chunk.missing", "zh-HK", "分片 {index} 不存在，無法合併", "文件上傳"),
+            ("validation.file.upload.merge.size.mismatch", "zh-CN", "合并后文件大小与声明不一致", "文件上传"),
+            ("validation.file.upload.merge.size.mismatch", "en-US", "Merged file size does not match the declared size", "File upload"),
+            ("validation.file.upload.merge.size.mismatch", "ja-JP", "マージ後のファイルサイズが宣言値と一致しません", "ファイルアップロード"),
+            ("validation.file.upload.merge.size.mismatch", "zh-HK", "合併後文件大小與聲明不一致", "文件上傳"),
+            ("validation.file.upload.chunk.count.exceeded", "zh-CN", "分片数量超过上限（{max}）", "文件上传"),
+            ("validation.file.upload.chunk.count.exceeded", "en-US", "Chunk count exceeds the limit ({max})", "File upload"),
+            ("validation.file.upload.chunk.count.exceeded", "ja-JP", "チャンク数が上限（{max}）を超えています", "ファイルアップロード"),
+            ("validation.file.upload.chunk.count.exceeded", "zh-HK", "分片數量超過上限（{max}）", "文件上傳"),
+            ("validation.file.upload.chunk.plan.mismatch", "zh-CN", "分片参数与服务器策略不一致，请刷新后重试", "文件上传"),
+            ("validation.file.upload.chunk.plan.mismatch", "en-US", "Chunk parameters do not match the server upload policy. Please refresh and try again.", "File upload"),
+            ("validation.file.upload.chunk.plan.mismatch", "ja-JP", "チャンクパラメータがサーバー策略と一致しません。更新して再試行してください。", "ファイルアップロード"),
+            ("validation.file.upload.chunk.plan.mismatch", "zh-HK", "分片參數與服務器策略不一致，請刷新後重試", "文件上傳"),
+            ("validation.file.upload.chunk.size.mismatch", "zh-CN", "分片大小与服务器策略不一致", "文件上传"),
+            ("validation.file.upload.chunk.size.mismatch", "en-US", "Chunk size does not match the server upload policy", "File upload"),
+            ("validation.file.upload.chunk.size.mismatch", "ja-JP", "チャンクサイズがサーバー策略と一致しません", "ファイルアップロード"),
+            ("validation.file.upload.chunk.size.mismatch", "zh-HK", "分片大小與服務器策略不一致", "文件上傳"),
+            ("validation.file.upload.duplicate.original.name.today", "zh-CN", "当日已存在相同原始文件名的文件：{fileName}", "文件上传"),
+            ("validation.file.upload.duplicate.original.name.today", "en-US", "A file with the same original name already exists today: {fileName}", "File upload"),
+            ("validation.file.upload.duplicate.original.name.today", "ja-JP", "本日すでに同じ元ファイル名のファイルが存在します：{fileName}", "ファイルアップロード"),
+            ("validation.file.upload.duplicate.original.name.today", "zh-HK", "當日已存在相同原始文件名的文件：{fileName}", "文件上傳"),
+            ("validation.file.storage.read.unsupported", "zh-CN", "当前存储方式暂不支持引擎读流，请使用访问地址或扩展存储驱动", "文件上传"),
+            ("validation.file.storage.read.unsupported", "en-US", "The current storage type does not support engine read stream. Use the access URL or extend the storage driver.", "File upload"),
+            ("validation.file.storage.read.unsupported", "ja-JP", "現在のストレージ方式はエンジン読み取りに未対応です。アクセス URL を使用するか、ストレージドライバを拡張してください。", "ファイルアップロード"),
+            ("validation.file.storage.read.unsupported", "zh-HK", "當前存儲方式暫不支持引擎讀流，請使用訪問地址或擴展存儲驅動", "文件上傳"),
+            ("validation.file.physical.notfound", "zh-CN", "物理文件不存在", "文件上传"),
+            ("validation.file.physical.notfound", "en-US", "Physical file not found", "File upload"),
+            ("validation.file.physical.notfound", "ja-JP", "物理ファイルが存在しません", "ファイルアップロード"),
+            ("validation.file.physical.notfound", "zh-HK", "物理文件不存在", "文件上傳"),
+            ("validation.file.storage.delete.unsupported", "zh-CN", "当前存储方式暂不支持引擎删除物理文件", "文件上传"),
+            ("validation.file.storage.delete.unsupported", "en-US", "The current storage type does not support engine physical file deletion", "File upload"),
+            ("validation.file.storage.delete.unsupported", "ja-JP", "現在のストレージ方式はエンジンによる物理ファイル削除に未対応です", "ファイルアップロード"),
+            ("validation.file.storage.delete.unsupported", "zh-HK", "當前存儲方式暫不支持引擎刪除物理文件", "文件上傳"),
+            ("validation.file.storage.markdelete.unsupported", "zh-CN", "当前存储方式暂不支持引擎标记删除物理文件", "文件上传"),
+            ("validation.file.storage.markdelete.unsupported", "en-US", "The current storage type does not support marking physical files as deleted", "File upload"),
+            ("validation.file.storage.markdelete.unsupported", "ja-JP", "現在のストレージ方式は物理ファイルの削除マークに未対応です", "ファイルアップロード"),
+            ("validation.file.storage.markdelete.unsupported", "zh-HK", "當前存儲方式暫不支持引擎標記刪除物理文件", "文件上傳"),
+            ("validation.file.storage.provider.unsupported", "zh-CN", "当前 OSS/FTP 提供商标识暂不支持，请检查 StorageConfig 或 appsettings 配置", "文件上传"),
+            ("validation.file.storage.provider.unsupported", "en-US", "The OSS/FTP provider is not supported. Check StorageConfig or appsettings.", "File upload"),
+            ("validation.file.storage.provider.unsupported", "ja-JP", "現在の OSS/FTP プロバイダーは未対応です。StorageConfig または appsettings を確認してください。", "ファイルアップロード"),
+            ("validation.file.storage.provider.unsupported", "zh-HK", "當前 OSS/FTP 提供商标識暫不支持，請檢查 StorageConfig 或 appsettings 配置", "文件上傳"),
+            ("validation.file.storage.upload.failed", "zh-CN", "远程存储上传失败，请稍后重试或联系管理员", "文件上传"),
+            ("validation.file.storage.upload.failed", "en-US", "Remote storage upload failed. Please retry or contact the administrator.", "File upload"),
+            ("validation.file.storage.upload.failed", "ja-JP", "リモートストレージへのアップロードに失敗しました。しばらくして再試行するか、管理者に連絡してください。", "ファイルアップロード"),
+            ("validation.file.storage.upload.failed", "zh-HK", "遠程存儲上傳失敗，請稍後重試或聯繫管理員", "文件上傳"),
+            ("validation.file.physical.delete.target.exists", "zh-CN", "删除标记目标物理文件已存在，无法重命名", "文件上传"),
+            ("validation.file.physical.delete.target.exists", "en-US", "Deleted-mark target physical file already exists and cannot be renamed", "File upload"),
+            ("validation.file.physical.delete.target.exists", "ja-JP", "削除マーク先の物理ファイルが既に存在するため、リネームできません", "ファイルアップロード"),
+            ("validation.file.physical.delete.target.exists", "zh-HK", "刪除標記目標物理文件已存在，無法重命名", "文件上傳"),
+            ("validation.file.download.disabled", "zh-CN", "文件已禁用，无法下载", "文件"),
+            ("validation.file.download.disabled", "en-US", "File is disabled and cannot be downloaded", "File"),
+            ("validation.file.download.disabled", "ja-JP", "ファイルは無効化されているため、ダウンロードできません", "ファイル"),
+            ("validation.file.download.disabled", "zh-HK", "文件已禁用，無法下載", "文件"),
+            ("validation.file.access.denied", "zh-CN", "无权访问该文件", "文件"),
+            ("validation.file.access.denied", "en-US", "You do not have permission to access this file", "File"),
+            ("validation.file.access.denied", "ja-JP", "このファイルにアクセスする権限がありません", "ファイル"),
+            ("validation.file.access.denied", "zh-HK", "無權訪問該文件", "文件"),
             // data.*
             ("common.data.duplicate", "zh-CN", "存在重复数据", "数据"),
             ("common.data.duplicate", "en-US", "Duplicate data found", "Data"),
@@ -1992,39 +2099,7 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.table.page", "ja-JP", "{page} ページ", "共通テーブル"),
             ("common.table.page", "zh-HK", "第 {page} 頁", "通用表格"),
         };
-        AppendMenuButtonAliasRows(rows);
         return rows;
-    }
-
-    /// <summary>
-    /// 为菜单按钮种子补齐 common.button.* 别名（与 common.page.button.* 文案一致，供 TaktMenuButtonSeedData.I18nKey 使用）。
-    /// </summary>
-    /// <param name="rows">标准通用翻译列表（原地追加）。</param>
-    private static void AppendMenuButtonAliasRows(
-        List<(string I18nKey, string CultureCode, string TranslationText, string? ContextNote)> rows)
-    {
-        const string pageButtonPrefix = "common.page.button.";
-        const string menuButtonPrefix = "common.button.";
-        var existingKeys = new HashSet<string>(
-            rows.Where(r => r.I18nKey.StartsWith(menuButtonPrefix, StringComparison.Ordinal))
-                .Select(r => r.I18nKey),
-            StringComparer.Ordinal);
-        var snapshot = rows.ToList();
-        foreach (var row in snapshot)
-        {
-            if (!row.I18nKey.StartsWith(pageButtonPrefix, StringComparison.Ordinal))
-            {
-                continue;
-            }
-
-            var aliasKey = menuButtonPrefix + row.I18nKey[pageButtonPrefix.Length..];
-            if (!existingKeys.Add(aliasKey))
-            {
-                continue;
-            }
-
-            rows.Add((aliasKey, row.CultureCode, row.TranslationText, row.ContextNote));
-        }
     }
 
     /// <summary>
@@ -2055,10 +2130,10 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = resourceGroup;
-        translation.ResourceType = resourceType;
+        translation.ResourceGroup = "Foundation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

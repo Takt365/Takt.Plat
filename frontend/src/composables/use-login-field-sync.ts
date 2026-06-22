@@ -184,7 +184,7 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
       return error.message.trim();
     }
 
-    return resolveHttpErrorMessage(error) || t('login.page.message.tenantValidateFail');
+    return resolveHttpErrorMessage(error) || t('login.page.message.tenant.validate.fail');
   }
 
   /**
@@ -209,7 +209,7 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
       }
       tenantValidated.value = false;
       tenantStore.clearTenantCode();
-      notifyTenantToast(t('login.page.message.tenantNotFound'));
+      notifyTenantToast(t('login.page.message.tenant.not.found'));
       await syncTenantFormField();
       return false;
     } catch (error) {
@@ -250,7 +250,7 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
       return;
     }
     if (!result.userFound) {
-      notifyPreviewToast(t('login.page.message.userNotFound'));
+      notifyPreviewToast(t('login.page.message.user.not.found'));
     }
     lastPreviewKey = previewKey;
   }

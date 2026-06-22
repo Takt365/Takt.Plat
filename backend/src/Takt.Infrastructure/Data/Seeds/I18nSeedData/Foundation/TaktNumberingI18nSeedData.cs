@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktNumberingI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktNumbering 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktNumbering 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/numbering）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -75,164 +75,164 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktNumbering 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.numbering._self / entity.numbering.{{field}}；ResourceGroup=8；ResourceType=0
+    /// I18nKey：entity.numbering._self / entity.numbering.{{field}}；ResourceGroup=Foundation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetNumberingTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.numbering._self
-            new TranslationSeedItem("entity.numbering._self", "en-US", "Numbering Information", "实体名称"),
+            new TranslationSeedItem("entity.numbering._self", "en-US", "Numbering Information_us", "实体名称"),
             // entity.numbering._self
-            new TranslationSeedItem("entity.numbering._self", "ja-JP", "编号规则信息", "实体名称"),
+            new TranslationSeedItem("entity.numbering._self", "ja-JP", "编号规则信息_jp", "实体名称"),
             // entity.numbering._self
             new TranslationSeedItem("entity.numbering._self", "zh-CN", "编号规则信息", "实体名称"),
             // entity.numbering._self
-            new TranslationSeedItem("entity.numbering._self", "zh-HK", "编号规则信息", "实体名称"),
+            new TranslationSeedItem("entity.numbering._self", "zh-HK", "编号规则信息_hk", "实体名称"),
 
             // entity.numbering.rulecode
-            new TranslationSeedItem("entity.numbering.rulecode", "en-US", "规则编码", "规则编码（唯一索引：租户+公司内唯一，见 ix_numbering_code_unique；如 SO, PO, CONTRACT）"),
+            new TranslationSeedItem("entity.numbering.rulecode", "en-US", "规则编码_us", "规则编码（唯一索引：租户+公司内唯一，见 ix_numbering_code_unique；如 SO, PO, CONTRACT）"),
             // entity.numbering.rulecode
-            new TranslationSeedItem("entity.numbering.rulecode", "ja-JP", "规则编码", "规则编码（唯一索引：租户+公司内唯一，见 ix_numbering_code_unique；如 SO, PO, CONTRACT）"),
+            new TranslationSeedItem("entity.numbering.rulecode", "ja-JP", "规则编码_jp", "规则编码（唯一索引：租户+公司内唯一，见 ix_numbering_code_unique；如 SO, PO, CONTRACT）"),
             // entity.numbering.rulecode
             new TranslationSeedItem("entity.numbering.rulecode", "zh-CN", "规则编码", "规则编码（唯一索引：租户+公司内唯一，见 ix_numbering_code_unique；如 SO, PO, CONTRACT）"),
             // entity.numbering.rulecode
-            new TranslationSeedItem("entity.numbering.rulecode", "zh-HK", "规则编码", "规则编码（唯一索引：租户+公司内唯一，见 ix_numbering_code_unique；如 SO, PO, CONTRACT）"),
+            new TranslationSeedItem("entity.numbering.rulecode", "zh-HK", "规则编码_hk", "规则编码（唯一索引：租户+公司内唯一，见 ix_numbering_code_unique；如 SO, PO, CONTRACT）"),
 
             // entity.numbering.rulename
-            new TranslationSeedItem("entity.numbering.rulename", "en-US", "规则名称", "规则名称（如：销售订单号、采购订单号）"),
+            new TranslationSeedItem("entity.numbering.rulename", "en-US", "规则名称_us", "规则名称（如：销售订单号、采购订单号）"),
             // entity.numbering.rulename
-            new TranslationSeedItem("entity.numbering.rulename", "ja-JP", "规则名称", "规则名称（如：销售订单号、采购订单号）"),
+            new TranslationSeedItem("entity.numbering.rulename", "ja-JP", "规则名称_jp", "规则名称（如：销售订单号、采购订单号）"),
             // entity.numbering.rulename
             new TranslationSeedItem("entity.numbering.rulename", "zh-CN", "规则名称", "规则名称（如：销售订单号、采购订单号）"),
             // entity.numbering.rulename
-            new TranslationSeedItem("entity.numbering.rulename", "zh-HK", "规则名称", "规则名称（如：销售订单号、采购订单号）"),
+            new TranslationSeedItem("entity.numbering.rulename", "zh-HK", "规则名称_hk", "规则名称（如：销售订单号、采购订单号）"),
 
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "en-US", "单据类型", "单据类型"),
+            new TranslationSeedItem("entity.numbering.documenttype", "en-US", "业务领域_us", "业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）"),
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "ja-JP", "单据类型", "单据类型"),
+            new TranslationSeedItem("entity.numbering.documenttype", "ja-JP", "业务领域_jp", "业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）"),
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "zh-CN", "单据类型", "单据类型"),
+            new TranslationSeedItem("entity.numbering.documenttype", "zh-CN", "业务领域", "业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）"),
             // entity.numbering.documenttype
-            new TranslationSeedItem("entity.numbering.documenttype", "zh-HK", "单据类型", "单据类型"),
+            new TranslationSeedItem("entity.numbering.documenttype", "zh-HK", "业务领域_hk", "业务领域（与一级菜单域一致，如 Foundation、Accounting、Logistics、Routine）"),
 
             // entity.numbering.departmentcode
-            new TranslationSeedItem("entity.numbering.departmentcode", "en-US", "部门编码", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
+            new TranslationSeedItem("entity.numbering.departmentcode", "en-US", "部门编码_us", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
             // entity.numbering.departmentcode
-            new TranslationSeedItem("entity.numbering.departmentcode", "ja-JP", "部门编码", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
+            new TranslationSeedItem("entity.numbering.departmentcode", "ja-JP", "部门编码_jp", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
             // entity.numbering.departmentcode
             new TranslationSeedItem("entity.numbering.departmentcode", "zh-CN", "部门编码", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
             // entity.numbering.departmentcode
-            new TranslationSeedItem("entity.numbering.departmentcode", "zh-HK", "部门编码", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
+            new TranslationSeedItem("entity.numbering.departmentcode", "zh-HK", "部门编码_hk", "部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode"),
 
-            // entity.numbering.prefix
-            new TranslationSeedItem("entity.numbering.prefix", "en-US", "前缀", "前缀（如：SO-, PO-, INV-）"),
-            // entity.numbering.prefix
-            new TranslationSeedItem("entity.numbering.prefix", "ja-JP", "前缀", "前缀（如：SO-, PO-, INV-）"),
-            // entity.numbering.prefix
-            new TranslationSeedItem("entity.numbering.prefix", "zh-CN", "前缀", "前缀（如：SO-, PO-, INV-）"),
-            // entity.numbering.prefix
-            new TranslationSeedItem("entity.numbering.prefix", "zh-HK", "前缀", "前缀（如：SO-, PO-, INV-）"),
+            // entity.numbering.prefixcode
+            new TranslationSeedItem("entity.numbering.prefixcode", "en-US", "前缀编码_us", "前缀编码（如：PUR、SORD、ANN）"),
+            // entity.numbering.prefixcode
+            new TranslationSeedItem("entity.numbering.prefixcode", "ja-JP", "前缀编码_jp", "前缀编码（如：PUR、SORD、ANN）"),
+            // entity.numbering.prefixcode
+            new TranslationSeedItem("entity.numbering.prefixcode", "zh-CN", "前缀编码", "前缀编码（如：PUR、SORD、ANN）"),
+            // entity.numbering.prefixcode
+            new TranslationSeedItem("entity.numbering.prefixcode", "zh-HK", "前缀编码_hk", "前缀编码（如：PUR、SORD、ANN）"),
 
             // entity.numbering.dateformat
-            new TranslationSeedItem("entity.numbering.dateformat", "en-US", "日期格式", "日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期"),
+            new TranslationSeedItem("entity.numbering.dateformat", "en-US", "日期格式_us", "日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
             // entity.numbering.dateformat
-            new TranslationSeedItem("entity.numbering.dateformat", "ja-JP", "日期格式", "日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期"),
+            new TranslationSeedItem("entity.numbering.dateformat", "ja-JP", "日期格式_jp", "日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
             // entity.numbering.dateformat
-            new TranslationSeedItem("entity.numbering.dateformat", "zh-CN", "日期格式", "日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期"),
+            new TranslationSeedItem("entity.numbering.dateformat", "zh-CN", "日期格式", "日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
             // entity.numbering.dateformat
-            new TranslationSeedItem("entity.numbering.dateformat", "zh-HK", "日期格式", "日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期"),
+            new TranslationSeedItem("entity.numbering.dateformat", "zh-HK", "日期格式_hk", "日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
 
             // entity.numbering.sequencelength
-            new TranslationSeedItem("entity.numbering.sequencelength", "en-US", "流水号位数", "流水号位数（3=001, 4=0001, 5=00001, 6=000001）"),
+            new TranslationSeedItem("entity.numbering.sequencelength", "en-US", "流水位数_us", "流水位数（3=001, 4=0001, 5=00001, 6=000001）"),
             // entity.numbering.sequencelength
-            new TranslationSeedItem("entity.numbering.sequencelength", "ja-JP", "流水号位数", "流水号位数（3=001, 4=0001, 5=00001, 6=000001）"),
+            new TranslationSeedItem("entity.numbering.sequencelength", "ja-JP", "流水位数_jp", "流水位数（3=001, 4=0001, 5=00001, 6=000001）"),
             // entity.numbering.sequencelength
-            new TranslationSeedItem("entity.numbering.sequencelength", "zh-CN", "流水号位数", "流水号位数（3=001, 4=0001, 5=00001, 6=000001）"),
+            new TranslationSeedItem("entity.numbering.sequencelength", "zh-CN", "流水位数", "流水位数（3=001, 4=0001, 5=00001, 6=000001）"),
             // entity.numbering.sequencelength
-            new TranslationSeedItem("entity.numbering.sequencelength", "zh-HK", "流水号位数", "流水号位数（3=001, 4=0001, 5=00001, 6=000001）"),
+            new TranslationSeedItem("entity.numbering.sequencelength", "zh-HK", "流水位数_hk", "流水位数（3=001, 4=0001, 5=00001, 6=000001）"),
 
             // entity.numbering.sequencestep
-            new TranslationSeedItem("entity.numbering.sequencestep", "en-US", "流水号步长", "流水号步长（每次递增的数值，默认1）"),
+            new TranslationSeedItem("entity.numbering.sequencestep", "en-US", "流水步长_us", "流水步长（每次递增的数值，默认1）"),
             // entity.numbering.sequencestep
-            new TranslationSeedItem("entity.numbering.sequencestep", "ja-JP", "流水号步长", "流水号步长（每次递增的数值，默认1）"),
+            new TranslationSeedItem("entity.numbering.sequencestep", "ja-JP", "流水步长_jp", "流水步长（每次递增的数值，默认1）"),
             // entity.numbering.sequencestep
-            new TranslationSeedItem("entity.numbering.sequencestep", "zh-CN", "流水号步长", "流水号步长（每次递增的数值，默认1）"),
+            new TranslationSeedItem("entity.numbering.sequencestep", "zh-CN", "流水步长", "流水步长（每次递增的数值，默认1）"),
             // entity.numbering.sequencestep
-            new TranslationSeedItem("entity.numbering.sequencestep", "zh-HK", "流水号步长", "流水号步长（每次递增的数值，默认1）"),
+            new TranslationSeedItem("entity.numbering.sequencestep", "zh-HK", "流水步长_hk", "流水步长（每次递增的数值，默认1）"),
 
-            // entity.numbering.suffix
-            new TranslationSeedItem("entity.numbering.suffix", "en-US", "后缀", "后缀（如：-CN, -USD, -V2）"),
-            // entity.numbering.suffix
-            new TranslationSeedItem("entity.numbering.suffix", "ja-JP", "后缀", "后缀（如：-CN, -USD, -V2）"),
-            // entity.numbering.suffix
-            new TranslationSeedItem("entity.numbering.suffix", "zh-CN", "后缀", "后缀（如：-CN, -USD, -V2）"),
-            // entity.numbering.suffix
-            new TranslationSeedItem("entity.numbering.suffix", "zh-HK", "后缀", "后缀（如：-CN, -USD, -V2）"),
+            // entity.numbering.suffixcode
+            new TranslationSeedItem("entity.numbering.suffixcode", "en-US", "后缀编码_us", "后缀编码（可选，最多 4 位）"),
+            // entity.numbering.suffixcode
+            new TranslationSeedItem("entity.numbering.suffixcode", "ja-JP", "后缀编码_jp", "后缀编码（可选，最多 4 位）"),
+            // entity.numbering.suffixcode
+            new TranslationSeedItem("entity.numbering.suffixcode", "zh-CN", "后缀编码", "后缀编码（可选，最多 4 位）"),
+            // entity.numbering.suffixcode
+            new TranslationSeedItem("entity.numbering.suffixcode", "zh-HK", "后缀编码_hk", "后缀编码（可选，最多 4 位）"),
 
             // entity.numbering.resetperiod
-            new TranslationSeedItem("entity.numbering.resetperiod", "en-US", "重置周期", "重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）"),
+            new TranslationSeedItem("entity.numbering.resetperiod", "en-US", "重置周期_us", "重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）"),
             // entity.numbering.resetperiod
-            new TranslationSeedItem("entity.numbering.resetperiod", "ja-JP", "重置周期", "重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）"),
+            new TranslationSeedItem("entity.numbering.resetperiod", "ja-JP", "重置周期_jp", "重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）"),
             // entity.numbering.resetperiod
-            new TranslationSeedItem("entity.numbering.resetperiod", "zh-CN", "重置周期", "重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）"),
+            new TranslationSeedItem("entity.numbering.resetperiod", "zh-CN", "重置周期", "重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）"),
             // entity.numbering.resetperiod
-            new TranslationSeedItem("entity.numbering.resetperiod", "zh-HK", "重置周期", "重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）"),
+            new TranslationSeedItem("entity.numbering.resetperiod", "zh-HK", "重置周期_hk", "重置周期（字典 sys_reset_period_config；none=不重置，day/month/year/hour=按日/月/年/时；须与 date_format 粒度匹配）"),
 
             // entity.numbering.currentsequence
-            new TranslationSeedItem("entity.numbering.currentsequence", "en-US", "当前流水号", "当前流水号（用于记录下一个流水号值）"),
+            new TranslationSeedItem("entity.numbering.currentsequence", "en-US", "当前流水_us", "当前流水（用于记录下一个流水号值）"),
             // entity.numbering.currentsequence
-            new TranslationSeedItem("entity.numbering.currentsequence", "ja-JP", "当前流水号", "当前流水号（用于记录下一个流水号值）"),
+            new TranslationSeedItem("entity.numbering.currentsequence", "ja-JP", "当前流水_jp", "当前流水（用于记录下一个流水号值）"),
             // entity.numbering.currentsequence
-            new TranslationSeedItem("entity.numbering.currentsequence", "zh-CN", "当前流水号", "当前流水号（用于记录下一个流水号值）"),
+            new TranslationSeedItem("entity.numbering.currentsequence", "zh-CN", "当前流水", "当前流水（用于记录下一个流水号值）"),
             // entity.numbering.currentsequence
-            new TranslationSeedItem("entity.numbering.currentsequence", "zh-HK", "当前流水号", "当前流水号（用于记录下一个流水号值）"),
+            new TranslationSeedItem("entity.numbering.currentsequence", "zh-HK", "当前流水_hk", "当前流水（用于记录下一个流水号值）"),
 
             // entity.numbering.examplecode
-            new TranslationSeedItem("entity.numbering.examplecode", "en-US", "示例编码", "示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001"),
+            new TranslationSeedItem("entity.numbering.examplecode", "en-US", "起始编码_us", "起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码"),
             // entity.numbering.examplecode
-            new TranslationSeedItem("entity.numbering.examplecode", "ja-JP", "示例编码", "示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001"),
+            new TranslationSeedItem("entity.numbering.examplecode", "ja-JP", "起始编码_jp", "起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码"),
             // entity.numbering.examplecode
-            new TranslationSeedItem("entity.numbering.examplecode", "zh-CN", "示例编码", "示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001"),
+            new TranslationSeedItem("entity.numbering.examplecode", "zh-CN", "起始编码", "起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码"),
             // entity.numbering.examplecode
-            new TranslationSeedItem("entity.numbering.examplecode", "zh-HK", "示例编码", "示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001"),
+            new TranslationSeedItem("entity.numbering.examplecode", "zh-HK", "起始编码_hk", "起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码"),
 
             // entity.numbering.separator
-            new TranslationSeedItem("entity.numbering.separator", "en-US", "分隔符", "分隔符（默认 -，也可用 _ 或 /）"),
+            new TranslationSeedItem("entity.numbering.separator", "en-US", "分隔符_us", "分隔符（空=段直接拼接；-=连字符分隔，默认 -）"),
             // entity.numbering.separator
-            new TranslationSeedItem("entity.numbering.separator", "ja-JP", "分隔符", "分隔符（默认 -，也可用 _ 或 /）"),
+            new TranslationSeedItem("entity.numbering.separator", "ja-JP", "分隔符_jp", "分隔符（空=段直接拼接；-=连字符分隔，默认 -）"),
             // entity.numbering.separator
-            new TranslationSeedItem("entity.numbering.separator", "zh-CN", "分隔符", "分隔符（默认 -，也可用 _ 或 /）"),
+            new TranslationSeedItem("entity.numbering.separator", "zh-CN", "分隔符", "分隔符（空=段直接拼接；-=连字符分隔，默认 -）"),
             // entity.numbering.separator
-            new TranslationSeedItem("entity.numbering.separator", "zh-HK", "分隔符", "分隔符（默认 -，也可用 _ 或 /）"),
+            new TranslationSeedItem("entity.numbering.separator", "zh-HK", "分隔符_hk", "分隔符（空=段直接拼接；-=连字符分隔，默认 -）"),
 
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "en-US", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "en-US", "是否内置_us", "是否内置（0=否，1=是，系统内置的不可删除）"),
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "ja-JP", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "ja-JP", "是否内置_jp", "是否内置（0=否，1=是，系统内置的不可删除）"),
             // entity.numbering.isbuiltin
             new TranslationSeedItem("entity.numbering.isbuiltin", "zh-CN", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
             // entity.numbering.isbuiltin
-            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-HK", "是否内置", "是否内置（0=否，1=是，系统内置的不可删除）"),
+            new TranslationSeedItem("entity.numbering.isbuiltin", "zh-HK", "是否内置_hk", "是否内置（0=否，1=是，系统内置的不可删除）"),
 
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "en-US", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "ja-JP", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "zh-CN", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
             // entity.numbering.status
-            new TranslationSeedItem("entity.numbering.status", "zh-HK", "状态", "状态（字典 sys_normal_disable；1=启用 0=禁用）"),
+            new TranslationSeedItem("entity.numbering.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),
 
             // entity.numbering.description
-            new TranslationSeedItem("entity.numbering.description", "en-US", "描述说明", "描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）"),
+            new TranslationSeedItem("entity.numbering.description", "en-US", "描述说明_us", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence（段名为实体属性名）"),
             // entity.numbering.description
-            new TranslationSeedItem("entity.numbering.description", "ja-JP", "描述说明", "描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）"),
+            new TranslationSeedItem("entity.numbering.description", "ja-JP", "描述说明_jp", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence（段名为实体属性名）"),
             // entity.numbering.description
-            new TranslationSeedItem("entity.numbering.description", "zh-CN", "描述说明", "描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）"),
+            new TranslationSeedItem("entity.numbering.description", "zh-CN", "描述说明", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence（段名为实体属性名）"),
             // entity.numbering.description
-            new TranslationSeedItem("entity.numbering.description", "zh-HK", "描述说明", "描述说明；可选配置编码段顺序，格式：segments:DocumentType,CompanyCode,DepartmentCode,Prefix,DateFormat,Sequence（段名为实体属性名，Sequence 为流水号占位）"),
+            new TranslationSeedItem("entity.numbering.description", "zh-HK", "描述说明_hk", "描述说明；可选配置编码段顺序，格式：segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence（段名为实体属性名）"),
         };
     }
 
@@ -250,10 +250,10 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 8;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Foundation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -4,7 +4,7 @@
 // 文件名称：TaktConfigurableSelection.cs
 // 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
-// 功能描述：自定义报表筛选条件（Selection Screen / WHERE）
+// 功能描述：自定义报表 SQVI 筛选条件（WHERE）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -15,7 +15,7 @@ using SqlSugar;
 namespace Takt.Domain.Entities.Statistics.Report;
 
 /// <summary>
-/// 自定义报表筛选条件（对标 SAP Selection Screen）
+/// 自定义报表 SQVI 筛选条件
 /// </summary>
 /// <remarks>
 /// 运行前由用户填写筛选值；服务层将合法值编译为参数化 WHERE 条件。
@@ -46,7 +46,7 @@ public class TaktConfigurableSelection : TaktCompanyEntityBase
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（Selection Screen 标签）
+    /// 显示名称（SQVI 筛选项标签）
     /// </summary>
     [SugarColumn(ColumnName = "display_name", ColumnDescription = "显示名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string DisplayName { get; set; } = string.Empty;
@@ -54,8 +54,8 @@ public class TaktConfigurableSelection : TaktCompanyEntityBase
     /// <summary>
     /// 比较运算符
     /// </summary>
-    [SugarColumn(ColumnName = "filter_operator", ColumnDescription = "比较运算符", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int FilterOperator { get; set; } = 1;
+    [SugarColumn(ColumnName = "filter_operator", ColumnDescription = "比较运算符", ColumnDataType = "int", IsNullable = false, DefaultValue = "7")]
+    public int FilterOperator { get; set; } = 7;
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -76,7 +76,7 @@ public class TaktConfigurableSelection : TaktCompanyEntityBase
     public int IsRequired { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（Selection Screen 展示顺序）
+    /// 排序号（SQVI 筛选项展示顺序）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }

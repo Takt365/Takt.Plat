@@ -212,6 +212,69 @@ public static class TaktValidationI18nKeys
     /// <summary>文件</summary>
     public const string FieldFile = "common.field.file";
 
+    /// <summary>文件为空</summary>
+    public const string FileEmpty = "common.file.empty";
+
+    /// <summary>文件实体（entity.file._self）</summary>
+    public const string EntityFileSelf = "entity.file._self";
+
+    /// <summary>上传文件大小超限</summary>
+    public const string FileUploadSizeExceeded = "validation.file.upload.size.exceeded";
+
+    /// <summary>上传文件类型不支持</summary>
+    public const string FileUploadTypeUnsupported = "validation.file.upload.type.unsupported";
+
+    /// <summary>上传文件名无效</summary>
+    public const string FileUploadNameInvalid = "validation.file.upload.name.invalid";
+
+    /// <summary>分片序号无效</summary>
+    public const string FileUploadChunkIndexInvalid = "validation.file.upload.chunk.index.invalid";
+
+    /// <summary>分片缺失无法合并</summary>
+    public const string FileUploadChunkMissing = "validation.file.upload.chunk.missing";
+
+    /// <summary>合并后大小与声明不一致</summary>
+    public const string FileUploadMergeSizeMismatch = "validation.file.upload.merge.size.mismatch";
+
+    /// <summary>分片数量超过上限</summary>
+    public const string FileUploadChunkCountExceeded = "validation.file.upload.chunk.count.exceeded";
+
+    /// <summary>分片计划与文件大小不一致</summary>
+    public const string FileUploadChunkPlanMismatch = "validation.file.upload.chunk.plan.mismatch";
+
+    /// <summary>分片大小与计划不一致</summary>
+    public const string FileUploadChunkSizeMismatch = "validation.file.upload.chunk.size.mismatch";
+
+    /// <summary>当日同名校验失败</summary>
+    public const string FileUploadDuplicateOriginalNameToday = "validation.file.upload.duplicate.original.name.today";
+
+    /// <summary>当前存储不支持读流</summary>
+    public const string FileStorageReadUnsupported = "validation.file.storage.read.unsupported";
+
+    /// <summary>物理文件不存在</summary>
+    public const string FilePhysicalNotFound = "validation.file.physical.notfound";
+
+    /// <summary>当前存储不支持删除物理文件</summary>
+    public const string FileStorageDeleteUnsupported = "validation.file.storage.delete.unsupported";
+
+    /// <summary>当前存储不支持标记删除物理文件</summary>
+    public const string FileStorageMarkDeleteUnsupported = "validation.file.storage.markdelete.unsupported";
+
+    /// <summary>OSS/FTP 提供商标识不受支持</summary>
+    public const string FileStorageProviderUnsupported = "validation.file.storage.provider.unsupported";
+
+    /// <summary>远程存储上传失败</summary>
+    public const string FileStorageUploadFailed = "validation.file.storage.upload.failed";
+
+    /// <summary>删除标记目标已存在</summary>
+    public const string FilePhysicalDeleteTargetExists = "validation.file.physical.delete.target.exists";
+
+    /// <summary>文件已禁用无法下载</summary>
+    public const string FileDownloadDisabled = "validation.file.download.disabled";
+
+    /// <summary>无权访问文件</summary>
+    public const string FileAccessDenied = "validation.file.access.denied";
+
     /// <summary>工单状态流转不合法</summary>
     public const string TicketStatusTransitionInvalid = "validation.ticket.status.transition.invalid";
 

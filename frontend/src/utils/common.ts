@@ -152,7 +152,7 @@ export const TAKT_LOGIN_LAYOUT_STORAGE_KEY = 'takt.login.layout.position';
 /** 前端支持的语言编码（与后端 TaktCultureSeedData.CultureCode 一致） */
 export const TAKT_SUPPORTED_LOCALES = ['en-US', 'ja-JP', 'zh-HK', 'zh-CN'] as const;
 
-/** 租户编码位数（与 Database:TenantCodes 一致） */
+/** 租户流水位数（与 Database:TenantCodes 一致） */
 export const TAKT_TENANT_CODE_LENGTH = 3;
 
 /** 登录租户远程校验防抖（毫秒） */

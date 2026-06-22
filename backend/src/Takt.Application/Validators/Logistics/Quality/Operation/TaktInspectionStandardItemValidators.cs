@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardItemValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：InspectionStandardItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktInspectionStandardItem 生成，请按需审阅）
 // 
@@ -31,18 +31,18 @@ public class TaktInspectionStandardItemCreateValidator : AbstractValidator<TaktI
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.InspectionStandardId)
             .GreaterThanOrEqualTo(0).WithMessage("检验标准ID不能为负数");
         RuleFor(x => x.ItemCode)
             .NotEmpty().WithMessage("检验项目编码不能为空")
-            .MaximumLength(40).WithMessage("检验项目编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("检验项目编码长度不能超过50个字符");
         RuleFor(x => x.ItemName)
             .NotEmpty().WithMessage("检验项目名称不能为空")
-            .MaximumLength(40).WithMessage("检验项目名称长度不能超过40个字符");
+            .MaximumLength(200).WithMessage("检验项目名称长度不能超过200个字符");
         RuleFor(x => x.DefectLevel)
             .NotEmpty().WithMessage("缺点等级不能为空")
             .MaximumLength(2).WithMessage("缺点等级长度不能超过2个字符");
@@ -67,7 +67,7 @@ public class TaktInspectionStandardItemCreateValidator : AbstractValidator<TaktI
         RuleFor(x => x.RejectionCriteria)
             .NotEmpty().WithMessage("拒收标准不能为空")
             .MaximumLength(50).WithMessage("拒收标准长度不能超过50个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -108,17 +108,17 @@ public class TaktInspectionStandardItemImportValidator : AbstractValidator<TaktI
     public TaktInspectionStandardItemImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.InspectionStandardId)
             .GreaterThanOrEqualTo(0).WithMessage("检验标准ID不能为负数");
         RuleFor(x => x.ItemCode)
             .NotEmpty().WithMessage("检验项目编码不能为空")
-            .MaximumLength(40).WithMessage("检验项目编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("检验项目编码长度不能超过50个字符");
         RuleFor(x => x.ItemName)
             .NotEmpty().WithMessage("检验项目名称不能为空")
-            .MaximumLength(40).WithMessage("检验项目名称长度不能超过40个字符");
+            .MaximumLength(200).WithMessage("检验项目名称长度不能超过200个字符");
         RuleFor(x => x.DefectLevel)
             .NotEmpty().WithMessage("缺点等级不能为空")
             .MaximumLength(2).WithMessage("缺点等级长度不能超过2个字符");
@@ -137,8 +137,8 @@ public class TaktInspectionStandardItemImportValidator : AbstractValidator<TaktI
         RuleFor(x => x.InspectionMethodDescription)
             .NotEmpty().WithMessage("检验方法说明不能为空")
             .MaximumLength(500).WithMessage("检验方法说明长度不能超过500个字符");
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

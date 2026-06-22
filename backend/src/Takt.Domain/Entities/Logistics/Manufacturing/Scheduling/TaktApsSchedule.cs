@@ -159,6 +159,12 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     public string? ScheduleDescription { get; set; }
 
     /// <summary>
+    /// APS 排程订单列表（排程批次关联的订单）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktApsOrder.ApsScheduleId))]
+    public List<TaktApsOrder>? Orders { get; set; }
+
+    /// <summary>
     /// 排程明细列表（主子表关系）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktApsScheduleItem.ApsScheduleId))]

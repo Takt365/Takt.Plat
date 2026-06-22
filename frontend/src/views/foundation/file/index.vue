@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/foundation/file -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：文件实体 公司级实体：文件元数据按租户+公司隔离管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：文件实体管理页面，含查询、上传、删除、导出与只读详情，不支持导入与编辑 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -21,11 +21,10 @@
     <!-- 工具栏 -->
     <TaktToolsBar
       create-permission="foundation:file:create"
-      update-permission="foundation:file:update"
       delete-permission="foundation:file:delete"
       export-permission="foundation:file:export"
       :show-create="true"
-      :show-update="true"
+      :show-update="false"
       :show-delete="true"
       :show-import="false"
       :show-export="true"
@@ -36,41 +35,22 @@
       :show-refresh="true"
       :create-disabled="false"
       :create-loading="loading"
-      :update-disabled="updateDisabled"
-      :update-loading="loading"
       :delete-disabled="deleteDisabled"
       :delete-loading="loading"
       :refresh-loading="loading"
       @create="handleCreate"
-      @update="handleUpdate"
       @delete="handleDelete"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    >
-      <template #right>
-        <input
-          ref="uploadInputRef"
-          type="file"
-          class="hidden"
-          @change="handleUploadChange"
-        />
-        <a-button
-          v-permission="'foundation:file:upload'"
-          class="takt-button-upload"
-          :loading="uploadLoading"
-          @click="handleUploadClick"
-        >
-          <template #icon><RiUploadLine /></template>
-          {{ t('common.page.button.upload') }}
-        </a-button>
-      </template>
-    </TaktToolsBar>
+    />
 
     <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
+    <div class="foundation-file-table-wrap">
+      <TaktSingleTable
+        :scroll="tableScroll"
+        :columns="columns"
       entity-scope="company"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'fileId'"
@@ -87,33 +67,46 @@
     >
       <!-- 字典列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'fileCategory'">
-          <TaktDictTag
-            :value="getFileField(record, 'fileCategory')"
-            dict-type="sys_file_category"
-          />
-        </template>
-        <template v-else-if="column.key === 'storageType'">
+        <template v-if="column.key === 'storageType'">
           <TaktDictTag
             :value="getFileField(record, 'storageType')"
             dict-type="sys_storage_type"
           />
         </template>
+        <template v-else-if="column.key === 'fileHash'">
+          <a-typography-link
+            v-if="canDownloadFile(record)"
+            :disabled="downloadingFileId === getFileId(record)"
+            @click.stop="handleDownloadFile(record)"
+          >
+            {{ getFileDisplayName(record) }}
+          </a-typography-link>
+          <span v-else>{{ getFileDisplayName(record) || '-' }}</span>
+        </template>
         <template v-else-if="column.key === 'fileStatus'">
-          <TaktDictTag
-            :value="getFileField(record, 'fileStatus')"
-            dict-type="sys_normal_disable"
+          <a-switch
+            :checked="getFileField(record, 'fileStatus') === 1"
+            :disabled="getFileField(record, 'fileStatus') === TAKT_FILE_STATUS_LOCKED"
+            :checked-children="t('common.page.button.enable')"
+            :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleFileStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'isPublic'">
-          <TaktDictTag
-            :value="getFileField(record, 'isPublic')"
-            dict-type="sys_is_public"
+          <a-switch
+            :checked="getFileField(record, 'isPublic') === 0"
+            :checked-children="t('dict.sys.is.public.type.0')"
+            :un-checked-children="t('dict.sys.is.public.type.1')"
+            @change="(checked: unknown) => handleFilePublicChange(record, Boolean(checked))"
           />
+        </template>
+        <template v-else-if="column.key === 'fileTags'">
+          <takt-tag-color :value="getFileField(record, 'fileTags')" />
         </template>
       </template>
 
     </TaktSingleTable>
+    </div>
 
     <!-- 分页组件 -->
     <TaktPagination
@@ -124,21 +117,31 @@
       @show-size-change="handlePaginationSizeChange"
     />
 
-    <!-- 新增/编辑对话框 -->
+    <!-- 新增上传对话框 -->
     <TaktModal
-      v-model:open="formVisible"
-      :title="formTitle"
+      v-model:open="uploadVisible"
+      :title="t('common.dialog.title.create', { entity: t('entity.file._self') })"
       width="50%"
       wrap-class-name="takt-form-modal-resizable"
-      :confirm-loading="formLoading"
-      @ok="handleFormSubmit"
-      @cancel="handleFormCancel"
+      :confirm-loading="uploadLoading"
+      @ok="handleUploadSubmit"
+      @cancel="handleUploadCancel"
     >
-      <FileForm
-        ref="formRef"
-        :form-data="formData"
-        :loading="formLoading"
-      />
+      <FileFormUpload ref="uploadFormRef" :loading="uploadLoading" />
+    </TaktModal>
+    <!-- 详情对话框 -->
+    <TaktModal
+      v-model:open="detailVisible"
+      :title="t('common.dialog.title.detail', { entity: t('entity.file._self') })"
+      width="50%"
+      wrap-class-name="takt-form-modal-resizable"
+      :footer="null"
+      :cancel-text="t('common.page.button.close')"
+      @cancel="handleDetailClose"
+    >
+      <a-spin :spinning="detailLoading">
+        <FileDetail :detail="detailData" @downloaded="handleDetailDownloaded" />
+      </a-spin>
     </TaktModal>
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
@@ -225,11 +228,10 @@
       </div>
       <div v-show="isFieldVisible('fileCategory')">
       <a-form-item :label="t('entity.file.category')">
-        <TaktSelect
+        <a-input-number
           v-model:value="advancedQueryForm.fileCategory"
-          dict-type="sys_file_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.file.category') })"
-          allow-clear
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.file.category') })"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -296,7 +298,7 @@
       <a-form-item :label="t('entity.file.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.fileStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.file.status') })"
           allow-clear
         />
@@ -306,7 +308,7 @@
       <a-form-item :label="t('entity.file.ispublic')">
         <TaktSelect
           v-model:value="advancedQueryForm.isPublic"
-          dict-type="sys_is_public"
+          dict-type="sys_is_public_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.file.ispublic') })"
           allow-clear
         />
@@ -372,11 +374,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.extfield')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfield') })"
           allow-clear
         />
       </a-form-item>
@@ -406,54 +408,28 @@
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
-
-    <!-- 分片上传弹窗（断点续传） -->
-    <takt-modal
-      v-model:open="chunkUploadVisible"
-      :title="t('components.common.page.upload.chunkmodaltitle')"
-      :use-viewport-size="false"
-      :confirm-loading="chunkUploadLoading"
-      :ok-button-props="{ style: { display: 'none' } }"
-      :cancel-text="t('components.common.page.upload.cancel')"
-      @cancel="handleChunkUploadCancel"
-    >
-      <div class="flex flex-col gap-3">
-        <a-typography-text>{{ chunkUploadFileName }}</a-typography-text>
-        <a-progress :percent="chunkUploadPercent" :status="chunkUploadProgressStatus" />
-        <a-typography-text type="secondary">{{ chunkUploadStatusText }}</a-typography-text>
-        <div class="flex gap-2 justify-end">
-          <a-button
-            v-if="chunkUploadCanPause"
-            @click="handleChunkUploadPause"
-          >
-            {{ t('components.common.page.upload.chunkpause') }}
-          </a-button>
-          <a-button
-            v-if="chunkUploadCanResume"
-            type="primary"
-            @click="handleChunkUploadResume"
-          >
-            {{ t('components.common.page.upload.chunkresume') }}
-          </a-button>
-        </div>
-      </div>
-    </takt-modal>
   </div>
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize, ensureTaktPaginationConfigAsync } from '@/utils/takt-paged'
 /**
  * 文件实体 公司级实体：文件元数据按租户+公司隔离管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/foundation/file
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
-import FileForm from './components/file-form.vue'
-import { getFileList, getFileById, createFile, updateFile, deleteFileById, deleteFileBatch, exportFile, downloadFile, uploadFile } from '@/api/foundation/file'
-import { RiEditLine, RiDeleteBinLine, RiDownloadLine, RiUploadLine } from '@remixicon/vue'
+import FileFormUpload from './components/file-form-upload.vue'
+import FileDetail from './components/file-detail.vue'
+import { getFileList, getFileById, deleteFileById, deleteFileBatch, exportFile, downloadFileById, updateFileStatus, updateFilePublic } from '@/api/foundation/file'
+import type { File, FileQuery } from '@/types/foundation/file'
+import { isFileStatusEnabled, TAKT_FILE_STATUS_LOCKED } from '@/utils/takt-file-status'
+import { taktExcelEntityNames } from '@/utils/naming'
+import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { RiEyeLine, RiDeleteBinLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -471,71 +447,36 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<File[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
+/** 表格 scroll.y（服务端分页固定视口高度） */
+const tableScroll = { y: 'calc(100vh - 300px)' } as const
 /** 工具栏单选时当前行 */
 const selectedRow = ref<File | null>(null)
 /** 表格多选行 */
 const selectedRows = ref<File[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
+/** 正在下载的文件 ID（行内链接 loading） */
+const downloadingFileId = ref('')
 
-/** 新增/编辑弹窗是否打开 */
-const formVisible = ref(false)
-/** 弹窗标题（新增/编辑） */
-const formTitle = ref('')
-/** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<File>>({})
-/** 表单提交 loading */
-const formLoading = ref(false)
-/** 文件上传 loading */
+/** 新增上传弹窗是否打开 */
+const uploadVisible = ref(false)
+/** 上传提交 loading */
 const uploadLoading = ref(false)
-/** 隐藏文件选择 input */
-const uploadInputRef = ref<HTMLInputElement | null>(null)
-/** 分片上传弹窗 */
-const chunkUploadVisible = ref(false)
-/** 分片上传进行中 */
-const chunkUploadLoading = ref(false)
-/** 当前上传文件名 */
-const chunkUploadFileName = ref('')
-/** 分片上传进度 0-100 */
-const chunkUploadPercent = ref(0)
-/** 分片上传状态文案 */
-const chunkUploadStatusText = ref('')
-/** 分片上传器实例 */
-const chunkUploaderRef = ref<TaktFileChunkUploader | null>(null)
-/** 当前分片上传状态 */
-const chunkUploadStatus = ref<TaktFileChunkUploadStatus>(TaktFileChunkUploadStatus.Waiting)
-/** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()
+/** 上传表单 ref（validate / resetFields / uploadFiles） */
+const uploadFormRef = ref<InstanceType<typeof FileFormUpload> | null>(null)
+/** 详情弹窗是否打开 */
+const detailVisible = ref(false)
+/** 详情加载中 */
+const detailLoading = ref(false)
+/** 详情展示数据 */
+const detailData = ref<Partial<File> | null>(null)
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
-
-/** 分片上传进度条状态 */
-const chunkUploadProgressStatus = computed(() => {
-  if (chunkUploadStatus.value === TaktFileChunkUploadStatus.Error) {
-    return 'exception'
-  }
-  if (chunkUploadStatus.value === TaktFileChunkUploadStatus.Success) {
-    return 'success'
-  }
-  return 'active'
-})
-
-/** 是否可暂停 */
-const chunkUploadCanPause = computed(
-  () => chunkUploadStatus.value === TaktFileChunkUploadStatus.Uploading
-)
-
-/** 是否可恢复 */
-const chunkUploadCanResume = computed(
-  () =>
-    chunkUploadStatus.value === TaktFileChunkUploadStatus.Paused
-    || chunkUploadStatus.value === TaktFileChunkUploadStatus.Error
-)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   fileCode: '',
@@ -561,7 +502,7 @@ const advancedQueryForm = ref({
   location: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -589,7 +530,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'location', label: t('entity.file.location') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -600,14 +541,68 @@ const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'fileId'
-/** 工具栏「编辑」是否禁用（须恰好选中一行） */
-const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** 组装列表/导出查询参数（空字符串与未填数值不下发，避免后端模型绑定 400） */
+function buildListQuery(overrides?: Partial<FileQuery>): FileQuery {
+  const form = advancedQueryForm.value
+  const query: FileQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof FileQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('fileCode', form.fileCode)
+  assignTrimmed('fileName', form.fileName)
+  assignTrimmed('fileOriginalName', form.fileOriginalName)
+  assignTrimmed('filePath', form.filePath)
+  assignTrimmed('fileSize', form.fileSize)
+  assignTrimmed('fileType', form.fileType)
+  assignTrimmed('fileExtension', form.fileExtension)
+  assignTrimmed('fileHash', form.fileHash)
+  assignTrimmed('storageConfig', form.storageConfig)
+  assignTrimmed('accessUrl', form.accessUrl)
+  assignTrimmed('fileDescription', form.fileDescription)
+  assignTrimmed('fileTags', form.fileTags)
+  assignTrimmed('ipAddress', form.ipAddress)
+  assignTrimmed('location', form.location)
+  assignTrimmed('lastDownloadTimeStart', form.lastDownloadTimeStart)
+  assignTrimmed('lastDownloadTimeEnd', form.lastDownloadTimeEnd)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  if (form.fileCategory !== undefined && form.fileCategory !== null) {
+    query.fileCategory = form.fileCategory
+  }
+  if (form.storageType !== undefined && form.storageType !== null) {
+    query.storageType = form.storageType
+  }
+  if (form.downloadCount !== undefined && form.downloadCount !== null) {
+    query.downloadCount = form.downloadCount
+  }
+  if (form.fileStatus !== undefined && form.fileStatus !== null) {
+    query.fileStatus = form.fileStatus
+  }
+  if (form.isPublic !== undefined && form.isPublic !== null) {
+    query.isPublic = form.isPublic
+  }
+  return query
+}
 
 /** 页面挂载后加载分页列表 */
-onMounted(() => {
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
@@ -638,13 +633,71 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getFileField(record, 'fileCode') ?? ''
   },
   {
-    title: t('entity.file.name'),
-    dataIndex: 'fileName',
-    key: 'fileName',
+    title: t('entity.file.hash'),
+    dataIndex: 'fileHash',
+    key: 'fileHash',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getFileField(record, 'fileName') ?? ''
+    customRender: ({ record }: { record: any }) => getFileField(record, 'fileHash') ?? ''
+  },
+  {
+    title: t('entity.file.storagetype'),
+    dataIndex: 'storageType',
+    key: 'storageType',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: t('entity.file.status'),
+    dataIndex: 'fileStatus',
+    key: 'fileStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: t('entity.file.ispublic'),
+    dataIndex: 'isPublic',
+    key: 'isPublic',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: t('entity.file.tags'),
+    dataIndex: 'fileTags',
+    key: 'fileTags',
+    width: 160,
+    resizable: true,
+    ellipsis: false,
+  },
+  {
+    title: t('entity.file.downloadcount'),
+    dataIndex: 'downloadCount',
+    key: 'downloadCount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getFileField(record, 'downloadCount') ?? ''
+  },
+  {
+    title: t('entity.file.lastdownloadtime'),
+    dataIndex: 'lastDownloadTime',
+    key: 'lastDownloadTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getFileField(record, 'lastDownloadTime') ?? ''
+  },
+  {
+    title: t('entity.file.name'),
+    dataIndex: 'fileName',
+    key: 'fileName',
+    width: 160,
+    resizable: true,
+    ellipsis: true,
   },
   {
     title: t('entity.file.originalname'),
@@ -691,15 +744,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getFileField(record, 'fileExtension') ?? ''
   },
-  {
-    title: t('entity.file.hash'),
-    dataIndex: 'fileHash',
-    key: 'fileHash',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getFileField(record, 'fileHash') ?? ''
-  },
+
   {
     title: t('entity.file.category'),
     dataIndex: 'fileCategory',
@@ -707,15 +752,9 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: any }) => getFileField(record, 'fileCategory') ?? ''
   },
-  {
-    title: t('entity.file.storagetype'),
-    dataIndex: 'storageType',
-    key: 'storageType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
+
   {
     title: t('entity.file.storageconfig'),
     dataIndex: 'storageConfig',
@@ -734,40 +773,8 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getFileField(record, 'accessUrl') ?? ''
   },
-  {
-    title: t('entity.file.downloadcount'),
-    dataIndex: 'downloadCount',
-    key: 'downloadCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getFileField(record, 'downloadCount') ?? ''
-  },
-  {
-    title: t('entity.file.lastdownloadtime'),
-    dataIndex: 'lastDownloadTime',
-    key: 'lastDownloadTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getFileField(record, 'lastDownloadTime') ?? ''
-  },
-  {
-    title: t('entity.file.status'),
-    dataIndex: 'fileStatus',
-    key: 'fileStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.file.ispublic'),
-    dataIndex: 'isPublic',
-    key: 'isPublic',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
+
+
   {
     title: t('entity.file.description'),
     dataIndex: 'fileDescription',
@@ -777,15 +784,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getFileField(record, 'fileDescription') ?? ''
   },
-  {
-    title: t('entity.file.tags'),
-    dataIndex: 'fileTags',
-    key: 'fileTags',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getFileField(record, 'fileTags') ?? ''
-  },
+
   {
     title: t('entity.file.ipaddress'),
     dataIndex: 'ipAddress',
@@ -805,22 +804,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getFileField(record, 'location') ?? ''
   },
   CreateActionColumn({
+    width: 148,
     actions: [
       {
-        key: 'download',
-        label: t('common.page.button.download'),
+        key: 'detail',
+        label: t('common.page.button.detail'),
         shape: 'plain',
-        icon: RiDownloadLine,
-        permission: 'foundation:file:download',
-        onClick: (record: File) => handleDownload(record)
-      },
-      {
-        key: 'update',
-        label: t('common.page.button.edit'),
-        shape: 'plain',
-        icon: RiEditLine,
-        permission: 'foundation:file:update',
-        onClick: (record: File) => handleEdit(record)
+        icon: RiEyeLine,
+        permission: 'foundation:file:query',
+        onClick: (record: File) => handleShowDetail(record),
       },
       {
         key: 'delete',
@@ -842,6 +834,112 @@ const getFileId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getFileField = (record: any, field: string): any => record?.[field]
+
+/**
+ * 表格展示用文件名（优先原始名）
+ * @param record 行数据
+ * @returns {string} 展示名
+ */
+function getFileDisplayName(record: File): string {
+  const original = getFileField(record, 'fileHashOriginalName')
+  const stored = getFileField(record, 'fileName')
+  const name = (original ?? stored ?? '').toString().trim()
+  return name
+}
+
+/**
+ * 是否允许下载（启用态且有主键）
+ * @param record 行数据
+ * @returns 可下载返回 true
+ */
+function canDownloadFile(record: File): boolean {
+  const id = getFileId(record)
+  if (!id) {
+    return false
+  }
+  return isFileStatusEnabled(getFileField(record, 'fileStatus'))
+}
+
+/**
+ * 点击文件名称下载
+ * @param record 当前行
+ */
+async function handleDownloadFile(record: File) {
+  const id = getFileId(record)
+  if (!id || !canDownloadFile(record)) {
+    return
+  }
+  const fallbackName = getFileDisplayName(record) || 'download'
+  downloadingFileId.value = id
+  try {
+    const blob = await downloadFileById(id)
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = fallbackName
+    link.style.display = 'none'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    setTimeout(() => window.URL.revokeObjectURL(url), 100)
+    message.success(t('common.feedback.success'))
+    await loadData()
+  } catch (error: unknown) {
+    const err = error as { message?: string }
+    logger.error('[File] 下载失败', { fileId: id, error })
+    message.error(err?.message || t('common.feedback.failed'))
+  } finally {
+    downloadingFileId.value = ''
+  }
+}
+
+/**
+ * 表格行内切换文件状态（sys_normal_disable_status：1=启用，0=禁用；2=锁定不可切换）
+ * @param record 当前行
+ * @param checked 开关是否选中（启用）
+ */
+async function handleFileStatusChange(record: File, checked: boolean) {
+  const id = getFileId(record)
+  if (!id || getFileField(record, 'fileStatus') === TAKT_FILE_STATUS_LOCKED) {
+    return
+  }
+  const newStatus = checked ? 1 : 0
+  const oldStatus = getFileField(record, 'fileStatus')
+  ;(record as File).fileStatus = newStatus
+  try {
+    await updateFileStatus({ fileId: id, fileStatus: newStatus })
+    message.success(t('common.feedback.updated'))
+  } catch (error: unknown) {
+    ;(record as File).fileStatus = oldStatus
+    const err = error as { message?: string }
+    logger.error('[File] 状态更新失败', { fileId: id, error })
+    message.error(err?.message || t('common.feedback.failed'))
+  }
+}
+
+/**
+ * 表格行内切换公开（sys_is_public_type：0=公开，1=私有）
+ * @param record 当前行
+ * @param checked 开关是否选中（公开）
+ */
+async function handleFilePublicChange(record: File, checked: boolean) {
+  const id = getFileId(record)
+  if (!id) {
+    return
+  }
+  const newIsPublic = checked ? 0 : 1
+  const oldIsPublic = getFileField(record, 'isPublic')
+  ;(record as File).isPublic = newIsPublic
+  try {
+    await updateFilePublic({ fileId: id, isPublic: newIsPublic })
+    message.success(t('common.feedback.updated'))
+  } catch (error: unknown) {
+    ;(record as File).isPublic = oldIsPublic
+    const err = error as { message?: string }
+    logger.error('[File] 公开范围更新失败', { fileId: id, error })
+    message.error(err?.message || t('common.feedback.failed'))
+  }
+}
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -885,16 +983,7 @@ const onClickRow = (record: File) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: FileQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getFileList(params)
+    const res = await getFileList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -912,7 +1001,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -943,218 +1032,97 @@ function handleReset() {
   location: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
-/** 打开新增弹窗 */
+/** 打开新增上传弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.file._self') })
-  formData.value = {}
-  formVisible.value = true
+  uploadVisible.value = true
+  nextTick(() => {
+    uploadFormRef.value?.resetFields()
+  })
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: File) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.file._self') })
-  formData.value = { ...record }
-  formVisible.value = true
-}
-
-/** 工具栏编辑：打开当前单选行 */
-function handleUpdate() {
-  if (selectedRow.value) {
-    handleEdit(selectedRow.value)
-  } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.file._self') }))
+/** 打开详情弹窗 */
+async function handleShowDetail(record: File) {
+  const id = getFileId(record)
+  if (!id) {
+    return
+  }
+  detailVisible.value = true
+  detailLoading.value = true
+  detailData.value = null
+  try {
+    detailData.value = await getFileById(id)
+  } catch (error: unknown) {
+    const err = error as { message?: string }
+    message.error(err?.message || t('common.feedback.load.data.failed'))
+    detailVisible.value = false
+  } finally {
+    detailLoading.value = false
   }
 }
-/** 提交新增/编辑表单 */
-async function handleFormSubmit() {
-  const refInst = formRef.value
+/** 提交新增上传 */
+async function handleUploadSubmit() {
+  const refInst = uploadFormRef.value
   if (!refInst?.validate) return
   try {
     await refInst.validate()
   } catch {
     return
   }
-  formLoading.value = true
+  uploadLoading.value = true
   try {
-    const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
-    const id = (formData.value as any)?.[entityIdName]
-    if (id) {
-      await updateFile(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.file._self') }))
-    } else {
-      await createFile(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.file._self') }))
-    }
-    formVisible.value = false
+    await refInst.uploadFiles()
+    message.success(t('common.feedback.created', { target: t('entity.file._self') }))
+    uploadVisible.value = false
+    uploadFormRef.value?.resetFields()
     loadData()
   } finally {
-    formLoading.value = false
+    uploadLoading.value = false
   }
 }
 
-/** 关闭新增/编辑弹窗（不提交） */
-function handleFormCancel() {
-  formVisible.value = false
+/** 关闭新增上传弹窗 */
+function handleUploadCancel() {
+  uploadVisible.value = false
+  uploadFormRef.value?.resetFields()
 }
 
-/** 触发文件选择 */
-function handleUploadClick() {
-  uploadInputRef.value?.click()
+/** 关闭详情弹窗 */
+function handleDetailClose() {
+  detailVisible.value = false
+  detailData.value = null
 }
 
-/** 更新分片上传状态文案 */
-function updateChunkUploadStatusText(
-  status: TaktFileChunkUploadStatus,
-  uploaded: number,
-  total: number
-) {
-  chunkUploadStatus.value = status
-  if (status === TaktFileChunkUploadStatus.Hashing) {
-    chunkUploadStatusText.value = t('components.common.page.upload.chunkhashing')
+/**
+ * 详情内下载成功后刷新详情与列表下载次数
+ * @param fileId 文件ID
+ */
+async function handleDetailDownloaded(fileId: string) {
+  if (!fileId) {
     return
   }
-  if (status === TaktFileChunkUploadStatus.Merging) {
-    chunkUploadStatusText.value = t('components.common.page.upload.chunkmerging')
-    return
-  }
-  if (status === TaktFileChunkUploadStatus.Paused) {
-    chunkUploadStatusText.value = t('components.common.page.upload.chunkpaused')
-    return
-  }
-  if (total > 0) {
-    chunkUploadStatusText.value = t('components.common.page.upload.chunkuploading', {
-      uploaded,
-      total,
-    })
-  }
-}
-
-/** 整文件/分片上传（大文件自动分片+断点续传） */
-async function handleUploadChange(event: Event) {
-  const input = event.target as HTMLInputElement
-  const file = input.files?.[0]
-  input.value = ''
-  if (!file) return
-
-  if (!shouldUseTaktFileChunkUpload(file.size)) {
-    uploadLoading.value = true
-    try {
-      await uploadFile(file)
-      message.success(t('common.feedback.action.success', { action: t('common.page.button.upload') }))
-      loadData()
-    } finally {
-      uploadLoading.value = false
-    }
-    return
-  }
-
-  chunkUploadFileName.value = file.name
-  chunkUploadPercent.value = 0
-  chunkUploadVisible.value = true
-  chunkUploadLoading.value = true
-  const uploader = new TaktFileChunkUploader(file, {
-    onProgress: (progress) => {
-      chunkUploadPercent.value = progress.percent
-      updateChunkUploadStatusText(
-        progress.status,
-        progress.uploadedChunks,
-        progress.totalChunks
-      )
-    },
-  })
-  chunkUploaderRef.value = uploader
   try {
-    await uploader.start()
-    message.success(t('components.common.page.upload.fileuploadsuccess', { name: file.name }))
-    chunkUploadVisible.value = false
-    loadData()
-  } catch (error: unknown) {
-    if (error instanceof TaktFileChunkUploadPausedError) {
-      chunkUploadLoading.value = false
-      return
-    }
-    if (chunkUploadStatus.value !== TaktFileChunkUploadStatus.Cancelled) {
-      const errMsg = error instanceof Error ? error.message : String(error)
-      message.error(t('components.common.page.upload.fileuploadfail', { name: file.name }) + (errMsg ? `: ${errMsg}` : ''))
-    }
-    chunkUploadVisible.value = false
-  } finally {
-    if (chunkUploadStatus.value !== TaktFileChunkUploadStatus.Paused) {
-      chunkUploadLoading.value = false
-      chunkUploaderRef.value = null
-    }
+    detailData.value = await getFileById(fileId)
+  } catch {
+    // 详情已本地更新下载次数；拉取失败不阻断
   }
+  await loadData()
 }
 
-/** 暂停分片上传 */
-function handleChunkUploadPause() {
-  chunkUploaderRef.value?.pause()
-}
-
-/** 恢复分片上传 */
-async function handleChunkUploadResume() {
-  const uploader = chunkUploaderRef.value
-  if (!uploader) return
-  chunkUploadLoading.value = true
-  try {
-    await uploader.resume()
-    message.success(t('components.common.page.upload.fileuploadsuccess', { name: chunkUploadFileName.value }))
-    chunkUploadVisible.value = false
-    loadData()
-  } catch (error: unknown) {
-    if (error instanceof TaktFileChunkUploadPausedError) {
-      return
-    }
-    const errMsg = error instanceof Error ? error.message : String(error)
-    message.error(t('components.common.page.upload.fileuploadfail', { name: chunkUploadFileName.value }) + (errMsg ? `: ${errMsg}` : ''))
-  } finally {
-    if (chunkUploadStatus.value !== TaktFileChunkUploadStatus.Paused) {
-      chunkUploadLoading.value = false
-      chunkUploaderRef.value = null
-    }
-  }
-}
-
-/** 取消分片上传 */
-async function handleChunkUploadCancel() {
-  await chunkUploaderRef.value?.cancel()
-  chunkUploadVisible.value = false
-  chunkUploaderRef.value = null
-}
-
-/** 下载文件 */
-async function handleDownload(record: File) {
-  const id = getFileId(record)
-  if (!id) return
-  const blob = await downloadFile(id)
-  const fileName = getFileField(record, 'fileOriginalName') || getFileField(record, 'fileName') || `file-${id}`
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = fileName
-  link.click()
-  URL.revokeObjectURL(url)
-}
 /** 导出当前查询条件下的 Excel */
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: FileQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportFile(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportFile(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1222,7 +1190,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1251,7 +1219,7 @@ function handleAdvancedQueryReset() {
   location: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -1281,23 +1249,29 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+/** 分页每页条数变更（重置到默认页码） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
 
 <style scoped lang="css">
 .foundation-file {
-  padding: 16px;
+  padding: 0 4px 0 0;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+.foundation-file-table-wrap {
+  flex: 1;
   min-height: 0;
 }
 </style>

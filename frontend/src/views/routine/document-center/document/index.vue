@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="routine-document-center-document">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,76 +52,46 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="approval"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'documentId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getDocumentId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getDocumentId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="documentId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.documentVersion._self') }}</div>
-          <a-table
-            v-if="hasDocumentVersionRows(record)"
-            :columns="documentVersionExpandColumns"
-            :data-source="getDocumentVersionRows(record)"
-            :row-key="(row: DocumentVersion, index?: number) => row?.documentVersionId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.documentChangeLog._self') }}</div>
-          <a-table
-            v-if="hasDocumentChangeLogRows(record)"
-            :columns="documentChangeLogExpandColumns"
-            :data-source="getDocumentChangeLogRows(record)"
-            :row-key="(row: DocumentChangeLog, index?: number) => row?.documentChangeLogId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <DocumentVersionPanel
+          ref="documentVersionPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <DocumentForm
+        :key="formData?.documentId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -143,6 +113,8 @@
         <a-input
           v-model:value="advancedQueryForm.documentCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -152,6 +124,8 @@
         <a-input
           v-model:value="advancedQueryForm.title"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.title') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -207,6 +181,8 @@
         <a-input
           v-model:value="advancedQueryForm.summary"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.summary') })"
+          show-count
+          :maxlength="2000"
           allow-clear
         />
       </a-form-item>
@@ -216,6 +192,8 @@
         <a-input
           v-model:value="advancedQueryForm.tags"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.tags') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
@@ -225,6 +203,8 @@
         <a-input
           v-model:value="advancedQueryForm.fileId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.fileid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -234,6 +214,8 @@
         <a-input
           v-model:value="advancedQueryForm.fileName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.filename') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -243,6 +225,8 @@
         <a-input
           v-model:value="advancedQueryForm.filePath"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.filepath') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
@@ -252,6 +236,8 @@
         <a-input
           v-model:value="advancedQueryForm.fileSize"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.filesize') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -261,6 +247,8 @@
         <a-input
           v-model:value="advancedQueryForm.fileType"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.filetype') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -270,6 +258,8 @@
         <a-input
           v-model:value="advancedQueryForm.fileExtension"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.fileextension') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -345,6 +335,8 @@
         <a-input
           v-model:value="advancedQueryForm.publisherId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.publisherid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -354,6 +346,8 @@
         <a-input
           v-model:value="advancedQueryForm.publisherName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.publishername') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -363,6 +357,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.deptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -372,6 +368,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.deptname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -381,15 +379,6 @@
         <a-input-number
           v-model:value="advancedQueryForm.isTop"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.istop') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.document.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.sortorder') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -427,6 +416,8 @@
         <a-input
           v-model:value="advancedQueryForm.targetDepartments"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.targetdepartments') })"
+          show-count
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
@@ -436,6 +427,8 @@
         <a-input
           v-model:value="advancedQueryForm.targetUsers"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.targetusers') })"
+          show-count
+          :maxlength="2000"
           allow-clear
         />
       </a-form-item>
@@ -454,6 +447,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.initiatorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -463,6 +458,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.initiatedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -482,6 +479,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.approvedby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -491,6 +490,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.document.approvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -527,11 +528,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('entity.document.extfield')">
+        <a-textarea
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.document.extfield') })"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -541,8 +543,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -595,13 +599,12 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import DocumentForm from './components/document-form.vue'
-import { getDocumentList, getDocumentById, createDocument, updateDocument, deleteDocumentById, deleteDocumentBatch, getDocumentTemplate, importDocument, exportDocument } from '@/api/routine/document-center/document'
-import * as documentVersionApi from '@/api/routine/document-center/document-version'
-import * as documentChangeLogApi from '@/api/routine/document-center/document-change-log'
-import type { DocumentVersion, DocumentVersionQuery } from '@/types/routine/document-center/document-version'
-import type { DocumentChangeLog, DocumentChangeLogQuery } from '@/types/routine/document-center/document-change-log'
-import type { Document, DocumentQuery, DocumentCreate, DocumentUpdate } from '@/types/routine/document-center/document'
+import DocumentVersionPanel from './components/document-version-panel.vue'
+import { provideDocumentMasterContext } from './composables/use-document-master-context'
+import { getDocumentList, getDocumentById, createDocument, updateDocument, deleteDocumentById, deleteDocumentBatch, getDocumentTemplate, importDocument, exportDocument, updateDocumentStatus } from '@/api/routine/document-center/document'
+import type { Document, DocumentQuery } from '@/types/routine/document-center/document'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
@@ -622,9 +625,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Document[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -639,11 +642,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Document>>({})
+const formData = ref<Partial<Document> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -673,7 +678,6 @@ const advancedQueryForm = ref({
   deptId: '',
   deptName: '',
   isTop: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   viewCount: undefined as number | undefined,
   downloadCount: undefined as number | undefined,
   targetScope: '',
@@ -688,7 +692,7 @@ const advancedQueryForm = ref({
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -708,18 +712,17 @@ const queryFieldsMeta = computed(() => [
   { key: 'fileSize', label: t('entity.document.filesize') },
   { key: 'fileType', label: t('entity.document.filetype') },
   { key: 'fileExtension', label: t('entity.document.fileextension') },
-  { key: 'effectiveTimeStart', label: t('entity.document.effectivetimestart') },
-  { key: 'effectiveTimeEnd', label: t('entity.document.effectivetimeend') },
-  { key: 'expireTimeStart', label: t('entity.document.expiretimestart') },
-  { key: 'expireTimeEnd', label: t('entity.document.expiretimeend') },
-  { key: 'publishTimeStart', label: t('entity.document.publishtimestart') },
-  { key: 'publishTimeEnd', label: t('entity.document.publishtimeend') },
+  { key: 'effectiveTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.document.effectivetime')) },
+  { key: 'effectiveTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.document.effectivetime')) },
+  { key: 'expireTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.document.expiretime')) },
+  { key: 'expireTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.document.expiretime')) },
+  { key: 'publishTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.document.publishtime')) },
+  { key: 'publishTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.document.publishtime')) },
   { key: 'publisherId', label: t('entity.document.publisherid') },
   { key: 'publisherName', label: t('entity.document.publishername') },
   { key: 'deptId', label: t('entity.document.deptid') },
   { key: 'deptName', label: t('entity.document.deptname') },
   { key: 'isTop', label: t('entity.document.istop') },
-  { key: 'sortOrder', label: t('entity.document.sortorder') },
   { key: 'viewCount', label: t('entity.document.viewcount') },
   { key: 'downloadCount', label: t('entity.document.downloadcount') },
   { key: 'targetScope', label: t('entity.document.targetscope') },
@@ -734,7 +737,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'approvedAtEnd', label: t('entity.document.approvedatend') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('entity.document.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -752,138 +755,129 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideDocumentMasterContext()
+const documentVersionPanelRef = ref<InstanceType<typeof DocumentVersionPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {DocumentQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<DocumentQuery>): DocumentQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: DocumentQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof DocumentQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('documentCode', form.documentCode)
+  assignTrimmed('title', form.title)
+  if (form.documentCategory !== undefined && form.documentCategory !== null) {
+    query.documentCategory = form.documentCategory
+  }
+  if (form.documentStatus !== undefined && form.documentStatus !== null) {
+    query.documentStatus = form.documentStatus
+  }
+  if (form.confidentialLevel !== undefined && form.confidentialLevel !== null) {
+    query.confidentialLevel = form.confidentialLevel
+  }
+  if (form.version !== undefined && form.version !== null) {
+    query.version = form.version
+  }
+  assignTrimmed('content', form.content)
+  assignTrimmed('summary', form.summary)
+  assignTrimmed('tags', form.tags)
+  assignTrimmed('fileId', form.fileId)
+  assignTrimmed('fileName', form.fileName)
+  assignTrimmed('filePath', form.filePath)
+  assignTrimmed('fileSize', form.fileSize)
+  assignTrimmed('fileType', form.fileType)
+  assignTrimmed('fileExtension', form.fileExtension)
+  assignTrimmed('effectiveTimeStart', form.effectiveTimeStart)
+  assignTrimmed('effectiveTimeEnd', form.effectiveTimeEnd)
+  assignTrimmed('expireTimeStart', form.expireTimeStart)
+  assignTrimmed('expireTimeEnd', form.expireTimeEnd)
+  assignTrimmed('publishTimeStart', form.publishTimeStart)
+  assignTrimmed('publishTimeEnd', form.publishTimeEnd)
+  assignTrimmed('publisherId', form.publisherId)
+  assignTrimmed('publisherName', form.publisherName)
+  assignTrimmed('deptId', form.deptId)
+  assignTrimmed('deptName', form.deptName)
+  if (form.isTop !== undefined && form.isTop !== null) {
+    query.isTop = form.isTop
+  }
+  if (form.viewCount !== undefined && form.viewCount !== null) {
+    query.viewCount = form.viewCount
+  }
+  if (form.downloadCount !== undefined && form.downloadCount !== null) {
+    query.downloadCount = form.downloadCount
+  }
+  assignTrimmed('targetScope', form.targetScope)
+  assignTrimmed('targetDepartments', form.targetDepartments)
+  assignTrimmed('targetUsers', form.targetUsers)
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  assignTrimmed('initiatorId', form.initiatorId)
+  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
+  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
+  assignTrimmed('approvedBy', form.approvedBy)
+  assignTrimmed('approvedAtStart', form.approvedAtStart)
+  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：documentVersion 列 */
-const documentVersionExpandColumns = computed(() => [
-  {
-    title: t('entity.documentVersion.documentname'),
-    dataIndex: 'documentName',
-    key: 'documentName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentVersion.versionno'),
-    dataIndex: 'versionNo',
-    key: 'versionNo',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentVersion.versionnote'),
-    dataIndex: 'versionNote',
-    key: 'versionNote',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentVersion.fileid'),
-    dataIndex: 'fileId',
-    key: 'fileId',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentVersion.filename'),
-    dataIndex: 'fileName',
-    key: 'fileName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentVersion.filepath'),
-    dataIndex: 'filePath',
-    key: 'filePath',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentVersion.filesize'),
-    dataIndex: 'fileSize',
-    key: 'fileSize',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentVersion.filetype'),
-    dataIndex: 'fileType',
-    key: 'fileType',
-    ellipsis: true,
-  },
-])
 
-/** 展开行预览：documentChangeLog 列 */
-const documentChangeLogExpandColumns = computed(() => [
-  {
-    title: t('entity.documentChangeLog.documentname'),
-    dataIndex: 'documentName',
-    key: 'documentName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentChangeLog.documentcode'),
-    dataIndex: 'documentCode',
-    key: 'documentCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentChangeLog.documenttitle'),
-    dataIndex: 'documentTitle',
-    key: 'documentTitle',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentChangeLog.changetype'),
-    dataIndex: 'changeType',
-    key: 'changeType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentChangeLog.changesummary'),
-    dataIndex: 'changeSummary',
-    key: 'changeSummary',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.documentChangeLog.versionatchange'),
-    dataIndex: 'versionAtChange',
-    key: 'versionAtChange',
-    ellipsis: true,
-  },
-])
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
 
-/** 读取主表行上的 documentVersion 子表缓存 */
-function getDocumentVersionRows(record: Document): DocumentVersion[] {
-  return (record as any)?.versions ?? []
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: Document | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getDocumentId(record) : ''
 }
 
-/** 主表行是否已加载 documentVersion 子表 */
-function hasDocumentVersionRows(record: Document): boolean {
-  return getDocumentVersionRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as Document
+  const key = getDocumentId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
-/** 读取主表行上的 documentChangeLog 子表缓存 */
-function getDocumentChangeLogRows(record: Document): DocumentChangeLog[] {
-  return (record as any)?.changeLogs ?? []
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
 }
-
-/** 主表行是否已加载 documentChangeLog 子表 */
-function hasDocumentChangeLogRows(record: Document): boolean {
-  return getDocumentChangeLogRows(record).length > 0
-}
-
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadDocumentDetail(record: Document): Promise<Document | null> {
@@ -902,81 +896,6 @@ async function loadDocumentDetail(record: Document): Promise<Document | null> {
     message.error(error?.message || t('common.feedback.load.data.failed'))
     return null
   }
-}
-/** 懒加载 documentVersion 子表（DocumentVersionQuery + documentVersionApi，与主表 DocumentQuery 分离） */
-async function loadDocumentVersionForDocument(record: Document): Promise<DocumentVersion[]> {
-  const masterId = getDocumentId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: DocumentVersionQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      documentId: masterId,
-    }
-    const result = await documentVersionApi.getDocumentVersionList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getDocumentId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, versions: rows } as Document
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 documentChangeLog 子表（DocumentChangeLogQuery + documentChangeLogApi，与主表 DocumentQuery 分离） */
-async function loadDocumentChangeLogForDocument(record: Document): Promise<DocumentChangeLog[]> {
-  const masterId = getDocumentId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: DocumentChangeLogQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      documentId: masterId,
-    }
-    const result = await documentChangeLogApi.getDocumentChangeLogList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getDocumentId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, changeLogs: rows } as Document
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureDocumentChildrenLoaded(record: Document) {
-  if (!hasDocumentVersionRows(record)) {
-    await loadDocumentVersionForDocument(record)
-  }
-  if (!hasDocumentChangeLogRows(record)) {
-    await loadDocumentChangeLogForDocument(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: Document) {
-  const key = getDocumentId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureDocumentChildrenLoaded(record)
-  expandedRowKeys.value = [key]
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
@@ -1274,6 +1193,7 @@ const getDocumentId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getDocumentField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1281,51 +1201,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: Document, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getDocumentId(selectedRow.value) === getDocumentId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: Document[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Document) => ({
-  onClick: () => {
-    const key = getDocumentId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getDocumentId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: DocumentQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getDocumentList(params)
+    const res = await getDocumentList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1343,7 +1244,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1377,7 +1278,6 @@ function handleReset() {
   deptId: '',
   deptName: '',
   isTop: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   viewCount: undefined as number | undefined,
   downloadCount: undefined as number | undefined,
   targetScope: '',
@@ -1392,18 +1292,19 @@ function handleReset() {
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.document._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: Document) {
@@ -1447,6 +1348,11 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.document._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  documentVersionPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1456,6 +1362,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1487,16 +1395,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: DocumentQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportDocument(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportDocument(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1533,6 +1436,10 @@ async function handleDeleteOne(record: Document) {
     onOk: async () => {
       await deleteDocumentById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: t('entity.document._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1552,6 +1459,10 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteDocumentBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.document._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1564,7 +1475,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1596,7 +1507,6 @@ function handleAdvancedQueryReset() {
   deptId: '',
   deptName: '',
   isTop: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   viewCount: undefined as number | undefined,
   downloadCount: undefined as number | undefined,
   targetScope: '',
@@ -1611,7 +1521,7 @@ function handleAdvancedQueryReset() {
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -1640,24 +1550,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.routine-document-center-document {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

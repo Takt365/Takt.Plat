@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Cost
-// 文件名称：TaktQualityOperationOthersController.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityAssuranceOthersController.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务其他通常业务费用明细控制器
 // 
@@ -23,17 +23,17 @@ namespace Takt.WebApi.Controllers.Logistics.Quality.Cost;
 /// </summary>
 [ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "品质业务其他通常业务费用明细")]
-public class TaktQualityOperationOthersController : TaktControllerBase
+public class TaktQualityAssuranceOthersController : TaktControllerBase
 {
-    private readonly ITaktQualityOperationOtherService _qualityOperationOtherService;
+    private readonly ITaktQualityAssuranceOtherService _qualityAssuranceOtherService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="qualityOperationOtherService">品质业务其他通常业务费用明细服务</param>
-    public TaktQualityOperationOthersController(ITaktQualityOperationOtherService qualityOperationOtherService)
+    /// <param name="qualityAssuranceOtherService">品质业务其他通常业务费用明细服务</param>
+    public TaktQualityAssuranceOthersController(ITaktQualityAssuranceOtherService qualityAssuranceOtherService)
     {
-        _qualityOperationOtherService = qualityOperationOtherService;
+        _qualityAssuranceOtherService = qualityAssuranceOtherService;
     }
 
     /// <summary>
@@ -41,13 +41,13 @@ public class TaktQualityOperationOthersController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationother:list", "品质业务其他通常业务费用明细列表")]
+    [TaktPermission("logistics:quality:cost:assurance:list", "品质业务其他通常业务费用明细列表")]
     [HttpGet("list")]
-    public async Task<IActionResult> GetQualityOperationOtherListAsync([FromQuery] TaktQualityOperationOtherQueryDto queryDto)
+    public async Task<IActionResult> GetQualityAssuranceOtherListAsync([FromQuery] TaktQualityAssuranceOtherQueryDto queryDto)
     {
         try
         {
-            var result = await _qualityOperationOtherService.GetQualityOperationOtherListAsync(queryDto);
+            var result = await _qualityAssuranceOtherService.GetQualityAssuranceOtherListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
         }
         catch (Exception ex)
@@ -61,13 +61,13 @@ public class TaktQualityOperationOthersController : TaktControllerBase
     /// </summary>
     /// <param name="id">品质业务其他通常业务费用明细ID</param>
     /// <returns>品质业务其他通常业务费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationother:query", "品质业务其他通常业务费用明细详情")]
+    [TaktPermission("logistics:quality:cost:assurance:query", "品质业务其他通常业务费用明细详情")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetQualityOperationOtherByIdAsync(long id)
+    public async Task<IActionResult> GetQualityAssuranceOtherByIdAsync(long id)
     {
         try
         {
-            var result = await _qualityOperationOtherService.GetQualityOperationOtherByIdAsync(id);
+            var result = await _qualityAssuranceOtherService.GetQualityAssuranceOtherByIdAsync(id);
             if (result == null)
             {
                 return NotFound("品质业务其他通常业务费用明细不存在");
@@ -84,13 +84,13 @@ public class TaktQualityOperationOthersController : TaktControllerBase
     /// 获取品质业务其他通常业务费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationother:query", "品质业务其他通常业务费用明细选项")]
+    [TaktPermission("logistics:quality:cost:assurance:query", "品质业务其他通常业务费用明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQualityOperationOtherOptionsAsync()
+    public async Task<IActionResult> GetQualityAssuranceOtherOptionsAsync()
     {
         try
         {
-            var result = await _qualityOperationOtherService.GetQualityOperationOtherOptionsAsync();
+            var result = await _qualityAssuranceOtherService.GetQualityAssuranceOtherOptionsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -104,13 +104,13 @@ public class TaktQualityOperationOthersController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>品质业务其他通常业务费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationother:create", "创建品质业务其他通常业务费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:create", "创建品质业务其他通常业务费用明细")]
     [HttpPost]
-    public async Task<IActionResult> CreateQualityOperationOtherAsync([FromBody] TaktQualityOperationOtherCreateDto dto)
+    public async Task<IActionResult> CreateQualityAssuranceOtherAsync([FromBody] TaktQualityAssuranceOtherCreateDto dto)
     {
         try
         {
-            var result = await _qualityOperationOtherService.CreateQualityOperationOtherAsync(dto);
+            var result = await _qualityAssuranceOtherService.CreateQualityAssuranceOtherAsync(dto);
             return Success(result, "创建成功");
         }
         catch (Exception ex)
@@ -125,13 +125,13 @@ public class TaktQualityOperationOthersController : TaktControllerBase
     /// <param name="id">品质业务其他通常业务费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>品质业务其他通常业务费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationother:update", "更新品质业务其他通常业务费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:update", "更新品质业务其他通常业务费用明细")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateQualityOperationOtherAsync(long id, [FromBody] TaktQualityOperationOtherUpdateDto dto)
+    public async Task<IActionResult> UpdateQualityAssuranceOtherAsync(long id, [FromBody] TaktQualityAssuranceOtherUpdateDto dto)
     {
         try
         {
-            var result = await _qualityOperationOtherService.UpdateQualityOperationOtherAsync(id, dto);
+            var result = await _qualityAssuranceOtherService.UpdateQualityAssuranceOtherAsync(id, dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)
@@ -145,13 +145,13 @@ public class TaktQualityOperationOthersController : TaktControllerBase
     /// </summary>
     /// <param name="id">品质业务其他通常业务费用明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationother:delete", "删除品质业务其他通常业务费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:delete", "删除品质业务其他通常业务费用明细")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteQualityOperationOtherByIdAsync(long id)
+    public async Task<IActionResult> DeleteQualityAssuranceOtherByIdAsync(long id)
     {
         try
         {
-            await _qualityOperationOtherService.DeleteQualityOperationOtherByIdAsync(id);
+            await _qualityAssuranceOtherService.DeleteQualityAssuranceOtherByIdAsync(id);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -165,13 +165,13 @@ public class TaktQualityOperationOthersController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationother:delete", "批量删除品质业务其他通常业务费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:delete", "批量删除品质业务其他通常业务费用明细")]
     [HttpDelete("batch")]
-    public async Task<IActionResult> DeleteQualityOperationOtherBatchAsync([FromBody] IEnumerable<long> ids)
+    public async Task<IActionResult> DeleteQualityAssuranceOtherBatchAsync([FromBody] IEnumerable<long> ids)
     {
         try
         {
-            await _qualityOperationOtherService.DeleteQualityOperationOtherBatchAsync(ids);
+            await _qualityAssuranceOtherService.DeleteQualityAssuranceOtherBatchAsync(ids);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -184,13 +184,13 @@ public class TaktQualityOperationOthersController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationother:import", "获取品质业务其他通常业务费用明细导入模板")]
+    [TaktPermission("logistics:quality:cost:assurance:import", "获取品质业务其他通常业务费用明细导入模板")]
     [HttpGet("template")]
-    public async Task<IActionResult> GetQualityOperationOtherTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    public async Task<IActionResult> GetQualityAssuranceOtherTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
         try
         {
-            var (resultFileName, content) = await _qualityOperationOtherService.GetQualityOperationOtherTemplateAsync(sheetName, templateName);
+            var (resultFileName, content) = await _qualityAssuranceOtherService.GetQualityAssuranceOtherTemplateAsync(sheetName, templateName);
             return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)
@@ -204,9 +204,9 @@ public class TaktQualityOperationOthersController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationother:import", "导入品质业务其他通常业务费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:import", "导入品质业务其他通常业务费用明细")]
     [HttpPost("import")]
-    public async Task<IActionResult> ImportQualityOperationOtherAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    public async Task<IActionResult> ImportQualityAssuranceOtherAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
         try
         {
@@ -216,7 +216,7 @@ public class TaktQualityOperationOthersController : TaktControllerBase
             }
 
             await using var stream = file.OpenReadStream();
-            var (success, fail, errors) = await _qualityOperationOtherService.ImportQualityOperationOtherAsync(stream, sheetName);
+            var (success, fail, errors) = await _qualityAssuranceOtherService.ImportQualityAssuranceOtherAsync(stream, sheetName);
             return Success(new
             {
                 SuccessCount = success,
@@ -234,13 +234,13 @@ public class TaktQualityOperationOthersController : TaktControllerBase
     /// 导出品质业务其他通常业务费用明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityoperationother:export", "导出品质业务其他通常业务费用明细")]
+    [TaktPermission("logistics:quality:cost:assurance:export", "导出品质业务其他通常业务费用明细")]
     [HttpGet("export")]
-    public async Task<IActionResult> ExportQualityOperationOtherAsync([FromQuery] TaktQualityOperationOtherQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    public async Task<IActionResult> ExportQualityAssuranceOtherAsync([FromQuery] TaktQualityAssuranceOtherQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {
         try
         {
-            var (resultFileName, fileContent) = await _qualityOperationOtherService.ExportQualityOperationOtherAsync(query, sheetName, exportName);
+            var (resultFileName, fileContent) = await _qualityAssuranceOtherService.ExportQualityAssuranceOtherAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

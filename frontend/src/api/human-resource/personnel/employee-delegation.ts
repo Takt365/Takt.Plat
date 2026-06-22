@@ -40,9 +40,7 @@ export function getEmployeeDelegationList(queryDto: any): Promise<TaktPagedResul
   return request<TaktPagedResult<EmployeeDelegation>>({
     url: `${EMPLOYEE_DELEGATION_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportEmployeeDelegation(
     url: `${EMPLOYEE_DELEGATION_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

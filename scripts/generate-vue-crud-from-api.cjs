@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-vue-crud-from-api.cjs
 // 创建时间：2026-06-03
 // 创建人：Takt365(Cursor AI)
@@ -23,11 +23,36 @@ const {
   fieldPlaceholderTExpr,
   renderQueryFormItem,
   renderFormControl,
+  renderFormItemOpening,
+  buildExtFieldIconImportLine,
+  buildRemixIconImportLine,
+  buildQueryFieldMetaLine,
   computeFormTabCount,
   buildFormTabLabelAttr,
   buildFormContentClassComputedExpr,
+  buildGeneratedFormTemplateBody,
+  buildMasterDetailFormTypeImportLines,
+  buildFormTabsScopedStyleBlock,
   hasScopeContextFormFields,
   pascalToCamel,
+  fieldsUseDictSelect,
+  buildDictDataStoreImportLine,
+  buildDictDataStoreIndexSetup,
+  buildGeneratedFormVueScriptFragments,
+  buildResetPeriodListMapperScriptBlock,
+  buildListDictTagValueExpr,
+  resolveListSwitchAndDictColsForIndex,
+  buildListBodyCellBlock,
+  buildListSwitchHandlersBlock,
+  INDEX_FORM_RESET_NEXT_TICK,
+  buildServerPagedListQueryBlock,
+  buildServerPagedLoadDataBody,
+  buildServerPagedExportApiCall,
+  buildServerPagedOnMountedBlock,
+  buildServerPagedPaginationHandlersBlock,
+  buildServerPagedIndexStyleBlock,
+  buildFormResetScopeDefaultsBlock,
+  isChangeLogOnlySeparateMenuMaster,
 } = require('./generate-vue-common.cjs');
 
 const EMPTY_MD_INDEX_PARTS = {
@@ -51,10 +76,10 @@ function generateCrudIndexVue(ctx) {
     entityCamel,
     entityI18nSlug,
     entityKebab,
+    viewEntityKebab,
     modulePath,
     viewModulePath,
     permissionPrefix,
-    cssRootClass,
     caps,
     fields,
     comment,
@@ -73,8 +98,10 @@ function generateCrudIndexVue(ctx) {
     caps.apiGetTemplate,
     caps.apiImport,
     caps.apiExport,
+    caps.apiUpdateStatus,
+    caps.apiUpdateBuiltIn,
   ].filter(Boolean);
-  const typeImports = [`${entityPascal}`, `${entityPascal}Query`, `${entityPascal}Create`, `${entityPascal}Update`]
+  const typeImports = [`${entityPascal}`, `${entityPascal}Query`]
     .filter((name, idx, arr) => arr.indexOf(name) === idx);
   const childTypeImportLines = hasMasterDetail
     ? (fields.masterDetailChildren || [])
@@ -82,21 +109,21 @@ function generateCrudIndexVue(ctx) {
       .join('\n')
     : '';
   const listCols = fields.listFields.filter((f) => f.name !== caps.entityIdName);
-  const dictListCols = listCols.filter((f) => f.dictType);
-  const dictBodyCellBlock = dictListCols.length > 0
-    ? `      <!-- 字典列渲染 -->
-      <template #bodyCell="{ column, record }">
-${dictListCols.map((f, i) => `        <template ${i === 0 ? 'v-if' : 'v-else-if'}="column.key === '${f.name}'">
-          <TaktDictTag
-            :value="get${entityPascal}Field(record, '${f.name}')"
-            dict-type="${f.dictType}"
-          />
-        </template>`).join('\n')}
-      </template>
-`
-    : '';
+  const { switchListCols, dictTagListCols } = resolveListSwitchAndDictColsForIndex(
+    listCols.filter((f) => f.dictType || f.isListSwitch),
+    caps,
+  );
+  const needsDictInIndex = fieldsUseDictSelect(fields.queryFields)
+    || fieldsUseDictSelect(fields.formFields)
+    || dictTagListCols.length > 0;
+  const indexDictImport = needsDictInIndex ? buildDictDataStoreImportLine() : '';
+  const indexDictSetup = needsDictInIndex ? buildDictDataStoreIndexSetup() : '';
+  const indexDictOnMounted = needsDictInIndex ? '  void dictDataStore.loadAllDictDataAsync()\n' : '';
+  const resetPeriodListMapperBlock = buildResetPeriodListMapperScriptBlock(dictTagListCols);
+  const dictBodyCellBlock = buildListBodyCellBlock(dictTagListCols, switchListCols, entityPascal);
+  const listSwitchHandlersBlock = buildListSwitchHandlersBlock(switchListCols, entityPascal, caps);
   const queryItems = fields.queryFields.map((f) => renderQueryFormItem(f)).join('\n');
-  const queryFieldsMetaBlock = fields.queryFields.map((f) => `  { key: '${f.name}', label: ${fieldLabelTExpr(f)} },`).join('\n');
+  const queryFieldsMetaBlock = fields.queryFields.map((f) => buildQueryFieldMetaLine(f, entityI18nSlug)).join('\n');
   const queryFieldStorageKey = `takt-query-fields-${viewModulePath.replace(/\//g, '-')}`;
   const queryInit = fields.queryFields.map((f) => {
     const val = f.type === 'number' ? 'undefined as number | undefined' : "''";
@@ -156,6 +183,7 @@ ${dictListCols.map((f, i) => `        <template ${i === 0 ? 'v-if' : 'v-else-if'
       @cancel="handleFormCancel"
     >
       <${entityPascal}Form
+        :key="formData?.${caps.entityIdName} ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -184,11 +212,12 @@ ${dictListCols.map((f, i) => `        <template ${i === 0 ? 'v-if' : 'v-else-if'
       />
     </TaktModal>` : '';
   const formImports = (caps.hasCreate || caps.hasUpdate)
-    ? `import ${entityPascal}Form from './components/${entityKebab}-form.vue'\n`
+    ? `import ${entityPascal}Form from './components/${viewEntityKebab}-form.vue'\n`
     : '';
-  const iconImports = (caps.hasUpdate || caps.hasDelete)
-    ? "import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'\n"
-    : '';
+  const iconImports = buildRemixIconImportLine({
+    includeActionIcons: caps.hasUpdate || caps.hasDelete,
+    queryFields: fields.queryFields,
+  });
   const excelImport = (caps.hasImport || caps.hasExport)
     ? "import { taktExcelEntityNames } from '@/utils/naming'\n"
     : '';
@@ -217,8 +246,8 @@ const excelNames = taktExcelEntityNames('${caps.entityClassName}')
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.${entityI18nSlug}._self') })
-  formData.value = {}
-  formVisible.value = true
+  formData.value = null
+  formVisible.value = true${INDEX_FORM_RESET_NEXT_TICK}
 }` : '';
   const updateHandler = caps.hasUpdate ? (hasMasterDetail && caps.hasGetById ? `
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
@@ -277,6 +306,7 @@ ${caps.hasUpdate ? `      await ${caps.apiUpdate}(id, payload as any)\n      mes
 ${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)\n      message.success(t('common.feedback.created', { target: t('entity.${entityI18nSlug}._self') }))` : ''}
     }
     formVisible.value = false
+    formData.value = null${INDEX_FORM_RESET_NEXT_TICK}
     loadData()
   } finally {
     formLoading.value = false
@@ -286,6 +316,7 @@ ${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)\n      message
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null${INDEX_FORM_RESET_NEXT_TICK}
 }` : '';
   const importHandlers = (caps.hasImport && caps.hasGetTemplate) ? `
 /** 打开导入对话框 */
@@ -319,16 +350,7 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: ${entityPascal}Query = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await ${caps.apiExport}(exportQuery, excelNames.sheet, excelNames.fileBase)
+${buildServerPagedExportApiCall(caps.apiExport)}
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = \`\${excelNames.fileBase}_\${ts.getFullYear()}\${pad(ts.getMonth() + 1)}\${pad(ts.getDate())}\${pad(ts.getHours())}\${pad(ts.getMinutes())}\${pad(ts.getSeconds())}\`
@@ -390,19 +412,13 @@ async function handleDelete() {
     }
   })
 }` : '';
-  const loadDataBody = caps.hasGetList ? `    const kw = (queryKeyword.value ?? '').trim()
-    const params: ${entityPascal}Query = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await ${caps.apiGetList}(params)
-    dataSource.value = res.data ?? []
-    total.value = res.total ?? 0` : `    dataSource.value = []
+  const loadDataBody = caps.hasGetList
+    ? buildServerPagedLoadDataBody(caps.apiGetList)
+    : `    dataSource.value = []
     total.value = 0`;
+  const serverPagedScriptBlock = caps.hasGetList
+    ? buildServerPagedListQueryBlock(entityPascal, fields.queryFields)
+    : '';
   return `<!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/${viewModulePath} -->
@@ -413,7 +429,7 @@ async function handleDelete() {
 <!-- ======================================== -->
 
 <template>
-  <div class="${cssRootClass}">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -456,8 +472,8 @@ ${caps.hasExport ? '      @export="handleExport"' : ''}
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="${entityScope}"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'${caps.entityIdName}'"
       table-mode="single"
@@ -474,7 +490,7 @@ ${mdParts.expandProps}
 ${dictBodyCellBlock}${mdParts.expandTemplate}
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -523,15 +539,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 ${formImports}import { ${importApiNames.join(', ')} } from '@/api/${modulePath}/${entityKebab}'
 ${mdParts.childApiImports ? `${mdParts.childApiImports}\n` : ''}${childTypeImportLines ? `${childTypeImportLines}\n` : ''}import type { ${typeImports.join(', ')} } from '@/types/${modulePath}/${entityKebab}'
-${excelImport}${exportImport}${iconImports}
+${indexDictImport}${excelImport}${exportImport}${iconImports}
 ${singleStateBlock}
-${mdParts.state}
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
-  loadData()
-})
+${indexDictSetup}${mdParts.state}
+${serverPagedScriptBlock}${buildServerPagedOnMountedBlock(indexDictOnMounted)}
 
 ${mdParts.columns}
 
@@ -566,6 +580,7 @@ const get${entityPascal}Id = (record: any): string => record?.[entityIdName] ?? 
  * @param field 字段名
  */
 const get${entityPascal}Field = (record: any, field: string): any => record?.[field]
+${resetPeriodListMapperBlock}
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -625,7 +640,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -635,10 +650,10 @@ function handleReset() {
   advancedQueryForm.value = {
 ${queryInit}
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
-${createHandler}${updateHandler}${formSubmitHandler}${importHandlers}${exportHandler}${deleteOneHandler}${deleteBatchHandler}
+${createHandler}${updateHandler}${formSubmitHandler}${importHandlers}${exportHandler}${deleteOneHandler}${deleteBatchHandler}${listSwitchHandlersBlock}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -647,7 +662,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -681,27 +696,8 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
+${caps.hasGetList ? buildServerPagedPaginationHandlersBlock() : ''}
 </script>
-
-<style scoped lang="css">
-.${cssRootClass} {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>
 `;
 }
 
@@ -713,48 +709,25 @@ const EMPTY_MD_FORM_PARTS = { tabs: '', script: '', needsTaktSelect: false };
  * @param {{ mdFormParts?: object, hasMasterDetail?: boolean, generatorScript?: string }} [assemblyOptions]
  */
 function generateCrudFormVue(ctx) {
-  const { entityPascal, entityCamel, entityKebab, modulePath, viewModulePath, fields, comment } = ctx;
+  const { entityPascal, entityCamel, entityKebab, viewEntityKebab, modulePath, viewModulePath, fields, comment, caps } = ctx;
   const generatorScript = 'generate-vue-crud-from-api.cjs';
   const mdFormParts = { tabs: '', script: '', needsTaktSelect: false };
   const hasMasterDetail = false;
   const formFields = fields.formFields;
-  const tabCount = computeFormTabCount(formFields.length);
+  const entityIdField = caps?.entityIdName ?? `${entityCamel}Id`;
+  const formCodeControlOptions = { entityIdField };
   const formContentClassExpr = buildFormContentClassComputedExpr();
-  const tabs = [];
-  for (let tabIndex = 1; tabIndex <= tabCount; tabIndex += 1) {
-    const start = (tabIndex - 1) * FORM_TAB_FIELDS_PER_TAB;
-    const end = tabIndex * FORM_TAB_FIELDS_PER_TAB;
-    const tabFields = formFields.slice(start, end);
-    const items = tabFields.map((f) => {
-      const colSpan = f.htmlType === 'textarea' ? 24 : 12;
-      const control = renderFormControl(f, 'formState.', '                ');
-      return `            <a-col :span="${colSpan}">
-              <a-form-item
-                :label="${fieldLabelTExpr(f)}"
-                name="${f.name}"
-              >
-${control}
-              </a-form-item>
-            </a-col>`;
-    }).join('\n');
-    const tabLabel = buildFormTabLabelAttr(tabIndex, tabCount);
-    const tabComment = tabIndex === 1 && hasMasterDetail ? '      <!-- 主表 -->\n' : '';
-    tabs.push(`${tabComment}      <a-tab-pane
-        key="tab-${tabIndex - 1}"
-        ${tabLabel}
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-${items}
-          </a-row>
-        </div>
-      </a-tab-pane>`);
-  }
+  const formTemplate = buildGeneratedFormTemplateBody({
+    formFields,
+    formCodeControlOptions,
+    hasMasterDetail,
+    extraTabPanes: mdFormParts.tabs,
+    entityKebab: viewEntityKebab,
+  });
+  const useFormTabs = formTemplate.useFormTabs;
   const needsTaktSelect = formFields.some((f) => f.htmlType === 'select' && f.dictType) || mdFormParts.needsTaktSelect;
   const masterDetailChildren = fields.masterDetailChildren || [];
   const hasScopeContextFields = hasScopeContextFormFields(formFields, masterDetailChildren);
-  const entityIdField = `${pascalToCamel(entityPascal)}Id`;
   const scopeStoreImports = hasScopeContextFields
     ? "import { useTenantStore } from '@/stores/identity/tenant'\nimport { useUserStore } from '@/stores/identity/user'\n"
     : '';
@@ -793,12 +766,11 @@ watch(
   },
 )
 ` : '';
-  const childTypeImports = hasMasterDetail
-    ? [...new Set((fields.masterDetailChildren || []).flatMap((c) => [c.childCreateType, c.childType]))]
-    : [];
-  const typeImportLine = [`${entityPascal}Create`, ...childTypeImports]
-    .filter((name, idx, arr) => arr.indexOf(name) === idx)
-    .join(', ');
+  const { masterTypeImport } = buildMasterDetailFormTypeImportLines({
+    entityPascal,
+    entityKebab,
+    modulePath,
+  });
   const childFieldStrip = hasMasterDetail
     ? (fields.masterDetailChildren || []).map((c) => `    delete (next as any).${c.fieldName}`).join('\n')
     : '';
@@ -806,25 +778,20 @@ watch(
   const resetChildRows = hasMasterDetail
     ? (fields.masterDetailChildren || []).map((c) => `  child${c.childPascal}Rows.value = []`).join('\n')
     : '';
-  const getValuesBody = hasMasterDetail ? '  return buildSubmitPayload()' : '  return { ...formState }';
+  const formScriptFragments = buildGeneratedFormVueScriptFragments({
+    formFields,
+    entityIdField,
+    childFieldStrip,
+    hasScopeContextFields,
+    watchSyncChild,
+    useBuildSubmitPayload: hasMasterDetail,
+  });
+  const resetScopeDefaultsLine = buildFormResetScopeDefaultsBlock(entityIdField, hasScopeContextFields);
+  const getValuesBody = formScriptFragments.getValuesBody;
   const taktSelectImport = needsTaktSelect
     ? "import TaktSelect from '@/components/business/takt-select/index.vue'\n"
     : '';
-  const requiredRules = formFields
-    .filter((f) => !f.optional && f.name !== 'remark' && !f.readOnly)
-    .map((f) => {
-      const trigger = f.htmlType === 'select' || f.htmlType === 'date' || f.htmlType === 'switch' ? 'change' : 'blur';
-      const placeholderKey = f.htmlType === 'select' || f.htmlType === 'date'
-        ? 'common.page.form.placeholder.select'
-        : 'common.page.form.placeholder.required';
-      return `  ${f.name}: [
-    {
-      required: true,
-      message: ${fieldPlaceholderTExpr(f, placeholderKey)},
-      trigger: '${trigger}'
-    }
-  ],`;
-    }).join('\n');
+  const extFieldIconImport = buildExtFieldIconImportLine(formFields);
   const formScriptState = buildFormScriptStateBlock({
     formContentClassExpr,
     formFieldsJson: JSON.stringify(formFields.map((f) => f.name)),
@@ -832,11 +799,12 @@ watch(
     scopeStoreScript: hasScopeContextFields ? scopeStoreScript : '',
     entityPascal,
     entityIdField,
+    useFormTabs,
   });
   return `<!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/${viewModulePath}/components -->
-<!-- 文件名称：${entityKebab}-form.vue -->
+<!-- 文件名称：${viewEntityKebab}-form.vue -->
 <!-- 功能描述：${comment}维护弹窗内嵌表单。由 ${generatorScript} 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
@@ -845,18 +813,13 @@ watch(
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
     label-align="right"
   >
-    <a-tabs
-      v-model:active-key="activeTab"
-      class="${entityKebab}-form-tabs"
-    >
-${tabs.join('\n')}
-${mdFormParts.tabs}
-    </a-tabs>
+${formTemplate.body}
   </a-form>
 </template>
 
@@ -865,28 +828,20 @@ ${mdFormParts.tabs}
  * ${comment}维护表单 · 由 ${generatorScript} 根据 types/api 生成
  * @module views/${viewModulePath}/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+${formScriptFragments.vueImportLine}
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { ${typeImportLine} } from '@/types/${modulePath}/${entityKebab}'
-${taktSelectImport}${scopeStoreImports}
+${masterTypeImport}
+${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${scopeStoreImports}
 ${formScriptState}
-
-/** 编辑态灌入 formData；新增态 reset */
-watch(
-  () => props.formData,
-  (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
-${childFieldStrip}
-${hasScopeContextFields ? '    applyScopeDefaults(next)\n' : ''}    Object.assign(formState, next)
-${watchSyncChild}  },
-  { immediate: true, deep: true }
-)
+${formScriptFragments.defaultsBlock}
+${formScriptFragments.normalizerBlock}
+${formScriptFragments.dictBootstrap}
+${formScriptFragments.watchBlock}
 ${scopeContextWatch}
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-${requiredRules}
+${formScriptFragments.requiredRules}
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -900,26 +855,21 @@ function getValues(): Record<string, any> {
 ${getValuesBody}
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
-${resetChildRows}
-  activeTab.value = 'tab-0'
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+${resetScopeDefaultsLine}${resetChildRows}
+${useFormTabs ? '  activeTab.value = \'tab-0\'' : ''}
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
-
-<style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>
+${buildFormTabsScopedStyleBlock(useFormTabs)}
 `;
 }
 /**
@@ -930,7 +880,7 @@ function isCrudEntity(bundle) {
   if (bundle.isTreeEntity) {
     return false;
   }
-  if (bundle.isMasterDetailEntity) {
+  if (bundle.isMasterDetailEntity && !isChangeLogOnlySeparateMenuMaster(bundle)) {
     return false;
   }
   return Boolean(bundle.capsMerged.hasGetList || bundle.capsMerged.hasCreate || bundle.capsMerged.hasUpdate);
@@ -954,10 +904,20 @@ function processCrudApiModule(apiFilePath, options, registry) {
     }
     return { skipped: true };
   }
+  const changeLogOnlyMaster = isChangeLogOnlySeparateMenuMaster(bundle);
+  if (changeLogOnlyMaster) {
+    console.log(`  仅 ChangeLog 独立菜单：主菜单生成单表 CRUD（变更页走主子视图）`);
+  }
   console.log(`  标准 CRUD: ${bundle.fullCtx.caps.apiGetList || bundle.fullCtx.caps.apiCreate}`);
   console.log(`  entityScope: ${bundle.fullCtx.fields.entityScope} ← Takt${bundle.entityShort}`);
-  const indexContent = generateCrudIndexVue(bundle.fullCtx);
-  const formContent = bundle.needsForm ? generateCrudFormVue(bundle.fullCtx) : '';
+  const crudCtx = changeLogOnlyMaster
+    ? {
+      ...bundle.fullCtx,
+      fields: { ...bundle.fullCtx.fields, masterDetailChildren: [] },
+    }
+    : bundle.fullCtx;
+  const indexContent = generateCrudIndexVue(crudCtx);
+  const formContent = bundle.needsForm ? generateCrudFormVue(crudCtx) : '';
   return writeVueModuleOutputs(bundle, indexContent, formContent, options);
 }
 

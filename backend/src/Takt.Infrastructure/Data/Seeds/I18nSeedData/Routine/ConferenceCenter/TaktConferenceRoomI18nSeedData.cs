@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceRoomI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConferenceRoom 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,101 +75,101 @@ public class TaktConferenceRoomI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktConferenceRoom 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.conferenceroom._self / entity.conferenceroom.{{field}}；ResourceGroup=2；ResourceType=0
+    /// I18nKey：entity.conferenceroom._self / entity.conferenceroom.{{field}}；ResourceGroup=ConferenceCenter；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetConferenceRoomTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.conferenceroom._self
-            new TranslationSeedItem("entity.conferenceroom._self", "en-US", "Conference Room Information", "实体名称"),
+            new TranslationSeedItem("entity.conferenceroom._self", "en-US", "Conference Room Information_us", "实体名称"),
             // entity.conferenceroom._self
-            new TranslationSeedItem("entity.conferenceroom._self", "ja-JP", "会议室信息", "实体名称"),
+            new TranslationSeedItem("entity.conferenceroom._self", "ja-JP", "会议室信息_jp", "实体名称"),
             // entity.conferenceroom._self
             new TranslationSeedItem("entity.conferenceroom._self", "zh-CN", "会议室信息", "实体名称"),
             // entity.conferenceroom._self
-            new TranslationSeedItem("entity.conferenceroom._self", "zh-HK", "会议室信息", "实体名称"),
+            new TranslationSeedItem("entity.conferenceroom._self", "zh-HK", "会议室信息_hk", "实体名称"),
 
             // entity.conferenceroom.roomcode
-            new TranslationSeedItem("entity.conferenceroom.roomcode", "en-US", "会议室编码", "会议室编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.conferenceroom.roomcode", "en-US", "会议室编码_us", "会议室编码（租户+公司内唯一）"),
             // entity.conferenceroom.roomcode
-            new TranslationSeedItem("entity.conferenceroom.roomcode", "ja-JP", "会议室编码", "会议室编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.conferenceroom.roomcode", "ja-JP", "会议室编码_jp", "会议室编码（租户+公司内唯一）"),
             // entity.conferenceroom.roomcode
             new TranslationSeedItem("entity.conferenceroom.roomcode", "zh-CN", "会议室编码", "会议室编码（租户+公司内唯一）"),
             // entity.conferenceroom.roomcode
-            new TranslationSeedItem("entity.conferenceroom.roomcode", "zh-HK", "会议室编码", "会议室编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.conferenceroom.roomcode", "zh-HK", "会议室编码_hk", "会议室编码（租户+公司内唯一）"),
 
             // entity.conferenceroom.roomname
-            new TranslationSeedItem("entity.conferenceroom.roomname", "en-US", "会议室名称", "会议室名称"),
+            new TranslationSeedItem("entity.conferenceroom.roomname", "en-US", "会议室名称_us", "会议室名称"),
             // entity.conferenceroom.roomname
-            new TranslationSeedItem("entity.conferenceroom.roomname", "ja-JP", "会议室名称", "会议室名称"),
+            new TranslationSeedItem("entity.conferenceroom.roomname", "ja-JP", "会议室名称_jp", "会议室名称"),
             // entity.conferenceroom.roomname
             new TranslationSeedItem("entity.conferenceroom.roomname", "zh-CN", "会议室名称", "会议室名称"),
             // entity.conferenceroom.roomname
-            new TranslationSeedItem("entity.conferenceroom.roomname", "zh-HK", "会议室名称", "会议室名称"),
+            new TranslationSeedItem("entity.conferenceroom.roomname", "zh-HK", "会议室名称_hk", "会议室名称"),
 
             // entity.conferenceroom.building
-            new TranslationSeedItem("entity.conferenceroom.building", "en-US", "楼栋", "楼栋/建筑"),
+            new TranslationSeedItem("entity.conferenceroom.building", "en-US", "楼栋_us", "楼栋/建筑"),
             // entity.conferenceroom.building
-            new TranslationSeedItem("entity.conferenceroom.building", "ja-JP", "楼栋", "楼栋/建筑"),
+            new TranslationSeedItem("entity.conferenceroom.building", "ja-JP", "楼栋_jp", "楼栋/建筑"),
             // entity.conferenceroom.building
             new TranslationSeedItem("entity.conferenceroom.building", "zh-CN", "楼栋", "楼栋/建筑"),
             // entity.conferenceroom.building
-            new TranslationSeedItem("entity.conferenceroom.building", "zh-HK", "楼栋", "楼栋/建筑"),
+            new TranslationSeedItem("entity.conferenceroom.building", "zh-HK", "楼栋_hk", "楼栋/建筑"),
 
             // entity.conferenceroom.floor
-            new TranslationSeedItem("entity.conferenceroom.floor", "en-US", "楼层", "楼层"),
+            new TranslationSeedItem("entity.conferenceroom.floor", "en-US", "楼层_us", "楼层"),
             // entity.conferenceroom.floor
-            new TranslationSeedItem("entity.conferenceroom.floor", "ja-JP", "楼层", "楼层"),
+            new TranslationSeedItem("entity.conferenceroom.floor", "ja-JP", "楼层_jp", "楼层"),
             // entity.conferenceroom.floor
             new TranslationSeedItem("entity.conferenceroom.floor", "zh-CN", "楼层", "楼层"),
             // entity.conferenceroom.floor
-            new TranslationSeedItem("entity.conferenceroom.floor", "zh-HK", "楼层", "楼层"),
+            new TranslationSeedItem("entity.conferenceroom.floor", "zh-HK", "楼层_hk", "楼层"),
 
             // entity.conferenceroom.locationdetail
-            new TranslationSeedItem("entity.conferenceroom.locationdetail", "en-US", "详细位置", "详细位置说明"),
+            new TranslationSeedItem("entity.conferenceroom.locationdetail", "en-US", "详细位置_us", "详细位置说明"),
             // entity.conferenceroom.locationdetail
-            new TranslationSeedItem("entity.conferenceroom.locationdetail", "ja-JP", "详细位置", "详细位置说明"),
+            new TranslationSeedItem("entity.conferenceroom.locationdetail", "ja-JP", "详细位置_jp", "详细位置说明"),
             // entity.conferenceroom.locationdetail
             new TranslationSeedItem("entity.conferenceroom.locationdetail", "zh-CN", "详细位置", "详细位置说明"),
             // entity.conferenceroom.locationdetail
-            new TranslationSeedItem("entity.conferenceroom.locationdetail", "zh-HK", "详细位置", "详细位置说明"),
+            new TranslationSeedItem("entity.conferenceroom.locationdetail", "zh-HK", "详细位置_hk", "详细位置说明"),
 
             // entity.conferenceroom.capacity
-            new TranslationSeedItem("entity.conferenceroom.capacity", "en-US", "容纳人数", "容纳人数（0 表示不限）"),
+            new TranslationSeedItem("entity.conferenceroom.capacity", "en-US", "容纳人数_us", "容纳人数（0 表示不限）"),
             // entity.conferenceroom.capacity
-            new TranslationSeedItem("entity.conferenceroom.capacity", "ja-JP", "容纳人数", "容纳人数（0 表示不限）"),
+            new TranslationSeedItem("entity.conferenceroom.capacity", "ja-JP", "容纳人数_jp", "容纳人数（0 表示不限）"),
             // entity.conferenceroom.capacity
             new TranslationSeedItem("entity.conferenceroom.capacity", "zh-CN", "容纳人数", "容纳人数（0 表示不限）"),
             // entity.conferenceroom.capacity
-            new TranslationSeedItem("entity.conferenceroom.capacity", "zh-HK", "容纳人数", "容纳人数（0 表示不限）"),
+            new TranslationSeedItem("entity.conferenceroom.capacity", "zh-HK", "容纳人数_hk", "容纳人数（0 表示不限）"),
 
             // entity.conferenceroom.facilities
-            new TranslationSeedItem("entity.conferenceroom.facilities", "en-US", "设施说明", "设施说明（投影、视频会议设备等）"),
+            new TranslationSeedItem("entity.conferenceroom.facilities", "en-US", "设施说明_us", "设施说明（投影、视频会议设备等）"),
             // entity.conferenceroom.facilities
-            new TranslationSeedItem("entity.conferenceroom.facilities", "ja-JP", "设施说明", "设施说明（投影、视频会议设备等）"),
+            new TranslationSeedItem("entity.conferenceroom.facilities", "ja-JP", "设施说明_jp", "设施说明（投影、视频会议设备等）"),
             // entity.conferenceroom.facilities
             new TranslationSeedItem("entity.conferenceroom.facilities", "zh-CN", "设施说明", "设施说明（投影、视频会议设备等）"),
             // entity.conferenceroom.facilities
-            new TranslationSeedItem("entity.conferenceroom.facilities", "zh-HK", "设施说明", "设施说明（投影、视频会议设备等）"),
+            new TranslationSeedItem("entity.conferenceroom.facilities", "zh-HK", "设施说明_hk", "设施说明（投影、视频会议设备等）"),
 
             // entity.conferenceroom.roomstatus
-            new TranslationSeedItem("entity.conferenceroom.roomstatus", "en-US", "会议室状态", "会议室状态"),
+            new TranslationSeedItem("entity.conferenceroom.roomstatus", "en-US", "会议室状态_us", "会议室状态"),
             // entity.conferenceroom.roomstatus
-            new TranslationSeedItem("entity.conferenceroom.roomstatus", "ja-JP", "会议室状态", "会议室状态"),
+            new TranslationSeedItem("entity.conferenceroom.roomstatus", "ja-JP", "会议室状态_jp", "会议室状态"),
             // entity.conferenceroom.roomstatus
             new TranslationSeedItem("entity.conferenceroom.roomstatus", "zh-CN", "会议室状态", "会议室状态"),
             // entity.conferenceroom.roomstatus
-            new TranslationSeedItem("entity.conferenceroom.roomstatus", "zh-HK", "会议室状态", "会议室状态"),
+            new TranslationSeedItem("entity.conferenceroom.roomstatus", "zh-HK", "会议室状态_hk", "会议室状态"),
 
             // entity.conferenceroom.sortorder
-            new TranslationSeedItem("entity.conferenceroom.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.conferenceroom.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.conferenceroom.sortorder
-            new TranslationSeedItem("entity.conferenceroom.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.conferenceroom.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.conferenceroom.sortorder
             new TranslationSeedItem("entity.conferenceroom.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.conferenceroom.sortorder
-            new TranslationSeedItem("entity.conferenceroom.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.conferenceroom.sortorder", "zh-HK", "排序号_hk", "排序号"),
         };
     }
 
@@ -187,10 +187,10 @@ public class TaktConferenceRoomI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 2;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "ConferenceCenter";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

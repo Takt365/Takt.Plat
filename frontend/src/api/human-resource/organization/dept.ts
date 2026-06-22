@@ -17,6 +17,7 @@ import type {
 } from '@/types/common';
 import type {
   Dept,
+  DeptBuiltIn,
   DeptCreate,
   DeptSort,
   DeptStatus,
@@ -43,9 +44,7 @@ export function getDeptList(queryDto: any): Promise<TaktPagedResult<Dept>> {
   return request<TaktPagedResult<Dept>>({
     url: `${DEPT_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -144,6 +143,19 @@ export function updateDeptStatus(dto: DeptStatus): Promise<Dept> {
 }
 
 /**
+ * 更新部门是否内置
+ * @param {DeptBuiltIn} dto 是否内置 DTO
+ * @returns {Promise<Dept>} 部门DTO
+ */
+export function updateDeptBuiltIn(dto: DeptBuiltIn): Promise<Dept> {
+  return request<Dept>({
+    url: `${DEPT_API_BASE}/built-in`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
  * 更新部门排序
  * @param {DeptSort} dto 排序DTO
  * @returns {Promise<Dept>} 部门DTO
@@ -232,7 +244,7 @@ export function exportDept(
     url: `${DEPT_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

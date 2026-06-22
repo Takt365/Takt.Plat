@@ -41,8 +41,8 @@ public abstract class TaktTenantEntityBase
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    [SugarColumn(ColumnName = "ext_field_json", ColumnDescription = "扩展字段JSON", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
-    public string? ExtFieldJson { get; set; }
+    [SugarColumn(ColumnName = "ext_field", ColumnDescription = "扩展字段", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -128,8 +128,8 @@ public abstract class TaktCompanyEntityBase
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    [SugarColumn(ColumnName = "ext_field_json", ColumnDescription = "扩展字段JSON", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
-    public string? ExtFieldJson { get; set; }
+    [SugarColumn(ColumnName = "ext_field_json", ColumnDescription = "扩展字段", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -191,9 +191,7 @@ public abstract class TaktCompanyEntityBase
 /// 审批级实体基类
 /// 包含租户+公司双重隔离+审批流程相关字段
 /// 适用于需要审批的业务实体，如：请假单、报销单、采购单、合同等
-/// 
-/// 注意：此基类仅适用于简单审批（单级审批）
-/// 如果是多级审批或复杂工作流，应使用独立的审批记录表（TaktApprovalRecord）
+/// FlowInstanceId 由业务在调用 TaktFlowEngine 发起流程后写入；ApprovalStatus 与引擎终态对齐
 /// </summary>
 public abstract class TaktApprovalEntityBase
 {
@@ -220,7 +218,7 @@ public abstract class TaktApprovalEntityBase
     /// 扩展字段JSON
     /// </summary>
     [SugarColumn(ColumnName = "ext_field_json", ColumnDescription = "扩展字段JSON", ColumnDataType = "nvarchar", Length = 4000, IsNullable = true)]
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -229,10 +227,17 @@ public abstract class TaktApprovalEntityBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 审批状态（0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤销，5=已终止）
+    /// 审批状态（0=待审批，1=审批中，2=已通过，3=已驳回，4=已撤回，5=已终止）
     /// </summary>
     [SugarColumn(ColumnName = "approval_status", ColumnDescription = "审批状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ApprovalStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 流程实例 ID（关联 TaktFlowInstance，发起审批后由业务写入）
+    /// </summary>
+    [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 发起人ID

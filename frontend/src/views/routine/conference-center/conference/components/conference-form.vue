@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/conference-center/conference/components -->
 <!-- 文件名称：conference-form.vue -->
-<!-- 功能描述：会议实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：会议中心主实体 支持内部/外部/视频/混合会议排期、议程及参与人管理维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form conference-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="conference-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -74,8 +77,10 @@
                 <a-input
                   v-model:value="formState.conferenceCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.code') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.conferenceId"
                 />
               </a-form-item>
             </a-col>
@@ -87,7 +92,8 @@
                 <a-input
                   v-model:value="formState.title"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.title') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -100,7 +106,6 @@
                 <a-input-number
                   v-model:value="formState.conferenceType"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.type') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -113,7 +118,6 @@
                 <a-input-number
                   v-model:value="formState.conferenceStatus"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.status') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -123,11 +127,11 @@
                 :label="t('entity.conference.starttime')"
                 name="startTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.startTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.starttime') })"
-                  size="small"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.starttime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -136,23 +140,24 @@
                 :label="t('entity.conference.endtime')"
                 name="endTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.endTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.endtime') })"
-                  size="small"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.conference.endtime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.conference.roomid')"
-                name="conferenceRoomId"
+                :label="t('entity.conference.location')"
+                name="location"
               >
                 <a-input
-                  v-model:value="formState.conferenceRoomId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.roomid') })"
-                  size="small"
+                  v-model:value="formState.location"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.location') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -169,39 +174,54 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.conference.roomname')"
-                name="conferenceRoomName"
-              >
-                <a-input
-                  v-model:value="formState.conferenceRoomName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.roomname') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.conference.location')"
-                name="location"
-              >
-                <a-input
-                  v-model:value="formState.location"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.location') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.conference.meetinglink')"
                 name="meetingLink"
               >
                 <a-input
                   v-model:value="formState.meetingLink"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.meetinglink') })"
-                  size="small"
+                  show-count
+                  :maxlength="500"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.conference.agenda')"
+                name="agenda"
+              >
+                <a-input
+                  v-model:value="formState.agenda"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.agenda') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.conference.content')"
+                name="content"
+              >
+                <a-textarea
+                  v-model:value="formState.content"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.conference.content') })"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.conference.summary')"
+                name="summary"
+              >
+                <a-input
+                  v-model:value="formState.summary"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.summary') })"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
@@ -214,7 +234,8 @@
                 <a-input
                   v-model:value="formState.tags"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.tags') })"
-                  size="small"
+                  show-count
+                  :maxlength="500"
                   allow-clear
                 />
               </a-form-item>
@@ -227,7 +248,8 @@
                 <a-input
                   v-model:value="formState.organizerId"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.organizerid') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -240,7 +262,8 @@
                 <a-input
                   v-model:value="formState.organizerName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.organizername') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -253,7 +276,8 @@
                 <a-input
                   v-model:value="formState.deptId"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.deptid') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -266,7 +290,8 @@
                 <a-input
                   v-model:value="formState.deptName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.deptname') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -279,20 +304,6 @@
                 <a-input-number
                   v-model:value="formState.maxParticipants"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.maxparticipants') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.conference.reminderminutes')"
-                name="reminderMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.reminderMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.reminderminutes') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -307,28 +318,68 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.conference.flowinstanceid')"
-                name="flowInstanceId"
+                :label="t('entity.conference.reminderminutes')"
+                name="reminderMinutes"
+              >
+                <a-input-number
+                  v-model:value="formState.reminderMinutes"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.reminderminutes') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.conference.roomid')"
+                name="conferenceRoomId"
               >
                 <a-input
-                  v-model:value="formState.flowInstanceId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.flowinstanceid') })"
-                  size="small"
+                  v-model:value="formState.conferenceRoomId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.roomid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('entity.conference.roomname')"
+                name="conferenceRoomName"
               >
                 <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                  v-model:value="formState.conferenceRoomName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conference.roomname') })"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -341,172 +392,42 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：conferenceParticipant -->
-      <a-tab-pane
-        key="child-participants"
-        :tab="t('entity.conferenceParticipant._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddConferenceParticipantRow">
-            {{ t('common.page.button.create') }}{{ t('entity.conferenceParticipant._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="conferenceParticipantFormColumns"
-          :data-source="childConferenceParticipantRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'userId'">
-              <a-input
-                v-model:value="record.userId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceParticipant.userid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'userName'">
-              <a-input
-                v-model:value="record.userName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceParticipant.username') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'participantRole'">
-              <a-input-number
-                v-model:value="record.participantRole"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceParticipant.participantrole') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'attendanceStatus'">
-              <a-input-number
-                v-model:value="record.attendanceStatus"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceParticipant.attendancestatus') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'checkInTime'">
-              <a-input
-                v-model:value="record.checkInTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceParticipant.checkintime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'checkOutTime'">
-              <a-input
-                v-model:value="record.checkOutTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.conferenceParticipant.checkouttime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'extFieldJson'">
-              <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveConferenceParticipantRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：conferenceAgenda -->
-      <a-tab-pane
-        key="child-agendaRecords"
-        :tab="t('entity.conferenceAgenda._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddConferenceAgendaRow">
-            {{ t('common.page.button.create') }}{{ t('entity.conferenceAgenda._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="conferenceAgendaFormColumns"
-          :data-source="childConferenceAgendaRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveConferenceAgendaRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 participants -->
+    <TaktEditableTable
+      ref="conferenceParticipantTableRef"
+      v-model="childConferenceParticipantRows"
+      :columns="conferenceParticipantFormColumns"
+      :title="t('entity.conferenceparticipant._self')"
+      :add-button-entity="t('entity.conferenceparticipant._self')"
+      id-field="conferenceParticipantId"
+      :default-row="createDefaultConferenceParticipantRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * 会议实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 会议中心主实体 支持内部/外部/视频/混合会议排期、议程及参与人管理维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/routine/conference-center/conference/components
  */
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { ConferenceCreate, ConferenceParticipantCreate, ConferenceParticipant, ConferenceAgendaCreate, ConferenceAgenda } from '@/types/routine/conference-center/conference'
+import type { ConferenceCreate } from '@/types/routine/conference-center/conference'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -539,154 +460,103 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","conferenceCode","title","conferenceType","conferenceStatus","startTime","endTime","conferenceRoomId","conferenceRoomName","location","meetingLink","tags","organizerId","organizerName","deptId","deptName","maxParticipants","reminderMinutes","flowInstanceId","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","conferenceCode","title","conferenceType","conferenceStatus","startTime","endTime","location","meetingLink","agenda","content","summary","tags","organizerId","organizerName","deptId","deptName","maxParticipants","reminderMinutes","conferenceRoomId","conferenceRoomName","extField","remark"]
 
-/** conferenceParticipant 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childConferenceParticipantRows = ref<Record<string, unknown>[]>([])
-/** conferenceAgenda 子表行（表单 Tab 内嵌） */
-const childConferenceAgendaRows = ref<Record<string, unknown>[]>([])
+const conferenceParticipantTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 conferenceParticipant 表单列定义 */
-const conferenceParticipantFormColumns = computed(() => [
+/** 子表 conferenceParticipant 可编辑列 */
+const conferenceParticipantFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.conferenceParticipant.userid'),
-    dataIndex: 'userId',
     key: 'userId',
+    title: t('entity.conferenceparticipant.userid'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.conferenceParticipant.username'),
-    dataIndex: 'userName',
     key: 'userName',
+    title: t('entity.conferenceparticipant.username'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.conferenceParticipant.participantrole'),
-    dataIndex: 'participantRole',
     key: 'participantRole',
+    title: t('entity.conferenceparticipant.participantrole'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.conferenceParticipant.attendancestatus'),
-    dataIndex: 'attendanceStatus',
     key: 'attendanceStatus',
+    title: t('entity.conferenceparticipant.attendancestatus'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.conferenceParticipant.checkintime'),
-    dataIndex: 'checkInTime',
     key: 'checkInTime',
+    title: t('entity.conferenceparticipant.checkintime'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
     width: 140,
   },
   {
-    title: t('entity.conferenceParticipant.checkouttime'),
-    dataIndex: 'checkOutTime',
     key: 'checkOutTime',
+    title: t('entity.conferenceparticipant.checkouttime'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
     width: 140,
   },
   {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
+    key: 'checkInMethod',
+    title: t('entity.conferenceparticipant.checkinmethod'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
-    key: 'remark',
+    key: 'extField',
+    title: t('common.page.entity.extfield'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 conferenceAgenda 表单列定义 */
-const conferenceAgendaFormColumns = computed(() => [
-
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<ConferenceCreate & { conferenceId?: string }> | null | undefined) {
-  childConferenceParticipantRows.value = ((val as any)?.participants ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.conferenceParticipantId ?? `new-${index}`,
-  }))
-  childConferenceAgendaRows.value = ((val as any)?.agendaRecords ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.conferenceAgendaId ?? `new-${index}`,
-  }))
+  childConferenceParticipantRows.value = ((val as any)?.participants ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 conferenceParticipant 行 */
-function handleAddConferenceParticipantRow() {
-  childConferenceParticipantRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      userId: '',
-      userName: '',
-      participantRole: 0,
-      attendanceStatus: 0,
-      checkInTime: '',
-      checkOutTime: '',
-      extFieldJson: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 conferenceParticipant 行 */
-function handleRemoveConferenceParticipantRow(index: number) {
-  childConferenceParticipantRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 conferenceAgenda 行 */
-function handleAddConferenceAgendaRow() {
-  childConferenceAgendaRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-
-  })
-}
-
-/** 表单 Tab 内删除 conferenceAgenda 行 */
-function handleRemoveConferenceAgendaRow(index: number) {
-  childConferenceAgendaRows.value.splice(index, 1)
+function createDefaultConferenceParticipantRow(): Record<string, unknown> {
+  return {
+    userId: '',
+    userName: '',
+    participantRole: 0,
+    attendanceStatus: 0,
+    checkInTime: '',
+    checkOutTime: '',
+    checkInMethod: 0,
+    extField: '',
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.conferenceId ?? ''
   return {
     ...formState,
-    participants: childConferenceParticipantRows.value.map(({ __rowKey, ...rest }) => rest),
-    agendaRecords: childConferenceAgendaRows.value.map(({ __rowKey, ...rest }) => rest),
+    participants: conferenceParticipantTableRef.value?.getRows?.() ?? childConferenceParticipantRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      conferenceId: masterId,
+    })),
   }
 }
 
@@ -698,7 +568,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -706,20 +576,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 conferenceId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.conferenceId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).participants
-    delete (next as any).agendaRecords
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -749,32 +634,44 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  conferenceType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.conference.type') }),
-      trigger: 'change'
-    }
-  ],
-  conferenceStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.conference.status') }),
-      trigger: 'change'
-    }
-  ],
+  conferenceType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conference.type') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conference.type') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  conferenceStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conference.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conference.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   startTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.conference.starttime') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.conference.starttime') }),
+      trigger: 'change'
     }
   ],
   endTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.conference.endtime') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.conference.endtime') }),
+      trigger: 'change'
     }
   ],
   organizerId: [
@@ -791,40 +688,76 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  maxParticipants: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.conference.maxparticipants') }),
-      trigger: 'change'
-    }
-  ],
-  reminderMinutes: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.conference.reminderminutes') }),
-      trigger: 'change'
-    }
-  ],
+  maxParticipants: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conference.maxparticipants') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conference.maxparticipants') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  reminderMinutes: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conference.reminderminutes') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.conference.reminderminutes') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await conferenceParticipantTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('conferenceType' in payload) {
+    const rawconferenceType = payload.conferenceType
+    payload.conferenceType = typeof rawconferenceType === 'number' ? rawconferenceType : Number(rawconferenceType)
+  }
+  if ('conferenceStatus' in payload) {
+    const rawconferenceStatus = payload.conferenceStatus
+    payload.conferenceStatus = typeof rawconferenceStatus === 'number' ? rawconferenceStatus : Number(rawconferenceStatus)
+  }
+  if ('maxParticipants' in payload) {
+    const rawmaxParticipants = payload.maxParticipants
+    payload.maxParticipants = typeof rawmaxParticipants === 'number' ? rawmaxParticipants : Number(rawmaxParticipants)
+  }
+  if ('reminderMinutes' in payload) {
+    const rawreminderMinutes = payload.reminderMinutes
+    payload.reminderMinutes = typeof rawreminderMinutes === 'number' ? rawreminderMinutes : Number(rawreminderMinutes)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.conferenceId)
   childConferenceParticipantRows.value = []
-  childConferenceAgendaRows.value = []
+  conferenceParticipantTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

@@ -120,4 +120,10 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "delivery_status", ColumnDescription = "行交货状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 销售订单主表
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(SalesOrderId))]
+    public TaktSalesOrder? SalesOrder { get; set; }
 }

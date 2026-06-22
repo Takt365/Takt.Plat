@@ -1,6 +1,6 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Material
+// 命名空间：Takt.Domain.Entities.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderItem.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
@@ -13,7 +13,7 @@
 using SqlSugar;
 using Takt.Domain.Entities;
 
-namespace Takt.Domain.Entities.Logistics.Materials;
+namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
 /// Takt采购订单明细实体
@@ -99,7 +99,7 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     public decimal UnitPrice { get; set; } = 0;
 
     /// <summary>
-    /// 折扣率（0-100，表示折扣百分比）
+    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
     /// </summary>
     [SugarColumn(ColumnName = "discount_rate", ColumnDescription = "折扣率", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountRate { get; set; } = 0;
@@ -111,7 +111,7 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     public decimal DiscountAmount { get; set; } = 0;
 
     /// <summary>
-    /// 税费率（0-100，表示税费百分比）
+    /// 税费率（字典 logistics_tax_rate_param 预设或手输；0-100，表示税费百分比）
     /// </summary>
     [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税费率", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal TaxRate { get; set; } = 0;
@@ -129,7 +129,7 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     public decimal SubtotalAmount { get; set; } = 0;
 
     /// <summary>
-    /// 行交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_status", ColumnDescription = "行交货状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryStatus { get; set; } = 0;

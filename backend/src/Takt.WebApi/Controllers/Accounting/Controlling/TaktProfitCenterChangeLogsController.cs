@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Controlling
 // 文件名称：TaktProfitCenterChangeLogsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：利润中心变更记录控制器
 // 
@@ -41,7 +41,7 @@ public class TaktProfitCenterChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("accounting:controlling:profitcenterchangelog:list", "利润中心变更记录列表")]
+    [TaktPermission("accounting:controlling:profit:center:change:log:list", "利润中心变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetProfitCenterChangeLogListAsync([FromQuery] TaktProfitCenterChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktProfitCenterChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">利润中心变更记录ID</param>
     /// <returns>利润中心变更记录DTO</returns>
-    [TaktPermission("accounting:controlling:profitcenterchangelog:query", "利润中心变更记录详情")]
+    [TaktPermission("accounting:controlling:profit:center:change:log:query", "利润中心变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProfitCenterChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktProfitCenterChangeLogsController : TaktControllerBase
     /// 获取利润中心变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("accounting:controlling:profitcenterchangelog:query", "利润中心变更记录选项")]
+    [TaktPermission("accounting:controlling:profit:center:change:log:query", "利润中心变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetProfitCenterChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktProfitCenterChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>利润中心变更记录DTO</returns>
-    [TaktPermission("accounting:controlling:profitcenterchangelog:create", "创建利润中心变更记录")]
+    [TaktPermission("accounting:controlling:profit:center:change:log:create", "创建利润中心变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateProfitCenterChangeLogAsync([FromBody] TaktProfitCenterChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktProfitCenterChangeLogsController : TaktControllerBase
     /// <param name="id">利润中心变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>利润中心变更记录DTO</returns>
-    [TaktPermission("accounting:controlling:profitcenterchangelog:update", "更新利润中心变更记录")]
+    [TaktPermission("accounting:controlling:profit:center:change:log:update", "更新利润中心变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProfitCenterChangeLogAsync(long id, [FromBody] TaktProfitCenterChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktProfitCenterChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">利润中心变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:profitcenterchangelog:delete", "删除利润中心变更记录")]
+    [TaktPermission("accounting:controlling:profit:center:change:log:delete", "删除利润中心变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProfitCenterChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktProfitCenterChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("accounting:controlling:profitcenterchangelog:delete", "批量删除利润中心变更记录")]
+    [TaktPermission("accounting:controlling:profit:center:change:log:delete", "批量删除利润中心变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteProfitCenterChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktProfitCenterChangeLogsController : TaktControllerBase
     /// 导出利润中心变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("accounting:controlling:profitcenterchangelog:export", "导出利润中心变更记录")]
+    [TaktPermission("accounting:controlling:profit:center:change:log:export", "导出利润中心变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportProfitCenterChangeLogAsync([FromQuery] TaktProfitCenterChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

@@ -23,7 +23,7 @@ namespace Takt.Application.Dtos.Statistics.Report;
 // ========================================
 
 /// <summary>
-/// 自定义报表主实体（对标 SAP QuickViewer / SQVI 查询定义）
+/// 自定义报表主实体（SQVI 查询定义）
 /// 对应前端 TaktConfigurableDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -72,20 +72,9 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     public int MaxQueryRows { get; set; } = 0;
 
     /// <summary>
-    /// 归属用户 ID（为空表示公司级共享报表）
+    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OwnerUserId { get; set; }
-
-    /// <summary>
-    /// 归属用户 名称（填充字段）
-    /// </summary>
-    public string? OwnerUserName { get; set; }
-
-    /// <summary>
-    /// 是否内置（内置报表禁止删除）
-    /// </summary>
-    public int IsBuiltIn { get; set; }
+    public int IsPublic { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -121,7 +110,7 @@ public class TaktConfigurableDto : TaktCompanyDtoBase
     public List<TaktConfigurableFieldDto>? Fields { get; set; }
 
     /// <summary>
-    /// 筛选条件列表（Selection Screen / WHERE）
+    /// 筛选条件列表（SQVI WHERE）
     /// （子表：TaktConfigurableSelection）
     /// </summary>
     public List<TaktConfigurableSelectionDto>? Selections { get; set; }
@@ -196,15 +185,9 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     public int? MaxQueryRows { get; set; }
 
     /// <summary>
-    /// 归属用户 ID（为空表示公司级共享报表）
+    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OwnerUserId { get; set; }
-
-    /// <summary>
-    /// 是否内置（内置报表禁止删除）
-    /// </summary>
-    public int? IsBuiltIn { get; set; }
+    public int? IsPublic { get; set; }
 
     /// <summary>
     /// 排序号
@@ -234,7 +217,7 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -304,15 +287,9 @@ public class TaktConfigurableCreateDto
     public int MaxQueryRows { get; set; } = 0;
 
     /// <summary>
-    /// 归属用户 ID（为空表示公司级共享报表）
+    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OwnerUserId { get; set; }
-
-    /// <summary>
-    /// 是否内置（内置报表禁止删除）
-    /// </summary>
-    public int IsBuiltIn { get; set; }
+    public int IsPublic { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -345,7 +322,7 @@ public class TaktConfigurableCreateDto
     public List<TaktConfigurableFieldCreateDto>? Fields { get; set; }
 
     /// <summary>
-    /// 筛选条件列表（Selection Screen / WHERE）（子表，级联保存）
+    /// 筛选条件列表（SQVI WHERE）（子表，级联保存）
     /// </summary>
     public List<TaktConfigurableSelectionCreateDto>? Selections { get; set; }
 
@@ -362,7 +339,7 @@ public class TaktConfigurableCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -494,15 +471,9 @@ public class TaktConfigurableTemplateDto
     public int? MaxQueryRows { get; set; }
 
     /// <summary>
-    /// 归属用户 ID（为空表示公司级共享报表）
+    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OwnerUserId { get; set; }
-
-    /// <summary>
-    /// 是否内置（内置报表禁止删除）
-    /// </summary>
-    public int? IsBuiltIn { get; set; }
+    public int? IsPublic { get; set; }
 
     /// <summary>
     /// 排序号
@@ -522,7 +493,7 @@ public class TaktConfigurableTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -587,15 +558,9 @@ public class TaktConfigurableImportDto
     public int? MaxQueryRows { get; set; }
 
     /// <summary>
-    /// 归属用户 ID（为空表示公司级共享报表）
+    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OwnerUserId { get; set; }
-
-    /// <summary>
-    /// 是否内置（内置报表禁止删除）
-    /// </summary>
-    public int? IsBuiltIn { get; set; }
+    public int? IsPublic { get; set; }
 
     /// <summary>
     /// 排序号
@@ -615,7 +580,7 @@ public class TaktConfigurableImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -681,15 +646,9 @@ public class TaktConfigurableExportDto
     public int MaxQueryRows { get; set; } = 0;
 
     /// <summary>
-    /// 归属用户 ID（为空表示公司级共享报表）
+    /// 公开（字典 sys_is_public_type；0=公开，1=私有）
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? OwnerUserId { get; set; }
-
-    /// <summary>
-    /// 是否内置（内置报表禁止删除）
-    /// </summary>
-    public int IsBuiltIn { get; set; }
+    public int IsPublic { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -709,7 +668,7 @@ public class TaktConfigurableExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

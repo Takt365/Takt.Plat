@@ -11,6 +11,7 @@
 // ========================================
 
 using Microsoft.AspNetCore.Mvc;
+using Takt.Application.Dtos.Code.Database;
 using Takt.Application.Services.Code.Database;
 using Takt.Shared.Constants;
 
@@ -65,6 +66,26 @@ public class TaktDatabaseInfosController : TaktControllerBase
         try
         {
             var result = await _databaseInfoService.GetDatabaseTableInfoListAsync(tenantCode);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 分页获取当前登录租户业务库下用户表摘要
+    /// </summary>
+    /// <param name="queryDto">分页与关键字查询</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("code:database:info:list", "数据库表摘要分页列表")]
+    [HttpGet("table-list")]
+    public async Task<IActionResult> GetDatabaseTableInfoPageListAsync([FromQuery] TaktDatabaseTableInfoQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _databaseInfoService.GetDatabaseTableInfoPageListAsync(queryDto);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

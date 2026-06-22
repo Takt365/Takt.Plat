@@ -1,6 +1,6 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Materials
+// 命名空间：Takt.Domain.Entities.Logistics.Procurement
 // 文件名称：TaktPurchasePrice.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
@@ -13,7 +13,7 @@
 using SqlSugar;
 using Takt.Domain.Entities;
 
-namespace Takt.Domain.Entities.Logistics.Materials;
+namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
 /// Takt采购价格实体（供应商价格主表，一个供应商可以有多个物料价格）
@@ -47,7 +47,7 @@ public class TaktPurchasePrice : TaktCompanyEntityBase
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
+    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
     /// </summary>
     [SugarColumn(ColumnName = "price_type", ColumnDescription = "价格类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PriceType { get; set; } = 0;

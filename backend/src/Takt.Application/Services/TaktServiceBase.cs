@@ -11,6 +11,7 @@
 // ========================================
 
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Takt.Domain.Interfaces;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
@@ -195,6 +196,38 @@ public abstract class TaktServiceBase
             : key;
 
         throw new TaktBusinessException(message);
+    }
+
+    /// <summary>
+    /// 抛出本地化异常（TaktLocalizedException，由控制器 ResolveLocalizedException 解析）
+    /// </summary>
+    /// <param name="messageKey">翻译键</param>
+    /// <param name="fieldKey">字段标签键（entity.* / common.field.*），可为 null</param>
+    /// <param name="max">写入 {max} 占位</param>
+    /// <param name="extraTokens">额外命名占位（如 fileName、index）</param>
+    /// <param name="fieldExtras">拼在字段名后的附加值</param>
+    [DoesNotReturn]
+    protected void ThrowLocalizedException(
+        string messageKey,
+        string? fieldKey = null,
+        int? max = null,
+        IReadOnlyDictionary<string, string>? extraTokens = null,
+        params object[] fieldExtras)
+    {
+        Dictionary<string, string>? tokens = null;
+        if (max.HasValue)
+        {
+            tokens = extraTokens != null
+                ? new Dictionary<string, string>(extraTokens, StringComparer.Ordinal)
+                : new Dictionary<string, string>(StringComparer.Ordinal);
+            tokens["max"] = max.Value.ToString(CultureInfo.InvariantCulture);
+        }
+        else if (extraTokens != null)
+        {
+            tokens = new Dictionary<string, string>(extraTokens, StringComparer.Ordinal);
+        }
+
+        throw new TaktLocalizedException(messageKey, "Backend", fieldKey, tokens, fieldExtras);
     }
 
     /// <summary>

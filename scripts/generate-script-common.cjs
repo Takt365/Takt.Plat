@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-script-common.cjs
 // 创建时间：2026-05-23
 // 创建人：Takt365(Cursor AI)
@@ -74,7 +74,8 @@ function singularizeControllerSegment(segment) {
   }
   if (segment.endsWith('es')) {
     const base = segment.slice(0, -2);
-    if (/(s|x|z|ch|sh)$/i.test(base)) {
+    // 仅 -ss/-x/-z/-ch/-sh + es（如 Classes、Boxes）；勿用末尾单 s（Warehouses→Warehouse 走下方 -s）
+    if (/(ss|x|z|ch|sh)$/i.test(base)) {
       return base;
     }
   }
@@ -154,6 +155,33 @@ function writeGeneratedFile(filePath, content) {
 }
 
 const DEFAULT_BACKEND_ROOT = path.resolve(__dirname, '../backend/src');
+
+/** 全量生成脚本允许的 CLI 参数（无参 / --all / -all） */
+const ALL_ONLY_CLI_ALIASES = new Set(['--all', '--ALL', '-all', '-ALL']);
+
+/**
+ * 解析全量生成 CLI（无参或 --all / -all，禁止其它参数）
+ * @param {string[]} args process.argv.slice(2)
+ * @param {() => void} printUsage
+ */
+function parseAllOnlyGenerateArgsFromArgv(args, printUsage) {
+  for (const arg of args) {
+    if (ALL_ONLY_CLI_ALIASES.has(arg)) {
+      continue;
+    }
+    console.error(`❌ 不支持参数: ${arg}（仅允许无参或 --all）`);
+    printUsage();
+    process.exit(1);
+  }
+}
+
+/**
+ * 从 process.argv 解析全量生成 CLI（无参或 --all / -all）
+ * @param {() => void} printUsage
+ */
+function parseAllOnlyGenerateArgs(printUsage) {
+  parseAllOnlyGenerateArgsFromArgv(process.argv.slice(2), printUsage);
+}
 
 /**
  * 从 process.argv 解析单实体代码生成 CLI（禁止 --all）
@@ -477,8 +505,23 @@ function buildEntitySelfI18nKey(slug) {
   return buildEntityI18nKey(normalizedSlug, '_self');
 }
 
+/** TaktTranslation.ResourceType 种子固定值（字典 sys_resource_type：frontend） */
+const TRANSLATION_RESOURCE_TYPE_FRONTEND = 'frontend';
+
 /**
- * TaktModule 数值（与 Takt.Shared.Enums.TaktModule 一致；TaktTranslation.ResourceGroup 存 int）
+ * 由 I18nSeedData 业务目录片段生成 ResourceGroup（取命名空间路径最后一段，如 Logging、Foundation）
+ * @param {readonly string[]} seedDirParts 如 ['Statistics', 'Logging'] → Logging；根目录种子传空数组 → Common
+ * @returns {string}
+ */
+function buildTranslationResourceGroup(seedDirParts) {
+  if (!seedDirParts || seedDirParts.length === 0) {
+    return 'Common';
+  }
+  return seedDirParts[seedDirParts.length - 1];
+}
+
+/**
+ * TaktModule 数值（与 Takt.Shared.Enums.TaktModule 一致；ApiModule 等仍用 int）
  */
 const TAKT_MODULE_INT = {
   Dashboard: 0,
@@ -495,12 +538,79 @@ const TAKT_MODULE_INT = {
 };
 
 /**
- * TaktAppSide 数值（与 Takt.Shared.Enums.TaktAppSide 一致；TaktTranslation.ResourceType 存 int）
+ * TaktAppSide 数值（与 Takt.Shared.Enums.TaktAppSide 一致）
  */
 const TAKT_APP_SIDE_INT = {
   Frontend: 0,
   Backend: 1,
 };
+
+/** appsettings 分页节名（与 TaktPagedOptions.SectionName 一致） */
+const TAKT_PAGED_OPTIONS_SECTION = 'Paged';
+
+/**
+ * vue-i18n 消息内空对象字面量（显示为 {}）
+ * token：{'{'} + {'}'}
+ */
+const VUE_I18N_LITERAL_EMPTY_OBJECT = "{'{'}{'}'}";
+
+/**
+ * vue-i18n 消息内 JSON 示例（字面量块含开括号与内容，闭合 } 用 {'}'} token）
+ * 显示为 {"customCode":"A001"}
+ */
+const VUE_I18N_JSON_EXAMPLE_SIMPLE = "{'{\"customCode\":\"A001\"'}{'}'}";
+
+/**
+ * vue-i18n 消息内 JSON 示例（含布尔字段）
+ * 显示为 {"customCode":"A001","enabled":true}
+ */
+const VUE_I18N_JSON_EXAMPLE_WITH_ENABLED = "{'{\"customCode\":\"A001\",\"enabled\":true'}{'}'}";
+
+/**
+ * common.page.form.placeholder.extfield 种子译文（与 TaktCommonI18nSeedData 对齐）
+ * @returns {Array<[string, string, string, string]>}
+ */
+function buildCommonExtFieldPlaceholderI18nTuples() {
+  return [
+    ['common.page.form.placeholder.extfield', 'zh-CN', `示例：${VUE_I18N_JSON_EXAMPLE_SIMPLE}（键与字符串值须英文双引号，选填）`, '通用表单'],
+    ['common.page.form.placeholder.extfield', 'en-US', `e.g. ${VUE_I18N_JSON_EXAMPLE_SIMPLE} (use double quotes for keys/strings)`, 'Common Form'],
+    ['common.page.form.placeholder.extfield', 'ja-JP', `例: ${VUE_I18N_JSON_EXAMPLE_SIMPLE}（キーと文字列値は二重引用符）`, '共通フォーム'],
+    ['common.page.form.placeholder.extfield', 'zh-HK', `示例：${VUE_I18N_JSON_EXAMPLE_SIMPLE}（鍵與字串值須英文雙引號，選填）`, '通用表单'],
+  ];
+}
+
+/**
+ * common.page.entity.extfieldhint 种子译文（与 TaktCommonI18nSeedData 对齐）
+ * @returns {Array<[string, string, string, string]>}
+ */
+function buildCommonExtFieldHintI18nTuples() {
+  return [
+    [
+      'common.page.entity.extfieldhint',
+      'zh-CN',
+      `请输入合法 JSON 对象字符串：整体须为 ${VUE_I18N_LITERAL_EMPTY_OBJECT}；键名与字符串值必须使用英文双引号；数字、布尔、null 不加引号。示例：${VUE_I18N_JSON_EXAMPLE_WITH_ENABLED}。不支持数组 [] 或裸字符串。选填，最多 400 字符。`,
+      '通用实体',
+    ],
+    [
+      'common.page.entity.extfieldhint',
+      'en-US',
+      `Enter a valid JSON object: wrap in ${VUE_I18N_LITERAL_EMPTY_OBJECT}; use double quotes for keys and string values; numbers/booleans/null are unquoted. Example: ${VUE_I18N_JSON_EXAMPLE_WITH_ENABLED}. Arrays and plain strings are not supported. Optional, max 400 characters.`,
+      'Common Entity',
+    ],
+    [
+      'common.page.entity.extfieldhint',
+      'ja-JP',
+      `有効な JSON オブジェクトを入力してください：全体は ${VUE_I18N_LITERAL_EMPTY_OBJECT}；キーと文字列値は二重引用符必須；数値・真偽値・null は引用符なし。例: ${VUE_I18N_JSON_EXAMPLE_WITH_ENABLED}。配列 [] や裸の文字列は不可。任意、最大 400 文字。`,
+      '共通エンティティ',
+    ],
+    [
+      'common.page.entity.extfieldhint',
+      'zh-HK',
+      `請輸入合法 JSON 物件字串：整體須為 ${VUE_I18N_LITERAL_EMPTY_OBJECT}；鍵名與字串值必須使用英文雙引號；數字、布林、null 不加引號。示例：${VUE_I18N_JSON_EXAMPLE_WITH_ENABLED}。不支援陣列 [] 或裸字串。選填，最多 400 字元。`,
+      '通用实体',
+    ],
+  ];
+}
 
 /**
  * 解析 TaktModule 名称为 int 字典码
@@ -519,20 +629,215 @@ function resolveTaktModuleInt(moduleName) {
  */
 const ENTITY_BASE_FIELDS = {
   tenant: [
-    'tenantCode', 'extFieldJson', 'remark',
+    'tenantCode', 'ExtField', 'remark',
     'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
   ],
   company: [
-    'tenantCode', 'companyCode', 'extFieldJson', 'remark',
+    'tenantCode', 'companyCode', 'ExtField', 'remark',
     'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
   ],
   approval: [
-    'tenantCode', 'companyCode', 'extFieldJson', 'remark',
+    'tenantCode', 'companyCode', 'ExtField', 'remark',
     'approvalStatus', 'initiatorId', 'initiatedAt', 'approvalOpinion', 'approvedBy', 'approvedAt',
     'flowInstanceId',
     'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
   ],
 };
+
+/**
+ * 当 kebab 名与 modulePath 任一路径段重复时去掉前缀（api/types/views 共用）
+ * 例：logistics/serial + serial-inbound → inbound
+ * 例：logistics/quality/cost + quality-assurance → assurance
+ * 例：logistics/maintenance + maintenance-work-order → work-order
+ * @param {string} entityKebab
+ * @param {string} modulePath 如 logistics/serial、logistics/quality/cost
+ * @returns {string}
+ */
+function stripModulePrefixFromEntityKebab(entityKebab, modulePath) {
+  if (!entityKebab || !modulePath) {
+    return entityKebab;
+  }
+  let result = entityKebab;
+  const segments = modulePath.split('/').filter(Boolean);
+  for (const seg of segments) {
+    const redundantPrefix = `${seg.toLowerCase()}-`;
+    if (result.startsWith(redundantPrefix)) {
+      result = result.slice(redundantPrefix.length);
+    }
+  }
+  return result;
+}
+
+/**
+ * 解析前端 api/types 文件名（去模块目录重复前缀）
+ * @param {string} rawKebab 控制器或 DTO 推导的 kebab 名
+ * @param {string} modulePath 模块目录，如 logistics/serial
+ * @returns {string}
+ */
+function resolveFrontendModuleFileName(rawKebab, modulePath) {
+  return stripModulePrefixFromEntityKebab(rawKebab, modulePath);
+}
+
+/**
+ * 模块末级目录与实体 kebab 同名（如 routine/announcement + announcement）→ 不再追加一段
+ * @param {string} entityKebab
+ * @param {string} modulePath
+ * @returns {boolean}
+ */
+function isModuleLeafSameAsEntityKebab(entityKebab, modulePath) {
+  if (!entityKebab || !modulePath) {
+    return false;
+  }
+  const segments = String(modulePath).split('/').filter(Boolean);
+  return segments.length > 0 && segments[segments.length - 1] === entityKebab;
+}
+
+/**
+ * 解析 views / ComponentPath 目录（禁止 routine/announcement/announcement）
+ * @param {string} modulePath
+ * @param {string} entityKebab
+ * @returns {string}
+ */
+function resolveViewModulePath(modulePath, entityKebab) {
+  if (!modulePath || modulePath === '.') {
+    return entityKebab;
+  }
+  if (isModuleLeafSameAsEntityKebab(entityKebab, modulePath)) {
+    return modulePath;
+  }
+  return `${modulePath}/${entityKebab}`;
+}
+
+/**
+ * 解析 frontend api/types 落盘相对路径（禁止 routine/announcement/announcement.ts）
+ * @param {string} modulePath DTO/控制器扫描目录，如 routine/announcement
+ * @param {string} fileKebab 实体 kebab 文件名
+ * @returns {{ relDir: string, file: string, importPath: string }}
+ */
+function resolveFrontendOutputRelPath(modulePath, fileKebab) {
+  const file = resolveFrontendModuleFileName(fileKebab, modulePath);
+  if (!modulePath) {
+    return { relDir: '', file, importPath: file };
+  }
+  if (isModuleLeafSameAsEntityKebab(file, modulePath) || isModuleLeafSameAsEntityKebab(fileKebab, modulePath)) {
+    const segments = modulePath.split('/').filter(Boolean);
+    const parentDir = segments.slice(0, -1).join('/');
+    return {
+      relDir: parentDir,
+      file,
+      importPath: parentDir ? `${parentDir}/${file}` : file,
+    };
+  }
+  return {
+    relDir: modulePath,
+    file,
+    importPath: `${modulePath}/${file}`,
+  };
+}
+
+/**
+ * 实体短名 → 权限末段（小写连写，如 SerialInbound→serialinbound）
+ * @param {string} entityShort
+ * @returns {string}
+ */
+function entityShortToPermissionSlug(entityShort) {
+  return entityShort.replace(/([a-z0-9])([A-Z])/g, '$1$2').toLowerCase();
+}
+
+/**
+ * 权限末段去重：仅全字匹配模块目录段（materials 与 material 视为不同词，禁止复数剥 s 假去重）
+ * @param {string} entitySlug entityShortToPermissionSlug 结果
+ * @param {string} moduleSegment 模块路径段（如 materials、conferencecenter）
+ * @returns {string}
+ */
+function dedupePermissionEntitySlugAgainstModule(entitySlug, moduleSegment) {
+  if (!entitySlug || !moduleSegment) {
+    return entitySlug;
+  }
+  const slug = String(entitySlug).toLowerCase();
+  const seg = String(moduleSegment).toLowerCase();
+  if (slug === seg) {
+    return '';
+  }
+  if (slug.startsWith(seg)) {
+    return slug.slice(seg.length);
+  }
+  if (slug.endsWith(seg) && slug.length > seg.length) {
+    return slug.slice(0, -seg.length);
+  }
+  return slug;
+}
+
+/** 服务路径目录段 → 权限目录段（小写连写，CustomerService→service） */
+const PERMISSION_PATH_PART_ALIASES = {
+  CustomerService: 'service',
+};
+
+/**
+ * 由服务 pathParts 提取权限目录段（不含领域）
+ * @param {string[]} pathParts 如 ['Routine','NewsCenter']
+ * @returns {string[]}
+ */
+function buildPermissionModuleSegments(pathParts) {
+  if (!pathParts || pathParts.length <= 1) {
+    return [];
+  }
+  return pathParts.slice(1).map((part) => PERMISSION_PATH_PART_ALIASES[part] || part.toLowerCase());
+}
+
+/**
+ * 按服务 pathParts 解析权限实体段（逐段与目录去重）
+ * @param {string} entityShort
+ * @param {string[]} pathParts
+ * @returns {string}
+ */
+function resolvePermissionEntitySlugFromPathParts(entityShort, pathParts) {
+  let slug = entityShortToPermissionSlug(entityShort);
+  for (const seg of buildPermissionModuleSegments(pathParts)) {
+    slug = dedupePermissionEntitySlugAgainstModule(slug, seg);
+  }
+  return slug;
+}
+
+/**
+ * 组装权限前缀：领域[:目录…][:实体]；实体为空或与任一段目录相同则省略实体段
+ * 格式：业务领域:业务目录:实体:操作（操作由调用方追加）
+ * @param {string} domain
+ * @param {string[]} subdirs
+ * @param {string} entitySlug
+ * @returns {string}
+ */
+function assemblePermissionBase(domain, subdirs, entitySlug) {
+  const domainSeg = String(domain || '').trim().toLowerCase();
+  const dirs = (subdirs || []).map((seg) => String(seg || '').trim().toLowerCase()).filter(Boolean);
+  let slug = String(entitySlug || '').trim().toLowerCase();
+  if (slug && dirs.some((seg) => seg === slug)) {
+    slug = '';
+  }
+  if (!dirs.length) {
+    return slug ? `${domainSeg}:${slug}` : domainSeg;
+  }
+  const subdirPath = dirs.join(':');
+  if (!slug) {
+    return `${domainSeg}:${subdirPath}`;
+  }
+  return `${domainSeg}:${subdirPath}:${slug}`;
+}
+
+/**
+ * 按模块路径解析权限实体末段（逐段与目录名去重）
+ * @param {string} entityShort PascalCase 实体短名
+ * @param {string} modulePath 模块目录（不含领域），如 logistics/quality/cost
+ * @returns {string}
+ */
+function resolvePermissionEntitySlugFromModulePath(entityShort, modulePath) {
+  let slug = entityShortToPermissionSlug(entityShort);
+  const segments = String(modulePath || '').split('/').filter(Boolean);
+  for (const seg of segments) {
+    slug = dedupePermissionEntitySlugAgainstModule(slug, seg);
+  }
+  return slug;
+}
 
 module.exports = {
   GENERATED_FILE_WRITE_POLICY,
@@ -554,6 +859,8 @@ module.exports = {
   DEFAULT_BACKEND_ROOT,
   parseSingleEntityGenerateArgsFromArgv,
   parseSingleEntityGenerateArgs,
+  parseAllOnlyGenerateArgsFromArgv,
+  parseAllOnlyGenerateArgs,
   buildSingleEntityChildArgs,
   sanitizeXmlDocPlainText,
   pascalToCamel,
@@ -564,7 +871,27 @@ module.exports = {
   entityClassToSlug,
   buildEntityI18nKey,
   buildEntitySelfI18nKey,
+  TRANSLATION_RESOURCE_TYPE_FRONTEND,
+  buildTranslationResourceGroup,
   TAKT_MODULE_INT,
   TAKT_APP_SIDE_INT,
   resolveTaktModuleInt,
+  TAKT_PAGED_OPTIONS_SECTION,
+  VUE_I18N_LITERAL_EMPTY_OBJECT,
+  VUE_I18N_JSON_EXAMPLE_SIMPLE,
+  VUE_I18N_JSON_EXAMPLE_WITH_ENABLED,
+  buildCommonExtFieldPlaceholderI18nTuples,
+  buildCommonExtFieldHintI18nTuples,
+  stripModulePrefixFromEntityKebab,
+  resolveFrontendModuleFileName,
+  isModuleLeafSameAsEntityKebab,
+  resolveViewModulePath,
+  resolveFrontendOutputRelPath,
+  entityShortToPermissionSlug,
+  dedupePermissionEntitySlugAgainstModule,
+  PERMISSION_PATH_PART_ALIASES,
+  buildPermissionModuleSegments,
+  resolvePermissionEntitySlugFromPathParts,
+  assemblePermissionBase,
+  resolvePermissionEntitySlugFromModulePath,
 };

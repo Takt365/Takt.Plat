@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktServiceTicketDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceTicket 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktServiceTicket 生成，请按需审阅）
 // 
@@ -115,12 +115,12 @@ public class TaktServiceTicketDto : TaktCompanyDtoBase
     public int TicketType { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
@@ -300,12 +300,12 @@ public class TaktServiceTicketQueryDto : TaktPagedQuery
     public int? TicketType { get; set; }
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
     /// </summary>
     public int? TicketStatus { get; set; }
 
@@ -418,7 +418,7 @@ public class TaktServiceTicketQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -519,12 +519,12 @@ public class TaktServiceTicketCreateDto
     public int TicketType { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
@@ -596,14 +596,9 @@ public class TaktServiceTicketCreateDto
     public DateTime? AcceptedAt { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -650,9 +645,9 @@ public class TaktServiceTicketStatusDto
     public long ServiceTicketId { get; set; }
 
     /// <summary>
-    /// 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
     /// </summary>
-    [Required(ErrorMessage = "工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）不能为空")]
+    [Required(ErrorMessage = "工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）不能为空")]
     public int TicketStatus { get; set; } = 0;
 }
 
@@ -766,7 +761,7 @@ public class TaktServiceTicketTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -862,7 +857,7 @@ public class TaktServiceTicketImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -957,12 +952,12 @@ public class TaktServiceTicketExportDto
     public int TicketType { get; set; } = 0;
 
     /// <summary>
-    /// 优先级（0=低，1=中，2=高，3=紧急）
+    /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 工单状态（0=待派工，1=已派工，2=处理中，3=待验收，4=已完成，5=已关闭，6=已取消）
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
@@ -1040,7 +1035,7 @@ public class TaktServiceTicketExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

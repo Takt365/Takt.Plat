@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceScaleI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPriceScale 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,83 +75,83 @@ public class TaktSalesPriceScaleI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktSalesPriceScale 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.salespricescale._self / entity.salespricescale.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.salespricescale._self / entity.salespricescale.{{field}}；ResourceGroup=Sales；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetSalesPriceScaleTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.salespricescale._self
-            new TranslationSeedItem("entity.salespricescale._self", "en-US", "Sales Price Scale Information", "实体名称"),
+            new TranslationSeedItem("entity.salespricescale._self", "en-US", "Sales Price Scale Information_us", "实体名称"),
             // entity.salespricescale._self
-            new TranslationSeedItem("entity.salespricescale._self", "ja-JP", "Takt销售价格阶梯信息", "实体名称"),
+            new TranslationSeedItem("entity.salespricescale._self", "ja-JP", "Takt销售价格阶梯信息_jp", "实体名称"),
             // entity.salespricescale._self
             new TranslationSeedItem("entity.salespricescale._self", "zh-CN", "Takt销售价格阶梯信息", "实体名称"),
             // entity.salespricescale._self
-            new TranslationSeedItem("entity.salespricescale._self", "zh-HK", "Takt销售价格阶梯信息", "实体名称"),
+            new TranslationSeedItem("entity.salespricescale._self", "zh-HK", "Takt销售价格阶梯信息_hk", "实体名称"),
 
             // entity.salespricescale.itemid
-            new TranslationSeedItem("entity.salespricescale.itemid", "en-US", "价格明细ID", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricescale.itemid", "en-US", "价格明细ID_us", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
             // entity.salespricescale.itemid
-            new TranslationSeedItem("entity.salespricescale.itemid", "ja-JP", "价格明细ID", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricescale.itemid", "ja-JP", "价格明细ID_jp", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
             // entity.salespricescale.itemid
             new TranslationSeedItem("entity.salespricescale.itemid", "zh-CN", "价格明细ID", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
             // entity.salespricescale.itemid
-            new TranslationSeedItem("entity.salespricescale.itemid", "zh-HK", "价格明细ID", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.salespricescale.itemid", "zh-HK", "价格明细ID_hk", "价格明细ID（关联销售价格明细表，序列化为string以避免Javascript精度问题）"),
 
             // entity.salespricescale.salespricecode
-            new TranslationSeedItem("entity.salespricescale.salespricecode", "en-US", "销售价格编码", "销售价格编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salespricescale.salespricecode", "en-US", "销售价格编码_us", "销售价格编码（冗余字段，便于查询）"),
             // entity.salespricescale.salespricecode
-            new TranslationSeedItem("entity.salespricescale.salespricecode", "ja-JP", "销售价格编码", "销售价格编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salespricescale.salespricecode", "ja-JP", "销售价格编码_jp", "销售价格编码（冗余字段，便于查询）"),
             // entity.salespricescale.salespricecode
             new TranslationSeedItem("entity.salespricescale.salespricecode", "zh-CN", "销售价格编码", "销售价格编码（冗余字段，便于查询）"),
             // entity.salespricescale.salespricecode
-            new TranslationSeedItem("entity.salespricescale.salespricecode", "zh-HK", "销售价格编码", "销售价格编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salespricescale.salespricecode", "zh-HK", "销售价格编码_hk", "销售价格编码（冗余字段，便于查询）"),
 
             // entity.salespricescale.linenumber
-            new TranslationSeedItem("entity.salespricescale.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescale.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
             // entity.salespricescale.linenumber
-            new TranslationSeedItem("entity.salespricescale.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescale.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
             // entity.salespricescale.linenumber
             new TranslationSeedItem("entity.salespricescale.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
             // entity.salespricescale.linenumber
-            new TranslationSeedItem("entity.salespricescale.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescale.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.salespricescale.startquantity
-            new TranslationSeedItem("entity.salespricescale.startquantity", "en-US", "起始数量", "起始数量（基本单位数量，包含此数量）"),
+            new TranslationSeedItem("entity.salespricescale.startquantity", "en-US", "起始数量_us", "起始数量（基本单位数量，包含此数量）"),
             // entity.salespricescale.startquantity
-            new TranslationSeedItem("entity.salespricescale.startquantity", "ja-JP", "起始数量", "起始数量（基本单位数量，包含此数量）"),
+            new TranslationSeedItem("entity.salespricescale.startquantity", "ja-JP", "起始数量_jp", "起始数量（基本单位数量，包含此数量）"),
             // entity.salespricescale.startquantity
             new TranslationSeedItem("entity.salespricescale.startquantity", "zh-CN", "起始数量", "起始数量（基本单位数量，包含此数量）"),
             // entity.salespricescale.startquantity
-            new TranslationSeedItem("entity.salespricescale.startquantity", "zh-HK", "起始数量", "起始数量（基本单位数量，包含此数量）"),
+            new TranslationSeedItem("entity.salespricescale.startquantity", "zh-HK", "起始数量_hk", "起始数量（基本单位数量，包含此数量）"),
 
             // entity.salespricescale.endquantity
-            new TranslationSeedItem("entity.salespricescale.endquantity", "en-US", "结束数量", "结束数量（基本单位数量，包含此数量，0表示无上限）"),
+            new TranslationSeedItem("entity.salespricescale.endquantity", "en-US", "结束数量_us", "结束数量（基本单位数量，包含此数量，0表示无上限）"),
             // entity.salespricescale.endquantity
-            new TranslationSeedItem("entity.salespricescale.endquantity", "ja-JP", "结束数量", "结束数量（基本单位数量，包含此数量，0表示无上限）"),
+            new TranslationSeedItem("entity.salespricescale.endquantity", "ja-JP", "结束数量_jp", "结束数量（基本单位数量，包含此数量，0表示无上限）"),
             // entity.salespricescale.endquantity
             new TranslationSeedItem("entity.salespricescale.endquantity", "zh-CN", "结束数量", "结束数量（基本单位数量，包含此数量，0表示无上限）"),
             // entity.salespricescale.endquantity
-            new TranslationSeedItem("entity.salespricescale.endquantity", "zh-HK", "结束数量", "结束数量（基本单位数量，包含此数量，0表示无上限）"),
+            new TranslationSeedItem("entity.salespricescale.endquantity", "zh-HK", "结束数量_hk", "结束数量（基本单位数量，包含此数量，0表示无上限）"),
 
             // entity.salespricescale.scaleprice
-            new TranslationSeedItem("entity.salespricescale.scaleprice", "en-US", "阶梯价格", "阶梯价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.salespricescale.scaleprice", "en-US", "阶梯价格_us", "阶梯价格（精确到分，存储为整数，单位为分）"),
             // entity.salespricescale.scaleprice
-            new TranslationSeedItem("entity.salespricescale.scaleprice", "ja-JP", "阶梯价格", "阶梯价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.salespricescale.scaleprice", "ja-JP", "阶梯价格_jp", "阶梯价格（精确到分，存储为整数，单位为分）"),
             // entity.salespricescale.scaleprice
             new TranslationSeedItem("entity.salespricescale.scaleprice", "zh-CN", "阶梯价格", "阶梯价格（精确到分，存储为整数，单位为分）"),
             // entity.salespricescale.scaleprice
-            new TranslationSeedItem("entity.salespricescale.scaleprice", "zh-HK", "阶梯价格", "阶梯价格（精确到分，存储为整数，单位为分）"),
+            new TranslationSeedItem("entity.salespricescale.scaleprice", "zh-HK", "阶梯价格_hk", "阶梯价格（精确到分，存储为整数，单位为分）"),
 
             // entity.salespricescale.priceitem
-            new TranslationSeedItem("entity.salespricescale.priceitem", "en-US", "销售价格明细", "销售价格明细（主表）"),
+            new TranslationSeedItem("entity.salespricescale.priceitem", "en-US", "销售价格明细_us", "销售价格明细（主表）"),
             // entity.salespricescale.priceitem
-            new TranslationSeedItem("entity.salespricescale.priceitem", "ja-JP", "销售价格明细", "销售价格明细（主表）"),
+            new TranslationSeedItem("entity.salespricescale.priceitem", "ja-JP", "销售价格明细_jp", "销售价格明细（主表）"),
             // entity.salespricescale.priceitem
             new TranslationSeedItem("entity.salespricescale.priceitem", "zh-CN", "销售价格明细", "销售价格明细（主表）"),
             // entity.salespricescale.priceitem
-            new TranslationSeedItem("entity.salespricescale.priceitem", "zh-HK", "销售价格明细", "销售价格明细（主表）"),
+            new TranslationSeedItem("entity.salespricescale.priceitem", "zh-HK", "销售价格明细_hk", "销售价格明细（主表）"),
         };
     }
 
@@ -169,10 +169,10 @@ public class TaktSalesPriceScaleI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Sales";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/conference-center
 // 文件名称：conference-room.ts
-// 创建时间：2026-06-11
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -42,9 +42,7 @@ export function getConferenceRoomList(queryDto: any): Promise<TaktPagedResult<Co
   return request<TaktPagedResult<ConferenceRoom>>({
     url: `${CONFERENCE_ROOM_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -114,7 +112,7 @@ export function deleteConferenceRoomBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新会议室状态
- * @param {ConferenceRoomStatus} dto 状态 DTO（TaktConferenceRoomStatus 枚举）
+ * @param {ConferenceRoomStatus} dto 状态 DTO
  * @returns {Promise<ConferenceRoom>} 会议室DTO
  */
 export function updateConferenceRoomStatus(dto: ConferenceRoomStatus): Promise<ConferenceRoom> {
@@ -214,7 +212,7 @@ export function exportConferenceRoom(
     url: `${CONFERENCE_ROOM_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

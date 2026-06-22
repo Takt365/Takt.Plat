@@ -1,6 +1,6 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Material
+// 命名空间：Takt.Domain.Entities.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestItem.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
@@ -13,7 +13,7 @@
 using SqlSugar;
 using Takt.Domain.Entities;
 
-namespace Takt.Domain.Entities.Logistics.Materials;
+namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
 /// Takt采购申请明细实体

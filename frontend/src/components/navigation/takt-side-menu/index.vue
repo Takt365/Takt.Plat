@@ -100,7 +100,7 @@ watch(
 .takt-side-menu {
   border-right: 0;
 
-  /* 图标与文本间距见 navigation-menu-base.css；层级缩进由 :inline-indent 控制 */
+  /* 图标与文本间距见 menu-base.css；层级缩进由 :inline-indent 控制 */
 
   &.menu-style-rounded {
     :deep(.ant-menu-item) {

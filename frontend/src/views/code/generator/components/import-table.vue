@@ -13,10 +13,10 @@
     :wrapper-col="{ span: 16 }"
   >
     <!-- 数据源：租户业务库 -->
-    <a-form-item :label="t('common.page.button.datasource')">
+    <a-form-item :label="t('entity.gentable.datasource')">
       <a-select
         v-model:value="tenantCode"
-        :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.button.datasource') })"
+        :placeholder="t('common.page.form.placeholder.select', { field: t('entity.gentable.datasource') })"
         allow-clear
         style="width: 100%"
         @change="handleConfigChange"
@@ -34,7 +34,7 @@
     <a-form-item :label="t('code.generator.page.importtable.datatable')">
       <a-select
         v-model:value="tableName"
-        :placeholder="t('common.page.form.placeholder.selectfirst', { field: t('common.page.button.datasource') })"
+        :placeholder="t('common.page.form.placeholder.selectfirst', { field: t('entity.gentable.datasource') })"
         :disabled="!tenantCode"
         :loading="databaseTablesLoading"
         allow-clear

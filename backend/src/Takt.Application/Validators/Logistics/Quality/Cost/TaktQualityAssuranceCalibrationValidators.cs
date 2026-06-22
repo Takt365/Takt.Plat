@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Cost
-// 文件名称：TaktQualityOperationCalibrationValidators.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityAssuranceCalibrationValidators.cs
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
-// 功能描述：QualityOperationCalibration 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktQualityOperationCalibration 生成，请按需审阅）
+// 功能描述：QualityAssuranceCalibration 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktQualityAssuranceCalibration 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,31 +16,31 @@ using Takt.Application.Dtos.Logistics.Quality.Cost;
 namespace Takt.Application.Validators.Logistics.Quality.Cost;
 
 // ========================================
-// 创建QualityOperationCalibration 验证器
+// 创建QualityAssuranceCalibration 验证器
 // ========================================
 
 /// <summary>
-/// 创建QualityOperationCalibration DTO 验证器
+/// 创建QualityAssuranceCalibration DTO 验证器
 /// </summary>
-public class TaktQualityOperationCalibrationCreateValidator : AbstractValidator<TaktQualityOperationCalibrationCreateDto>
+public class TaktQualityAssuranceCalibrationCreateValidator : AbstractValidator<TaktQualityAssuranceCalibrationCreateDto>
 {
     /// <summary>
-    /// 初始化 创建QualityOperationCalibration 校验规则
+    /// 初始化 创建QualityAssuranceCalibration 校验规则
     /// </summary>
-    public TaktQualityOperationCalibrationCreateValidator()
+    public TaktQualityAssuranceCalibrationCreateValidator()
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
-        RuleFor(x => x.QualityOperationId)
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.QualityAssuranceId)
             .GreaterThanOrEqualTo(0).WithMessage("品质业务主表ID不能为负数");
-        RuleFor(x => x.QualityOperationCode)
+        RuleFor(x => x.QualityAssuranceCode)
             .NotEmpty().WithMessage("品质业务编码不能为空")
-            .MaximumLength(40).WithMessage("品质业务编码长度不能超过40个字符");
-        RuleFor(x => x.ExtFieldJson)
+            .MaximumLength(30).WithMessage("品质业务编码长度不能超过30个字符");
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -48,49 +48,49 @@ public class TaktQualityOperationCalibrationCreateValidator : AbstractValidator<
 }
 
 // ========================================
-// 更新QualityOperationCalibration 验证器
+// 更新QualityAssuranceCalibration 验证器
 // ========================================
 
 /// <summary>
-/// 更新QualityOperationCalibration DTO 验证器
+/// 更新QualityAssuranceCalibration DTO 验证器
 /// </summary>
-public class TaktQualityOperationCalibrationUpdateValidator : AbstractValidator<TaktQualityOperationCalibrationUpdateDto>
+public class TaktQualityAssuranceCalibrationUpdateValidator : AbstractValidator<TaktQualityAssuranceCalibrationUpdateDto>
 {
     /// <summary>
-    /// 初始化 更新QualityOperationCalibration 校验规则
+    /// 初始化 更新QualityAssuranceCalibration 校验规则
     /// </summary>
-    public TaktQualityOperationCalibrationUpdateValidator()
+    public TaktQualityAssuranceCalibrationUpdateValidator()
     {
-        RuleFor(x => x.QualityOperationCalibrationId)
-            .GreaterThan(0).WithMessage("QualityOperationCalibrationID无效");
+        RuleFor(x => x.QualityAssuranceCalibrationId)
+            .GreaterThan(0).WithMessage("QualityAssuranceCalibrationID无效");
     }
 }
 
 // ========================================
-// 导入QualityOperationCalibration 验证器
+// 导入QualityAssuranceCalibration 验证器
 // ========================================
 
 /// <summary>
-/// 导入QualityOperationCalibration DTO 验证器
+/// 导入QualityAssuranceCalibration DTO 验证器
 /// </summary>
-public class TaktQualityOperationCalibrationImportValidator : AbstractValidator<TaktQualityOperationCalibrationImportDto>
+public class TaktQualityAssuranceCalibrationImportValidator : AbstractValidator<TaktQualityAssuranceCalibrationImportDto>
 {
     /// <summary>
-    /// 初始化 导入QualityOperationCalibration 校验规则
+    /// 初始化 导入QualityAssuranceCalibration 校验规则
     /// </summary>
-    public TaktQualityOperationCalibrationImportValidator()
+    public TaktQualityAssuranceCalibrationImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
-        RuleFor(x => x.QualityOperationId)
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.QualityAssuranceId)
             .GreaterThanOrEqualTo(0).WithMessage("品质业务主表ID不能为负数");
-        RuleFor(x => x.QualityOperationCode)
+        RuleFor(x => x.QualityAssuranceCode)
             .NotEmpty().WithMessage("品质业务编码不能为空")
-            .MaximumLength(40).WithMessage("品质业务编码长度不能超过40个字符");
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+            .MaximumLength(30).WithMessage("品质业务编码长度不能超过30个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

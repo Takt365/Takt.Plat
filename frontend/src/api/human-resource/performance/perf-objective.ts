@@ -41,9 +41,7 @@ export function getPerfObjectiveList(queryDto: any): Promise<TaktPagedResult<Per
   return request<TaktPagedResult<PerfObjective>>({
     url: `${PERF_OBJECTIVE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportPerfObjective(
     url: `${PERF_OBJECTIVE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

@@ -1,8 +1,8 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/sales/sales-order/components -->
-<!-- 文件名称：sales-order-form.vue -->
-<!-- 功能描述：Takt销售订单实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 命名空间：@/views/logistics/sales/order/components -->
+<!-- 文件名称：order-form.vue -->
+<!-- 功能描述：Takt采购订单实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form order-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -17,9 +18,8 @@
   >
     <a-tabs
       v-model:active-key="activeTab"
-      class="sales-order-form-tabs"
+      class="order-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,101 +63,106 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.plantcode')"
+                :label="t('entity.purchaseorder.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.plantcode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.purchaseOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.code')"
-                name="salesOrderCode"
+                :label="t('entity.purchaseorder.code')"
+                name="purchaseOrderCode"
               >
                 <a-input
-                  v-model:value="formState.salesOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.code') })"
-                  size="small"
+                  v-model:value="formState.purchaseOrderCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.code') })"
+                  show-count
+                  :maxlength="10"
                   allow-clear
+                  :disabled="!!formData?.purchaseOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.customercode')"
-                name="customerCode"
+                :label="t('entity.purchaseorder.suppliercode')"
+                name="supplierCode"
               >
                 <a-input
-                  v-model:value="formState.customerCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.customercode') })"
-                  size="small"
+                  v-model:value="formState.supplierCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.suppliercode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.purchaseOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.customername')"
-                name="customerName"
+                :label="t('entity.purchaseorder.suppliername')"
+                name="supplierName"
               >
                 <a-input
-                  v-model:value="formState.customerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.customername') })"
-                  size="small"
+                  v-model:value="formState.supplierName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.suppliername') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.orderdate')"
+                :label="t('entity.purchaseorder.orderdate')"
                 name="orderDate"
               >
                 <a-date-picker
                   v-model:value="formState.orderDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesOrder.orderdate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderdate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.requireddeliverydate')"
-                name="requiredDeliveryDate"
+                :label="t('entity.purchaseorder.requiredarrivaldate')"
+                name="requiredArrivalDate"
               >
                 <a-date-picker
-                  v-model:value="formState.requiredDeliveryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesOrder.requireddeliverydate') })"
+                  v-model:value="formState.requiredArrivalDate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.requiredarrivaldate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.actualdeliverydate')"
-                name="actualDeliveryDate"
+                :label="t('entity.purchaseorder.actualarrivaldate')"
+                name="actualArrivalDate"
               >
                 <a-date-picker
-                  v-model:value="formState.actualDeliveryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesOrder.actualdeliverydate') })"
+                  v-model:value="formState.actualArrivalDate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.actualarrivaldate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -172,131 +179,123 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.salesby')"
-                name="salesBy"
+                :label="t('entity.purchaseorder.purchasegroup')"
+                name="purchaseGroup"
               >
                 <a-input
-                  v-model:value="formState.salesBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.salesby') })"
-                  size="small"
+                  v-model:value="formState.purchaseGroup"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.purchasegroup') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.totalquantity')"
+                :label="t('entity.purchaseorder.totalquantity')"
                 name="totalQuantity"
               >
                 <a-input-number
                   v-model:value="formState.totalQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.totalquantity') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.totalquantity') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.totalamount')"
+                :label="t('entity.purchaseorder.totalamount')"
                 name="totalAmount"
               >
                 <a-input-number
                   v-model:value="formState.totalAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.totalamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.totalamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.discountamount')"
+                :label="t('entity.purchaseorder.discountamount')"
                 name="discountAmount"
               >
                 <a-input-number
                   v-model:value="formState.discountAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.discountamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.discountamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.taxamount')"
+                :label="t('entity.purchaseorder.taxamount')"
                 name="taxAmount"
               >
                 <a-input-number
                   v-model:value="formState.taxAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.taxamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.taxamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.actualamount')"
+                :label="t('entity.purchaseorder.actualamount')"
                 name="actualAmount"
               >
                 <a-input-number
                   v-model:value="formState.actualAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.actualamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.actualamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.shippedquantity')"
-                name="shippedQuantity"
+                :label="t('entity.purchaseorder.receivedquantity')"
+                name="receivedQuantity"
               >
                 <a-input-number
-                  v-model:value="formState.shippedQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.shippedquantity') })"
-                  size="small"
+                  v-model:value="formState.receivedQuantity"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.receivedquantity') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.shippedamount')"
-                name="shippedAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.shippedAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.shippedamount') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.salesOrder.receivedamount')"
+                :label="t('entity.purchaseorder.receivedamount')"
                 name="receivedAmount"
               >
                 <a-input-number
                   v-model:value="formState.receivedAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.receivedamount') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.receivedamount') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.salesOrder.orderstatus')"
+                :label="t('entity.purchaseorder.paidamount')"
+                name="paidAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.paidAmount"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.paidamount') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.purchaseorder.orderstatus')"
                 name="orderStatus"
               >
                 <TaktSelect
                   v-model:value="formState.orderStatus"
-                  dict-type="sys_normal_disable"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salesOrder.orderstatus') })"
-                  size="small"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderstatus') })"
                 />
               </a-form-item>
             </a-col>
@@ -310,68 +309,63 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesOrder.deliverystatus')"
+                :label="t('entity.purchaseorder.deliverystatus')"
                 name="deliveryStatus"
               >
                 <a-input-number
                   v-model:value="formState.deliveryStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.deliverystatus') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.salesOrder.deliverymethod')"
-                name="deliveryMethod"
-              >
-                <a-input-number
-                  v-model:value="formState.deliveryMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.deliverymethod') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.salesOrder.paymentmethod')"
-                name="paymentMethod"
-              >
-                <a-input-number
-                  v-model:value="formState.paymentMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrder.paymentmethod') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.deliverystatus') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.salesOrder.deliveryaddress')"
+                :label="t('entity.purchaseorder.paymentmethod')"
+                name="paymentMethod"
+              >
+                <a-input-number
+                  v-model:value="formState.paymentMethod"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.paymentmethod') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.purchaseorder.deliverymethod')"
+                name="deliveryMethod"
+              >
+                <a-input-number
+                  v-model:value="formState.deliveryMethod"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.deliverymethod') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.purchaseorder.deliveryaddress')"
                 name="deliveryAddress"
               >
                 <a-textarea
                   v-model:value="formState.deliveryAddress"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.salesOrder.deliveryaddress') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.purchaseorder.deliveryaddress') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('entity.purchaseorder.extfield')"
+                name="ExtField"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
-                  allow-clear
+                <a-textarea
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.purchaseorder.extfield') })"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -383,252 +377,43 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：salesOrderItem -->
-      <a-tab-pane
-        key="child-items"
-        :tab="t('entity.salesOrderItem._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddSalesOrderItemRow">
-            {{ t('common.page.button.create') }}{{ t('entity.salesOrderItem._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="salesOrderItemFormColumns"
-          :data-source="childSalesOrderItemRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderItem.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'materialCode'">
-              <a-input
-                v-model:value="record.materialCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderItem.materialcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'materialName'">
-              <a-input
-                v-model:value="record.materialName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderItem.materialname') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'materialSpecification'">
-              <a-input
-                v-model:value="record.materialSpecification"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderItem.materialspecification') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'salesUnit'">
-              <a-input
-                v-model:value="record.salesUnit"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderItem.salesunit') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'orderQuantity'">
-              <a-input-number
-                v-model:value="record.orderQuantity"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderItem.orderquantity') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'shippedQuantity'">
-              <a-input-number
-                v-model:value="record.shippedQuantity"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderItem.shippedquantity') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'unitPrice'">
-              <a-input-number
-                v-model:value="record.unitPrice"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderItem.unitprice') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveSalesOrderItemRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：salesOrderChangeLog -->
-      <a-tab-pane
-        key="child-changeLogs"
-        :tab="t('entity.salesOrderChangeLog._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddSalesOrderChangeLogRow">
-            {{ t('common.page.button.create') }}{{ t('entity.salesOrderChangeLog._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="salesOrderChangeLogFormColumns"
-          :data-source="childSalesOrderChangeLogRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'orderCode'">
-              <a-input
-                v-model:value="record.orderCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderChangeLog.ordercode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeFields'">
-              <a-input
-                v-model:value="record.changeFields"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderChangeLog.changefields') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeTime'">
-              <a-input
-                v-model:value="record.changeTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderChangeLog.changetime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeBy'">
-              <a-input
-                v-model:value="record.changeBy"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderChangeLog.changeby') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeReason'">
-              <a-input
-                v-model:value="record.changeReason"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salesOrderChangeLog.changereason') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'extFieldJson'">
-              <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveSalesOrderChangeLogRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 items -->
+    <TaktEditableTable
+      ref="purchaseOrderItemTableRef"
+      v-model="childPurchaseOrderItemRows"
+      :columns="purchaseOrderItemFormColumns"
+      :title="t('entity.purchaseorderitem._self')"
+      :add-button-entity="t('entity.purchaseorderitem._self')"
+      id-field="purchaseOrderItemId"
+      :default-row="createDefaultPurchaseOrderItemRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * Takt销售订单实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
- * @module views/logistics/sales/sales-order/components
+ * Takt采购订单实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * @module views/logistics/sales/order/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { SalesOrderCreate, SalesOrderItemCreate, SalesOrderItem, SalesOrderChangeLogCreate, SalesOrderChangeLog } from '@/types/logistics/sales/sales-order'
+import type { PurchaseOrderCreate } from '@/types/logistics/procurement/order'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -661,234 +446,111 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesOrderCode","customerCode","customerName","orderDate","requiredDeliveryDate","actualDeliveryDate","salesBy","totalQuantity","totalAmount","discountAmount","taxAmount","actualAmount","shippedQuantity","shippedAmount","receivedAmount","orderStatus","deliveryStatus","deliveryMethod","paymentMethod","deliveryAddress","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchaseOrderCode","supplierCode","supplierName","orderDate","requiredArrivalDate","actualArrivalDate","purchaseGroup","totalQuantity","totalAmount","discountAmount","taxAmount","actualAmount","receivedQuantity","receivedAmount","paidAmount","orderStatus","deliveryStatus","paymentMethod","deliveryMethod","deliveryAddress","ExtField","remark"]
 
-/** salesOrderItem 子表行（表单 Tab 内嵌） */
-const childSalesOrderItemRows = ref<Record<string, unknown>[]>([])
-/** salesOrderChangeLog 子表行（表单 Tab 内嵌） */
-const childSalesOrderChangeLogRows = ref<Record<string, unknown>[]>([])
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
-/** 子表 salesOrderItem 表单列定义 */
-const salesOrderItemFormColumns = computed(() => [
+const childPurchaseOrderItemRows = ref<Record<string, unknown>[]>([])
+const purchaseOrderItemTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
+
+/** 子表 purchaseOrderItem 可编辑列 */
+const purchaseOrderItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.salesOrderItem.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
+    title: t('entity.purchaseorderitem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
+  },
+  {
+    key: 'requestCode',
+    title: t('entity.purchaseorderitem.requestcode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchaseorderitem.requestcode') }),
+  },
+  {
+    key: 'requestLineNumber',
+    title: t('entity.purchaseorderitem.requestlinenumber'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.salesOrderItem.materialcode'),
-    dataIndex: 'materialCode',
     key: 'materialCode',
+    title: t('entity.purchaseorderitem.materialcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.salesOrderItem.materialname'),
-    dataIndex: 'materialName',
     key: 'materialName',
+    title: t('entity.purchaseorderitem.materialname'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.salesOrderItem.materialspecification'),
-    dataIndex: 'materialSpecification',
     key: 'materialSpecification',
+    title: t('entity.purchaseorderitem.materialspecification'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchaseorderitem.materialspecification') }),
+  },
+  {
+    key: 'purchaseUnit',
+    title: t('entity.purchaseorderitem.purchaseunit'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.salesOrderItem.salesunit'),
-    dataIndex: 'salesUnit',
-    key: 'salesUnit',
-    width: 140,
-  },
-  {
-    title: t('entity.salesOrderItem.orderquantity'),
-    dataIndex: 'orderQuantity',
     key: 'orderQuantity',
+    title: t('entity.purchaseorderitem.orderquantity'),
+    editor: 'inputNumber',
     width: 140,
-  },
-  {
-    title: t('entity.salesOrderItem.shippedquantity'),
-    dataIndex: 'shippedQuantity',
-    key: 'shippedQuantity',
-    width: 140,
-  },
-  {
-    title: t('entity.salesOrderItem.unitprice'),
-    dataIndex: 'unitPrice',
-    key: 'unitPrice',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 salesOrderChangeLog 表单列定义 */
-const salesOrderChangeLogFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.salesOrderChangeLog.ordercode'),
-    dataIndex: 'orderCode',
-    key: 'orderCode',
-    width: 140,
-  },
-  {
-    title: t('entity.salesOrderChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    width: 140,
-  },
-  {
-    title: t('entity.salesOrderChangeLog.changetime'),
-    dataIndex: 'changeTime',
-    key: 'changeTime',
-    width: 140,
-  },
-  {
-    title: t('entity.salesOrderChangeLog.changeby'),
-    dataIndex: 'changeBy',
-    key: 'changeBy',
-    width: 140,
-  },
-  {
-    title: t('entity.salesOrderChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
-    key: 'remark',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<SalesOrderCreate & { salesOrderId?: string }> | null | undefined) {
-  childSalesOrderItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.salesOrderItemId ?? `new-${index}`,
-  }))
-  childSalesOrderChangeLogRows.value = ((val as any)?.changeLogs ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.salesOrderChangeLogId ?? `new-${index}`,
-  }))
+function syncChildRowsFromFormData(val: Partial<PurchaseOrderCreate & { purchaseOrderId?: string }> | null | undefined) {
+  childPurchaseOrderItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 salesOrderItem 行 */
-function handleAddSalesOrderItemRow() {
-  childSalesOrderItemRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      lineNumber: 0,
-      materialCode: '',
-      materialName: '',
-      materialSpecification: '',
-      salesUnit: '',
-      orderQuantity: 0,
-      shippedQuantity: 0,
-      unitPrice: 0,
-  })
-}
-
-/** 表单 Tab 内删除 salesOrderItem 行 */
-function handleRemoveSalesOrderItemRow(index: number) {
-  childSalesOrderItemRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 salesOrderChangeLog 行 */
-function handleAddSalesOrderChangeLogRow() {
-  childSalesOrderChangeLogRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      orderCode: '',
-      changeFields: '',
-      changeTime: '',
-      changeBy: '',
-      changeReason: '',
-      extFieldJson: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 salesOrderChangeLog 行 */
-function handleRemoveSalesOrderChangeLogRow(index: number) {
-  childSalesOrderChangeLogRows.value.splice(index, 1)
+function createDefaultPurchaseOrderItemRow(): Record<string, unknown> {
+  return {
+    lineNumber: (childPurchaseOrderItemRows.value.length + 1) * 10,
+    requestCode: '',
+    requestLineNumber: 0,
+    materialCode: '',
+    materialName: '',
+    materialSpecification: '',
+    purchaseUnit: '',
+    orderQuantity: 0,
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.purchaseOrderId ?? ''
   return {
     ...formState,
-    items: childSalesOrderItemRows.value.map(({ __rowKey, ...rest }) => rest),
-    changeLogs: childSalesOrderChangeLogRows.value.map(({ __rowKey, ...rest }) => rest),
+    items: purchaseOrderItemTableRef.value?.getRows?.() ?? childPurchaseOrderItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      purchaseOrderId: masterId,
+    })),
   }
 }
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
-  formData?: Partial<SalesOrderCreate & { salesOrderId?: string }> | null
+  formData?: Partial<PurchaseOrderCreate & { purchaseOrderId?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -896,27 +558,54 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  orderStatus: 1
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 purchaseOrderId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.purchaseOrderId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).items
-    delete (next as any).changeLogs
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    const isCreate = !props.formData?.salesOrderId
+    const isCreate = !props.formData?.purchaseOrderId
     if (isCreate) {
       applyScopeDefaults(formState, true)
     }
@@ -925,138 +614,273 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  salesOrderCode: [
+  plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesOrder.code') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.plantcode') }),
       trigger: 'blur'
     }
   ],
-  customerCode: [
+  purchaseOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesOrder.customercode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.code') }),
       trigger: 'blur'
     }
   ],
-  customerName: [
+  supplierCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.salesOrder.customername') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.suppliercode') }),
+      trigger: 'blur'
+    }
+  ],
+  supplierName: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseorder.suppliername') }),
       trigger: 'blur'
     }
   ],
   orderDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.orderdate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderdate') }),
       trigger: 'change'
     }
   ],
-  totalQuantity: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.totalquantity') }),
-      trigger: 'change'
-    }
-  ],
-  totalAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.totalamount') }),
-      trigger: 'change'
-    }
-  ],
-  discountAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.discountamount') }),
-      trigger: 'change'
-    }
-  ],
-  taxAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.taxamount') }),
-      trigger: 'change'
-    }
-  ],
-  actualAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.actualamount') }),
-      trigger: 'change'
-    }
-  ],
-  shippedQuantity: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.shippedquantity') }),
-      trigger: 'change'
-    }
-  ],
-  shippedAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.shippedamount') }),
-      trigger: 'change'
-    }
-  ],
-  receivedAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.receivedamount') }),
-      trigger: 'change'
-    }
-  ],
-  orderStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.orderstatus') }),
-      trigger: 'change'
-    }
-  ],
-  deliveryStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.deliverystatus') }),
-      trigger: 'change'
-    }
-  ],
-  deliveryMethod: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.deliverymethod') }),
-      trigger: 'change'
-    }
-  ],
-  paymentMethod: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.salesOrder.paymentmethod') }),
-      trigger: 'change'
-    }
-  ],
+  totalQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.totalquantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.totalquantity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  totalAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.totalamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.totalamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  discountAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.discountamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.discountamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.taxamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.taxamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  actualAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.actualamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.actualamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  receivedQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.receivedquantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.receivedquantity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  receivedAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.receivedamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.receivedamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  paidAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.paidamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.paidamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  orderStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.orderstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  deliveryStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.deliverystatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.deliverystatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  paymentMethod: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.paymentmethod') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.paymentmethod') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  deliveryMethod: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.deliverymethod') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseorder.deliverymethod') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await purchaseOrderItemTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('totalQuantity' in payload) {
+    const rawtotalQuantity = payload.totalQuantity
+    payload.totalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
+  }
+  if ('totalAmount' in payload) {
+    const rawtotalAmount = payload.totalAmount
+    payload.totalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
+  }
+  if ('discountAmount' in payload) {
+    const rawdiscountAmount = payload.discountAmount
+    payload.discountAmount = typeof rawdiscountAmount === 'number' ? rawdiscountAmount : Number(rawdiscountAmount)
+  }
+  if ('taxAmount' in payload) {
+    const rawtaxAmount = payload.taxAmount
+    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  }
+  if ('actualAmount' in payload) {
+    const rawactualAmount = payload.actualAmount
+    payload.actualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
+  }
+  if ('receivedQuantity' in payload) {
+    const rawreceivedQuantity = payload.receivedQuantity
+    payload.receivedQuantity = typeof rawreceivedQuantity === 'number' ? rawreceivedQuantity : Number(rawreceivedQuantity)
+  }
+  if ('receivedAmount' in payload) {
+    const rawreceivedAmount = payload.receivedAmount
+    payload.receivedAmount = typeof rawreceivedAmount === 'number' ? rawreceivedAmount : Number(rawreceivedAmount)
+  }
+  if ('paidAmount' in payload) {
+    const rawpaidAmount = payload.paidAmount
+    payload.paidAmount = typeof rawpaidAmount === 'number' ? rawpaidAmount : Number(rawpaidAmount)
+  }
+  if ('orderStatus' in payload) {
+    const raworderStatus = payload.orderStatus
+    payload.orderStatus = typeof raworderStatus === 'number' ? raworderStatus : Number(raworderStatus)
+  }
+  if ('deliveryStatus' in payload) {
+    const rawdeliveryStatus = payload.deliveryStatus
+    payload.deliveryStatus = typeof rawdeliveryStatus === 'number' ? rawdeliveryStatus : Number(rawdeliveryStatus)
+  }
+  if ('paymentMethod' in payload) {
+    const rawpaymentMethod = payload.paymentMethod
+    payload.paymentMethod = typeof rawpaymentMethod === 'number' ? rawpaymentMethod : Number(rawpaymentMethod)
+  }
+  if ('deliveryMethod' in payload) {
+    const rawdeliveryMethod = payload.deliveryMethod
+    payload.deliveryMethod = typeof rawdeliveryMethod === 'number' ? rawdeliveryMethod : Number(rawdeliveryMethod)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
-  childSalesOrderItemRows.value = []
-  childSalesOrderChangeLogRows.value = []
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.purchaseOrderId)
+  childPurchaseOrderItemRows.value = []
+  purchaseOrderItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

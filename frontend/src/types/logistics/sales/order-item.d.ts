@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
-// 文件名称：sales-order-item.d.ts
-// 创建时间：2026-06-09
+// 文件名称：order-item.d.ts
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -112,6 +112,11 @@ export interface SalesOrderItem extends CompanyDtoBase {
    * 行交货状态（0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus: number;
+
+  /**
+   * 销售订单主表 （主表：TaktSalesOrder）
+   */
+  salesOrder?: SalesOrder;
 
 }
 
@@ -226,7 +231,7 @@ export interface SalesOrderItemQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -340,7 +345,7 @@ export interface SalesOrderItemCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -443,7 +448,7 @@ export interface SalesOrderItemTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -517,7 +522,7 @@ export interface SalesOrderItemImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -626,7 +631,7 @@ export interface SalesOrderItemExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

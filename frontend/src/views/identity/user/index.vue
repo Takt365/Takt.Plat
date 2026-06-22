@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="identity-user p-4">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -73,9 +73,12 @@
       <!-- 自定义列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'userStatus'">
-          <TaktDictTag
-            :value="record.userStatus"
-            dict-type="sys_normal_disable"
+          <a-switch
+            :checked="record.userStatus === 1"
+            :disabled="isAdminUser(record)"
+            :checked-children="t('common.page.button.enable')"
+            :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleUserStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'userType'">
@@ -87,7 +90,7 @@
       </template>
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -107,6 +110,7 @@
       @cancel="handleFormCancel"
     >
       <UserForm
+        :key="formData?.userId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -146,7 +150,7 @@
       <a-form-item :label="t('entity.user.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.userStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.user.status') })"
           allow-clear
         />
@@ -210,6 +214,7 @@
 </template>
 
 <script setup lang="ts">
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 用户列表页脚本模块。
  * - API：@/api/identity/user；表单子组件为 ./components/user-form.vue。
@@ -231,6 +236,7 @@ import {
   updateUser,
   deleteUserById,
   deleteUserBatch,
+  updateUserStatus,
   unlock,
   exportUserData,
   getUserTemplate,
@@ -278,8 +284,8 @@ const loading = ref(false)
 // 表格数据
 const dataSource = ref<User[]>([])
 // 分页：当前页、每页条数、总条数
-const currentPage = ref(1)
-const pageSize = ref(20)
+const currentPage = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 // 行选择：单选行、多选行、勾选 key
 const selectedRow = ref<User | null>(null)
@@ -312,8 +318,36 @@ const currentAssignUser = ref<UserAssignRecord | null>(null)
 const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 
-// 初始化时加载数据
-onMounted(() => {
+/**
+ * 构建列表查询参数
+ * @param overrides 覆盖分页等字段
+ * @returns {UserQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<UserQuery>): UserQuery {
+  const query: UserQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  if (advancedQueryForm.value.username) {
+    query.username = advancedQueryForm.value.username
+  }
+  if (advancedQueryForm.value.nickname) {
+    query.nickname = advancedQueryForm.value.nickname
+  }
+  if (advancedQueryForm.value.userStatus !== undefined) {
+    query.userStatus = advancedQueryForm.value.userStatus
+  }
+  return query
+}
+
+/** 页面挂载：加载分页配置后拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
@@ -567,25 +601,7 @@ const onClickRow = (record: UserTableRow) => {
 const loadData = async () => {
   try {
     loading.value = true
-    const params: UserQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value
-    }
-
-    if (queryKeyword.value) {
-      params.keyWords = queryKeyword.value
-    }
-    if (advancedQueryForm.value.username) {
-      params.username = advancedQueryForm.value.username
-    }
-    if (advancedQueryForm.value.nickname) {
-      params.nickname = advancedQueryForm.value.nickname
-    }
-    if (advancedQueryForm.value.userStatus !== undefined) {
-      params.userStatus = advancedQueryForm.value.userStatus
-    }
-
-    const response = await getUserList(params)
+    const response = await getUserList(buildListQuery())
     const responseAny = response as { Data?: User[]; Total?: number }
     const items = response?.data ?? responseAny?.Data ?? []
     const totalCount = response?.total ?? responseAny?.Total ?? 0
@@ -607,15 +623,37 @@ useTableRefresh(loadData)
 
 // 查询
 const handleSearch = () => {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
+}
+
+/**
+ * 表格行内切换用户状态（sys_normal_disable_status：1=启用，0=禁用）
+ * @param record 当前行
+ * @param checked 开关是否选中（启用）
+ */
+const handleUserStatusChange = async (record: User, checked: boolean) => {
+  const id = getUserId(record)
+  if (!id || isAdminUser(record)) return
+  const newStatus = checked ? 1 : 0
+  const oldStatus = record.userStatus
+  record.userStatus = newStatus
+  try {
+    await updateUserStatus(id, { userId: id, userStatus: newStatus })
+    message.success(t('common.feedback.updated'))
+  } catch (error: unknown) {
+    record.userStatus = oldStatus
+    const err = error as { message?: string }
+    userLogger.error('状态更新失败', { action: 'updateUserStatus', userId: id }, error)
+    message.error(err?.message || t('common.feedback.failed'))
+  }
 }
 
 // 重置
 const handleReset = () => {
   queryKeyword.value = ''
   advancedQueryForm.value = emptyUserAdvancedQueryForm()
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -632,8 +670,10 @@ const handlePaginationChange = (page: number, size: number) => {
   pageSize.value = size
   loadData()
 }
+
+/** 分页每页条数变更（重置到第 1 页） */
 const handlePaginationSizeChange = (_current: number, size: number) => {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
   loadData()
 }
@@ -990,7 +1030,7 @@ const handleAdvancedQuery = () => {
 
 // 高级查询提交
 const handleAdvancedQuerySubmit = (_values?: Record<string, any>) => {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
   advancedQueryVisible.value = false
 }

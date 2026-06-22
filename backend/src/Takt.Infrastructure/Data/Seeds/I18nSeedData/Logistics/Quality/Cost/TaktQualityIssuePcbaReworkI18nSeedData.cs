@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailurePcbaReworkI18nSeedData.cs
-// 创建时间：2026-06-12
+// 文件名称：TaktQualityIssuePcbaReworkI18nSeedData.cs
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktQualityFailurePcbaRework 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktQualityIssuePcbaRework 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -20,10 +20,10 @@ using Takt.Shared.Helpers;
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost;
 
 /// <summary>
-/// TaktQualityFailurePcbaRework 实体国际化翻译种子（键前缀 entity.qualityfailurepcbarework.*）
+/// TaktQualityIssuePcbaRework 实体国际化翻译种子（键前缀 entity.qualityissuepcbarework.*）
 /// 幂等性：存在则更新，不存在则创建
 /// </summary>
-public class TaktQualityFailurePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
+public class TaktQualityIssuePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
 {
     /// <summary>
     /// 执行顺序（实体翻译种子，位于部门翻译之后）
@@ -35,7 +35,7 @@ public class TaktQualityFailurePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
     /// </summary>
     public async Task<(int InsertCount, int UpdateCount)> SeedAsync(IServiceProvider serviceProvider, string? tenantCode = null)
     {
-        TaktLogger.Information("开始初始化 TaktQualityFailurePcbaRework 实体国际化翻译种子...");
+        TaktLogger.Information("开始初始化 TaktQualityIssuePcbaRework 实体国际化翻译种子...");
 
         if (string.IsNullOrEmpty(tenantCode))
         {
@@ -50,9 +50,9 @@ public class TaktQualityFailurePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
         int insertCount = 0;
         int updateCount = 0;
 
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityfailurepcbarework 实体翻译...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化 qualityissuepcbarework 实体翻译...", tenantCode);
 
-        foreach (var item in GetQualityFailurePcbaReworkTranslations())
+        foreach (var item in GetQualityIssuePcbaReworkTranslations())
         {
             if (!cultureIdByCode.TryGetValue(item.CultureCode, out var cultureId))
             {
@@ -69,188 +69,188 @@ public class TaktQualityFailurePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
             updateCount += u;
         }
 
-        TaktLogger.Information("TaktQualityFailurePcbaRework 实体翻译种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
+        TaktLogger.Information("TaktQualityIssuePcbaRework 实体翻译种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
         return (insertCount, updateCount);
     }
 
     /// <summary>
-    /// TaktQualityFailurePcbaRework 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.qualityfailurepcbarework._self / entity.qualityfailurepcbarework.{{field}}；ResourceGroup=4；ResourceType=0
+    /// TaktQualityIssuePcbaRework 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
+    /// I18nKey：entity.qualityissuepcbarework._self / entity.qualityissuepcbarework.{{field}}；ResourceGroup=Cost；ResourceType=frontend
     /// </summary>
-    private static List<TranslationSeedItem> GetQualityFailurePcbaReworkTranslations()
+    private static List<TranslationSeedItem> GetQualityIssuePcbaReworkTranslations()
     {
         return new List<TranslationSeedItem>
         {
-            // entity.qualityfailurepcbarework._self
-            new TranslationSeedItem("entity.qualityfailurepcbarework._self", "en-US", "Quality Failure Pcba Rework Information", "实体名称"),
-            // entity.qualityfailurepcbarework._self
-            new TranslationSeedItem("entity.qualityfailurepcbarework._self", "ja-JP", "品质问题应对明细 - PCBA不良改修应对信息", "实体名称"),
-            // entity.qualityfailurepcbarework._self
-            new TranslationSeedItem("entity.qualityfailurepcbarework._self", "zh-CN", "品质问题应对明细 - PCBA不良改修应对信息", "实体名称"),
-            // entity.qualityfailurepcbarework._self
-            new TranslationSeedItem("entity.qualityfailurepcbarework._self", "zh-HK", "品质问题应对明细 - PCBA不良改修应对信息", "实体名称"),
+            // entity.qualityissuepcbarework._self
+            new TranslationSeedItem("entity.qualityissuepcbarework._self", "en-US", "Quality Issue Pcba Rework Information_us", "实体名称"),
+            // entity.qualityissuepcbarework._self
+            new TranslationSeedItem("entity.qualityissuepcbarework._self", "ja-JP", "品质问题应对明细 - PCBA不良改修应对信息_jp", "实体名称"),
+            // entity.qualityissuepcbarework._self
+            new TranslationSeedItem("entity.qualityissuepcbarework._self", "zh-CN", "品质问题应对明细 - PCBA不良改修应对信息", "实体名称"),
+            // entity.qualityissuepcbarework._self
+            new TranslationSeedItem("entity.qualityissuepcbarework._self", "zh-HK", "品质问题应对明细 - PCBA不良改修应对信息_hk", "实体名称"),
 
-            // entity.qualityfailurepcbarework.qualityfailureid
-            new TranslationSeedItem("entity.qualityfailurepcbarework.qualityfailureid", "en-US", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityfailurepcbarework.qualityfailureid
-            new TranslationSeedItem("entity.qualityfailurepcbarework.qualityfailureid", "ja-JP", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityfailurepcbarework.qualityfailureid
-            new TranslationSeedItem("entity.qualityfailurepcbarework.qualityfailureid", "zh-CN", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
-            // entity.qualityfailurepcbarework.qualityfailureid
-            new TranslationSeedItem("entity.qualityfailurepcbarework.qualityfailureid", "zh-HK", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityissuepcbarework.qualityissueid
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "en-US", "品质问题主表ID_us", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityissuepcbarework.qualityissueid
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "ja-JP", "品质问题主表ID_jp", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityissuepcbarework.qualityissueid
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "zh-CN", "品质问题主表ID", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
+            // entity.qualityissuepcbarework.qualityissueid
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表ID(主子表关系,序列化为string以避免Javascript精度问题)"),
 
-            // entity.qualityfailurepcbarework.qualityfailurecode
-            new TranslationSeedItem("entity.qualityfailurepcbarework.qualityfailurecode", "en-US", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
-            // entity.qualityfailurepcbarework.qualityfailurecode
-            new TranslationSeedItem("entity.qualityfailurepcbarework.qualityfailurecode", "ja-JP", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
-            // entity.qualityfailurepcbarework.qualityfailurecode
-            new TranslationSeedItem("entity.qualityfailurepcbarework.qualityfailurecode", "zh-CN", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
-            // entity.qualityfailurepcbarework.qualityfailurecode
-            new TranslationSeedItem("entity.qualityfailurepcbarework.qualityfailurecode", "zh-HK", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityissuepcbarework.qualityissuecode
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissuecode", "en-US", "品质问题编码_us", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityissuepcbarework.qualityissuecode
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissuecode", "ja-JP", "品质问题编码_jp", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityissuepcbarework.qualityissuecode
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissuecode", "zh-CN", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
+            // entity.qualityissuepcbarework.qualityissuecode
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissuecode", "zh-HK", "品质问题编码_hk", "品质问题编码（冗余字段，便于查询）"),
 
-            // entity.qualityfailurepcbarework.linenumber
-            new TranslationSeedItem("entity.qualityfailurepcbarework.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.qualityfailurepcbarework.linenumber
-            new TranslationSeedItem("entity.qualityfailurepcbarework.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.qualityfailurepcbarework.linenumber
-            new TranslationSeedItem("entity.qualityfailurepcbarework.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.qualityfailurepcbarework.linenumber
-            new TranslationSeedItem("entity.qualityfailurepcbarework.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityissuepcbarework.linenumber
+            new TranslationSeedItem("entity.qualityissuepcbarework.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityissuepcbarework.linenumber
+            new TranslationSeedItem("entity.qualityissuepcbarework.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityissuepcbarework.linenumber
+            new TranslationSeedItem("entity.qualityissuepcbarework.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.qualityissuepcbarework.linenumber
+            new TranslationSeedItem("entity.qualityissuepcbarework.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
-            // entity.qualityfailurepcbarework.pcbadefectparts
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbadefectparts", "en-US", "PCBA不良内容", "PCBA不良内容(Parts/Components)"),
-            // entity.qualityfailurepcbarework.pcbadefectparts
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbadefectparts", "ja-JP", "PCBA不良内容", "PCBA不良内容(Parts/Components)"),
-            // entity.qualityfailurepcbarework.pcbadefectparts
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbadefectparts", "zh-CN", "PCBA不良内容", "PCBA不良内容(Parts/Components)"),
-            // entity.qualityfailurepcbarework.pcbadefectparts
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbadefectparts", "zh-HK", "PCBA不良内容", "PCBA不良内容(Parts/Components)"),
+            // entity.qualityissuepcbarework.pcbadefectparts
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbadefectparts", "en-US", "PCBA不良内容_us", "PCBA不良内容(Parts/Components)"),
+            // entity.qualityissuepcbarework.pcbadefectparts
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbadefectparts", "ja-JP", "PCBA不良内容_jp", "PCBA不良内容(Parts/Components)"),
+            // entity.qualityissuepcbarework.pcbadefectparts
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbadefectparts", "zh-CN", "PCBA不良内容", "PCBA不良内容(Parts/Components)"),
+            // entity.qualityissuepcbarework.pcbadefectparts
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbadefectparts", "zh-HK", "PCBA不良内容_hk", "PCBA不良内容(Parts/Components)"),
 
-            // entity.qualityfailurepcbarework.pcbareworkcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworkcost", "en-US", "PCBA选别改修费用", "PCBA选别・改修费用（元）"),
-            // entity.qualityfailurepcbarework.pcbareworkcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworkcost", "ja-JP", "PCBA选别改修费用", "PCBA选别・改修费用（元）"),
-            // entity.qualityfailurepcbarework.pcbareworkcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworkcost", "zh-CN", "PCBA选别改修费用", "PCBA选别・改修费用（元）"),
-            // entity.qualityfailurepcbarework.pcbareworkcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworkcost", "zh-HK", "PCBA选别改修费用", "PCBA选别・改修费用（元）"),
+            // entity.qualityissuepcbarework.pcbareworkcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworkcost", "en-US", "PCBA选别改修费用_us", "PCBA选别・改修费用（元）"),
+            // entity.qualityissuepcbarework.pcbareworkcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworkcost", "ja-JP", "PCBA选别改修费用_jp", "PCBA选别・改修费用（元）"),
+            // entity.qualityissuepcbarework.pcbareworkcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworkcost", "zh-CN", "PCBA选别改修费用", "PCBA选别・改修费用（元）"),
+            // entity.qualityissuepcbarework.pcbareworkcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworkcost", "zh-HK", "PCBA选别改修费用_hk", "PCBA选别・改修费用（元）"),
 
-            // entity.qualityfailurepcbarework.pcbareworktimeminutes
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworktimeminutes", "en-US", "PCBA选别改修时间", "PCBA选别・改修时间（分钟）"),
-            // entity.qualityfailurepcbarework.pcbareworktimeminutes
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworktimeminutes", "ja-JP", "PCBA选别改修时间", "PCBA选别・改修时间（分钟）"),
-            // entity.qualityfailurepcbarework.pcbareworktimeminutes
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworktimeminutes", "zh-CN", "PCBA选别改修时间", "PCBA选别・改修时间（分钟）"),
-            // entity.qualityfailurepcbarework.pcbareworktimeminutes
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworktimeminutes", "zh-HK", "PCBA选别改修时间", "PCBA选别・改修时间（分钟）"),
+            // entity.qualityissuepcbarework.pcbareworktimeminutes
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworktimeminutes", "en-US", "PCBA选别改修时间_us", "PCBA选别・改修时间（分钟）"),
+            // entity.qualityissuepcbarework.pcbareworktimeminutes
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworktimeminutes", "ja-JP", "PCBA选别改修时间_jp", "PCBA选别・改修时间（分钟）"),
+            // entity.qualityissuepcbarework.pcbareworktimeminutes
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworktimeminutes", "zh-CN", "PCBA选别改修时间", "PCBA选别・改修时间（分钟）"),
+            // entity.qualityissuepcbarework.pcbareworktimeminutes
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworktimeminutes", "zh-HK", "PCBA选别改修时间_hk", "PCBA选别・改修时间（分钟）"),
 
-            // entity.qualityfailurepcbarework.pcbareinspectiontimeminutes
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareinspectiontimeminutes", "en-US", "PCBA再检查时间", "PCBA再检查时间（分钟）"),
-            // entity.qualityfailurepcbarework.pcbareinspectiontimeminutes
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareinspectiontimeminutes", "ja-JP", "PCBA再检查时间", "PCBA再检查时间（分钟）"),
-            // entity.qualityfailurepcbarework.pcbareinspectiontimeminutes
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareinspectiontimeminutes", "zh-CN", "PCBA再检查时间", "PCBA再检查时间（分钟）"),
-            // entity.qualityfailurepcbarework.pcbareinspectiontimeminutes
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareinspectiontimeminutes", "zh-HK", "PCBA再检查时间", "PCBA再检查时间（分钟）"),
+            // entity.qualityissuepcbarework.pcbareinspectiontimeminutes
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareinspectiontimeminutes", "en-US", "PCBA再检查时间_us", "PCBA再检查时间（分钟）"),
+            // entity.qualityissuepcbarework.pcbareinspectiontimeminutes
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareinspectiontimeminutes", "ja-JP", "PCBA再检查时间_jp", "PCBA再检查时间（分钟）"),
+            // entity.qualityissuepcbarework.pcbareinspectiontimeminutes
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareinspectiontimeminutes", "zh-CN", "PCBA再检查时间", "PCBA再检查时间（分钟）"),
+            // entity.qualityissuepcbarework.pcbareinspectiontimeminutes
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareinspectiontimeminutes", "zh-HK", "PCBA再检查时间_hk", "PCBA再检查时间（分钟）"),
 
-            // entity.qualityfailurepcbarework.pcbatravelcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbatravelcost", "en-US", "PCBA交通费旅费", "PCBA交通费、旅费（元）"),
-            // entity.qualityfailurepcbarework.pcbatravelcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbatravelcost", "ja-JP", "PCBA交通费旅费", "PCBA交通费、旅费（元）"),
-            // entity.qualityfailurepcbarework.pcbatravelcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbatravelcost", "zh-CN", "PCBA交通费旅费", "PCBA交通费、旅费（元）"),
-            // entity.qualityfailurepcbarework.pcbatravelcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbatravelcost", "zh-HK", "PCBA交通费旅费", "PCBA交通费、旅费（元）"),
+            // entity.qualityissuepcbarework.pcbatravelcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbatravelcost", "en-US", "PCBA交通费旅费_us", "PCBA交通费、旅费（元）"),
+            // entity.qualityissuepcbarework.pcbatravelcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbatravelcost", "ja-JP", "PCBA交通费旅费_jp", "PCBA交通费、旅费（元）"),
+            // entity.qualityissuepcbarework.pcbatravelcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbatravelcost", "zh-CN", "PCBA交通费旅费", "PCBA交通费、旅费（元）"),
+            // entity.qualityissuepcbarework.pcbatravelcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbatravelcost", "zh-HK", "PCBA交通费旅费_hk", "PCBA交通费、旅费（元）"),
 
-            // entity.qualityfailurepcbarework.pcbawarehousecost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbawarehousecost", "en-US", "PCBA仓库管理费", "PCBA仓库管理费（元）"),
-            // entity.qualityfailurepcbarework.pcbawarehousecost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbawarehousecost", "ja-JP", "PCBA仓库管理费", "PCBA仓库管理费（元）"),
-            // entity.qualityfailurepcbarework.pcbawarehousecost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbawarehousecost", "zh-CN", "PCBA仓库管理费", "PCBA仓库管理费（元）"),
-            // entity.qualityfailurepcbarework.pcbawarehousecost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbawarehousecost", "zh-HK", "PCBA仓库管理费", "PCBA仓库管理费（元）"),
+            // entity.qualityissuepcbarework.pcbawarehousecost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbawarehousecost", "en-US", "PCBA仓库管理费_us", "PCBA仓库管理费（元）"),
+            // entity.qualityissuepcbarework.pcbawarehousecost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbawarehousecost", "ja-JP", "PCBA仓库管理费_jp", "PCBA仓库管理费（元）"),
+            // entity.qualityissuepcbarework.pcbawarehousecost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbawarehousecost", "zh-CN", "PCBA仓库管理费", "PCBA仓库管理费（元）"),
+            // entity.qualityissuepcbarework.pcbawarehousecost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbawarehousecost", "zh-HK", "PCBA仓库管理费_hk", "PCBA仓库管理费（元）"),
 
-            // entity.qualityfailurepcbarework.pcbaotherexpenses
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbaotherexpenses", "en-US", "PCBA选别改修其他费用", "PCBA选别・改修其他费用（元）"),
-            // entity.qualityfailurepcbarework.pcbaotherexpenses
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbaotherexpenses", "ja-JP", "PCBA选别改修其他费用", "PCBA选别・改修其他费用（元）"),
-            // entity.qualityfailurepcbarework.pcbaotherexpenses
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbaotherexpenses", "zh-CN", "PCBA选别改修其他费用", "PCBA选别・改修其他费用（元）"),
-            // entity.qualityfailurepcbarework.pcbaotherexpenses
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbaotherexpenses", "zh-HK", "PCBA选别改修其他费用", "PCBA选别・改修其他费用（元）"),
+            // entity.qualityissuepcbarework.pcbaotherexpenses
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbaotherexpenses", "en-US", "PCBA选别改修其他费用_us", "PCBA选别・改修其他费用（元）"),
+            // entity.qualityissuepcbarework.pcbaotherexpenses
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbaotherexpenses", "ja-JP", "PCBA选别改修其他费用_jp", "PCBA选别・改修其他费用（元）"),
+            // entity.qualityissuepcbarework.pcbaotherexpenses
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbaotherexpenses", "zh-CN", "PCBA选别改修其他费用", "PCBA选别・改修其他费用（元）"),
+            // entity.qualityissuepcbarework.pcbaotherexpenses
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbaotherexpenses", "zh-HK", "PCBA选别改修其他费用_hk", "PCBA选别・改修其他费用（元）"),
 
-            // entity.qualityfailurepcbarework.pcbareworknote
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworknote", "en-US", "PCBA选别改修备注", "PCBA选别・改修备注"),
-            // entity.qualityfailurepcbarework.pcbareworknote
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworknote", "ja-JP", "PCBA选别改修备注", "PCBA选别・改修备注"),
-            // entity.qualityfailurepcbarework.pcbareworknote
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworknote", "zh-CN", "PCBA选别改修备注", "PCBA选别・改修备注"),
-            // entity.qualityfailurepcbarework.pcbareworknote
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbareworknote", "zh-HK", "PCBA选别改修备注", "PCBA选别・改修备注"),
+            // entity.qualityissuepcbarework.pcbareworknote
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworknote", "en-US", "PCBA选别改修备注_us", "PCBA选别・改修备注"),
+            // entity.qualityissuepcbarework.pcbareworknote
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworknote", "ja-JP", "PCBA选别改修备注_jp", "PCBA选别・改修备注"),
+            // entity.qualityissuepcbarework.pcbareworknote
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworknote", "zh-CN", "PCBA选别改修备注", "PCBA选别・改修备注"),
+            // entity.qualityissuepcbarework.pcbareworknote
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbareworknote", "zh-HK", "PCBA选别改修备注_hk", "PCBA选别・改修备注"),
 
-            // entity.qualityfailurepcbarework.pcbascrapcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbascrapcost", "en-US", "PCBA向顾客费用请求", "PCBA向顾客的费用请求（元）"),
-            // entity.qualityfailurepcbarework.pcbascrapcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbascrapcost", "ja-JP", "PCBA向顾客费用请求", "PCBA向顾客的费用请求（元）"),
-            // entity.qualityfailurepcbarework.pcbascrapcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbascrapcost", "zh-CN", "PCBA向顾客费用请求", "PCBA向顾客的费用请求（元）"),
-            // entity.qualityfailurepcbarework.pcbascrapcost
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbascrapcost", "zh-HK", "PCBA向顾客费用请求", "PCBA向顾客的费用请求（元）"),
+            // entity.qualityissuepcbarework.pcbascrapcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbascrapcost", "en-US", "PCBA向顾客费用请求_us", "PCBA向顾客的费用请求（元）"),
+            // entity.qualityissuepcbarework.pcbascrapcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbascrapcost", "ja-JP", "PCBA向顾客费用请求_jp", "PCBA向顾客的费用请求（元）"),
+            // entity.qualityissuepcbarework.pcbascrapcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbascrapcost", "zh-CN", "PCBA向顾客费用请求", "PCBA向顾客的费用请求（元）"),
+            // entity.qualityissuepcbarework.pcbascrapcost
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbascrapcost", "zh-HK", "PCBA向顾客费用请求_hk", "PCBA向顾客的费用请求（元）"),
 
-            // entity.qualityfailurepcbarework.pcbacustomername
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbacustomername", "en-US", "PCBA顾客名", "PCBA顾客名"),
-            // entity.qualityfailurepcbarework.pcbacustomername
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbacustomername", "ja-JP", "PCBA顾客名", "PCBA顾客名"),
-            // entity.qualityfailurepcbarework.pcbacustomername
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbacustomername", "zh-CN", "PCBA顾客名", "PCBA顾客名"),
-            // entity.qualityfailurepcbarework.pcbacustomername
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbacustomername", "zh-HK", "PCBA顾客名", "PCBA顾客名"),
+            // entity.qualityissuepcbarework.pcbacustomername
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername", "en-US", "PCBA顾客名_us", "PCBA顾客名"),
+            // entity.qualityissuepcbarework.pcbacustomername
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername", "ja-JP", "PCBA顾客名_jp", "PCBA顾客名"),
+            // entity.qualityissuepcbarework.pcbacustomername
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername", "zh-CN", "PCBA顾客名", "PCBA顾客名"),
+            // entity.qualityissuepcbarework.pcbacustomername
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername", "zh-HK", "PCBA顾客名_hk", "PCBA顾客名"),
 
-            // entity.qualityfailurepcbarework.pcbadebitnoteno
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbadebitnoteno", "en-US", "PCBA Debit Note No", "PCBA Debit Note No"),
-            // entity.qualityfailurepcbarework.pcbadebitnoteno
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbadebitnoteno", "ja-JP", "PCBA Debit Note No", "PCBA Debit Note No"),
-            // entity.qualityfailurepcbarework.pcbadebitnoteno
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbadebitnoteno", "zh-CN", "PCBA Debit Note No", "PCBA Debit Note No"),
-            // entity.qualityfailurepcbarework.pcbadebitnoteno
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbadebitnoteno", "zh-HK", "PCBA Debit Note No", "PCBA Debit Note No"),
+            // entity.qualityissuepcbarework.pcbadebitnoteno
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbadebitnoteno", "en-US", "PCBA Debit Note No_us", "PCBA Debit Note No"),
+            // entity.qualityissuepcbarework.pcbadebitnoteno
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbadebitnoteno", "ja-JP", "PCBA Debit Note No_jp", "PCBA Debit Note No"),
+            // entity.qualityissuepcbarework.pcbadebitnoteno
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbadebitnoteno", "zh-CN", "PCBA Debit Note No", "PCBA Debit Note No"),
+            // entity.qualityissuepcbarework.pcbadebitnoteno
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbadebitnoteno", "zh-HK", "PCBA Debit Note No_hk", "PCBA Debit Note No"),
 
-            // entity.qualityfailurepcbarework.pcbaotherexpenses2
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbaotherexpenses2", "en-US", "PCBA其他费用", "PCBA其他费用（元）"),
-            // entity.qualityfailurepcbarework.pcbaotherexpenses2
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbaotherexpenses2", "ja-JP", "PCBA其他费用", "PCBA其他费用（元）"),
-            // entity.qualityfailurepcbarework.pcbaotherexpenses2
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbaotherexpenses2", "zh-CN", "PCBA其他费用", "PCBA其他费用（元）"),
-            // entity.qualityfailurepcbarework.pcbaotherexpenses2
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbaotherexpenses2", "zh-HK", "PCBA其他费用", "PCBA其他费用（元）"),
+            // entity.qualityissuepcbarework.pcbaotherexpenses2
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbaotherexpenses2", "en-US", "PCBA其他费用_us", "PCBA其他费用（元）"),
+            // entity.qualityissuepcbarework.pcbaotherexpenses2
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbaotherexpenses2", "ja-JP", "PCBA其他费用_jp", "PCBA其他费用（元）"),
+            // entity.qualityissuepcbarework.pcbaotherexpenses2
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbaotherexpenses2", "zh-CN", "PCBA其他费用", "PCBA其他费用（元）"),
+            // entity.qualityissuepcbarework.pcbaotherexpenses2
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbaotherexpenses2", "zh-HK", "PCBA其他费用_hk", "PCBA其他费用（元）"),
 
-            // entity.qualityfailurepcbarework.pcbanote
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbanote", "en-US", "PCBA备注", "PCBA备注"),
-            // entity.qualityfailurepcbarework.pcbanote
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbanote", "ja-JP", "PCBA备注", "PCBA备注"),
-            // entity.qualityfailurepcbarework.pcbanote
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbanote", "zh-CN", "PCBA备注", "PCBA备注"),
-            // entity.qualityfailurepcbarework.pcbanote
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbanote", "zh-HK", "PCBA备注", "PCBA备注"),
+            // entity.qualityissuepcbarework.pcbanote
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbanote", "en-US", "PCBA备注_us", "PCBA备注"),
+            // entity.qualityissuepcbarework.pcbanote
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbanote", "ja-JP", "PCBA备注_jp", "PCBA备注"),
+            // entity.qualityissuepcbarework.pcbanote
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbanote", "zh-CN", "PCBA备注", "PCBA备注"),
+            // entity.qualityissuepcbarework.pcbanote
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbanote", "zh-HK", "PCBA备注_hk", "PCBA备注"),
 
-            // entity.qualityfailurepcbarework.pcbarecorder
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbarecorder", "en-US", "PCBA不良改修对应记录者", "PCBA不良改修应对记录者"),
-            // entity.qualityfailurepcbarework.pcbarecorder
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbarecorder", "ja-JP", "PCBA不良改修对应记录者", "PCBA不良改修应对记录者"),
-            // entity.qualityfailurepcbarework.pcbarecorder
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbarecorder", "zh-CN", "PCBA不良改修对应记录者", "PCBA不良改修应对记录者"),
-            // entity.qualityfailurepcbarework.pcbarecorder
-            new TranslationSeedItem("entity.qualityfailurepcbarework.pcbarecorder", "zh-HK", "PCBA不良改修对应记录者", "PCBA不良改修应对记录者"),
+            // entity.qualityissuepcbarework.pcbarecorder
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbarecorder", "en-US", "PCBA不良改修对应记录者_us", "PCBA不良改修应对记录者"),
+            // entity.qualityissuepcbarework.pcbarecorder
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbarecorder", "ja-JP", "PCBA不良改修对应记录者_jp", "PCBA不良改修应对记录者"),
+            // entity.qualityissuepcbarework.pcbarecorder
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbarecorder", "zh-CN", "PCBA不良改修对应记录者", "PCBA不良改修应对记录者"),
+            // entity.qualityissuepcbarework.pcbarecorder
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbarecorder", "zh-HK", "PCBA不良改修对应记录者_hk", "PCBA不良改修应对记录者"),
 
-            // entity.qualityfailurepcbarework.issue
-            new TranslationSeedItem("entity.qualityfailurepcbarework.issue", "en-US", "质量问题主表", "质量问题主表（导航属性）"),
-            // entity.qualityfailurepcbarework.issue
-            new TranslationSeedItem("entity.qualityfailurepcbarework.issue", "ja-JP", "质量问题主表", "质量问题主表（导航属性）"),
-            // entity.qualityfailurepcbarework.issue
-            new TranslationSeedItem("entity.qualityfailurepcbarework.issue", "zh-CN", "质量问题主表", "质量问题主表（导航属性）"),
-            // entity.qualityfailurepcbarework.issue
-            new TranslationSeedItem("entity.qualityfailurepcbarework.issue", "zh-HK", "质量问题主表", "质量问题主表（导航属性）"),
+            // entity.qualityissuepcbarework.issue
+            new TranslationSeedItem("entity.qualityissuepcbarework.issue", "en-US", "质量问题主表_us", "质量问题主表（导航属性）"),
+            // entity.qualityissuepcbarework.issue
+            new TranslationSeedItem("entity.qualityissuepcbarework.issue", "ja-JP", "质量问题主表_jp", "质量问题主表（导航属性）"),
+            // entity.qualityissuepcbarework.issue
+            new TranslationSeedItem("entity.qualityissuepcbarework.issue", "zh-CN", "质量问题主表", "质量问题主表（导航属性）"),
+            // entity.qualityissuepcbarework.issue
+            new TranslationSeedItem("entity.qualityissuepcbarework.issue", "zh-HK", "质量问题主表_hk", "质量问题主表（导航属性）"),
         };
     }
 
@@ -268,10 +268,10 @@ public class TaktQualityFailurePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Cost";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -41,9 +41,7 @@ export function getSocialInsuranceList(queryDto: any): Promise<TaktPagedResult<S
   return request<TaktPagedResult<SocialInsurance>>({
     url: `${SOCIAL_INSURANCE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportSocialInsurance(
     url: `${SOCIAL_INSURANCE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

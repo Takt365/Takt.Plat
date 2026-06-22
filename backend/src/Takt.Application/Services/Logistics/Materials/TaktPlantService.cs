@@ -97,7 +97,7 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
     {
         var list = await _plantRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
-            x => x.PlantName,
+            x => x.PlantName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -372,7 +372,7 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
                 || SqlFunc.ToString(x.PlantExistence).Contains(keywords)
                 || SqlFunc.ToString(x.PlantStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EstablishmentDate).Contains(keywords)
                 || SqlFunc.ToString(x.ClosingDate).Contains(keywords)
@@ -570,9 +570,9 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

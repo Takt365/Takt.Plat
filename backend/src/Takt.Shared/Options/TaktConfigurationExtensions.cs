@@ -134,7 +134,7 @@ public static class TaktConfigurationExtensions
     }
 
     /// <summary>
-    /// 绑定并校验 <c>Ftp:{provider}</c> 节（提供商标识与 <c>sys_ftp_provider</c> 字典值一致）
+    /// 绑定并校验 <c>Ftp:{provider}</c> 节（提供商标识与 <c>sys_ftp_provider_type</c> 字典值一致）
     /// </summary>
     /// <param name="configuration">应用配置</param>
     /// <param name="provider">FTP 提供商标识，如 <c>teac_cn</c></param>
@@ -151,7 +151,7 @@ public static class TaktConfigurationExtensions
     }
 
     /// <summary>
-    /// 绑定并校验 <c>Oss:{provider}</c> 节（提供商标识与 <c>sys_oss_provider</c> 字典值一致）
+    /// 绑定并校验 <c>Oss:{provider}</c> 节（提供商标识与 <c>sys_oss_provider_type</c> 字典值一致）
     /// </summary>
     /// <param name="configuration">应用配置</param>
     /// <param name="provider">OSS 提供商标识，如 <c>aliyun</c></param>
@@ -223,6 +223,18 @@ public static class TaktConfigurationExtensions
     public static TaktEmailOptions RequireEmail(this IConfiguration configuration)
     {
         var options = configuration.RequireOptions<TaktEmailOptions>(TaktEmailOptions.SectionName);
+        options.Validate();
+        return options;
+    }
+
+    /// <summary>
+    /// 绑定并校验 <c>Paged</c> 节（列表默认页码/页大小/上限）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    /// <returns>分页配置</returns>
+    public static TaktPagedOptions RequirePaged(this IConfiguration configuration)
+    {
+        var options = configuration.RequireOptions<TaktPagedOptions>(TaktPagedOptions.SectionName);
         options.Validate();
         return options;
     }

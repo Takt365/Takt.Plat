@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/announcement
 // 文件名称：announcement.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/announcement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 公告通知实体 用于发布系统公告、通知、新闻等信息 支持富文本内容、附件、置顶、定时发布等功能 需要审批流程：草稿→审批→发布
+ * 公告通知实体 用于发布系统公告、通知等信息 支持富文本内容、附件、置顶、定时发布等功能 需要审批流程：草稿→审批→发布
  * 对应前端 TaktAnnouncementDto
  * 继承 TaktApprovalDtoBase
  * 对应前端 Announcement
@@ -34,7 +34,7 @@ export interface Announcement extends ApprovalDtoBase {
   title: string;
 
   /**
-   * 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+   * 公告类型（字典 sys_announcement_category）
    */
   announcementType: number;
 
@@ -104,7 +104,7 @@ export interface Announcement extends ApprovalDtoBase {
   targetUsers?: string;
 
   /**
-   * 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+   * 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
    */
   announcementStatus: number;
 
@@ -134,7 +134,7 @@ export interface AnnouncementQuery extends TaktPagedQuery {
   title?: string;
 
   /**
-   * 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+   * 公告类型（字典 sys_announcement_category）
    */
   announcementType?: number;
 
@@ -214,7 +214,7 @@ export interface AnnouncementQuery extends TaktPagedQuery {
   targetUsers?: string;
 
   /**
-   * 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+   * 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
    */
   announcementStatus?: number;
 
@@ -254,6 +254,11 @@ export interface AnnouncementQuery extends TaktPagedQuery {
   approvedAtEnd?: string;
 
   /**
+   * 流程实例 ID
+   */
+  flowInstanceId?: string;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -266,7 +271,7 @@ export interface AnnouncementQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -303,7 +308,7 @@ export interface AnnouncementCreate {
   title: string;
 
   /**
-   * 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+   * 公告类型（字典 sys_announcement_category）
    */
   announcementType: number;
 
@@ -373,14 +378,14 @@ export interface AnnouncementCreate {
   targetUsers?: string;
 
   /**
-   * 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+   * 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
    */
   announcementStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -417,7 +422,7 @@ export interface AnnouncementStatus {
   announcementId: string;
 
   /**
-   * 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+   * 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
    */
   announcementStatus: number;
 
@@ -446,7 +451,7 @@ export interface AnnouncementTemplate {
   title?: string;
 
   /**
-   * 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+   * 公告类型（字典 sys_announcement_category）
    */
   announcementType?: number;
 
@@ -503,7 +508,7 @@ export interface AnnouncementTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -540,7 +545,7 @@ export interface AnnouncementImport {
   title?: string;
 
   /**
-   * 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+   * 公告类型（字典 sys_announcement_category）
    */
   announcementType?: number;
 
@@ -597,7 +602,7 @@ export interface AnnouncementImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -624,7 +629,7 @@ export interface AnnouncementExport {
   title: string;
 
   /**
-   * 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+   * 公告类型（字典 sys_announcement_category）
    */
   announcementType: number;
 
@@ -694,14 +699,14 @@ export interface AnnouncementExport {
   targetUsers?: string;
 
   /**
-   * 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+   * 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
    */
   announcementStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

@@ -206,6 +206,7 @@ import {{ table.entity_name_pascal }}Form from './components/{{ table.entity_nam
 import { {{ api_import_count = 0 }}{{ if has_get_list; api_import_count = api_import_count + 1; end }}{{ if has_get_options; api_import_count = api_import_count + 1; end }}{{ if has_create; api_import_count = api_import_count + 1; end }}{{ if has_update; api_import_count = api_import_count + 1; end }}{{ if has_delete; api_import_count = api_import_count + 1; end }}{{ if has_delete_batch; api_import_count = api_import_count + 1; end }}{{ if has_get_template; api_import_count = api_import_count + 1; end }}{{ if has_import_data; api_import_count = api_import_count + 1; end }}{{ if has_export_data; api_import_count = api_import_count + 1; end }}{{ api_import_index = 0 }}{{ if has_get_list; api_import_index = api_import_index + 1; }}{{ api_get_list }}{{ if api_import_index < api_import_count }}, {{ end }}{{ end }}{{ if has_get_options; api_import_index = api_import_index + 1; }}{{ api_get_options }}{{ if api_import_index < api_import_count }}, {{ end }}{{ end }}{{ if has_create; api_import_index = api_import_index + 1; }}{{ api_create }}{{ if api_import_index < api_import_count }}, {{ end }}{{ end }}{{ if has_update; api_import_index = api_import_index + 1; }}{{ api_update }}{{ if api_import_index < api_import_count }}, {{ end }}{{ end }}{{ if has_delete; api_import_index = api_import_index + 1; }}{{ api_delete }}{{ if api_import_index < api_import_count }}, {{ end }}{{ end }}{{ if has_delete_batch; api_import_index = api_import_index + 1; }}{{ api_delete_batch }}{{ if api_import_index < api_import_count }}, {{ end }}{{ end }}{{ if has_get_template; api_import_index = api_import_index + 1; }}{{ api_get_template }}{{ if api_import_index < api_import_count }}, {{ end }}{{ end }}{{ if has_import_data; api_import_index = api_import_index + 1; }}{{ api_import_data }}{{ if api_import_index < api_import_count }}, {{ end }}{{ end }}{{ if has_export_data; api_import_index = api_import_index + 1; }}{{ api_export_data }}{{ if api_import_index < api_import_count }}, {{ end }}{{ end }} } from '@/api/{{ table.frontend_module_path }}/{{ table.entity_name_kebab }}'
 import type { {{ type_count = 0 }}{{~ for cat in table.dto_category_descriptors ~}}{{~ if cat.Name != "TemplateDto" && cat.Name != "ImportDto" && cat.Name != "ExportDto" ~}}{{ type_count = type_count + 1 }}{{~ end ~}}{{~ end ~}}{{ type_index = 0 }}{{~ for cat in table.dto_category_descriptors ~}}{{~ if cat.Name != "TemplateDto" && cat.Name != "ImportDto" && cat.Name != "ExportDto" ~}}{{ type_index = type_index + 1 }}{{ cat.TsInterfaceName }}{{ if type_index < type_count }}, {{ end }}{{~ end ~}}{{~ end ~}} } from '@/types/{{ table.frontend_module_path }}/{{ table.entity_name_kebab }}'
 import { createLogger } from '@/utils/logger'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 {{~ if has_export_data ~}}
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 {{~ end ~}}
@@ -231,9 +232,9 @@ const loading = ref(false)
 /** 表格数据源 */
 const dataSource = ref<{{ table.entity_name_pascal }}[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 总记录数 */
 const total = ref(0)
 /** 当前选中行（单行） */
@@ -281,7 +282,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 {{~ end ~}}
 
-onMounted(() => {
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
@@ -432,7 +434,7 @@ async function loadData() {
 
 /** 查询：重置页码并重新加载 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -446,7 +448,7 @@ function handleReset() {
 {{~ end ~}}
 {{~ end ~}}
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -632,7 +634,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重新加载 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -679,7 +681,7 @@ function handlePaginationChange(page: number) {
 /** 分页每页条数变化 */
 function handlePaginationSizeChange(_current: number, size: number) {
   pageSize.value = size
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 </script>

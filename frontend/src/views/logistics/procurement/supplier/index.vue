@@ -1,6 +1,6 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
-<!-- 命名空间：@/views/logistics/materials/purchasing/supplier -->
+<!-- 命名空间：@/views/logistics/procurement/supplier -->
 <!-- 文件名称：index.vue -->
 <!-- 功能描述：Takt供货商实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-materials-purchasing-supplier">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:materials:supplier:create"
-      update-permission="logistics:materials:supplier:update"
-      delete-permission="logistics:materials:supplier:delete"
-      import-permission="logistics:materials:supplier:import"
-      export-permission="logistics:materials:supplier:export"
+      create-permission="logistics:procurement:supplier:create"
+      update-permission="logistics:procurement:supplier:update"
+      delete-permission="logistics:procurement:supplier:delete"
+      import-permission="logistics:procurement:supplier:import"
+      export-permission="logistics:procurement:supplier:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'supplierId'"
       table-mode="single"
@@ -69,19 +69,38 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'supplierStatus'">
+          <a-switch
+            :checked="getSupplierField(record, 'supplierStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleSupplierStatusChange(record, Boolean(checked))"
+          />
+        </template>
+        <template v-else-if="column.key === 'supplierType'">
           <TaktDictTag
-            :value="getSupplierField(record, 'supplierStatus')"
-            dict-type="sys_normal_disable"
+            :value="getSupplierField(record, 'supplierType')"
+            dict-type="logistics_supplier_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'paymentTerms'">
+          <TaktDictTag
+            :value="getSupplierField(record, 'paymentTerms')"
+            dict-type="logistics_payment_terms_param"
+          />
+        </template>
+        <template v-else-if="column.key === 'supplierLevel'">
+          <TaktDictTag
+            :value="getSupplierField(record, 'supplierLevel')"
+            dict-type="logistics_grade_category"
           />
         </template>
       </template>
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -101,6 +120,7 @@
       @cancel="handleFormCancel"
     >
       <SupplierForm
+        :key="formData?.supplierId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -111,7 +131,7 @@
       v-model:open="advancedQueryVisible"
       v-model:visible-field-keys="visibleQueryFieldKeys"
       :fields="queryFieldsMeta"
-      :storage-key="'takt-query-fields-logistics-materials-purchasing-supplier'"
+      :storage-key="'takt-query-fields-logistics-procurement-supplier'"
       :form-model="advancedQueryForm"
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
@@ -122,6 +142,8 @@
         <a-input
           v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -131,6 +153,8 @@
         <a-input
           v-model:value="advancedQueryForm.supplierCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.code') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -140,6 +164,8 @@
         <a-input
           v-model:value="advancedQueryForm.supplierName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.name') })"
+          show-count
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
@@ -149,16 +175,19 @@
         <a-input
           v-model:value="advancedQueryForm.supplierShortName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.shortname') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('supplierType')">
       <a-form-item :label="t('entity.supplier.type')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.supplierType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.type') })"
-          style="width: 100%"
+          dict-type="logistics_supplier_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplier.type') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -167,6 +196,8 @@
         <a-input
           v-model:value="advancedQueryForm.industrySector"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.industrysector') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -176,6 +207,8 @@
         <a-input
           v-model:value="advancedQueryForm.supplierTaxNumber"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.taxnumber') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -185,6 +218,8 @@
         <a-input
           v-model:value="advancedQueryForm.registrationCountry"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.registrationcountry') })"
+          show-count
+          :maxlength="2"
           allow-clear
         />
       </a-form-item>
@@ -224,6 +259,8 @@
         <a-input
           v-model:value="advancedQueryForm.supplierPhone"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.phone') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -233,6 +270,8 @@
         <a-input
           v-model:value="advancedQueryForm.supplierFax"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.fax') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -242,6 +281,8 @@
         <a-input
           v-model:value="advancedQueryForm.supplierEmail"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.email') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -251,6 +292,8 @@
         <a-input
           v-model:value="advancedQueryForm.supplierWebsite"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.website') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -260,6 +303,8 @@
         <a-input
           v-model:value="advancedQueryForm.contactPerson"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.contactperson') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -269,6 +314,8 @@
         <a-input
           v-model:value="advancedQueryForm.contactPhone"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.contactphone') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -278,6 +325,8 @@
         <a-input
           v-model:value="advancedQueryForm.contactEmail"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.contactemail') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -287,25 +336,29 @@
         <a-input
           v-model:value="advancedQueryForm.currencyCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.currencycode') })"
+          show-count
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('paymentTerms')">
       <a-form-item :label="t('entity.supplier.paymentterms')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.paymentTerms"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.paymentterms') })"
-          style="width: 100%"
+          dict-type="logistics_payment_terms_param"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplier.paymentterms') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('supplierLevel')">
       <a-form-item :label="t('entity.supplier.level')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.supplierLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.level') })"
-          style="width: 100%"
+          dict-type="logistics_grade_category"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplier.level') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -331,18 +384,9 @@
       <a-form-item :label="t('entity.supplier.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.supplierStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplier.status') })"
           allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.supplier.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplier.sortorder') })"
-          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -368,12 +412,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -382,8 +445,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -429,19 +494,21 @@
 <script setup lang="ts">
 /**
  * Takt供货商实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
- * @module views/logistics/materials/purchasing/supplier
+ * @module views/logistics/procurement/supplier
  */
 import { ref, computed, onMounted } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SupplierForm from './components/supplier-form.vue'
-import { getSupplierList, getSupplierById, createSupplier, updateSupplier, deleteSupplierById, deleteSupplierBatch, getSupplierTemplate, importSupplier, exportSupplier } from '@/api/logistics/materials/supplier'
-import type { Supplier, SupplierQuery, SupplierCreate, SupplierUpdate } from '@/types/logistics/materials/supplier'
+import { getSupplierList, getSupplierById, createSupplier, updateSupplier, deleteSupplierById, deleteSupplierBatch, getSupplierTemplate, importSupplier, exportSupplier, updateSupplierStatus } from '@/api/logistics/procurement/supplier'
+import type { Supplier, SupplierQuery } from '@/types/logistics/procurement/supplier'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -459,9 +526,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Supplier[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -476,11 +543,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Supplier>>({})
+const formData = ref<Partial<Supplier> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -508,10 +577,9 @@ const advancedQueryForm = ref({
   evaluationScore: undefined as number | undefined,
   isQualified: undefined as number | undefined,
   supplierStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -540,10 +608,9 @@ const queryFieldsMeta = computed(() => [
   { key: 'evaluationScore', label: t('entity.supplier.evaluationscore') },
   { key: 'isQualified', label: t('entity.supplier.isqualified') },
   { key: 'supplierStatus', label: t('entity.supplier.status') },
-  { key: 'sortOrder', label: t('entity.supplier.sortorder') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -561,11 +628,81 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {SupplierQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<SupplierQuery>): SupplierQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: SupplierQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof SupplierQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('supplierCode', form.supplierCode)
+  assignTrimmed('supplierName', form.supplierName)
+  assignTrimmed('supplierShortName', form.supplierShortName)
+  if (form.supplierType !== undefined && form.supplierType !== null) {
+    query.supplierType = form.supplierType
+  }
+  assignTrimmed('industrySector', form.industrySector)
+  assignTrimmed('supplierTaxNumber', form.supplierTaxNumber)
+  assignTrimmed('registrationCountry', form.registrationCountry)
+  assignTrimmed('registrationAddress1', form.registrationAddress1)
+  assignTrimmed('registrationAddress2', form.registrationAddress2)
+  assignTrimmed('registrationAddress3', form.registrationAddress3)
+  assignTrimmed('supplierPhone', form.supplierPhone)
+  assignTrimmed('supplierFax', form.supplierFax)
+  assignTrimmed('supplierEmail', form.supplierEmail)
+  assignTrimmed('supplierWebsite', form.supplierWebsite)
+  assignTrimmed('contactPerson', form.contactPerson)
+  assignTrimmed('contactPhone', form.contactPhone)
+  assignTrimmed('contactEmail', form.contactEmail)
+  assignTrimmed('currencyCode', form.currencyCode)
+  if (form.paymentTerms !== undefined && form.paymentTerms !== null) {
+    query.paymentTerms = form.paymentTerms
+  }
+  if (form.supplierLevel !== undefined && form.supplierLevel !== null) {
+    query.supplierLevel = form.supplierLevel
+  }
+  if (form.evaluationScore !== undefined && form.evaluationScore !== null) {
+    query.evaluationScore = form.evaluationScore
+  }
+  if (form.isQualified !== undefined && form.isQualified !== null) {
+    query.isQualified = form.isQualified
+  }
+  if (form.supplierStatus !== undefined && form.supplierStatus !== null) {
+    query.supplierStatus = form.supplierStatus
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -627,7 +764,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierField(record, 'supplierType') ?? ''
   },
   {
     title: t('entity.supplier.industrysector'),
@@ -762,7 +898,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierField(record, 'paymentTerms') ?? ''
   },
   {
     title: t('entity.supplier.level'),
@@ -771,7 +906,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierField(record, 'supplierLevel') ?? ''
   },
   {
     title: t('entity.supplier.evaluationscore'),
@@ -806,7 +940,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:materials:supplier:update',
+        permission: 'logistics:procurement:supplier:update',
         onClick: (record: Supplier) => handleEdit(record)
       },
       {
@@ -814,7 +948,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:materials:supplier:delete',
+        permission: 'logistics:procurement:supplier:delete',
         onClick: (record: Supplier) => handleDeleteOne(record)
       }
     ]
@@ -829,6 +963,7 @@ const getSupplierId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getSupplierField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -872,16 +1007,7 @@ const onClickRow = (record: Supplier) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: SupplierQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getSupplierList(params)
+    const res = await getSupplierList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -899,7 +1025,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -931,21 +1057,21 @@ function handleReset() {
   evaluationScore: undefined as number | undefined,
   isQualified: undefined as number | undefined,
   supplierStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.supplier._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: Supplier) {
@@ -983,6 +1109,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.supplier._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -992,6 +1120,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1023,16 +1153,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: SupplierQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportSupplier(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportSupplier(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1092,6 +1217,30 @@ async function handleDelete() {
     }
   })
 }
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleSupplierStatusChange(record: Supplier, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getSupplierField(record, 'supplierStatus')
+  const id = getSupplierId(record)
+  const row = dataSource.value.find((item) => getSupplierId(item) === id)
+  if (row) {
+    row.supplierStatus = newVal
+  }
+  try {
+    await updateSupplierStatus({ supplierId: id, supplierStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.supplierStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
+}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -1100,7 +1249,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1130,10 +1279,9 @@ function handleAdvancedQueryReset() {
   evaluationScore: undefined as number | undefined,
   isQualified: undefined as number | undefined,
   supplierStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1163,23 +1311,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.logistics-materials-purchasing-supplier {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

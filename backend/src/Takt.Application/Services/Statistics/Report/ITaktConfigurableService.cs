@@ -108,4 +108,39 @@ public interface ITaktConfigurableService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportConfigurableAsync(TaktConfigurableQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    /// <summary>
+    /// 获取 SQVI 运行时筛选条件定义
+    /// </summary>
+    /// <param name="id">报表主键</param>
+    /// <returns>运行时屏幕 DTO</returns>
+    Task<TaktConfigurableRuntimeScreenDto> GetConfigurableRuntimeScreenAsync(long id);
+
+    /// <summary>
+    /// 执行报表查询（分页）
+    /// </summary>
+    /// <param name="id">报表主键</param>
+    /// <param name="dto">查询参数与筛选值</param>
+    /// <returns>查询结果</returns>
+    Task<TaktConfigurableQueryResultDto> ExecuteConfigurableQueryAsync(long id, TaktConfigurableExecuteQueryDto dto);
+
+    /// <summary>
+    /// 设计态预览查询（未保存报表定义）
+    /// </summary>
+    /// <param name="dto">报表定义与分页参数</param>
+    /// <returns>查询结果</returns>
+    Task<TaktConfigurableQueryResultDto> PreviewConfigurableQueryAsync(TaktConfigurablePreviewQueryDto dto);
+
+    /// <summary>
+    /// 导出报表数据（Excel）
+    /// </summary>
+    /// <param name="id">报表主键</param>
+    /// <param name="dto">筛选值</param>
+    /// <param name="sheetName">工作表名</param>
+    /// <param name="fileName">文件名（不含扩展名）</param>
+    /// <returns>Excel 文件</returns>
+    Task<(string fileName, byte[] content)> ExportConfigurableDataAsync(
+        long id,
+        TaktConfigurableExportDataDto dto,
+        string? sheetName = null,
+        string? fileName = null);
 }

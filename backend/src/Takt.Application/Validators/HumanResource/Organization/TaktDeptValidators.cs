@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Organization
 // 文件名称：TaktDeptValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Dept 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktDept 生成，请按需审阅）
 // 
@@ -12,7 +12,6 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.HumanResource.Organization;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.HumanResource.Organization;
 
@@ -32,23 +31,21 @@ public class TaktDeptCreateValidator : AbstractValidator<TaktDeptCreateDto>
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(40).WithMessage("部门编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("部门编码长度不能超过50个字符");
         RuleFor(x => x.DeptName)
             .NotEmpty().WithMessage("部门名称不能为空")
-            .MaximumLength(40).WithMessage("部门名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("部门名称长度不能超过100个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父部门ID不能为负数");
         RuleFor(x => x.CostCenterCode)
             .NotEmpty().WithMessage("成本中心编码不能为空")
-            .MaximumLength(40).WithMessage("成本中心编码长度不能超过40个字符");
-        RuleFor(x => x.CostCategory)
-            .IsInEnum().WithMessage("费用类别无效");
+            .MaximumLength(20).WithMessage("成本中心编码长度不能超过20个字符");
         RuleFor(x => x.HeadUserId)
             .GreaterThanOrEqualTo(0).WithMessage("部门负责人ID不能为负数");
         RuleFor(x => x.Phone)
@@ -61,16 +58,12 @@ public class TaktDeptCreateValidator : AbstractValidator<TaktDeptCreateDto>
         RuleFor(x => x.Location)
             .NotEmpty().WithMessage("办公地点不能为空")
             .MaximumLength(200).WithMessage("办公地点长度不能超过200个字符");
-        RuleFor(x => x.DeptStatus)
-            .IsInEnum().WithMessage("状态无效");
-        RuleFor(x => x.IsBuiltIn)
-            .IsInEnum().WithMessage("是否内置无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("部门描述不能为空")
             .MaximumLength(500).WithMessage("部门描述长度不能超过500个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -111,22 +104,20 @@ public class TaktDeptImportValidator : AbstractValidator<TaktDeptImportDto>
     public TaktDeptImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(40).WithMessage("部门编码长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("部门编码长度不能超过50个字符");
         RuleFor(x => x.DeptName)
             .NotEmpty().WithMessage("部门名称不能为空")
-            .MaximumLength(40).WithMessage("部门名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("部门名称长度不能超过100个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父部门ID不能为负数");
         RuleFor(x => x.CostCenterCode)
             .NotEmpty().WithMessage("成本中心编码不能为空")
-            .MaximumLength(40).WithMessage("成本中心编码长度不能超过40个字符");
-        RuleFor(x => x.CostCategory)
-            .IsInEnum().WithMessage("费用类别无效");
+            .MaximumLength(20).WithMessage("成本中心编码长度不能超过20个字符");
         RuleFor(x => x.HeadUserId)
             .GreaterThanOrEqualTo(0).WithMessage("部门负责人ID不能为负数");
         RuleFor(x => x.Phone)
@@ -139,14 +130,10 @@ public class TaktDeptImportValidator : AbstractValidator<TaktDeptImportDto>
         RuleFor(x => x.Location)
             .NotEmpty().WithMessage("办公地点不能为空")
             .MaximumLength(200).WithMessage("办公地点长度不能超过200个字符");
-        RuleFor(x => x.DeptStatus)
-            .IsInEnum().WithMessage("状态无效");
-        RuleFor(x => x.IsBuiltIn)
-            .IsInEnum().WithMessage("是否内置无效");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

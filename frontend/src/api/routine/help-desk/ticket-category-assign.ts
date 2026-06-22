@@ -41,9 +41,7 @@ export function getTicketCategoryAssignList(queryDto: any): Promise<TaktPagedRes
   return request<TaktPagedResult<TicketCategoryAssign>>({
     url: `${TICKET_CATEGORY_ASSIGN_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportTicketCategoryAssign(
     url: `${TICKET_CATEGORY_ASSIGN_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

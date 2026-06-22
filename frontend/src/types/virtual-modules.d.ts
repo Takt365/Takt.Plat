@@ -23,3 +23,13 @@ declare module 'virtual:app-info' {
 
   export default appInfo;
 }
+
+declare module '@form-create/antd-designer/locale/zh-cn.js' {
+  const locale: Record<string, unknown>;
+  export default locale;
+}
+
+declare module '@form-create/antd-designer/locale/en.js' {
+  const locale: Record<string, unknown>;
+  export default locale;
+}

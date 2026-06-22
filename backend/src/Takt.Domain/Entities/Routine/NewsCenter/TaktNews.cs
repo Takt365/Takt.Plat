@@ -114,12 +114,6 @@ public class TaktNews : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "attachment_count", ColumnDescription = "附件数量", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int AttachmentCount { get; set; } = 0;
     /// <summary>
-    /// 流程实例 ID（关联工作流，如发布审批流程；流程侧 BusinessType=News、BusinessKey=本表 Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-    /// <summary>
     /// 发布部门 ID
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "发布部门ID", ColumnDataType = "bigint", IsNullable = true)]
@@ -152,7 +146,7 @@ public class TaktNews : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 新闻状态
+    /// 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     [SugarColumn(ColumnName = "news_status", ColumnDescription = "新闻状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int NewsStatus { get; set; } = 0;

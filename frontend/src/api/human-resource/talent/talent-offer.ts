@@ -40,9 +40,7 @@ export function getTalentOfferList(queryDto: any): Promise<TaktPagedResult<Talen
   return request<TaktPagedResult<TalentOffer>>({
     url: `${TALENT_OFFER_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportTalentOffer(
     url: `${TALENT_OFFER_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

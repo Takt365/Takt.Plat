@@ -78,6 +78,13 @@ public interface ITaktDictTypeService
     Task<TaktDictTypeDto> UpdateDictTypeStatusAsync(TaktDictTypeStatusDto dto);
 
     /// <summary>
+    /// 更新字典类型是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktDictTypeDto> UpdateDictTypeBuiltInAsync(TaktDictTypeBuiltInDto dto);
+
+    /// <summary>
     /// 更新字典类型排序
     /// </summary>
     /// <param name="dto">排序DTO</param>

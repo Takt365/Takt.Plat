@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowSchemeI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowScheme 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,155 +75,155 @@ public class TaktFlowSchemeI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktFlowScheme 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.flowscheme._self / entity.flowscheme.{{field}}；ResourceGroup=6；ResourceType=0
+    /// I18nKey：entity.flowscheme._self / entity.flowscheme.{{field}}；ResourceGroup=Workflow；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetFlowSchemeTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.flowscheme._self
-            new TranslationSeedItem("entity.flowscheme._self", "en-US", "Flow Scheme Information", "实体名称"),
+            new TranslationSeedItem("entity.flowscheme._self", "en-US", "Flow Scheme Information_us", "实体名称"),
             // entity.flowscheme._self
-            new TranslationSeedItem("entity.flowscheme._self", "ja-JP", "流程定义信息", "实体名称"),
+            new TranslationSeedItem("entity.flowscheme._self", "ja-JP", "流程定义信息_jp", "实体名称"),
             // entity.flowscheme._self
             new TranslationSeedItem("entity.flowscheme._self", "zh-CN", "流程定义信息", "实体名称"),
             // entity.flowscheme._self
-            new TranslationSeedItem("entity.flowscheme._self", "zh-HK", "流程定义信息", "实体名称"),
+            new TranslationSeedItem("entity.flowscheme._self", "zh-HK", "流程定义信息_hk", "实体名称"),
 
             // entity.flowscheme.processkey
-            new TranslationSeedItem("entity.flowscheme.processkey", "en-US", "流程键", "流程键（公司内业务唯一标识，如 leave）"),
+            new TranslationSeedItem("entity.flowscheme.processkey", "en-US", "流程键_us", "流程键（公司内业务唯一标识，如 leave）"),
             // entity.flowscheme.processkey
-            new TranslationSeedItem("entity.flowscheme.processkey", "ja-JP", "流程键", "流程键（公司内业务唯一标识，如 leave）"),
+            new TranslationSeedItem("entity.flowscheme.processkey", "ja-JP", "流程键_jp", "流程键（公司内业务唯一标识，如 leave）"),
             // entity.flowscheme.processkey
             new TranslationSeedItem("entity.flowscheme.processkey", "zh-CN", "流程键", "流程键（公司内业务唯一标识，如 leave）"),
             // entity.flowscheme.processkey
-            new TranslationSeedItem("entity.flowscheme.processkey", "zh-HK", "流程键", "流程键（公司内业务唯一标识，如 leave）"),
+            new TranslationSeedItem("entity.flowscheme.processkey", "zh-HK", "流程键_hk", "流程键（公司内业务唯一标识，如 leave）"),
 
             // entity.flowscheme.processname
-            new TranslationSeedItem("entity.flowscheme.processname", "en-US", "流程名称", "流程名称"),
+            new TranslationSeedItem("entity.flowscheme.processname", "en-US", "流程名称_us", "流程名称"),
             // entity.flowscheme.processname
-            new TranslationSeedItem("entity.flowscheme.processname", "ja-JP", "流程名称", "流程名称"),
+            new TranslationSeedItem("entity.flowscheme.processname", "ja-JP", "流程名称_jp", "流程名称"),
             // entity.flowscheme.processname
             new TranslationSeedItem("entity.flowscheme.processname", "zh-CN", "流程名称", "流程名称"),
             // entity.flowscheme.processname
-            new TranslationSeedItem("entity.flowscheme.processname", "zh-HK", "流程名称", "流程名称"),
+            new TranslationSeedItem("entity.flowscheme.processname", "zh-HK", "流程名称_hk", "流程名称"),
 
             // entity.flowscheme.definitionversion
-            new TranslationSeedItem("entity.flowscheme.definitionversion", "en-US", "定义版本号", "定义版本号（同流程键可多版本）"),
+            new TranslationSeedItem("entity.flowscheme.definitionversion", "en-US", "定义版本号_us", "定义版本号（同流程键可多版本）"),
             // entity.flowscheme.definitionversion
-            new TranslationSeedItem("entity.flowscheme.definitionversion", "ja-JP", "定义版本号", "定义版本号（同流程键可多版本）"),
+            new TranslationSeedItem("entity.flowscheme.definitionversion", "ja-JP", "定义版本号_jp", "定义版本号（同流程键可多版本）"),
             // entity.flowscheme.definitionversion
             new TranslationSeedItem("entity.flowscheme.definitionversion", "zh-CN", "定义版本号", "定义版本号（同流程键可多版本）"),
             // entity.flowscheme.definitionversion
-            new TranslationSeedItem("entity.flowscheme.definitionversion", "zh-HK", "定义版本号", "定义版本号（同流程键可多版本）"),
+            new TranslationSeedItem("entity.flowscheme.definitionversion", "zh-HK", "定义版本号_hk", "定义版本号（同流程键可多版本）"),
 
             // entity.flowscheme.processversion
-            new TranslationSeedItem("entity.flowscheme.processversion", "en-US", "版本标签", "版本标签（如 v1.0.0）"),
+            new TranslationSeedItem("entity.flowscheme.processversion", "en-US", "版本标签_us", "版本标签（如 v1.0.0）"),
             // entity.flowscheme.processversion
-            new TranslationSeedItem("entity.flowscheme.processversion", "ja-JP", "版本标签", "版本标签（如 v1.0.0）"),
+            new TranslationSeedItem("entity.flowscheme.processversion", "ja-JP", "版本标签_jp", "版本标签（如 v1.0.0）"),
             // entity.flowscheme.processversion
             new TranslationSeedItem("entity.flowscheme.processversion", "zh-CN", "版本标签", "版本标签（如 v1.0.0）"),
             // entity.flowscheme.processversion
-            new TranslationSeedItem("entity.flowscheme.processversion", "zh-HK", "版本标签", "版本标签（如 v1.0.0）"),
+            new TranslationSeedItem("entity.flowscheme.processversion", "zh-HK", "版本标签_hk", "版本标签（如 v1.0.0）"),
 
             // entity.flowscheme.islatest
-            new TranslationSeedItem("entity.flowscheme.islatest", "en-US", "是否最新版", "是否当前最新版（同键仅一条为 1）"),
+            new TranslationSeedItem("entity.flowscheme.islatest", "en-US", "是否最新版_us", "是否当前最新版（同键仅一条为 1）"),
             // entity.flowscheme.islatest
-            new TranslationSeedItem("entity.flowscheme.islatest", "ja-JP", "是否最新版", "是否当前最新版（同键仅一条为 1）"),
+            new TranslationSeedItem("entity.flowscheme.islatest", "ja-JP", "是否最新版_jp", "是否当前最新版（同键仅一条为 1）"),
             // entity.flowscheme.islatest
             new TranslationSeedItem("entity.flowscheme.islatest", "zh-CN", "是否最新版", "是否当前最新版（同键仅一条为 1）"),
             // entity.flowscheme.islatest
-            new TranslationSeedItem("entity.flowscheme.islatest", "zh-HK", "是否最新版", "是否当前最新版（同键仅一条为 1）"),
+            new TranslationSeedItem("entity.flowscheme.islatest", "zh-HK", "是否最新版_hk", "是否当前最新版（同键仅一条为 1）"),
 
             // entity.flowscheme.processcategory
-            new TranslationSeedItem("entity.flowscheme.processcategory", "en-US", "流程分类", "流程分类"),
+            new TranslationSeedItem("entity.flowscheme.processcategory", "en-US", "流程分类_us", "流程分类"),
             // entity.flowscheme.processcategory
-            new TranslationSeedItem("entity.flowscheme.processcategory", "ja-JP", "流程分类", "流程分类"),
+            new TranslationSeedItem("entity.flowscheme.processcategory", "ja-JP", "流程分类_jp", "流程分类"),
             // entity.flowscheme.processcategory
             new TranslationSeedItem("entity.flowscheme.processcategory", "zh-CN", "流程分类", "流程分类"),
             // entity.flowscheme.processcategory
-            new TranslationSeedItem("entity.flowscheme.processcategory", "zh-HK", "流程分类", "流程分类"),
+            new TranslationSeedItem("entity.flowscheme.processcategory", "zh-HK", "流程分类_hk", "流程分类"),
 
             // entity.flowscheme.processdescription
-            new TranslationSeedItem("entity.flowscheme.processdescription", "en-US", "流程说明", "流程说明"),
+            new TranslationSeedItem("entity.flowscheme.processdescription", "en-US", "流程说明_us", "流程说明"),
             // entity.flowscheme.processdescription
-            new TranslationSeedItem("entity.flowscheme.processdescription", "ja-JP", "流程说明", "流程说明"),
+            new TranslationSeedItem("entity.flowscheme.processdescription", "ja-JP", "流程说明_jp", "流程说明"),
             // entity.flowscheme.processdescription
             new TranslationSeedItem("entity.flowscheme.processdescription", "zh-CN", "流程说明", "流程说明"),
             // entity.flowscheme.processdescription
-            new TranslationSeedItem("entity.flowscheme.processdescription", "zh-HK", "流程说明", "流程说明"),
+            new TranslationSeedItem("entity.flowscheme.processdescription", "zh-HK", "流程说明_hk", "流程说明"),
 
             // entity.flowscheme.processstatus
-            new TranslationSeedItem("entity.flowscheme.processstatus", "en-US", "发布状态", "发布状态"),
+            new TranslationSeedItem("entity.flowscheme.processstatus", "en-US", "发布状态_us", "发布状态"),
             // entity.flowscheme.processstatus
-            new TranslationSeedItem("entity.flowscheme.processstatus", "ja-JP", "发布状态", "发布状态"),
+            new TranslationSeedItem("entity.flowscheme.processstatus", "ja-JP", "发布状态_jp", "发布状态"),
             // entity.flowscheme.processstatus
             new TranslationSeedItem("entity.flowscheme.processstatus", "zh-CN", "发布状态", "发布状态"),
             // entity.flowscheme.processstatus
-            new TranslationSeedItem("entity.flowscheme.processstatus", "zh-HK", "发布状态", "发布状态"),
+            new TranslationSeedItem("entity.flowscheme.processstatus", "zh-HK", "发布状态_hk", "发布状态"),
 
             // entity.flowscheme.suspensionstate
-            new TranslationSeedItem("entity.flowscheme.suspensionstate", "en-US", "挂起状态", "挂起状态（1 激活，2 挂起）"),
+            new TranslationSeedItem("entity.flowscheme.suspensionstate", "en-US", "挂起状态_us", "挂起状态（1 激活，2 挂起）"),
             // entity.flowscheme.suspensionstate
-            new TranslationSeedItem("entity.flowscheme.suspensionstate", "ja-JP", "挂起状态", "挂起状态（1 激活，2 挂起）"),
+            new TranslationSeedItem("entity.flowscheme.suspensionstate", "ja-JP", "挂起状态_jp", "挂起状态（1 激活，2 挂起）"),
             // entity.flowscheme.suspensionstate
             new TranslationSeedItem("entity.flowscheme.suspensionstate", "zh-CN", "挂起状态", "挂起状态（1 激活，2 挂起）"),
             // entity.flowscheme.suspensionstate
-            new TranslationSeedItem("entity.flowscheme.suspensionstate", "zh-HK", "挂起状态", "挂起状态（1 激活，2 挂起）"),
+            new TranslationSeedItem("entity.flowscheme.suspensionstate", "zh-HK", "挂起状态_hk", "挂起状态（1 激活，2 挂起）"),
 
             // entity.flowscheme.processcontent
-            new TranslationSeedItem("entity.flowscheme.processcontent", "en-US", "流程设计JSON", "流程设计 JSON（节点、网关、条件、审批人配置）"),
+            new TranslationSeedItem("entity.flowscheme.processcontent", "en-US", "流程设计JSON_us", "流程设计 JSON（节点、网关、条件、审批人配置）"),
             // entity.flowscheme.processcontent
-            new TranslationSeedItem("entity.flowscheme.processcontent", "ja-JP", "流程设计JSON", "流程设计 JSON（节点、网关、条件、审批人配置）"),
+            new TranslationSeedItem("entity.flowscheme.processcontent", "ja-JP", "流程设计JSON_jp", "流程设计 JSON（节点、网关、条件、审批人配置）"),
             // entity.flowscheme.processcontent
             new TranslationSeedItem("entity.flowscheme.processcontent", "zh-CN", "流程设计JSON", "流程设计 JSON（节点、网关、条件、审批人配置）"),
             // entity.flowscheme.processcontent
-            new TranslationSeedItem("entity.flowscheme.processcontent", "zh-HK", "流程设计JSON", "流程设计 JSON（节点、网关、条件、审批人配置）"),
+            new TranslationSeedItem("entity.flowscheme.processcontent", "zh-HK", "流程设计JSON_hk", "流程设计 JSON（节点、网关、条件、审批人配置）"),
 
             // entity.flowscheme.deploymentid
-            new TranslationSeedItem("entity.flowscheme.deploymentid", "en-US", "部署批次号", "部署批次号"),
+            new TranslationSeedItem("entity.flowscheme.deploymentid", "en-US", "部署批次号_us", "部署批次号"),
             // entity.flowscheme.deploymentid
-            new TranslationSeedItem("entity.flowscheme.deploymentid", "ja-JP", "部署批次号", "部署批次号"),
+            new TranslationSeedItem("entity.flowscheme.deploymentid", "ja-JP", "部署批次号_jp", "部署批次号"),
             // entity.flowscheme.deploymentid
             new TranslationSeedItem("entity.flowscheme.deploymentid", "zh-CN", "部署批次号", "部署批次号"),
             // entity.flowscheme.deploymentid
-            new TranslationSeedItem("entity.flowscheme.deploymentid", "zh-HK", "部署批次号", "部署批次号"),
+            new TranslationSeedItem("entity.flowscheme.deploymentid", "zh-HK", "部署批次号_hk", "部署批次号"),
 
             // entity.flowscheme.formid
-            new TranslationSeedItem("entity.flowscheme.formid", "en-US", "关联表单ID", "关联表单 ID"),
+            new TranslationSeedItem("entity.flowscheme.formid", "en-US", "关联表单ID_us", "关联表单 ID"),
             // entity.flowscheme.formid
-            new TranslationSeedItem("entity.flowscheme.formid", "ja-JP", "关联表单ID", "关联表单 ID"),
+            new TranslationSeedItem("entity.flowscheme.formid", "ja-JP", "关联表单ID_jp", "关联表单 ID"),
             // entity.flowscheme.formid
             new TranslationSeedItem("entity.flowscheme.formid", "zh-CN", "关联表单ID", "关联表单 ID"),
             // entity.flowscheme.formid
-            new TranslationSeedItem("entity.flowscheme.formid", "zh-HK", "关联表单ID", "关联表单 ID"),
+            new TranslationSeedItem("entity.flowscheme.formid", "zh-HK", "关联表单ID_hk", "关联表单 ID"),
 
             // entity.flowscheme.formcode
-            new TranslationSeedItem("entity.flowscheme.formcode", "en-US", "关联表单编码", "关联表单编码"),
+            new TranslationSeedItem("entity.flowscheme.formcode", "en-US", "关联表单编码_us", "关联表单编码"),
             // entity.flowscheme.formcode
-            new TranslationSeedItem("entity.flowscheme.formcode", "ja-JP", "关联表单编码", "关联表单编码"),
+            new TranslationSeedItem("entity.flowscheme.formcode", "ja-JP", "关联表单编码_jp", "关联表单编码"),
             // entity.flowscheme.formcode
             new TranslationSeedItem("entity.flowscheme.formcode", "zh-CN", "关联表单编码", "关联表单编码"),
             // entity.flowscheme.formcode
-            new TranslationSeedItem("entity.flowscheme.formcode", "zh-HK", "关联表单编码", "关联表单编码"),
+            new TranslationSeedItem("entity.flowscheme.formcode", "zh-HK", "关联表单编码_hk", "关联表单编码"),
 
             // entity.flowscheme.sortorder
-            new TranslationSeedItem("entity.flowscheme.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.flowscheme.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.flowscheme.sortorder
-            new TranslationSeedItem("entity.flowscheme.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.flowscheme.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.flowscheme.sortorder
             new TranslationSeedItem("entity.flowscheme.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.flowscheme.sortorder
-            new TranslationSeedItem("entity.flowscheme.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.flowscheme.sortorder", "zh-HK", "排序号_hk", "排序号"),
 
             // entity.flowscheme.form
-            new TranslationSeedItem("entity.flowscheme.form", "en-US", "关联表单", "关联表单"),
+            new TranslationSeedItem("entity.flowscheme.form", "en-US", "关联表单_us", "关联表单"),
             // entity.flowscheme.form
-            new TranslationSeedItem("entity.flowscheme.form", "ja-JP", "关联表单", "关联表单"),
+            new TranslationSeedItem("entity.flowscheme.form", "ja-JP", "关联表单_jp", "关联表单"),
             // entity.flowscheme.form
             new TranslationSeedItem("entity.flowscheme.form", "zh-CN", "关联表单", "关联表单"),
             // entity.flowscheme.form
-            new TranslationSeedItem("entity.flowscheme.form", "zh-HK", "关联表单", "关联表单"),
+            new TranslationSeedItem("entity.flowscheme.form", "zh-HK", "关联表单_hk", "关联表单"),
         };
     }
 
@@ -241,10 +241,10 @@ public class TaktFlowSchemeI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 6;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Workflow";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

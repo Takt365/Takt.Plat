@@ -38,7 +38,7 @@ public class TaktVocabulary : TaktTenantEntityBase
     public int WordCategory { get; set; } = 0;
 
     /// <summary>
-    /// 过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）
+    /// 过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）
     /// </summary>
     [SugarColumn(ColumnName = "filter_level", ColumnDescription = "过滤等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FilterLevel { get; set; } = 1;

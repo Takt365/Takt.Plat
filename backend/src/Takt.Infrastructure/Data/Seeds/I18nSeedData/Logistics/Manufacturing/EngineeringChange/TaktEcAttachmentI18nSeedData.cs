@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcAttachment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,92 +75,92 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEcAttachment 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.ecattachment._self / entity.ecattachment.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.ecattachment._self / entity.ecattachment.{{field}}；ResourceGroup=EngineeringChange；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetEcAttachmentTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.ecattachment._self
-            new TranslationSeedItem("entity.ecattachment._self", "en-US", "Ec Attachment Information", "实体名称"),
+            new TranslationSeedItem("entity.ecattachment._self", "en-US", "Ec Attachment Information_us", "实体名称"),
             // entity.ecattachment._self
-            new TranslationSeedItem("entity.ecattachment._self", "ja-JP", "设变附件信息", "实体名称"),
+            new TranslationSeedItem("entity.ecattachment._self", "ja-JP", "设变附件信息_jp", "实体名称"),
             // entity.ecattachment._self
             new TranslationSeedItem("entity.ecattachment._self", "zh-CN", "设变附件信息", "实体名称"),
             // entity.ecattachment._self
-            new TranslationSeedItem("entity.ecattachment._self", "zh-HK", "设变附件信息", "实体名称"),
+            new TranslationSeedItem("entity.ecattachment._self", "zh-HK", "设变附件信息_hk", "实体名称"),
 
             // entity.ecattachment.ecid
-            new TranslationSeedItem("entity.ecattachment.ecid", "en-US", "设变ID", "设变主表ID"),
+            new TranslationSeedItem("entity.ecattachment.ecid", "en-US", "设变ID_us", "设变主表ID"),
             // entity.ecattachment.ecid
-            new TranslationSeedItem("entity.ecattachment.ecid", "ja-JP", "设变ID", "设变主表ID"),
+            new TranslationSeedItem("entity.ecattachment.ecid", "ja-JP", "设变ID_jp", "设变主表ID"),
             // entity.ecattachment.ecid
             new TranslationSeedItem("entity.ecattachment.ecid", "zh-CN", "设变ID", "设变主表ID"),
             // entity.ecattachment.ecid
-            new TranslationSeedItem("entity.ecattachment.ecid", "zh-HK", "设变ID", "设变主表ID"),
+            new TranslationSeedItem("entity.ecattachment.ecid", "zh-HK", "设变ID_hk", "设变主表ID"),
 
             // entity.ecattachment.ecno
-            new TranslationSeedItem("entity.ecattachment.ecno", "en-US", "设变单号", "设变单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.ecattachment.ecno", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
             // entity.ecattachment.ecno
-            new TranslationSeedItem("entity.ecattachment.ecno", "ja-JP", "设变单号", "设变单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.ecattachment.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余字段,便于查询）"),
             // entity.ecattachment.ecno
             new TranslationSeedItem("entity.ecattachment.ecno", "zh-CN", "设变单号", "设变单号（冗余字段,便于查询）"),
             // entity.ecattachment.ecno
-            new TranslationSeedItem("entity.ecattachment.ecno", "zh-HK", "设变单号", "设变单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.ecattachment.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余字段,便于查询）"),
 
             // entity.ecattachment.linenumber
-            new TranslationSeedItem("entity.ecattachment.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.ecattachment.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
             // entity.ecattachment.linenumber
-            new TranslationSeedItem("entity.ecattachment.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.ecattachment.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
             // entity.ecattachment.linenumber
             new TranslationSeedItem("entity.ecattachment.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
             // entity.ecattachment.linenumber
-            new TranslationSeedItem("entity.ecattachment.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.ecattachment.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.ecattachment.attachmenttype
-            new TranslationSeedItem("entity.ecattachment.attachmenttype", "en-US", "文件类别", "文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等"),
+            new TranslationSeedItem("entity.ecattachment.attachmenttype", "en-US", "文件类别_us", "文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等"),
             // entity.ecattachment.attachmenttype
-            new TranslationSeedItem("entity.ecattachment.attachmenttype", "ja-JP", "文件类别", "文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等"),
+            new TranslationSeedItem("entity.ecattachment.attachmenttype", "ja-JP", "文件类别_jp", "文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等"),
             // entity.ecattachment.attachmenttype
             new TranslationSeedItem("entity.ecattachment.attachmenttype", "zh-CN", "文件类别", "文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等"),
             // entity.ecattachment.attachmenttype
-            new TranslationSeedItem("entity.ecattachment.attachmenttype", "zh-HK", "文件类别", "文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等"),
+            new TranslationSeedItem("entity.ecattachment.attachmenttype", "zh-HK", "文件类别_hk", "文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等"),
 
             // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "en-US", "文件编号", "文件编号（如联络编号等）"),
+            new TranslationSeedItem("entity.ecattachment.docno", "en-US", "文件编号_us", "文件编号（如联络编号等）"),
             // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "ja-JP", "文件编号", "文件编号（如联络编号等）"),
+            new TranslationSeedItem("entity.ecattachment.docno", "ja-JP", "文件编号_jp", "文件编号（如联络编号等）"),
             // entity.ecattachment.docno
             new TranslationSeedItem("entity.ecattachment.docno", "zh-CN", "文件编号", "文件编号（如联络编号等）"),
             // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "zh-HK", "文件编号", "文件编号（如联络编号等）"),
+            new TranslationSeedItem("entity.ecattachment.docno", "zh-HK", "文件编号_hk", "文件编号（如联络编号等）"),
 
             // entity.ecattachment.filename
-            new TranslationSeedItem("entity.ecattachment.filename", "en-US", "文件名称", "文件名称"),
+            new TranslationSeedItem("entity.ecattachment.filename", "en-US", "文件名称_us", "文件名称"),
             // entity.ecattachment.filename
-            new TranslationSeedItem("entity.ecattachment.filename", "ja-JP", "文件名称", "文件名称"),
+            new TranslationSeedItem("entity.ecattachment.filename", "ja-JP", "文件名称_jp", "文件名称"),
             // entity.ecattachment.filename
             new TranslationSeedItem("entity.ecattachment.filename", "zh-CN", "文件名称", "文件名称"),
             // entity.ecattachment.filename
-            new TranslationSeedItem("entity.ecattachment.filename", "zh-HK", "文件名称", "文件名称"),
+            new TranslationSeedItem("entity.ecattachment.filename", "zh-HK", "文件名称_hk", "文件名称"),
 
             // entity.ecattachment.accessurl
-            new TranslationSeedItem("entity.ecattachment.accessurl", "en-US", "访问地址", "访问地址（URL）"),
+            new TranslationSeedItem("entity.ecattachment.accessurl", "en-US", "访问地址_us", "访问地址（URL）"),
             // entity.ecattachment.accessurl
-            new TranslationSeedItem("entity.ecattachment.accessurl", "ja-JP", "访问地址", "访问地址（URL）"),
+            new TranslationSeedItem("entity.ecattachment.accessurl", "ja-JP", "访问地址_jp", "访问地址（URL）"),
             // entity.ecattachment.accessurl
             new TranslationSeedItem("entity.ecattachment.accessurl", "zh-CN", "访问地址", "访问地址（URL）"),
             // entity.ecattachment.accessurl
-            new TranslationSeedItem("entity.ecattachment.accessurl", "zh-HK", "访问地址", "访问地址（URL）"),
+            new TranslationSeedItem("entity.ecattachment.accessurl", "zh-HK", "访问地址_hk", "访问地址（URL）"),
 
             // entity.ecattachment.ec
-            new TranslationSeedItem("entity.ecattachment.ec", "en-US", "设变主表", "设变主表（多对一）"),
+            new TranslationSeedItem("entity.ecattachment.ec", "en-US", "设变主表_us", "设变主表（多对一）"),
             // entity.ecattachment.ec
-            new TranslationSeedItem("entity.ecattachment.ec", "ja-JP", "设变主表", "设变主表（多对一）"),
+            new TranslationSeedItem("entity.ecattachment.ec", "ja-JP", "设变主表_jp", "设变主表（多对一）"),
             // entity.ecattachment.ec
             new TranslationSeedItem("entity.ecattachment.ec", "zh-CN", "设变主表", "设变主表（多对一）"),
             // entity.ecattachment.ec
-            new TranslationSeedItem("entity.ecattachment.ec", "zh-HK", "设变主表", "设变主表（多对一）"),
+            new TranslationSeedItem("entity.ecattachment.ec", "zh-HK", "设变主表_hk", "设变主表（多对一）"),
         };
     }
 
@@ -178,10 +178,10 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "EngineeringChange";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

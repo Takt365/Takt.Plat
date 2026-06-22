@@ -56,7 +56,7 @@ export interface UserFormModel {
   password: string;
 
   /**
-   * 用户状态（字典 sys_normal_disable）
+   * 用户状态（字典 sys_normal_disable_status）
    */
   userStatus: number;
 

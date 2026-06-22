@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDetailService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA改修明细应用服务实现
 // 
@@ -101,7 +101,7 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
         EnsureThreeLayerContext();
         var list = await _pcbaRepairDetailRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.ProdOrderCode,
+            x => x.ProdOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -349,7 +349,7 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
                 || (x.DefectResponsibility != null && x.DefectResponsibility.Contains(keywords))
                 || (x.DefectNature != null && x.DefectNature.Contains(keywords))
                 || (x.RepairOperator != null && x.RepairOperator.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -425,9 +425,9 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
             exp = exp.And(x => x.RepairOperator != null && x.RepairOperator.Contains(queryDto.RepairOperator));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

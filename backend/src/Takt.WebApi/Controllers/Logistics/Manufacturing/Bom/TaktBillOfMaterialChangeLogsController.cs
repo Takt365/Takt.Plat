@@ -41,7 +41,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterialchangelog:list", "BOM变更记录列表")]
+    [TaktPermission("logistics:manufacturing:bom:billofmaterial:list", "BOM变更记录列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetBillOfMaterialChangeLogListAsync([FromQuery] TaktBillOfMaterialChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">BOM变更记录ID</param>
     /// <returns>BOM变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterialchangelog:query", "BOM变更记录详情")]
+    [TaktPermission("logistics:manufacturing:bom:billofmaterial:query", "BOM变更记录详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBillOfMaterialChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// 获取BOM变更记录选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterialchangelog:query", "BOM变更记录选项")]
+    [TaktPermission("logistics:manufacturing:bom:billofmaterial:query", "BOM变更记录选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetBillOfMaterialChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>BOM变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterialchangelog:create", "创建BOM变更记录")]
+    [TaktPermission("logistics:manufacturing:bom:billofmaterial:create", "创建BOM变更记录")]
     [HttpPost]
     public async Task<IActionResult> CreateBillOfMaterialChangeLogAsync([FromBody] TaktBillOfMaterialChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// <param name="id">BOM变更记录ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>BOM变更记录DTO</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterialchangelog:update", "更新BOM变更记录")]
+    [TaktPermission("logistics:manufacturing:bom:billofmaterial:update", "更新BOM变更记录")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateBillOfMaterialChangeLogAsync(long id, [FromBody] TaktBillOfMaterialChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">BOM变更记录ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterialchangelog:delete", "删除BOM变更记录")]
+    [TaktPermission("logistics:manufacturing:bom:billofmaterial:delete", "删除BOM变更记录")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBillOfMaterialChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterialchangelog:delete", "批量删除BOM变更记录")]
+    [TaktPermission("logistics:manufacturing:bom:billofmaterial:delete", "批量删除BOM变更记录")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteBillOfMaterialChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktBillOfMaterialChangeLogsController : TaktControllerBase
     /// 导出BOM变更记录
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:billofmaterialchangelog:export", "导出BOM变更记录")]
+    [TaktPermission("logistics:manufacturing:bom:billofmaterial:export", "导出BOM变更记录")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportBillOfMaterialChangeLogAsync([FromQuery] TaktBillOfMaterialChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

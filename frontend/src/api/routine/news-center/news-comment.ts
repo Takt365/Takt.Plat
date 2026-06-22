@@ -42,9 +42,7 @@ export function getNewsCommentList(queryDto: any): Promise<TaktPagedResult<NewsC
   return request<TaktPagedResult<NewsComment>>({
     url: `${NEWS_COMMENT_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -218,7 +216,7 @@ export function exportNewsComment(
     url: `${NEWS_COMMENT_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

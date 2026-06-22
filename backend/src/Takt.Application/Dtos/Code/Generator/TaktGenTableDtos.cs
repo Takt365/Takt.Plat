@@ -10,7 +10,6 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
@@ -106,7 +105,7 @@ public class TaktGenTableDto : TaktTenantDtoBase
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组
+    /// 菜单权限组（gen_button_category 后缀，逗号/JSON；<b>仅</b>用于生成 menu_and_translation.sql 按钮 INSERT）
     /// </summary>
     public string? MenuButtonGroup { get; set; } = string.Empty;
 
@@ -370,7 +369,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public string? PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组
+    /// 菜单权限组（gen_button_category 后缀，逗号/JSON；<b>仅</b>用于生成 menu_and_translation.sql 按钮 INSERT）
     /// </summary>
     public string? MenuButtonGroup { get; set; } = string.Empty;
 
@@ -548,7 +547,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -573,13 +572,11 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）
     /// </summary>
-    [Required(ErrorMessage = "数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000，不可空）不能为空")]
     public string DataSource { get; set; } = string.Empty;
 
     /// <summary>
     /// 数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）
     /// </summary>
-    [Required(ErrorMessage = "数据表名称（唯一索引：租户内数据源+表名唯一，见 ix_gen_table_datasource_table_unique）不能为空")]
     public string TableName { get; set; } = string.Empty;
 
     /// <summary>
@@ -620,7 +617,6 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）
     /// </summary>
-    [Required(ErrorMessage = "生成模板类型（crud=单表操作，tree=树表操作，sub=主子表操作）不能为空")]
     public string GenTemplateCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -631,7 +627,6 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
     /// </summary>
-    [Required(ErrorMessage = "业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）不能为空")]
     public string GenBusinessName { get; set; } = string.Empty;
 
     /// <summary>
@@ -642,11 +637,10 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。
     /// </summary>
-    [Required(ErrorMessage = "权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。不能为空")]
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组
+    /// 菜单权限组（gen_button_category 后缀，逗号/JSON；<b>仅</b>用于生成 menu_and_translation.sql 按钮 INSERT）
     /// </summary>
     public string? MenuButtonGroup { get; set; } = string.Empty;
 
@@ -663,7 +657,6 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 实体类名称（首字母大写，驼峰命名）
     /// </summary>
-    [Required(ErrorMessage = "实体类名称（首字母大写，驼峰命名）不能为空")]
     public string EntityClassName { get; set; } = string.Empty;
 
     /// <summary>
@@ -739,7 +732,6 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 生成路径（默认为项目根目录）
     /// </summary>
-    [Required(ErrorMessage = "生成路径（默认为项目根目录）不能为空")]
     public string GenPath { get; set; } = string.Empty;
 
     /// <summary>
@@ -761,13 +753,11 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 排序字段
     /// </summary>
-    [Required(ErrorMessage = "排序字段不能为空")]
     public string SortField { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序类型（asc=升序，desc=降序）
     /// </summary>
-    [Required(ErrorMessage = "排序类型（asc=升序，desc=降序）不能为空")]
     public string SortType { get; set; } = string.Empty;
 
     /// <summary>
@@ -808,7 +798,6 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 作者
     /// </summary>
-    [Required(ErrorMessage = "作者不能为空")]
     public string GenAuthor { get; set; } = string.Empty;
 
     /// <summary>
@@ -817,14 +806,14 @@ public class TaktGenTableCreateDto
     public string? OtherGenOptions { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）（子表，级联保存）
+    /// 字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）（子表，级联保存；GenTableColumnId&gt;0 更新，=0 新增）
     /// </summary>
-    public List<TaktGenTableColumnCreateDto>? Columns { get; set; }
+    public List<TaktGenTableColumnUpdateDto>? Columns { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -844,9 +833,8 @@ public class TaktGenTableCreateDto
 public class TaktGenTableUpdateDto : TaktGenTableCreateDto
 {
     /// <summary>
-    /// GenTableID（标识要更新的实体）
+    /// GenTableID（标识要更新的实体；以路由 {id} 为准，body 可省略）
     /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long GenTableId { get; set; }
@@ -930,7 +918,7 @@ public class TaktGenTableTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -1012,7 +1000,7 @@ public class TaktGenTableImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -1108,7 +1096,7 @@ public class TaktGenTableExportDto
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组
+    /// 菜单权限组（gen_button_category 后缀，逗号/JSON；<b>仅</b>用于生成 menu_and_translation.sql 按钮 INSERT）
     /// </summary>
     public string? MenuButtonGroup { get; set; } = string.Empty;
 
@@ -1276,7 +1264,7 @@ public class TaktGenTableExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

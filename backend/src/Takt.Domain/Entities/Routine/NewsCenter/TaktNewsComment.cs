@@ -94,12 +94,6 @@ public class TaktNewsComment : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "comment_level", ColumnDescription = "评论层级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CommentLevel { get; set; } = 0;
     /// <summary>
-    /// 流程实例 ID（评论审核工作流）
-    /// </summary>
-    [SugarColumn(ColumnName = "flow_instance_id", ColumnDescription = "流程实例ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-    /// <summary>
     /// 评论状态
     /// </summary>
     [SugarColumn(ColumnName = "comment_status", ColumnDescription = "评论状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]

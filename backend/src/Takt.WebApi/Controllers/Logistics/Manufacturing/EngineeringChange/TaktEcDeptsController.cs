@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDeptsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变部门控制器
 // 
@@ -41,7 +41,7 @@ public class TaktEcDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecdept:list", "设变部门列表")]
+    [TaktPermission("logistics:manufacturing:engineeringchange:ec:list", "设变部门列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcDeptListAsync([FromQuery] TaktEcDeptQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEcDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="id">设变部门ID</param>
     /// <returns>设变部门DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecdept:query", "设变部门详情")]
+    [TaktPermission("logistics:manufacturing:engineeringchange:ec:query", "设变部门详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEcDeptByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEcDeptsController : TaktControllerBase
     /// 获取设变部门选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecdept:query", "设变部门选项")]
+    [TaktPermission("logistics:manufacturing:engineeringchange:ec:query", "设变部门选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEcDeptOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEcDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>设变部门DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecdept:create", "创建设变部门")]
+    [TaktPermission("logistics:manufacturing:engineeringchange:ec:create", "创建设变部门")]
     [HttpPost]
     public async Task<IActionResult> CreateEcDeptAsync([FromBody] TaktEcDeptCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEcDeptsController : TaktControllerBase
     /// <param name="id">设变部门ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>设变部门DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecdept:update", "更新设变部门")]
+    [TaktPermission("logistics:manufacturing:engineeringchange:ec:update", "更新设变部门")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEcDeptAsync(long id, [FromBody] TaktEcDeptUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEcDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="id">设变部门ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecdept:delete", "删除设变部门")]
+    [TaktPermission("logistics:manufacturing:engineeringchange:ec:delete", "删除设变部门")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEcDeptByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEcDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecdept:delete", "批量删除设变部门")]
+    [TaktPermission("logistics:manufacturing:engineeringchange:ec:delete", "批量删除设变部门")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEcDeptBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktEcDeptsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecdept:import", "获取设变部门导入模板")]
+    [TaktPermission("logistics:manufacturing:engineeringchange:ec:import", "获取设变部门导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEcDeptTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktEcDeptsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecdept:import", "导入设变部门")]
+    [TaktPermission("logistics:manufacturing:engineeringchange:ec:import", "导入设变部门")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEcDeptAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktEcDeptsController : TaktControllerBase
     /// 导出设变部门
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineeringchange:ecdept:export", "导出设变部门")]
+    [TaktPermission("logistics:manufacturing:engineeringchange:ec:export", "导出设变部门")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcDeptAsync([FromQuery] TaktEcDeptQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

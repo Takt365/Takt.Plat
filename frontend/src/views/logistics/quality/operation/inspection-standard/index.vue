@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-quality-operation-inspection-standard">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,64 +52,46 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'inspectionStandardId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getInspectionStandardId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getInspectionStandardId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="inspectionStandardId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.inspectionStandardItem._self') }}</div>
-          <a-table
-            v-if="hasInspectionStandardItemRows(record)"
-            :columns="inspectionStandardItemExpandColumns"
-            :data-source="getInspectionStandardItemRows(record)"
-            :row-key="(row: InspectionStandardItem, index?: number) => row?.inspectionStandardItemId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <InspectionStandardItemPanel
+          ref="inspectionStandardItemPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <InspectionStandardForm
+        :key="formData?.inspectionStandardId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -127,100 +109,114 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.inspectionStandard.plantcode')">
+      <a-form-item :label="t('entity.inspectionstandard.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('standardCode')">
-      <a-form-item :label="t('entity.inspectionStandard.standardcode')">
+      <a-form-item :label="t('entity.inspectionstandard.standardcode')">
         <a-input
           v-model:value="advancedQueryForm.standardCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.standardcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardcode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('standardName')">
-      <a-form-item :label="t('entity.inspectionStandard.standardname')">
+      <a-form-item :label="t('entity.inspectionstandard.standardname')">
         <a-input
           v-model:value="advancedQueryForm.standardName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.standardname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardname') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionType')">
-      <a-form-item :label="t('entity.inspectionStandard.inspectiontype')">
+      <a-form-item :label="t('entity.inspectionstandard.inspectiontype')">
         <a-input-number
           v-model:value="advancedQueryForm.inspectionType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.inspectiontype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.inspectiontype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCategoryCode')">
-      <a-form-item :label="t('entity.inspectionStandard.materialcategorycode')">
+      <a-form-item :label="t('entity.inspectionstandard.materialcategorycode')">
         <a-input
           v-model:value="advancedQueryForm.materialCategoryCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.materialcategorycode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.materialcategorycode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCategoryName')">
-      <a-form-item :label="t('entity.inspectionStandard.materialcategoryname')">
+      <a-form-item :label="t('entity.inspectionstandard.materialcategoryname')">
         <a-input
           v-model:value="advancedQueryForm.materialCategoryName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.materialcategoryname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.materialcategoryname') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('samplingSchemeCode')">
-      <a-form-item :label="t('entity.inspectionStandard.samplingschemecode')">
+      <a-form-item :label="t('entity.inspectionstandard.samplingschemecode')">
         <a-input
           v-model:value="advancedQueryForm.samplingSchemeCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.samplingschemecode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.samplingschemecode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('samplingSchemeName')">
-      <a-form-item :label="t('entity.inspectionStandard.samplingschemename')">
+      <a-form-item :label="t('entity.inspectionstandard.samplingschemename')">
         <a-input
           v-model:value="advancedQueryForm.samplingSchemeName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.samplingschemename') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.samplingschemename') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isEnabled')">
-      <a-form-item :label="t('entity.inspectionStandard.isenabled')">
+      <a-form-item :label="t('entity.inspectionstandard.isenabled')">
         <a-input-number
           v-model:value="advancedQueryForm.isEnabled"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.isenabled') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.isenabled') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('standardStatus')">
-      <a-form-item :label="t('entity.inspectionStandard.standardstatus')">
+      <a-form-item :label="t('entity.inspectionstandard.standardstatus')">
         <a-input-number
           v-model:value="advancedQueryForm.standardStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionStandard.standardstatus') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.inspectionstandard.standardstatus') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('standardDescription')">
-      <a-form-item :label="t('entity.inspectionStandard.standarddescription')">
+      <a-form-item :label="t('entity.inspectionstandard.standarddescription')">
         <a-textarea
           v-model:value="advancedQueryForm.standardDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.inspectionStandard.standarddescription') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.inspectionstandard.standarddescription') })"
           :rows="2"
           allow-clear
         />
@@ -248,12 +244,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -262,8 +277,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -273,14 +290,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.inspectionStandard._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.inspectionstandard._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.inspectionStandard._self"
+        entity-i18n-key="entity.inspectionstandard._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -316,14 +333,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import InspectionStandardForm from './components/inspection-standard-form.vue'
-import { getInspectionStandardList, getInspectionStandardById, createInspectionStandard, updateInspectionStandard, deleteInspectionStandardById, deleteInspectionStandardBatch, getInspectionStandardTemplate, importInspectionStandard, exportInspectionStandard } from '@/api/logistics/quality/operation/inspection-standard'
-import * as inspectionStandardItemApi from '@/api/logistics/quality/operation/inspection-standard-item'
-import type { InspectionStandardItem, InspectionStandardItemQuery } from '@/types/logistics/quality/operation/inspection-standard-item'
-import type { InspectionStandard, InspectionStandardQuery, InspectionStandardCreate, InspectionStandardUpdate } from '@/types/logistics/quality/operation/inspection-standard'
+import InspectionStandardItemPanel from './components/inspection-standard-item-panel.vue'
+import { provideInspectionStandardMasterContext } from './composables/use-inspection-standard-master-context'
+import { getInspectionStandardList, getInspectionStandardById, createInspectionStandard, updateInspectionStandard, deleteInspectionStandardById, deleteInspectionStandardBatch, getInspectionStandardTemplate, importInspectionStandard, exportInspectionStandard, updateInspectionStandardStatus } from '@/api/logistics/quality/operation/inspection-standard'
+import type { InspectionStandard, InspectionStandardQuery } from '@/types/logistics/quality/operation/inspection-standard'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -331,7 +349,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktInspectionStandard')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.inspectionStandard._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.inspectionstandard._self') })
 )
 
 /** 快捷查询关键字 */
@@ -341,9 +359,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<InspectionStandard[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -358,11 +376,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<InspectionStandard>>({})
+const formData = ref<Partial<InspectionStandard> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -379,25 +399,25 @@ const advancedQueryForm = ref({
   standardDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.inspectionStandard.plantcode') },
-  { key: 'standardCode', label: t('entity.inspectionStandard.standardcode') },
-  { key: 'standardName', label: t('entity.inspectionStandard.standardname') },
-  { key: 'inspectionType', label: t('entity.inspectionStandard.inspectiontype') },
-  { key: 'materialCategoryCode', label: t('entity.inspectionStandard.materialcategorycode') },
-  { key: 'materialCategoryName', label: t('entity.inspectionStandard.materialcategoryname') },
-  { key: 'samplingSchemeCode', label: t('entity.inspectionStandard.samplingschemecode') },
-  { key: 'samplingSchemeName', label: t('entity.inspectionStandard.samplingschemename') },
-  { key: 'isEnabled', label: t('entity.inspectionStandard.isenabled') },
-  { key: 'standardStatus', label: t('entity.inspectionStandard.standardstatus') },
-  { key: 'standardDescription', label: t('entity.inspectionStandard.standarddescription') },
+  { key: 'plantCode', label: t('entity.inspectionstandard.plantcode') },
+  { key: 'standardCode', label: t('entity.inspectionstandard.standardcode') },
+  { key: 'standardName', label: t('entity.inspectionstandard.standardname') },
+  { key: 'inspectionType', label: t('entity.inspectionstandard.inspectiontype') },
+  { key: 'materialCategoryCode', label: t('entity.inspectionstandard.materialcategorycode') },
+  { key: 'materialCategoryName', label: t('entity.inspectionstandard.materialcategoryname') },
+  { key: 'samplingSchemeCode', label: t('entity.inspectionstandard.samplingschemecode') },
+  { key: 'samplingSchemeName', label: t('entity.inspectionstandard.samplingschemename') },
+  { key: 'isEnabled', label: t('entity.inspectionstandard.isenabled') },
+  { key: 'standardStatus', label: t('entity.inspectionstandard.standardstatus') },
+  { key: 'standardDescription', label: t('entity.inspectionstandard.standarddescription') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -415,76 +435,92 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideInspectionStandardMasterContext()
+const inspectionStandardItemPanelRef = ref<InstanceType<typeof InspectionStandardItemPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {InspectionStandardQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<InspectionStandardQuery>): InspectionStandardQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: InspectionStandardQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof InspectionStandardQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('standardCode', form.standardCode)
+  assignTrimmed('standardName', form.standardName)
+  if (form.inspectionType !== undefined && form.inspectionType !== null) {
+    query.inspectionType = form.inspectionType
+  }
+  assignTrimmed('materialCategoryCode', form.materialCategoryCode)
+  assignTrimmed('materialCategoryName', form.materialCategoryName)
+  assignTrimmed('samplingSchemeCode', form.samplingSchemeCode)
+  assignTrimmed('samplingSchemeName', form.samplingSchemeName)
+  if (form.isEnabled !== undefined && form.isEnabled !== null) {
+    query.isEnabled = form.isEnabled
+  }
+  if (form.standardStatus !== undefined && form.standardStatus !== null) {
+    query.standardStatus = form.standardStatus
+  }
+  assignTrimmed('standardDescription', form.standardDescription)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：inspectionStandardItem 列 */
-const inspectionStandardItemExpandColumns = computed(() => [
-  {
-    title: t('entity.inspectionStandardItem.inspectionstandardname'),
-    dataIndex: 'inspectionStandardName',
-    key: 'inspectionStandardName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.inspectionStandardItem.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.inspectionStandardItem.itemcode'),
-    dataIndex: 'itemCode',
-    key: 'itemCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.inspectionStandardItem.itemname'),
-    dataIndex: 'itemName',
-    key: 'itemName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.inspectionStandardItem.itemtype'),
-    dataIndex: 'itemType',
-    key: 'itemType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.inspectionStandardItem.defectlevel'),
-    dataIndex: 'defectLevel',
-    key: 'defectLevel',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.inspectionStandardItem.inspectionmode'),
-    dataIndex: 'inspectionMode',
-    key: 'inspectionMode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.inspectionStandardItem.standardvalue'),
-    dataIndex: 'standardValue',
-    key: 'standardValue',
-    ellipsis: true,
-  },
-])
 
-/** 读取主表行上的 inspectionStandardItem 子表缓存 */
-function getInspectionStandardItemRows(record: InspectionStandard): InspectionStandardItem[] {
-  return (record as any)?.items ?? []
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: InspectionStandard | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getInspectionStandardId(record) : ''
 }
 
-/** 主表行是否已加载 inspectionStandardItem 子表 */
-function hasInspectionStandardItemRows(record: InspectionStandard): boolean {
-  return getInspectionStandardItemRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as InspectionStandard
+  const key = getInspectionStandardId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadInspectionStandardDetail(record: InspectionStandard): Promise<InspectionStandard | null> {
@@ -504,52 +540,6 @@ async function loadInspectionStandardDetail(record: InspectionStandard): Promise
     return null
   }
 }
-/** 懒加载 inspectionStandardItem 子表（InspectionStandardItemQuery + inspectionStandardItemApi，与主表 InspectionStandardQuery 分离） */
-async function loadInspectionStandardItemForInspectionStandard(record: InspectionStandard): Promise<InspectionStandardItem[]> {
-  const masterId = getInspectionStandardId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: InspectionStandardItemQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      inspectionStandardId: masterId,
-    }
-    const result = await inspectionStandardItemApi.getInspectionStandardItemList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getInspectionStandardId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, items: rows } as InspectionStandard
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureInspectionStandardChildrenLoaded(record: InspectionStandard) {
-  if (!hasInspectionStandardItemRows(record)) {
-    await loadInspectionStandardItemForInspectionStandard(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: InspectionStandard) {
-  const key = getInspectionStandardId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureInspectionStandardChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -564,7 +554,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'inspectionStandardId') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.plantcode'),
+    title: t('entity.inspectionstandard.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -573,7 +563,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.standardcode'),
+    title: t('entity.inspectionstandard.standardcode'),
     dataIndex: 'standardCode',
     key: 'standardCode',
     width: 120,
@@ -582,7 +572,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'standardCode') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.standardname'),
+    title: t('entity.inspectionstandard.standardname'),
     dataIndex: 'standardName',
     key: 'standardName',
     width: 120,
@@ -591,7 +581,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'standardName') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.inspectiontype'),
+    title: t('entity.inspectionstandard.inspectiontype'),
     dataIndex: 'inspectionType',
     key: 'inspectionType',
     width: 120,
@@ -600,7 +590,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'inspectionType') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.materialcategorycode'),
+    title: t('entity.inspectionstandard.materialcategorycode'),
     dataIndex: 'materialCategoryCode',
     key: 'materialCategoryCode',
     width: 120,
@@ -609,7 +599,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'materialCategoryCode') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.materialcategoryname'),
+    title: t('entity.inspectionstandard.materialcategoryname'),
     dataIndex: 'materialCategoryName',
     key: 'materialCategoryName',
     width: 120,
@@ -618,7 +608,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'materialCategoryName') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.samplingschemecode'),
+    title: t('entity.inspectionstandard.samplingschemecode'),
     dataIndex: 'samplingSchemeCode',
     key: 'samplingSchemeCode',
     width: 120,
@@ -627,7 +617,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'samplingSchemeCode') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.samplingschemename'),
+    title: t('entity.inspectionstandard.samplingschemename'),
     dataIndex: 'samplingSchemeName',
     key: 'samplingSchemeName',
     width: 120,
@@ -636,7 +626,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'samplingSchemeName') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.isenabled'),
+    title: t('entity.inspectionstandard.isenabled'),
     dataIndex: 'isEnabled',
     key: 'isEnabled',
     width: 120,
@@ -645,7 +635,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'isEnabled') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.standardstatus'),
+    title: t('entity.inspectionstandard.standardstatus'),
     dataIndex: 'standardStatus',
     key: 'standardStatus',
     width: 120,
@@ -654,7 +644,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getInspectionStandardField(record, 'standardStatus') ?? ''
   },
   {
-    title: t('entity.inspectionStandard.standarddescription'),
+    title: t('entity.inspectionstandard.standarddescription'),
     dataIndex: 'standardDescription',
     key: 'standardDescription',
     width: 120,
@@ -693,6 +683,7 @@ const getInspectionStandardId = (record: any): string => record?.[entityIdName] 
  */
 const getInspectionStandardField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -700,51 +691,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: InspectionStandard, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getInspectionStandardId(selectedRow.value) === getInspectionStandardId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: InspectionStandard[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: InspectionStandard) => ({
-  onClick: () => {
-    const key = getInspectionStandardId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getInspectionStandardId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: InspectionStandardQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getInspectionStandardList(params)
+    const res = await getInspectionStandardList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -762,7 +734,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -783,22 +755,23 @@ function handleReset() {
   standardDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.inspectionStandard._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.inspectionstandard._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: InspectionStandard) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.inspectionStandard._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.inspectionstandard._self') })
   formLoading.value = true
   try {
     const detail = await loadInspectionStandardDetail(record)
@@ -814,7 +787,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.inspectionStandard._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.inspectionstandard._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -832,12 +805,17 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateInspectionStandard(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.inspectionStandard._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.inspectionstandard._self') }))
     } else {
       await createInspectionStandard(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.inspectionStandard._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.inspectionstandard._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  inspectionStandardItemPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -847,6 +825,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -878,16 +858,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: InspectionStandardQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportInspectionStandard(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportInspectionStandard(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -906,10 +881,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.inspectionStandard._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.inspectionstandard._self') }))
   } catch (error: any) {
     logger.error('[InspectionStandard] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.inspectionStandard._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.inspectionstandard._self') }))
   } finally {
     loading.value = false
   }
@@ -918,12 +893,16 @@ async function handleExport() {
 async function handleDeleteOne(record: InspectionStandard) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.inspectionStandard._self'), name: t('common.tip.this.target', { target: t('entity.inspectionStandard._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.inspectionstandard._self'), name: t('common.tip.this.target', { target: t('entity.inspectionstandard._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteInspectionStandardById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.inspectionStandard._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.inspectionstandard._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -931,18 +910,22 @@ async function handleDeleteOne(record: InspectionStandard) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.inspectionStandard._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.inspectionstandard._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.inspectionStandard._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.inspectionstandard._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteInspectionStandardBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.inspectionStandard._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.inspectionstandard._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -955,7 +938,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -974,7 +957,7 @@ function handleAdvancedQueryReset() {
   standardDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1003,24 +986,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-quality-operation-inspection-standard {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

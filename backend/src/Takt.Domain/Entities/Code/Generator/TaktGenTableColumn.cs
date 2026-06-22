@@ -34,7 +34,7 @@ public class TaktGenTableColumn : TaktTenantEntityBase
     public long GenTableId { get; set; }
 
     /// <summary>
-    /// 行号（字段在表中的排列顺序，从1开始）
+    /// 行号（项号/序号，固定步长=10）
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
@@ -74,79 +74,79 @@ public class TaktGenTableColumn : TaktTenantEntityBase
   /// <summary>
   /// C#长度（字符串长度、数值类型的整数位数）
   /// </summary>
-  [SugarColumn(ColumnName = "length", ColumnDescription = "数据长度", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+  [SugarColumn(ColumnName = "length", ColumnDescription = "长度", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
   public int Length { get; set; } = 0;
 
   /// <summary>
   /// C#小数位数（decimal等数值类型的小数位数）
   /// </summary>
-  [SugarColumn(ColumnName = "decimal_digits", ColumnDescription = "数据精度", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+  [SugarColumn(ColumnName = "decimal_digits", ColumnDescription = "精度", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
   public int DecimalDigits { get; set; } = 0;
     /// <summary>
     /// 是否主键（1=是，0=否）
     /// </summary>
-    [SugarColumn(ColumnName = "is_pk", ColumnDescription = "是否主键", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_pk", ColumnDescription = "主键", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsPk { get; set; } = 0;
 
     /// <summary>
     /// 是否自增（1=是，0=否）
     /// </summary>
-    [SugarColumn(ColumnName = "is_increment", ColumnDescription = "是否自增", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_increment", ColumnDescription = "自增", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsIncrement { get; set; } = 0;
 
     /// <summary>
     /// 是否必填（1=是，0=否）
     /// </summary>
-    [SugarColumn(ColumnName = "is_required", ColumnDescription = "是否必填", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    [SugarColumn(ColumnName = "is_required", ColumnDescription = "必填", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsRequired { get; set; } = 1;
 
     /// <summary>
     /// 是否为新增字段（1=是，0=否）
     /// </summary>
-    [SugarColumn(ColumnName = "is_create", ColumnDescription = "是否新增", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    [SugarColumn(ColumnName = "is_create", ColumnDescription = "新增", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsCreate { get; set; } = 1;
 
     /// <summary>
     /// 是否更新字段（1=是，0=否）
     /// </summary>
-    [SugarColumn(ColumnName = "is_update", ColumnDescription = "是否更新", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    [SugarColumn(ColumnName = "is_update", ColumnDescription = "更新", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsUpdate { get; set; } = 1;
 
     /// <summary>
     /// 是否查重字段（1=是，0=否）
     /// </summary>
-    [SugarColumn(ColumnName = "is_unique", ColumnDescription = "是否查重", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_unique", ColumnDescription = "查重", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsUnique { get; set; } = 0;
 
     /// <summary>
     /// 是否列表字段（1=是，0=否）
     /// </summary>
-    [SugarColumn(ColumnName = "is_list", ColumnDescription = "是否列表", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    [SugarColumn(ColumnName = "is_list", ColumnDescription = "列表", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsList { get; set; } = 1;
 
     /// <summary>
     /// 是否导出字段（1=是，0=否）
     /// </summary>
-    [SugarColumn(ColumnName = "is_export", ColumnDescription = "是否导出", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    [SugarColumn(ColumnName = "is_export", ColumnDescription = "导出", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsExport { get; set; } = 1;
 
     /// <summary>
     /// 是否可排序字段（1=是，0=否）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
     /// </summary>
-    [SugarColumn(ColumnName = "is_sort", ColumnDescription = "是否排序", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_sort", ColumnDescription = "排序", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsSort { get; set; } = 0;
 
     /// <summary>
     /// 是否查询字段（1=是，0=否）
     /// </summary>
-    [SugarColumn(ColumnName = "is_query", ColumnDescription = "是否查询", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_query", ColumnDescription = "查询", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（EQ=等于，NE=不等于，GT=大于，GTE=大于等于，LT=小于，LTE=小于等于，LIKE=模糊，BETWEEN=范围）
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其它类型默认 eq
     /// </summary>
-    [SugarColumn(ColumnName = "query_type", ColumnDescription = "查询方式", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "EQ")]
-    public string QueryType { get; set; } = "EQ";
+    [SugarColumn(ColumnName = "query_type", ColumnDescription = "查询方式", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "")]
+    public string QueryType { get; set; } = string.Empty;
 
     /// <summary>
     /// 显示类型（input=输入框，textarea=文本域，select=下拉框，checkbox=复选框，radio=单选框，date=日期控件，time=时间控件，image=图片上传，file=文件上传，slider=滑块，switch=开关，editor=富文本编辑器）
@@ -159,12 +159,6 @@ public class TaktGenTableColumn : TaktTenantEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "dict_type", ColumnDescription = "字典类型", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DictType { get; set; }
-
-    /// <summary>
-    /// 排序序号
-    /// </summary>
-    [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int SortOrder { get; set; } = 0;
 
     // ========================================
     // 导航属性区域

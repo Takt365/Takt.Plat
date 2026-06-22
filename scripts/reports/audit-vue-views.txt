@@ -1,0 +1,383 @@
+Takt Plat - 菜单视图审计报告（仅输出缺失/不一致项）
+生成时间: 2026-06-22 01:14:56
+菜单种子: TaktMenuLevel1SeedData.cs, TaktMenuLevel2SeedData.cs, TaktMenuLevel3SeedData.cs, TaktMenuLevel4SeedData.cs, TaktMenuLevel5SeedData.cs
+命令: node audit-vue-views.cjs [--out=路径]  （请在 scripts 目录下执行）
+
+=== 汇总 ===
+菜单页面(MenuType=1): 209
+CRUD/业务页(已排除壳页 15): 194
+菜单↔views 目录不一致: 15
+  - RoutePath 与 ComponentPath 不一致: 0
+  - 菜单路径与 views 目录不一致: 12
+  - 父级菜单缺 index 但子目录有 views: 3
+视图/api 栈异常: 19
+  - 缺少 index.vue: 19
+  - 有视图缺 api/types: 0
+异常项合计: 34
+审计结论: FAIL
+
+=== 菜单路径与 views 目录不一致 (12) ===
+[human-resource/personnel/employee-delegate]
+  菜单: HUMANRESOURCE_PERSONNEL_EMPLOYEE_DELEGATE
+  种子: TaktMenuLevel3SeedData.cs
+  权限: humanresource:personnel:employeedelegation:list
+  RoutePath: /human-resource/personnel/employee-delegate
+  ComponentPath: human-resource/personnel/employee-delegate/index
+  实际 views: human-resource/personnel/employee-delegation/index.vue
+  应对齐 RoutePath: /human-resource/personnel/employee-delegate → /human-resource/personnel/employee-delegation
+  应对齐 ComponentPath: human-resource/personnel/employee-delegate/index → human-resource/personnel/employee-delegation/index
+
+[human-resource/talent/interview]
+  菜单: HUMANRESOURCE_TALENT_INTERVIEW
+  种子: TaktMenuLevel3SeedData.cs
+  权限: humanresource:talent:interview:list
+  RoutePath: /human-resource/talent/interview
+  ComponentPath: human-resource/talent/interview/index
+  实际 views: human-resource/talent/talent-interview/index.vue
+  应对齐 RoutePath: /human-resource/talent/interview → /human-resource/talent/talent-interview
+  应对齐 ComponentPath: human-resource/talent/interview/index → human-resource/talent/talent-interview/index
+
+[human-resource/talent/job-posting]
+  菜单: HUMANRESOURCE_TALENT_JOB_POSTING
+  种子: TaktMenuLevel3SeedData.cs
+  权限: humanresource:talent:jobposting:list
+  RoutePath: /human-resource/talent/job-posting
+  ComponentPath: human-resource/talent/job-posting/index
+  实际 views: human-resource/talent/talent-job-posting/index.vue
+  应对齐 RoutePath: /human-resource/talent/job-posting → /human-resource/talent/talent-job-posting
+  应对齐 ComponentPath: human-resource/talent/job-posting/index → human-resource/talent/talent-job-posting/index
+
+[human-resource/talent/offer]
+  菜单: HUMANRESOURCE_TALENT_OFFER
+  种子: TaktMenuLevel3SeedData.cs
+  权限: humanresource:talent:offer:list
+  RoutePath: /human-resource/talent/offer
+  ComponentPath: human-resource/talent/offer/index
+  实际 views: human-resource/talent/talent-offer/index.vue
+  应对齐 RoutePath: /human-resource/talent/offer → /human-resource/talent/talent-offer
+  应对齐 ComponentPath: human-resource/talent/offer/index → human-resource/talent/talent-offer/index
+
+[human-resource/talent/recruitment-plan]
+  菜单: HUMANRESOURCE_TALENT_RECRUITMENT_PLAN
+  种子: TaktMenuLevel3SeedData.cs
+  权限: humanresource:talent:recruitmentplan:list
+  RoutePath: /human-resource/talent/recruitment-plan
+  ComponentPath: human-resource/talent/recruitment-plan/index
+  实际 views: human-resource/talent/talent-recruitment-plan/index.vue
+  应对齐 RoutePath: /human-resource/talent/recruitment-plan → /human-resource/talent/talent-recruitment-plan
+  应对齐 ComponentPath: human-resource/talent/recruitment-plan/index → human-resource/talent/talent-recruitment-plan/index
+
+[human-resource/talent/staffing-requirement]
+  菜单: HUMANRESOURCE_TALENT_STAFFING_REQUIREMENT
+  种子: TaktMenuLevel3SeedData.cs
+  权限: humanresource:talent:staffingrequirement:list
+  RoutePath: /human-resource/talent/staffing-requirement
+  ComponentPath: human-resource/talent/staffing-requirement/index
+  实际 views: human-resource/talent/talent-staffing-requirement/index.vue
+  应对齐 RoutePath: /human-resource/talent/staffing-requirement → /human-resource/talent/talent-staffing-requirement
+  应对齐 ComponentPath: human-resource/talent/staffing-requirement/index → human-resource/talent/talent-staffing-requirement/index
+
+[logistics/manufacturing/sop/ack]
+  菜单: LOGISTICS_MANUFACTURING_SOP_ACK
+  种子: TaktMenuLevel4SeedData.cs
+  权限: logistics:manufacturing:sop:ack:list
+  RoutePath: /logistics/manufacturing/sop/ack
+  ComponentPath: logistics/manufacturing/sop/ack/index
+  实际 views: logistics/manufacturing/sop/sop-ack/index.vue
+  应对齐 RoutePath: /logistics/manufacturing/sop/ack → /logistics/manufacturing/sop/sop-ack
+  应对齐 ComponentPath: logistics/manufacturing/sop/ack/index → logistics/manufacturing/sop/sop-ack/index
+
+[logistics/manufacturing/sop/call]
+  菜单: LOGISTICS_MANUFACTURING_SOP_CALL
+  种子: TaktMenuLevel4SeedData.cs
+  权限: logistics:manufacturing:sop:call:list
+  RoutePath: /logistics/manufacturing/sop/call
+  ComponentPath: logistics/manufacturing/sop/call/index
+  实际 views: logistics/manufacturing/sop/sop-call/index.vue
+  应对齐 RoutePath: /logistics/manufacturing/sop/call → /logistics/manufacturing/sop/sop-call
+  应对齐 ComponentPath: logistics/manufacturing/sop/call/index → logistics/manufacturing/sop/sop-call/index
+
+[logistics/manufacturing/sop/esd-check]
+  菜单: LOGISTICS_MANUFACTURING_SOP_ESD_CHECK
+  种子: TaktMenuLevel4SeedData.cs
+  权限: logistics:manufacturing:sop:esdcheck:list
+  RoutePath: /logistics/manufacturing/sop/esd-check
+  ComponentPath: logistics/manufacturing/sop/esd-check/index
+  实际 views: logistics/manufacturing/sop/sop-esd-check/index.vue
+  应对齐 RoutePath: /logistics/manufacturing/sop/esd-check → /logistics/manufacturing/sop/sop-esd-check
+  应对齐 ComponentPath: logistics/manufacturing/sop/esd-check/index → logistics/manufacturing/sop/sop-esd-check/index
+
+[logistics/manufacturing/sop/workstation]
+  菜单: LOGISTICS_MANUFACTURING_SOP_WORKSTATION
+  种子: TaktMenuLevel4SeedData.cs
+  权限: logistics:manufacturing:sop:workstation:list
+  RoutePath: /logistics/manufacturing/sop/workstation
+  ComponentPath: logistics/manufacturing/sop/workstation/index
+  实际 views: logistics/manufacturing/sop/sop-workstation/index.vue
+  应对齐 RoutePath: /logistics/manufacturing/sop/workstation → /logistics/manufacturing/sop/sop-workstation
+  应对齐 ComponentPath: logistics/manufacturing/sop/workstation/index → logistics/manufacturing/sop/sop-workstation/index
+
+[logistics/sales/sales-invoice]
+  菜单: LOGISTICS_SALES_INVOICE
+  种子: TaktMenuLevel3SeedData.cs
+  权限: logistics:sales:invoice:list
+  RoutePath: /logistics/sales/sales-invoice
+  ComponentPath: logistics/sales/sales-invoice/index
+  实际 views: logistics/sales/invoice/index.vue
+  应对齐 RoutePath: /logistics/sales/sales-invoice → /logistics/sales/invoice
+  应对齐 ComponentPath: logistics/sales/sales-invoice/index → logistics/sales/invoice/index
+
+[routine/conference-center]
+  菜单: ROUTINE_CONFERENCE_CENTER
+  种子: TaktMenuLevel2SeedData.cs
+  权限: routine:conferencecenter:list
+  RoutePath: /routine/conference-center
+  ComponentPath: routine/conference-center/index
+  实际 views: routine/conference-center/conference/index.vue
+  应对齐 RoutePath: /routine/conference-center → /routine/conference-center/conference
+  应对齐 ComponentPath: routine/conference-center/index → routine/conference-center/conference/index
+
+=== 父级菜单缺 index 但子目录有 views (3) ===
+[routine/document-center]
+  菜单: ROUTINE_DOCUMENT_CENTER
+  种子: TaktMenuLevel2SeedData.cs
+  权限: routine:documentcenter:list
+  RoutePath: /routine/document-center
+  ComponentPath: routine/document-center/index
+  子目录已有 views: routine/document-center/document, routine/document-center/document-change-log
+  说明: 菜单指向父级 index，但 views 在子目录；应改 MenuType=0 目录或新增子菜单
+
+[routine/news-center]
+  菜单: ROUTINE_NEWS_CENTER
+  种子: TaktMenuLevel2SeedData.cs
+  权限: routine:newscenter:list
+  RoutePath: /routine/news-center
+  ComponentPath: routine/news-center/index
+  子目录已有 views: routine/news-center/news
+  说明: 菜单指向父级 index，但 views 在子目录；应改 MenuType=0 目录或新增子菜单
+
+[routine/visitor-center]
+  菜单: ROUTINE_VISITOR_CENTER
+  种子: TaktMenuLevel2SeedData.cs
+  权限: routine:visitorcenter:list
+  RoutePath: /routine/visitor-center
+  ComponentPath: routine/visitor-center/index
+  子目录已有 views: routine/visitor-center/visitor
+  说明: 菜单指向父级 index，但 views 在子目录；应改 MenuType=0 目录或新增子菜单
+
+=== 缺少 index.vue - 缺 API/types (19) ===
+[logistics/manufacturing/engineering-change/batch]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_BATCH
+  权限: logistics:manufacturing:engineeringchange:batch:list
+  路由: /logistics/manufacturing/engineering-change/batch
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Batch
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/bukan]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_BUKAN
+  权限: logistics:manufacturing:engineeringchange:bukan:list
+  路由: /logistics/manufacturing/engineering-change/bukan
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Bukan
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/gijutsu]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_GIJUTSU
+  权限: logistics:manufacturing:engineeringchange:gijutsu:list
+  路由: /logistics/manufacturing/engineering-change/gijutsu
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Gijutsu
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/hinkan]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_HINKAN
+  权限: logistics:manufacturing:engineeringchange:hinkan:list
+  路由: /logistics/manufacturing/engineering-change/hinkan
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Hinkan
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/kakunin]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KAKUNIN
+  权限: logistics:manufacturing:engineeringchange:kakunin:list
+  路由: /logistics/manufacturing/engineering-change/kakunin
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Kakunin
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/kanban]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KANBAN
+  权限: logistics:manufacturing:engineeringchange:kanban:list
+  路由: /logistics/manufacturing/engineering-change/kanban
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Kanban
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/koubai]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KOUBAI
+  权限: logistics:manufacturing:engineeringchange:koubai:list
+  路由: /logistics/manufacturing/engineering-change/koubai
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Koubai
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/legacy-product]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_LEGACY_PRODUCT
+  权限: logistics:manufacturing:engineeringchange:legacyproduct:list
+  路由: /logistics/manufacturing/engineering-change/legacy-product
+  种子: TaktMenuLevel4SeedData.cs
+  实体: LegacyProduct
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/seikan]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIKAN
+  权限: logistics:manufacturing:engineeringchange:seikan:list
+  路由: /logistics/manufacturing/engineering-change/seikan
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Seikan
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/seizouikka]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIZOUIKKA
+  权限: logistics:manufacturing:engineeringchange:seizouikka:list
+  路由: /logistics/manufacturing/engineering-change/seizouikka
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Seizouikka
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/seizounika]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIZOUNIKA
+  权限: logistics:manufacturing:engineeringchange:seizounika:list
+  路由: /logistics/manufacturing/engineering-change/seizounika
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Seizounika
+  api: N  types: N  view: N
+
+[logistics/manufacturing/engineering-change/ukeken]
+  菜单: LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_UKEKEN
+  权限: logistics:manufacturing:engineeringchange:ukeken:list
+  路由: /logistics/manufacturing/engineering-change/ukeken
+  种子: TaktMenuLevel4SeedData.cs
+  实体: Ukeken
+  api: N  types: N  view: N
+
+[logistics/manufacturing/planning/master-demand-schedule]
+  菜单: LOGISTICS_MANUFACTURING_PLANNING_MASTER_DEMAND_SCHEDULE
+  权限: logistics:manufacturing:planning:master:demand:schedule:list
+  路由: /logistics/manufacturing/planning/master-demand-schedule
+  种子: TaktMenuLevel4SeedData.cs
+  实体: MasterDemandSchedule
+  api: N  types: N  view: N
+
+[logistics/manufacturing/planning/master-production-schedule]
+  菜单: LOGISTICS_MANUFACTURING_PLANNING_MASTER_PRODUCTION_SCHEDULE
+  权限: logistics:manufacturing:planning:master:production:schedule:list
+  路由: /logistics/manufacturing/planning/master-production-schedule
+  种子: TaktMenuLevel4SeedData.cs
+  实体: MasterProductionSchedule
+  api: N  types: N  view: N
+
+[logistics/manufacturing/planning/planned-order]
+  菜单: LOGISTICS_MANUFACTURING_PLANNING_PLANNED_ORDER
+  权限: logistics:manufacturing:planning:planned:order:list
+  路由: /logistics/manufacturing/planning/planned-order
+  种子: TaktMenuLevel4SeedData.cs
+  实体: PlannedOrder
+  api: N  types: N  view: N
+
+[logistics/manufacturing/scheduling/aps-order]
+  菜单: LOGISTICS_MANUFACTURING_SCHEDULING_APS_ORDER
+  权限: logistics:manufacturing:scheduling:aps:order:list
+  路由: /logistics/manufacturing/scheduling/aps-order
+  种子: TaktMenuLevel4SeedData.cs
+  实体: ApsOrder
+  api: N  types: N  view: N
+
+[logistics/manufacturing/scheduling/changeover-matrix]
+  菜单: LOGISTICS_MANUFACTURING_SCHEDULING_CHANGEOVER_MATRIX
+  权限: logistics:manufacturing:scheduling:changeover:matrix:list
+  路由: /logistics/manufacturing/scheduling/changeover-matrix
+  种子: TaktMenuLevel4SeedData.cs
+  实体: ChangeoverMatrix
+  api: N  types: N  view: N
+
+[logistics/manufacturing/scheduling/production-dispatch]
+  菜单: LOGISTICS_MANUFACTURING_SCHEDULING_PRODUCTION_DISPATCH
+  权限: logistics:manufacturing:scheduling:production:dispatch:list
+  路由: /logistics/manufacturing/scheduling/production-dispatch
+  种子: TaktMenuLevel4SeedData.cs
+  实体: ProductionDispatch
+  api: N  types: N  view: N
+
+[logistics/manufacturing/scheduling/work-center]
+  菜单: LOGISTICS_MANUFACTURING_SCHEDULING_WORK_CENTER
+  权限: logistics:manufacturing:scheduling:work:center:list
+  路由: /logistics/manufacturing/scheduling/work-center
+  种子: TaktMenuLevel4SeedData.cs
+  实体: WorkCenter
+  api: N  types: N  view: N
+
+=== 异常清单 TSV (19, 可导入 Excel) ===
+status	viewModulePath	menuCode	permission	routePath	api	types	view	entityArg
+MISSING_STACK	logistics/manufacturing/engineering-change/batch	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_BATCH	logistics:manufacturing:engineeringchange:batch:list	/logistics/manufacturing/engineering-change/batch	N	N	N	Batch
+MISSING_STACK	logistics/manufacturing/engineering-change/bukan	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_BUKAN	logistics:manufacturing:engineeringchange:bukan:list	/logistics/manufacturing/engineering-change/bukan	N	N	N	Bukan
+MISSING_STACK	logistics/manufacturing/engineering-change/gijutsu	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_GIJUTSU	logistics:manufacturing:engineeringchange:gijutsu:list	/logistics/manufacturing/engineering-change/gijutsu	N	N	N	Gijutsu
+MISSING_STACK	logistics/manufacturing/engineering-change/hinkan	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_HINKAN	logistics:manufacturing:engineeringchange:hinkan:list	/logistics/manufacturing/engineering-change/hinkan	N	N	N	Hinkan
+MISSING_STACK	logistics/manufacturing/engineering-change/kakunin	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KAKUNIN	logistics:manufacturing:engineeringchange:kakunin:list	/logistics/manufacturing/engineering-change/kakunin	N	N	N	Kakunin
+MISSING_STACK	logistics/manufacturing/engineering-change/kanban	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KANBAN	logistics:manufacturing:engineeringchange:kanban:list	/logistics/manufacturing/engineering-change/kanban	N	N	N	Kanban
+MISSING_STACK	logistics/manufacturing/engineering-change/koubai	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KOUBAI	logistics:manufacturing:engineeringchange:koubai:list	/logistics/manufacturing/engineering-change/koubai	N	N	N	Koubai
+MISSING_STACK	logistics/manufacturing/engineering-change/legacy-product	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_LEGACY_PRODUCT	logistics:manufacturing:engineeringchange:legacyproduct:list	/logistics/manufacturing/engineering-change/legacy-product	N	N	N	LegacyProduct
+MISSING_STACK	logistics/manufacturing/engineering-change/seikan	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIKAN	logistics:manufacturing:engineeringchange:seikan:list	/logistics/manufacturing/engineering-change/seikan	N	N	N	Seikan
+MISSING_STACK	logistics/manufacturing/engineering-change/seizouikka	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIZOUIKKA	logistics:manufacturing:engineeringchange:seizouikka:list	/logistics/manufacturing/engineering-change/seizouikka	N	N	N	Seizouikka
+MISSING_STACK	logistics/manufacturing/engineering-change/seizounika	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_SEIZOUNIKA	logistics:manufacturing:engineeringchange:seizounika:list	/logistics/manufacturing/engineering-change/seizounika	N	N	N	Seizounika
+MISSING_STACK	logistics/manufacturing/engineering-change/ukeken	LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_UKEKEN	logistics:manufacturing:engineeringchange:ukeken:list	/logistics/manufacturing/engineering-change/ukeken	N	N	N	Ukeken
+MISSING_STACK	logistics/manufacturing/planning/master-demand-schedule	LOGISTICS_MANUFACTURING_PLANNING_MASTER_DEMAND_SCHEDULE	logistics:manufacturing:planning:master:demand:schedule:list	/logistics/manufacturing/planning/master-demand-schedule	N	N	N	MasterDemandSchedule
+MISSING_STACK	logistics/manufacturing/planning/master-production-schedule	LOGISTICS_MANUFACTURING_PLANNING_MASTER_PRODUCTION_SCHEDULE	logistics:manufacturing:planning:master:production:schedule:list	/logistics/manufacturing/planning/master-production-schedule	N	N	N	MasterProductionSchedule
+MISSING_STACK	logistics/manufacturing/planning/planned-order	LOGISTICS_MANUFACTURING_PLANNING_PLANNED_ORDER	logistics:manufacturing:planning:planned:order:list	/logistics/manufacturing/planning/planned-order	N	N	N	PlannedOrder
+MISSING_STACK	logistics/manufacturing/scheduling/aps-order	LOGISTICS_MANUFACTURING_SCHEDULING_APS_ORDER	logistics:manufacturing:scheduling:aps:order:list	/logistics/manufacturing/scheduling/aps-order	N	N	N	ApsOrder
+MISSING_STACK	logistics/manufacturing/scheduling/changeover-matrix	LOGISTICS_MANUFACTURING_SCHEDULING_CHANGEOVER_MATRIX	logistics:manufacturing:scheduling:changeover:matrix:list	/logistics/manufacturing/scheduling/changeover-matrix	N	N	N	ChangeoverMatrix
+MISSING_STACK	logistics/manufacturing/scheduling/production-dispatch	LOGISTICS_MANUFACTURING_SCHEDULING_PRODUCTION_DISPATCH	logistics:manufacturing:scheduling:production:dispatch:list	/logistics/manufacturing/scheduling/production-dispatch	N	N	N	ProductionDispatch
+MISSING_STACK	logistics/manufacturing/scheduling/work-center	LOGISTICS_MANUFACTURING_SCHEDULING_WORK_CENTER	logistics:manufacturing:scheduling:work:center:list	/logistics/manufacturing/scheduling/work-center	N	N	N	WorkCenter
+
+=== 修改清单（汇总；工作目录 scripts/）===
+
+# 1. 菜单种子 TaktMenuLevel1SeedData.cs / TaktMenuLevel2SeedData.cs / TaktMenuLevel3SeedData.cs / TaktMenuLevel4SeedData.cs / TaktMenuLevel5SeedData.cs（RoutePath / ComponentPath / MenuType）
+TaktMenuLevel3SeedData.cs | HUMANRESOURCE_PERSONNEL_EMPLOYEE_DELEGATE | RoutePath: /human-resource/personnel/employee-delegate → /human-resource/personnel/employee-delegation | ComponentPath: human-resource/personnel/employee-delegate/index → human-resource/personnel/employee-delegation/index
+TaktMenuLevel3SeedData.cs | HUMANRESOURCE_TALENT_INTERVIEW | RoutePath: /human-resource/talent/interview → /human-resource/talent/talent-interview | ComponentPath: human-resource/talent/interview/index → human-resource/talent/talent-interview/index
+TaktMenuLevel3SeedData.cs | HUMANRESOURCE_TALENT_JOB_POSTING | RoutePath: /human-resource/talent/job-posting → /human-resource/talent/talent-job-posting | ComponentPath: human-resource/talent/job-posting/index → human-resource/talent/talent-job-posting/index
+TaktMenuLevel3SeedData.cs | HUMANRESOURCE_TALENT_OFFER | RoutePath: /human-resource/talent/offer → /human-resource/talent/talent-offer | ComponentPath: human-resource/talent/offer/index → human-resource/talent/talent-offer/index
+TaktMenuLevel3SeedData.cs | HUMANRESOURCE_TALENT_RECRUITMENT_PLAN | RoutePath: /human-resource/talent/recruitment-plan → /human-resource/talent/talent-recruitment-plan | ComponentPath: human-resource/talent/recruitment-plan/index → human-resource/talent/talent-recruitment-plan/index
+TaktMenuLevel3SeedData.cs | HUMANRESOURCE_TALENT_STAFFING_REQUIREMENT | RoutePath: /human-resource/talent/staffing-requirement → /human-resource/talent/talent-staffing-requirement | ComponentPath: human-resource/talent/staffing-requirement/index → human-resource/talent/talent-staffing-requirement/index
+TaktMenuLevel4SeedData.cs | LOGISTICS_MANUFACTURING_SOP_ACK | RoutePath: /logistics/manufacturing/sop/ack → /logistics/manufacturing/sop/sop-ack | ComponentPath: logistics/manufacturing/sop/ack/index → logistics/manufacturing/sop/sop-ack/index
+TaktMenuLevel4SeedData.cs | LOGISTICS_MANUFACTURING_SOP_CALL | RoutePath: /logistics/manufacturing/sop/call → /logistics/manufacturing/sop/sop-call | ComponentPath: logistics/manufacturing/sop/call/index → logistics/manufacturing/sop/sop-call/index
+TaktMenuLevel4SeedData.cs | LOGISTICS_MANUFACTURING_SOP_ESD_CHECK | RoutePath: /logistics/manufacturing/sop/esd-check → /logistics/manufacturing/sop/sop-esd-check | ComponentPath: logistics/manufacturing/sop/esd-check/index → logistics/manufacturing/sop/sop-esd-check/index
+TaktMenuLevel4SeedData.cs | LOGISTICS_MANUFACTURING_SOP_WORKSTATION | RoutePath: /logistics/manufacturing/sop/workstation → /logistics/manufacturing/sop/sop-workstation | ComponentPath: logistics/manufacturing/sop/workstation/index → logistics/manufacturing/sop/sop-workstation/index
+TaktMenuLevel3SeedData.cs | LOGISTICS_SALES_INVOICE | RoutePath: /logistics/sales/sales-invoice → /logistics/sales/invoice | ComponentPath: logistics/sales/sales-invoice/index → logistics/sales/invoice/index
+TaktMenuLevel2SeedData.cs | ROUTINE_CONFERENCE_CENTER | RoutePath: /routine/conference-center → /routine/conference-center/conference | ComponentPath: routine/conference-center/index → routine/conference-center/conference/index
+TaktMenuLevel2SeedData.cs | ROUTINE_DOCUMENT_CENTER | 改 MenuType=0 目录或新增子菜单 ComponentPath: routine/document-center/document/index; routine/document-center/document-change-log/index
+TaktMenuLevel2SeedData.cs | ROUTINE_NEWS_CENTER | 改 MenuType=0 目录或新增子菜单 ComponentPath: routine/news-center/news/index
+TaktMenuLevel2SeedData.cs | ROUTINE_VISITOR_CENTER | 改 MenuType=0 目录或新增子菜单 ComponentPath: routine/visitor-center/visitor/index
+
+# 2. 缺全栈 (19) → generate-all
+node generate-all.cjs --Batch
+node generate-all.cjs --Bukan
+node generate-all.cjs --Gijutsu
+node generate-all.cjs --Hinkan
+node generate-all.cjs --Kakunin
+node generate-all.cjs --Kanban
+node generate-all.cjs --Koubai
+node generate-all.cjs --LegacyProduct
+node generate-all.cjs --Seikan
+node generate-all.cjs --Seizouikka
+node generate-all.cjs --Seizounika
+node generate-all.cjs --Ukeken
+node generate-all.cjs --MasterDemandSchedule
+node generate-all.cjs --MasterProductionSchedule
+node generate-all.cjs --PlannedOrder
+node generate-all.cjs --ApsOrder
+node generate-all.cjs --ChangeoverMatrix
+node generate-all.cjs --ProductionDispatch
+node generate-all.cjs --WorkCenter
+
+字段说明: 菜单对照 TaktMenuLevel1~5SeedData；views 路径约定为 frontend/src/views/{ComponentPath 去 /index}.vue

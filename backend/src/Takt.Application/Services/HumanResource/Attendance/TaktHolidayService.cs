@@ -99,7 +99,7 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
         EnsureThreeLayerContext();
         var list = await _holidayRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.HolidayName,
+            x => x.HolidayName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -344,7 +344,7 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
                 || (x.HolidayGreeting != null && x.HolidayGreeting.Contains(keywords))
                 || (x.HolidayQuote != null && x.HolidayQuote.Contains(keywords))
                 || (x.HolidayTheme != null && x.HolidayTheme.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.StartDate).Contains(keywords)
                 || SqlFunc.ToString(x.EndDate).Contains(keywords)
@@ -382,9 +382,9 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
             exp = exp.And(x => x.HolidayTheme != null && x.HolidayTheme.Contains(queryDto.HolidayTheme));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

@@ -13,32 +13,32 @@
   <a-row :gutter="16">
     <a-col :span="12">
       <a-form-item
-        :label="t('entity.flowScheme.processkey')"
+        :label="t('entity.flowscheme.processkey')"
         name="processKey"
         required
       >
         <a-input
           v-model:value="processKeyModel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowScheme.processkey') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowscheme.processkey') })"
           :disabled="!!props.form.flowSchemeId"
         />
       </a-form-item>
     </a-col>
     <a-col :span="12">
       <a-form-item
-        :label="t('entity.flowScheme.processname')"
+        :label="t('entity.flowscheme.processname')"
         name="processName"
         required
       >
         <a-input
           v-model:value="processNameModel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowScheme.processname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowscheme.processname') })"
         />
       </a-form-item>
     </a-col>
     <a-col :span="12">
       <a-form-item
-        :label="t('entity.flowScheme.definitionversion')"
+        :label="t('entity.flowscheme.definitionversion')"
         name="definitionVersion"
       >
         <a-input-number
@@ -50,7 +50,7 @@
     </a-col>
     <a-col :span="12">
       <a-form-item
-        :label="t('entity.flowScheme.processversion')"
+        :label="t('entity.flowscheme.processversion')"
         name="processVersion"
       >
         <a-input
@@ -61,7 +61,7 @@
     </a-col>
     <a-col :span="12">
       <a-form-item
-        :label="t('entity.flowScheme.islatest')"
+        :label="t('entity.flowscheme.islatest')"
         name="isLatest"
       >
         <a-select
@@ -69,17 +69,17 @@
           style="width: 100%"
         >
           <a-select-option :value="1">
-            {{ t('common.page.button.yes') }}
+            {{ t('common.status.yes') }}
           </a-select-option>
           <a-select-option :value="0">
-            {{ t('common.page.button.no') }}
+            {{ t('common.status.no') }}
           </a-select-option>
         </a-select>
       </a-form-item>
     </a-col>
     <a-col :span="12">
       <a-form-item
-        :label="t('entity.flowScheme.suspensionstate')"
+        :label="t('entity.flowscheme.suspensionstate')"
         name="suspensionState"
       >
         <a-select
@@ -87,17 +87,17 @@
           style="width: 100%"
         >
           <a-select-option :value="1">
-            {{ t('workflow.scheme.page.suspensionActive') }}
+            {{ t('workflow.scheme.page.suspension.active') }}
           </a-select-option>
           <a-select-option :value="2">
-            {{ t('workflow.scheme.page.suspensionSuspended') }}
+            {{ t('workflow.scheme.page.suspension.suspended') }}
           </a-select-option>
         </a-select>
       </a-form-item>
     </a-col>
     <a-col :span="12">
       <a-form-item
-        :label="t('entity.flowScheme.processcategory')"
+        :label="t('entity.flowscheme.processcategory')"
         name="processCategory"
       >
         <a-input-number
@@ -109,7 +109,7 @@
     </a-col>
     <a-col :span="12">
       <a-form-item
-        :label="t('entity.flowScheme.processdescription')"
+        :label="t('entity.flowscheme.processdescription')"
         name="processDescription"
       >
         <a-input
@@ -120,21 +120,21 @@
     </a-col>
     <a-col :span="12">
       <a-form-item
-        :label="t('entity.flowScheme.processstatus')"
+        :label="t('entity.flowscheme.processstatus')"
         name="processStatus"
       >
         <TaktSelect
           v-model="processStatusModel"
           dict-type="sys_scheme_status"
           style="width: 100%"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowScheme.processstatus') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowscheme.processstatus') })"
           allow-clear
         />
       </a-form-item>
     </a-col>
     <a-col :span="12">
       <a-form-item
-        :label="t('entity.flowScheme.sortorder')"
+        :label="t('entity.flowscheme.sortorder')"
         name="sortOrder"
       >
         <a-input-number

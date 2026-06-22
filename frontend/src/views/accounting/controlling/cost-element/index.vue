@@ -32,11 +32,11 @@
         @search="loadFullCostElementTree"
       />
       <TaktTreeRightToolsBar
-        create-permission="accounting:controlling:costelement:create"
-        update-permission="accounting:controlling:costelement:update"
-        delete-permission="accounting:controlling:costelement:delete"
-        import-permission="accounting:controlling:costelement:import"
-        export-permission="accounting:controlling:costelement:export"
+        create-permission="accounting:controlling:cost:element:create"
+        update-permission="accounting:controlling:cost:element:update"
+        delete-permission="accounting:controlling:cost:element:delete"
+        import-permission="accounting:controlling:cost:element:import"
+        export-permission="accounting:controlling:cost:element:export"
         :show-create="true"
         :show-update="true"
         :show-delete="true"
@@ -109,12 +109,14 @@
               {{ getCostElementField(record, 'costElementName') }}
             </span>
           </template>
-          <template v-if="column.key === 'costElementStatus'">
-            <TaktDictTag
-              :value="getCostElementDictValue(record, 'costElementStatus')"
-              dict-type="sys_normal_disable"
-            />
-          </template>
+        <template v-else-if="column.key === 'costElementStatus'">
+          <a-switch
+            :checked="getCostElementField(record, 'costElementStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleCostElementStatusChange(record, Boolean(checked))"
+          />
+        </template>
+
         </template>
       </TaktTreeRightTable>
     </div>
@@ -130,6 +132,7 @@
       @cancel="handleFormCancel"
     >
       <CostElementForm
+        :key="formData?.costElementId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -147,132 +150,111 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('costElementCode')">
-      <a-form-item :label="t('entity.costElement.code')">
+      <a-form-item :label="t('entity.costelement.code')">
         <a-input
           v-model:value="advancedQueryForm.costElementCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.code') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costElementName')">
-      <a-form-item :label="t('entity.costElement.name')">
+      <a-form-item :label="t('entity.costelement.name')">
         <a-input
           v-model:value="advancedQueryForm.costElementName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.name') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('shortName')">
-      <a-form-item :label="t('entity.costElement.shortname')">
-        <a-input
-          v-model:value="advancedQueryForm.shortName"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.costElement.shortname') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('costElementDesc')">
-      <a-form-item :label="t('entity.costElement.costelementdesc')">
-        <a-input
-          v-model:value="advancedQueryForm.costElementDesc"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.costElement.costelementdesc') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.name') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costElementType')">
-      <a-form-item :label="t('entity.costElement.type')">
+      <a-form-item :label="t('entity.costelement.type')">
         <a-input-number
           v-model:value="advancedQueryForm.costElementType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.type') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.type') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costElementCategory')">
-      <a-form-item :label="t('entity.costElement.category')">
+      <a-form-item :label="t('entity.costelement.category')">
         <a-input-number
           v-model:value="advancedQueryForm.costElementCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.category') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.category') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('parentId')">
-      <a-form-item :label="t('entity.costElement.parentid')">
+      <a-form-item :label="t('entity.costelement.parentid')">
         <a-input
           v-model:value="advancedQueryForm.parentId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.parentid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.parentid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costElementLevel')">
-      <a-form-item :label="t('entity.costElement.level')">
+      <a-form-item :label="t('entity.costelement.level')">
         <a-input-number
           v-model:value="advancedQueryForm.costElementLevel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.level') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costelement.level') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costElementStatus')">
-      <a-form-item :label="t('entity.costElement.status')">
+      <a-form-item :label="t('entity.costelement.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.costElementStatus"
-          dict-type="sys_normal_disable"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costElement.status') })"
+          dict-type="sys_normal_disable_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.status') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validFromStart')">
-      <a-form-item :label="t('entity.costElement.validfromstart')">
+      <a-form-item :label="t('entity.costelement.validfromstart')">
         <a-date-picker
           v-model:value="advancedQueryForm.validFromStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costElement.validfromstart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.validfromstart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validFromEnd')">
-      <a-form-item :label="t('entity.costElement.validfromend')">
+      <a-form-item :label="t('entity.costelement.validfromend')">
         <a-date-picker
           v-model:value="advancedQueryForm.validFromEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costElement.validfromend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.validfromend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validToStart')">
-      <a-form-item :label="t('entity.costElement.validtostart')">
+      <a-form-item :label="t('entity.costelement.validtostart')">
         <a-date-picker
           v-model:value="advancedQueryForm.validToStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costElement.validtostart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.validtostart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('validToEnd')">
-      <a-form-item :label="t('entity.costElement.validtoend')">
+      <a-form-item :label="t('entity.costelement.validtoend')">
         <a-date-picker
           v-model:value="advancedQueryForm.validToEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costElement.validtoend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.costelement.validtoend') })"
           value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.costElement.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.costElement.sortorder') })"
           style="width: 100%"
         />
       </a-form-item>
@@ -283,7 +265,7 @@
           v-model:value="advancedQueryForm.createdAtStart"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
@@ -294,17 +276,36 @@
           v-model:value="advancedQueryForm.createdAtEnd"
           :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
-          show-time
+            show-time
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -313,8 +314,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -324,14 +327,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.costElement._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.costelement._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.costElement._self"
+        entity-i18n-key="entity.costelement._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -368,13 +371,15 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import CostElementForm from './components/cost-element-form.vue'
-import { getCostElementTree, getCostElementById, createCostElement, updateCostElement, deleteCostElementById, deleteCostElementBatch, getCostElementTemplate, importCostElement, exportCostElement } from '@/api/accounting/controlling/cost-element'
+import { getCostElementTree, getCostElementById, createCostElement, updateCostElement, deleteCostElementById, deleteCostElementBatch, getCostElementTemplate, importCostElement, exportCostElement, updateCostElementStatus } from '@/api/accounting/controlling/cost-element'
 import type { CostElement, CostElementTree, CostElementUpdate } from '@/types/accounting/controlling/cost-element'
 import type { TreeDropPayload } from '@/components/business/takt-tree-left-table/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
@@ -386,7 +391,7 @@ const excelNames = taktExcelEntityNames('TaktCostElement')
 /** 右侧树表快捷查询占位文案 */
 const tableSearchPlaceholder = computed(() =>
   t('common.page.form.placeholder.search', {
-    keyword: [t('entity.costElement.name'), t('entity.costElement.code')].join(' / '),
+    keyword: [t('entity.costelement.name'), t('entity.costelement.code')].join(' / '),
   })
 )
 
@@ -401,9 +406,9 @@ const treeExpandedKeys = ref<(string | number)[]>([])
 /** 右侧表格展开状态（预留） */
 const tableExpanded = ref(false)
 /** 右侧拍平列表当前页码 */
-const tableCurrentPage = ref(1)
+const tableCurrentPage = ref(getTaktDefaultPageIndex())
 /** 右侧拍平列表每页条数 */
-const tablePageSize = ref(20)
+const tablePageSize = ref(getTaktDefaultPageSize())
 /** 页面 loading（树加载、提交、导出等） */
 const loading = ref(false)
 /** 全量树表节点（左侧树与右侧表共用，不受右侧查询过滤） */
@@ -424,19 +429,18 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<CostElement>>({})
+const formData = ref<Partial<CostElement> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   costElementCode: '',
   costElementName: '',
-  shortName: '',
-  costElementDesc: '',
   costElementType: undefined as number | undefined,
   costElementCategory: undefined as number | undefined,
   parentId: '',
@@ -446,31 +450,27 @@ const advancedQueryForm = ref({
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'costElementCode', label: t('entity.costElement.code') },
-  { key: 'costElementName', label: t('entity.costElement.name') },
-  { key: 'shortName', label: t('entity.costElement.shortname') },
-  { key: 'costElementDesc', label: t('entity.costElement.costelementdesc') },
-  { key: 'costElementType', label: t('entity.costElement.type') },
-  { key: 'costElementCategory', label: t('entity.costElement.category') },
-  { key: 'parentId', label: t('entity.costElement.parentid') },
-  { key: 'costElementLevel', label: t('entity.costElement.level') },
-  { key: 'costElementStatus', label: t('entity.costElement.status') },
-  { key: 'validFromStart', label: t('entity.costElement.validfromstart') },
-  { key: 'validFromEnd', label: t('entity.costElement.validfromend') },
-  { key: 'validToStart', label: t('entity.costElement.validtostart') },
-  { key: 'validToEnd', label: t('entity.costElement.validtoend') },
-  { key: 'sortOrder', label: t('entity.costElement.sortorder') },
+  { key: 'costElementCode', label: t('entity.costelement.code') },
+  { key: 'costElementName', label: t('entity.costelement.name') },
+  { key: 'costElementType', label: t('entity.costelement.type') },
+  { key: 'costElementCategory', label: t('entity.costelement.category') },
+  { key: 'parentId', label: t('entity.costelement.parentid') },
+  { key: 'costElementLevel', label: t('entity.costelement.level') },
+  { key: 'costElementStatus', label: t('entity.costelement.status') },
+  { key: 'validFromStart', label: t('entity.costelement.validfromstart') },
+  { key: 'validFromEnd', label: t('entity.costelement.validfromend') },
+  { key: 'validToStart', label: t('entity.costelement.validtostart') },
+  { key: 'validToEnd', label: t('entity.costelement.validtoend') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -485,6 +485,9 @@ const visibleColumnKeys = ref<string[]>([])
 const entityIdName = 'costElementId'
 /** 树节点标题字段名（左侧树 title 与缩进列） */
 const treeTitleField = 'costElementName'
+
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
 /** 解析树节点 key（与列表 costElementId、左侧树 key 一致） */
 function resolveCostElementNodeKey(node: Record<string, unknown>): string {
@@ -645,8 +648,6 @@ function matchesCostElementRightQuery(record: Record<string, unknown>): boolean 
   }
   if (advancedQueryForm.value.costElementCode && !String(record.costElementCode ?? '').includes(String(advancedQueryForm.value.costElementCode))) return false
   if (advancedQueryForm.value.costElementName && !String(record.costElementName ?? '').includes(String(advancedQueryForm.value.costElementName))) return false
-  if (advancedQueryForm.value.shortName && !String(record.shortName ?? '').includes(String(advancedQueryForm.value.shortName))) return false
-  if (advancedQueryForm.value.costElementDesc && !String(record.costElementDesc ?? '').includes(String(advancedQueryForm.value.costElementDesc))) return false
   if (advancedQueryForm.value.costElementType !== undefined && record.costElementType !== advancedQueryForm.value.costElementType) return false
   if (advancedQueryForm.value.costElementCategory !== undefined && record.costElementCategory !== advancedQueryForm.value.costElementCategory) return false
   if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
@@ -656,10 +657,9 @@ function matchesCostElementRightQuery(record: Record<string, unknown>): boolean 
   if (advancedQueryForm.value.validFromEnd && !String(record.validFromEnd ?? '').includes(String(advancedQueryForm.value.validFromEnd))) return false
   if (advancedQueryForm.value.validToStart && !String(record.validToStart ?? '').includes(String(advancedQueryForm.value.validToStart))) return false
   if (advancedQueryForm.value.validToEnd && !String(record.validToEnd ?? '').includes(String(advancedQueryForm.value.validToEnd))) return false
-  if (advancedQueryForm.value.sortOrder !== undefined && record.sortOrder !== advancedQueryForm.value.sortOrder) return false
   if (advancedQueryForm.value.createdAtStart && !String(record.createdAtStart ?? '').includes(String(advancedQueryForm.value.createdAtStart))) return false
   if (advancedQueryForm.value.createdAtEnd && !String(record.createdAtEnd ?? '').includes(String(advancedQueryForm.value.createdAtEnd))) return false
-  if (advancedQueryForm.value.extFieldJson && !String(record.extFieldJson ?? '').includes(String(advancedQueryForm.value.extFieldJson))) return false
+  if (advancedQueryForm.value.extField && !String(record.extField ?? '').includes(String(advancedQueryForm.value.extField))) return false
   if (advancedQueryForm.value.remark && !String(record.remark ?? '').includes(String(advancedQueryForm.value.remark))) return false
   return true
 }
@@ -678,13 +678,13 @@ const paginatedFlatTableRows = computed(() => {
 
 /** 左侧选中节点或查询变化时，右侧拍平列表重置到第一页 */
 watch(tableTreeData, () => {
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 })
 
 /** 左侧树选中：重置右侧分页到第一页 */
 const handleTreeSelect = (selectedKeys: (string | number)[]) => {
   selectedTreeKeys.value = selectedKeys
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /**
@@ -704,8 +704,6 @@ function buildCostElementUpdateDto(
     companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
     costElementCode: costElement.costElementCode,
     costElementName: costElement.costElementName,
-    shortName: costElement.shortName,
-    costElementDesc: costElement.costElementDesc,
     costElementType: costElement.costElementType,
     costElementCategory: costElement.costElementCategory,
     parentId: overrides.parentId,
@@ -713,8 +711,8 @@ function buildCostElementUpdateDto(
     costElementStatus: costElement.costElementStatus,
     validFrom: costElement.validFrom,
     validTo: costElement.validTo,
-    sortOrder: overrides.sortOrder,
-    extFieldJson: costElement.extFieldJson,
+    changeLogs: costElement.changeLogs,
+    extField: costElement.extField,
     remark: costElement.remark,
   }
 }
@@ -757,10 +755,10 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
       parentId: pos.parentId,
       sortOrder: pos.sortOrder,
     }))
-    message.success(t('common.feedback.updated', { target: t('entity.costElement._self') }))
+    message.success(t('common.feedback.updated', { target: t('entity.costelement._self') }))
     await loadData()
   } catch (error: unknown) {
-    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: t('entity.costElement._self') })))
+    message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: t('entity.costelement._self') })))
     await loadFullCostElementTree().catch(() => undefined)
   } finally {
     loading.value = false
@@ -817,6 +815,7 @@ const getCostElementDictValue = (
   return String(value)
 }
 
+
 /** 从异常对象提取用户可见消息 */
 const getErrorMessage = (error: unknown, fallback: string): string => {
   if (typeof error === 'object' && error !== null && 'message' in error) {
@@ -842,7 +841,7 @@ watchEffect(() => {
       getCostElementField(record, 'costElementId') ?? getCostElementField(record, 'id') ?? '',
   },
   {
-    title: t('entity.costElement.code'),
+    title: t('entity.costelement.code'),
     dataIndex: 'costElementCode',
     key: 'costElementCode',
     width: 120,
@@ -851,7 +850,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'costElementCode') ?? ''
   },
   {
-    title: t('entity.costElement.name'),
+    title: t('entity.costelement.name'),
     dataIndex: 'costElementName',
     key: 'costElementName',
     width: 160,
@@ -859,25 +858,7 @@ watchEffect(() => {
     ellipsis: true,
   },
   {
-    title: t('entity.costElement.shortname'),
-    dataIndex: 'shortName',
-    key: 'shortName',
-    width: 100,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'shortName') ?? ''
-  },
-  {
-    title: t('entity.costElement.costelementdesc'),
-    dataIndex: 'costElementDesc',
-    key: 'costElementDesc',
-    width: 160,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'costElementDesc') ?? ''
-  },
-  {
-    title: t('entity.costElement.type'),
+    title: t('entity.costelement.type'),
     dataIndex: 'costElementType',
     key: 'costElementType',
     width: 120,
@@ -886,7 +867,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'costElementType') ?? ''
   },
   {
-    title: t('entity.costElement.category'),
+    title: t('entity.costelement.category'),
     dataIndex: 'costElementCategory',
     key: 'costElementCategory',
     width: 120,
@@ -895,7 +876,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'costElementCategory') ?? ''
   },
   {
-    title: t('entity.costElement.parentid'),
+    title: t('entity.costelement.parentid'),
     dataIndex: 'parentId',
     key: 'parentId',
     width: 120,
@@ -904,7 +885,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'parentId') ?? ''
   },
   {
-    title: t('entity.costElement.level'),
+    title: t('entity.costelement.level'),
     dataIndex: 'costElementLevel',
     key: 'costElementLevel',
     width: 120,
@@ -913,7 +894,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'costElementLevel') ?? ''
   },
   {
-    title: t('entity.costElement.status'),
+    title: t('entity.costelement.status'),
     dataIndex: 'costElementStatus',
     key: 'costElementStatus',
     width: 120,
@@ -921,7 +902,7 @@ watchEffect(() => {
     ellipsis: true,
   },
   {
-    title: t('entity.costElement.validfrom'),
+    title: t('entity.costelement.validfrom'),
     dataIndex: 'validFrom',
     key: 'validFrom',
     width: 120,
@@ -930,7 +911,7 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getCostElementField(record, 'validFrom') ?? ''
   },
   {
-    title: t('entity.costElement.validto'),
+    title: t('entity.costelement.validto'),
     dataIndex: 'validTo',
     key: 'validTo',
     width: 120,
@@ -945,7 +926,7 @@ watchEffect(() => {
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'accounting:controlling:costelement:update',
+        permission: 'accounting:controlling:cost:element:update',
         onClick: (record: CostElement) => handleEdit(record)
       },
       {
@@ -953,7 +934,7 @@ watchEffect(() => {
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'accounting:controlling:costelement:delete',
+        permission: 'accounting:controlling:cost:element:delete',
         onClick: (record: CostElement) => handleDeleteOne(record)
       }
     ],
@@ -1006,10 +987,9 @@ async function loadData() {
   }
 }
 
-/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
-useTableRefresh(loadData)
+/** 右侧查询（客户端过滤，不请求接口） */
 const handleSearch = () => {
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /** 右侧重置（不影响左侧树与 fullTableTree） */
@@ -1018,8 +998,6 @@ const handleReset = () => {
   advancedQueryForm.value = {
   costElementCode: '',
   costElementName: '',
-  shortName: '',
-  costElementDesc: '',
   costElementType: undefined as number | undefined,
   costElementCategory: undefined as number | undefined,
   parentId: '',
@@ -1029,28 +1007,54 @@ const handleReset = () => {
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
+}
+
+
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleCostElementStatusChange(record: CostElementRowRecord, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getCostElementField(record, 'costElementStatus')
+  const id = getCostElementId(record)
+  const row = null
+  if (row) {
+    row.costElementStatus = newVal
+  }
+  try {
+    await updateCostElementStatus({ costElementId: id, costElementStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    await loadData()
+  } catch (error: unknown) {
+    if (row) {
+      row.costElementStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
 }
 
 /** 新增：默认 parentId 为当前左侧选中节点 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.costElement._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.costelement._self') })
   const keys = selectedTreeKeys.value
   formData.value = {
     parentId: keys.length > 0 ? String(keys[keys.length - 1]) : '0',
   }
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 
 /** 打开编辑弹窗 */
 function handleEdit(record: CostElement) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.costElement._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.costelement._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -1060,7 +1064,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.costElement._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.costelement._self') }))
   }
 }
 
@@ -1079,12 +1083,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateCostElement(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.costElement._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.costelement._self') }))
     } else {
       await createCostElement(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.costElement._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.costelement._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     await loadData()
   } finally {
     formLoading.value = false
@@ -1094,18 +1100,20 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 
 /** 删除单行 */
 async function handleDeleteOne(record: CostElement) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.costElement._self'), name: t('common.tip.this.target', { target: t('entity.costElement._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.costelement._self'), name: t('common.tip.this.target', { target: t('entity.costelement._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteCostElementById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.costElement._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.costelement._self') }))
       await loadData()
     }
   })
@@ -1114,18 +1122,18 @@ async function handleDeleteOne(record: CostElement) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.costElement._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.costelement._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.costElement._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.costelement._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteCostElementBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.costElement._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.costelement._self') }))
       await loadData()
     }
   })
@@ -1181,10 +1189,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.costElement._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.costelement._self') }))
   } catch (error: unknown) {
     logger.error('[CostElement] 导出失败', undefined, error)
-    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: t('entity.costElement._self') })))
+    message.error(getErrorMessage(error, t('common.feedback.export.failed', { target: t('entity.costelement._self') })))
   } finally {
     loading.value = false
   }
@@ -1198,7 +1206,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置右侧分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  tableCurrentPage.value = 1
+  tableCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /** 重置高级查询表单（不自动查询） */
@@ -1206,8 +1214,6 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   costElementCode: '',
   costElementName: '',
-  shortName: '',
-  costElementDesc: '',
   costElementType: undefined as number | undefined,
   costElementCategory: undefined as number | undefined,
   parentId: '',
@@ -1217,10 +1223,9 @@ function handleAdvancedQueryReset() {
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1250,8 +1255,10 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 
-/** 页面挂载后加载树数据 */
-onMounted(() => {
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉树数据 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   void loadData()
 })
 </script>

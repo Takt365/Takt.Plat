@@ -1,0 +1,99 @@
+/* ========================================
+ * 项目名称：节拍工厂·Takt Plat
+ * 命名空间：frontend/src/styles
+ * 文件名称：tag-base.css
+ * 创建时间：2026-06-13
+ * 创建人：Takt365(Cursor AI)
+ * 功能描述：takt-tag-color 预设色（token 来自 color-base.css，序号与 utils/takt-tag-color 对齐）
+ *
+ * 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+ * 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+ * ======================================== */
+
+.takt-tag-color {
+  border: none !important;
+}
+
+/* 0 --takt-cn-hong */
+.takt-tag-color-0,
+.ant-tag.takt-tag-color-0 {
+  background-color: color-mix(in srgb, var(--takt-cn-hong) 16%, transparent);
+  color: var(--takt-cn-hong);
+}
+
+/* 1 --takt-cn-chengse */
+.takt-tag-color-1,
+.ant-tag.takt-tag-color-1 {
+  background-color: color-mix(in srgb, var(--takt-cn-chengse) 16%, transparent);
+  color: var(--takt-cn-chengse);
+}
+
+/* 2 --takt-cn-qiuhuang */
+.takt-tag-color-2,
+.ant-tag.takt-tag-color-2 {
+  background-color: color-mix(in srgb, var(--takt-cn-qiuhuang) 22%, transparent);
+  color: var(--takt-cn-qiuhuang);
+}
+
+/* 3 --takt-cn-youlv */
+.takt-tag-color-3,
+.ant-tag.takt-tag-color-3 {
+  background-color: color-mix(in srgb, var(--takt-cn-youlv) 16%, transparent);
+  color: var(--takt-cn-youlv);
+}
+
+/* 4 --takt-cn-feicui */
+.takt-tag-color-4,
+.ant-tag.takt-tag-color-4 {
+  background-color: color-mix(in srgb, var(--takt-cn-feicui) 18%, transparent);
+  color: var(--takt-cn-songbeilv);
+}
+
+/* 5 --takt-cn-dianqing */
+.takt-tag-color-5,
+.ant-tag.takt-tag-color-5 {
+  background-color: color-mix(in srgb, var(--takt-cn-dianqing) 16%, transparent);
+  color: var(--takt-cn-dianqing);
+}
+
+/* 6 --takt-cn-baolan */
+.takt-tag-color-6,
+.ant-tag.takt-tag-color-6 {
+  background-color: color-mix(in srgb, var(--takt-cn-baolan) 16%, transparent);
+  color: var(--takt-cn-baolan);
+}
+
+/* 7 --takt-cn-zise */
+.takt-tag-color-7,
+.ant-tag.takt-tag-color-7 {
+  background-color: color-mix(in srgb, var(--takt-cn-zise) 16%, transparent);
+  color: var(--takt-cn-zise);
+}
+
+/* 8 --takt-jp-momo */
+.takt-tag-color-8,
+.ant-tag.takt-tag-color-8 {
+  background-color: color-mix(in srgb, var(--takt-jp-momo) 20%, transparent);
+  color: var(--takt-jp-shoujou);
+}
+
+/* 9 --takt-jp-asagi */
+.takt-tag-color-9,
+.ant-tag.takt-tag-color-9 {
+  background-color: color-mix(in srgb, var(--takt-jp-asagi) 16%, transparent);
+  color: var(--takt-jp-asagi);
+}
+
+/* 10 --takt-klein-blue */
+.takt-tag-color-10,
+.ant-tag.takt-tag-color-10 {
+  background-color: color-mix(in srgb, var(--takt-klein-blue) 14%, transparent);
+  color: var(--takt-klein-blue);
+}
+
+/* 11 --takt-tiffany-blue */
+.takt-tag-color-11,
+.ant-tag.takt-tag-color-11 {
+  background-color: color-mix(in srgb, var(--takt-tiffany-blue) 16%, transparent);
+  color: var(--takt-tiffany-blue);
+}

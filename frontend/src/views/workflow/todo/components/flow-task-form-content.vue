@@ -17,7 +17,7 @@
         v-if="detail.processTitle"
         class="flow-task-form-content__title"
       >
-        <span class="flow-task-form-content__label">{{ t('entity.flowInstance.processtitle') }}</span>
+        <span class="flow-task-form-content__label">{{ t('entity.flowinstance.processtitle') }}</span>
         <span>{{ detail.processTitle }}</span>
       </div>
       <div class="flow-task-form-content__body">
@@ -46,7 +46,7 @@
           v-else
           class="flow-task-form-content__empty"
         >
-          {{ t('workflow.my.page.startFlowForm.formDataLabel') }}{{ t('workflow.instance.page.formDataEmpty') }}
+          {{ t('workflow.my.page.start.flow.form.form.data.label') }}{{ t('workflow.instance.page.form.data.empty') }}
         </div>
       </div>
     </template>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验单应用服务实现
 // 
@@ -105,8 +105,8 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     {
         EnsureThreeLayerContext();
         var list = await _fqcOrderRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.PlantCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.JudgeStatus == 1,
+            x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -439,7 +439,7 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
                 || SqlFunc.ToString(x.JudgeStatus).Contains(keywords)
                 || (x.JudgeBy != null && x.JudgeBy.Contains(keywords))
                 || (x.JudgeDescription != null && x.JudgeDescription.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.InspectionDate).Contains(keywords)
                 || SqlFunc.ToString(x.JudgeDate).Contains(keywords)
@@ -507,9 +507,9 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
             exp = exp.And(x => x.JudgeDescription != null && x.JudgeDescription.Contains(queryDto.JudgeDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
-// 文件名称：sales-invoice.d.ts
-// 创建时间：2026-06-09
+// 文件名称：invoice.d.ts
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -31,7 +31,7 @@ export interface SalesInvoice extends CompanyDtoBase {
   /**
    * 工厂代码
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售发票编码（唯一索引）
@@ -74,12 +74,12 @@ export interface SalesInvoice extends CompanyDtoBase {
   actualAmount: number;
 
   /**
-   * 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
    */
   invoiceStatus: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -164,12 +164,12 @@ export interface SalesInvoiceQuery extends TaktPagedQuery {
   actualAmount?: number;
 
   /**
-   * 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
    */
   invoiceStatus?: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -191,7 +191,7 @@ export interface SalesInvoiceQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -225,7 +225,7 @@ export interface SalesInvoiceCreate {
   /**
    * 工厂代码
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售发票编码（唯一索引）
@@ -268,12 +268,12 @@ export interface SalesInvoiceCreate {
   actualAmount: number;
 
   /**
-   * 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
    */
   invoiceStatus: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -290,7 +290,7 @@ export interface SalesInvoiceCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -327,7 +327,7 @@ export interface SalesInvoiceStatus {
   salesInvoiceId: string;
 
   /**
-   * 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
    */
   invoiceStatus: number;
 
@@ -376,12 +376,12 @@ export interface SalesInvoiceTemplate {
   customerName?: string;
 
   /**
-   * 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
    */
   invoiceStatus?: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -393,7 +393,7 @@ export interface SalesInvoiceTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -450,12 +450,12 @@ export interface SalesInvoiceImport {
   customerName?: string;
 
   /**
-   * 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
    */
   invoiceStatus?: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -467,7 +467,7 @@ export interface SalesInvoiceImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -496,7 +496,7 @@ export interface SalesInvoiceExport {
   /**
    * 工厂代码
    */
-  plantCode?: string;
+  plantCode: string;
 
   /**
    * 销售发票编码（唯一索引）
@@ -539,12 +539,12 @@ export interface SalesInvoiceExport {
   actualAmount: number;
 
   /**
-   * 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
    */
   invoiceStatus: number;
 
   /**
-   * 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -556,7 +556,7 @@ export interface SalesInvoiceExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

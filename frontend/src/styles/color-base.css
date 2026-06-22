@@ -123,11 +123,11 @@
   --takt-tiffany-blue: #00a0b0; /* 2.蒂芙尼蓝 */
   --takt-chinese-red: #ff0000; /* 3.中国红 */
   --takt-titian-red: #ff6347; /* 4.提香红 */
-  --takt-burgundy: #990033; /* 5.勃艮第红 */
-  --takt-bordeaux: #8c1515; /* 6.波尔多红 */
+  --takt-burgundy-red: #990033; /* 5.勃艮第红 */
+  --takt-bordeaux-red: #8c1515; /* 6.波尔多红 */
   --takt-klein-blue: #002fa7; /* 7.克莱因蓝 */
-  --takt-van-dyke-brown: #4c2b18; /* 8.凡戴克棕 */
+  --takt-vandyke-brown: #4c2b18; /* 8.凡戴克棕 */
   --takt-prussian-blue: #003153; /* 9.普鲁士蓝 */
-  --takt-sennelier-yellow: #f9dc24; /* 10.申布伦黄 */
+  --takt-sennelier-yellow: #f4d35e; /* 10.申布伦黄 */
   --takt-memorial-gray: #808080; /* 11.纪念灰 */
 }

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/scheduling/aps-schedule/components -->
 <!-- 文件名称：aps-schedule-form.vue -->
-<!-- 功能描述：APS排程主表维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：APS排程主表维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form aps-schedule-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="aps-schedule-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,100 +63,104 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.plantcode')"
+                :label="t('entity.apsschedule.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.plantcode') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.apsScheduleId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.schedulecode')"
+                :label="t('entity.apsschedule.schedulecode')"
                 name="scheduleCode"
               >
                 <a-input
                   v-model:value="formState.scheduleCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulecode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulecode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.apsScheduleId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.schedulename')"
+                :label="t('entity.apsschedule.schedulename')"
                 name="scheduleName"
               >
                 <a-input
                   v-model:value="formState.scheduleName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulename') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulename') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.scheduletype')"
+                :label="t('entity.apsschedule.scheduletype')"
                 name="scheduleType"
               >
                 <a-input-number
                   v-model:value="formState.scheduleType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.scheduletype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.scheduletype') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.plandate')"
+                :label="t('entity.apsschedule.plandate')"
                 name="planDate"
               >
                 <a-date-picker
                   v-model:value="formState.planDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.plandate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.plandate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.planstarttime')"
+                :label="t('entity.apsschedule.planstarttime')"
                 name="planStartTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.planStartTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.planstarttime') })"
-                  size="small"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planstarttime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.planendtime')"
+                :label="t('entity.apsschedule.planendtime')"
                 name="planEndTime"
               >
-                <a-input
+                <a-date-picker
                   v-model:value="formState.planEndTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.planendtime') })"
-                  size="small"
-                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planendtime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -170,130 +176,132 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.plancycle')"
+                :label="t('entity.apsschedule.plancycle')"
                 name="planCycle"
               >
                 <a-input-number
                   v-model:value="formState.planCycle"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.plancycle') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.plancycle') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.workshopcode')"
+                :label="t('entity.apsschedule.workshopcode')"
                 name="workshopCode"
               >
                 <a-input
                   v-model:value="formState.workshopCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.workshopcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.workshopcode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.apsScheduleId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.workshopname')"
+                :label="t('entity.apsschedule.workshopname')"
                 name="workshopName"
               >
                 <a-input
                   v-model:value="formState.workshopName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.workshopname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.workshopname') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.productionlinecode')"
+                :label="t('entity.apsschedule.productionlinecode')"
                 name="productionLineCode"
               >
                 <a-input
                   v-model:value="formState.productionLineCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.productionlinecode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.productionlinecode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.apsScheduleId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.productionlinename')"
+                :label="t('entity.apsschedule.productionlinename')"
                 name="productionLineName"
               >
                 <a-input
                   v-model:value="formState.productionLineName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.productionlinename') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.productionlinename') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.schedulestrategy')"
+                :label="t('entity.apsschedule.schedulestrategy')"
                 name="scheduleStrategy"
               >
                 <a-input-number
                   v-model:value="formState.scheduleStrategy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulestrategy') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulestrategy') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.schedulealgorithm')"
+                :label="t('entity.apsschedule.schedulealgorithm')"
                 name="scheduleAlgorithm"
               >
                 <a-input-number
                   v-model:value="formState.scheduleAlgorithm"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulealgorithm') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulealgorithm') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.optimizationobjective')"
+                :label="t('entity.apsschedule.optimizationobjective')"
                 name="optimizationObjective"
               >
                 <a-input-number
                   v-model:value="formState.optimizationObjective"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.optimizationobjective') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.optimizationobjective') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.schedulestatus')"
+                :label="t('entity.apsschedule.schedulestatus')"
                 name="scheduleStatus"
               >
                 <a-input-number
                   v-model:value="formState.scheduleStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulestatus') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulestatus') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.apsSchedule.plannerid')"
+                :label="t('entity.apsschedule.plannerid')"
                 name="plannerId"
               >
                 <a-input
                   v-model:value="formState.plannerId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.plannerid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.plannerid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -308,81 +316,82 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.apsSchedule.plannername')"
+                :label="t('entity.apsschedule.plannername')"
                 name="plannerName"
               >
                 <a-input
                   v-model:value="formState.plannerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.plannername') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.apsSchedule.publishtime')"
-                name="publishTime"
-              >
-                <a-input
-                  v-model:value="formState.publishTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.publishtime') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.apsSchedule.publishuserid')"
-                name="publishUserId"
-              >
-                <a-input
-                  v-model:value="formState.publishUserId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.publishuserid') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.apsSchedule.publishusername')"
-                name="publishUserName"
-              >
-                <a-input
-                  v-model:value="formState.publishUserName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.publishusername') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.plannername') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.apsSchedule.scheduledescription')"
+                :label="t('entity.apsschedule.publishtime')"
+                name="publishTime"
+              >
+                <a-date-picker
+                  v-model:value="formState.publishTime"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.publishtime') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.apsschedule.publishuserid')"
+                name="publishUserId"
+              >
+                <a-input
+                  v-model:value="formState.publishUserId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.publishuserid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.apsschedule.publishusername')"
+                name="publishUserName"
+              >
+                <a-input
+                  v-model:value="formState.publishUserName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.publishusername') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.apsschedule.scheduledescription')"
                 name="scheduleDescription"
               >
                 <a-textarea
                   v-model:value="formState.scheduleDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.apsSchedule.scheduledescription') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.apsschedule.scheduledescription') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                :label="t('entity.apsschedule.extfield')"
+                name="ExtField"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
-                  allow-clear
+                <a-textarea
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.apsschedule.extfield') })"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -394,239 +403,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：apsScheduleItem -->
-      <a-tab-pane
-        key="child-items"
-        :tab="t('entity.apsScheduleItem._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddApsScheduleItemRow">
-            {{ t('common.page.button.create') }}{{ t('entity.apsScheduleItem._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="apsScheduleItemFormColumns"
-          :data-source="childApsScheduleItemRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleItem.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'workOrderCode'">
-              <a-input
-                v-model:value="record.workOrderCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleItem.workordercode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'productCode'">
-              <a-input
-                v-model:value="record.productCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleItem.productcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'productName'">
-              <a-input
-                v-model:value="record.productName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleItem.productname') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'workCenterCode'">
-              <a-input
-                v-model:value="record.workCenterCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleItem.workcentercode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'workCenterName'">
-              <a-input
-                v-model:value="record.workCenterName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleItem.workcentername') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'processCode'">
-              <a-input
-                v-model:value="record.processCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleItem.processcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'processName'">
-              <a-input
-                v-model:value="record.processName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleItem.processname') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveApsScheduleItemRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：apsScheduleChangeLog -->
-      <a-tab-pane
-        key="child-changeLogs"
-        :tab="t('entity.apsScheduleChangeLog._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddApsScheduleChangeLogRow">
-            {{ t('common.page.button.create') }}{{ t('entity.apsScheduleChangeLog._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="apsScheduleChangeLogFormColumns"
-          :data-source="childApsScheduleChangeLogRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'changeFields'">
-              <a-input
-                v-model:value="record.changeFields"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleChangeLog.changefields') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeType'">
-              <a-input-number
-                v-model:value="record.changeType"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleChangeLog.changetype') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'changeReason'">
-              <a-input
-                v-model:value="record.changeReason"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleChangeLog.changereason') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeBy'">
-              <a-input
-                v-model:value="record.changeBy"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleChangeLog.changeby') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeTime'">
-              <a-input
-                v-model:value="record.changeTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsScheduleChangeLog.changetime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'extFieldJson'">
-              <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveApsScheduleChangeLogRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 items -->
+    <TaktEditableTable
+      ref="apsScheduleItemTableRef"
+      v-model="childApsScheduleItemRows"
+      :columns="apsScheduleItemFormColumns"
+      :title="t('entity.apsscheduleitem._self')"
+      :add-button-entity="t('entity.apsscheduleitem._self')"
+      id-field="apsScheduleItemId"
+      :default-row="createDefaultApsScheduleItemRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -638,7 +437,7 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { ApsScheduleCreate, ApsScheduleItemCreate, ApsScheduleItem, ApsScheduleChangeLogCreate, ApsScheduleChangeLog } from '@/types/logistics/manufacturing/scheduling/aps-schedule'
+import type { ApsScheduleCreate } from '@/types/logistics/manufacturing/scheduling/aps-schedule'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -671,222 +470,99 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","scheduleCode","scheduleName","scheduleType","planDate","planStartTime","planEndTime","planCycle","workshopCode","workshopName","productionLineCode","productionLineName","scheduleStrategy","scheduleAlgorithm","optimizationObjective","scheduleStatus","plannerId","plannerName","publishTime","publishUserId","publishUserName","scheduleDescription","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","scheduleCode","scheduleName","scheduleType","planDate","planStartTime","planEndTime","planCycle","workshopCode","workshopName","productionLineCode","productionLineName","scheduleStrategy","scheduleAlgorithm","optimizationObjective","scheduleStatus","plannerId","plannerName","publishTime","publishUserId","publishUserName","scheduleDescription","ExtField","remark"]
 
-/** apsScheduleItem 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childApsScheduleItemRows = ref<Record<string, unknown>[]>([])
-/** apsScheduleChangeLog 子表行（表单 Tab 内嵌） */
-const childApsScheduleChangeLogRows = ref<Record<string, unknown>[]>([])
+const apsScheduleItemTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 apsScheduleItem 表单列定义 */
-const apsScheduleItemFormColumns = computed(() => [
+/** 子表 apsScheduleItem 可编辑列 */
+const apsScheduleItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.apsScheduleItem.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.apsscheduleitem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.apsScheduleItem.workordercode'),
-    dataIndex: 'workOrderCode',
     key: 'workOrderCode',
+    title: t('entity.apsscheduleitem.workordercode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.apsScheduleItem.productcode'),
-    dataIndex: 'productCode',
     key: 'productCode',
+    title: t('entity.apsscheduleitem.productcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.apsScheduleItem.productname'),
-    dataIndex: 'productName',
     key: 'productName',
+    title: t('entity.apsscheduleitem.productname'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.apsScheduleItem.workcentercode'),
-    dataIndex: 'workCenterCode',
     key: 'workCenterCode',
-    width: 140,
+    title: t('entity.apsscheduleitem.workcentercode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.apsscheduleitem.workcentercode') }),
   },
   {
-    title: t('entity.apsScheduleItem.workcentername'),
-    dataIndex: 'workCenterName',
     key: 'workCenterName',
-    width: 140,
+    title: t('entity.apsscheduleitem.workcentername'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.apsscheduleitem.workcentername') }),
   },
   {
-    title: t('entity.apsScheduleItem.processcode'),
-    dataIndex: 'processCode',
     key: 'processCode',
+    title: t('entity.apsscheduleitem.processcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.apsScheduleItem.processname'),
-    dataIndex: 'processName',
     key: 'processName',
+    title: t('entity.apsscheduleitem.processname'),
+    editor: 'input',
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 apsScheduleChangeLog 表单列定义 */
-const apsScheduleChangeLogFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    width: 140,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.changetype'),
-    dataIndex: 'changeType',
-    key: 'changeType',
-    width: 140,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    width: 140,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.changeby'),
-    dataIndex: 'changeBy',
-    key: 'changeBy',
-    width: 140,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.changetime'),
-    dataIndex: 'changeTime',
-    key: 'changeTime',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
-    key: 'remark',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<ApsScheduleCreate & { apsScheduleId?: string }> | null | undefined) {
-  childApsScheduleItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.apsScheduleItemId ?? `new-${index}`,
-  }))
-  childApsScheduleChangeLogRows.value = ((val as any)?.changeLogs ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.apsScheduleChangeLogId ?? `new-${index}`,
-  }))
+  childApsScheduleItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 apsScheduleItem 行 */
-function handleAddApsScheduleItemRow() {
-  childApsScheduleItemRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      lineNumber: 0,
-      workOrderCode: '',
-      productCode: '',
-      productName: '',
-      workCenterCode: '',
-      workCenterName: '',
-      processCode: '',
-      processName: '',
-  })
-}
-
-/** 表单 Tab 内删除 apsScheduleItem 行 */
-function handleRemoveApsScheduleItemRow(index: number) {
-  childApsScheduleItemRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 apsScheduleChangeLog 行 */
-function handleAddApsScheduleChangeLogRow() {
-  childApsScheduleChangeLogRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      changeFields: '',
-      changeType: 0,
-      changeReason: '',
-      changeBy: '',
-      changeTime: '',
-      extFieldJson: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 apsScheduleChangeLog 行 */
-function handleRemoveApsScheduleChangeLogRow(index: number) {
-  childApsScheduleChangeLogRows.value.splice(index, 1)
+function createDefaultApsScheduleItemRow(): Record<string, unknown> {
+  return {
+    lineNumber: (childApsScheduleItemRows.value.length + 1) * 10,
+    workOrderCode: '',
+    productCode: '',
+    productName: '',
+    workCenterCode: '',
+    workCenterName: '',
+    processCode: '',
+    processName: '',
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.apsScheduleId ?? ''
   return {
     ...formState,
-    items: childApsScheduleItemRows.value.map(({ __rowKey, ...rest }) => rest),
-    changeLogs: childApsScheduleChangeLogRows.value.map(({ __rowKey, ...rest }) => rest),
+    items: apsScheduleItemTableRef.value?.getRows?.() ?? childApsScheduleItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      apsScheduleId: masterId,
+    })),
   }
 }
 
@@ -898,7 +574,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -906,20 +582,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 apsScheduleId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.apsScheduleId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).items
-    delete (next as any).changeLogs
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -938,107 +629,175 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.apsschedule.plantcode') }),
       trigger: 'blur'
     }
   ],
   scheduleCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulecode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulecode') }),
       trigger: 'blur'
     }
   ],
   scheduleName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulename') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulename') }),
       trigger: 'blur'
     }
   ],
-  scheduleType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.scheduletype') }),
-      trigger: 'change'
-    }
-  ],
+  scheduleType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.scheduletype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.scheduletype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   planDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.plandate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.apsschedule.plandate') }),
       trigger: 'change'
     }
   ],
   planStartTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.planstarttime') }),
-      trigger: 'blur'
+      message: t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planstarttime') }),
+      trigger: 'change'
     }
   ],
   planEndTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.planendtime') }),
-      trigger: 'blur'
-    }
-  ],
-  planCycle: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.plancycle') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planendtime') }),
       trigger: 'change'
     }
   ],
-  scheduleStrategy: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.schedulestrategy') }),
-      trigger: 'change'
-    }
-  ],
-  scheduleAlgorithm: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.schedulealgorithm') }),
-      trigger: 'change'
-    }
-  ],
-  optimizationObjective: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.optimizationobjective') }),
-      trigger: 'change'
-    }
-  ],
-  scheduleStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.schedulestatus') }),
-      trigger: 'change'
-    }
-  ],
+  planCycle: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.plancycle') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.plancycle') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  scheduleStrategy: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.schedulestrategy') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.schedulestrategy') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  scheduleAlgorithm: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.schedulealgorithm') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.schedulealgorithm') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  optimizationObjective: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.optimizationobjective') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.optimizationobjective') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  scheduleStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.schedulestatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.apsschedule.schedulestatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await apsScheduleItemTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('scheduleType' in payload) {
+    const rawscheduleType = payload.scheduleType
+    payload.scheduleType = typeof rawscheduleType === 'number' ? rawscheduleType : Number(rawscheduleType)
+  }
+  if ('planCycle' in payload) {
+    const rawplanCycle = payload.planCycle
+    payload.planCycle = typeof rawplanCycle === 'number' ? rawplanCycle : Number(rawplanCycle)
+  }
+  if ('scheduleStrategy' in payload) {
+    const rawscheduleStrategy = payload.scheduleStrategy
+    payload.scheduleStrategy = typeof rawscheduleStrategy === 'number' ? rawscheduleStrategy : Number(rawscheduleStrategy)
+  }
+  if ('scheduleAlgorithm' in payload) {
+    const rawscheduleAlgorithm = payload.scheduleAlgorithm
+    payload.scheduleAlgorithm = typeof rawscheduleAlgorithm === 'number' ? rawscheduleAlgorithm : Number(rawscheduleAlgorithm)
+  }
+  if ('optimizationObjective' in payload) {
+    const rawoptimizationObjective = payload.optimizationObjective
+    payload.optimizationObjective = typeof rawoptimizationObjective === 'number' ? rawoptimizationObjective : Number(rawoptimizationObjective)
+  }
+  if ('scheduleStatus' in payload) {
+    const rawscheduleStatus = payload.scheduleStatus
+    payload.scheduleStatus = typeof rawscheduleStatus === 'number' ? rawscheduleStatus : Number(rawscheduleStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.apsScheduleId)
   childApsScheduleItemRows.value = []
-  childApsScheduleChangeLogRows.value = []
+  apsScheduleItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

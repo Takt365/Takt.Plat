@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,99 +63,102 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.complainthandlingcode')"
+                :label="t('entity.customercomplainthandling.complainthandlingcode')"
                 name="complaintHandlingCode"
               >
                 <a-input
                   v-model:value="formState.complaintHandlingCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.complainthandlingcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.complainthandlingcode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.customerComplaintHandlingId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.complaintid')"
+                :label="t('entity.customercomplainthandling.complaintid')"
                 name="complaintId"
               >
                 <a-input
                   v-model:value="formState.complaintId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.complaintid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.complaintid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.complaintno')"
+                :label="t('entity.customercomplainthandling.complaintno')"
                 name="complaintNo"
               >
                 <a-input
                   v-model:value="formState.complaintNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.complaintno') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.complaintno') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.complaintitemid')"
+                :label="t('entity.customercomplainthandling.complaintitemid')"
                 name="complaintItemId"
               >
                 <a-input
                   v-model:value="formState.complaintItemId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.complaintitemid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.complaintitemid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.handlingstage')"
+                :label="t('entity.customercomplainthandling.handlingstage')"
                 name="handlingStage"
               >
                 <a-input-number
                   v-model:value="formState.handlingStage"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.handlingstage') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.handlingstage') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.handlingmethod')"
+                :label="t('entity.customercomplainthandling.handlingmethod')"
                 name="handlingMethod"
               >
                 <a-input-number
                   v-model:value="formState.handlingMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.handlingmethod') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.handlingmethod') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.handlingdescription')"
+                :label="t('entity.customercomplainthandling.handlingdescription')"
                 name="handlingDescription"
               >
                 <a-textarea
                   v-model:value="formState.handlingDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.customerComplaintHandling.handlingdescription') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.customercomplainthandling.handlingdescription') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -168,132 +174,136 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.causeanalysis')"
+                :label="t('entity.customercomplainthandling.causeanalysis')"
                 name="causeAnalysis"
               >
                 <a-input
                   v-model:value="formState.causeAnalysis"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.causeanalysis') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.causeanalysis') })"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.correctiveaction')"
+                :label="t('entity.customercomplainthandling.correctiveaction')"
                 name="correctiveAction"
               >
                 <a-input
                   v-model:value="formState.correctiveAction"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.correctiveaction') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.correctiveaction') })"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.preventiveaction')"
+                :label="t('entity.customercomplainthandling.preventiveaction')"
                 name="preventiveAction"
               >
                 <a-input
                   v-model:value="formState.preventiveAction"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.preventiveaction') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.preventiveaction') })"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.responsibledept')"
+                :label="t('entity.customercomplainthandling.responsibledept')"
                 name="responsibleDept"
               >
                 <a-input
                   v-model:value="formState.responsibleDept"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.responsibledept') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.responsibledept') })"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.responsibleby')"
+                :label="t('entity.customercomplainthandling.responsibleby')"
                 name="responsibleBy"
               >
                 <a-input
                   v-model:value="formState.responsibleBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.responsibleby') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.responsibleby') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.handlerby')"
+                :label="t('entity.customercomplainthandling.handlerby')"
                 name="handlerBy"
               >
                 <a-input
                   v-model:value="formState.handlerBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.handlerby') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.handlerby') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.handlingat')"
+                :label="t('entity.customercomplainthandling.handlingat')"
                 name="handlingAt"
               >
                 <a-input
                   v-model:value="formState.handlingAt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.handlingat') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.handlingat') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.plannedcompletiondate')"
+                :label="t('entity.customercomplainthandling.plannedcompletiondate')"
                 name="plannedCompletionDate"
               >
                 <a-date-picker
                   v-model:value="formState.plannedCompletionDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customerComplaintHandling.plannedcompletiondate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customercomplainthandling.plannedcompletiondate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.actualcompletiondate')"
+                :label="t('entity.customercomplainthandling.actualcompletiondate')"
                 name="actualCompletionDate"
               >
                 <a-date-picker
                   v-model:value="formState.actualCompletionDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customerComplaintHandling.actualcompletiondate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customercomplainthandling.actualcompletiondate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.handlingstatus')"
+                :label="t('entity.customercomplainthandling.handlingstatus')"
                 name="handlingStatus"
               >
                 <a-input-number
                   v-model:value="formState.handlingStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.handlingstatus') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.handlingstatus') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -308,67 +318,80 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.handlingcost')"
+                :label="t('entity.customercomplainthandling.handlingcost')"
                 name="handlingCost"
               >
                 <a-input-number
                   v-model:value="formState.handlingCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.handlingcost') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.handlingcost') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.customerfeedback')"
+                :label="t('entity.customercomplainthandling.customerfeedback')"
                 name="customerFeedback"
               >
                 <a-input
                   v-model:value="formState.customerFeedback"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.customerfeedback') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.customerfeedback') })"
+                  show-count
+                  :maxlength="1000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.customersatisfaction')"
+                :label="t('entity.customercomplainthandling.customersatisfaction')"
                 name="customerSatisfaction"
               >
                 <a-input-number
                   v-model:value="formState.customerSatisfaction"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.customersatisfaction') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.customersatisfaction') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.customerComplaintHandling.attachmentpaths')"
+                :label="t('entity.customercomplainthandling.attachmentpaths')"
                 name="attachmentPaths"
               >
                 <a-input
                   v-model:value="formState.attachmentPaths"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.attachmentpaths') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.attachmentpaths') })"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -381,15 +404,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -403,6 +427,7 @@ import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { CustomerComplaintHandlingCreate } from '@/types/logistics/quality/complaint/customer-complaint-handling'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -435,7 +460,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","complaintHandlingCode","complaintId","complaintNo","complaintItemId","handlingStage","handlingMethod","handlingDescription","causeAnalysis","correctiveAction","preventiveAction","responsibleDept","responsibleBy","handlerBy","handlingAt","plannedCompletionDate","actualCompletionDate","handlingStatus","handlingCost","customerFeedback","customerSatisfaction","attachmentPaths","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","complaintHandlingCode","complaintId","complaintNo","complaintItemId","handlingStage","handlingMethod","handlingDescription","causeAnalysis","correctiveAction","preventiveAction","responsibleDept","responsibleBy","handlerBy","handlingAt","plannedCompletionDate","actualCompletionDate","handlingStatus","handlingCost","customerFeedback","customerSatisfaction","attachmentPaths","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -446,7 +471,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -454,18 +479,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 customerComplaintHandlingId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.customerComplaintHandlingId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -484,52 +525,70 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   complaintHandlingCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.complainthandlingcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.complainthandlingcode') }),
       trigger: 'blur'
     }
   ],
   complaintId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.complaintid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.complaintid') }),
       trigger: 'blur'
     }
   ],
   complaintNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.complaintno') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.complaintno') }),
       trigger: 'blur'
     }
   ],
-  handlingStage: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customerComplaintHandling.handlingstage') }),
-      trigger: 'change'
-    }
-  ],
-  handlingMethod: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customerComplaintHandling.handlingmethod') }),
-      trigger: 'change'
-    }
-  ],
+  handlingStage: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplainthandling.handlingstage') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplainthandling.handlingstage') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  handlingMethod: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplainthandling.handlingmethod') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplainthandling.handlingmethod') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   handlingDescription: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customerComplaintHandling.handlingdescription') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.handlingdescription') }),
       trigger: 'blur'
     }
   ],
-  handlingStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customerComplaintHandling.handlingstatus') }),
-      trigger: 'change'
-    }
-  ],
+  handlingStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplainthandling.handlingstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplainthandling.handlingstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -540,15 +599,42 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('handlingStage' in payload) {
+    const rawhandlingStage = payload.handlingStage
+    payload.handlingStage = typeof rawhandlingStage === 'number' ? rawhandlingStage : Number(rawhandlingStage)
+  }
+  if ('handlingMethod' in payload) {
+    const rawhandlingMethod = payload.handlingMethod
+    payload.handlingMethod = typeof rawhandlingMethod === 'number' ? rawhandlingMethod : Number(rawhandlingMethod)
+  }
+  if ('handlingStatus' in payload) {
+    const rawhandlingStatus = payload.handlingStatus
+    payload.handlingStatus = typeof rawhandlingStatus === 'number' ? rawhandlingStatus : Number(rawhandlingStatus)
+  }
+  if ('handlingCost' in payload) {
+    const rawhandlingCost = payload.handlingCost
+    payload.handlingCost = typeof rawhandlingCost === 'number' ? rawhandlingCost : Number(rawhandlingCost)
+  }
+  if ('customerSatisfaction' in payload) {
+    const rawcustomerSatisfaction = payload.customerSatisfaction
+    payload.customerSatisfaction = typeof rawcustomerSatisfaction === 'number' ? rawcustomerSatisfaction : Number(rawcustomerSatisfaction)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.customerComplaintHandlingId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

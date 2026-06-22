@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailureMeetingService.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityIssueMeetingService.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题会议调查试验费用明细应用服务实现
 // 
@@ -27,33 +27,33 @@ namespace Takt.Application.Services.Logistics.Quality.Cost;
 /// <summary>
 /// 质量问题会议调查试验费用明细应用服务
 /// </summary>
-public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFailureMeetingService
+public class TaktQualityIssueMeetingService : TaktServiceBase, ITaktQualityIssueMeetingService
 {
-    private readonly ITaktCompanyRepository<TaktQualityFailureMeeting> _qualityFailureMeetingRepository;
-    private readonly ITaktCompanyRepository<TaktQualityFailure> _qualityFailureRepository;
+    private readonly ITaktCompanyRepository<TaktQualityIssueMeeting> _qualityIssueMeetingRepository;
+    private readonly ITaktCompanyRepository<TaktQualityIssue> _qualityIssueRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="qualityFailureMeetingRepository">质量问题会议调查试验费用明细仓储</param>
-    /// <param name="qualityFailureRepository">品质问题应对主仓储</param>
+    /// <param name="qualityIssueMeetingRepository">质量问题会议调查试验费用明细仓储</param>
+    /// <param name="qualityIssueRepository">品质问题应对主仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
-    public TaktQualityFailureMeetingService(
-        ITaktCompanyRepository<TaktQualityFailureMeeting> qualityFailureMeetingRepository,
-        ITaktCompanyRepository<TaktQualityFailure> qualityFailureRepository,
+    public TaktQualityIssueMeetingService(
+        ITaktCompanyRepository<TaktQualityIssueMeeting> qualityIssueMeetingRepository,
+        ITaktCompanyRepository<TaktQualityIssue> qualityIssueRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
-        _qualityFailureMeetingRepository = qualityFailureMeetingRepository;
-        _qualityFailureRepository = qualityFailureRepository;
+        _qualityIssueMeetingRepository = qualityIssueMeetingRepository;
+        _qualityIssueRepository = qualityIssueRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -63,15 +63,15 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    public async Task<TaktPagedResult<TaktQualityFailureMeetingDto>> GetQualityFailureMeetingListAsync(TaktQualityFailureMeetingQueryDto queryDto)
+    public async Task<TaktPagedResult<TaktQualityIssueMeetingDto>> GetQualityIssueMeetingListAsync(TaktQualityIssueMeetingQueryDto queryDto)
     {
         var predicate = QueryExpression(queryDto);
-        var (data, total) = await _qualityFailureMeetingRepository.GetPagedAsync(
+        var (data, total) = await _qualityIssueMeetingRepository.GetPagedAsync(
             queryDto.PageIndex,
             queryDto.PageSize,
             predicate);
-        return TaktPagedResult<TaktQualityFailureMeetingDto>.Create(
-            data.Adapt<List<TaktQualityFailureMeetingDto>>(),
+        return TaktPagedResult<TaktQualityIssueMeetingDto>.Create(
+            data.Adapt<List<TaktQualityIssueMeetingDto>>(),
             total,
             queryDto.PageIndex,
             queryDto.PageSize);
@@ -82,31 +82,31 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// </summary>
     /// <param name="id">质量问题会议调查试验费用明细ID</param>
     /// <returns>DTO</returns>
-    public async Task<TaktQualityFailureMeetingDto?> GetQualityFailureMeetingByIdAsync(long id)
+    public async Task<TaktQualityIssueMeetingDto?> GetQualityIssueMeetingByIdAsync(long id)
     {
-        var entity = await _qualityFailureMeetingRepository.GetByIdAsync(id);
+        var entity = await _qualityIssueMeetingRepository.GetByIdAsync(id);
         if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
         {
             return null;
         }
-        return entity.Adapt<TaktQualityFailureMeetingDto>();
+        return entity.Adapt<TaktQualityIssueMeetingDto>();
     }
 
     /// <summary>
     /// 获取质量问题会议调查试验费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetQualityFailureMeetingOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetQualityIssueMeetingOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _qualityFailureMeetingRepository.GetListAsync(
+        var list = await _qualityIssueMeetingRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.QualityFailureCode,
+            x => x.QualityIssueCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.QualityFailureCode ?? e.Id.ToString(),
+            DictLabel = e.QualityIssueCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -115,28 +115,28 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktQualityFailureMeetingDto> CreateQualityFailureMeetingAsync(TaktQualityFailureMeetingCreateDto dto)
+    public async Task<TaktQualityIssueMeetingDto> CreateQualityIssueMeetingAsync(TaktQualityIssueMeetingCreateDto dto)
     {
-        var entity = dto.Adapt<TaktQualityFailureMeeting>();
-        await StampQualityFailureMeetingQualityFailureAsync(entity, dto);
-        var isUnique_ix_takt_logistics_quality_failure_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _qualityFailureMeetingRepository,
-            x => x.QualityFailureId == entity.QualityFailureId
+        var entity = dto.Adapt<TaktQualityIssueMeeting>();
+        await StampQualityIssueMeetingQualityIssueAsync(entity, dto);
+        var isUnique_ix_takt_logistics_quality_issue_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
+            _qualityIssueMeetingRepository,
+            x => x.QualityIssueId == entity.QualityIssueId
                 && x.LineNumber == entity.LineNumber);
-        if (!isUnique_ix_takt_logistics_quality_failure_meeting_line_unique)
+        if (!isUnique_ix_takt_logistics_quality_issue_meeting_line_unique)
         {
-            throw new TaktBusinessException("质量问题会议调查试验费用明细的QualityFailureId、LineNumber已存在");
+            throw new TaktBusinessException("质量问题会议调查试验费用明细的QualityIssueId、LineNumber已存在");
         }
         if (entity.LineNumber <= 0)
         {
-            var maxLine = await _qualityFailureMeetingRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityFailureId == entity.QualityFailureId,
+            var maxLine = await _qualityIssueMeetingRepository.GetMaxIntAsync(
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityIssueId == entity.QualityIssueId,
                 x => x.LineNumber);
-            var businessCode = !string.IsNullOrWhiteSpace(entity.QualityFailureCode) ? entity.QualityFailureCode : entity.QualityFailureId.ToString();
+            var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIssueCode) ? entity.QualityIssueCode : entity.QualityIssueId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
-        entity = await _qualityFailureMeetingRepository.CreateAsync(entity);
-        return await GetQualityFailureMeetingByIdAsync(entity.Id) ?? entity.Adapt<TaktQualityFailureMeetingDto>();
+        entity = await _qualityIssueMeetingRepository.CreateAsync(entity);
+        return await GetQualityIssueMeetingByIdAsync(entity.Id) ?? entity.Adapt<TaktQualityIssueMeetingDto>();
     }
 
     /// <summary>
@@ -145,26 +145,26 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// <param name="id">质量问题会议调查试验费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktQualityFailureMeetingDto> UpdateQualityFailureMeetingAsync(long id, TaktQualityFailureMeetingUpdateDto dto)
+    public async Task<TaktQualityIssueMeetingDto> UpdateQualityIssueMeetingAsync(long id, TaktQualityIssueMeetingUpdateDto dto)
     {
-        var entity = await _qualityFailureMeetingRepository.GetByIdAsync(id);
+        var entity = await _qualityIssueMeetingRepository.GetByIdAsync(id);
         if (entity == null)
         {
             throw new TaktBusinessException("质量问题会议调查试验费用明细不存在");
         }
         dto.Adapt(entity);
-        await StampQualityFailureMeetingQualityFailureAsync(entity, dto);
-        var isUnique_ix_takt_logistics_quality_failure_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _qualityFailureMeetingRepository,
-            x => x.QualityFailureId == entity.QualityFailureId
+        await StampQualityIssueMeetingQualityIssueAsync(entity, dto);
+        var isUnique_ix_takt_logistics_quality_issue_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
+            _qualityIssueMeetingRepository,
+            x => x.QualityIssueId == entity.QualityIssueId
                 && x.LineNumber == entity.LineNumber,
             id);
-        if (!isUnique_ix_takt_logistics_quality_failure_meeting_line_unique)
+        if (!isUnique_ix_takt_logistics_quality_issue_meeting_line_unique)
         {
-            throw new TaktBusinessException("质量问题会议调查试验费用明细的QualityFailureId、LineNumber已存在");
+            throw new TaktBusinessException("质量问题会议调查试验费用明细的QualityIssueId、LineNumber已存在");
         }
-        await _qualityFailureMeetingRepository.UpdateAsync(entity);
-        return await GetQualityFailureMeetingByIdAsync(id) ?? throw new TaktBusinessException("质量问题会议调查试验费用明细不存在");
+        await _qualityIssueMeetingRepository.UpdateAsync(entity);
+        return await GetQualityIssueMeetingByIdAsync(id) ?? throw new TaktBusinessException("质量问题会议调查试验费用明细不存在");
     }
 
     /// <summary>
@@ -172,9 +172,9 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// </summary>
     /// <param name="id">质量问题会议调查试验费用明细ID</param>
     /// <returns>任务</returns>
-    public async Task DeleteQualityFailureMeetingByIdAsync(long id)
+    public async Task DeleteQualityIssueMeetingByIdAsync(long id)
     {
-        var deleted = await _qualityFailureMeetingRepository.DeleteAsync(id);
+        var deleted = await _qualityIssueMeetingRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("质量问题会议调查试验费用明细不存在或已删除");
@@ -186,7 +186,7 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    public async Task DeleteQualityFailureMeetingBatchAsync(IEnumerable<long> ids)
+    public async Task DeleteQualityIssueMeetingBatchAsync(IEnumerable<long> ids)
     {
         var idList = ids?.Distinct().ToList() ?? new List<long>();
         if (idList.Count == 0)
@@ -195,7 +195,7 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
         }
         foreach (var id in idList)
         {
-            await DeleteQualityFailureMeetingByIdAsync(id);
+            await DeleteQualityIssueMeetingByIdAsync(id);
         }
     }
 
@@ -205,9 +205,9 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public async Task<(string fileName, byte[] content)> GetQualityFailureMeetingTemplateAsync(string? sheetName = null, string? fileName = null)
+    public async Task<(string fileName, byte[] content)> GetQualityIssueMeetingTemplateAsync(string? sheetName = null, string? fileName = null)
     {
-        return await TaktExcelHelper.GenerateTemplateAsync<TaktQualityFailureMeetingTemplateDto>(
+        return await TaktExcelHelper.GenerateTemplateAsync<TaktQualityIssueMeetingTemplateDto>(
             sheetName ?? "质量问题会议调查试验费用明细导入模板",
             fileName ?? "质量问题会议调查试验费用明细导入模板.xlsx");
     }
@@ -218,12 +218,12 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    public async Task<(int success, int fail, List<string> errors)> ImportQualityFailureMeetingAsync(Stream fileStream, string? sheetName = null)
+    public async Task<(int success, int fail, List<string> errors)> ImportQualityIssueMeetingAsync(Stream fileStream, string? sheetName = null)
     {
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
-        var rows = await TaktExcelHelper.ImportAsync<TaktQualityFailureMeetingImportDto>(fileStream, sheetName ?? "质量问题会议调查试验费用明细导入模板");
+        var rows = await TaktExcelHelper.ImportAsync<TaktQualityIssueMeetingImportDto>(fileStream, sheetName ?? "质量问题会议调查试验费用明细导入模板");
         if (rows == null || rows.Count == 0)
         {
             errors.Add("Excel文件中没有数据");
@@ -234,31 +234,31 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
         {
             try
             {
-                var entity = rows[i].Adapt<TaktQualityFailureMeeting>();
-                var importDto = rows[i].Adapt<TaktQualityFailureMeetingCreateDto>();
-                await StampQualityFailureMeetingQualityFailureAsync(entity, importDto);
-                var importKey = $"{entity.QualityFailureId}|{entity.LineNumber}";
+                var entity = rows[i].Adapt<TaktQualityIssueMeeting>();
+                var importDto = rows[i].Adapt<TaktQualityIssueMeetingCreateDto>();
+                await StampQualityIssueMeetingQualityIssueAsync(entity, importDto);
+                var importKey = $"{entity.QualityIssueId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（QualityFailureId、LineNumber）");
+                    throw new TaktBusinessException("与Excel中其他行重复（QualityIssueId、LineNumber）");
                 }
-                var isUnique_ix_takt_logistics_quality_failure_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
-                    _qualityFailureMeetingRepository,
-                    x => x.QualityFailureId == entity.QualityFailureId
+                var isUnique_ix_takt_logistics_quality_issue_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    _qualityIssueMeetingRepository,
+                    x => x.QualityIssueId == entity.QualityIssueId
                         && x.LineNumber == entity.LineNumber);
-                if (!isUnique_ix_takt_logistics_quality_failure_meeting_line_unique)
+                if (!isUnique_ix_takt_logistics_quality_issue_meeting_line_unique)
                 {
-                    throw new TaktBusinessException("质量问题会议调查试验费用明细的QualityFailureId、LineNumber已存在");
+                    throw new TaktBusinessException("质量问题会议调查试验费用明细的QualityIssueId、LineNumber已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
-                    var maxLine = await _qualityFailureMeetingRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityFailureId == entity.QualityFailureId,
+                    var maxLine = await _qualityIssueMeetingRepository.GetMaxIntAsync(
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityIssueId == entity.QualityIssueId,
                         x => x.LineNumber);
-                    var businessCode = !string.IsNullOrWhiteSpace(entity.QualityFailureCode) ? entity.QualityFailureCode : entity.QualityFailureId.ToString();
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIssueCode) ? entity.QualityIssueCode : entity.QualityIssueId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
-                await _qualityFailureMeetingRepository.CreateAsync(entity);
+                await _qualityIssueMeetingRepository.CreateAsync(entity);
                 success += 1;
             }
             catch (Exception ex)
@@ -277,18 +277,18 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public async Task<(string fileName, byte[] fileContent)> ExportQualityFailureMeetingAsync(TaktQualityFailureMeetingQueryDto? query = null, string? sheetName = null, string? fileName = null)
+    public async Task<(string fileName, byte[] fileContent)> ExportQualityIssueMeetingAsync(TaktQualityIssueMeetingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktQualityFailureMeetingQueryDto());
-        var list = await _qualityFailureMeetingRepository.GetListAsync(predicate);
+        var predicate = QueryExpression(query ?? new TaktQualityIssueMeetingQueryDto());
+        var list = await _qualityIssueMeetingRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(
-                new List<TaktQualityFailureMeetingExportDto>(),
+                new List<TaktQualityIssueMeetingExportDto>(),
                 sheetName ?? "质量问题会议调查试验费用明细数据",
                 fileName ?? "质量问题会议调查试验费用明细导出.xlsx");
         }
-        var exportData = list.Adapt<List<TaktQualityFailureMeetingExportDto>>();
+        var exportData = list.Adapt<List<TaktQualityIssueMeetingExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
             sheetName ?? "质量问题会议调查试验费用明细数据",
@@ -305,18 +305,18 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// <param name="entity">当前实体</param>
     /// <param name="dto">创建 DTO</param>
     /// <returns>任务</returns>
-    private async Task StampQualityFailureMeetingQualityFailureAsync(TaktQualityFailureMeeting entity, TaktQualityFailureMeetingCreateDto dto)
+    private async Task StampQualityIssueMeetingQualityIssueAsync(TaktQualityIssueMeeting entity, TaktQualityIssueMeetingCreateDto dto)
     {
-        if (dto.QualityFailureId <= 0)
+        if (dto.QualityIssueId <= 0)
         {
             return;
         }
-        var master = await _qualityFailureRepository.GetByIdAsync(dto.QualityFailureId);
+        var master = await _qualityIssueRepository.GetByIdAsync(dto.QualityIssueId);
         if (master == null)
         {
             throw new TaktBusinessException("品质问题应对主不存在");
         }
-        entity.QualityFailureId = master.Id;
+        entity.QualityIssueId = master.Id;
     }
     // ========================================
     // 查询表达式
@@ -327,16 +327,16 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>查询表达式</returns>
-    private static Expression<Func<TaktQualityFailureMeeting, bool>> QueryExpression(TaktQualityFailureMeetingQueryDto? queryDto)
+    private static Expression<Func<TaktQualityIssueMeeting, bool>> QueryExpression(TaktQualityIssueMeetingQueryDto? queryDto)
     {
-        var exp = Expressionable.Create<TaktQualityFailureMeeting>();
+        var exp = Expressionable.Create<TaktQualityIssueMeeting>();
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                SqlFunc.ToString(x.QualityFailureId).Contains(keywords)
-                || (x.QualityFailureCode != null && x.QualityFailureCode.Contains(keywords))
+                SqlFunc.ToString(x.QualityIssueId).Contains(keywords)
+                || (x.QualityIssueCode != null && x.QualityIssueCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || SqlFunc.ToString(x.DirectManpowerCostPerMinute).Contains(keywords)
                 || SqlFunc.ToString(x.IndirectManpowerCostPerMinute).Contains(keywords)
@@ -351,20 +351,20 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
                 || SqlFunc.ToString(x.OtherWorkTimeMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.OtherApparatusCost).Contains(keywords)
                 || (x.MeetingRecorder != null && x.MeetingRecorder.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.QualityFailureId.HasValue == true)
+        if (queryDto?.QualityIssueId.HasValue == true)
         {
-            exp = exp.And(x => x.QualityFailureId == queryDto.QualityFailureId);
+            exp = exp.And(x => x.QualityIssueId == queryDto.QualityIssueId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityFailureCode))
+        if (!string.IsNullOrEmpty(queryDto?.QualityIssueCode))
         {
-            exp = exp.And(x => x.QualityFailureCode != null && x.QualityFailureCode.Contains(queryDto.QualityFailureCode));
+            exp = exp.And(x => x.QualityIssueCode != null && x.QualityIssueCode.Contains(queryDto.QualityIssueCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
@@ -437,9 +437,9 @@ public class TaktQualityFailureMeetingService : TaktServiceBase, ITaktQualityFai
             exp = exp.And(x => x.MeetingRecorder != null && x.MeetingRecorder.Contains(queryDto.MeetingRecorder));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

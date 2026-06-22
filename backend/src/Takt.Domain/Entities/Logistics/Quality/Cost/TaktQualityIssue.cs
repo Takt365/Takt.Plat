@@ -1,7 +1,7 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailure.cs
+// 文件名称：TaktQualityIssue.cs
 // 创建时间：2026-05-07
 // 创建人：Takt365(Qoder AI)
 // 功能描述:品质问题应对主表,用于记录质量问题的基础信息(年月日、机种、批次)
@@ -19,11 +19,11 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 /// <summary>
 /// 品质问题应对主表,用于记录质量问题的基础信息(年月日、机种、批次)及汇总数据
 /// </summary>
-[SugarTable("takt_logistics_quality_failure", "品质问题应对主表")]
-[SugarIndex("ix_quality_failure_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_quality_failure_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_quality_failure_qf_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(QualityFailureCode), OrderByType.Asc, nameof(FailureDate), OrderByType.Asc, true)]
-public class TaktQualityFailure : TaktCompanyEntityBase
+[SugarTable("takt_logistics_quality_issue", "品质问题应对主表")]
+[SugarIndex("ix_quality_issue_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_quality_issue_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_quality_issue_qf_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(QualityIssueCode), OrderByType.Asc, nameof(IssueDate), OrderByType.Asc, true)]
+public class TaktQualityIssue : TaktCompanyEntityBase
 {
     /// <summary>
     /// 工厂代码
@@ -34,16 +34,16 @@ public class TaktQualityFailure : TaktCompanyEntityBase
     /// <summary>
     /// 品质问题编码（唯一，如：QF-2026-0001）
     /// </summary>
-    [SugarColumn(ColumnName = "quality_failure_code", ColumnDescription = "品质问题编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string QualityFailureCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "quality_issue_code", ColumnDescription = "品质问题编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     // ==================== 基础日期与产品信息 ====================
     
     /// <summary>
     /// 问题日期
     /// </summary>
-    [SugarColumn(ColumnName = "failure_date", ColumnDescription = "问题日期", ColumnDataType = "date", IsNullable = false)]
-    public DateTime FailureDate { get; set; }
+    [SugarColumn(ColumnName = "issue_date", ColumnDescription = "问题日期", ColumnDataType = "date", IsNullable = false)]
+    public DateTime IssueDate { get; set; }
 
     /// <summary>
     /// 机种/产品型号
@@ -100,18 +100,18 @@ public class TaktQualityFailure : TaktCompanyEntityBase
     /// <summary>
     /// 会议/调查/试验费用明细列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktQualityFailureMeeting.QualityFailureId))]
-    public List<TaktQualityFailureMeeting>? MeetingItems { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktQualityIssueMeeting.QualityIssueId))]
+    public List<TaktQualityIssueMeeting>? MeetingItems { get; set; }
 
     /// <summary>
     /// 组装不良改修应对明细列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktQualityFailureAssyRework.QualityFailureId))]
-    public List<TaktQualityFailureAssyRework>? AssyReworkItems { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktQualityIssueAssyRework.QualityIssueId))]
+    public List<TaktQualityIssueAssyRework>? AssyReworkItems { get; set; }
 
     /// <summary>
     /// PCBA不良改修应对明细列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktQualityFailurePcbaRework.QualityFailureId))]
-    public List<TaktQualityFailurePcbaRework>? PcbaReworkItems { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktQualityIssuePcbaRework.QualityIssueId))]
+    public List<TaktQualityIssuePcbaRework>? PcbaReworkItems { get; set; }
 }

@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
-// 文件名称：TaktQualityOperationDtos.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityAssuranceDtos.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
-// 功能描述：QualityOperation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityOperation 生成，请按需审阅）
+// 功能描述：QualityAssurance 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityAssurance 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,22 +18,22 @@ using Takt.Shared.Models;
 namespace Takt.Application.Dtos.Logistics.Quality.Cost;
 
 // ========================================
-// QualityOperation 响应 DTO
+// QualityAssurance 响应 DTO
 // ========================================
 
 /// <summary>
 /// 品质业务主表,用于记录品质业务的基础信息(年月、顾客)及汇总数据
-/// 对应前端 TaktQualityOperationDto
+/// 对应前端 TaktQualityAssuranceDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
-public class TaktQualityOperationDto : TaktCompanyDtoBase
+public class TaktQualityAssuranceDto : TaktCompanyDtoBase
 {
     /// <summary>
-    /// QualityOperationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// QualityAssuranceID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationId { get; set; }
+    public long QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 工厂代码
@@ -43,12 +43,12 @@ public class TaktQualityOperationDto : TaktCompanyDtoBase
     /// <summary>
     /// 品质业务编码(唯一,如:QO-2026-0001)
     /// </summary>
-    public string QualityOperationCode { get; set; } = string.Empty;
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务年月(格式:2026-05)
     /// </summary>
-    public string OperationMonth { get; set; } = string.Empty;
+    public string AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
     /// 顾客名
@@ -77,57 +77,57 @@ public class TaktQualityOperationDto : TaktCompanyDtoBase
 
     /// <summary>
     /// 来料检验费用明细列表
-    /// （子表：TaktQualityOperationIncoming）
+    /// （子表：TaktQualityAssuranceIncoming）
     /// </summary>
-    public List<TaktQualityOperationIncomingDto>? IncomingItems { get; set; }
+    public List<TaktQualityAssuranceIncomingDto>? IncomingItems { get; set; }
 
     /// <summary>
     /// 初期/定期检定费用明细列表
-    /// （子表：TaktQualityOperationFirstArticle）
+    /// （子表：TaktQualityAssuranceFirstArticle）
     /// </summary>
-    public List<TaktQualityOperationFirstArticleDto>? FirstArticleItems { get; set; }
+    public List<TaktQualityAssuranceFirstArticleDto>? FirstArticleItems { get; set; }
 
     /// <summary>
     /// 设备校正费用明细列表
-    /// （子表：TaktQualityOperationCalibration）
+    /// （子表：TaktQualityAssuranceCalibration）
     /// </summary>
-    public List<TaktQualityOperationCalibrationDto>? CalibrationItems { get; set; }
+    public List<TaktQualityAssuranceCalibrationDto>? CalibrationItems { get; set; }
 
     /// <summary>
     /// 其他通常业务费用明细列表
-    /// （子表：TaktQualityOperationOther）
+    /// （子表：TaktQualityAssuranceOther）
     /// </summary>
-    public List<TaktQualityOperationOtherDto>? OtherItems { get; set; }
+    public List<TaktQualityAssuranceOtherDto>? OtherItems { get; set; }
 
     /// <summary>
     /// 出货检验费用明细列表
-    /// （子表：TaktQualityOperationOutgoing）
+    /// （子表：TaktQualityAssuranceOutgoing）
     /// </summary>
-    public List<TaktQualityOperationOutgoingDto>? OutgoingItems { get; set; }
+    public List<TaktQualityAssuranceOutgoingDto>? OutgoingItems { get; set; }
 
     /// <summary>
     /// 信赖性评价/ORT费用明细列表
-    /// （子表：TaktQualityOperationReliability）
+    /// （子表：TaktQualityAssuranceReliability）
     /// </summary>
-    public List<TaktQualityOperationReliabilityDto>? ReliabilityItems { get; set; }
+    public List<TaktQualityAssuranceReliabilityDto>? ReliabilityItems { get; set; }
 
     /// <summary>
     /// 顾客品质要求对应费用明细列表
-    /// （子表：TaktQualityOperationCustomerResponse）
+    /// （子表：TaktQualityAssuranceCustomerResponse）
     /// </summary>
-    public List<TaktQualityOperationCustomerResponseDto>? CustomerResponseItems { get; set; }
+    public List<TaktQualityAssuranceCustomerResponseDto>? CustomerResponseItems { get; set; }
 
 }
 
 // ========================================
-// QualityOperation 查询 DTO
+// QualityAssurance 查询 DTO
 // ========================================
 
 /// <summary>
-/// QualityOperation 分页查询 DTO
+/// QualityAssurance 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
-public class TaktQualityOperationQueryDto : TaktPagedQuery
+public class TaktQualityAssuranceQueryDto : TaktPagedQuery
 {
     /// <summary>
     /// 租户编码
@@ -147,12 +147,12 @@ public class TaktQualityOperationQueryDto : TaktPagedQuery
     /// <summary>
     /// 品质业务编码(唯一,如:QO-2026-0001)
     /// </summary>
-    public string? QualityOperationCode { get; set; } = string.Empty;
+    public string? QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务年月(格式:2026-05)
     /// </summary>
-    public string? OperationMonth { get; set; } = string.Empty;
+    public string? AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
     /// 顾客名
@@ -192,7 +192,7 @@ public class TaktQualityOperationQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -201,13 +201,13 @@ public class TaktQualityOperationQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建QualityOperation DTO
+// 创建QualityAssurance DTO
 // ========================================
 
 /// <summary>
-/// 创建QualityOperation DTO
+/// 创建QualityAssurance DTO
 /// </summary>
-public class TaktQualityOperationCreateDto
+public class TaktQualityAssuranceCreateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -234,13 +234,13 @@ public class TaktQualityOperationCreateDto
     /// 品质业务编码(唯一,如:QO-2026-0001)
     /// </summary>
     [Required(ErrorMessage = "品质业务编码(唯一,如:QO-2026-0001)不能为空")]
-    public string QualityOperationCode { get; set; } = string.Empty;
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务年月(格式:2026-05)
     /// </summary>
     [Required(ErrorMessage = "业务年月(格式:2026-05)不能为空")]
-    public string OperationMonth { get; set; } = string.Empty;
+    public string AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
     /// 顾客名
@@ -271,42 +271,42 @@ public class TaktQualityOperationCreateDto
     /// <summary>
     /// 来料检验费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityOperationIncomingCreateDto>? IncomingItems { get; set; }
+    public List<TaktQualityAssuranceIncomingCreateDto>? IncomingItems { get; set; }
 
     /// <summary>
     /// 初期/定期检定费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityOperationFirstArticleCreateDto>? FirstArticleItems { get; set; }
+    public List<TaktQualityAssuranceFirstArticleCreateDto>? FirstArticleItems { get; set; }
 
     /// <summary>
     /// 设备校正费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityOperationCalibrationCreateDto>? CalibrationItems { get; set; }
+    public List<TaktQualityAssuranceCalibrationCreateDto>? CalibrationItems { get; set; }
 
     /// <summary>
     /// 其他通常业务费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityOperationOtherCreateDto>? OtherItems { get; set; }
+    public List<TaktQualityAssuranceOtherCreateDto>? OtherItems { get; set; }
 
     /// <summary>
     /// 出货检验费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityOperationOutgoingCreateDto>? OutgoingItems { get; set; }
+    public List<TaktQualityAssuranceOutgoingCreateDto>? OutgoingItems { get; set; }
 
     /// <summary>
     /// 信赖性评价/ORT费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityOperationReliabilityCreateDto>? ReliabilityItems { get; set; }
+    public List<TaktQualityAssuranceReliabilityCreateDto>? ReliabilityItems { get; set; }
 
     /// <summary>
     /// 顾客品质要求对应费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityOperationCustomerResponseCreateDto>? CustomerResponseItems { get; set; }
+    public List<TaktQualityAssuranceCustomerResponseCreateDto>? CustomerResponseItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -316,22 +316,22 @@ public class TaktQualityOperationCreateDto
 }
 
 // ========================================
-// 更新QualityOperation DTO
+// 更新QualityAssurance DTO
 // ========================================
 
 /// <summary>
-/// 更新QualityOperation DTO
-/// 继承 TaktQualityOperationCreateDto，添加 QualityOperationId 字段
+/// 更新QualityAssurance DTO
+/// 继承 TaktQualityAssuranceCreateDto，添加 QualityAssuranceId 字段
 /// </summary>
-public class TaktQualityOperationUpdateDto : TaktQualityOperationCreateDto
+public class TaktQualityAssuranceUpdateDto : TaktQualityAssuranceCreateDto
 {
     /// <summary>
-    /// QualityOperationID（标识要更新的实体）
+    /// QualityAssuranceID（标识要更新的实体）
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationId { get; set; }
+    public long QualityAssuranceId { get; set; }
 
 }
 
@@ -340,9 +340,9 @@ public class TaktQualityOperationUpdateDto : TaktQualityOperationCreateDto
 // ========================================
 
 /// <summary>
-/// QualityOperation 导入模板行 DTO
+/// QualityAssurance 导入模板行 DTO
 /// </summary>
-public class TaktQualityOperationTemplateDto
+public class TaktQualityAssuranceTemplateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -362,12 +362,12 @@ public class TaktQualityOperationTemplateDto
     /// <summary>
     /// 品质业务编码(唯一,如:QO-2026-0001)
     /// </summary>
-    public string? QualityOperationCode { get; set; } = string.Empty;
+    public string? QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务年月(格式:2026-05)
     /// </summary>
-    public string? OperationMonth { get; set; } = string.Empty;
+    public string? AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
     /// 顾客名
@@ -392,7 +392,7 @@ public class TaktQualityOperationTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -402,9 +402,9 @@ public class TaktQualityOperationTemplateDto
 }
 
 /// <summary>
-/// QualityOperation 导入 DTO（独立实现，不继承 TemplateDto）
+/// QualityAssurance 导入 DTO（独立实现，不继承 TemplateDto）
 /// </summary>
-public class TaktQualityOperationImportDto
+public class TaktQualityAssuranceImportDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -429,12 +429,12 @@ public class TaktQualityOperationImportDto
     /// <summary>
     /// 品质业务编码(唯一,如:QO-2026-0001)
     /// </summary>
-    public string? QualityOperationCode { get; set; } = string.Empty;
+    public string? QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务年月(格式:2026-05)
     /// </summary>
-    public string? OperationMonth { get; set; } = string.Empty;
+    public string? AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
     /// 顾客名
@@ -459,7 +459,7 @@ public class TaktQualityOperationImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -473,16 +473,16 @@ public class TaktQualityOperationImportDto
 // ========================================
 
 /// <summary>
-/// QualityOperation 导出 DTO（独立实现，不继承响应 Dto）
+/// QualityAssurance 导出 DTO（独立实现，不继承响应 Dto）
 /// </summary>
-public class TaktQualityOperationExportDto
+public class TaktQualityAssuranceExportDto
 {
     /// <summary>
-    /// QualityOperationID
+    /// QualityAssuranceID
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityOperationId { get; set; }
+    public long QualityAssuranceId { get; set; }
 
     /// <summary>
     /// 公司代码
@@ -497,12 +497,12 @@ public class TaktQualityOperationExportDto
     /// <summary>
     /// 品质业务编码(唯一,如:QO-2026-0001)
     /// </summary>
-    public string QualityOperationCode { get; set; } = string.Empty;
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务年月(格式:2026-05)
     /// </summary>
-    public string OperationMonth { get; set; } = string.Empty;
+    public string AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
     /// 顾客名
@@ -532,7 +532,7 @@ public class TaktQualityOperationExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

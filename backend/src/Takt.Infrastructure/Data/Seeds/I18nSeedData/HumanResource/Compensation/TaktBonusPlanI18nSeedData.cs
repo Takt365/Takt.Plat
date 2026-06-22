@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktBonusPlanI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBonusPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,110 +75,110 @@ public class TaktBonusPlanI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktBonusPlan 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.bonusplan._self / entity.bonusplan.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.bonusplan._self / entity.bonusplan.{{field}}；ResourceGroup=Compensation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetBonusPlanTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.bonusplan._self
-            new TranslationSeedItem("entity.bonusplan._self", "en-US", "Bonus Plan Information", "实体名称"),
+            new TranslationSeedItem("entity.bonusplan._self", "en-US", "Bonus Plan Information_us", "实体名称"),
             // entity.bonusplan._self
-            new TranslationSeedItem("entity.bonusplan._self", "ja-JP", "奖金方案信息", "实体名称"),
+            new TranslationSeedItem("entity.bonusplan._self", "ja-JP", "奖金方案信息_jp", "实体名称"),
             // entity.bonusplan._self
             new TranslationSeedItem("entity.bonusplan._self", "zh-CN", "奖金方案信息", "实体名称"),
             // entity.bonusplan._self
-            new TranslationSeedItem("entity.bonusplan._self", "zh-HK", "奖金方案信息", "实体名称"),
+            new TranslationSeedItem("entity.bonusplan._self", "zh-HK", "奖金方案信息_hk", "实体名称"),
 
             // entity.bonusplan.plancode
-            new TranslationSeedItem("entity.bonusplan.plancode", "en-US", "方案编码", "方案编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.bonusplan.plancode", "en-US", "方案编码_us", "方案编码（租户+公司内唯一）"),
             // entity.bonusplan.plancode
-            new TranslationSeedItem("entity.bonusplan.plancode", "ja-JP", "方案编码", "方案编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.bonusplan.plancode", "ja-JP", "方案编码_jp", "方案编码（租户+公司内唯一）"),
             // entity.bonusplan.plancode
             new TranslationSeedItem("entity.bonusplan.plancode", "zh-CN", "方案编码", "方案编码（租户+公司内唯一）"),
             // entity.bonusplan.plancode
-            new TranslationSeedItem("entity.bonusplan.plancode", "zh-HK", "方案编码", "方案编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.bonusplan.plancode", "zh-HK", "方案编码_hk", "方案编码（租户+公司内唯一）"),
 
             // entity.bonusplan.planname
-            new TranslationSeedItem("entity.bonusplan.planname", "en-US", "方案名称", "方案名称"),
+            new TranslationSeedItem("entity.bonusplan.planname", "en-US", "方案名称_us", "方案名称"),
             // entity.bonusplan.planname
-            new TranslationSeedItem("entity.bonusplan.planname", "ja-JP", "方案名称", "方案名称"),
+            new TranslationSeedItem("entity.bonusplan.planname", "ja-JP", "方案名称_jp", "方案名称"),
             // entity.bonusplan.planname
             new TranslationSeedItem("entity.bonusplan.planname", "zh-CN", "方案名称", "方案名称"),
             // entity.bonusplan.planname
-            new TranslationSeedItem("entity.bonusplan.planname", "zh-HK", "方案名称", "方案名称"),
+            new TranslationSeedItem("entity.bonusplan.planname", "zh-HK", "方案名称_hk", "方案名称"),
 
             // entity.bonusplan.bonustype
-            new TranslationSeedItem("entity.bonusplan.bonustype", "en-US", "奖金类型", "奖金类型（字典 hr_comp_bonus_type）"),
+            new TranslationSeedItem("entity.bonusplan.bonustype", "en-US", "奖金类型_us", "奖金类型（字典 hr_comp_bonus_type）"),
             // entity.bonusplan.bonustype
-            new TranslationSeedItem("entity.bonusplan.bonustype", "ja-JP", "奖金类型", "奖金类型（字典 hr_comp_bonus_type）"),
+            new TranslationSeedItem("entity.bonusplan.bonustype", "ja-JP", "奖金类型_jp", "奖金类型（字典 hr_comp_bonus_type）"),
             // entity.bonusplan.bonustype
             new TranslationSeedItem("entity.bonusplan.bonustype", "zh-CN", "奖金类型", "奖金类型（字典 hr_comp_bonus_type）"),
             // entity.bonusplan.bonustype
-            new TranslationSeedItem("entity.bonusplan.bonustype", "zh-HK", "奖金类型", "奖金类型（字典 hr_comp_bonus_type）"),
+            new TranslationSeedItem("entity.bonusplan.bonustype", "zh-HK", "奖金类型_hk", "奖金类型（字典 hr_comp_bonus_type）"),
 
             // entity.bonusplan.calcmethod
-            new TranslationSeedItem("entity.bonusplan.calcmethod", "en-US", "计算方式", "计算方式（字典 hr_comp_bonus_calc_method）"),
+            new TranslationSeedItem("entity.bonusplan.calcmethod", "en-US", "计算方式_us", "计算方式（字典 hr_comp_bonus_calc_method_type）"),
             // entity.bonusplan.calcmethod
-            new TranslationSeedItem("entity.bonusplan.calcmethod", "ja-JP", "计算方式", "计算方式（字典 hr_comp_bonus_calc_method）"),
+            new TranslationSeedItem("entity.bonusplan.calcmethod", "ja-JP", "计算方式_jp", "计算方式（字典 hr_comp_bonus_calc_method_type）"),
             // entity.bonusplan.calcmethod
-            new TranslationSeedItem("entity.bonusplan.calcmethod", "zh-CN", "计算方式", "计算方式（字典 hr_comp_bonus_calc_method）"),
+            new TranslationSeedItem("entity.bonusplan.calcmethod", "zh-CN", "计算方式", "计算方式（字典 hr_comp_bonus_calc_method_type）"),
             // entity.bonusplan.calcmethod
-            new TranslationSeedItem("entity.bonusplan.calcmethod", "zh-HK", "计算方式", "计算方式（字典 hr_comp_bonus_calc_method）"),
+            new TranslationSeedItem("entity.bonusplan.calcmethod", "zh-HK", "计算方式_hk", "计算方式（字典 hr_comp_bonus_calc_method_type）"),
 
             // entity.bonusplan.salaryformulaid
-            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "en-US", "计算公式ID", "关联计算公式 ID（按公式计算时引用 TaktSalaryFormula）"),
+            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "en-US", "计算公式ID_us", "关联计算公式 ID（按公式计算时引用 TaktSalaryFormula）"),
             // entity.bonusplan.salaryformulaid
-            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "ja-JP", "计算公式ID", "关联计算公式 ID（按公式计算时引用 TaktSalaryFormula）"),
+            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "ja-JP", "计算公式ID_jp", "关联计算公式 ID（按公式计算时引用 TaktSalaryFormula）"),
             // entity.bonusplan.salaryformulaid
             new TranslationSeedItem("entity.bonusplan.salaryformulaid", "zh-CN", "计算公式ID", "关联计算公式 ID（按公式计算时引用 TaktSalaryFormula）"),
             // entity.bonusplan.salaryformulaid
-            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "zh-HK", "计算公式ID", "关联计算公式 ID（按公式计算时引用 TaktSalaryFormula）"),
+            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "zh-HK", "计算公式ID_hk", "关联计算公式 ID（按公式计算时引用 TaktSalaryFormula）"),
 
             // entity.bonusplan.defaultamount
-            new TranslationSeedItem("entity.bonusplan.defaultamount", "en-US", "默认金额", "默认奖金金额或基数（元）"),
+            new TranslationSeedItem("entity.bonusplan.defaultamount", "en-US", "默认金额_us", "默认奖金金额或基数（元）"),
             // entity.bonusplan.defaultamount
-            new TranslationSeedItem("entity.bonusplan.defaultamount", "ja-JP", "默认金额", "默认奖金金额或基数（元）"),
+            new TranslationSeedItem("entity.bonusplan.defaultamount", "ja-JP", "默认金额_jp", "默认奖金金额或基数（元）"),
             // entity.bonusplan.defaultamount
             new TranslationSeedItem("entity.bonusplan.defaultamount", "zh-CN", "默认金额", "默认奖金金额或基数（元）"),
             // entity.bonusplan.defaultamount
-            new TranslationSeedItem("entity.bonusplan.defaultamount", "zh-HK", "默认金额", "默认奖金金额或基数（元）"),
+            new TranslationSeedItem("entity.bonusplan.defaultamount", "zh-HK", "默认金额_hk", "默认奖金金额或基数（元）"),
 
             // entity.bonusplan.effectivedate
-            new TranslationSeedItem("entity.bonusplan.effectivedate", "en-US", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.bonusplan.effectivedate", "en-US", "生效日期_us", "生效日期"),
             // entity.bonusplan.effectivedate
-            new TranslationSeedItem("entity.bonusplan.effectivedate", "ja-JP", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.bonusplan.effectivedate", "ja-JP", "生效日期_jp", "生效日期"),
             // entity.bonusplan.effectivedate
             new TranslationSeedItem("entity.bonusplan.effectivedate", "zh-CN", "生效日期", "生效日期"),
             // entity.bonusplan.effectivedate
-            new TranslationSeedItem("entity.bonusplan.effectivedate", "zh-HK", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.bonusplan.effectivedate", "zh-HK", "生效日期_hk", "生效日期"),
 
             // entity.bonusplan.planstatus
-            new TranslationSeedItem("entity.bonusplan.planstatus", "en-US", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.bonusplan.planstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
             // entity.bonusplan.planstatus
-            new TranslationSeedItem("entity.bonusplan.planstatus", "ja-JP", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.bonusplan.planstatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
             // entity.bonusplan.planstatus
-            new TranslationSeedItem("entity.bonusplan.planstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.bonusplan.planstatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
             // entity.bonusplan.planstatus
-            new TranslationSeedItem("entity.bonusplan.planstatus", "zh-HK", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.bonusplan.planstatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
 
             // entity.bonusplan.description
-            new TranslationSeedItem("entity.bonusplan.description", "en-US", "方案说明", "方案说明"),
+            new TranslationSeedItem("entity.bonusplan.description", "en-US", "方案说明_us", "方案说明"),
             // entity.bonusplan.description
-            new TranslationSeedItem("entity.bonusplan.description", "ja-JP", "方案说明", "方案说明"),
+            new TranslationSeedItem("entity.bonusplan.description", "ja-JP", "方案说明_jp", "方案说明"),
             // entity.bonusplan.description
             new TranslationSeedItem("entity.bonusplan.description", "zh-CN", "方案说明", "方案说明"),
             // entity.bonusplan.description
-            new TranslationSeedItem("entity.bonusplan.description", "zh-HK", "方案说明", "方案说明"),
+            new TranslationSeedItem("entity.bonusplan.description", "zh-HK", "方案说明_hk", "方案说明"),
 
             // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.bonusplan.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.bonusplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.bonusplan.relatedplant
             new TranslationSeedItem("entity.bonusplan.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.bonusplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -196,10 +196,10 @@ public class TaktBonusPlanI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Compensation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -1,6 +1,6 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Material
+// 命名空间：Takt.Domain.Entities.Logistics.Procurement
 // 文件名称：TaktPurchaseOrder.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
@@ -13,7 +13,7 @@
 using SqlSugar;
 using Takt.Domain.Entities;
 
-namespace Takt.Domain.Entities.Logistics.Materials;
+namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
 /// Takt采购订单实体
@@ -70,7 +70,7 @@ public class TaktPurchaseOrder : TaktCompanyEntityBase
     public DateTime? ActualArrivalDate { get; set; }
 
     /// <summary>
-    /// 采购组代码
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_group", ColumnDescription = "采购组代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? PurchaseGroup { get; set; }
@@ -130,19 +130,19 @@ public class TaktPurchaseOrder : TaktCompanyEntityBase
     public int OrderStatus { get; set; } = 1;
 
     /// <summary>
-    /// 交货状态（0=未交货，1=部分交货，2=全部交货）
+    /// 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_status", ColumnDescription = "交货状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
-    /// 支付方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 支付方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "payment_method", ColumnDescription = "支付方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentMethod { get; set; } = 0;
 
     /// <summary>
-    /// 交货方式（0=自提，1=供应商送货，2=物流配送，3=快递）
+    /// 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_method", ColumnDescription = "交货方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryMethod { get; set; } = 0;

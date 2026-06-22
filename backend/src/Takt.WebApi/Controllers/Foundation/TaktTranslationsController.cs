@@ -252,7 +252,7 @@ public class TaktTranslationsController : TaktControllerBase
     /// <summary>
     /// 获取翻译转置列表（分页）
     /// </summary>
-    [TaktPermission("foundation:i18n:query", "查询翻译转置列表")]
+    [TaktPermission("foundation:i18n:list", "查询翻译转置列表")]
     [HttpGet("transposed")]
     public async Task<IActionResult> GetTranslationTransposedListAsync([FromQuery] TaktTranslationTransposedQueryDto queryDto)
     {

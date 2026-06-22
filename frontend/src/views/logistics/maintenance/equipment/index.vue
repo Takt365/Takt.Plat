@@ -2,13 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/maintenance/equipment -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt工厂设备实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：Takt工厂设备实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-maintenance-equipment">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'equipmentId'"
       table-mode="single"
@@ -66,31 +66,22 @@
       :row-selection="rowSelection"
       :custom-row="onClickRow"
 
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.maintenance._self') }}</div>
-          <a-table
-            v-if="hasMaintenanceRows(record)"
-            :columns="maintenanceExpandColumns"
-            :data-source="getMaintenanceRows(record)"
-            :row-key="(row: Maintenance, index?: number) => row?.maintenanceId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'equipmentStatus'">
+          <TaktDictTag
+            :value="getEquipmentField(record, 'equipmentStatus')"
+            dict-type="sys_equipment_status"
           />
-          <a-empty v-else class="mb-4" />
-        </div>
+        </template>
       </template>
+
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -110,6 +101,7 @@
       @cancel="handleFormCancel"
     >
       <EquipmentForm
+        :key="formData?.equipmentId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -131,6 +123,8 @@
         <a-input
           v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -140,6 +134,8 @@
         <a-input
           v-model:value="advancedQueryForm.equipmentCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -149,6 +145,8 @@
         <a-input
           v-model:value="advancedQueryForm.equipmentName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.name') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -167,6 +165,8 @@
         <a-input
           v-model:value="advancedQueryForm.equipmentModel"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.model') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -176,6 +176,8 @@
         <a-input
           v-model:value="advancedQueryForm.equipmentSpecification"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.specification') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -185,6 +187,8 @@
         <a-input
           v-model:value="advancedQueryForm.equipmentBrand"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.brand') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -194,6 +198,8 @@
         <a-input
           v-model:value="advancedQueryForm.manufacturer"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.manufacturer') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -203,6 +209,8 @@
         <a-input
           v-model:value="advancedQueryForm.dealerBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.dealerby') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -212,6 +220,8 @@
         <a-input
           v-model:value="advancedQueryForm.serialNumber"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.serialnumber') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -221,6 +231,8 @@
         <a-input
           v-model:value="advancedQueryForm.workshopBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.workshopby') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -230,6 +242,8 @@
         <a-input
           v-model:value="advancedQueryForm.productionLineBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.productionlineby') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -239,6 +253,8 @@
         <a-input
           v-model:value="advancedQueryForm.workstationBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.workstationby') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -248,6 +264,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.deptby') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -257,6 +275,8 @@
         <a-input
           v-model:value="advancedQueryForm.equipmentLocation"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.location') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -266,6 +286,8 @@
         <a-input
           v-model:value="advancedQueryForm.responsibleUserBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.responsibleuserby') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -275,6 +297,8 @@
         <a-input
           v-model:value="advancedQueryForm.operatorBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.operatorby') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -393,6 +417,8 @@
         <a-input
           v-model:value="advancedQueryForm.technicalParameters"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.technicalparameters') })"
+          show-count
+          :maxlength="4000"
           allow-clear
         />
       </a-form-item>
@@ -402,6 +428,8 @@
         <a-input
           v-model:value="advancedQueryForm.equipmentImages"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.images') })"
+          show-count
+          :maxlength="2000"
           allow-clear
         />
       </a-form-item>
@@ -411,6 +439,8 @@
         <a-input
           v-model:value="advancedQueryForm.equipmentDocuments"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.documents') })"
+          show-count
+          :maxlength="2000"
           allow-clear
         />
       </a-form-item>
@@ -435,10 +465,11 @@
       </div>
       <div v-show="isFieldVisible('equipmentStatus')">
       <a-form-item :label="t('entity.equipment.status')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.equipmentStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.status') })"
-          style="width: 100%"
+          dict-type="sys_equipment_status"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.equipment.status') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -464,12 +495,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -478,8 +528,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -524,7 +576,7 @@
 
 <script setup lang="ts">
 /**
- * Takt工厂设备实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Takt工厂设备实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/maintenance/equipment
  */
 import { ref, computed, onMounted } from 'vue'
@@ -532,14 +584,14 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import EquipmentForm from './components/equipment-form.vue'
-import { getEquipmentList, getEquipmentById, createEquipment, updateEquipment, deleteEquipmentById, deleteEquipmentBatch, getEquipmentTemplate, importEquipment, exportEquipment } from '@/api/logistics/maintenance/equipment'
-import * as maintenanceApi from '@/api/logistics/maintenance/maintenance'
-import type { Maintenance, MaintenanceQuery } from '@/types/logistics/maintenance/maintenance'
-import type { Equipment, EquipmentQuery, EquipmentCreate, EquipmentUpdate } from '@/types/logistics/maintenance/equipment'
+import { getEquipmentList, getEquipmentById, createEquipment, updateEquipment, deleteEquipmentById, deleteEquipmentBatch, getEquipmentTemplate, importEquipment, exportEquipment, updateEquipmentStatus } from '@/api/logistics/maintenance/equipment'
+import type { Equipment, EquipmentQuery } from '@/types/logistics/maintenance/equipment'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -557,9 +609,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Equipment[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -574,11 +626,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Equipment>>({})
+const formData = ref<Partial<Equipment> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -618,7 +672,7 @@ const advancedQueryForm = ref({
   equipmentStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -640,16 +694,16 @@ const queryFieldsMeta = computed(() => [
   { key: 'equipmentLocation', label: t('entity.equipment.location') },
   { key: 'responsibleUserBy', label: t('entity.equipment.responsibleuserby') },
   { key: 'operatorBy', label: t('entity.equipment.operatorby') },
-  { key: 'purchaseDateStart', label: t('entity.equipment.purchasedatestart') },
-  { key: 'purchaseDateEnd', label: t('entity.equipment.purchasedateend') },
-  { key: 'installationDateStart', label: t('entity.equipment.installationdatestart') },
-  { key: 'installationDateEnd', label: t('entity.equipment.installationdateend') },
-  { key: 'startDateStart', label: t('entity.equipment.startdatestart') },
-  { key: 'startDateEnd', label: t('entity.equipment.startdateend') },
-  { key: 'warrantyStartDateStart', label: t('entity.equipment.warrantystartdatestart') },
-  { key: 'warrantyStartDateEnd', label: t('entity.equipment.warrantystartdateend') },
-  { key: 'warrantyEndDateStart', label: t('entity.equipment.warrantyenddatestart') },
-  { key: 'warrantyEndDateEnd', label: t('entity.equipment.warrantyenddateend') },
+  { key: 'purchaseDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipment.purchasedate')) },
+  { key: 'purchaseDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipment.purchasedate')) },
+  { key: 'installationDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipment.installationdate')) },
+  { key: 'installationDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipment.installationdate')) },
+  { key: 'startDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipment.startdate')) },
+  { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipment.startdate')) },
+  { key: 'warrantyStartDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipment.warrantystartdate')) },
+  { key: 'warrantyStartDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipment.warrantystartdate')) },
+  { key: 'warrantyEndDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.equipment.warrantyenddate')) },
+  { key: 'warrantyEndDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.equipment.warrantyenddate')) },
   { key: 'equipmentOriginalValue', label: t('entity.equipment.originalvalue') },
   { key: 'technicalParameters', label: t('entity.equipment.technicalparameters') },
   { key: 'equipmentImages', label: t('entity.equipment.images') },
@@ -659,7 +713,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'equipmentStatus', label: t('entity.equipment.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -677,141 +731,94 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {EquipmentQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<EquipmentQuery>): EquipmentQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: EquipmentQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof EquipmentQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('equipmentCode', form.equipmentCode)
+  assignTrimmed('equipmentName', form.equipmentName)
+  if (form.equipmentType !== undefined && form.equipmentType !== null) {
+    query.equipmentType = form.equipmentType
+  }
+  assignTrimmed('equipmentModel', form.equipmentModel)
+  assignTrimmed('equipmentSpecification', form.equipmentSpecification)
+  assignTrimmed('equipmentBrand', form.equipmentBrand)
+  assignTrimmed('manufacturer', form.manufacturer)
+  assignTrimmed('dealerBy', form.dealerBy)
+  assignTrimmed('serialNumber', form.serialNumber)
+  assignTrimmed('workshopBy', form.workshopBy)
+  assignTrimmed('productionLineBy', form.productionLineBy)
+  assignTrimmed('workstationBy', form.workstationBy)
+  assignTrimmed('deptBy', form.deptBy)
+  assignTrimmed('equipmentLocation', form.equipmentLocation)
+  assignTrimmed('responsibleUserBy', form.responsibleUserBy)
+  assignTrimmed('operatorBy', form.operatorBy)
+  assignTrimmed('purchaseDateStart', form.purchaseDateStart)
+  assignTrimmed('purchaseDateEnd', form.purchaseDateEnd)
+  assignTrimmed('installationDateStart', form.installationDateStart)
+  assignTrimmed('installationDateEnd', form.installationDateEnd)
+  assignTrimmed('startDateStart', form.startDateStart)
+  assignTrimmed('startDateEnd', form.startDateEnd)
+  assignTrimmed('warrantyStartDateStart', form.warrantyStartDateStart)
+  assignTrimmed('warrantyStartDateEnd', form.warrantyStartDateEnd)
+  assignTrimmed('warrantyEndDateStart', form.warrantyEndDateStart)
+  assignTrimmed('warrantyEndDateEnd', form.warrantyEndDateEnd)
+  if (form.equipmentOriginalValue !== undefined && form.equipmentOriginalValue !== null) {
+    query.equipmentOriginalValue = form.equipmentOriginalValue
+  }
+  assignTrimmed('technicalParameters', form.technicalParameters)
+  assignTrimmed('equipmentImages', form.equipmentImages)
+  assignTrimmed('equipmentDocuments', form.equipmentDocuments)
+  if (form.isCritical !== undefined && form.isCritical !== null) {
+    query.isCritical = form.isCritical
+  }
+  if (form.warrantyStatus !== undefined && form.warrantyStatus !== null) {
+    query.warrantyStatus = form.warrantyStatus
+  }
+  if (form.equipmentStatus !== undefined && form.equipmentStatus !== null) {
+    query.equipmentStatus = form.equipmentStatus
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
-/** 展开行预览：maintenance 列 */
-const maintenanceExpandColumns = computed(() => [
-  {
-    title: t('entity.maintenance.equipmentname'),
-    dataIndex: 'equipmentName',
-    key: 'equipmentName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.maintenance.equipmentcode'),
-    dataIndex: 'equipmentCode',
-    key: 'equipmentCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.maintenance.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.maintenance.type'),
-    dataIndex: 'maintenanceType',
-    key: 'maintenanceType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.maintenance.company'),
-    dataIndex: 'maintenanceCompany',
-    key: 'maintenanceCompany',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.maintenance.technician'),
-    dataIndex: 'maintenanceTechnician',
-    key: 'maintenanceTechnician',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.maintenance.date'),
-    dataIndex: 'maintenanceDate',
-    key: 'maintenanceDate',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.maintenance.starttime'),
-    dataIndex: 'maintenanceStartTime',
-    key: 'maintenanceStartTime',
-    ellipsis: true,
-  },
-])
-
-/** 读取主表行上的 maintenance 子表缓存 */
-function getMaintenanceRows(record: Equipment): Maintenance[] {
-  return (record as any)?.maintenanceRecords ?? []
-}
-
-/** 主表行是否已加载 maintenance 子表 */
-function hasMaintenanceRows(record: Equipment): boolean {
-  return getMaintenanceRows(record).length > 0
-}
 
 
-/** 加载主表详情并回填当前页 dataSource */
-async function loadEquipmentDetail(record: Equipment): Promise<Equipment | null> {
-  const id = getEquipmentId(record)
-  if (!id) {
-    return null
-  }
-  try {
-    const detail = await getEquipmentById(id)
-    const index = dataSource.value.findIndex((row) => getEquipmentId(row) === id)
-    if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as Equipment
-    }
-    return detail
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return null
-  }
-}
-/** 懒加载 maintenance 子表（MaintenanceQuery + maintenanceApi，与主表 EquipmentQuery 分离） */
-async function loadMaintenanceForEquipment(record: Equipment): Promise<Maintenance[]> {
-  const masterId = getEquipmentId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: MaintenanceQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      equipmentId: masterId,
-    }
-    const result = await maintenanceApi.getMaintenanceList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getEquipmentId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, maintenanceRecords: rows } as Equipment
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
 
-/** 展开前确保各子表已懒加载 */
-async function ensureEquipmentChildrenLoaded(record: Equipment) {
-  if (!hasMaintenanceRows(record)) {
-    await loadMaintenanceForEquipment(record)
-  }
-}
 
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: Equipment) {
-  const key = getEquipmentId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureEquipmentChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
+
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -1084,7 +1091,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentStatus') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1116,6 +1122,7 @@ const getEquipmentId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getEquipmentField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -1159,16 +1166,7 @@ const onClickRow = (record: Equipment) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: EquipmentQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getEquipmentList(params)
+    const res = await getEquipmentList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1186,7 +1184,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1230,36 +1228,31 @@ function handleReset() {
   equipmentStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.equipment._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: Equipment) {
+/** 打开编辑弹窗 */
+function handleEdit(record: Equipment) {
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.equipment._self') })
-  formLoading.value = true
-  try {
-    const detail = await loadEquipmentDetail(record)
-    formData.value = detail ? { ...detail } : { ...record }
-    formVisible.value = true
-  } finally {
-    formLoading.value = false
-  }
+  formData.value = { ...record }
+  formVisible.value = true
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
+    handleEdit(selectedRow.value)
   } else {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.equipment._self') }))
   }
@@ -1285,6 +1278,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.equipment._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -1294,6 +1289,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1325,16 +1322,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: EquipmentQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportEquipment(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportEquipment(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1402,7 +1394,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1444,7 +1436,7 @@ function handleAdvancedQueryReset() {
   equipmentStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1474,23 +1466,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.logistics-maintenance-equipment {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

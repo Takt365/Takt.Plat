@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Ec 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEc 生成，请按需审阅）
 // 
@@ -89,17 +89,6 @@ public class TaktEcDto : TaktCompanyDtoBase
     /// 录入日期
     /// </summary>
     public DateTime EcEntryDate { get; set; }
-
-    /// <summary>
-    /// 流程实例ID（关联工作流）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long FlowInstanceId { get; set; }
-
-    /// <summary>
-    /// 流程实例名称（填充字段）
-    /// </summary>
-    public string? FlowInstanceName { get; set; }
 
     /// <summary>
     /// 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
@@ -211,12 +200,6 @@ public class TaktEcQueryDto : TaktPagedQuery
     public DateTime? EcEntryDateEnd { get; set; }
 
     /// <summary>
-    /// 流程实例ID（关联工作流）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
     /// </summary>
     public int? EcStatus { get; set; }
@@ -234,7 +217,7 @@ public class TaktEcQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -328,12 +311,6 @@ public class TaktEcCreateDto
     public DateTime EcEntryDate { get; set; }
 
     /// <summary>
-    /// 流程实例ID（关联工作流）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
     /// </summary>
     public int EcStatus { get; set; } = 0;
@@ -351,7 +328,7 @@ public class TaktEcCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -459,12 +436,6 @@ public class TaktEcTemplateDto
     public string? EcDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例ID（关联工作流）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
     /// </summary>
     public int? EcStatus { get; set; }
@@ -472,7 +443,7 @@ public class TaktEcTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -537,12 +508,6 @@ public class TaktEcImportDto
     public string? EcDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例ID（关联工作流）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
     /// </summary>
     public int? EcStatus { get; set; }
@@ -550,7 +515,7 @@ public class TaktEcImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -636,12 +601,6 @@ public class TaktEcExportDto
     public DateTime EcEntryDate { get; set; }
 
     /// <summary>
-    /// 流程实例ID（关联工作流）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
     /// </summary>
     public int EcStatus { get; set; } = 0;
@@ -649,7 +608,7 @@ public class TaktEcExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

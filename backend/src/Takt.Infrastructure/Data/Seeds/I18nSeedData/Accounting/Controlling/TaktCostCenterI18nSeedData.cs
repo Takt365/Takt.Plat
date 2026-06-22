@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktCostCenterI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCostCenter 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,146 +75,155 @@ public class TaktCostCenterI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktCostCenter 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.costcenter._self / entity.costcenter.{{field}}；ResourceGroup=3；ResourceType=0
+    /// I18nKey：entity.costcenter._self / entity.costcenter.{{field}}；ResourceGroup=Controlling；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetCostCenterTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.costcenter._self
-            new TranslationSeedItem("entity.costcenter._self", "en-US", "Cost Center Information", "实体名称"),
+            new TranslationSeedItem("entity.costcenter._self", "en-US", "Cost Center Information_us", "实体名称"),
             // entity.costcenter._self
-            new TranslationSeedItem("entity.costcenter._self", "ja-JP", "成本中心信息", "实体名称"),
+            new TranslationSeedItem("entity.costcenter._self", "ja-JP", "成本中心信息_jp", "实体名称"),
             // entity.costcenter._self
             new TranslationSeedItem("entity.costcenter._self", "zh-CN", "成本中心信息", "实体名称"),
             // entity.costcenter._self
-            new TranslationSeedItem("entity.costcenter._self", "zh-HK", "成本中心信息", "实体名称"),
+            new TranslationSeedItem("entity.costcenter._self", "zh-HK", "成本中心信息_hk", "实体名称"),
 
             // entity.costcenter.code
-            new TranslationSeedItem("entity.costcenter.code", "en-US", "成本中心编码", "成本中心编码"),
+            new TranslationSeedItem("entity.costcenter.code", "en-US", "成本中心编码_us", "成本中心编码"),
             // entity.costcenter.code
-            new TranslationSeedItem("entity.costcenter.code", "ja-JP", "成本中心编码", "成本中心编码"),
+            new TranslationSeedItem("entity.costcenter.code", "ja-JP", "成本中心编码_jp", "成本中心编码"),
             // entity.costcenter.code
             new TranslationSeedItem("entity.costcenter.code", "zh-CN", "成本中心编码", "成本中心编码"),
             // entity.costcenter.code
-            new TranslationSeedItem("entity.costcenter.code", "zh-HK", "成本中心编码", "成本中心编码"),
+            new TranslationSeedItem("entity.costcenter.code", "zh-HK", "成本中心编码_hk", "成本中心编码"),
 
             // entity.costcenter.name
-            new TranslationSeedItem("entity.costcenter.name", "en-US", "成本中心名称", "成本中心名称"),
+            new TranslationSeedItem("entity.costcenter.name", "en-US", "成本中心名称_us", "成本中心名称"),
             // entity.costcenter.name
-            new TranslationSeedItem("entity.costcenter.name", "ja-JP", "成本中心名称", "成本中心名称"),
+            new TranslationSeedItem("entity.costcenter.name", "ja-JP", "成本中心名称_jp", "成本中心名称"),
             // entity.costcenter.name
             new TranslationSeedItem("entity.costcenter.name", "zh-CN", "成本中心名称", "成本中心名称"),
             // entity.costcenter.name
-            new TranslationSeedItem("entity.costcenter.name", "zh-HK", "成本中心名称", "成本中心名称"),
+            new TranslationSeedItem("entity.costcenter.name", "zh-HK", "成本中心名称_hk", "成本中心名称"),
 
             // entity.costcenter.parentid
-            new TranslationSeedItem("entity.costcenter.parentid", "en-US", "父级ID", "父级 ID（0 表示根节点）"),
+            new TranslationSeedItem("entity.costcenter.parentid", "en-US", "父级ID_us", "父级 ID（0 表示根节点）"),
             // entity.costcenter.parentid
-            new TranslationSeedItem("entity.costcenter.parentid", "ja-JP", "父级ID", "父级 ID（0 表示根节点）"),
+            new TranslationSeedItem("entity.costcenter.parentid", "ja-JP", "父级ID_jp", "父级 ID（0 表示根节点）"),
             // entity.costcenter.parentid
             new TranslationSeedItem("entity.costcenter.parentid", "zh-CN", "父级ID", "父级 ID（0 表示根节点）"),
             // entity.costcenter.parentid
-            new TranslationSeedItem("entity.costcenter.parentid", "zh-HK", "父级ID", "父级 ID（0 表示根节点）"),
+            new TranslationSeedItem("entity.costcenter.parentid", "zh-HK", "父级ID_hk", "父级 ID（0 表示根节点）"),
 
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "en-US", "成本中心类型", "成本中心类型（0=成本中心，1=利润中心，2=投资中心）"),
+            new TranslationSeedItem("entity.costcenter.type", "en-US", "成本中心类型_us", "成本中心类型（0=成本中心，1=利润中心，2=投资中心）"),
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "ja-JP", "成本中心类型", "成本中心类型（0=成本中心，1=利润中心，2=投资中心）"),
+            new TranslationSeedItem("entity.costcenter.type", "ja-JP", "成本中心类型_jp", "成本中心类型（0=成本中心，1=利润中心，2=投资中心）"),
             // entity.costcenter.type
             new TranslationSeedItem("entity.costcenter.type", "zh-CN", "成本中心类型", "成本中心类型（0=成本中心，1=利润中心，2=投资中心）"),
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "zh-HK", "成本中心类型", "成本中心类型（0=成本中心，1=利润中心，2=投资中心）"),
+            new TranslationSeedItem("entity.costcenter.type", "zh-HK", "成本中心类型_hk", "成本中心类型（0=成本中心，1=利润中心，2=投资中心）"),
 
             // entity.costcenter.managerid
-            new TranslationSeedItem("entity.costcenter.managerid", "en-US", "负责人ID", "负责人用户 ID"),
+            new TranslationSeedItem("entity.costcenter.managerid", "en-US", "负责人ID_us", "负责人用户 ID"),
             // entity.costcenter.managerid
-            new TranslationSeedItem("entity.costcenter.managerid", "ja-JP", "负责人ID", "负责人用户 ID"),
+            new TranslationSeedItem("entity.costcenter.managerid", "ja-JP", "负责人ID_jp", "负责人用户 ID"),
             // entity.costcenter.managerid
             new TranslationSeedItem("entity.costcenter.managerid", "zh-CN", "负责人ID", "负责人用户 ID"),
             // entity.costcenter.managerid
-            new TranslationSeedItem("entity.costcenter.managerid", "zh-HK", "负责人ID", "负责人用户 ID"),
+            new TranslationSeedItem("entity.costcenter.managerid", "zh-HK", "负责人ID_hk", "负责人用户 ID"),
 
             // entity.costcenter.managername
-            new TranslationSeedItem("entity.costcenter.managername", "en-US", "负责人姓名", "负责人姓名"),
+            new TranslationSeedItem("entity.costcenter.managername", "en-US", "负责人姓名_us", "负责人姓名"),
             // entity.costcenter.managername
-            new TranslationSeedItem("entity.costcenter.managername", "ja-JP", "负责人姓名", "负责人姓名"),
+            new TranslationSeedItem("entity.costcenter.managername", "ja-JP", "负责人姓名_jp", "负责人姓名"),
             // entity.costcenter.managername
             new TranslationSeedItem("entity.costcenter.managername", "zh-CN", "负责人姓名", "负责人姓名"),
             // entity.costcenter.managername
-            new TranslationSeedItem("entity.costcenter.managername", "zh-HK", "负责人姓名", "负责人姓名"),
+            new TranslationSeedItem("entity.costcenter.managername", "zh-HK", "负责人姓名_hk", "负责人姓名"),
 
             // entity.costcenter.deptid
-            new TranslationSeedItem("entity.costcenter.deptid", "en-US", "所属部门ID", "所属部门 ID"),
+            new TranslationSeedItem("entity.costcenter.deptid", "en-US", "所属部门ID_us", "所属部门 ID"),
             // entity.costcenter.deptid
-            new TranslationSeedItem("entity.costcenter.deptid", "ja-JP", "所属部门ID", "所属部门 ID"),
+            new TranslationSeedItem("entity.costcenter.deptid", "ja-JP", "所属部门ID_jp", "所属部门 ID"),
             // entity.costcenter.deptid
             new TranslationSeedItem("entity.costcenter.deptid", "zh-CN", "所属部门ID", "所属部门 ID"),
             // entity.costcenter.deptid
-            new TranslationSeedItem("entity.costcenter.deptid", "zh-HK", "所属部门ID", "所属部门 ID"),
+            new TranslationSeedItem("entity.costcenter.deptid", "zh-HK", "所属部门ID_hk", "所属部门 ID"),
 
             // entity.costcenter.deptname
-            new TranslationSeedItem("entity.costcenter.deptname", "en-US", "所属部门名称", "所属部门名称"),
+            new TranslationSeedItem("entity.costcenter.deptname", "en-US", "所属部门名称_us", "所属部门名称"),
             // entity.costcenter.deptname
-            new TranslationSeedItem("entity.costcenter.deptname", "ja-JP", "所属部门名称", "所属部门名称"),
+            new TranslationSeedItem("entity.costcenter.deptname", "ja-JP", "所属部门名称_jp", "所属部门名称"),
             // entity.costcenter.deptname
             new TranslationSeedItem("entity.costcenter.deptname", "zh-CN", "所属部门名称", "所属部门名称"),
             // entity.costcenter.deptname
-            new TranslationSeedItem("entity.costcenter.deptname", "zh-HK", "所属部门名称", "所属部门名称"),
+            new TranslationSeedItem("entity.costcenter.deptname", "zh-HK", "所属部门名称_hk", "所属部门名称"),
 
             // entity.costcenter.level
-            new TranslationSeedItem("entity.costcenter.level", "en-US", "成本中心层级", "成本中心层级"),
+            new TranslationSeedItem("entity.costcenter.level", "en-US", "成本中心层级_us", "成本中心层级"),
             // entity.costcenter.level
-            new TranslationSeedItem("entity.costcenter.level", "ja-JP", "成本中心层级", "成本中心层级"),
+            new TranslationSeedItem("entity.costcenter.level", "ja-JP", "成本中心层级_jp", "成本中心层级"),
             // entity.costcenter.level
             new TranslationSeedItem("entity.costcenter.level", "zh-CN", "成本中心层级", "成本中心层级"),
             // entity.costcenter.level
-            new TranslationSeedItem("entity.costcenter.level", "zh-HK", "成本中心层级", "成本中心层级"),
+            new TranslationSeedItem("entity.costcenter.level", "zh-HK", "成本中心层级_hk", "成本中心层级"),
 
             // entity.costcenter.relatedplant
-            new TranslationSeedItem("entity.costcenter.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.costcenter.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.costcenter.relatedplant
-            new TranslationSeedItem("entity.costcenter.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.costcenter.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.costcenter.relatedplant
             new TranslationSeedItem("entity.costcenter.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.costcenter.relatedplant
-            new TranslationSeedItem("entity.costcenter.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.costcenter.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
 
             // entity.costcenter.status
-            new TranslationSeedItem("entity.costcenter.status", "en-US", "成本中心状态", "成本中心状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.costcenter.status", "en-US", "成本中心状态_us", "成本中心状态（1=启用，0=禁用）"),
             // entity.costcenter.status
-            new TranslationSeedItem("entity.costcenter.status", "ja-JP", "成本中心状态", "成本中心状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.costcenter.status", "ja-JP", "成本中心状态_jp", "成本中心状态（1=启用，0=禁用）"),
             // entity.costcenter.status
             new TranslationSeedItem("entity.costcenter.status", "zh-CN", "成本中心状态", "成本中心状态（1=启用，0=禁用）"),
             // entity.costcenter.status
-            new TranslationSeedItem("entity.costcenter.status", "zh-HK", "成本中心状态", "成本中心状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.costcenter.status", "zh-HK", "成本中心状态_hk", "成本中心状态（1=启用，0=禁用）"),
 
             // entity.costcenter.validfrom
-            new TranslationSeedItem("entity.costcenter.validfrom", "en-US", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.costcenter.validfrom", "en-US", "生效日期_us", "生效日期"),
             // entity.costcenter.validfrom
-            new TranslationSeedItem("entity.costcenter.validfrom", "ja-JP", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.costcenter.validfrom", "ja-JP", "生效日期_jp", "生效日期"),
             // entity.costcenter.validfrom
             new TranslationSeedItem("entity.costcenter.validfrom", "zh-CN", "生效日期", "生效日期"),
             // entity.costcenter.validfrom
-            new TranslationSeedItem("entity.costcenter.validfrom", "zh-HK", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.costcenter.validfrom", "zh-HK", "生效日期_hk", "生效日期"),
 
             // entity.costcenter.validto
-            new TranslationSeedItem("entity.costcenter.validto", "en-US", "失效日期", "失效日期"),
+            new TranslationSeedItem("entity.costcenter.validto", "en-US", "失效日期_us", "失效日期"),
             // entity.costcenter.validto
-            new TranslationSeedItem("entity.costcenter.validto", "ja-JP", "失效日期", "失效日期"),
+            new TranslationSeedItem("entity.costcenter.validto", "ja-JP", "失效日期_jp", "失效日期"),
             // entity.costcenter.validto
             new TranslationSeedItem("entity.costcenter.validto", "zh-CN", "失效日期", "失效日期"),
             // entity.costcenter.validto
-            new TranslationSeedItem("entity.costcenter.validto", "zh-HK", "失效日期", "失效日期"),
+            new TranslationSeedItem("entity.costcenter.validto", "zh-HK", "失效日期_hk", "失效日期"),
 
             // entity.costcenter.sortorder
-            new TranslationSeedItem("entity.costcenter.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.costcenter.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.costcenter.sortorder
-            new TranslationSeedItem("entity.costcenter.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.costcenter.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.costcenter.sortorder
             new TranslationSeedItem("entity.costcenter.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.costcenter.sortorder
-            new TranslationSeedItem("entity.costcenter.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.costcenter.sortorder", "zh-HK", "排序号_hk", "排序号"),
+
+            // entity.costcenter.changelogs
+            new TranslationSeedItem("entity.costcenter.changelogs", "en-US", "成本中心变更记录列表_us", "成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）"),
+            // entity.costcenter.changelogs
+            new TranslationSeedItem("entity.costcenter.changelogs", "ja-JP", "成本中心变更记录列表_jp", "成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）"),
+            // entity.costcenter.changelogs
+            new TranslationSeedItem("entity.costcenter.changelogs", "zh-CN", "成本中心变更记录列表", "成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）"),
+            // entity.costcenter.changelogs
+            new TranslationSeedItem("entity.costcenter.changelogs", "zh-HK", "成本中心变更记录列表_hk", "成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）"),
         };
     }
 
@@ -232,10 +241,10 @@ public class TaktCostCenterI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 3;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Controlling";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

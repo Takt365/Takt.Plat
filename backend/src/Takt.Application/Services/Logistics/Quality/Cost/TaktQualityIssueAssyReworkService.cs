@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailureAssyReworkService.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityIssueAssyReworkService.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题组装不良改修费用明细应用服务实现
 // 
@@ -27,33 +27,33 @@ namespace Takt.Application.Services.Logistics.Quality.Cost;
 /// <summary>
 /// 质量问题组装不良改修费用明细应用服务
 /// </summary>
-public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQualityFailureAssyReworkService
+public class TaktQualityIssueAssyReworkService : TaktServiceBase, ITaktQualityIssueAssyReworkService
 {
-    private readonly ITaktCompanyRepository<TaktQualityFailureAssyRework> _qualityFailureAssyReworkRepository;
-    private readonly ITaktCompanyRepository<TaktQualityFailure> _qualityFailureRepository;
+    private readonly ITaktCompanyRepository<TaktQualityIssueAssyRework> _qualityIssueAssyReworkRepository;
+    private readonly ITaktCompanyRepository<TaktQualityIssue> _qualityIssueRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="qualityFailureAssyReworkRepository">质量问题组装不良改修费用明细仓储</param>
-    /// <param name="qualityFailureRepository">品质问题应对主仓储</param>
+    /// <param name="qualityIssueAssyReworkRepository">质量问题组装不良改修费用明细仓储</param>
+    /// <param name="qualityIssueRepository">品质问题应对主仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
-    public TaktQualityFailureAssyReworkService(
-        ITaktCompanyRepository<TaktQualityFailureAssyRework> qualityFailureAssyReworkRepository,
-        ITaktCompanyRepository<TaktQualityFailure> qualityFailureRepository,
+    public TaktQualityIssueAssyReworkService(
+        ITaktCompanyRepository<TaktQualityIssueAssyRework> qualityIssueAssyReworkRepository,
+        ITaktCompanyRepository<TaktQualityIssue> qualityIssueRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
-        _qualityFailureAssyReworkRepository = qualityFailureAssyReworkRepository;
-        _qualityFailureRepository = qualityFailureRepository;
+        _qualityIssueAssyReworkRepository = qualityIssueAssyReworkRepository;
+        _qualityIssueRepository = qualityIssueRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -63,15 +63,15 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    public async Task<TaktPagedResult<TaktQualityFailureAssyReworkDto>> GetQualityFailureAssyReworkListAsync(TaktQualityFailureAssyReworkQueryDto queryDto)
+    public async Task<TaktPagedResult<TaktQualityIssueAssyReworkDto>> GetQualityIssueAssyReworkListAsync(TaktQualityIssueAssyReworkQueryDto queryDto)
     {
         var predicate = QueryExpression(queryDto);
-        var (data, total) = await _qualityFailureAssyReworkRepository.GetPagedAsync(
+        var (data, total) = await _qualityIssueAssyReworkRepository.GetPagedAsync(
             queryDto.PageIndex,
             queryDto.PageSize,
             predicate);
-        return TaktPagedResult<TaktQualityFailureAssyReworkDto>.Create(
-            data.Adapt<List<TaktQualityFailureAssyReworkDto>>(),
+        return TaktPagedResult<TaktQualityIssueAssyReworkDto>.Create(
+            data.Adapt<List<TaktQualityIssueAssyReworkDto>>(),
             total,
             queryDto.PageIndex,
             queryDto.PageSize);
@@ -82,26 +82,26 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="id">质量问题组装不良改修费用明细ID</param>
     /// <returns>DTO</returns>
-    public async Task<TaktQualityFailureAssyReworkDto?> GetQualityFailureAssyReworkByIdAsync(long id)
+    public async Task<TaktQualityIssueAssyReworkDto?> GetQualityIssueAssyReworkByIdAsync(long id)
     {
-        var entity = await _qualityFailureAssyReworkRepository.GetByIdAsync(id);
+        var entity = await _qualityIssueAssyReworkRepository.GetByIdAsync(id);
         if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
         {
             return null;
         }
-        return entity.Adapt<TaktQualityFailureAssyReworkDto>();
+        return entity.Adapt<TaktQualityIssueAssyReworkDto>();
     }
 
     /// <summary>
     /// 获取质量问题组装不良改修费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetQualityFailureAssyReworkOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetQualityIssueAssyReworkOptionsAsync()
     {
         EnsureThreeLayerContext();
-        var list = await _qualityFailureAssyReworkRepository.GetListAsync(
+        var list = await _qualityIssueAssyReworkRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.AssyCustomerName,
+            x => x.AssyCustomerName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -115,28 +115,28 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktQualityFailureAssyReworkDto> CreateQualityFailureAssyReworkAsync(TaktQualityFailureAssyReworkCreateDto dto)
+    public async Task<TaktQualityIssueAssyReworkDto> CreateQualityIssueAssyReworkAsync(TaktQualityIssueAssyReworkCreateDto dto)
     {
-        var entity = dto.Adapt<TaktQualityFailureAssyRework>();
-        await StampQualityFailureAssyReworkQualityFailureAsync(entity, dto);
-        var isUnique_ix_takt_logistics_quality_failure_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _qualityFailureAssyReworkRepository,
-            x => x.QualityFailureId == entity.QualityFailureId
+        var entity = dto.Adapt<TaktQualityIssueAssyRework>();
+        await StampQualityIssueAssyReworkQualityIssueAsync(entity, dto);
+        var isUnique_ix_takt_logistics_quality_issue_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
+            _qualityIssueAssyReworkRepository,
+            x => x.QualityIssueId == entity.QualityIssueId
                 && x.LineNumber == entity.LineNumber);
-        if (!isUnique_ix_takt_logistics_quality_failure_assy_rework_line_unique)
+        if (!isUnique_ix_takt_logistics_quality_issue_assy_rework_line_unique)
         {
-            throw new TaktBusinessException("质量问题组装不良改修费用明细的QualityFailureId、LineNumber已存在");
+            throw new TaktBusinessException("质量问题组装不良改修费用明细的QualityIssueId、LineNumber已存在");
         }
         if (entity.LineNumber <= 0)
         {
-            var maxLine = await _qualityFailureAssyReworkRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityFailureId == entity.QualityFailureId,
+            var maxLine = await _qualityIssueAssyReworkRepository.GetMaxIntAsync(
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityIssueId == entity.QualityIssueId,
                 x => x.LineNumber);
-            var businessCode = !string.IsNullOrWhiteSpace(entity.QualityFailureCode) ? entity.QualityFailureCode : entity.QualityFailureId.ToString();
+            var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIssueCode) ? entity.QualityIssueCode : entity.QualityIssueId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
-        entity = await _qualityFailureAssyReworkRepository.CreateAsync(entity);
-        return await GetQualityFailureAssyReworkByIdAsync(entity.Id) ?? entity.Adapt<TaktQualityFailureAssyReworkDto>();
+        entity = await _qualityIssueAssyReworkRepository.CreateAsync(entity);
+        return await GetQualityIssueAssyReworkByIdAsync(entity.Id) ?? entity.Adapt<TaktQualityIssueAssyReworkDto>();
     }
 
     /// <summary>
@@ -145,26 +145,26 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// <param name="id">质量问题组装不良改修费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktQualityFailureAssyReworkDto> UpdateQualityFailureAssyReworkAsync(long id, TaktQualityFailureAssyReworkUpdateDto dto)
+    public async Task<TaktQualityIssueAssyReworkDto> UpdateQualityIssueAssyReworkAsync(long id, TaktQualityIssueAssyReworkUpdateDto dto)
     {
-        var entity = await _qualityFailureAssyReworkRepository.GetByIdAsync(id);
+        var entity = await _qualityIssueAssyReworkRepository.GetByIdAsync(id);
         if (entity == null)
         {
             throw new TaktBusinessException("质量问题组装不良改修费用明细不存在");
         }
         dto.Adapt(entity);
-        await StampQualityFailureAssyReworkQualityFailureAsync(entity, dto);
-        var isUnique_ix_takt_logistics_quality_failure_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _qualityFailureAssyReworkRepository,
-            x => x.QualityFailureId == entity.QualityFailureId
+        await StampQualityIssueAssyReworkQualityIssueAsync(entity, dto);
+        var isUnique_ix_takt_logistics_quality_issue_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
+            _qualityIssueAssyReworkRepository,
+            x => x.QualityIssueId == entity.QualityIssueId
                 && x.LineNumber == entity.LineNumber,
             id);
-        if (!isUnique_ix_takt_logistics_quality_failure_assy_rework_line_unique)
+        if (!isUnique_ix_takt_logistics_quality_issue_assy_rework_line_unique)
         {
-            throw new TaktBusinessException("质量问题组装不良改修费用明细的QualityFailureId、LineNumber已存在");
+            throw new TaktBusinessException("质量问题组装不良改修费用明细的QualityIssueId、LineNumber已存在");
         }
-        await _qualityFailureAssyReworkRepository.UpdateAsync(entity);
-        return await GetQualityFailureAssyReworkByIdAsync(id) ?? throw new TaktBusinessException("质量问题组装不良改修费用明细不存在");
+        await _qualityIssueAssyReworkRepository.UpdateAsync(entity);
+        return await GetQualityIssueAssyReworkByIdAsync(id) ?? throw new TaktBusinessException("质量问题组装不良改修费用明细不存在");
     }
 
     /// <summary>
@@ -172,9 +172,9 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="id">质量问题组装不良改修费用明细ID</param>
     /// <returns>任务</returns>
-    public async Task DeleteQualityFailureAssyReworkByIdAsync(long id)
+    public async Task DeleteQualityIssueAssyReworkByIdAsync(long id)
     {
-        var deleted = await _qualityFailureAssyReworkRepository.DeleteAsync(id);
+        var deleted = await _qualityIssueAssyReworkRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("质量问题组装不良改修费用明细不存在或已删除");
@@ -186,7 +186,7 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    public async Task DeleteQualityFailureAssyReworkBatchAsync(IEnumerable<long> ids)
+    public async Task DeleteQualityIssueAssyReworkBatchAsync(IEnumerable<long> ids)
     {
         var idList = ids?.Distinct().ToList() ?? new List<long>();
         if (idList.Count == 0)
@@ -195,7 +195,7 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
         }
         foreach (var id in idList)
         {
-            await DeleteQualityFailureAssyReworkByIdAsync(id);
+            await DeleteQualityIssueAssyReworkByIdAsync(id);
         }
     }
 
@@ -205,9 +205,9 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public async Task<(string fileName, byte[] content)> GetQualityFailureAssyReworkTemplateAsync(string? sheetName = null, string? fileName = null)
+    public async Task<(string fileName, byte[] content)> GetQualityIssueAssyReworkTemplateAsync(string? sheetName = null, string? fileName = null)
     {
-        return await TaktExcelHelper.GenerateTemplateAsync<TaktQualityFailureAssyReworkTemplateDto>(
+        return await TaktExcelHelper.GenerateTemplateAsync<TaktQualityIssueAssyReworkTemplateDto>(
             sheetName ?? "质量问题组装不良改修费用明细导入模板",
             fileName ?? "质量问题组装不良改修费用明细导入模板.xlsx");
     }
@@ -218,12 +218,12 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    public async Task<(int success, int fail, List<string> errors)> ImportQualityFailureAssyReworkAsync(Stream fileStream, string? sheetName = null)
+    public async Task<(int success, int fail, List<string> errors)> ImportQualityIssueAssyReworkAsync(Stream fileStream, string? sheetName = null)
     {
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
-        var rows = await TaktExcelHelper.ImportAsync<TaktQualityFailureAssyReworkImportDto>(fileStream, sheetName ?? "质量问题组装不良改修费用明细导入模板");
+        var rows = await TaktExcelHelper.ImportAsync<TaktQualityIssueAssyReworkImportDto>(fileStream, sheetName ?? "质量问题组装不良改修费用明细导入模板");
         if (rows == null || rows.Count == 0)
         {
             errors.Add("Excel文件中没有数据");
@@ -234,31 +234,31 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
         {
             try
             {
-                var entity = rows[i].Adapt<TaktQualityFailureAssyRework>();
-                var importDto = rows[i].Adapt<TaktQualityFailureAssyReworkCreateDto>();
-                await StampQualityFailureAssyReworkQualityFailureAsync(entity, importDto);
-                var importKey = $"{entity.QualityFailureId}|{entity.LineNumber}";
+                var entity = rows[i].Adapt<TaktQualityIssueAssyRework>();
+                var importDto = rows[i].Adapt<TaktQualityIssueAssyReworkCreateDto>();
+                await StampQualityIssueAssyReworkQualityIssueAsync(entity, importDto);
+                var importKey = $"{entity.QualityIssueId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（QualityFailureId、LineNumber）");
+                    throw new TaktBusinessException("与Excel中其他行重复（QualityIssueId、LineNumber）");
                 }
-                var isUnique_ix_takt_logistics_quality_failure_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
-                    _qualityFailureAssyReworkRepository,
-                    x => x.QualityFailureId == entity.QualityFailureId
+                var isUnique_ix_takt_logistics_quality_issue_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    _qualityIssueAssyReworkRepository,
+                    x => x.QualityIssueId == entity.QualityIssueId
                         && x.LineNumber == entity.LineNumber);
-                if (!isUnique_ix_takt_logistics_quality_failure_assy_rework_line_unique)
+                if (!isUnique_ix_takt_logistics_quality_issue_assy_rework_line_unique)
                 {
-                    throw new TaktBusinessException("质量问题组装不良改修费用明细的QualityFailureId、LineNumber已存在");
+                    throw new TaktBusinessException("质量问题组装不良改修费用明细的QualityIssueId、LineNumber已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
-                    var maxLine = await _qualityFailureAssyReworkRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityFailureId == entity.QualityFailureId,
+                    var maxLine = await _qualityIssueAssyReworkRepository.GetMaxIntAsync(
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityIssueId == entity.QualityIssueId,
                         x => x.LineNumber);
-                    var businessCode = !string.IsNullOrWhiteSpace(entity.QualityFailureCode) ? entity.QualityFailureCode : entity.QualityFailureId.ToString();
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIssueCode) ? entity.QualityIssueCode : entity.QualityIssueId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
-                await _qualityFailureAssyReworkRepository.CreateAsync(entity);
+                await _qualityIssueAssyReworkRepository.CreateAsync(entity);
                 success += 1;
             }
             catch (Exception ex)
@@ -277,18 +277,18 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public async Task<(string fileName, byte[] fileContent)> ExportQualityFailureAssyReworkAsync(TaktQualityFailureAssyReworkQueryDto? query = null, string? sheetName = null, string? fileName = null)
+    public async Task<(string fileName, byte[] fileContent)> ExportQualityIssueAssyReworkAsync(TaktQualityIssueAssyReworkQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktQualityFailureAssyReworkQueryDto());
-        var list = await _qualityFailureAssyReworkRepository.GetListAsync(predicate);
+        var predicate = QueryExpression(query ?? new TaktQualityIssueAssyReworkQueryDto());
+        var list = await _qualityIssueAssyReworkRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
             return await TaktExcelHelper.ExportAsync(
-                new List<TaktQualityFailureAssyReworkExportDto>(),
+                new List<TaktQualityIssueAssyReworkExportDto>(),
                 sheetName ?? "质量问题组装不良改修费用明细数据",
                 fileName ?? "质量问题组装不良改修费用明细导出.xlsx");
         }
-        var exportData = list.Adapt<List<TaktQualityFailureAssyReworkExportDto>>();
+        var exportData = list.Adapt<List<TaktQualityIssueAssyReworkExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
             sheetName ?? "质量问题组装不良改修费用明细数据",
@@ -305,18 +305,18 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// <param name="entity">当前实体</param>
     /// <param name="dto">创建 DTO</param>
     /// <returns>任务</returns>
-    private async Task StampQualityFailureAssyReworkQualityFailureAsync(TaktQualityFailureAssyRework entity, TaktQualityFailureAssyReworkCreateDto dto)
+    private async Task StampQualityIssueAssyReworkQualityIssueAsync(TaktQualityIssueAssyRework entity, TaktQualityIssueAssyReworkCreateDto dto)
     {
-        if (dto.QualityFailureId <= 0)
+        if (dto.QualityIssueId <= 0)
         {
             return;
         }
-        var master = await _qualityFailureRepository.GetByIdAsync(dto.QualityFailureId);
+        var master = await _qualityIssueRepository.GetByIdAsync(dto.QualityIssueId);
         if (master == null)
         {
             throw new TaktBusinessException("品质问题应对主不存在");
         }
-        entity.QualityFailureId = master.Id;
+        entity.QualityIssueId = master.Id;
     }
     // ========================================
     // 查询表达式
@@ -327,16 +327,16 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>查询表达式</returns>
-    private static Expression<Func<TaktQualityFailureAssyRework, bool>> QueryExpression(TaktQualityFailureAssyReworkQueryDto? queryDto)
+    private static Expression<Func<TaktQualityIssueAssyRework, bool>> QueryExpression(TaktQualityIssueAssyReworkQueryDto? queryDto)
     {
-        var exp = Expressionable.Create<TaktQualityFailureAssyRework>();
+        var exp = Expressionable.Create<TaktQualityIssueAssyRework>();
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                SqlFunc.ToString(x.QualityFailureId).Contains(keywords)
-                || (x.QualityFailureCode != null && x.QualityFailureCode.Contains(keywords))
+                SqlFunc.ToString(x.QualityIssueId).Contains(keywords)
+                || (x.QualityIssueCode != null && x.QualityIssueCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.AssyDefectParts != null && x.AssyDefectParts.Contains(keywords))
                 || SqlFunc.ToString(x.AssyReworkCost).Contains(keywords)
@@ -352,20 +352,20 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
                 || SqlFunc.ToString(x.AssyOtherExpenses2).Contains(keywords)
                 || (x.AssyNote != null && x.AssyNote.Contains(keywords))
                 || (x.AssyRecorder != null && x.AssyRecorder.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (queryDto?.QualityFailureId.HasValue == true)
+        if (queryDto?.QualityIssueId.HasValue == true)
         {
-            exp = exp.And(x => x.QualityFailureId == queryDto.QualityFailureId);
+            exp = exp.And(x => x.QualityIssueId == queryDto.QualityIssueId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityFailureCode))
+        if (!string.IsNullOrEmpty(queryDto?.QualityIssueCode))
         {
-            exp = exp.And(x => x.QualityFailureCode != null && x.QualityFailureCode.Contains(queryDto.QualityFailureCode));
+            exp = exp.And(x => x.QualityIssueCode != null && x.QualityIssueCode.Contains(queryDto.QualityIssueCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
@@ -443,9 +443,9 @@ public class TaktQualityFailureAssyReworkService : TaktServiceBase, ITaktQuality
             exp = exp.And(x => x.AssyRecorder != null && x.AssyRecorder.Contains(queryDto.AssyRecorder));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

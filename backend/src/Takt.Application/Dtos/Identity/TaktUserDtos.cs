@@ -181,7 +181,7 @@ public class TaktUserQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -237,7 +237,7 @@ public class TaktCreateUserDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -435,7 +435,7 @@ public class TaktUserTemplateDto
     public int UserStatus { get; set; } = 1;
 
     /// <summary>
-    /// 状态名称（Excel 填文本时优先；字典 sys_yes_no DictLabel）
+    /// 状态名称（Excel 填文本时优先；字典 sys_yes_no_type DictLabel）
     /// </summary>
     public string? StatusName { get; set; }
 
@@ -447,7 +447,7 @@ public class TaktUserTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -506,7 +506,7 @@ public class TaktUserImportDto
     public int UserStatus { get; set; } = 1;
 
     /// <summary>
-    /// 状态名称（Excel 填文本时优先；字典 sys_yes_no DictLabel）
+    /// 状态名称（Excel 填文本时优先；字典 sys_yes_no_type DictLabel）
     /// </summary>
     public string? StatusName { get; set; }
 
@@ -518,7 +518,7 @@ public class TaktUserImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -590,9 +590,9 @@ public class TaktUserExportDto
     public int UserStatus { get; set; }
 
     /// <summary>
-    /// 状态名称（导出用；字典 sys_yes_no）
+    /// 状态名称（导出用；字典 sys_yes_no_type）
     /// </summary>
-    [TaktDictType("sys_yes_no")]
+    [TaktDictType("sys_yes_no_type")]
     public string StatusName { get; set; } = string.Empty;
 
     /// <summary>
@@ -633,7 +633,7 @@ public class TaktUserExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

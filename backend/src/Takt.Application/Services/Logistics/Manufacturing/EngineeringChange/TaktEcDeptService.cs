@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDeptService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变部门应用服务实现
 // 
@@ -101,7 +101,7 @@ public class TaktEcDeptService : TaktServiceBase, ITaktEcDeptService
         EnsureThreeLayerContext();
         var list = await _ecDeptRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.DeptCode,
+            x => x.DeptCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -355,7 +355,7 @@ public class TaktEcDeptService : TaktServiceBase, ITaktEcDeptService
                 || (x.InspectionBatch != null && x.InspectionBatch.Contains(keywords))
                 || (x.SamplingNo != null && x.SamplingNo.Contains(keywords))
                 || SqlFunc.ToString(x.IsSopUpdated).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ScheduledProductionDate).Contains(keywords)
                 || SqlFunc.ToString(x.PurchaseOrderIssueDate).Contains(keywords)
@@ -467,9 +467,9 @@ public class TaktEcDeptService : TaktServiceBase, ITaktEcDeptService
             exp = exp.And(x => x.IsSopUpdated == queryDto.IsSopUpdated);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

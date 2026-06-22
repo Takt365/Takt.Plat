@@ -40,9 +40,7 @@ export function getTalentStaffingRequirementList(queryDto: any): Promise<TaktPag
   return request<TaktPagedResult<TalentStaffingRequirement>>({
     url: `${TALENT_STAFFING_REQUIREMENT_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportTalentStaffingRequirement(
     url: `${TALENT_STAFFING_REQUIREMENT_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

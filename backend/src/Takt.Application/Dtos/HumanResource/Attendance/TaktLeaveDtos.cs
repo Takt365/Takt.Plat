@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktLeaveDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Leave 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktLeave 生成，请按需审阅）
 // 
@@ -58,7 +58,7 @@ public class TaktLeaveDto : TaktApprovalDtoBase
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假类型（字典 sys_leave_category；affair/sick/annual 等）
+    /// 请假类型（字典 sys_leave_type）
     /// </summary>
     public string LeaveType { get; set; } = string.Empty;
 
@@ -88,11 +88,6 @@ public class TaktLeaveDto : TaktApprovalDtoBase
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 名称（填充字段）
-    /// </summary>
-    public string? FlowInstanceName { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -109,7 +104,7 @@ public class TaktLeaveDto : TaktApprovalDtoBase
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
+    /// 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
     public int LeaveStatus { get; set; } = 0;
 
@@ -158,7 +153,7 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假类型（字典 sys_leave_category；affair/sick/annual 等）
+    /// 请假类型（字典 sys_leave_type）
     /// </summary>
     public string? LeaveType { get; set; } = string.Empty;
 
@@ -198,12 +193,6 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -225,14 +214,14 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
+    /// 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
     public int? LeaveStatus { get; set; }
 
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -267,6 +256,12 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     public DateTime? ApprovedAtEnd { get; set; }
 
     /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -279,7 +274,7 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -335,9 +330,9 @@ public class TaktLeaveCreateDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假类型（字典 sys_leave_category；affair/sick/annual 等）
+    /// 请假类型（字典 sys_leave_type）
     /// </summary>
-    [Required(ErrorMessage = "请假类型（字典 sys_leave_category；affair/sick/annual 等）不能为空")]
+    [Required(ErrorMessage = "请假类型（字典 sys_leave_type）不能为空")]
     public string LeaveType { get; set; } = string.Empty;
 
     /// <summary>
@@ -367,12 +362,6 @@ public class TaktLeaveCreateDto
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -389,14 +378,14 @@ public class TaktLeaveCreateDto
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
+    /// 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
     public int LeaveStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -443,9 +432,9 @@ public class TaktLeaveStatusDto
     public long LeaveId { get; set; }
 
     /// <summary>
-    /// 请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
+    /// 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
-    [Required(ErrorMessage = "请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）不能为空")]
+    [Required(ErrorMessage = "请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）不能为空")]
     public int LeaveStatus { get; set; } = 0;
 }
 
@@ -491,7 +480,7 @@ public class TaktLeaveTemplateDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假类型（字典 sys_leave_category；affair/sick/annual 等）
+    /// 请假类型（字典 sys_leave_type）
     /// </summary>
     public string? LeaveType { get; set; } = string.Empty;
 
@@ -511,12 +500,6 @@ public class TaktLeaveTemplateDto
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -528,14 +511,14 @@ public class TaktLeaveTemplateDto
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
+    /// 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
     public int? LeaveStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -587,7 +570,7 @@ public class TaktLeaveImportDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假类型（字典 sys_leave_category；affair/sick/annual 等）
+    /// 请假类型（字典 sys_leave_type）
     /// </summary>
     public string? LeaveType { get; set; } = string.Empty;
 
@@ -607,12 +590,6 @@ public class TaktLeaveImportDto
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -624,14 +601,14 @@ public class TaktLeaveImportDto
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
+    /// 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
     public int? LeaveStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -679,7 +656,7 @@ public class TaktLeaveExportDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假类型（字典 sys_leave_category；affair/sick/annual 等）
+    /// 请假类型（字典 sys_leave_type）
     /// </summary>
     public string LeaveType { get; set; } = string.Empty;
 
@@ -709,12 +686,6 @@ public class TaktLeaveExportDto
     public string? ProofAttachmentsJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -731,14 +702,14 @@ public class TaktLeaveExportDto
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 请假状态（字典 hr_leave_status：0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
+    /// 请假状态（字典 sys_approval_status；与 ApprovalStatus 取值一致：0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
     public int LeaveStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

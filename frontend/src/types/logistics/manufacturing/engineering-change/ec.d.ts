@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -82,16 +82,6 @@ export interface Ec extends CompanyDtoBase {
    * 录入日期
    */
   ecEntryDate: string;
-
-  /**
-   * 流程实例ID（关联工作流）
-   */
-  flowInstanceId: string;
-
-  /**
-   * 流程实例名称（填充字段）
-   */
-  flowInstanceName?: string;
 
   /**
    * 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
@@ -199,11 +189,6 @@ export interface EcQuery extends TaktPagedQuery {
   ecEntryDateEnd?: string;
 
   /**
-   * 流程实例ID（关联工作流）
-   */
-  flowInstanceId?: string;
-
-  /**
    * 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
    */
   ecStatus?: number;
@@ -221,7 +206,7 @@ export interface EcQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -308,11 +293,6 @@ export interface EcCreate {
   ecEntryDate: string;
 
   /**
-   * 流程实例ID（关联工作流）
-   */
-  flowInstanceId: string;
-
-  /**
    * 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
    */
   ecStatus: number;
@@ -330,7 +310,7 @@ export interface EcCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -426,11 +406,6 @@ export interface EcTemplate {
   ecDistinction?: string;
 
   /**
-   * 流程实例ID（关联工作流）
-   */
-  flowInstanceId?: string;
-
-  /**
    * 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
    */
   ecStatus?: number;
@@ -438,7 +413,7 @@ export interface EcTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -505,11 +480,6 @@ export interface EcImport {
   ecDistinction?: string;
 
   /**
-   * 流程实例ID（关联工作流）
-   */
-  flowInstanceId?: string;
-
-  /**
    * 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
    */
   ecStatus?: number;
@@ -517,7 +487,7 @@ export interface EcImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -599,11 +569,6 @@ export interface EcExport {
   ecEntryDate: string;
 
   /**
-   * 流程实例ID（关联工作流）
-   */
-  flowInstanceId: string;
-
-  /**
    * 设变状态（0=草稿 1=审批中 2=已通过 3=已驳回 4=已撤回）
    */
   ecStatus: number;
@@ -611,7 +576,7 @@ export interface EcExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktFileService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-13
 // 创建人：Takt365(Cursor AI)
 // 功能描述：文件应用服务实现
 // 
@@ -10,15 +10,14 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.IO;
 using System.Linq.Expressions;
 using Mapster;
-using Microsoft.AspNetCore.Http;
 using SqlSugar;
 using Takt.Application.Dtos.Foundation;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
@@ -27,41 +26,33 @@ using Takt.Shared.Options;
 namespace Takt.Application.Services.Foundation;
 
 /// <summary>
-/// 文件应用服务（CRUD + 上传/下载运行时）
+/// 文件应用服务
 /// </summary>
 public class TaktFileService : TaktServiceBase, ITaktFileService
 {
     private readonly ITaktCompanyRepository<TaktFile> _fileRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
     private readonly ITaktFileUploadEngine _fileUploadEngine;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="fileRepository">文件仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
-    /// <param name="fileUploadEngine">通用上传引擎</param>
-    /// <param name="httpContextAccessor">HTTP 上下文</param>
+    /// <param name="fileUploadEngine">文件上传引擎</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktFileService(
         ITaktCompanyRepository<TaktFile> fileRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktFileUploadEngine fileUploadEngine,
-        IHttpContextAccessor httpContextAccessor,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
-        ArgumentNullException.ThrowIfNull(fileRepository);
-        ArgumentNullException.ThrowIfNull(uniqueValidator);
-        ArgumentNullException.ThrowIfNull(fileUploadEngine);
-        ArgumentNullException.ThrowIfNull(httpContextAccessor);
         _fileRepository = fileRepository;
         _uniqueValidator = uniqueValidator;
         _fileUploadEngine = fileUploadEngine;
-        _httpContextAccessor = httpContextAccessor;
     }
 
     /// <summary>
@@ -99,6 +90,114 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
     }
 
     /// <summary>
+    /// 按文件ID下载物理文件流
+    /// </summary>
+    /// <param name="id">文件ID</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>可读流与下载文件名</returns>
+    public async Task<TaktFileDownloadStreamResult> DownloadFileByIdAsync(
+        long id,
+        CancellationToken cancellationToken = default)
+    {
+        EnsureThreeLayerContext();
+        var entity = await _fileRepository.GetByIdAsync(id);
+        if (entity == null
+            || entity.TenantCode != CurrentTenantCode
+            || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("文件不存在");
+        }
+
+        EnsureFileDownloadAllowed(entity);
+
+        var downloadName = !string.IsNullOrWhiteSpace(entity.FileOriginalName)
+            ? entity.FileOriginalName
+            : entity.FileName;
+        var descriptor = new TaktFileStorageDescriptor
+        {
+            FilePath = entity.FilePath,
+            StorageType = entity.StorageType,
+            StorageConfig = entity.StorageConfig,
+        };
+        var result = await _fileUploadEngine.OpenReadAsync(
+            descriptor,
+            downloadName,
+            entity.FileType,
+            cancellationToken);
+
+        entity.DownloadCount = checked(entity.DownloadCount + 1);
+        entity.LastDownloadTime = DateTime.Now;
+        await _fileRepository.UpdateAsync(entity);
+
+        return result;
+    }
+
+    /// <summary>
+    /// 校验当前用户是否允许下载该文件
+    /// </summary>
+    /// <param name="entity">文件实体</param>
+    private void EnsureFileDownloadAllowed(TaktFile entity)
+    {
+        if (!TaktFileStatusHelper.IsEnabled(entity.FileStatus))
+        {
+            ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.FileDownloadDisabled);
+        }
+
+        var currentUserId = CurrentUserId ?? 0;
+        if (entity.IsPublic == 1 && entity.CreatedBy != currentUserId)
+        {
+            ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.FileAccessDenied);
+        }
+    }
+
+    /// <summary>
+    /// 校验当前用户是否允许删除该文件（私有文件仅创建人可删）
+    /// </summary>
+    /// <param name="entity">文件实体</param>
+    private void EnsureFileDeleteAllowed(TaktFile entity)
+    {
+        var currentUserId = CurrentUserId ?? 0;
+        if (entity.IsPublic == 1 && entity.CreatedBy != currentUserId)
+        {
+            ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.FileAccessDenied);
+        }
+    }
+
+    /// <summary>
+    /// 将物理文件重命名为带删除标记的文件名（xxx.ext → xxx.del.ext，经上传引擎调用 TaktFileHelper）
+    /// </summary>
+    /// <param name="entity">文件实体</param>
+    private async Task MarkFilePhysicalDeletedAsync(TaktFile entity)
+    {
+        if (string.IsNullOrWhiteSpace(entity.FilePath))
+        {
+            return;
+        }
+
+        var fileName = Path.GetFileName(entity.FilePath.Replace('\\', '/'));
+        if (TaktFileHelper.IsDeletedPhysicalFileName(fileName))
+        {
+            return;
+        }
+
+        var descriptor = new TaktFileStorageDescriptor
+        {
+            FilePath = entity.FilePath,
+            StorageType = entity.StorageType,
+            StorageConfig = entity.StorageConfig,
+        };
+        var deletedRelativePath = await _fileUploadEngine.MarkStoredFileDeletedAsync(descriptor);
+        if (string.Equals(deletedRelativePath, entity.FilePath, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        entity.FilePath = deletedRelativePath;
+        entity.FileName = Path.GetFileName(deletedRelativePath.Replace('\\', '/'));
+        await _fileRepository.UpdateAsync(entity);
+    }
+
+    /// <summary>
     /// 获取文件选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
@@ -109,8 +208,9 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
         var list = await _fileRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
+                && x.FileStatus == TaktFileStatusHelper.Enabled
                 && (x.IsPublic == 0 || x.CreatedBy == currentUserId),
-            x => x.FileName,
+            x => x.FileName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -165,34 +265,66 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
     }
 
     /// <summary>
-    /// 删除文件
+    /// 删除文件（软删数据表；物理文件经 TaktFileHelper 重命名为 xxx.del.ext）
     /// </summary>
     /// <param name="id">文件ID</param>
     /// <returns>任务</returns>
     public async Task DeleteFileByIdAsync(long id)
     {
-        var deleted = await _fileRepository.DeleteAsync(id);
-        if (!deleted)
+        EnsureThreeLayerContext();
+        var entity = await _fileRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("文件不存在或已删除");
         }
+
+        await DeleteFileEntityAsync(entity);
     }
 
     /// <summary>
-    /// 批量删除文件
+    /// 批量删除文件（每条均软删数据表，并将物理文件重命名为 xxx.del.ext）
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     public async Task DeleteFileBatchAsync(IEnumerable<long> ids)
     {
+        EnsureThreeLayerContext();
         var idList = ids?.Distinct().ToList() ?? new List<long>();
         if (idList.Count == 0)
         {
             return;
         }
+
         foreach (var id in idList)
         {
-            await DeleteFileByIdAsync(id);
+            var entity = await _fileRepository.GetByIdAsync(id);
+            if (entity == null)
+            {
+                throw new TaktBusinessException("文件不存在或已删除");
+            }
+
+            await DeleteFileEntityAsync(entity);
+        }
+    }
+
+    /// <summary>
+    /// 删除单条文件实体：权限校验、物理文件标记删除、数据表软删
+    /// </summary>
+    /// <param name="entity">已加载的文件实体</param>
+    private async Task DeleteFileEntityAsync(TaktFile entity)
+    {
+        if (entity.TenantCode != CurrentTenantCode
+            || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("文件不存在或已删除");
+        }
+
+        EnsureFileDeleteAllowed(entity);
+        await MarkFilePhysicalDeletedAsync(entity);
+        var deleted = await _fileRepository.DeleteAsync(entity.Id);
+        if (!deleted)
+        {
+            throw new TaktBusinessException("文件不存在或已删除");
         }
     }
 
@@ -211,6 +343,87 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
         entity.FileStatus = dto.FileStatus;
         await _fileRepository.UpdateAsync(entity);
         return await GetFileByIdAsync(dto.FileId) ?? throw new TaktBusinessException("文件不存在");
+    }
+
+    /// <summary>
+    /// 更新文件公开
+    /// </summary>
+    /// <param name="dto">公开范围 DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktFileDto> UpdateFilePublicAsync(TaktFilePublicDto dto)
+    {
+        var entity = await _fileRepository.GetByIdAsync(dto.FileId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("文件不存在");
+        }
+        if (dto.IsPublic is not 0 and not 1)
+        {
+            throw new TaktBusinessException("公开必须为字典 sys_is_public_type 合法值（0=公开，1=私有）");
+        }
+        entity.IsPublic = dto.IsPublic;
+        await _fileRepository.UpdateAsync(entity);
+        return await GetFileByIdAsync(dto.FileId) ?? throw new TaktBusinessException("文件不存在");
+    }
+
+    /// <summary>
+    /// 获取导入模板
+    /// </summary>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
+    public async Task<(string fileName, byte[] content)> GetFileTemplateAsync(string? sheetName = null, string? fileName = null)
+    {
+        return await TaktExcelHelper.GenerateTemplateAsync<TaktFileTemplateDto>(
+            sheetName ?? "文件导入模板",
+            fileName ?? "文件导入模板.xlsx");
+    }
+
+    /// <summary>
+    /// 导入文件
+    /// </summary>
+    /// <param name="fileStream">Excel 文件流</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <returns>导入结果</returns>
+    public async Task<(int success, int fail, List<string> errors)> ImportFileAsync(Stream fileStream, string? sheetName = null)
+    {
+        var errors = new List<string>();
+        var success = 0;
+        var fail = 0;
+        var rows = await TaktExcelHelper.ImportAsync<TaktFileImportDto>(fileStream, sheetName ?? "文件导入模板");
+        if (rows == null || rows.Count == 0)
+        {
+            errors.Add("Excel文件中没有数据");
+            return (0, 0, errors);
+        }
+        var importSeenKeys = new HashSet<string>(StringComparer.Ordinal);
+        for (var i = 0; i < rows.Count; i++)
+        {
+            try
+            {
+                var entity = rows[i].Adapt<TaktFile>();
+                var importKey = $"{entity.FileCode}";
+                if (!importSeenKeys.Add(importKey))
+                {
+                    throw new TaktBusinessException("与Excel中其他行重复（FileCode）");
+                }
+                var isUnique_ix_file_code_unique = await _uniqueValidator.IsUniqueAsync(
+                    _fileRepository,
+                    x => x.FileCode == entity.FileCode);
+                if (!isUnique_ix_file_code_unique)
+                {
+                    throw new TaktBusinessException("文件的FileCode已存在");
+                }
+                await _fileRepository.CreateAsync(entity);
+                success += 1;
+            }
+            catch (Exception ex)
+            {
+                fail += 1;
+                errors.Add($"第{i + 2}行: {ex.Message}");
+            }
+        }
+        return (success, fail, errors);
     }
 
     /// <summary>
@@ -239,375 +452,320 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
     }
 
     // ========================================
-    // 上传 / 下载
+    // 文件上传（整文件 / 分片）
     // ========================================
 
     /// <summary>
-    /// 整文件上传（委托引擎落盘并写入 TaktFile 元数据）
+    /// 获取上传策略（可选 totalSizeBytes 计算分片计划）
+    /// </summary>
+    /// <param name="totalSizeBytes">文件总大小（字节）</param>
+    /// <returns>上传策略</returns>
+    public TaktFileUploadPolicyResult GetFileUploadPolicy(long? totalSizeBytes = null)
+    {
+        EnsureThreeLayerContext();
+        return _fileUploadEngine.GetUploadPolicy(totalSizeBytes);
+    }
+
+    /// <summary>
+    /// 整文件上传并落库
     /// </summary>
     /// <param name="fileStream">文件流</param>
     /// <param name="fileName">原始文件名</param>
     /// <param name="contentType">MIME 类型</param>
-    /// <param name="meta">可选业务元数据</param>
+    /// <param name="meta">业务元数据</param>
+    /// <param name="clientIp">上传来源客户端 IP（由 WebApi 经 TaktLocationHelper.ResolveClientIp 解析）</param>
     /// <param name="cancellationToken">取消令牌</param>
-    /// <returns>已持久化的文件 DTO</returns>
+    /// <returns>上传结果</returns>
     public async Task<TaktFileUploadResultDto> UploadFileAsync(
         Stream fileStream,
         string fileName,
         string? contentType,
         TaktFileUploadMetaDto? meta = null,
+        string? clientIp = null,
         CancellationToken cancellationToken = default)
     {
+        EnsureThreeLayerContext();
         ArgumentNullException.ThrowIfNull(fileStream);
         ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
-        var enrichedMeta = EnrichUploadMeta(meta);
+        await EnsureUploadOriginalNameUniqueTodayAsync(fileName);
+        var scope = BuildUploadScope(meta);
         var stored = await _fileUploadEngine.UploadFileAsync(
             fileStream,
             fileName,
             contentType,
-            BuildUploadScope(enrichedMeta),
+            scope,
             cancellationToken);
-        var entity = await PersistStoredFileAsync(stored, enrichedMeta);
-        return MapToUploadResultDto(entity);
+        var entity = await PersistFileEntityAsync(stored, meta, clientIp);
+        return MapUploadResult(entity);
     }
 
     /// <summary>
-    /// 检查分片是否已上传（秒传/断点续传前置）
+    /// 检查分片是否已上传
     /// </summary>
-    /// <param name="dto">分片标识与序号等检查参数</param>
-    /// <returns>分片是否已存在于临时存储</returns>
-    public async Task<TaktFileChunkCheckResultDto> CheckFileChunkAsync(TaktFileChunkCheckDto dto)
+    /// <param name="request">检查参数</param>
+    /// <returns>是否存在</returns>
+    public async Task<TaktFileChunkCheckResult> CheckFileChunkAsync(TaktFileChunkCheckRequest request)
     {
-        ArgumentNullException.ThrowIfNull(dto);
-        var result = await _fileUploadEngine.CheckChunkAsync(new TaktFileChunkCheckRequest
-        {
-            Identifier = dto.Identifier,
-            ChunkNumber = dto.ChunkNumber,
-            ChunkSize = dto.ChunkSize,
-            TotalSize = dto.TotalSize,
-            FileName = dto.FileName,
-        });
-        return new TaktFileChunkCheckResultDto { Exists = result.Exists };
+        EnsureThreeLayerContext();
+        ArgumentNullException.ThrowIfNull(request);
+        return await _fileUploadEngine.CheckChunkAsync(request, BuildBaseUploadScope());
     }
 
     /// <summary>
-    /// 列出已上传分片序号（断点续传批量恢复）
+    /// 列出已上传分片序号
     /// </summary>
-    /// <param name="dto">查询参数</param>
+    /// <param name="request">查询参数</param>
     /// <returns>已上传分片序号</returns>
-    public async Task<TaktFileChunkListResultDto> ListFileChunksAsync(TaktFileChunkListDto dto)
+    public async Task<TaktFileChunkListResult> ListFileChunksAsync(TaktFileChunkListRequest request)
     {
+        EnsureThreeLayerContext();
+        ArgumentNullException.ThrowIfNull(request);
+        return await _fileUploadEngine.ListUploadedChunksAsync(request, BuildBaseUploadScope());
+    }
+
+    /// <summary>
+    /// 上传单个分片
+    /// </summary>
+    /// <param name="chunkStream">分片流</param>
+    /// <param name="request">分片元数据</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    public async Task UploadFileChunkAsync(
+        Stream chunkStream,
+        TaktFileChunkUploadRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        EnsureThreeLayerContext();
+        ArgumentNullException.ThrowIfNull(chunkStream);
+        ArgumentNullException.ThrowIfNull(request);
+        await _fileUploadEngine.UploadChunkAsync(
+            chunkStream,
+            request,
+            BuildBaseUploadScope(),
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// 合并分片并落库
+    /// </summary>
+    /// <param name="dto">合并参数</param>
+    /// <param name="clientIp">上传来源客户端 IP（由 WebApi 经 TaktLocationHelper.ResolveClientIp 解析）</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>上传结果</returns>
+    public async Task<TaktFileUploadResultDto> MergeFileChunksAsync(
+        TaktFileChunkMergeDto dto,
+        string? clientIp = null,
+        CancellationToken cancellationToken = default)
+    {
+        EnsureThreeLayerContext();
         ArgumentNullException.ThrowIfNull(dto);
-        var result = await _fileUploadEngine.ListUploadedChunksAsync(new TaktFileChunkListRequest
+        ArgumentException.ThrowIfNullOrWhiteSpace(dto.FileName);
+        await EnsureUploadOriginalNameUniqueTodayAsync(dto.FileName);
+        var meta = MapMergeMeta(dto);
+        var scope = BuildUploadScope(meta);
+        var mergeRequest = new TaktFileChunkMergeRequest
         {
             Identifier = dto.Identifier,
+            FileName = dto.FileName,
             TotalChunks = dto.TotalChunks,
-        });
-        return new TaktFileChunkListResultDto
+            TotalSize = dto.TotalSize,
+        };
+        var stored = await _fileUploadEngine.MergeChunksAsync(
+            mergeRequest,
+            scope,
+            cancellationToken);
+        var entity = await PersistFileEntityAsync(stored, meta, clientIp);
+        return MapUploadResult(entity);
+    }
+
+    /// <summary>
+    /// 取消分片上传并清理临时分片
+    /// </summary>
+    /// <param name="identifier">上传会话标识</param>
+    public async Task CancelFileChunksAsync(string identifier)
+    {
+        EnsureThreeLayerContext();
+        ArgumentException.ThrowIfNullOrWhiteSpace(identifier);
+        await _fileUploadEngine.CancelUploadedChunksAsync(identifier, BuildBaseUploadScope());
+    }
+
+    /// <summary>
+    /// 构建租户+公司隔离范围（分片临时目录）
+    /// </summary>
+    /// <returns>上传范围</returns>
+    private TaktFileUploadScope BuildBaseUploadScope()
+    {
+        EnsureThreeLayerContext();
+        return new TaktFileUploadScope
         {
-            UploadedChunkNumbers = result.UploadedChunkNumbers,
+            TenantCode = CurrentTenantCode!,
+            CompanyCode = CurrentCompanyCode!,
         };
     }
 
     /// <summary>
-    /// 取消分片上传并清理临时目录
+    /// 由业务元数据构建上传范围
     /// </summary>
-    /// <param name="dto">取消参数</param>
-    public Task CancelFileChunksAsync(TaktFileChunkCancelDto dto)
+    /// <param name="meta">业务元数据</param>
+    /// <returns>上传范围</returns>
+    private TaktFileUploadScope BuildUploadScope(TaktFileUploadMetaDto? meta)
     {
-        ArgumentNullException.ThrowIfNull(dto);
-        return _fileUploadEngine.CancelUploadedChunksAsync(dto.Identifier);
-    }
-
-    /// <summary>
-    /// 上传单个分片至临时存储
-    /// </summary>
-    /// <param name="chunkStream">分片二进制流</param>
-    /// <param name="dto">分片元数据</param>
-    /// <param name="cancellationToken">取消令牌</param>
-    public Task UploadFileChunkAsync(
-        Stream chunkStream,
-        TaktFileChunkUploadDto dto,
-        CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(dto);
-        return _fileUploadEngine.UploadChunkAsync(chunkStream, new TaktFileChunkUploadRequest
+        var scope = BuildBaseUploadScope();
+        if (meta == null)
         {
-            Identifier = dto.Identifier,
-            ChunkNumber = dto.ChunkNumber,
-            TotalChunks = dto.TotalChunks,
-            ChunkSize = dto.ChunkSize,
-            TotalSize = dto.TotalSize,
-            FileName = dto.FileName,
-        }, null, cancellationToken);
+            return scope;
+        }
+
+        scope.CategoryPath = meta.CategoryPath;
+        scope.TargetFileName = meta.TargetFileName;
+        scope.StorageNaming = TaktFileHelper.NormalizeStorageNamingValue(meta.StorageNaming, 0);
+        scope.StorageType = meta.StorageType ?? 0;
+        scope.StorageConfig = meta.StorageConfig;
+        if (meta.FileUploadType.HasValue
+            && Enum.IsDefined(typeof(TaktFileUploadType), meta.FileUploadType.Value))
+        {
+            scope.FileUploadType = (TaktFileUploadType)meta.FileUploadType.Value;
+        }
+
+        return scope;
     }
 
     /// <summary>
-    /// 合并分片为完整文件并写入 TaktFile 元数据
+    /// 分片合并 DTO 转业务元数据
     /// </summary>
-    /// <param name="dto">合并参数</param>
-    /// <param name="cancellationToken">取消令牌</param>
-    /// <returns>已持久化的文件 DTO</returns>
-    public async Task<TaktFileUploadResultDto> MergeFileChunksAsync(
-        TaktFileChunkMergeDto dto,
-        CancellationToken cancellationToken = default)
+    /// <param name="dto">合并 DTO</param>
+    /// <returns>业务元数据</returns>
+    private static TaktFileUploadMetaDto MapMergeMeta(TaktFileChunkMergeDto dto)
     {
-        ArgumentNullException.ThrowIfNull(dto);
-        var meta = EnrichUploadMeta(new TaktFileUploadMetaDto
+        return new TaktFileUploadMetaDto
         {
             FileDescription = dto.FileDescription,
             FileTags = dto.FileTags,
             IsPublic = dto.IsPublic,
-            IpAddress = dto.IpAddress,
-            Location = dto.Location,
+            FileStatus = dto.FileStatus,
             FileUploadType = dto.FileUploadType,
             TargetFileName = dto.TargetFileName,
             CategoryPath = dto.CategoryPath,
-        });
-        var stored = await _fileUploadEngine.MergeChunksAsync(new TaktFileChunkMergeRequest
-        {
-            Identifier = dto.Identifier,
-            FileName = dto.FileName,
-            TotalChunks = dto.TotalChunks,
-            TotalSize = dto.TotalSize,
-        }, BuildUploadScope(meta), cancellationToken);
-        var entity = await PersistStoredFileAsync(stored, meta);
-        return MapToUploadResultDto(entity);
-    }
-
-    /// <summary>
-    /// 下载文件：校验租户/公司与启用状态，打开物理流并递增下载次数
-    /// </summary>
-    /// <param name="fileId">文件主键 ID</param>
-    /// <param name="cancellationToken">取消令牌</param>
-    /// <returns>可读流、原始文件名与 Content-Type</returns>
-    public async Task<TaktFileDownloadResultDto> DownloadFileAsync(
-        long fileId,
-        CancellationToken cancellationToken = default)
-    {
-        var entity = await GetOwnedFileEntityAsync(fileId);
-        if (entity.FileStatus != 1)
-        {
-            ThrowBusinessException("文件已禁用，无法下载");
-        }
-
-        var streamResult = await _fileUploadEngine.OpenReadAsync(
-            new TaktFileStorageDescriptor
-            {
-                FilePath = entity.FilePath,
-                StorageType = entity.StorageType,
-            },
-            entity.FileOriginalName,
-            entity.FileType,
-            cancellationToken);
-
-        entity.DownloadCount = checked(entity.DownloadCount + 1);
-        entity.LastDownloadTime = DateTime.Now;
-        await _fileRepository.UpdateAsync(entity);
-
-        return new TaktFileDownloadResultDto
-        {
-            Stream = streamResult.Stream,
-            FileName = streamResult.FileName,
-            ContentType = streamResult.ContentType,
+            StorageType = dto.StorageType,
+            StorageNaming = dto.StorageNaming,
+            StorageConfig = dto.StorageConfig,
         };
     }
 
     /// <summary>
-    /// 更新文件公开范围（TaktFile.IsPublic）
+    /// 校验当日同租户+公司下原始文件名是否已存在（与上传引擎 Path.GetFileName 归一化一致）
     /// </summary>
-    /// <param name="fileId">文件主键 ID</param>
-    /// <param name="dto">公开范围 DTO</param>
-    /// <returns>更新后的文件 DTO</returns>
-    public async Task<TaktFileDto> ChangeFilePublicAccessAsync(long fileId, TaktFilePublicAccessDto dto)
+    /// <param name="originalFileName">上传原始文件名</param>
+    private async Task EnsureUploadOriginalNameUniqueTodayAsync(string originalFileName)
     {
-        ArgumentNullException.ThrowIfNull(dto);
-        var entity = await GetOwnedFileEntityAsync(fileId);
-        entity.IsPublic = dto.IsPublic;
-        await _fileRepository.UpdateAsync(entity);
-        return entity.Adapt<TaktFileDto>();
+        var safeOriginalName = Path.GetFileName(originalFileName.Trim());
+        if (string.IsNullOrWhiteSpace(safeOriginalName))
+        {
+            return;
+        }
+
+        var dayStart = DateTime.Today;
+        var dayEnd = dayStart.AddDays(1);
+        var duplicated = await _fileRepository.ExistsAsync(x =>
+            x.FileOriginalName == safeOriginalName
+            && x.CreatedAt >= dayStart
+            && x.CreatedAt < dayEnd);
+        if (duplicated)
+        {
+            ThrowLocalizedException(
+                TaktValidationI18nKeys.FileUploadDuplicateOriginalNameToday,
+                extraTokens: new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["fileName"] = safeOriginalName,
+                });
+        }
     }
 
     /// <summary>
-    /// 获取当前租户+公司下的文件实体
+    /// 存储结果落库为 TaktFile 实体
     /// </summary>
-    /// <param name="fileId">文件 ID</param>
-    /// <returns>实体</returns>
-    private async Task<TaktFile> GetOwnedFileEntityAsync(long fileId)
-    {
-        EnsureThreeLayerContext();
-        var entity = await _fileRepository.GetByIdAsync(fileId);
-        if (entity == null
-            || entity.TenantCode != CurrentTenantCode
-            || entity.CompanyCode != CurrentCompanyCode
-            || entity.IsDeleted != 0)
-        {
-            ThrowBusinessException("文件不存在");
-        }
-
-        if (!TaktFileAccessHelper.CanAccess(entity.IsPublic, entity.CreatedBy, CurrentUserId))
-        {
-            ThrowBusinessException("无权访问该文件");
-        }
-
-        return entity;
-    }
-
-    /// <summary>
-    /// 将引擎存储结果写入 TaktFile 元数据
-    /// </summary>
-    /// <param name="stored">存储结果</param>
-    /// <param name="meta">业务附加字段</param>
+    /// <param name="stored">引擎存储结果</param>
+    /// <param name="meta">业务元数据</param>
+    /// <param name="clientIp">上传来源客户端 IP</param>
     /// <returns>已持久化实体</returns>
-    private async Task<TaktFile> PersistStoredFileAsync(TaktStoredFileResult stored, TaktFileUploadMetaDto meta)
+    private async Task<TaktFile> PersistFileEntityAsync(
+        TaktStoredFileResult stored,
+        TaktFileUploadMetaDto? meta,
+        string? clientIp = null)
     {
-        ArgumentNullException.ThrowIfNull(stored);
-        ArgumentNullException.ThrowIfNull(meta);
-        EnsureThreeLayerContext();
-        ValidateStoredFileResult(stored);
+        var (ipAddress, location) = ResolveUploadIpAndLocation(clientIp);
         var entity = new TaktFile
         {
-            TenantCode = CurrentTenantCode,
-            CompanyCode = CurrentCompanyCode,
-            FileCode = !string.IsNullOrWhiteSpace(stored.FileCode)
-                ? stored.FileCode.Trim()
-                : GenerateFileCode(),
+            FileCode = stored.FileCode,
             FileName = stored.FileName,
             FileOriginalName = stored.FileOriginalName,
             FilePath = stored.FilePath,
             FileSize = stored.FileSize,
-            FileType = NormalizeRequiredString(stored.FileType),
-            FileExtension = NormalizeRequiredString(stored.FileExtension),
-            FileHash = NormalizeRequiredString(stored.FileHash),
+            FileType = stored.FileType ?? string.Empty,
+            FileExtension = stored.FileExtension ?? string.Empty,
+            FileHash = stored.FileHash ?? string.Empty,
             FileCategory = stored.FileCategory,
             StorageType = stored.StorageType,
-            StorageConfig = NormalizeNullableString(stored.StorageConfig),
-            AccessUrl = NormalizeRequiredString(stored.AccessUrl),
-            DownloadCount = 0,
-            FileStatus = 1,
-            IsPublic = meta.IsPublic ?? 0,
-            FileDescription = NormalizeRequiredString(meta.FileDescription),
-            FileTags = NormalizeRequiredString(meta.FileTags),
-            IpAddress = NormalizeRequiredString(meta.IpAddress),
-            Location = NormalizeRequiredString(meta.Location),
+            StorageConfig = stored.StorageConfig,
+            AccessUrl = stored.AccessUrl ?? string.Empty,
+            FileDescription = ResolveUploadFileDescription(stored.FileCode, stored.FileName, meta),
+            FileTags = meta?.FileTags ?? string.Empty,
+            IsPublic = meta?.IsPublic ?? 0,
+            FileStatus = TaktFileStatusHelper.NormalizeOrDefault(meta?.FileStatus),
+            IpAddress = ipAddress,
+            Location = location,
         };
-        entity = await _fileRepository.CreateAsync(entity);
-        return entity;
+        var isUnique_ix_file_code_unique = await _uniqueValidator.IsUniqueAsync(
+            _fileRepository,
+            x => x.FileCode == entity.FileCode);
+        if (!isUnique_ix_file_code_unique)
+        {
+            entity.FileCode = TaktFileHelper.GenerateFileCode();
+            if (string.IsNullOrWhiteSpace(meta?.FileDescription))
+            {
+                entity.FileDescription = TaktFileHelper.BuildFileCodeNameDescription(entity.FileCode, entity.FileName);
+            }
+        }
+        return await _fileRepository.CreateAsync(entity);
     }
 
     /// <summary>
-    /// 校验引擎存储结果是否满足 TaktFile 非空列要求
+    /// 解析上传落库的 IP 与地理位置（与 TaktOnlineService 一致，经 TaktLocationHelper.ResolveIpAndLocationForLog）
     /// </summary>
-    /// <param name="stored">存储结果</param>
-    private static void ValidateStoredFileResult(TaktStoredFileResult stored)
+    /// <param name="clientIp">客户端 IP</param>
+    /// <returns>可落库的 IP 与位置</returns>
+    private static (string IpAddress, string Location) ResolveUploadIpAndLocation(string? clientIp)
     {
-        if (string.IsNullOrWhiteSpace(stored.FileName)
-            || string.IsNullOrWhiteSpace(stored.FileOriginalName)
-            || string.IsNullOrWhiteSpace(stored.FilePath))
-        {
-            throw new InvalidOperationException("文件存储结果缺少必填路径或名称字段");
-        }
-
-        if (stored.FileSize < 0)
-        {
-            throw new InvalidOperationException("文件大小无效");
-        }
+        var (_, location) = TaktLocationHelper.ResolveIpAndLocationForLog(clientIp, null);
+        return (clientIp ?? string.Empty, location ?? string.Empty);
     }
 
     /// <summary>
-    /// 将必填字符串规范为非 null
+    /// 解析上传文件描述（未传入时默认由文件编码与存储文件名组成）
     /// </summary>
-    /// <param name="value">原始值</param>
-    /// <returns>去首尾空白后的非 null 字符串</returns>
-    private static string NormalizeRequiredString(string? value) =>
-        string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
-
-    /// <summary>
-    /// 将允许为 null 的字符串规范化
-    /// </summary>
-    /// <param name="value">原始值</param>
-    /// <returns>去首尾空白后的值；空白为 null</returns>
-    private static string? NormalizeNullableString(string? value) =>
-        string.IsNullOrWhiteSpace(value) ? null : value.Trim();
-
-    /// <summary>
-    /// 补全上传元数据中的 IP/地理位置
-    /// </summary>
-    /// <param name="meta">原始元数据</param>
-    /// <returns>补全后的元数据</returns>
-    private TaktFileUploadMetaDto EnrichUploadMeta(TaktFileUploadMetaDto? meta)
+    /// <param name="fileCode">文件业务编码</param>
+    /// <param name="fileName">存储文件名</param>
+    /// <param name="meta">业务元数据</param>
+    /// <returns>文件描述</returns>
+    private static string ResolveUploadFileDescription(
+        string fileCode,
+        string fileName,
+        TaktFileUploadMetaDto? meta)
     {
-        meta ??= new TaktFileUploadMetaDto();
-        if (string.IsNullOrWhiteSpace(meta.IpAddress))
+        if (!string.IsNullOrWhiteSpace(meta?.FileDescription))
         {
-            meta.IpAddress = ResolveClientIpAddress();
+            return meta.FileDescription.Trim();
         }
 
-        if (string.IsNullOrWhiteSpace(meta.Location))
-        {
-            meta.Location = !string.IsNullOrWhiteSpace(meta.IpAddress)
-                ? TaktLocationHelper.ResolveIpLocationForLog(meta.IpAddress) ?? string.Empty
-                : string.Empty;
-        }
-
-        meta.FileDescription = NormalizeRequiredString(meta.FileDescription);
-        meta.FileTags = NormalizeRequiredString(meta.FileTags);
-        meta.IpAddress = NormalizeRequiredString(meta.IpAddress);
-        meta.Location = NormalizeRequiredString(meta.Location);
-        return meta;
+        return TaktFileHelper.BuildFileCodeNameDescription(fileCode, fileName);
     }
 
     /// <summary>
-    /// 由上传元数据构建引擎隔离范围（上传类型、目标文件名）
-    /// </summary>
-    /// <param name="meta">上传元数据</param>
-    /// <returns>引擎 scope（租户/公司在引擎内解析）</returns>
-    private static TaktFileUploadScope BuildUploadScope(TaktFileUploadMetaDto meta)
-    {
-        ArgumentNullException.ThrowIfNull(meta);
-        return new TaktFileUploadScope
-        {
-            FileUploadType = meta.FileUploadType,
-            TargetFileName = meta.TargetFileName,
-            CategoryPath = meta.CategoryPath,
-        };
-    }
-
-    /// <summary>
-    /// 解析当前请求客户端 IP
-    /// </summary>
-    /// <returns>IP；无 HttpContext 时返回空串</returns>
-    private string ResolveClientIpAddress()
-    {
-        var context = _httpContextAccessor.HttpContext;
-        if (context == null)
-        {
-            return string.Empty;
-        }
-
-        var forwarded = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(forwarded))
-        {
-            return forwarded.Split(',')[0].Trim();
-        }
-
-        return context.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
-    }
-
-    /// <summary>
-    /// 生成文件业务编码
-    /// </summary>
-    private static string GenerateFileCode() =>
-        $"FILE-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid():N}"[..32];
-
-    /// <summary>
-    /// 将已持久化实体映射为上传结果 DTO
+    /// 实体映射为上传结果 DTO
     /// </summary>
     /// <param name="entity">文件实体</param>
-    /// <returns>上传结果 DTO</returns>
-    private static TaktFileUploadResultDto MapToUploadResultDto(TaktFile entity)
+    /// <returns>上传结果</returns>
+    private static TaktFileUploadResultDto MapUploadResult(TaktFile entity)
     {
-        ArgumentNullException.ThrowIfNull(entity);
         return new TaktFileUploadResultDto
         {
             FileId = entity.Id,
@@ -620,6 +778,8 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
             FileExtension = entity.FileExtension,
             FileHash = entity.FileHash,
             FileCategory = entity.FileCategory,
+            StorageType = entity.StorageType,
+            StorageConfig = entity.StorageConfig,
             AccessUrl = entity.AccessUrl,
         };
     }
@@ -660,7 +820,7 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
                 || (x.FileTags != null && x.FileTags.Contains(keywords))
                 || (x.IpAddress != null && x.IpAddress.Contains(keywords))
                 || (x.Location != null && x.Location.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.LastDownloadTime).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -762,9 +922,9 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
             exp = exp.And(x => x.Location != null && x.Location.Contains(queryDto.Location));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktEmployeeDeptI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeDept 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,56 +75,56 @@ public class TaktEmployeeDeptI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeDept 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeedept._self / entity.employeedept.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.employeedept._self / entity.employeedept.{{field}}；ResourceGroup=Organization；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeDeptTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.employeedept._self
-            new TranslationSeedItem("entity.employeedept._self", "en-US", "Employee Dept Information", "实体名称"),
+            new TranslationSeedItem("entity.employeedept._self", "en-US", "Employee Dept Information_us", "实体名称"),
             // entity.employeedept._self
-            new TranslationSeedItem("entity.employeedept._self", "ja-JP", "员工-部门关联信息", "实体名称"),
+            new TranslationSeedItem("entity.employeedept._self", "ja-JP", "员工-部门关联信息_jp", "实体名称"),
             // entity.employeedept._self
             new TranslationSeedItem("entity.employeedept._self", "zh-CN", "员工-部门关联信息", "实体名称"),
             // entity.employeedept._self
-            new TranslationSeedItem("entity.employeedept._self", "zh-HK", "员工-部门关联信息", "实体名称"),
+            new TranslationSeedItem("entity.employeedept._self", "zh-HK", "员工-部门关联信息_hk", "实体名称"),
 
             // entity.employeedept.employeeid
-            new TranslationSeedItem("entity.employeedept.employeeid", "en-US", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeedept.employeeid", "en-US", "员工ID_us", "员工ID"),
             // entity.employeedept.employeeid
-            new TranslationSeedItem("entity.employeedept.employeeid", "ja-JP", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeedept.employeeid", "ja-JP", "员工ID_jp", "员工ID"),
             // entity.employeedept.employeeid
             new TranslationSeedItem("entity.employeedept.employeeid", "zh-CN", "员工ID", "员工ID"),
             // entity.employeedept.employeeid
-            new TranslationSeedItem("entity.employeedept.employeeid", "zh-HK", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeedept.employeeid", "zh-HK", "员工ID_hk", "员工ID"),
 
             // entity.employeedept.deptid
-            new TranslationSeedItem("entity.employeedept.deptid", "en-US", "部门ID", "部门ID"),
+            new TranslationSeedItem("entity.employeedept.deptid", "en-US", "部门ID_us", "部门ID"),
             // entity.employeedept.deptid
-            new TranslationSeedItem("entity.employeedept.deptid", "ja-JP", "部门ID", "部门ID"),
+            new TranslationSeedItem("entity.employeedept.deptid", "ja-JP", "部门ID_jp", "部门ID"),
             // entity.employeedept.deptid
             new TranslationSeedItem("entity.employeedept.deptid", "zh-CN", "部门ID", "部门ID"),
             // entity.employeedept.deptid
-            new TranslationSeedItem("entity.employeedept.deptid", "zh-HK", "部门ID", "部门ID"),
+            new TranslationSeedItem("entity.employeedept.deptid", "zh-HK", "部门ID_hk", "部门ID"),
 
             // entity.employeedept.employee
-            new TranslationSeedItem("entity.employeedept.employee", "en-US", "员工", "员工（多对一）"),
+            new TranslationSeedItem("entity.employeedept.employee", "en-US", "员工_us", "员工（多对一）"),
             // entity.employeedept.employee
-            new TranslationSeedItem("entity.employeedept.employee", "ja-JP", "员工", "员工（多对一）"),
+            new TranslationSeedItem("entity.employeedept.employee", "ja-JP", "员工_jp", "员工（多对一）"),
             // entity.employeedept.employee
             new TranslationSeedItem("entity.employeedept.employee", "zh-CN", "员工", "员工（多对一）"),
             // entity.employeedept.employee
-            new TranslationSeedItem("entity.employeedept.employee", "zh-HK", "员工", "员工（多对一）"),
+            new TranslationSeedItem("entity.employeedept.employee", "zh-HK", "员工_hk", "员工（多对一）"),
 
             // entity.employeedept.dept
-            new TranslationSeedItem("entity.employeedept.dept", "en-US", "部门", "部门（多对一）"),
+            new TranslationSeedItem("entity.employeedept.dept", "en-US", "部门_us", "部门（多对一）"),
             // entity.employeedept.dept
-            new TranslationSeedItem("entity.employeedept.dept", "ja-JP", "部门", "部门（多对一）"),
+            new TranslationSeedItem("entity.employeedept.dept", "ja-JP", "部门_jp", "部门（多对一）"),
             // entity.employeedept.dept
             new TranslationSeedItem("entity.employeedept.dept", "zh-CN", "部门", "部门（多对一）"),
             // entity.employeedept.dept
-            new TranslationSeedItem("entity.employeedept.dept", "zh-HK", "部门", "部门（多对一）"),
+            new TranslationSeedItem("entity.employeedept.dept", "zh-HK", "部门_hk", "部门（多对一）"),
         };
     }
 
@@ -142,10 +142,10 @@ public class TaktEmployeeDeptI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Organization";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

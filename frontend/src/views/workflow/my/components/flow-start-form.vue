@@ -11,7 +11,7 @@
       <!-- 左侧：选择模板 -->
       <aside class="flow-start-form__sidebar">
         <div class="flow-start-form__sidebar-title">
-          {{ t('workflow.my.page.startFlowForm.templateListTitle') }}
+          {{ t('workflow.my.page.start.flow.form.template.list.title') }}
         </div>
         <div
           v-if="schemeLoading"
@@ -36,7 +36,7 @@
             v-if="!schemeOptions.length"
             class="flow-start-form__list-empty"
           >
-            {{ t('workflow.my.page.startFlowForm.processPlaceholder') }}
+            {{ t('workflow.my.page.start.flow.form.process.placeholder') }}
           </li>
         </ul>
       </aside>
@@ -48,7 +48,7 @@
         >
           <a-tab-pane
             :key="'fill'"
-            :title="t('workflow.my.page.startFlowForm.fillApprovalContent')"
+            :title="t('workflow.my.page.start.flow.form.fill.approval.content')"
           >
             <a-form
               ref="formRef"
@@ -57,10 +57,10 @@
               :rules="formRules"
               class="flow-start-form__form"
             >
-              <a-form-item :label="t('workflow.my.page.startFlowForm.applicantLabel')">
+              <a-form-item :label="t('workflow.my.page.start.flow.form.applicant.label')">
                 <a-select
                   v-model:value="applicantEmployeeId"
-                  :placeholder="t('workflow.my.page.startFlowForm.applicantPlaceholder')"
+                  :placeholder="t('workflow.my.page.start.flow.form.applicant.placeholder')"
                   :options="employeeSelectOptions"
                   :loading="employeeOptionsLoading"
                   allow-clear
@@ -70,19 +70,19 @@
                 />
               </a-form-item>
               <a-form-item
-                :label="t('entity.flowInstance.processtitle')"
+                :label="t('entity.flowinstance.processtitle')"
                 name="processTitle"
               >
                 <a-input
                   v-model:value="form.processTitle"
-                  :placeholder="t('workflow.my.page.startFlowForm.titlePlaceholder')"
+                  :placeholder="t('workflow.my.page.start.flow.form.title.placeholder')"
                   allow-clear
                 />
               </a-form-item>
               <template v-if="formConfigRule.length">
                 <template v-if="formConfigLoading">
                   <a-form-item
-                    :label="t('workflow.my.page.startFlowForm.formDataLabel')"
+                    :label="t('workflow.my.page.start.flow.form.form.data.label')"
                     class="flow-start-form__form-data-item"
                   >
                     <div class="flow-start-form-loading">
@@ -132,27 +132,27 @@
               </template>
               <a-form-item
                 v-else
-                :label="t('entity.flowInstance.frmdata')"
+                :label="t('entity.flowinstance.frmdata')"
                 name="frmData"
               >
                 <a-textarea
                   v-model:value="form.frmData"
                   :rows="4"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.flowInstance.frmdata') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.flowinstance.frmdata') })"
                 />
               </a-form-item>
             </a-form>
           </a-tab-pane>
           <a-tab-pane
             :key="'chart'"
-            :title="t('workflow.my.page.startFlowForm.step3FlowChart')"
+            :title="t('workflow.my.page.start.flow.form.step3.flow.chart')"
           >
             <div class="flow-start-form__step-chart">
               <div
                 v-if="!processContentForPreview?.trim()"
                 class="flow-start-form-chart-empty"
               >
-                {{ t('workflow.my.page.startFlowForm.flowChartEmpty') }}
+                {{ t('workflow.my.page.start.flow.form.flow.chart.empty') }}
               </div>
               <TaktFlowLogicDesigner
                 v-else
@@ -255,7 +255,7 @@ const frmDataModel = ref<Record<string, string>>({})
 const processContentForPreview = ref('')
 
 const formRules = computed(() => ({
-  processKey: [{ required: true, message: t('workflow.my.page.startFlowForm.processRequired') }],
+  processKey: [{ required: true, message: t('workflow.my.page.start.flow.form.process.required') }],
   processTitle: [],
   frmData: []
 }))
@@ -407,13 +407,13 @@ function syncFrmDataModelToFrmData(): void {
 async function validate(): Promise<boolean> {
   if (!form.processKey?.trim()) {
     const { message } = await import('ant-design-vue')
-    message.error(t('workflow.my.page.startFlowForm.processRequired'))
+    message.error(t('workflow.my.page.start.flow.form.process.required'))
     return false
   }
   const id = (applicantEmployeeId.value ?? '').trim()
   if (!id) {
     const { message } = await import('ant-design-vue')
-    message.error(t('workflow.my.page.startFlowForm.applicantRequired'))
+    message.error(t('workflow.my.page.start.flow.form.applicant.required'))
     return false
   }
   syncFrmDataModelToFrmData()

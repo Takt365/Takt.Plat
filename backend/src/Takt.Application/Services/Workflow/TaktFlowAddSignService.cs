@@ -93,7 +93,7 @@ public class TaktFlowAddSignService : TaktServiceBase, ITaktFlowAddSignService
         EnsureThreeLayerContext();
         var list = await _flowAddSignRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.SignUserName,
+            x => x.SignUserName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -261,7 +261,7 @@ public class TaktFlowAddSignService : TaktServiceBase, ITaktFlowAddSignService
                 || SqlFunc.ToString(x.ReturnToSignNode).Contains(keywords)
                 || (x.Reason != null && x.Reason.Contains(keywords))
                 || SqlFunc.ToString(x.IsHandled).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -307,9 +307,9 @@ public class TaktFlowAddSignService : TaktServiceBase, ITaktFlowAddSignService
             exp = exp.And(x => x.IsHandled == queryDto.IsHandled);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

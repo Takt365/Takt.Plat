@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-manufacturing-scheduling-aps-schedule">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,76 +52,46 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'apsScheduleId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getApsScheduleId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getApsScheduleId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="apsScheduleId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.apsScheduleItem._self') }}</div>
-          <a-table
-            v-if="hasApsScheduleItemRows(record)"
-            :columns="apsScheduleItemExpandColumns"
-            :data-source="getApsScheduleItemRows(record)"
-            :row-key="(row: ApsScheduleItem, index?: number) => row?.apsScheduleItemId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-          <div class="mb-2 text-sm font-medium">{{ t('entity.apsScheduleChangeLog._self') }}</div>
-          <a-table
-            v-if="hasApsScheduleChangeLogRows(record)"
-            :columns="apsScheduleChangeLogExpandColumns"
-            :data-source="getApsScheduleChangeLogRows(record)"
-            :row-key="(row: ApsScheduleChangeLog, index?: number) => row?.apsScheduleChangeLogId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <ApsScheduleItemPanel
+          ref="apsScheduleItemPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <ApsScheduleForm
+        :key="formData?.apsScheduleId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -139,66 +109,72 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.apsSchedule.plantcode')">
+      <a-form-item :label="t('entity.apsschedule.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.plantcode') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scheduleCode')">
-      <a-form-item :label="t('entity.apsSchedule.schedulecode')">
+      <a-form-item :label="t('entity.apsschedule.schedulecode')">
         <a-input
           v-model:value="advancedQueryForm.scheduleCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulecode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulecode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scheduleName')">
-      <a-form-item :label="t('entity.apsSchedule.schedulename')">
+      <a-form-item :label="t('entity.apsschedule.schedulename')">
         <a-input
           v-model:value="advancedQueryForm.scheduleName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulename') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulename') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scheduleType')">
-      <a-form-item :label="t('entity.apsSchedule.scheduletype')">
+      <a-form-item :label="t('entity.apsschedule.scheduletype')">
         <a-input-number
           v-model:value="advancedQueryForm.scheduleType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.scheduletype') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.scheduletype') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planDateStart')">
-      <a-form-item :label="t('entity.apsSchedule.plandatestart')">
+      <a-form-item :label="t('entity.apsschedule.plandatestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.planDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.plandatestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.plandatestart') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planDateEnd')">
-      <a-form-item :label="t('entity.apsSchedule.plandateend')">
+      <a-form-item :label="t('entity.apsschedule.plandateend')">
         <a-date-picker
           v-model:value="advancedQueryForm.planDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.plandateend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.plandateend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planStartTimeStart')">
-      <a-form-item :label="t('entity.apsSchedule.planstarttimestart')">
+      <a-form-item :label="t('entity.apsschedule.planstarttimestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.planStartTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.planstarttimestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planstarttimestart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -206,10 +182,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planStartTimeEnd')">
-      <a-form-item :label="t('entity.apsSchedule.planstarttimeend')">
+      <a-form-item :label="t('entity.apsschedule.planstarttimeend')">
         <a-date-picker
           v-model:value="advancedQueryForm.planStartTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.planstarttimeend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planstarttimeend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -217,10 +193,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planEndTimeStart')">
-      <a-form-item :label="t('entity.apsSchedule.planendtimestart')">
+      <a-form-item :label="t('entity.apsschedule.planendtimestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.planEndTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.planendtimestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planendtimestart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -228,10 +204,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planEndTimeEnd')">
-      <a-form-item :label="t('entity.apsSchedule.planendtimeend')">
+      <a-form-item :label="t('entity.apsschedule.planendtimeend')">
         <a-date-picker
           v-model:value="advancedQueryForm.planEndTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.planendtimeend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.planendtimeend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -239,109 +215,121 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planCycle')">
-      <a-form-item :label="t('entity.apsSchedule.plancycle')">
+      <a-form-item :label="t('entity.apsschedule.plancycle')">
         <a-input-number
           v-model:value="advancedQueryForm.planCycle"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.plancycle') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.plancycle') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('workshopCode')">
-      <a-form-item :label="t('entity.apsSchedule.workshopcode')">
+      <a-form-item :label="t('entity.apsschedule.workshopcode')">
         <a-input
           v-model:value="advancedQueryForm.workshopCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.workshopcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.workshopcode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('workshopName')">
-      <a-form-item :label="t('entity.apsSchedule.workshopname')">
+      <a-form-item :label="t('entity.apsschedule.workshopname')">
         <a-input
           v-model:value="advancedQueryForm.workshopName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.workshopname') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.workshopname') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('productionLineCode')">
-      <a-form-item :label="t('entity.apsSchedule.productionlinecode')">
+      <a-form-item :label="t('entity.apsschedule.productionlinecode')">
         <a-input
           v-model:value="advancedQueryForm.productionLineCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.productionlinecode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.productionlinecode') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('productionLineName')">
-      <a-form-item :label="t('entity.apsSchedule.productionlinename')">
+      <a-form-item :label="t('entity.apsschedule.productionlinename')">
         <a-input
           v-model:value="advancedQueryForm.productionLineName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.productionlinename') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.productionlinename') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scheduleStrategy')">
-      <a-form-item :label="t('entity.apsSchedule.schedulestrategy')">
+      <a-form-item :label="t('entity.apsschedule.schedulestrategy')">
         <a-input-number
           v-model:value="advancedQueryForm.scheduleStrategy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulestrategy') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulestrategy') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scheduleAlgorithm')">
-      <a-form-item :label="t('entity.apsSchedule.schedulealgorithm')">
+      <a-form-item :label="t('entity.apsschedule.schedulealgorithm')">
         <a-input-number
           v-model:value="advancedQueryForm.scheduleAlgorithm"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulealgorithm') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulealgorithm') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('optimizationObjective')">
-      <a-form-item :label="t('entity.apsSchedule.optimizationobjective')">
+      <a-form-item :label="t('entity.apsschedule.optimizationobjective')">
         <a-input-number
           v-model:value="advancedQueryForm.optimizationObjective"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.optimizationobjective') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.optimizationobjective') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scheduleStatus')">
-      <a-form-item :label="t('entity.apsSchedule.schedulestatus')">
+      <a-form-item :label="t('entity.apsschedule.schedulestatus')">
         <a-input-number
           v-model:value="advancedQueryForm.scheduleStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.schedulestatus') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.schedulestatus') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannerId')">
-      <a-form-item :label="t('entity.apsSchedule.plannerid')">
+      <a-form-item :label="t('entity.apsschedule.plannerid')">
         <a-input
           v-model:value="advancedQueryForm.plannerId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.plannerid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.plannerid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannerName')">
-      <a-form-item :label="t('entity.apsSchedule.plannername')">
+      <a-form-item :label="t('entity.apsschedule.plannername')">
         <a-input
           v-model:value="advancedQueryForm.plannerName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.plannername') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.plannername') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('publishTimeStart')">
-      <a-form-item :label="t('entity.apsSchedule.publishtimestart')">
+      <a-form-item :label="t('entity.apsschedule.publishtimestart')">
         <a-date-picker
           v-model:value="advancedQueryForm.publishTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.publishtimestart') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.publishtimestart') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -349,10 +337,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('publishTimeEnd')">
-      <a-form-item :label="t('entity.apsSchedule.publishtimeend')">
+      <a-form-item :label="t('entity.apsschedule.publishtimeend')">
         <a-date-picker
           v-model:value="advancedQueryForm.publishTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsSchedule.publishtimeend') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsschedule.publishtimeend') })"
           value-format="YYYY-MM-DD HH:mm:ss"
           show-time
           style="width: 100%"
@@ -360,28 +348,32 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('publishUserId')">
-      <a-form-item :label="t('entity.apsSchedule.publishuserid')">
+      <a-form-item :label="t('entity.apsschedule.publishuserid')">
         <a-input
           v-model:value="advancedQueryForm.publishUserId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.publishuserid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.publishuserid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('publishUserName')">
-      <a-form-item :label="t('entity.apsSchedule.publishusername')">
+      <a-form-item :label="t('entity.apsschedule.publishusername')">
         <a-input
           v-model:value="advancedQueryForm.publishUserName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsSchedule.publishusername') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsschedule.publishusername') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('scheduleDescription')">
-      <a-form-item :label="t('entity.apsSchedule.scheduledescription')">
+      <a-form-item :label="t('entity.apsschedule.scheduledescription')">
         <a-textarea
           v-model:value="advancedQueryForm.scheduleDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.apsSchedule.scheduledescription') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.apsschedule.scheduledescription') })"
           :rows="2"
           allow-clear
         />
@@ -409,11 +401,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('entity.apsschedule.extfield')">
+        <a-textarea
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.apsschedule.extfield') })"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -423,8 +416,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -434,14 +429,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.apsSchedule._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.apsschedule._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.apsSchedule._self"
+        entity-i18n-key="entity.apsschedule._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -477,13 +472,12 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ApsScheduleForm from './components/aps-schedule-form.vue'
-import { getApsScheduleList, getApsScheduleById, createApsSchedule, updateApsSchedule, deleteApsScheduleById, deleteApsScheduleBatch, getApsScheduleTemplate, importApsSchedule, exportApsSchedule } from '@/api/logistics/manufacturing/scheduling/aps-schedule'
-import * as apsScheduleItemApi from '@/api/logistics/manufacturing/scheduling/aps-schedule-item'
-import * as apsScheduleChangeLogApi from '@/api/logistics/manufacturing/scheduling/aps-schedule-change-log'
-import type { ApsScheduleItem, ApsScheduleItemQuery } from '@/types/logistics/manufacturing/scheduling/aps-schedule-item'
-import type { ApsScheduleChangeLog, ApsScheduleChangeLogQuery } from '@/types/logistics/manufacturing/scheduling/aps-schedule-change-log'
-import type { ApsSchedule, ApsScheduleQuery, ApsScheduleCreate, ApsScheduleUpdate } from '@/types/logistics/manufacturing/scheduling/aps-schedule'
+import ApsScheduleItemPanel from './components/aps-schedule-item-panel.vue'
+import { provideApsScheduleMasterContext } from './composables/use-aps-schedule-master-context'
+import { getApsScheduleList, getApsScheduleById, createApsSchedule, updateApsSchedule, deleteApsScheduleById, deleteApsScheduleBatch, getApsScheduleTemplate, importApsSchedule, exportApsSchedule, updateApsScheduleStatus } from '@/api/logistics/manufacturing/scheduling/aps-schedule'
+import type { ApsSchedule, ApsScheduleQuery } from '@/types/logistics/manufacturing/scheduling/aps-schedule'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
@@ -494,7 +488,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktApsSchedule')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.apsSchedule._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.apsschedule._self') })
 )
 
 /** 快捷查询关键字 */
@@ -504,9 +498,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<ApsSchedule[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -521,11 +515,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<ApsSchedule>>({})
+const formData = ref<Partial<ApsSchedule> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -557,40 +553,40 @@ const advancedQueryForm = ref({
   scheduleDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.apsSchedule.plantcode') },
-  { key: 'scheduleCode', label: t('entity.apsSchedule.schedulecode') },
-  { key: 'scheduleName', label: t('entity.apsSchedule.schedulename') },
-  { key: 'scheduleType', label: t('entity.apsSchedule.scheduletype') },
-  { key: 'planDateStart', label: t('entity.apsSchedule.plandatestart') },
-  { key: 'planDateEnd', label: t('entity.apsSchedule.plandateend') },
-  { key: 'planStartTimeStart', label: t('entity.apsSchedule.planstarttimestart') },
-  { key: 'planStartTimeEnd', label: t('entity.apsSchedule.planstarttimeend') },
-  { key: 'planEndTimeStart', label: t('entity.apsSchedule.planendtimestart') },
-  { key: 'planEndTimeEnd', label: t('entity.apsSchedule.planendtimeend') },
-  { key: 'planCycle', label: t('entity.apsSchedule.plancycle') },
-  { key: 'workshopCode', label: t('entity.apsSchedule.workshopcode') },
-  { key: 'workshopName', label: t('entity.apsSchedule.workshopname') },
-  { key: 'productionLineCode', label: t('entity.apsSchedule.productionlinecode') },
-  { key: 'productionLineName', label: t('entity.apsSchedule.productionlinename') },
-  { key: 'scheduleStrategy', label: t('entity.apsSchedule.schedulestrategy') },
-  { key: 'scheduleAlgorithm', label: t('entity.apsSchedule.schedulealgorithm') },
-  { key: 'optimizationObjective', label: t('entity.apsSchedule.optimizationobjective') },
-  { key: 'scheduleStatus', label: t('entity.apsSchedule.schedulestatus') },
-  { key: 'plannerId', label: t('entity.apsSchedule.plannerid') },
-  { key: 'plannerName', label: t('entity.apsSchedule.plannername') },
-  { key: 'publishTimeStart', label: t('entity.apsSchedule.publishtimestart') },
-  { key: 'publishTimeEnd', label: t('entity.apsSchedule.publishtimeend') },
-  { key: 'publishUserId', label: t('entity.apsSchedule.publishuserid') },
-  { key: 'publishUserName', label: t('entity.apsSchedule.publishusername') },
-  { key: 'scheduleDescription', label: t('entity.apsSchedule.scheduledescription') },
+  { key: 'plantCode', label: t('entity.apsschedule.plantcode') },
+  { key: 'scheduleCode', label: t('entity.apsschedule.schedulecode') },
+  { key: 'scheduleName', label: t('entity.apsschedule.schedulename') },
+  { key: 'scheduleType', label: t('entity.apsschedule.scheduletype') },
+  { key: 'planDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.apsschedule.plandate')) },
+  { key: 'planDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.apsschedule.plandate')) },
+  { key: 'planStartTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.apsschedule.planstarttime')) },
+  { key: 'planStartTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.apsschedule.planstarttime')) },
+  { key: 'planEndTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.apsschedule.planendtime')) },
+  { key: 'planEndTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.apsschedule.planendtime')) },
+  { key: 'planCycle', label: t('entity.apsschedule.plancycle') },
+  { key: 'workshopCode', label: t('entity.apsschedule.workshopcode') },
+  { key: 'workshopName', label: t('entity.apsschedule.workshopname') },
+  { key: 'productionLineCode', label: t('entity.apsschedule.productionlinecode') },
+  { key: 'productionLineName', label: t('entity.apsschedule.productionlinename') },
+  { key: 'scheduleStrategy', label: t('entity.apsschedule.schedulestrategy') },
+  { key: 'scheduleAlgorithm', label: t('entity.apsschedule.schedulealgorithm') },
+  { key: 'optimizationObjective', label: t('entity.apsschedule.optimizationobjective') },
+  { key: 'scheduleStatus', label: t('entity.apsschedule.schedulestatus') },
+  { key: 'plannerId', label: t('entity.apsschedule.plannerid') },
+  { key: 'plannerName', label: t('entity.apsschedule.plannername') },
+  { key: 'publishTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.apsschedule.publishtime')) },
+  { key: 'publishTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.apsschedule.publishtime')) },
+  { key: 'publishUserId', label: t('entity.apsschedule.publishuserid') },
+  { key: 'publishUserName', label: t('entity.apsschedule.publishusername') },
+  { key: 'scheduleDescription', label: t('entity.apsschedule.scheduledescription') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('entity.apsschedule.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -608,132 +604,113 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideApsScheduleMasterContext()
+const apsScheduleItemPanelRef = ref<InstanceType<typeof ApsScheduleItemPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {ApsScheduleQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<ApsScheduleQuery>): ApsScheduleQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: ApsScheduleQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof ApsScheduleQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('plantCode', form.plantCode)
+  assignTrimmed('scheduleCode', form.scheduleCode)
+  assignTrimmed('scheduleName', form.scheduleName)
+  if (form.scheduleType !== undefined && form.scheduleType !== null) {
+    query.scheduleType = form.scheduleType
+  }
+  assignTrimmed('planDateStart', form.planDateStart)
+  assignTrimmed('planDateEnd', form.planDateEnd)
+  assignTrimmed('planStartTimeStart', form.planStartTimeStart)
+  assignTrimmed('planStartTimeEnd', form.planStartTimeEnd)
+  assignTrimmed('planEndTimeStart', form.planEndTimeStart)
+  assignTrimmed('planEndTimeEnd', form.planEndTimeEnd)
+  if (form.planCycle !== undefined && form.planCycle !== null) {
+    query.planCycle = form.planCycle
+  }
+  assignTrimmed('workshopCode', form.workshopCode)
+  assignTrimmed('workshopName', form.workshopName)
+  assignTrimmed('productionLineCode', form.productionLineCode)
+  assignTrimmed('productionLineName', form.productionLineName)
+  if (form.scheduleStrategy !== undefined && form.scheduleStrategy !== null) {
+    query.scheduleStrategy = form.scheduleStrategy
+  }
+  if (form.scheduleAlgorithm !== undefined && form.scheduleAlgorithm !== null) {
+    query.scheduleAlgorithm = form.scheduleAlgorithm
+  }
+  if (form.optimizationObjective !== undefined && form.optimizationObjective !== null) {
+    query.optimizationObjective = form.optimizationObjective
+  }
+  if (form.scheduleStatus !== undefined && form.scheduleStatus !== null) {
+    query.scheduleStatus = form.scheduleStatus
+  }
+  assignTrimmed('plannerId', form.plannerId)
+  assignTrimmed('plannerName', form.plannerName)
+  assignTrimmed('publishTimeStart', form.publishTimeStart)
+  assignTrimmed('publishTimeEnd', form.publishTimeEnd)
+  assignTrimmed('publishUserId', form.publishUserId)
+  assignTrimmed('publishUserName', form.publishUserName)
+  assignTrimmed('scheduleDescription', form.scheduleDescription)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
-/** 展开行预览：apsScheduleItem 列 */
-const apsScheduleItemExpandColumns = computed(() => [
-  {
-    title: t('entity.apsScheduleItem.apsschedulename'),
-    dataIndex: 'apsScheduleName',
-    key: 'apsScheduleName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleItem.apsschedulecode'),
-    dataIndex: 'apsScheduleCode',
-    key: 'apsScheduleCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleItem.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleItem.workordercode'),
-    dataIndex: 'workOrderCode',
-    key: 'workOrderCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleItem.productcode'),
-    dataIndex: 'productCode',
-    key: 'productCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleItem.productname'),
-    dataIndex: 'productName',
-    key: 'productName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleItem.workcentercode'),
-    dataIndex: 'workCenterCode',
-    key: 'workCenterCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleItem.workcentername'),
-    dataIndex: 'workCenterName',
-    key: 'workCenterName',
-    ellipsis: true,
-  },
-])
 
-/** 展开行预览：apsScheduleChangeLog 列 */
-const apsScheduleChangeLogExpandColumns = computed(() => [
-  {
-    title: t('entity.apsScheduleChangeLog.apsschedulename'),
-    dataIndex: 'apsScheduleName',
-    key: 'apsScheduleName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.changetype'),
-    dataIndex: 'changeType',
-    key: 'changeType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.changeby'),
-    dataIndex: 'changeBy',
-    key: 'changeBy',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.changetime'),
-    dataIndex: 'changeTime',
-    key: 'changeTime',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.apsScheduleChangeLog.schedule'),
-    dataIndex: 'schedule',
-    key: 'schedule',
-    ellipsis: true,
-  },
-])
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
 
-/** 读取主表行上的 apsScheduleItem 子表缓存 */
-function getApsScheduleItemRows(record: ApsSchedule): ApsScheduleItem[] {
-  return (record as any)?.items ?? []
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: ApsSchedule | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getApsScheduleId(record) : ''
 }
 
-/** 主表行是否已加载 apsScheduleItem 子表 */
-function hasApsScheduleItemRows(record: ApsSchedule): boolean {
-  return getApsScheduleItemRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as ApsSchedule
+  const key = getApsScheduleId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
-/** 读取主表行上的 apsScheduleChangeLog 子表缓存 */
-function getApsScheduleChangeLogRows(record: ApsSchedule): ApsScheduleChangeLog[] {
-  return (record as any)?.changeLogs ?? []
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
 }
-
-/** 主表行是否已加载 apsScheduleChangeLog 子表 */
-function hasApsScheduleChangeLogRows(record: ApsSchedule): boolean {
-  return getApsScheduleChangeLogRows(record).length > 0
-}
-
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadApsScheduleDetail(record: ApsSchedule): Promise<ApsSchedule | null> {
@@ -753,81 +730,6 @@ async function loadApsScheduleDetail(record: ApsSchedule): Promise<ApsSchedule |
     return null
   }
 }
-/** 懒加载 apsScheduleItem 子表（ApsScheduleItemQuery + apsScheduleItemApi，与主表 ApsScheduleQuery 分离） */
-async function loadApsScheduleItemForApsSchedule(record: ApsSchedule): Promise<ApsScheduleItem[]> {
-  const masterId = getApsScheduleId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ApsScheduleItemQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      apsScheduleId: masterId,
-    }
-    const result = await apsScheduleItemApi.getApsScheduleItemList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getApsScheduleId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, items: rows } as ApsSchedule
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 懒加载 apsScheduleChangeLog 子表（ApsScheduleChangeLogQuery + apsScheduleChangeLogApi，与主表 ApsScheduleQuery 分离） */
-async function loadApsScheduleChangeLogForApsSchedule(record: ApsSchedule): Promise<ApsScheduleChangeLog[]> {
-  const masterId = getApsScheduleId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ApsScheduleChangeLogQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      apsScheduleId: masterId,
-    }
-    const result = await apsScheduleChangeLogApi.getApsScheduleChangeLogList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getApsScheduleId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, changeLogs: rows } as ApsSchedule
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureApsScheduleChildrenLoaded(record: ApsSchedule) {
-  if (!hasApsScheduleItemRows(record)) {
-    await loadApsScheduleItemForApsSchedule(record)
-  }
-  if (!hasApsScheduleChangeLogRows(record)) {
-    await loadApsScheduleChangeLogForApsSchedule(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: ApsSchedule) {
-  const key = getApsScheduleId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureApsScheduleChildrenLoaded(record)
-  expandedRowKeys.value = [key]
-}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -842,7 +744,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'apsScheduleId') ?? ''
   },
   {
-    title: t('entity.apsSchedule.plantcode'),
+    title: t('entity.apsschedule.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -851,7 +753,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.apsSchedule.schedulecode'),
+    title: t('entity.apsschedule.schedulecode'),
     dataIndex: 'scheduleCode',
     key: 'scheduleCode',
     width: 120,
@@ -860,7 +762,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'scheduleCode') ?? ''
   },
   {
-    title: t('entity.apsSchedule.schedulename'),
+    title: t('entity.apsschedule.schedulename'),
     dataIndex: 'scheduleName',
     key: 'scheduleName',
     width: 120,
@@ -869,7 +771,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'scheduleName') ?? ''
   },
   {
-    title: t('entity.apsSchedule.scheduletype'),
+    title: t('entity.apsschedule.scheduletype'),
     dataIndex: 'scheduleType',
     key: 'scheduleType',
     width: 120,
@@ -878,7 +780,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'scheduleType') ?? ''
   },
   {
-    title: t('entity.apsSchedule.plandate'),
+    title: t('entity.apsschedule.plandate'),
     dataIndex: 'planDate',
     key: 'planDate',
     width: 120,
@@ -887,7 +789,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'planDate') ?? ''
   },
   {
-    title: t('entity.apsSchedule.planstarttime'),
+    title: t('entity.apsschedule.planstarttime'),
     dataIndex: 'planStartTime',
     key: 'planStartTime',
     width: 120,
@@ -896,7 +798,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'planStartTime') ?? ''
   },
   {
-    title: t('entity.apsSchedule.planendtime'),
+    title: t('entity.apsschedule.planendtime'),
     dataIndex: 'planEndTime',
     key: 'planEndTime',
     width: 120,
@@ -905,7 +807,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'planEndTime') ?? ''
   },
   {
-    title: t('entity.apsSchedule.plancycle'),
+    title: t('entity.apsschedule.plancycle'),
     dataIndex: 'planCycle',
     key: 'planCycle',
     width: 120,
@@ -914,7 +816,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'planCycle') ?? ''
   },
   {
-    title: t('entity.apsSchedule.workshopcode'),
+    title: t('entity.apsschedule.workshopcode'),
     dataIndex: 'workshopCode',
     key: 'workshopCode',
     width: 120,
@@ -923,7 +825,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'workshopCode') ?? ''
   },
   {
-    title: t('entity.apsSchedule.workshopname'),
+    title: t('entity.apsschedule.workshopname'),
     dataIndex: 'workshopName',
     key: 'workshopName',
     width: 120,
@@ -932,7 +834,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'workshopName') ?? ''
   },
   {
-    title: t('entity.apsSchedule.productionlinecode'),
+    title: t('entity.apsschedule.productionlinecode'),
     dataIndex: 'productionLineCode',
     key: 'productionLineCode',
     width: 120,
@@ -941,7 +843,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'productionLineCode') ?? ''
   },
   {
-    title: t('entity.apsSchedule.productionlinename'),
+    title: t('entity.apsschedule.productionlinename'),
     dataIndex: 'productionLineName',
     key: 'productionLineName',
     width: 120,
@@ -950,7 +852,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'productionLineName') ?? ''
   },
   {
-    title: t('entity.apsSchedule.schedulestrategy'),
+    title: t('entity.apsschedule.schedulestrategy'),
     dataIndex: 'scheduleStrategy',
     key: 'scheduleStrategy',
     width: 120,
@@ -959,7 +861,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'scheduleStrategy') ?? ''
   },
   {
-    title: t('entity.apsSchedule.schedulealgorithm'),
+    title: t('entity.apsschedule.schedulealgorithm'),
     dataIndex: 'scheduleAlgorithm',
     key: 'scheduleAlgorithm',
     width: 120,
@@ -968,7 +870,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'scheduleAlgorithm') ?? ''
   },
   {
-    title: t('entity.apsSchedule.optimizationobjective'),
+    title: t('entity.apsschedule.optimizationobjective'),
     dataIndex: 'optimizationObjective',
     key: 'optimizationObjective',
     width: 120,
@@ -977,7 +879,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'optimizationObjective') ?? ''
   },
   {
-    title: t('entity.apsSchedule.schedulestatus'),
+    title: t('entity.apsschedule.schedulestatus'),
     dataIndex: 'scheduleStatus',
     key: 'scheduleStatus',
     width: 120,
@@ -986,7 +888,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'scheduleStatus') ?? ''
   },
   {
-    title: t('entity.apsSchedule.plannerid'),
+    title: t('entity.apsschedule.plannerid'),
     dataIndex: 'plannerId',
     key: 'plannerId',
     width: 120,
@@ -995,7 +897,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'plannerId') ?? ''
   },
   {
-    title: t('entity.apsSchedule.plannername'),
+    title: t('entity.apsschedule.plannername'),
     dataIndex: 'plannerName',
     key: 'plannerName',
     width: 120,
@@ -1004,7 +906,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'plannerName') ?? ''
   },
   {
-    title: t('entity.apsSchedule.publishtime'),
+    title: t('entity.apsschedule.publishtime'),
     dataIndex: 'publishTime',
     key: 'publishTime',
     width: 120,
@@ -1013,7 +915,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'publishTime') ?? ''
   },
   {
-    title: t('entity.apsSchedule.publishuserid'),
+    title: t('entity.apsschedule.publishuserid'),
     dataIndex: 'publishUserId',
     key: 'publishUserId',
     width: 120,
@@ -1022,7 +924,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'publishUserId') ?? ''
   },
   {
-    title: t('entity.apsSchedule.publishusername'),
+    title: t('entity.apsschedule.publishusername'),
     dataIndex: 'publishUserName',
     key: 'publishUserName',
     width: 120,
@@ -1031,7 +933,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsScheduleField(record, 'publishUserName') ?? ''
   },
   {
-    title: t('entity.apsSchedule.scheduledescription'),
+    title: t('entity.apsschedule.scheduledescription'),
     dataIndex: 'scheduleDescription',
     key: 'scheduleDescription',
     width: 120,
@@ -1070,6 +972,7 @@ const getApsScheduleId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getApsScheduleField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1077,51 +980,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: ApsSchedule, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getApsScheduleId(selectedRow.value) === getApsScheduleId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: ApsSchedule[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: ApsSchedule) => ({
-  onClick: () => {
-    const key = getApsScheduleId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getApsScheduleId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: ApsScheduleQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getApsScheduleList(params)
+    const res = await getApsScheduleList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1139,7 +1023,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1175,22 +1059,23 @@ function handleReset() {
   scheduleDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.apsSchedule._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.apsschedule._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: ApsSchedule) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.apsSchedule._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.apsschedule._self') })
   formLoading.value = true
   try {
     const detail = await loadApsScheduleDetail(record)
@@ -1206,7 +1091,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.apsSchedule._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.apsschedule._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1224,12 +1109,17 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateApsSchedule(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.apsSchedule._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.apsschedule._self') }))
     } else {
       await createApsSchedule(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.apsSchedule._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.apsschedule._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  apsScheduleItemPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1239,6 +1129,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1270,16 +1162,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: ApsScheduleQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportApsSchedule(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportApsSchedule(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1298,10 +1185,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.apsSchedule._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.apsschedule._self') }))
   } catch (error: any) {
     logger.error('[ApsSchedule] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.apsSchedule._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.apsschedule._self') }))
   } finally {
     loading.value = false
   }
@@ -1310,12 +1197,16 @@ async function handleExport() {
 async function handleDeleteOne(record: ApsSchedule) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.apsSchedule._self'), name: t('common.tip.this.target', { target: t('entity.apsSchedule._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.apsschedule._self'), name: t('common.tip.this.target', { target: t('entity.apsschedule._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteApsScheduleById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.apsSchedule._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.apsschedule._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1323,18 +1214,22 @@ async function handleDeleteOne(record: ApsSchedule) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.apsSchedule._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.apsschedule._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.apsSchedule._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.apsschedule._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteApsScheduleBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.apsSchedule._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.apsschedule._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1347,7 +1242,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1381,7 +1276,7 @@ function handleAdvancedQueryReset() {
   scheduleDescription: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -1410,24 +1305,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-manufacturing-scheduling-aps-schedule {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

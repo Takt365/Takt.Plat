@@ -25,9 +25,10 @@ namespace Takt.Domain.Entities.Accounting.Controlling;
 public class TaktCostElementChangeLog : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 成本要素 ID
+    /// 成本要素 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [SugarColumn(ColumnName = "cost_element_id", ColumnDescription = "成本要素ID", ColumnDataType = "bigint", IsNullable = false)]
+    [JsonConverter(typeof(ValueToStringConverter))]
     public long CostElementId { get; set; }
     /// <summary>
     /// 成本要素编码（冗余）
@@ -54,4 +55,9 @@ public class TaktCostElementChangeLog : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "change_reason", ColumnDescription = "变更原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? ChangeReason { get; set; }
+    /// <summary>
+    /// 成本要素主表
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(CostElementId))]
+    public TaktCostElement? CostElement { get; set; }
 }

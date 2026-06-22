@@ -11,10 +11,12 @@
 // ========================================
 
 import request from '@/api/request';
+import type { TaktPagedResult } from '@/types/common';
 import type {
   DatabaseInfo,
   DatabaseTableColumnInfo,
-  DatabaseTableInfo
+  DatabaseTableInfo,
+  DatabaseTableInfoQuery
 } from '@/types/code/database/database-info';
 
 /**
@@ -50,6 +52,19 @@ export function getDatabaseTableInfoList(tenantCode: string): Promise<DatabaseTa
     params: {
       tenantCode
     },
+  });
+}
+
+/**
+ * 分页获取当前登录租户业务库下用户表摘要
+ * @param {DatabaseTableInfoQuery} queryDto 分页与关键字查询
+ * @returns {Promise<TaktPagedResult<DatabaseTableInfo>>} 分页结果
+ */
+export function getDatabaseTableInfoPageList(queryDto: DatabaseTableInfoQuery): Promise<TaktPagedResult<DatabaseTableInfo>> {
+  return request<TaktPagedResult<DatabaseTableInfo>>({
+    url: `${DATABASE_INFO_API_BASE}/table-list`,
+    method: 'get',
+    params: queryDto,
   });
 }
 

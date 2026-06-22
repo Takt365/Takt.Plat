@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/bill-of-material/components -->
 <!-- 文件名称：bill-of-material-form.vue -->
-<!-- 功能描述：Takt物料清单实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt物料清单实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form bill-of-material-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="bill-of-material-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,98 +63,109 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.plantcode')"
+                :label="t('entity.billofmaterial.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.plantcode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.billOfMaterialId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.bomcode')"
+                :label="t('entity.billofmaterial.bomcode')"
                 name="bomCode"
               >
                 <a-input
                   v-model:value="formState.bomCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomcode') })"
+                  show-count
+                  :maxlength="50"
                   allow-clear
+                  :disabled="!!formData?.billOfMaterialId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.bomname')"
+                :label="t('entity.billofmaterial.bomname')"
                 name="bomName"
               >
                 <a-input
                   v-model:value="formState.bomName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomname') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.parentmaterialid')"
+                :label="t('entity.billofmaterial.parentmaterialid')"
                 name="parentMaterialId"
               >
                 <a-input
                   v-model:value="formState.parentMaterialId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialid') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialid') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.parentmaterialcode')"
+                :label="t('entity.billofmaterial.parentmaterialcode')"
                 name="parentMaterialCode"
               >
                 <a-input
                   v-model:value="formState.parentMaterialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialcode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.billOfMaterialId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.parentmaterialname')"
+                :label="t('entity.billofmaterial.parentmaterialname')"
                 name="parentMaterialName"
               >
                 <a-input
                   v-model:value="formState.parentMaterialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialname') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialname') })"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.bomversion')"
+                :label="t('entity.billofmaterial.bomversion')"
                 name="bomVersion"
               >
                 <a-input
                   v-model:value="formState.bomVersion"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomversion') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomversion') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -169,133 +182,127 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.bomtype')"
+                :label="t('entity.billofmaterial.bomtype')"
                 name="bomType"
               >
                 <a-input-number
                   v-model:value="formState.bomType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomtype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomtype') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.alternativebomnumber')"
+                :label="t('entity.billofmaterial.alternativebomnumber')"
                 name="alternativeBomNumber"
               >
                 <a-input
                   v-model:value="formState.alternativeBomNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.alternativebomnumber') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.alternativebomnumber') })"
+                  show-count
+                  :maxlength="10"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.effectivedate')"
+                :label="t('entity.billofmaterial.effectivedate')"
                 name="effectiveDate"
               >
                 <a-date-picker
                   v-model:value="formState.effectiveDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.effectivedate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.effectivedate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.expirydate')"
+                :label="t('entity.billofmaterial.expirydate')"
                 name="expiryDate"
               >
                 <a-date-picker
                   v-model:value="formState.expiryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.expirydate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.expirydate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.parentmaterialunit')"
+                :label="t('entity.billofmaterial.parentmaterialunit')"
                 name="parentMaterialUnit"
               >
                 <a-input
                   v-model:value="formState.parentMaterialUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialunit') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialunit') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.parentmaterialquantity')"
+                :label="t('entity.billofmaterial.parentmaterialquantity')"
                 name="parentMaterialQuantity"
               >
                 <a-input-number
                   v-model:value="formState.parentMaterialQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialquantity') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialquantity') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.isenabled')"
+                :label="t('entity.billofmaterial.isenabled')"
                 name="isEnabled"
               >
                 <a-input-number
                   v-model:value="formState.isEnabled"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.isenabled') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.isenabled') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billOfMaterial.bomstatus')"
+                :label="t('entity.billofmaterial.bomstatus')"
                 name="bomStatus"
               >
                 <a-input-number
                   v-model:value="formState.bomStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomstatus') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomstatus') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.billOfMaterial.bomdescription')"
+                :label="t('entity.billofmaterial.bomdescription')"
                 name="bomDescription"
               >
                 <a-textarea
                   v-model:value="formState.bomDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.billOfMaterial.bomdescription') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.billofmaterial.bomdescription') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.billOfMaterial.sortorder')"
-                name="sortOrder"
+                :label="t('entity.billofmaterial.extfield')"
+                name="ExtField"
               >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.sortorder') })"
-                  size="small"
-                  style="width: 100%"
+                <a-textarea
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.billofmaterial.extfield') })"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -309,19 +316,6 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
-              >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -330,239 +324,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：billOfMaterialItem -->
-      <a-tab-pane
-        key="child-items"
-        :tab="t('entity.billOfMaterialItem._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddBillOfMaterialItemRow">
-            {{ t('common.page.button.create') }}{{ t('entity.billOfMaterialItem._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="billOfMaterialItemFormColumns"
-          :data-source="childBillOfMaterialItemRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'bomCode'">
-              <a-input
-                v-model:value="record.bomCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.bomcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'materialId'">
-              <a-input
-                v-model:value="record.materialId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.materialid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'materialCode'">
-              <a-input
-                v-model:value="record.materialCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.materialcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'usageQuantity'">
-              <a-input-number
-                v-model:value="record.usageQuantity"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.usagequantity') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'materialUnit'">
-              <a-input
-                v-model:value="record.materialUnit"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.materialunit') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'scrapRate'">
-              <a-input-number
-                v-model:value="record.scrapRate"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.scraprate') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'actualUsageQuantity'">
-              <a-input-number
-                v-model:value="record.actualUsageQuantity"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialItem.actualusagequantity') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveBillOfMaterialItemRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
-      <!-- 子表：billOfMaterialChangeLog -->
-      <a-tab-pane
-        key="child-changeLogs"
-        :tab="t('entity.billOfMaterialChangeLog._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddBillOfMaterialChangeLogRow">
-            {{ t('common.page.button.create') }}{{ t('entity.billOfMaterialChangeLog._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="billOfMaterialChangeLogFormColumns"
-          :data-source="childBillOfMaterialChangeLogRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'bomCode'">
-              <a-input
-                v-model:value="record.bomCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialChangeLog.bomcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeFields'">
-              <a-input
-                v-model:value="record.changeFields"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialChangeLog.changefields') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeTime'">
-              <a-input
-                v-model:value="record.changeTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialChangeLog.changetime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeBy'">
-              <a-input
-                v-model:value="record.changeBy"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialChangeLog.changeby') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'changeReason'">
-              <a-input
-                v-model:value="record.changeReason"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billOfMaterialChangeLog.changereason') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'extFieldJson'">
-              <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveBillOfMaterialChangeLogRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 items -->
+    <TaktEditableTable
+      ref="billOfMaterialItemTableRef"
+      v-model="childBillOfMaterialItemRows"
+      :columns="billOfMaterialItemFormColumns"
+      :title="t('entity.billofmaterialitem._self')"
+      :add-button-entity="t('entity.billofmaterialitem._self')"
+      id-field="billOfMaterialItemId"
+      :default-row="createDefaultBillOfMaterialItemRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -574,7 +358,7 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { BillOfMaterialCreate, BillOfMaterialItemCreate, BillOfMaterialItem, BillOfMaterialChangeLogCreate, BillOfMaterialChangeLog } from '@/types/logistics/manufacturing/bom/bill-of-material'
+import type { BillOfMaterialCreate } from '@/types/logistics/manufacturing/bom/bill-of-material'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -607,222 +391,99 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","bomCode","bomName","parentMaterialId","parentMaterialCode","parentMaterialName","bomVersion","bomType","alternativeBomNumber","effectiveDate","expiryDate","parentMaterialUnit","parentMaterialQuantity","isEnabled","bomStatus","bomDescription","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","bomCode","bomName","parentMaterialId","parentMaterialCode","parentMaterialName","bomVersion","bomType","alternativeBomNumber","effectiveDate","expiryDate","parentMaterialUnit","parentMaterialQuantity","isEnabled","bomStatus","bomDescription","ExtField","remark"]
 
-/** billOfMaterialItem 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childBillOfMaterialItemRows = ref<Record<string, unknown>[]>([])
-/** billOfMaterialChangeLog 子表行（表单 Tab 内嵌） */
-const childBillOfMaterialChangeLogRows = ref<Record<string, unknown>[]>([])
+const billOfMaterialItemTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 billOfMaterialItem 表单列定义 */
-const billOfMaterialItemFormColumns = computed(() => [
+/** 子表 billOfMaterialItem 可编辑列 */
+const billOfMaterialItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.billOfMaterialItem.bomcode'),
-    dataIndex: 'bomCode',
     key: 'bomCode',
+    title: t('entity.billofmaterialitem.bomcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.billOfMaterialItem.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.billofmaterialitem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.billOfMaterialItem.materialid'),
-    dataIndex: 'materialId',
     key: 'materialId',
+    title: t('entity.billofmaterialitem.materialid'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.billOfMaterialItem.materialcode'),
-    dataIndex: 'materialCode',
     key: 'materialCode',
+    title: t('entity.billofmaterialitem.materialcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.billOfMaterialItem.usagequantity'),
-    dataIndex: 'usageQuantity',
     key: 'usageQuantity',
+    title: t('entity.billofmaterialitem.usagequantity'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.billOfMaterialItem.materialunit'),
-    dataIndex: 'materialUnit',
     key: 'materialUnit',
+    title: t('entity.billofmaterialitem.materialunit'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.billOfMaterialItem.scraprate'),
-    dataIndex: 'scrapRate',
     key: 'scrapRate',
+    title: t('entity.billofmaterialitem.scraprate'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.billOfMaterialItem.actualusagequantity'),
-    dataIndex: 'actualUsageQuantity',
     key: 'actualUsageQuantity',
+    title: t('entity.billofmaterialitem.actualusagequantity'),
+    editor: 'inputNumber',
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
-  },
-])
-
-/** 子表 billOfMaterialChangeLog 表单列定义 */
-const billOfMaterialChangeLogFormColumns = computed(() => [
-  {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.bomcode'),
-    dataIndex: 'bomCode',
-    key: 'bomCode',
-    width: 140,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.changefields'),
-    dataIndex: 'changeFields',
-    key: 'changeFields',
-    width: 140,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.changetime'),
-    dataIndex: 'changeTime',
-    key: 'changeTime',
-    width: 140,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.changeby'),
-    dataIndex: 'changeBy',
-    key: 'changeBy',
-    width: 140,
-  },
-  {
-    title: t('entity.billOfMaterialChangeLog.changereason'),
-    dataIndex: 'changeReason',
-    key: 'changeReason',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
-    key: 'remark',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<BillOfMaterialCreate & { billOfMaterialId?: string }> | null | undefined) {
-  childBillOfMaterialItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.billOfMaterialItemId ?? `new-${index}`,
-  }))
-  childBillOfMaterialChangeLogRows.value = ((val as any)?.changeLogs ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.billOfMaterialChangeLogId ?? `new-${index}`,
-  }))
+  childBillOfMaterialItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 billOfMaterialItem 行 */
-function handleAddBillOfMaterialItemRow() {
-  childBillOfMaterialItemRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      bomCode: '',
-      lineNumber: 0,
-      materialId: '',
-      materialCode: '',
-      usageQuantity: 0,
-      materialUnit: '',
-      scrapRate: 0,
-      actualUsageQuantity: 0,
-  })
-}
-
-/** 表单 Tab 内删除 billOfMaterialItem 行 */
-function handleRemoveBillOfMaterialItemRow(index: number) {
-  childBillOfMaterialItemRows.value.splice(index, 1)
-}
-
-/** 表单 Tab 内新增 billOfMaterialChangeLog 行 */
-function handleAddBillOfMaterialChangeLogRow() {
-  childBillOfMaterialChangeLogRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      bomCode: '',
-      changeFields: '',
-      changeTime: '',
-      changeBy: '',
-      changeReason: '',
-      extFieldJson: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 billOfMaterialChangeLog 行 */
-function handleRemoveBillOfMaterialChangeLogRow(index: number) {
-  childBillOfMaterialChangeLogRows.value.splice(index, 1)
+function createDefaultBillOfMaterialItemRow(): Record<string, unknown> {
+  return {
+    bomCode: '',
+    lineNumber: (childBillOfMaterialItemRows.value.length + 1) * 10,
+    materialId: '',
+    materialCode: '',
+    usageQuantity: 0,
+    materialUnit: '',
+    scrapRate: 0,
+    actualUsageQuantity: 0,
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.billOfMaterialId ?? ''
   return {
     ...formState,
-    items: childBillOfMaterialItemRows.value.map(({ __rowKey, ...rest }) => rest),
-    changeLogs: childBillOfMaterialChangeLogRows.value.map(({ __rowKey, ...rest }) => rest),
+    items: billOfMaterialItemTableRef.value?.getRows?.() ?? childBillOfMaterialItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      billOfMaterialId: masterId,
+    })),
   }
 }
 
@@ -834,7 +495,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -842,20 +503,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 billOfMaterialId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.billOfMaterialId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).items
-    delete (next as any).changeLogs
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -874,128 +550,169 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.plantcode') }),
       trigger: 'blur'
     }
   ],
   bomCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomcode') }),
       trigger: 'blur'
     }
   ],
   bomName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomname') }),
       trigger: 'blur'
     }
   ],
   parentMaterialId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialid') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialid') }),
       trigger: 'blur'
     }
   ],
   parentMaterialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialcode') }),
       trigger: 'blur'
     }
   ],
   parentMaterialName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialname') }),
       trigger: 'blur'
     }
   ],
   bomVersion: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.bomversion') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.bomversion') }),
       trigger: 'blur'
     }
   ],
-  bomType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.bomtype') }),
-      trigger: 'change'
-    }
-  ],
+  bomType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.bomtype') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.bomtype') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   alternativeBomNumber: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.alternativebomnumber') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.alternativebomnumber') }),
       trigger: 'blur'
     }
   ],
   effectiveDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.effectivedate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.effectivedate') }),
       trigger: 'change'
     }
   ],
   parentMaterialUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billOfMaterial.parentmaterialunit') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterial.parentmaterialunit') }),
       trigger: 'blur'
     }
   ],
-  parentMaterialQuantity: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.parentmaterialquantity') }),
-      trigger: 'change'
-    }
-  ],
-  isEnabled: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.isenabled') }),
-      trigger: 'change'
-    }
-  ],
-  bomStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.bomstatus') }),
-      trigger: 'change'
-    }
-  ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.billOfMaterial.sortorder') }),
-      trigger: 'change'
-    }
-  ],
+  parentMaterialQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.parentmaterialquantity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.parentmaterialquantity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isEnabled: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.isenabled') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.isenabled') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  bomStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.bomstatus') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterial.bomstatus') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await billOfMaterialItemTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('bomType' in payload) {
+    const rawbomType = payload.bomType
+    payload.bomType = typeof rawbomType === 'number' ? rawbomType : Number(rawbomType)
+  }
+  if ('parentMaterialQuantity' in payload) {
+    const rawparentMaterialQuantity = payload.parentMaterialQuantity
+    payload.parentMaterialQuantity = typeof rawparentMaterialQuantity === 'number' ? rawparentMaterialQuantity : Number(rawparentMaterialQuantity)
+  }
+  if ('isEnabled' in payload) {
+    const rawisEnabled = payload.isEnabled
+    payload.isEnabled = typeof rawisEnabled === 'number' ? rawisEnabled : Number(rawisEnabled)
+  }
+  if ('bomStatus' in payload) {
+    const rawbomStatus = payload.bomStatus
+    payload.bomStatus = typeof rawbomStatus === 'number' ? rawbomStatus : Number(rawbomStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.billOfMaterialId)
   childBillOfMaterialItemRows.value = []
-  childBillOfMaterialChangeLogRows.value = []
+  billOfMaterialItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

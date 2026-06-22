@@ -72,8 +72,25 @@ export function useTaktLoginCaptcha(
   /** 防止 can-submit 重复触发自动提交 */
   const autoConfirming = ref(false);
   let onVerifiedHandler: (() => void | Promise<void>) | undefined = options?.onVerified;
+  let onCaptchaSkippedHandler: (() => void | Promise<void>) | undefined = options?.onCaptchaSkipped;
 
   const isSlider = computed(() => isTaktCaptchaSliderType(challenge.value?.captchaType));
+
+  /**
+   * 验证码未启用时静默跳过并执行业务回调
+   * @param error 拉取挑战异常
+   */
+  async function handleCaptchaDisabledAsync(error: unknown): Promise<void> {
+    if (!isTaktCaptchaDisabledError(error)) {
+      throw error;
+    }
+    modalOpen.value = false;
+    canSubmit.value = false;
+    autoConfirming.value = false;
+    if (onCaptchaSkippedHandler) {
+      await onCaptchaSkippedHandler();
+    }
+  }
 
   /**
    * 加载验证码挑战
@@ -83,6 +100,8 @@ export function useTaktLoginCaptcha(
     canSubmit.value = false;
     try {
       challenge.value = await getSessionCaptcha();
+    } catch (error) {
+      await handleCaptchaDisabledAsync(error);
     } finally {
       loading.value = false;
     }
@@ -94,6 +113,14 @@ export function useTaktLoginCaptcha(
    */
   function registerOnVerified(handler: () => void | Promise<void>): void {
     onVerifiedHandler = handler;
+  }
+
+  /**
+   * 注册验证码未启用时的跳过回调（可在 composable 初始化之后绑定）
+   * @param handler 跳过验证码后执行的逻辑
+   */
+  function registerOnCaptchaSkipped(handler: () => void | Promise<void>): void {
+    onCaptchaSkippedHandler = handler;
   }
 
   /**
@@ -174,6 +201,7 @@ export function useTaktLoginCaptcha(
     loadChallengeAsync,
     handleCanSubmitChange,
     registerOnVerified,
+    registerOnCaptchaSkipped,
     confirmCaptcha,
     cancelCaptcha,
   };

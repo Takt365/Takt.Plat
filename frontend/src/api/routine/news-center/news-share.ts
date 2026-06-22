@@ -40,9 +40,7 @@ export function getNewsShareList(queryDto: any): Promise<TaktPagedResult<NewsSha
   return request<TaktPagedResult<NewsShare>>({
     url: `${NEWS_SHARE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportNewsShare(
     url: `${NEWS_SHARE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

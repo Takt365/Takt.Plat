@@ -102,7 +102,7 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
         EnsureThreeLayerContext();
         var list = await _salesPriceItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.SalesPriceCode,
+            x => x.SalesPriceCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -408,7 +408,7 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
                 || SqlFunc.ToString(x.SalesPrice).Contains(keywords)
                 || SqlFunc.ToString(x.MinOrderQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.MaxOrderQuantity).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -454,9 +454,9 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
             exp = exp.And(x => x.MaxOrderQuantity == queryDto.MaxOrderQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

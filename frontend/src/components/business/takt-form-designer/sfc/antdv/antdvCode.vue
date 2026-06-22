@@ -1,6 +1,6 @@
 <template>
   <div class="antdv-code">
-    <div class="antdv-code__preview">
+    <div class="antdv-code__preview takt-code-preview-panel">
       <pre class="antdv-code__pre"><code
         ref="codeRef"
         class="hljs language-xml"
@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
 import hljs from 'highlight.js'
-import 'highlight.js/styles/github.min.css'
 
 const props = withDefaults(
   defineProps<{
@@ -69,18 +68,17 @@ function onDownload() {
     flex: 1;
     min-height: 200px;
     overflow: auto;
-    border: 1px solid #d9d9d9;
-    border-radius: 6px;
-    background: #fafafa;
+    border: 1px solid var(--ant-color-border);
+    border-radius: var(--ant-border-radius);
   }
   .antdv-code__pre {
     margin: 0;
-    padding: 12px;
+    padding: 0;
     font-size: 12px;
     line-height: 1.5;
-    code {
-      font-family: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', monospace;
-    }
+  }
+  .antdv-code__pre code {
+    font-family: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', monospace;
   }
   .antdv-code__download {
     margin-top: 8px;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/controlling
 // 文件名称：profit-center.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -43,9 +43,7 @@ export function getProfitCenterList(queryDto: any): Promise<TaktPagedResult<Prof
   return request<TaktPagedResult<ProfitCenter>>({
     url: `${PROFIT_CENTER_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -132,7 +130,7 @@ export function deleteProfitCenterBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新利润中心状态
- * @param {ProfitCenterStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {ProfitCenterStatus} dto 状态 DTO
  * @returns {Promise<ProfitCenter>} 利润中心DTO
  */
 export function updateProfitCenterStatus(dto: ProfitCenterStatus): Promise<ProfitCenter> {
@@ -232,7 +230,7 @@ export function exportProfitCenter(
     url: `${PROFIT_CENTER_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

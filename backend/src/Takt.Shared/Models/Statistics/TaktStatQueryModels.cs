@@ -28,7 +28,7 @@ public sealed class TaktStatQueryBuildRequest
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否 SELECT DISTINCT（sys_yes_no，1=是）
+    /// 是否 SELECT DISTINCT（sys_yes_no_type，1=是）
     /// </summary>
     public int DistinctRows { get; set; } = 0;
 
@@ -63,10 +63,10 @@ public sealed class TaktStatQueryBuildRequest
     public IReadOnlyList<TaktStatQueryOrderByItem> OrderBys { get; set; } = Array.Empty<TaktStatQueryOrderByItem>();
 
     /// <summary>
-    /// 运行时筛选值（键为 Selection 的 SortOrder）
+    /// 运行时筛选值（键为 SelectionId；预览无 Id 时为 -SortOrder）
     /// </summary>
-    public IReadOnlyDictionary<int, TaktStatQuerySelectionValue> RuntimeSelectionValues { get; set; }
-        = new Dictionary<int, TaktStatQuerySelectionValue>();
+    public IReadOnlyDictionary<long, TaktStatQuerySelectionValue> RuntimeSelectionValues { get; set; }
+        = new Dictionary<long, TaktStatQuerySelectionValue>();
 }
 
 /// <summary>
@@ -85,7 +85,7 @@ public sealed class TaktStatQuerySourceItem
     public string TableName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否主表（sys_yes_no，1=是）
+    /// 是否主表（sys_yes_no_type，1=是）
     /// </summary>
     public int IsPrimary { get; set; } = 0;
 
@@ -162,7 +162,7 @@ public sealed class TaktStatQueryFieldItem
     public int AggregateFunc { get; set; } = 0;
 
     /// <summary>
-    /// 是否可见（sys_yes_no，1=是）
+    /// 是否可见（sys_yes_no_type，1=是）
     /// </summary>
     public int IsVisible { get; set; } = 1;
 
@@ -178,6 +178,11 @@ public sealed class TaktStatQueryFieldItem
 public sealed class TaktStatQuerySelectionItem
 {
     /// <summary>
+    /// 筛选项主键（持久化行 Id；预览无 Id 时为 0）
+    /// </summary>
+    public long SelectionId { get; set; }
+
+    /// <summary>
     /// 数据源别名
     /// </summary>
     public string SourceAlias { get; set; } = string.Empty;
@@ -188,12 +193,12 @@ public sealed class TaktStatQuerySelectionItem
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 比较符（1=等于…11=不为空）
+    /// 比较符（1=等于，2=不等于…7=模糊 LIKE，8=范围…11=不为空）
     /// </summary>
-    public int FilterOperator { get; set; } = 1;
+    public int FilterOperator { get; set; } = 7;
 
     /// <summary>
-    /// 是否必填（sys_yes_no，1=是）
+    /// 是否必填（sys_yes_no_type，1=是）
     /// </summary>
     public int IsRequired { get; set; } = 0;
 
@@ -217,6 +222,11 @@ public sealed class TaktStatQuerySelectionValue
     /// 区间结束值
     /// </summary>
     public string? ValueTo { get; set; }
+
+    /// <summary>
+    /// 运行时覆盖的比较符（0 或未传则使用筛选项定义 FilterOperator）
+    /// </summary>
+    public int FilterOperator { get; set; }
 }
 
 /// <summary>
@@ -267,27 +277,43 @@ public sealed class TaktStatQueryOrderByItem
 }
 
 /// <summary>
-/// SQL 编译结果
+/// SqlSugar Queryable 编译结果（运行时持有，非手写 SQL 文本）
 /// </summary>
-public sealed class TaktStatQueryBuildResult
+public sealed class TaktStatQueryCompiled
 {
-    /// <summary>
-    /// 可执行的 SELECT 语句（不含分页）
-    /// </summary>
-    public string Sql { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 命名参数
-    /// </summary>
-    public Dictionary<string, object?> Parameters { get; set; } = new(StringComparer.OrdinalIgnoreCase);
-
     /// <summary>
     /// 结果列键（与 SELECT 别名一致）
     /// </summary>
-    public IReadOnlyList<string> OutputKeys { get; set; } = Array.Empty<string>();
+    public IReadOnlyList<string> OutputKeys { get; init; } = Array.Empty<string>();
 
     /// <summary>
     /// 结果列显示名（与 OutputKeys 一一对应）
     /// </summary>
-    public IReadOnlyList<string> OutputLabels { get; set; } = Array.Empty<string>();
+    public IReadOnlyList<string> OutputLabels { get; init; } = Array.Empty<string>();
+}
+
+/// <summary>
+/// SqlSugar Queryable 分页/导出执行结果
+/// </summary>
+public sealed class TaktStatQueryPageResult
+{
+    /// <summary>
+    /// 满足条件的总行数
+    /// </summary>
+    public int Total { get; init; }
+
+    /// <summary>
+    /// 当前页/批次数据行
+    /// </summary>
+    public IReadOnlyList<Dictionary<string, object?>> Rows { get; init; } = Array.Empty<Dictionary<string, object?>>();
+
+    /// <summary>
+    /// 结果列键
+    /// </summary>
+    public IReadOnlyList<string> OutputKeys { get; init; } = Array.Empty<string>();
+
+    /// <summary>
+    /// 结果列显示名
+    /// </summary>
+    public IReadOnlyList<string> OutputLabels { get; init; } = Array.Empty<string>();
 }

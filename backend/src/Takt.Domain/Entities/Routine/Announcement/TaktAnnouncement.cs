@@ -17,7 +17,7 @@ namespace Takt.Domain.Entities.Routine.Announcement;
 
 /// <summary>
 /// 公告通知实体
-/// 用于发布系统公告、通知、新闻等信息
+/// 用于发布系统公告、通知等信息
 /// 支持富文本内容、附件、置顶、定时发布等功能
 /// 需要审批流程：草稿→审批→发布
 /// </summary>
@@ -34,10 +34,10 @@ public class TaktAnnouncement : TaktApprovalEntityBase
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公告类型（1=公告，2=通知，3=新闻，4=紧急通知）
+    /// 公告类型（字典 sys_announcement_category）
     /// </summary>
-    [SugarColumn(ColumnName = "announcement_type", ColumnDescription = "公告类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int AnnouncementType { get; set; } = 1;
+    [SugarColumn(ColumnName = "announcement_type", ColumnDescription = "公告类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
+    public int AnnouncementType { get; set; } = 2;
 
     /// <summary>
     /// 公告内容（富文本 HTML）
@@ -118,7 +118,7 @@ public class TaktAnnouncement : TaktApprovalEntityBase
     public string? TargetUsers { get; set; }
 
     /// <summary>
-    /// 状态（0=草稿，1=已发布，2=已撤回，3=已过期）
+    /// 状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
     /// </summary>
     [SugarColumn(ColumnName = "announcement_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int AnnouncementStatus { get; set; } = 0;

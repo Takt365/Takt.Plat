@@ -41,9 +41,7 @@ export function getConfigurableGroupByList(queryDto: any): Promise<TaktPagedResu
   return request<TaktPagedResult<ConfigurableGroupBy>>({
     url: `${CONFIGURABLE_GROUP_BY_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportConfigurableGroupBy(
     url: `${CONFIGURABLE_GROUP_BY_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

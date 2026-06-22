@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.ConferenceCenter
 // 文件名称：TaktConferenceDtos.cs
-// 创建时间：2026-06-11
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Conference 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConference 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Routine.ConferenceCenter;
 
@@ -23,7 +22,7 @@ namespace Takt.Application.Dtos.Routine.ConferenceCenter;
 // ========================================
 
 /// <summary>
-/// 会议实体（审批单） 继承 TaktApprovalEntityBase；排期、会议室关联；参与人（含签到）、议程/纪要由子实体维护 FlowInstanceId 由业务在发起流程后写入；流程引擎 BusinessType=Conference、BusinessKey=本表 Id
+/// 会议中心主实体 支持内部/外部/视频/混合会议排期、议程及参与人管理
 /// 对应前端 TaktConferenceDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -49,12 +48,12 @@ public class TaktConferenceDto : TaktApprovalDtoBase
     /// <summary>
     /// 会议类型
     /// </summary>
-    public int ConferenceType { get; set; }
+    public int ConferenceType { get; set; } = 0;
 
     /// <summary>
-    /// 会议状态（草稿/已排期/进行中/已结束/已取消）
+    /// 会议状态
     /// </summary>
-    public int ConferenceStatus { get; set; }
+    public int ConferenceStatus { get; set; } = 0;
 
     /// <summary>
     /// 开始时间
@@ -67,18 +66,7 @@ public class TaktConferenceDto : TaktApprovalDtoBase
     public DateTime EndTime { get; set; }
 
     /// <summary>
-    /// 会议室 ID（线下预约，可空表示外部场地或纯线上）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ConferenceRoomId { get; set; }
-
-    /// <summary>
-    /// 会议室名称（冗余，便于列表展示）
-    /// </summary>
-    public string? ConferenceRoomName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 会议地点（外部场地或补充地址，与会议室可并存）
+    /// 会议地点（线下会议室名称或地址）
     /// </summary>
     public string? Location { get; set; } = string.Empty;
 
@@ -86,6 +74,21 @@ public class TaktConferenceDto : TaktApprovalDtoBase
     /// 会议链接（线上会议 URL）
     /// </summary>
     public string? MeetingLink { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议议程
+    /// </summary>
+    public string? Agenda { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议内容（会议纪要正文，富文本 HTML）
+    /// </summary>
+    public string? Content { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议纪要摘要（用于列表展示）
+    /// </summary>
+    public string? Summary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
@@ -125,27 +128,21 @@ public class TaktConferenceDto : TaktApprovalDtoBase
     public int ReminderMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 流程实例 名称（填充字段）
+    /// 会议室 ID
     /// </summary>
-    public string? FlowInstanceName { get; set; }
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ConferenceRoomId { get; set; }
 
     /// <summary>
-    /// 会议室
-    /// （主表：TaktConferenceRoom）
+    /// 会议室名称（冗余快照）
     /// </summary>
-    public TaktConferenceRoomDto? ConferenceRoom { get; set; }
+    public string? ConferenceRoomName { get; set; } = string.Empty;
 
     /// <summary>
     /// 参与人列表（主子表关系）
     /// （子表：TaktConferenceParticipant）
     /// </summary>
     public List<TaktConferenceParticipantDto>? Participants { get; set; }
-
-    /// <summary>
-    /// 议程/纪要列表（主子表关系）
-    /// （子表：TaktConferenceAgenda）
-    /// </summary>
-    public List<TaktConferenceAgendaDto>? AgendaRecords { get; set; }
 
 }
 
@@ -185,7 +182,7 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     public int? ConferenceType { get; set; }
 
     /// <summary>
-    /// 会议状态（草稿/已排期/进行中/已结束/已取消）
+    /// 会议状态
     /// </summary>
     public int? ConferenceStatus { get; set; }
 
@@ -210,18 +207,7 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     public DateTime? EndTimeEnd { get; set; }
 
     /// <summary>
-    /// 会议室 ID（线下预约，可空表示外部场地或纯线上）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ConferenceRoomId { get; set; }
-
-    /// <summary>
-    /// 会议室名称（冗余，便于列表展示）
-    /// </summary>
-    public string? ConferenceRoomName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 会议地点（外部场地或补充地址，与会议室可并存）
+    /// 会议地点（线下会议室名称或地址）
     /// </summary>
     public string? Location { get; set; } = string.Empty;
 
@@ -229,6 +215,21 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     /// 会议链接（线上会议 URL）
     /// </summary>
     public string? MeetingLink { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议议程
+    /// </summary>
+    public string? Agenda { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议内容（会议纪要正文，富文本 HTML）
+    /// </summary>
+    public string? Content { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议纪要摘要（用于列表展示）
+    /// </summary>
+    public string? Summary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
@@ -268,15 +269,20 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     public int? ReminderMinutes { get; set; }
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；BusinessType=Conference、BusinessKey=本表 Id）
+    /// 会议室 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public long? ConferenceRoomId { get; set; }
+
+    /// <summary>
+    /// 会议室名称（冗余快照）
+    /// </summary>
+    public string? ConferenceRoomName { get; set; } = string.Empty;
 
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -311,6 +317,12 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     public DateTime? ApprovedAtEnd { get; set; }
 
     /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -323,7 +335,7 @@ public class TaktConferenceQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -370,12 +382,12 @@ public class TaktConferenceCreateDto
     /// <summary>
     /// 会议类型
     /// </summary>
-    public int ConferenceType { get; set; }
+    public int ConferenceType { get; set; } = 0;
 
     /// <summary>
-    /// 会议状态（草稿/已排期/进行中/已结束/已取消）
+    /// 会议状态
     /// </summary>
-    public int ConferenceStatus { get; set; }
+    public int ConferenceStatus { get; set; } = 0;
 
     /// <summary>
     /// 开始时间
@@ -388,18 +400,7 @@ public class TaktConferenceCreateDto
     public DateTime EndTime { get; set; }
 
     /// <summary>
-    /// 会议室 ID（线下预约，可空表示外部场地或纯线上）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ConferenceRoomId { get; set; }
-
-    /// <summary>
-    /// 会议室名称（冗余，便于列表展示）
-    /// </summary>
-    public string? ConferenceRoomName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 会议地点（外部场地或补充地址，与会议室可并存）
+    /// 会议地点（线下会议室名称或地址）
     /// </summary>
     public string? Location { get; set; } = string.Empty;
 
@@ -407,6 +408,21 @@ public class TaktConferenceCreateDto
     /// 会议链接（线上会议 URL）
     /// </summary>
     public string? MeetingLink { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议议程
+    /// </summary>
+    public string? Agenda { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议内容（会议纪要正文，富文本 HTML）
+    /// </summary>
+    public string? Content { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议纪要摘要（用于列表展示）
+    /// </summary>
+    public string? Summary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
@@ -447,10 +463,15 @@ public class TaktConferenceCreateDto
     public int ReminderMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；BusinessType=Conference、BusinessKey=本表 Id）
+    /// 会议室 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public long? ConferenceRoomId { get; set; }
+
+    /// <summary>
+    /// 会议室名称（冗余快照）
+    /// </summary>
+    public string? ConferenceRoomName { get; set; } = string.Empty;
 
     /// <summary>
     /// 参与人列表（主子表关系）（子表，级联保存）
@@ -458,14 +479,9 @@ public class TaktConferenceCreateDto
     public List<TaktConferenceParticipantCreateDto>? Participants { get; set; }
 
     /// <summary>
-    /// 议程/纪要列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktConferenceAgendaCreateDto>? AgendaRecords { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -512,10 +528,10 @@ public class TaktConferenceStatusDto
     public long ConferenceId { get; set; }
 
     /// <summary>
-    /// 会议状态（草稿/已排期/进行中/已结束/已取消）
+    /// 会议状态
     /// </summary>
-    [Required(ErrorMessage = "会议状态（草稿/已排期/进行中/已结束/已取消）不能为空")]
-    public int ConferenceStatus { get; set; }
+    [Required(ErrorMessage = "会议状态不能为空")]
+    public int ConferenceStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -553,23 +569,12 @@ public class TaktConferenceTemplateDto
     public int? ConferenceType { get; set; }
 
     /// <summary>
-    /// 会议状态（草稿/已排期/进行中/已结束/已取消）
+    /// 会议状态
     /// </summary>
     public int? ConferenceStatus { get; set; }
 
     /// <summary>
-    /// 会议室 ID（线下预约，可空表示外部场地或纯线上）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ConferenceRoomId { get; set; }
-
-    /// <summary>
-    /// 会议室名称（冗余，便于列表展示）
-    /// </summary>
-    public string? ConferenceRoomName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 会议地点（外部场地或补充地址，与会议室可并存）
+    /// 会议地点（线下会议室名称或地址）
     /// </summary>
     public string? Location { get; set; } = string.Empty;
 
@@ -577,6 +582,21 @@ public class TaktConferenceTemplateDto
     /// 会议链接（线上会议 URL）
     /// </summary>
     public string? MeetingLink { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议议程
+    /// </summary>
+    public string? Agenda { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议内容（会议纪要正文，富文本 HTML）
+    /// </summary>
+    public string? Content { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议纪要摘要（用于列表展示）
+    /// </summary>
+    public string? Summary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
@@ -595,15 +615,9 @@ public class TaktConferenceTemplateDto
     public string? OrganizerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 主办部门 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DeptId { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -648,23 +662,12 @@ public class TaktConferenceImportDto
     public int? ConferenceType { get; set; }
 
     /// <summary>
-    /// 会议状态（草稿/已排期/进行中/已结束/已取消）
+    /// 会议状态
     /// </summary>
     public int? ConferenceStatus { get; set; }
 
     /// <summary>
-    /// 会议室 ID（线下预约，可空表示外部场地或纯线上）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ConferenceRoomId { get; set; }
-
-    /// <summary>
-    /// 会议室名称（冗余，便于列表展示）
-    /// </summary>
-    public string? ConferenceRoomName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 会议地点（外部场地或补充地址，与会议室可并存）
+    /// 会议地点（线下会议室名称或地址）
     /// </summary>
     public string? Location { get; set; } = string.Empty;
 
@@ -672,6 +675,21 @@ public class TaktConferenceImportDto
     /// 会议链接（线上会议 URL）
     /// </summary>
     public string? MeetingLink { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议议程
+    /// </summary>
+    public string? Agenda { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议内容（会议纪要正文，富文本 HTML）
+    /// </summary>
+    public string? Content { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议纪要摘要（用于列表展示）
+    /// </summary>
+    public string? Summary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
@@ -690,15 +708,9 @@ public class TaktConferenceImportDto
     public string? OrganizerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 主办部门 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DeptId { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -736,12 +748,12 @@ public class TaktConferenceExportDto
     /// <summary>
     /// 会议类型
     /// </summary>
-    public int ConferenceType { get; set; }
+    public int ConferenceType { get; set; } = 0;
 
     /// <summary>
-    /// 会议状态（草稿/已排期/进行中/已结束/已取消）
+    /// 会议状态
     /// </summary>
-    public int ConferenceStatus { get; set; }
+    public int ConferenceStatus { get; set; } = 0;
 
     /// <summary>
     /// 开始时间
@@ -754,18 +766,7 @@ public class TaktConferenceExportDto
     public DateTime EndTime { get; set; }
 
     /// <summary>
-    /// 会议室 ID（线下预约，可空表示外部场地或纯线上）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ConferenceRoomId { get; set; }
-
-    /// <summary>
-    /// 会议室名称（冗余，便于列表展示）
-    /// </summary>
-    public string? ConferenceRoomName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 会议地点（外部场地或补充地址，与会议室可并存）
+    /// 会议地点（线下会议室名称或地址）
     /// </summary>
     public string? Location { get; set; } = string.Empty;
 
@@ -773,6 +774,21 @@ public class TaktConferenceExportDto
     /// 会议链接（线上会议 URL）
     /// </summary>
     public string? MeetingLink { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议议程
+    /// </summary>
+    public string? Agenda { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议内容（会议纪要正文，富文本 HTML）
+    /// </summary>
+    public string? Content { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会议纪要摘要（用于列表展示）
+    /// </summary>
+    public string? Summary { get; set; } = string.Empty;
 
     /// <summary>
     /// 标签（逗号分隔或 JSON 数组存储）
@@ -812,15 +828,20 @@ public class TaktConferenceExportDto
     public int ReminderMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；BusinessType=Conference、BusinessKey=本表 Id）
+    /// 会议室 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
+    public long? ConferenceRoomId { get; set; }
+
+    /// <summary>
+    /// 会议室名称（冗余快照）
+    /// </summary>
+    public string? ConferenceRoomName { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

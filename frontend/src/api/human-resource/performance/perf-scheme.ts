@@ -42,9 +42,7 @@ export function getPerfSchemeList(queryDto: any): Promise<TaktPagedResult<PerfSc
   return request<TaktPagedResult<PerfScheme>>({
     url: `${PERF_SCHEME_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportPerfScheme(
     url: `${PERF_SCHEME_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

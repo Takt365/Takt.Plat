@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantDtos.cs
-// 创建时间：2026-06-11
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConferenceParticipant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConferenceParticipant 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Routine.ConferenceCenter;
 
@@ -23,7 +22,7 @@ namespace Takt.Application.Dtos.Routine.ConferenceCenter;
 // ========================================
 
 /// <summary>
-/// 会议参与人子实体 合并邀请、角色、出席确认与签到/签退于同一行
+/// 会议参与人子实体
 /// 对应前端 TaktConferenceParticipantDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -37,7 +36,7 @@ public class TaktConferenceParticipantDto : TaktCompanyDtoBase
     public long ConferenceParticipantId { get; set; }
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
@@ -61,12 +60,12 @@ public class TaktConferenceParticipantDto : TaktCompanyDtoBase
     /// <summary>
     /// 参与角色
     /// </summary>
-    public int ParticipantRole { get; set; }
+    public int ParticipantRole { get; set; } = 0;
 
     /// <summary>
-    /// 出席状态（待确认/已接受/已拒绝/已签到/缺席）
+    /// 出席状态
     /// </summary>
-    public int AttendanceStatus { get; set; }
+    public int AttendanceStatus { get; set; } = 0;
 
     /// <summary>
     /// 签到时间
@@ -79,9 +78,9 @@ public class TaktConferenceParticipantDto : TaktCompanyDtoBase
     public DateTime? CheckOutTime { get; set; }
 
     /// <summary>
-    /// 签到方式
+    /// 签到方式（0=手动，1=扫码，2=人脸等）
     /// </summary>
-    public int CheckInMethod { get; set; }
+    public int CheckInMethod { get; set; } = 0;
 
     /// <summary>
     /// 会议（主表）
@@ -112,7 +111,7 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
@@ -134,7 +133,7 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     public int? ParticipantRole { get; set; }
 
     /// <summary>
-    /// 出席状态（待确认/已接受/已拒绝/已签到/缺席）
+    /// 出席状态
     /// </summary>
     public int? AttendanceStatus { get; set; }
 
@@ -159,7 +158,7 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     public DateTime? CheckOutTimeEnd { get; set; }
 
     /// <summary>
-    /// 签到方式
+    /// 签到方式（0=手动，1=扫码，2=人脸等）
     /// </summary>
     public int? CheckInMethod { get; set; }
 
@@ -176,7 +175,7 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -209,7 +208,7 @@ public class TaktConferenceParticipantCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
@@ -229,12 +228,12 @@ public class TaktConferenceParticipantCreateDto
     /// <summary>
     /// 参与角色
     /// </summary>
-    public int ParticipantRole { get; set; }
+    public int ParticipantRole { get; set; } = 0;
 
     /// <summary>
-    /// 出席状态（待确认/已接受/已拒绝/已签到/缺席）
+    /// 出席状态
     /// </summary>
-    public int AttendanceStatus { get; set; }
+    public int AttendanceStatus { get; set; } = 0;
 
     /// <summary>
     /// 签到时间
@@ -247,14 +246,14 @@ public class TaktConferenceParticipantCreateDto
     public DateTime? CheckOutTime { get; set; }
 
     /// <summary>
-    /// 签到方式
+    /// 签到方式（0=手动，1=扫码，2=人脸等）
     /// </summary>
-    public int CheckInMethod { get; set; }
+    public int CheckInMethod { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -301,10 +300,10 @@ public class TaktConferenceParticipantStatusDto
     public long ConferenceParticipantId { get; set; }
 
     /// <summary>
-    /// 出席状态（待确认/已接受/已拒绝/已签到/缺席）
+    /// 出席状态
     /// </summary>
-    [Required(ErrorMessage = "出席状态（待确认/已接受/已拒绝/已签到/缺席）不能为空")]
-    public int AttendanceStatus { get; set; }
+    [Required(ErrorMessage = "出席状态不能为空")]
+    public int AttendanceStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -327,7 +326,7 @@ public class TaktConferenceParticipantTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
@@ -349,19 +348,19 @@ public class TaktConferenceParticipantTemplateDto
     public int? ParticipantRole { get; set; }
 
     /// <summary>
-    /// 出席状态（待确认/已接受/已拒绝/已签到/缺席）
+    /// 出席状态
     /// </summary>
     public int? AttendanceStatus { get; set; }
 
     /// <summary>
-    /// 签到方式
+    /// 签到方式（0=手动，1=扫码，2=人脸等）
     /// </summary>
     public int? CheckInMethod { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -391,7 +390,7 @@ public class TaktConferenceParticipantImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
@@ -413,19 +412,19 @@ public class TaktConferenceParticipantImportDto
     public int? ParticipantRole { get; set; }
 
     /// <summary>
-    /// 出席状态（待确认/已接受/已拒绝/已签到/缺席）
+    /// 出席状态
     /// </summary>
     public int? AttendanceStatus { get; set; }
 
     /// <summary>
-    /// 签到方式
+    /// 签到方式（0=手动，1=扫码，2=人脸等）
     /// </summary>
     public int? CheckInMethod { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -456,7 +455,7 @@ public class TaktConferenceParticipantExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
@@ -475,12 +474,12 @@ public class TaktConferenceParticipantExportDto
     /// <summary>
     /// 参与角色
     /// </summary>
-    public int ParticipantRole { get; set; }
+    public int ParticipantRole { get; set; } = 0;
 
     /// <summary>
-    /// 出席状态（待确认/已接受/已拒绝/已签到/缺席）
+    /// 出席状态
     /// </summary>
-    public int AttendanceStatus { get; set; }
+    public int AttendanceStatus { get; set; } = 0;
 
     /// <summary>
     /// 签到时间
@@ -493,14 +492,14 @@ public class TaktConferenceParticipantExportDto
     public DateTime? CheckOutTime { get; set; }
 
     /// <summary>
-    /// 签到方式
+    /// 签到方式（0=手动，1=扫码，2=人脸等）
     /// </summary>
-    public int CheckInMethod { get; set; }
+    public int CheckInMethod { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

@@ -43,7 +43,7 @@
                   >
                     <a-select
                       :value="parseSelectToOptionalString(formState.tenantCode)"
-                      :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.tenantcode') })"
+                      :placeholder="t('common.page.form.placeholder.select', { field: t('entity.gentable.datasource') })"
                       allow-clear
                       style="width: 100%"
                       :options="databaseConfigOptions"
@@ -104,7 +104,7 @@
                   >
                     <a-input
                       :value="formState.tableComment ?? ''"
-                      :placeholder="tf('placeholder.tablecomment')"
+                      :placeholder="gentableInputPh('tablecomment')"
                       allow-clear
                       @update:value="(v: string) => { formState.tableComment = v === '' ? undefined : v }"
                     />
@@ -118,12 +118,12 @@
                     name="genTemplateCategory"
                     :label-col="{ span: 3 }"
                     :wrapper-col="{ span: 0 }"
-                    :rules="rq('gentemplatecategory')"
+                    :rules="rq('gentemplatecategory', 'select')"
                   >
                     <TaktSelect
                       :model-value="formState.genTemplateCategory ?? ''"
                       dict-type="gen_template_type"
-                      :placeholder="tf('placeholder.gentemplatecategory')"
+                      :placeholder="gentableSelectPh('gentemplatecategory')"
                       allow-clear
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.genTemplateCategory = parseSelectToOptionalString(v) }"
@@ -141,7 +141,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.inDatabase ?? ''"
-                      dict-type="sys_yes_no"
+                      dict-type="sys_yes_no_type"
                       :placeholder="tf('placeholder.indatabase')"
                       style="width: 100%"
                       disabled
@@ -164,7 +164,7 @@
                   >
                     <a-select
                       :value="formState.subTableName ?? undefined"
-                      :placeholder="tf('placeholder.subtablename')"
+                      :placeholder="gentableSelectPh('subtablename')"
                       allow-clear
                       style="width: 100%"
                       :options="subTableNameOptions"
@@ -187,7 +187,7 @@
                   >
                     <a-select
                       :value="formState.subTableFkName ?? undefined"
-                      :placeholder="tf('placeholder.subtablefkname')"
+                      :placeholder="gentableSelectPh('subtablefkname')"
                       allow-clear
                       style="width: 100%"
                       :options="columnSelectOptions"
@@ -211,7 +211,7 @@
                   >
                     <a-select
                       :value="formState.treeCode ?? undefined"
-                      :placeholder="tf('placeholder.treecode')"
+                      :placeholder="gentableSelectPh('treecode')"
                       allow-clear
                       style="width: 100%"
                       :options="columnSelectOptions"
@@ -234,7 +234,7 @@
                   >
                     <a-select
                       :value="formState.treeParentCode ?? undefined"
-                      :placeholder="tf('placeholder.treeparentcode')"
+                      :placeholder="gentableSelectPh('treeparentcode')"
                       allow-clear
                       style="width: 100%"
                       :options="columnSelectOptions"
@@ -257,7 +257,7 @@
                   >
                     <a-select
                       :value="formState.treeName ?? undefined"
-                      :placeholder="tf('placeholder.treename')"
+                      :placeholder="gentableSelectPh('treename')"
                       allow-clear
                       style="width: 100%"
                       :options="columnSelectOptions"
@@ -315,7 +315,7 @@
                     name="menuButtonGroup"
                     :label-col="{ span: 3 }"
                     :wrapper-col="{ span: 0 }"
-                    :rules="rq('menubuttongroup')"
+                    :rules="rq('menubuttongroup', 'select')"
                   >
                     <a-form-item-rest>
                       <div>
@@ -343,10 +343,10 @@
                     name="genModuleName"
                     :label-col="{ span: 3 }"
                     :wrapper-col="{ span: 0 }"
-                    :rules="rq('genmodulename')"
+                    :rules="rq('genmodulename', 'select')"
                   >
                     <TaktTreeSelect
-                      :value="formState.genModuleName ?? ''"
+                      :value="formState.genModuleName || undefined"
                       :tree-data="moduleOptionsTree"
                       :placeholder="tf('placeholder.genmodulename')"
                       allow-clear
@@ -566,7 +566,7 @@
                     name="isRepository"
                     :label-col="{ span: 3 }"
                     :wrapper-col="{ span: 0 }"
-                    :rules="rq('isrepository')"
+                    :rules="rq('isrepository', 'select')"
                   >
                     <a-radio-group
                       :value="formState.isRepository ?? undefined"
@@ -576,7 +576,7 @@
                   </a-form-item>
                 </a-col>
               </a-row>
-              <!-- 仓储相关字段：仅当「是否生成仓储」为「是」(0) 时显示，与「否」相斥 -->
+              <!-- 仓储相关字段：仅当「是否生成仓储」为「是」(1) 时显示，与「否」(0) 相斥 -->
               <a-row
                 v-if="formState.isRepository === 1"
                 :gutter="24"
@@ -698,11 +698,11 @@
                     name="genMethod"
                     :label-col="{ span: 3 }"
                     :wrapper-col="{ span: 0 }"
-                    :rules="rq('genmethod')"
+                    :rules="rq('genmethod', 'select')"
                   >
                     <TaktSelect
                       :model-value="formState.genMethod ?? ''"
-                      dict-type="gen_method"
+                      dict-type="gen_method_type"
                       :placeholder="tf('placeholder.genmethod')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.genMethod = parseSelectToOptionalNumber(v) }"
@@ -761,7 +761,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.isGenMenu ?? ''"
-                      dict-type="sys_yes_no"
+                      dict-type="sys_yes_no_type"
                       :placeholder="t('common.page.form.placeholder.selectonly')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.isGenMenu = parseSelectToOptionalNumber(v) }"
@@ -783,9 +783,9 @@
                     :rules="parentMenuIdRules"
                   >
                     <TaktTreeSelect
-                      :value="formState.parentMenuId ?? ''"
+                      :value="formState.parentMenuId || undefined"
                       :tree-data="parentMenuOptionsTree"
-                      :placeholder="tf('placeholder.parentmenuid')"
+                      :placeholder="gentableSelectPh('parentmenuid')"
                       allow-clear
                       style="width: 100%"
                       :field-names="{ label: 'dictLabel', value: 'dictValue' }"
@@ -801,11 +801,11 @@
                     name="isGenTranslation"
                     :label-col="{ span: 3 }"
                     :wrapper-col="{ span: 0 }"
-                    :rules="rq('isgentranslation')"
+                    :rules="rq('isgentranslation', 'select')"
                   >
                     <TaktSelect
                       :model-value="formState.isGenTranslation ?? ''"
-                      dict-type="sys_yes_no"
+                      dict-type="sys_yes_no_type"
                       :placeholder="t('common.page.form.placeholder.selectonly')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.isGenTranslation = parseSelectToOptionalNumber(v) }"
@@ -820,11 +820,11 @@
                     name="sortField"
                     :label-col="{ span: 3 }"
                     :wrapper-col="{ span: 0 }"
-                    :rules="rq('sortfield')"
+                    :rules="rq('sortfield', 'select')"
                   >
                     <a-select
                       :value="formState.sortField ?? undefined"
-                      :placeholder="tf('placeholder.sortfield')"
+                      :placeholder="gentableSelectPh('sortfield')"
                       allow-clear
                       style="width: 100%"
                       :options="columnSelectOptions"
@@ -840,12 +840,12 @@
                     name="sortType"
                     :label-col="{ span: 3 }"
                     :wrapper-col="{ span: 0 }"
-                    :rules="rq('sorttype')"
+                    :rules="rq('sorttype', 'select')"
                   >
                     <TaktSelect
                       :model-value="formState.sortType ?? ''"
                       dict-type="sys_sort_type"
-                      :placeholder="tf('placeholder.sorttype')"
+                      :placeholder="gentableSelectPh('sorttype')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.sortType = parseSelectToOptionalString(v) }"
                     />
@@ -868,7 +868,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.frontUi ?? ''"
-                      dict-type="gen_frontend_ui"
+                      dict-type="gen_frontend_ui_type"
                       :placeholder="tf('placeholder.frontui')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.frontUi = parseSelectToOptionalNumber(v) }"
@@ -883,11 +883,11 @@
                     name="frontFormLayout"
                     :label-col="{ span: 3 }"
                     :wrapper-col="{ span: 0 }"
-                    :rules="rq('frontformlayout')"
+                    :rules="rq('frontformlayout', 'select')"
                   >
                     <TaktSelect
                       :model-value="formState.frontFormLayout ?? ''"
-                      dict-type="gen_frontend_form_layout"
+                      dict-type="gen_frontend_form_layout_config"
                       :placeholder="tf('placeholder.frontformlayout')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.frontFormLayout = parseSelectToOptionalNumber(v) }"
@@ -905,7 +905,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.frontBtnStyle ?? ''"
-                      dict-type="gen_frontend_btn_style"
+                      dict-type="gen_button_style_config"
                       :placeholder="tf('placeholder.frontbtnstyle')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.frontBtnStyle = parseSelectToOptionalNumber(v) }"
@@ -920,11 +920,11 @@
                     name="isUseTabs"
                     :label-col="{ span: 3 }"
                     :wrapper-col="{ span: 0 }"
-                    :rules="rq('isusetabs')"
+                    :rules="rq('isusetabs', 'select')"
                   >
                     <TaktSelect
                       :model-value="formState.isUseTabs ?? ''"
-                      dict-type="sys_yes_no"
+                      dict-type="sys_yes_no_type"
                       :placeholder="t('common.page.form.placeholder.selectonly')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.isUseTabs = parseSelectToOptionalNumber(v) }"
@@ -981,6 +981,7 @@
                   >
                     <a-textarea
                       :value="formState.otherGenOptions ?? ''"
+                      :placeholder="t('common.page.form.placeholder.optional', { field: gentableLabel('othergenoptions') })"
                       :rows="4"
                       allow-clear
                       @update:value="(v: string) => { formState.otherGenOptions = v === '' ? undefined : v }"
@@ -999,25 +1000,76 @@
         :tab="tf('tab.column')"
         force-render
       >
-        <div class="column-toolbar">
-          <a-button
-            type="primary"
-            size="small"
-            @click="addColumnRow"
-          >
-            {{ t('common.page.button.createrow') }}
-          </a-button>
-        </div>
-        <div class="column-table-wrap">
+        <TaktToolsBar
+          :show-create="false"
+          :show-update="false"
+          :show-delete="false"
+          :show-import="false"
+          :show-export="false"
+          :show-advanced-query="false"
+          :show-refresh="false"
+          :show-transpose="false"
+          :show-expand="false"
+          :show-create-row="false"
+          :show-delete-row="false"
+          :show-column-setting="true"
+          :show-fullscreen="true"
+          @column-setting="handleColumnTableColumnSetting"
+          @fullscreen="handleColumnTableFullscreen"
+        >
+          <template #left>
+            <a-space>
+              <a-button
+                type="primary"
+                class="takt-button-create-row"
+                @click="addColumnRow"
+              >
+                <template #icon>
+                  <RiInsertRowBottom class="takt-remix-icon" />
+                </template>
+                {{ t('common.page.button.createrow') }}
+              </a-button>
+              <a-button
+                class="takt-button-delete-row"
+                :disabled="selectedColumnRowKeys.length === 0"
+                @click="handleDeleteSelectedColumnRows"
+              >
+                <template #icon>
+                  <RiDeleteRow class="takt-remix-icon" />
+                </template>
+                {{ t('common.page.button.deleterow') }}
+              </a-button>
+              <a-button
+                class="takt-button-reset"
+                :loading="columnLoading"
+                @click="handleResetAllColumnRows"
+              >
+                <template #icon>
+                  <RiRefreshLine class="takt-remix-icon" />
+                </template>
+                {{ resetAllButtonLabel }}
+              </a-button>
+            </a-space>
+          </template>
+        </TaktToolsBar>
+        <div
+          class="column-table-wrap column-table-wrap--fixed-y"
+          :style="columnTableBodyStyle"
+        >
           <a-table
-            :columns="columnTableColumns"
+            table-layout="fixed"
+            :columns="columnTableDisplayColumns"
             :data-source="columnList"
             :loading="columnLoading"
-            :row-key="(r: GenTableColumnRow) => String(r.columnId ?? '')"
+            :row-key="getColumnRowKey"
+            :row-selection="columnRowSelection"
             :custom-row="(r: GenTableColumnRow, i?: number) => columnTableCustomRow(r, i ?? 0)"
             :pagination="false"
+            :scroll="columnTableScroll"
+            :virtual="columnTableVirtual"
             size="small"
             bordered
+            @resize-column="handleColumnTableResizeColumn"
           >
             <template #bodyCell="{ column, record }">
               <!-- 拖拽把手：仅此格可拖拽，整行可放置 -->
@@ -1035,7 +1087,6 @@
               <template v-else-if="column.key === 'databaseColumnName'">
                 <a-input
                   :value="record.databaseColumnName ?? ''"
-                  size="small"
                   allow-clear
                   class="column-cell-input"
                   @update:value="(v: string) => { record.databaseColumnName = v === '' ? undefined : v }"
@@ -1045,20 +1096,18 @@
               <template v-else-if="column.key === 'columnComment'">
                 <a-input
                   :value="record.columnComment ?? ''"
-                  size="small"
                   allow-clear
                   class="column-cell-input"
                   @update:value="(v: string) => { record.columnComment = v === '' ? undefined : v }"
                 />
               </template>
-              <!-- DB类型：字典 sys_db_type，选中后级联 C#类型 -->
+              <!-- DB类型：字典 sys_db_data_type，选中后级联 C#类型 -->
               <template v-else-if="column.key === 'databaseDataType'">
                 <TaktSelect
                   :model-value="record.databaseDataType ?? ''"
-                  dict-type="sys_db_type"
-                  :placeholder="tf('placeholder.columndbtype')"
+                  dict-type="sys_db_data_type"
+                  :placeholder="gentableColumnSelectPh('databasedatatype')"
                   allow-clear
-                  size="small"
                   class="column-cell-select"
                   style="width: 100%"
                   @update:model-value="(v: unknown) => { record.databaseDataType = parseSelectToOptionalString(v) }"
@@ -1070,9 +1119,8 @@
                 <a-select
                   :value="record.csharpDataType ?? undefined"
                   :options="getCsharpTypeOptionsForRow(record.databaseDataType)"
-                  :placeholder="tf('placeholder.columncsharptype')"
+                  :placeholder="gentableColumnSelectPh('csharpdatatype')"
                   allow-clear
-                  size="small"
                   class="column-cell-select"
                   style="width: 100%"
                   @update:value="(v: unknown) => { record.csharpDataType = parseSelectToOptionalString(v) }"
@@ -1083,7 +1131,6 @@
               <template v-else-if="column.key === 'csharpColumnName'">
                 <a-input
                   :value="record.csharpColumnName ?? ''"
-                  size="small"
                   allow-clear
                   class="column-cell-input"
                   @update:value="(v: string) => { record.csharpColumnName = v === '' ? undefined : v }"
@@ -1094,7 +1141,6 @@
                 <a-input-number
                   v-if="needLengthForCsharpType(record.csharpDataType)"
                   :value="record.length ?? undefined"
-                  size="small"
                   :min="0"
                   class="column-cell-input"
                   style="width: 100%"
@@ -1110,7 +1156,6 @@
                 <a-input-number
                   v-if="needDecimalDigitsForCsharpType(record.csharpDataType)"
                   :value="record.decimalDigits ?? undefined"
-                  size="small"
                   :min="0"
                   class="column-cell-input"
                   style="width: 100%"
@@ -1125,14 +1170,13 @@
               <template v-else-if="column.key === 'isPk' || column.key === 'isIncrement' || column.key === 'isRequired' || column.key === 'isQuery' || column.key === 'isCreate' || column.key === 'isUpdate' || column.key === 'isUnique' || column.key === 'isList' || column.key === 'isExport' || column.key === 'isSort'">
                 <a-switch
                   :checked="record[String(column.key)] === 1"
-                  size="small"
-                  :checked-children="t('common.page.button.yes')"
-                  :un-checked-children="t('common.page.button.no')"
+                  :checked-children="t('common.status.yes')"
+                  :un-checked-children="t('common.status.no')"
                   @change="(checked: unknown) => {
                     const key = String(column.key)
                     const isOn = checked === true || checked === 1 || checked === '1'
                     record[key] = isOn ? 1 : 0
-                    if (key === 'isQuery' && !isOn) onColumnIsQueryChange(record as GenTableColumnRow)
+                    if (key === 'isQuery') onColumnIsQueryChange(record as GenTableColumnRow, isOn)
                   }"
                 />
               </template>
@@ -1142,9 +1186,8 @@
                   v-if="record.isQuery === 1"
                   :model-value="record.queryType ?? undefined"
                   dict-type="gen_query_type"
-                  :placeholder="tf('placeholder.columnquerytype')"
+                  :placeholder="gentableColumnSelectPh('querytype')"
                   allow-clear
-                  size="small"
                   class="column-cell-select"
                   style="width: 100%"
                   @update:model-value="(v: unknown) => { record.queryType = parseSelectToOptionalString(v) }"
@@ -1159,9 +1202,8 @@
                 <TaktSelect
                   :model-value="record.htmlType ?? undefined"
                   dict-type="gen_display_type"
-                  :placeholder="tf('placeholder.columnhtmltype')"
+                  :placeholder="gentableColumnSelectPh('htmltype')"
                   allow-clear
-                  size="small"
                   class="column-cell-select"
                   style="width: 100%"
                   @update:model-value="(v: unknown) => { record.htmlType = parseSelectToOptionalString(v) }"
@@ -1175,9 +1217,8 @@
                   :model-value="record.dictType ?? undefined"
                   :options="dictTypeOptions"
                   :field-names="{ label: 'dictLabel', value: 'extLabel' }"
-                  :placeholder="tf('placeholder.columndicttype')"
+                  :placeholder="gentableColumnSelectPh('dicttype')"
                   allow-clear
-                  size="small"
                   class="column-cell-select"
                   style="width: 100%"
                   @update:model-value="(v: unknown) => { record.dictType = parseSelectToOptionalString(v) }"
@@ -1191,7 +1232,6 @@
               <template v-else-if="column.key === 'orderNum'">
                 <a-input-number
                   :value="record.orderNum ?? undefined"
-                  size="small"
                   :min="1"
                   class="column-cell-input"
                   style="width: 100%"
@@ -1203,7 +1243,6 @@
                 <a-button
                   type="link"
                   danger
-                  size="small"
                   @click="removeColumnRow(record as GenTableColumnRow)"
                 >
                   {{ t('common.page.button.delete') }}
@@ -1224,6 +1263,38 @@
         </div>
       </a-tab-pane>
     </a-tabs>
+
+    <!-- 字段配置表列设置（代码生成特例：仅业务列，不混入实体审计字段） -->
+    <a-drawer
+      v-model:open="columnTableColumnSettingVisible"
+      :title="t('common.page.button.columnsetting')"
+      placement="right"
+      :width="400"
+      class="gen-column-table-setting-drawer"
+    >
+      <template #extra>
+        <a-button
+          size="small"
+          @click="handleColumnTableColumnSettingReset"
+        >
+          {{ t('common.page.button.reset') }}
+        </a-button>
+      </template>
+      <a-checkbox-group
+        v-model:value="columnTableVisibleKeys"
+        class="gen-column-setting-group"
+      >
+        <div
+          v-for="col in columnTableSettingOptions"
+          :key="String(col.key)"
+          class="gen-column-setting-item"
+        >
+          <a-checkbox :value="String(col.key)">
+            {{ col.title }}
+          </a-checkbox>
+        </div>
+      </a-checkbox-group>
+    </a-drawer>
   </div>
 </template>
 
@@ -1233,8 +1304,10 @@
  * 新建可从库选表（tenantCode + tableName）；编辑按 genTableId 拉列；提交由父级 createGenTable / updateGenTable。
  */
 import { useI18n } from 'vue-i18n'
+import { Modal } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
+import { RiDeleteRow, RiInsertRowBottom, RiRefreshLine } from '@remixicon/vue'
 import type { GenTable } from '@/types/code/generator/gen-table'
 import type { GenTableColumn } from '@/types/code/generator/gen-table-column'
 import { getGenTableColumnList } from '@/api/code/generator/gen-table-column'
@@ -1253,6 +1326,16 @@ import type { MenuTree } from '@/types/identity/menu'
 import { HolderOutlined } from '@ant-design/icons-vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useUserStore } from '@/stores/identity/user'
+import {
+  resolveTableScrollConfig,
+  TAKT_TABLE_SCROLL_Y_MIN,
+  resolveTableViewportHeight,
+} from '@/utils/table-scroll'
+import {
+  generateLineNumberSequence,
+  generateNextLineNumber,
+  resolveMaxLineNumber,
+} from '@/utils/takt-sequence'
 
 /** 表单可选字符串字段 */
 type OptionalText = string | undefined
@@ -1365,12 +1448,62 @@ const { t } = useI18n()
 const FORM = 'code.generator.page.form'
 
 /**
- * 必填校验规则
- * @param ruleKey rules 下的键名
+ * entity.gentable 字段标签（与 TaktGenTableI18nSeedData 键一致）
+ * @param entityField 末段键名（小写）
+ * @returns {string} 翻译结果
+ */
+function gentableLabel(entityField: string) {
+  return t(`entity.gentable.${entityField}`)
+}
+
+/**
+ * 下拉/树选占位（common.page.form.placeholder.select + entity.gentable.*）
+ * @param entityField 末段键名（小写）
+ * @returns {string} 占位文案
+ */
+function gentableSelectPh(entityField: string) {
+  return t('common.page.form.placeholder.select', { field: gentableLabel(entityField) })
+}
+
+/**
+ * 文本输入占位（common.page.form.placeholder.input + entity.gentable.*）
+ * @param entityField 末段键名（小写）
+ * @returns {string} 占位文案
+ */
+function gentableInputPh(entityField: string) {
+  return t('common.page.form.placeholder.input', { field: gentableLabel(entityField) })
+}
+
+/**
+ * entity.gentablecolumn 字段标签（TaktGenTableColumnI18nSeedData，末段与 C# 属性名小写一致）
+ * @param entityField 末段键名（如 csharpdatatype、csharpcolumnname）
+ * @returns {string} 列标题/标签文案
+ */
+function gentableColumnLabel(entityField: string) {
+  return t(`entity.gentablecolumn.${entityField}`)
+}
+
+/**
+ * entity.gentablecolumn 字段下拉占位（TaktGenTableColumnI18nSeedData + common.page.form.placeholder.select）
+ * @param entityField 末段键名（小写，与种子一致）
+ * @returns {string} 占位文案
+ */
+function gentableColumnSelectPh(entityField: string) {
+  return t('common.page.form.placeholder.select', {
+    field: gentableColumnLabel(entityField),
+  })
+}
+
+/**
+ * 必填校验规则（标签 entity.gentable.*，提示 common.page.form.placeholder.*）
+ * @param entityField entity.gentable 末段键名（小写，与种子一致）
+ * @param kind select 下拉/树选；input 文本输入
  * @returns Ant Design Form 规则项
  */
-function rq(ruleKey: string) {
-  return [{ required: true, message: t(`${FORM}.rules.${ruleKey}`) }]
+function rq(entityField: string, kind: 'select' | 'input' = 'input') {
+  const messageKey =
+    kind === 'select' ? 'common.page.form.placeholder.select' : 'common.page.form.placeholder.required'
+  return [{ required: true, message: t(messageKey, { field: gentableLabel(entityField) }) }]
 }
 
 /**
@@ -1382,6 +1515,11 @@ function tf(suffix: string) {
   return t(`${FORM}.${suffix}`)
 }
 
+/** 「重置所有」：common.page.button.reset + common.page.button.all */
+const resetAllButtonLabel = computed(
+  () => `${t('common.page.button.reset')}${t('common.page.button.all')}`,
+)
+
 /** 顶层 Tab：table | column */
 const activeTab = ref('table')
 /** 表配置子 Tab：basic | gen | ... */
@@ -1392,11 +1530,49 @@ const formRef = ref<FormInstance>()
 const formState = ref<GenFormState>(defaultFormState())
 /** 字段配置行列表 */
 const columnList = ref<GenTableColumnRow[]>([])
+/** 字段列表初始快照（重置所有时恢复） */
+const columnListBaseline = ref<GenTableColumnRow[]>([])
+/** 字段配置表选中行 key（columnId 字符串） */
+const selectedColumnRowKeys = ref<string[]>([])
+
+/**
+ * 深拷贝字段行列表
+ * @param rows 源列表
+ * @returns {GenTableColumnRow[]} 拷贝结果
+ */
+function cloneColumnRows(rows: GenTableColumnRow[]): GenTableColumnRow[] {
+  return JSON.parse(JSON.stringify(rows)) as GenTableColumnRow[]
+}
+
+/**
+ * 同步字段列表初始快照
+ * @param rows 当前列表
+ */
+function syncColumnListBaseline(rows: GenTableColumnRow[]): void {
+  columnListBaseline.value = cloneColumnRows(normalizeColumnOrderNum(rows))
+}
+
+/**
+ * 字段配置表 rowKey
+ * @param record 字段行
+ * @returns {string} columnId 字符串
+ */
+function getColumnRowKey(record: GenTableColumnRow): string {
+  return String(record.columnId ?? '')
+}
+
+/** 字段配置表行选择 */
+const columnRowSelection = computed(() => ({
+  selectedRowKeys: selectedColumnRowKeys.value,
+  onChange: (keys: (string | number)[]) => {
+    selectedColumnRowKeys.value = keys.map((k) => String(k))
+  },
+}))
 /** 本地新增列临时 id 序号（负整数） */
 let clientTempColumnSeq = 0
 /** 字段列表加载中 */
 const columnLoading = ref(false)
-/** 字典数据 Pinia（gen_function、sys_yes_no 等） */
+/** 字典数据 Pinia（gen_function_type、sys_yes_no_type 等） */
 const dictDataStore = useDictDataStore()
 /** 当前用户 Pinia（默认 genAuthor） */
 const userStore = useUserStore()
@@ -1488,7 +1664,7 @@ function parseTreeSelectToOptionalString(v: unknown): string | undefined {
 /** 菜单权限组：选项与选中值仅用于 formState.menuButtonGroup，与生成功能同为字典多选 */
 const menuButtonGroupOptions = computed(() => getDictSelectOptions('gen_button_category'))
 /** 生成功能：选项与选中值仅用于 formState.genFunction */
-const genFunctionOptions = computed(() => getDictSelectOptions('gen_function'))
+const genFunctionOptions = computed(() => getDictSelectOptions('gen_function_type'))
 
 /** 列中是否含 Status 字段（控制生成功能 Status 是否可选） */
 const hasStatusColumn = computed(() => {
@@ -1523,16 +1699,18 @@ const filteredGenFunctionOptions = computed(() => {
   })
 })
 
-/** 是否（sys_yes_no）下拉，value 为 number */
+/** 是否（sys_yes_no_type）下拉，value 为 number */
 const sysYesNoOptions = computed(() =>
-  getDictSelectOptions('sys_yes_no').map((opt: TaktDictSelectOption) => ({
+  getDictSelectOptions('sys_yes_no_type').map((opt: TaktDictSelectOption) => ({
     label: opt.label,
     value: Number(opt.value),
   }))
 )
 
-/** GenMethod=2 时展示的当前项目路径（与 genPath 一致） */
-const currentProjectPathDisplay = computed(() => formState.value.genPath || '')
+/** GenMethod=2 时展示说明文案（路径由生成/预览时后端解析） */
+const currentProjectPathDisplay = computed(() =>
+  formState.value.genMethod === 2 ? tf('placeholder.currentprojectidle') : (formState.value.genPath || ''),
+)
 
 /** 是否编辑模式（有 genTableId） */
 const isEditMode = computed(() => !!formState.value.genTableId)
@@ -1582,7 +1760,7 @@ const menuButtonGroupSelect = computed({
   }
 })
 
-/** 生成功能多选：仅与 formState.genFunction 双向同步，供「生成功能」a-checkbox-group 使用，选中值为字典 gen_function 的 value */
+/** 生成功能多选：仅与 formState.genFunction 双向同步，供「生成功能」a-checkbox-group 使用，选中值为字典 gen_function_type 的 value */
 const genFunctionSelect = computed({
   get() {
     const s = formState.value.genFunction
@@ -1661,9 +1839,12 @@ watch(
  * 挂载：加载字典、模块树、上级菜单树；新增态默认全选生成功能与按钮组
  */
 onMounted(async () => {
+  recalcColumnTableScrollY()
+  window.addEventListener('resize', recalcColumnTableScrollY)
+  document.addEventListener('fullscreenchange', recalcColumnTableScrollY)
   await dictDataStore.loadAllDictDataAsync()
   if (!formState.value.genTableId) {
-    const genOpts = getDictSelectOptions('gen_function')
+    const genOpts = getDictSelectOptions('gen_function_type')
     const btnOpts = getDictSelectOptions('gen_button_category')
     if (genOpts.length > 0) formState.value.genFunction = genOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
     if (btnOpts.length > 0) formState.value.menuButtonGroup = btnOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
@@ -1937,12 +2118,26 @@ function onColumnHtmlTypeChange(record: GenTableColumnRow, value: string | numbe
 }
 
 /**
- * 是否查询改为否时清空 queryType
+ * 是否查询开关变更：关时清空 queryType；开时按 C# 类型给默认 like/eq
  * @param record 字段行
+ * @param isOn 是否启用查询
  */
-function onColumnIsQueryChange(record: GenTableColumnRow) {
+function onColumnIsQueryChange(record: GenTableColumnRow, isOn?: boolean) {
   if (!record || typeof record !== 'object') return
-  record.queryType = undefined
+  const enabled = isOn ?? record.isQuery === 1
+  if (!enabled) {
+    record.queryType = undefined
+    return
+  }
+  if (!record.queryType?.trim()) {
+    record.queryType = isStringLikeCsharpType(record.csharpDataType) ? 'like' : 'eq'
+  }
+}
+
+/** C# 类型是否默认 like 查询 */
+function isStringLikeCsharpType(csharpDataType: string | undefined): boolean {
+  const t = csharpDataType?.trim().toLowerCase()
+  return !t || t === 'string' || t === 'guid'
 }
 
 /** 数据库列名下划线命名正则 */
@@ -1973,7 +2168,7 @@ function isPascalCase(s: string | undefined): boolean {
 
 /** 数据表名：必填 + 小写下划线格式（xxxx_xxxx_xxx） */
 const tableNameRules = computed(() => [
-  { required: true, message: t(`${FORM}.rules.tablename`) },
+  ...rq('tablename', 'input'),
   {
     validator: (_rule: unknown, v: string) =>
       !v || isSnakeCase(v)
@@ -1984,7 +2179,7 @@ const tableNameRules = computed(() => [
 
 /** 命名空间前缀校验：必填 + 帕斯卡命名 */
 const namePrefixPascalRules = computed(() => [
-  { required: true, message: t(`${FORM}.rules.nameprefix`) },
+  ...rq('nameprefix', 'input'),
   {
     validator: (_rule: unknown, v: string) =>
       !v || isPascalCase(v)
@@ -1996,60 +2191,52 @@ const namePrefixPascalRules = computed(() => [
 /** 根据 genTemplateCategory 决定：主子表时 subTableName、subTableFkName 必填 */
 /** 主子表：父表名必填规则 */
 const subTableNameRules = computed(() =>
-  formState.value.genTemplateCategory === 'sub' ? [{ required: true, message: t(`${FORM}.rules.subTableName`) }] : []
+  formState.value.genTemplateCategory === 'sub' ? rq('subtablename', 'select') : []
 )
 /** 主子表：外键列必填规则 */
 const subTableFkNameRules = computed(() =>
-  formState.value.genTemplateCategory === 'sub' ? [{ required: true, message: t(`${FORM}.rules.subTableFkName`) }] : []
+  formState.value.genTemplateCategory === 'sub' ? rq('subtablefkname', 'select') : []
 )
 /** 根据 genTemplateCategory 决定：树表时 treeCode、treeName、treeParentCode 必填 */
 /** 树表：树编码列必填 */
 const treeCodeRules = computed(() =>
-  formState.value.genTemplateCategory === 'tree' ? [{ required: true, message: t(`${FORM}.rules.treeCode`) }] : []
+  formState.value.genTemplateCategory === 'tree' ? rq('treecode', 'select') : []
 )
 /** 树表：树名称列必填 */
 const treeNameRules = computed(() =>
-  formState.value.genTemplateCategory === 'tree' ? [{ required: true, message: t(`${FORM}.rules.treeName`) }] : []
+  formState.value.genTemplateCategory === 'tree' ? rq('treename', 'select') : []
 )
 /** 树表：树父编码列必填 */
 const treeParentCodeRules = computed(() =>
-  formState.value.genTemplateCategory === 'tree' ? [{ required: true, message: t(`${FORM}.rules.treeParentCode`) }] : []
+  formState.value.genTemplateCategory === 'tree' ? rq('treeparentcode', 'select') : []
 )
 /** 生成方式：选中「自定义路径」(1) 时生成路径必填，zip(0)、当前项目(2) 时可空 */
 const genPathRules = computed(() =>
-  Number(formState.value.genMethod) === 1 ? [{ required: true, message: t(`${FORM}.rules.genPath`) }] : []
+  Number(formState.value.genMethod) === 1 ? rq('genpath', 'input') : []
 )
 /** 是否生成菜单：选「是」(1) 时上级菜单必填，选「否」(0) 时可空 */
 const parentMenuIdRules = computed(() =>
-  Number(formState.value.isGenMenu) === 1 ? [{ required: true, message: t(`${FORM}.rules.parentMenuId`) }] : []
+  Number(formState.value.isGenMenu) === 1 ? rq('parentmenuid', 'select') : []
 )
 /** 是否生成仓储：选「是」(1) 时仓储相关字段必填 */
 const repositoryInterfaceNamespaceRules = computed(() =>
-  Number(formState.value.isRepository) === 1
-    ? [{ required: true, message: t(`${FORM}.rules.repositoryInterfaceNamespace`) }]
-    : []
+  Number(formState.value.isRepository) === 1 ? rq('repositoryinterfacenamespace', 'input') : []
 )
 /** 仓储：IRepository 类名必填 */
 const iRepositoryClassNameRules = computed(() =>
-  Number(formState.value.isRepository) === 1
-    ? [{ required: true, message: t(`${FORM}.rules.iRepositoryClassName`) }]
-    : []
+  Number(formState.value.isRepository) === 1 ? rq('irepositoryclassname', 'input') : []
 )
 /** 仓储：实现类命名空间必填 */
 const repositoryNamespaceRules = computed(() =>
-  Number(formState.value.isRepository) === 1
-    ? [{ required: true, message: t(`${FORM}.rules.repositoryNamespace`) }]
-    : []
+  Number(formState.value.isRepository) === 1 ? rq('repositorynamespace', 'input') : []
 )
 /** 仓储：Repository 类名必填 */
 const repositoryClassNameRules = computed(() =>
-  Number(formState.value.isRepository) === 1
-    ? [{ required: true, message: t(`${FORM}.rules.repositoryClassName`) }]
-    : []
+  Number(formState.value.isRepository) === 1 ? rq('repositoryclassname', 'input') : []
 )
 /** 是否使用 Tabs：选「是」(1) 时 Tabs 字段数必填 */
 const tabsFieldCountRules = computed(() =>
-  Number(formState.value.isUseTabs) === 1 ? [{ required: true, message: t(`${FORM}.rules.tabsFieldCount`) }] : []
+  Number(formState.value.isUseTabs) === 1 ? rq('tabsfieldcount', 'input') : []
 )
 
 /** 新增空白字段行 */
@@ -2082,10 +2269,12 @@ function addColumnRow() {
     isExport: 1,
     isSort: 0,
     isQuery: 0,
-    queryType: 'LIKE',
+    queryType: undefined,
     htmlType: 'input',
     dictType: undefined,
-    orderNum: columnList.value.length + 1
+    orderNum: generateNextLineNumber(
+      resolveMaxLineNumber(columnList.value.map((row) => Number(row.orderNum ?? 0))),
+    )
   }
   columnList.value = [...columnList.value, newRow]
 }
@@ -2097,22 +2286,65 @@ function addColumnRow() {
 function removeColumnRow(record: GenTableColumnRow) {
   const id = (record).columnId
   if (id == null) return
+  const idStr = String(id)
   const nextList = columnList.value.filter(r => r.columnId !== id)
-  nextList.forEach((row, index) => {
-    row.orderNum = index + 1
-  })
-  columnList.value = nextList
+  columnList.value = normalizeColumnOrderNum(nextList)
+  selectedColumnRowKeys.value = selectedColumnRowKeys.value.filter((k) => k !== idStr)
 }
 
 /**
- * 重排 orderNum 为从 1 开始的连续序号
+ * 删除选中的字段行
+ */
+function handleDeleteSelectedColumnRows(): void {
+  if (selectedColumnRowKeys.value.length === 0) return
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.count', {
+      count: selectedColumnRowKeys.value.length,
+      entity: t('entity.gentablecolumn._self'),
+    }),
+    okText: t('common.page.button.confirm'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: () => {
+      const keySet = new Set(selectedColumnRowKeys.value)
+      const nextList = columnList.value.filter((r) => !keySet.has(getColumnRowKey(r)))
+      columnList.value = normalizeColumnOrderNum(nextList)
+      selectedColumnRowKeys.value = []
+    },
+  })
+}
+
+/**
+ * 重置所有字段行（已保存表从服务端重载；未保存表恢复打开/导入时的快照）
+ */
+function handleResetAllColumnRows(): void {
+  Modal.confirm({
+    title: t('common.tip.confirm.title', { action: resetAllButtonLabel.value }),
+    content: t('common.tip.confirm.question', { action: resetAllButtonLabel.value }),
+    okText: t('common.page.button.confirm'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      const tableId = formState.value.genTableId
+      selectedColumnRowKeys.value = []
+      if (tableId != null && String(tableId).trim() !== '') {
+        await loadColumns(String(tableId))
+        return
+      }
+      columnList.value = cloneColumnRows(columnListBaseline.value)
+    },
+  })
+}
+
+/**
+ * 按当前 orderNum 排序后重排行号为 10、20、30…（步长 10，与后端 TaktSequenceDefaults 一致）
  * @param list 字段行列表
  * @returns {GenTableColumnRow[]} 排序后的新数组
  */
 function normalizeColumnOrderNum(list: GenTableColumnRow[]) {
   const sorted = [...list].sort((a, b) => Number(a.orderNum ?? 0) - Number(b.orderNum ?? 0))
+  const lineNumbers = generateLineNumberSequence(sorted.length, 0)
   sorted.forEach((row, i) => {
-    row.orderNum = i + 1
+    row.orderNum = lineNumbers[i]
   })
   return sorted
 }
@@ -2169,10 +2401,7 @@ function onColumnDrop(e: DragEvent, dropRecord: GenTableColumnRow) {
   const [removed] = list.splice(dragIndex, 1)
   if (removed == null) return
   list.splice(dropIndex, 0, removed)
-  list.forEach((row, i) => {
-    row.orderNum = i + 1
-  })
-  columnList.value = list
+  columnList.value = normalizeColumnOrderNum(list)
 }
 
 /**
@@ -2189,40 +2418,212 @@ function columnTableCustomRow(record: GenTableColumnRow, index: number) {
   }
 }
 
-/** 字段配置表格列定义 */
+/** 弹窗内字段配置表纵向预留（75vh 弹窗壳 + Tab/工具栏/底栏，与 generator/index TaktModal body-style 对齐） */
+const GEN_FORM_COLUMN_TABLE_MODAL_CHROME_PX = 220
+/** 全屏模式下字段配置表上方预留（Tab + 工具栏 + 内边距） */
+const GEN_FORM_COLUMN_TABLE_FULLSCREEN_CHROME_PX = 140
+
+/**
+ * 计算弹窗内字段配置表 scroll.y（固定布局高度，与数据行数无关）
+ * @param viewportHeight 视口高度
+ * @returns scroll.y 像素值
+ */
+function computeGenFormColumnTableScrollYPx(viewportHeight?: number): number {
+  const vh = resolveTableViewportHeight(viewportHeight)
+  if (typeof document !== 'undefined' && document.fullscreenElement) {
+    return Math.max(TAKT_TABLE_SCROLL_Y_MIN, Math.floor(vh - GEN_FORM_COLUMN_TABLE_FULLSCREEN_CHROME_PX))
+  }
+  return Math.max(TAKT_TABLE_SCROLL_Y_MIN, Math.floor(vh * 0.75 - GEN_FORM_COLUMN_TABLE_MODAL_CHROME_PX))
+}
+
+/** 字段配置表 scroll.y（resize / 全屏时重算） */
+const columnTableScrollYPx = ref(computeGenFormColumnTableScrollYPx())
+
+/** 重算字段配置表 scroll.y */
+function recalcColumnTableScrollY(): void {
+  columnTableScrollYPx.value = computeGenFormColumnTableScrollYPx(
+    typeof window !== 'undefined' ? window.innerHeight : undefined,
+  )
+}
+
+/** 字段配置表列默认宽度（可拖拽调节） */
+const COLUMN_TABLE_DEFAULT_WIDTHS: Record<string, number> = {
+  dragSort: 36,
+  orderNum: 72,
+  databaseColumnName: 130,
+  columnComment: 100,
+  databaseDataType: 88,
+  csharpDataType: 88,
+  csharpColumnName: 110,
+  length: 64,
+  decimalDigits: 64,
+  isPk: 64,
+  isIncrement: 64,
+  isRequired: 64,
+  isQuery: 64,
+  isCreate: 64,
+  isUpdate: 64,
+  isUnique: 64,
+  isList: 64,
+  isExport: 64,
+  isSort: 64,
+  queryType: 88,
+  htmlType: 88,
+  dictType: 95,
+  action: 72,
+}
+
+/** 字段配置表列宽（拖拽后持久于当前表单会话） */
+const columnTableWidths = ref<Record<string, number>>({ ...COLUMN_TABLE_DEFAULT_WIDTHS })
+
+/** 字段配置表可勾选业务列 key（不含拖拽列与操作列；顺序与表格一致） */
+const COLUMN_TABLE_BUSINESS_KEYS = [
+  'orderNum',
+  'databaseColumnName',
+  'columnComment',
+  'databaseDataType',
+  'csharpDataType',
+  'csharpColumnName',
+  'length',
+  'decimalDigits',
+  'isPk',
+  'isIncrement',
+  'isRequired',
+  'isQuery',
+  'isCreate',
+  'isUpdate',
+  'isUnique',
+  'isList',
+  'isExport',
+  'isSort',
+  'queryType',
+  'htmlType',
+  'dictType',
+] as const
+
+/**
+ * 字段配置表默认可见业务列 key
+ * @returns 业务列 key 列表
+ */
+function resolveColumnTableDefaultVisibleKeys(): string[] {
+  return [...COLUMN_TABLE_BUSINESS_KEYS]
+}
+
+/** 字段配置表列设置抽屉显隐 */
+const columnTableColumnSettingVisible = ref(false)
+/** 字段配置表可见列 key（默认展示全部业务列） */
+const columnTableVisibleKeys = ref<string[]>(resolveColumnTableDefaultVisibleKeys())
+
+/**
+ * 打开字段配置表列设置抽屉
+ */
+function handleColumnTableColumnSetting(): void {
+  columnTableColumnSettingVisible.value = true
+}
+
+/** 字段配置表列设置恢复默认 */
+function handleColumnTableColumnSettingReset(): void {
+  columnTableVisibleKeys.value = resolveColumnTableDefaultVisibleKeys()
+}
+
+/**
+ * 字段配置表列宽拖拽
+ * @param w 新宽度
+ * @param col 列定义
+ */
+function handleColumnTableResizeColumn(w: number, col: TableColumnsType[number]): void {
+  const key = String(col.key ?? '')
+  if (!key) return
+  columnTableWidths.value = { ...columnTableWidths.value, [key]: w }
+  ;(col as { width?: number }).width = w
+}
+
+/** 全屏切换后重算表体高度 */
+function handleColumnTableFullscreen(): void {
+  recalcColumnTableScrollY()
+}
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', recalcColumnTableScrollY)
+  document.removeEventListener('fullscreenchange', recalcColumnTableScrollY)
+})
+
+/** 字段配置表格列定义（排序号紧随拖拽列；列宽可拖拽调节） */
 const columnTableColumns = computed<TableColumnsType>(() => {
+  const withPresentation = (col: TableColumnsType[number]): TableColumnsType[number] => {
+    const key = String(col.key ?? '')
+    const width = columnTableWidths.value[key] ?? (typeof col.width === 'number' ? col.width : undefined)
+    return { ...col, width, resizable: true }
+  }
   return [
-    { title: t(`${FORM}.column.dragsort`), key: 'dragSort', width: 36, align: 'center', class: 'column-drag-cell' },
-    {
-      title: t('entity.gentablecolumn.databasecolumnname'),
+    withPresentation({ title: t(`${FORM}.column.dragsort`), key: 'dragSort', width: 36, align: 'center', class: 'column-drag-cell' }),
+    withPresentation({ title: gentableColumnLabel('linenumber'), dataIndex: 'orderNum', key: 'orderNum', width: 72 }),
+    withPresentation({
+      title: gentableColumnLabel('databasecolumnname'),
       dataIndex: 'databaseColumnName',
       key: 'databaseColumnName',
       width: 130,
-      ellipsis: true
-    },
-    { title: t('entity.gentablecolumn.columncomment'), dataIndex: 'columnComment', key: 'columnComment', width: 100 },
-    { title: t('entity.gentablecolumn.databasedatatype'), dataIndex: 'databaseDataType', key: 'databaseDataType', width: 88 },
-    { title: t('entity.gentablecolumn.cshardatatype'), dataIndex: 'csharpDataType', key: 'csharpDataType', width: 88 },
-    { title: t('entity.gentablecolumn.csharcolumnname'), dataIndex: 'csharpColumnName', key: 'csharpColumnName', width: 110 },
-    { title: t('entity.gentablecolumn.length'), dataIndex: 'length', key: 'length', width: 64 },
-    { title: t('entity.gentablecolumn.decimaldigits'), dataIndex: 'decimalDigits', key: 'decimalDigits', width: 64 },
-    { title: t('entity.gentablecolumn.ispk'), dataIndex: 'isPk', key: 'isPk', width: 64 },
-    { title: t('entity.gentablecolumn.isincrement'), dataIndex: 'isIncrement', key: 'isIncrement', width: 64 },
-    { title: t('entity.gentablecolumn.isrequired'), dataIndex: 'isRequired', key: 'isRequired', width: 64 },
-    { title: t('entity.gentablecolumn.isquery'), dataIndex: 'isQuery', key: 'isQuery', width: 64 },
-    { title: t('entity.gentablecolumn.iscreate'), dataIndex: 'isCreate', key: 'isCreate', width: 64 },
-    { title: t('entity.gentablecolumn.isupdate'), dataIndex: 'isUpdate', key: 'isUpdate', width: 64 },
-    { title: t('entity.gentablecolumn.isunique'), dataIndex: 'isUnique', key: 'isUnique', width: 64 },
-    { title: t('entity.gentablecolumn.islist'), dataIndex: 'isList', key: 'isList', width: 64 },
-    { title: t('entity.gentablecolumn.isexport'), dataIndex: 'isExport', key: 'isExport', width: 64 },
-    { title: t('entity.gentablecolumn.issort'), dataIndex: 'isSort', key: 'isSort', width: 64 },
-    { title: t('entity.gentablecolumn.querytype'), dataIndex: 'queryType', key: 'queryType', width: 88 },
-    { title: t('entity.gentablecolumn.htmltype'), dataIndex: 'htmlType', key: 'htmlType', width: 88 },
-    { title: t('entity.gentablecolumn.dicttype'), dataIndex: 'dictType', key: 'dictType', width: 95 },
-    { title: t('entity.gentablecolumn.ordernum'), dataIndex: 'orderNum', key: 'orderNum', width: 72 },
-    { title: t('common.page.action.operation'), key: 'action', width: 72, fixed: 'right' }
+      ellipsis: true,
+    }),
+    withPresentation({ title: gentableColumnLabel('columncomment'), dataIndex: 'columnComment', key: 'columnComment', width: 100 }),
+    withPresentation({ title: gentableColumnLabel('databasedatatype'), dataIndex: 'databaseDataType', key: 'databaseDataType', width: 88 }),
+    withPresentation({ title: gentableColumnLabel('csharpdatatype'), dataIndex: 'csharpDataType', key: 'csharpDataType', width: 88 }),
+    withPresentation({ title: gentableColumnLabel('csharpcolumnname'), dataIndex: 'csharpColumnName', key: 'csharpColumnName', width: 110 }),
+    withPresentation({ title: gentableColumnLabel('length'), dataIndex: 'length', key: 'length', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('decimaldigits'), dataIndex: 'decimalDigits', key: 'decimalDigits', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('ispk'), dataIndex: 'isPk', key: 'isPk', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('isincrement'), dataIndex: 'isIncrement', key: 'isIncrement', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('isrequired'), dataIndex: 'isRequired', key: 'isRequired', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('isquery'), dataIndex: 'isQuery', key: 'isQuery', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('iscreate'), dataIndex: 'isCreate', key: 'isCreate', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('isupdate'), dataIndex: 'isUpdate', key: 'isUpdate', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('isunique'), dataIndex: 'isUnique', key: 'isUnique', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('islist'), dataIndex: 'isList', key: 'isList', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('isexport'), dataIndex: 'isExport', key: 'isExport', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('issort'), dataIndex: 'isSort', key: 'isSort', width: 64 }),
+    withPresentation({ title: gentableColumnLabel('querytype'), dataIndex: 'queryType', key: 'queryType', width: 88 }),
+    withPresentation({ title: gentableColumnLabel('htmltype'), dataIndex: 'htmlType', key: 'htmlType', width: 88 }),
+    withPresentation({ title: gentableColumnLabel('dicttype'), dataIndex: 'dictType', key: 'dictType', width: 95 }),
+    withPresentation({ title: t('common.action.operation'), key: 'action', width: 72, fixed: 'right' }),
   ]
 })
+
+/** 按列设置过滤后的字段配置表展示列（拖拽列与操作列始终保留） */
+const columnTableDisplayColumns = computed<TableColumnsType>(() => {
+  const cols = columnTableColumns.value
+  const keys = columnTableVisibleKeys.value
+  if (!keys.length) return cols
+  const keySet = new Set(keys.map((k) => String(k)))
+  return cols.filter((c) => {
+    const k = String(c.key ?? '')
+    return k === 'dragSort' || k === 'action' || keySet.has(k)
+  })
+})
+
+/** 列设置抽屉选项（仅业务列，不含 dragSort / action） */
+const columnTableSettingOptions = computed(() =>
+  columnTableColumns.value.filter((col) => {
+    const key = String(col.key ?? '')
+    return key && key !== 'dragSort' && key !== 'action'
+  }),
+)
+
+/** 字段配置表 scroll（横向为列宽总和；纵向固定，参照 takt-single-table） */
+const columnTableScroll = computed(() =>
+  resolveTableScrollConfig({
+    columns: columnTableDisplayColumns.value,
+    enableVerticalScroll: true,
+    verticalScrollHeight: columnTableScrollYPx.value,
+  }),
+)
+
+/** 字段配置表固定表体高度 CSS 变量（与 scroll.y 一致） */
+const columnTableBodyStyle = computed(() => ({
+  '--takt-table-scroll-y': `${columnTableScrollYPx.value}px`,
+}))
+
+/** 字段行数较多时启用虚拟滚动（07-overflow-vue） */
+const columnTableVirtual = computed(() => columnList.value.length > 100)
 
 /**
  * 表单初始状态（新增默认值）
@@ -2261,7 +2662,7 @@ function defaultFormState(): GenFormState {
     genFunctionName: undefined,
     genFunction: 'Query,Create,Update,Delete,Status,Sort,Template,Import,Export',
     genMethod: 1,
-    isRepository: 1,
+    isRepository: 0,
     genPath: '/',
     parentMenuId: undefined,
     isGenMenu: 1,
@@ -2269,7 +2670,7 @@ function defaultFormState(): GenFormState {
     sortType: 'asc',
     sortField: undefined,
     permsPrefix: undefined,
-    menuButtonGroup: 'query,create,update,delete,detail,preview,print,import,export,template,approve,revoke,authorize,allocate,resetpwd,changepwd,empty,truncate,unlock,disable,generate,download,sync,columns,tables,databases,initialize,clone,copy,suspend,resume,submit,withdraw,transfer,delegate,return,urge,addsign,reducesign,progress,history,publish,enable,version,design,config,validate,start,terminate,field,permission,datasource,theme,data,archive,clean,draft,deletedraft,send,forward,reply,read,unread,circulate,sign,confirm,like,unlike,favorite,unfavorite,share,unshare,comment,uncomment,flagging,unflagging,follow,unfollow,upload,destroy,run,stop,restart,refresh,reset,calculate,book,closing,reconcile,payment,depreciation,reimburse,reversal,accrual,period,carryforward,cancel,change',
+    menuButtonGroup: undefined,
     frontUi: 2,
     frontFormLayout: 24,
     frontBtnStyle: 1,
@@ -2330,8 +2731,13 @@ async function loadColumns(genTableId: string) {
     })
     const rows = (result?.data ?? []).map(mapGenTableColumnToRow)
     columnList.value = normalizeColumnOrderNum(rows)
+    syncColumnListBaseline(columnList.value)
+    if (!formState.value.sortField?.trim() && columnList.value.length > 0) {
+      formState.value.sortField = resolveDefaultSortField(columnList.value)
+    }
   } catch {
     columnList.value = []
+    columnListBaseline.value = []
   } finally {
     columnLoading.value = false
   }
@@ -2528,11 +2934,11 @@ watch(
   }
 )
 
-/** 生成方式与生成路径相斥：选「zip 压缩包」(0) 时清空生成路径 */
+/** 生成方式与生成路径：zip(0) 占位 "/"，避免后端 GenPath 必填校验失败 */
 watch(
   () => formState.value.genMethod,
   (next) => {
-    if (next === 0) formState.value.genPath = undefined
+    if (next === 0) formState.value.genPath = '/'
   }
 )
 
@@ -2568,6 +2974,12 @@ watch(
       if (!formState.value.genAuthor) {
         formState.value.genAuthor = readCurrentUserDisplayName()
       }
+      if (Number(formState.value.genMethod) === 0 && !formState.value.genPath?.trim()) {
+        formState.value.genPath = '/'
+      }
+      if (!formState.value.sortType?.trim()) {
+        formState.value.sortType = 'asc'
+      }
       applyNamespacesFromPrefixAndModule()
       applyPermsPrefix()
       const infos = props.databaseInfoList ?? []
@@ -2598,16 +3010,18 @@ watch(
               tableId: undefined,
             }))
         )
+        syncColumnListBaseline(columnList.value)
       } else if (tableId) {
         loadColumns(String(tableId))
       } else {
         columnList.value = []
+        columnListBaseline.value = []
       }
     } else {
       formState.value = defaultFormState()
       formState.value.genPath = '/'
       formState.value.genAuthor = readCurrentUserDisplayName()
-      const genOpts = getDictSelectOptions('gen_function')
+      const genOpts = getDictSelectOptions('gen_function_type')
       const btnOpts = getDictSelectOptions('gen_button_category')
       if (genOpts.length > 0) formState.value.genFunction = genOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
       if (btnOpts.length > 0) formState.value.menuButtonGroup = btnOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
@@ -2616,6 +3030,8 @@ watch(
       menuButtonGroupCheckAll.value = true
       menuButtonGroupIndeterminate.value = false
       columnList.value = []
+      columnListBaseline.value = []
+      selectedColumnRowKeys.value = []
     }
   },
   { immediate: true }
@@ -2653,29 +3069,108 @@ async function doValidate() {
 }
 
 /**
- * 汇总提交数据（含 columns 与 columnId/tableId 映射）
+ * 解析默认排序字段（主键列 → 可排序列 → 首列 → id）
+ * @param rows 字段配置行
+ * @returns {string} 数据库列名 snake_case
+ */
+function resolveDefaultSortField(rows: readonly GenTableColumnRow[]): string {
+  const pk = rows.find((r) => Number(r.isPk) === 1)
+  const pkName = pk?.databaseColumnName?.trim()
+  if (pkName) return pkName
+  const sortCol = rows.find((r) => Number(r.isSort) === 1)
+  const sortName = sortCol?.databaseColumnName?.trim()
+  if (sortName) return sortName
+  const first = rows.find((r) => r.databaseColumnName?.trim())
+  return first?.databaseColumnName?.trim() || 'id'
+}
+
+/**
+ * 将字段配置行映射为 API 列 DTO（columnId/orderNum 为 UI 别名）
+ * @param col 表单行
+ * @param isTableUpdate 是否更新主表
+ * @param tableId 主表 id
+ * @returns {Record<string, unknown>} 提交列 DTO
+ */
+function mapColumnRowForSubmit(
+  col: GenTableColumnRow,
+  isTableUpdate: boolean,
+  tableId?: string,
+  tenantCode?: string,
+): Record<string, unknown> {
+  const rawColId = col.columnId
+  const id = rawColId != null ? String(rawColId) : ''
+  const n = Number(id)
+  const hasPersistedColumnId = id !== '' && id !== '0' && Number.isFinite(n) && n > 0
+  const genTableColumnId = isTableUpdate ? (hasPersistedColumnId ? id : '0') : '0'
+  const lineNumber = col.orderNum ?? (col as { lineNumber?: number }).lineNumber ?? 0
+  const genTableId = tableId ?? (col.genTableId != null ? String(col.genTableId) : '0')
+  return {
+    tenantCode: col.tenantCode != null ? String(col.tenantCode) : tenantCode,
+    genTableId,
+    genTableColumnId,
+    lineNumber,
+    databaseColumnName: col.databaseColumnName?.trim() ?? '',
+    columnComment: col.columnComment ?? '',
+    databaseDataType: col.databaseDataType?.trim() ?? '',
+    csharpDataType: col.csharpDataType?.trim() ?? '',
+    csharpColumnName: col.csharpColumnName?.trim() ?? '',
+    length: col.length ?? 0,
+    decimalDigits: col.decimalDigits ?? 0,
+    isPk: col.isPk ?? 0,
+    isIncrement: col.isIncrement ?? 0,
+    isRequired: col.isRequired ?? 0,
+    isCreate: col.isCreate ?? 0,
+    isUpdate: col.isUpdate ?? 0,
+    isUnique: col.isUnique ?? 0,
+    isList: col.isList ?? 0,
+    isExport: col.isExport ?? 0,
+    isSort: col.isSort ?? 0,
+    isQuery: col.isQuery ?? 0,
+    queryType: col.isQuery === 1
+      ? (col.queryType?.trim() || (isStringLikeCsharpType(col.csharpDataType) ? 'like' : 'eq'))
+      : '',
+    htmlType: col.htmlType?.trim() || 'input',
+    dictType: col.dictType ?? '',
+    extField: col.extField,
+    remark: col.remark,
+  }
+}
+
+/**
+ * 汇总提交数据（含 columns 与 genTableColumnId/lineNumber 映射）
  * @returns {GenFormState} 可提交 DTO
  */
 function getValues(): GenFormState {
   const rows = normalizeColumnOrderNum(columnList.value)
-  // 只判断两个表 ID:主表有 genTableId = 更新,无 = 创建;列有 columnId 且不为 0 = 已有列
   const isTableUpdate = !!formState.value.genTableId
-  const columns = rows.map(col => {
-    const rawColId = col.columnId
-    const id = rawColId != null ? String(rawColId) : ''
-    const n = Number(id)
-    /** 后端正 id 为正整数；本地临时行为负整数，一律按新列提交 */
-    const hasPersistedColumnId = id !== '' && id !== '0' && Number.isFinite(n) && n > 0
-    // 创建表：columnId 传数字 0；更新表：已有列传字符串 id，新列传 "0"
-    const columnId = isTableUpdate ? (hasPersistedColumnId ? id : '0') : 0
-    // 创建表时列没有 tableId，后端 CreateAsync 会设；传 "0" 避免空字符串导致 ValueToStringConverter 反序列化 400
-    const tableId = isTableUpdate ? (col.tableId != null ? String(col.tableId) : '0') : '0'
-    const row = { ...col, columnId, tableId } as GenTableColumnRow & { columnId: number | string; tableId: string }
-    return row
-  })
-  const raw = { ...formState.value, columns } as GenFormState
+  const tableId = isTableUpdate ? String(formState.value.genTableId) : undefined
+  const tenantCode = formState.value.tenantCode?.trim() || undefined
+  const columns = rows.map((col) => mapColumnRowForSubmit(col, isTableUpdate, tableId, tenantCode)) as GenTableColumnRow[]
+  const raw = {
+    ...formState.value,
+    columns,
+    genTableId: isTableUpdate ? tableId : undefined,
+  } as GenFormState
   const gm = Number(raw.genMethod ?? 0)
   raw.genMethod = Number.isFinite(gm) ? gm : 0
+  /** zip 模式须传 genPath，避免 body 缺字段导致后端 GenPath Required 校验 400 */
+  if (raw.genMethod === 0) {
+    raw.genPath = raw.genPath?.trim() || '/'
+  } else {
+    raw.genPath = raw.genPath?.trim() ?? ''
+  }
+  if (!raw.sortField?.trim()) {
+    raw.sortField = resolveDefaultSortField(rows)
+  }
+  if (!raw.sortType?.trim()) {
+    raw.sortType = 'asc'
+  }
+  if (!raw.genAuthor?.trim()) {
+    raw.genAuthor = readCurrentUserDisplayName()
+  }
+  if (!raw.tenantCode?.trim()) {
+    raw.tenantCode = tenantCode
+  }
   /** 上级菜单 id 按字符串保留，避免前端 Number 强转导致 int64 精度丢失；无上级菜单时传 "0" */
   if (raw.parentMenuId != null && String(raw.parentMenuId).trim() !== '') {
     raw.parentMenuId = String(raw.parentMenuId)
@@ -2692,11 +3187,15 @@ function reset() {
   formState.value = defaultFormState()
   formState.value.genPath = '/'
   formState.value.genAuthor = readCurrentUserDisplayName()
-  const genOpts = getDictSelectOptions('gen_function')
+  const genOpts = getDictSelectOptions('gen_function_type')
   const btnOpts = getDictSelectOptions('gen_button_category')
   if (genOpts.length > 0) formState.value.genFunction = genOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
   if (btnOpts.length > 0) formState.value.menuButtonGroup = btnOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
   columnList.value = []
+  columnListBaseline.value = []
+  selectedColumnRowKeys.value = []
+  columnTableVisibleKeys.value = resolveColumnTableDefaultVisibleKeys()
+  columnTableWidths.value = { ...COLUMN_TABLE_DEFAULT_WIDTHS }
   activeTab.value = 'table'
   tableSubTab.value = 'basic'
   columnDragRowIndex.value = null
@@ -2718,13 +3217,37 @@ defineExpose({ validate: doValidate, getValues, reset })
 :deep(.ant-tabs-card .ant-tabs-content) {
   padding-top: 12px;
 }
-.column-toolbar {
-  margin-bottom: 8px;
-}
-/* 字段配置表格：横向滚动仅在此容器内，不撑开弹窗 */
+/* 字段配置表格：scroll.y 固定高度 + 横向滚动在 a-table 内（对齐 takt-single-table） */
 .column-table-wrap {
   width: 100%;
-  overflow-x: auto;
+  min-width: 0;
+  overflow: hidden;
+}
+.column-table-wrap :deep(.ant-table-wrapper) {
+  width: 100%;
+  min-width: 0;
+}
+.column-table-wrap :deep(.ant-table-container) {
+  min-width: 0;
+}
+/* 表格 size=small 控制行密度；行内控件仍为 middle，通过收紧单元格 padding 避免撑高行 */
+.column-table-wrap :deep(.ant-table-small .ant-table-thead > tr > th),
+.column-table-wrap :deep(.ant-table-small .ant-table-tbody > tr > td) {
+  padding-block: 4px;
+  vertical-align: middle;
+}
+.column-table-wrap :deep(.column-cell-input .ant-input-affix-wrapper),
+.column-table-wrap :deep(.column-cell-input.ant-input-number),
+.column-table-wrap :deep(.column-cell-select .ant-select-selector) {
+  margin-block: 0;
+}
+.column-table-wrap--fixed-y :deep(.ant-table-body) {
+  min-height: var(--takt-table-scroll-y);
+  max-height: var(--takt-table-scroll-y);
+  overflow-y: auto !important;
+}
+.column-table-wrap--fixed-y :deep(.ant-table-placeholder) {
+  min-height: calc(var(--takt-table-scroll-y) - 8px);
 }
 .column-cell-input,
 .column-cell-select {
@@ -2746,5 +3269,18 @@ defineExpose({ validate: doValidate, getValues, reset })
 .column-row-dragging {
   opacity: 0.6;
   background: var(--ant-color-primary-bg, #e6f4ff);
+}
+.gen-column-setting-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.gen-column-setting-item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ant-color-border-secondary);
+}
+.gen-column-setting-item:last-child {
+  border-bottom: none;
 }
 </style>

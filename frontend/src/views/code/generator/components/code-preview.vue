@@ -85,8 +85,8 @@
           :tab="t('code.generator.page.preview.tab.script')"
         />
       </a-tabs>
-      <div class="flex h-full min-h-[300px] rounded border border-border">
-        <div class="w-80 shrink-0 overflow-y-auto border-r border-border">
+      <div class="flex h-full min-h-[300px] overflow-hidden rounded border border-border bg-container">
+        <div class="w-80 shrink-0 overflow-y-auto border-r border-border bg-container">
           <template
             v-for="group in visibleCategoryGroups"
             :key="group.key"
@@ -111,7 +111,7 @@
             </div>
           </template>
         </div>
-        <div class="takt-code-preview-panel flex-1 overflow-auto bg-[var(--ant-color-fill-quaternary)] p-3">
+        <div class="takt-code-preview-panel flex-1 overflow-auto p-3">
           <pre class="m-0 overflow-auto whitespace-pre text-xs leading-normal"><code
             class="hljs"
             v-html="highlightedHtml"
@@ -129,7 +129,6 @@
  */
 import { useI18n } from 'vue-i18n'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/github.css'
 import TaktModal from '@/components/business/takt-modal/index.vue'
 
 /** highlight.js 自动检测语言子集（生成器常见后缀） */
@@ -251,6 +250,7 @@ type PreviewCategory =
   | 'backendDto'
   | 'backendService'
   | 'backendController'
+  | 'backendValidators'
   | 'backendOther'
   | 'frontendApi'
   | 'frontendType'
@@ -260,6 +260,30 @@ type PreviewCategory =
   | 'scriptTranslationSql'
   | 'scriptMenuSql'
   | 'scriptOther'
+
+/** 各 Tab 下分组展示顺序（与代码生成模板产出顺序一致） */
+const TAB_CATEGORY_ORDER: Record<PreviewTab, PreviewCategory[]> = {
+  backend: [
+    'backendEntity',
+    'backendDto',
+    'backendService',
+    'backendController',
+    'backendValidators',
+    'backendOther',
+  ],
+  frontend: [
+    'frontendApi',
+    'frontendType',
+    'frontendView',
+    'frontendComponent',
+    'frontendOther',
+  ],
+  script: [
+    'scriptTranslationSql',
+    'scriptMenuSql',
+    'scriptOther',
+  ],
+}
 
 /** 组件入参 */
 const props = withDefaults(
@@ -348,8 +372,9 @@ function resolveFileCategory(path: string): PreviewCategory {
   if (normalized.startsWith('backend/src/')) {
     if (normalized.includes('/entities/')) return 'backendEntity'
     if (normalized.includes('/dtos/')) return 'backendDto'
-    if (normalized.includes('/controllers/')) return 'backendController'
     if (normalized.includes('/services/')) return 'backendService'
+    if (normalized.includes('/controllers/')) return 'backendController'
+    if (normalized.includes('/validators/') || normalized.endsWith('validators.cs')) return 'backendValidators'
   }
   return 'backendOther'
 }
@@ -369,6 +394,8 @@ function categoryLabel(category: PreviewCategory): string {
       return t('code.generator.page.preview.category.backend.service')
     case 'backendController':
       return t('code.generator.page.preview.category.backend.controller')
+    case 'backendValidators':
+      return t('code.generator.page.preview.category.backend.validators')
     case 'backendOther':
       return t('code.generator.page.preview.category.backend.other')
     case 'frontendApi':
@@ -399,7 +426,7 @@ const tabFilesMap = computed<Record<PreviewTab, PreviewFile[]>>(() => {
   return map
 })
 
-/** 当前 Tab 下按类别分组的可见文件树 */
+/** 当前 Tab 下按固定顺序分组的可见文件树 */
 const visibleCategoryGroups = computed<PreviewCategoryGroup[]>(() => {
   const groups = new Map<PreviewCategory, PreviewFile[]>()
   for (const file of tabFilesMap.value[activeTab.value]) {
@@ -408,11 +435,13 @@ const visibleCategoryGroups = computed<PreviewCategoryGroup[]>(() => {
     list.push(file)
     groups.set(category, list)
   }
-  return Array.from(groups.entries()).map(([key, files]) => ({
-    key,
-    label: categoryLabel(key),
-    files
-  }))
+  return TAB_CATEGORY_ORDER[activeTab.value]
+    .filter((key) => (groups.get(key)?.length ?? 0) > 0)
+    .map((key) => ({
+      key,
+      label: categoryLabel(key),
+      files: [...(groups.get(key) ?? [])].sort((a, b) => a.name.localeCompare(b.name)),
+    }))
 })
 
 /** files 变化时重置 Tab 与默认选中文件 */

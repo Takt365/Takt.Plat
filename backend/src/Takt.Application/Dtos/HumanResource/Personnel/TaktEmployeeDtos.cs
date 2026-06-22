@@ -54,17 +54,17 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     /// <summary>
     /// 出生日期
     /// </summary>
-    public DateTime? BirthDate { get; set; }
+    public DateTime BirthDate { get; set; }
 
     /// <summary>
     /// 身份证号
     /// </summary>
-    public string? IdCardNo { get; set; } = string.Empty;
+    public string IdCardNo { get; set; } = string.Empty;
 
     /// <summary>
     /// 手机号码
     /// </summary>
-    public string? Mobile { get; set; } = string.Empty;
+    public string Mobile { get; set; } = string.Empty;
 
     /// <summary>
     /// 电子邮箱
@@ -72,24 +72,24 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place 编码或文本）
+    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码）
     /// </summary>
-    public string? NativePlace { get; set; } = string.Empty;
+    public string NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_group 编码或文本）
+    /// 民族（字典 hr_ethnic_code，1～56）
     /// </summary>
-    public string? Ethnicity { get; set; } = string.Empty;
+    public int Ethnicity { get; set; } = 1;
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_status 编码或文本）
+    /// 政治面貌（字典 hr_political_status，0～12）
     /// </summary>
-    public string? PoliticalStatus { get; set; } = string.Empty;
+    public int PoliticalStatus { get; set; } = 0;
 
     /// <summary>
     /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
     /// </summary>
-    public int? MaritalStatus { get; set; }
+    public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
     /// 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
@@ -176,17 +176,17 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     /// <summary>
     /// 紧急联系人姓名
     /// </summary>
-    public string? EmergencyContactName { get; set; } = string.Empty;
+    public string EmergencyContactName { get; set; } = string.Empty;
 
     /// <summary>
     /// 紧急联系人电话
     /// </summary>
-    public string? EmergencyContactPhone { get; set; } = string.Empty;
+    public string EmergencyContactPhone { get; set; } = string.Empty;
 
     /// <summary>
     /// 家庭住址
     /// </summary>
-    public string? HomeAddress { get; set; } = string.Empty;
+    public string HomeAddress { get; set; } = string.Empty;
 
     /// <summary>
     /// 照片URL
@@ -268,19 +268,19 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place 编码或文本）
+    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码）
     /// </summary>
     public string? NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_group 编码或文本）
+    /// 民族（字典 hr_ethnic_code，1～56）
     /// </summary>
-    public string? Ethnicity { get; set; } = string.Empty;
+    public int? Ethnicity { get; set; }
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_status 编码或文本）
+    /// 政治面貌（字典 hr_political_status，0～12）
     /// </summary>
-    public string? PoliticalStatus { get; set; } = string.Empty;
+    public int? PoliticalStatus { get; set; }
 
     /// <summary>
     /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
@@ -387,17 +387,17 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     /// <summary>
     /// 紧急联系人姓名
     /// </summary>
-    public string? EmergencyContactName { get; set; } = string.Empty;
+    public string EmergencyContactName { get; set; } = string.Empty;
 
     /// <summary>
     /// 紧急联系人电话
     /// </summary>
-    public string? EmergencyContactPhone { get; set; } = string.Empty;
+    public string EmergencyContactPhone { get; set; } = string.Empty;
 
     /// <summary>
     /// 家庭住址
     /// </summary>
-    public string? HomeAddress { get; set; } = string.Empty;
+    public string HomeAddress { get; set; } = string.Empty;
 
     /// <summary>
     /// 照片URL
@@ -417,7 +417,7 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -469,17 +469,17 @@ public class TaktEmployeeCreateDto
     /// <summary>
     /// 出生日期
     /// </summary>
-    public DateTime? BirthDate { get; set; }
+    public DateTime BirthDate { get; set; }
 
     /// <summary>
     /// 身份证号
     /// </summary>
-    public string? IdCardNo { get; set; } = string.Empty;
+    public string IdCardNo { get; set; } = string.Empty;
 
     /// <summary>
     /// 手机号码
     /// </summary>
-    public string? Mobile { get; set; } = string.Empty;
+    public string Mobile { get; set; } = string.Empty;
 
     /// <summary>
     /// 电子邮箱
@@ -487,24 +487,24 @@ public class TaktEmployeeCreateDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place 编码或文本）
+    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码）
     /// </summary>
-    public string? NativePlace { get; set; } = string.Empty;
+    public string NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_group 编码或文本）
+    /// 民族（字典 hr_ethnic_code，1～56）
     /// </summary>
-    public string? Ethnicity { get; set; } = string.Empty;
+    public int Ethnicity { get; set; } = 1;
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_status 编码或文本）
+    /// 政治面貌（字典 hr_political_status，0～12）
     /// </summary>
-    public string? PoliticalStatus { get; set; } = string.Empty;
+    public int PoliticalStatus { get; set; } = 0;
 
     /// <summary>
     /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
     /// </summary>
-    public int? MaritalStatus { get; set; }
+    public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
     /// 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
@@ -581,17 +581,17 @@ public class TaktEmployeeCreateDto
     /// <summary>
     /// 紧急联系人姓名
     /// </summary>
-    public string? EmergencyContactName { get; set; } = string.Empty;
+    public string EmergencyContactName { get; set; } = string.Empty;
 
     /// <summary>
     /// 紧急联系人电话
     /// </summary>
-    public string? EmergencyContactPhone { get; set; } = string.Empty;
+    public string EmergencyContactPhone { get; set; } = string.Empty;
 
     /// <summary>
     /// 家庭住址
     /// </summary>
-    public string? HomeAddress { get; set; } = string.Empty;
+    public string HomeAddress { get; set; } = string.Empty;
 
     /// <summary>
     /// 照片URL
@@ -611,7 +611,7 @@ public class TaktEmployeeCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -714,19 +714,19 @@ public class TaktEmployeeTemplateDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place 编码或文本）
+    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码）
     /// </summary>
     public string? NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_group 编码或文本）
+    /// 民族（字典 hr_ethnic_code，1～56）
     /// </summary>
-    public string? Ethnicity { get; set; } = string.Empty;
+    public int? Ethnicity { get; set; }
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_status 编码或文本）
+    /// 政治面貌（字典 hr_political_status，0～12）
     /// </summary>
-    public string? PoliticalStatus { get; set; } = string.Empty;
+    public int? PoliticalStatus { get; set; }
 
     /// <summary>
     /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
@@ -746,7 +746,7 @@ public class TaktEmployeeTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -791,6 +791,11 @@ public class TaktEmployeeImportDto
     public int? Gender { get; set; }
 
     /// <summary>
+    /// 出生日期
+    /// </summary>
+    public DateTime? BirthDate { get; set; }
+
+    /// <summary>
     /// 身份证号
     /// </summary>
     public string? IdCardNo { get; set; } = string.Empty;
@@ -806,19 +811,19 @@ public class TaktEmployeeImportDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place 编码或文本）
+    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码）
     /// </summary>
     public string? NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_group 编码或文本）
+    /// 民族（字典 hr_ethnic_code，1～56）
     /// </summary>
-    public string? Ethnicity { get; set; } = string.Empty;
+    public int? Ethnicity { get; set; }
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_status 编码或文本）
+    /// 政治面貌（字典 hr_political_status，0～12）
     /// </summary>
-    public string? PoliticalStatus { get; set; } = string.Empty;
+    public int? PoliticalStatus { get; set; }
 
     /// <summary>
     /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
@@ -836,9 +841,24 @@ public class TaktEmployeeImportDto
     public string? GraduateSchool { get; set; } = string.Empty;
 
     /// <summary>
+    /// 紧急联系人姓名
+    /// </summary>
+    public string? EmergencyContactName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 紧急联系人电话
+    /// </summary>
+    public string? EmergencyContactPhone { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 家庭住址
+    /// </summary>
+    public string? HomeAddress { get; set; } = string.Empty;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -886,17 +906,17 @@ public class TaktEmployeeExportDto
     /// <summary>
     /// 出生日期
     /// </summary>
-    public DateTime? BirthDate { get; set; }
+    public DateTime BirthDate { get; set; }
 
     /// <summary>
     /// 身份证号
     /// </summary>
-    public string? IdCardNo { get; set; } = string.Empty;
+    public string IdCardNo { get; set; } = string.Empty;
 
     /// <summary>
     /// 手机号码
     /// </summary>
-    public string? Mobile { get; set; } = string.Empty;
+    public string Mobile { get; set; } = string.Empty;
 
     /// <summary>
     /// 电子邮箱
@@ -904,24 +924,24 @@ public class TaktEmployeeExportDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place 编码或文本）
+    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码）
     /// </summary>
-    public string? NativePlace { get; set; } = string.Empty;
+    public string NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_group 编码或文本）
+    /// 民族（字典 hr_ethnic_code，1～56）
     /// </summary>
-    public string? Ethnicity { get; set; } = string.Empty;
+    public int Ethnicity { get; set; } = 1;
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_status 编码或文本）
+    /// 政治面貌（字典 hr_political_status，0～12）
     /// </summary>
-    public string? PoliticalStatus { get; set; } = string.Empty;
+    public int PoliticalStatus { get; set; } = 0;
 
     /// <summary>
     /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
     /// </summary>
-    public int? MaritalStatus { get; set; }
+    public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
     /// 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
@@ -998,17 +1018,17 @@ public class TaktEmployeeExportDto
     /// <summary>
     /// 紧急联系人姓名
     /// </summary>
-    public string? EmergencyContactName { get; set; } = string.Empty;
+    public string EmergencyContactName { get; set; } = string.Empty;
 
     /// <summary>
     /// 紧急联系人电话
     /// </summary>
-    public string? EmergencyContactPhone { get; set; } = string.Empty;
+    public string EmergencyContactPhone { get; set; } = string.Empty;
 
     /// <summary>
     /// 家庭住址
     /// </summary>
-    public string? HomeAddress { get; set; } = string.Empty;
+    public string HomeAddress { get; set; } = string.Empty;
 
     /// <summary>
     /// 照片URL
@@ -1018,7 +1038,7 @@ public class TaktEmployeeExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

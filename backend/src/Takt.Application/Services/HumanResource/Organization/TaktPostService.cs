@@ -107,7 +107,7 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
         EnsureThreeLayerContext();
         var list = await _postRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.PostName,
+            x => x.PostName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -264,6 +264,31 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
     }
 
     /// <summary>
+    /// 更新岗位是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktPostDto> UpdatePostBuiltInAsync(TaktPostBuiltInDto dto)
+    {
+        var entity = await _postRepository.GetByIdAsync(dto.PostId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("岗位不存在");
+        }
+        if (dto.IsBuiltIn is not 0 and not 1)
+        {
+            throw new TaktBusinessException("是否内置必须为字典 sys_yes_no_type 合法值（0=否，1=是）");
+        }
+        if (entity.IsBuiltIn == 1 && dto.IsBuiltIn != 1)
+        {
+            throw new TaktBusinessException("不允许取消内置岗位标识");
+        }
+        entity.IsBuiltIn = dto.IsBuiltIn;
+        await _postRepository.UpdateAsync(entity);
+        return await GetPostByIdAsync(dto.PostId) ?? throw new TaktBusinessException("岗位不存在");
+    }
+
+    /// <summary>
     /// 更新岗位排序
     /// </summary>
     /// <param name="dto">排序DTO</param>
@@ -393,12 +418,12 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
                 (x.PostCode != null && x.PostCode.Contains(keywords))
                 || (x.PostName != null && x.PostName.Contains(keywords))
                 || SqlFunc.ToString(x.DeptId).Contains(keywords)
-                || SqlFunc.ToString(x.PostType).Contains(keywords)
-                || SqlFunc.ToString(x.PostLevel).Contains(keywords)
+                || (x.PostCategory != null && x.PostCategory.Contains(keywords))
+                || (x.PostLevel != null && x.PostLevel.Contains(keywords))
                 || SqlFunc.ToString(x.Headcount).Contains(keywords)
                 || SqlFunc.ToString(x.CurrentCount).Contains(keywords)
-                || (x.Responsibilities != null && x.Responsibilities.Contains(keywords))
-                || (x.Requirements != null && x.Requirements.Contains(keywords))
+                || (x.Responsibilities.Contains(keywords))
+                || (x.Requirements.Contains(keywords))
                 || SqlFunc.ToString(x.EducationRequired).Contains(keywords)
                 || SqlFunc.ToString(x.ExperienceYears).Contains(keywords)
                 || SqlFunc.ToString(x.SalaryMin).Contains(keywords)
@@ -407,7 +432,7 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.Description != null && x.Description.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -428,12 +453,12 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
             exp = exp.And(x => x.DeptId == queryDto.DeptId);
         }
 
-        if (queryDto?.PostType.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.PostCategory))
         {
-            exp = exp.And(x => x.PostType == queryDto.PostType);
+            exp = exp.And(x => x.PostCategory == queryDto.PostCategory);
         }
 
-        if (queryDto?.PostLevel.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.PostLevel))
         {
             exp = exp.And(x => x.PostLevel == queryDto.PostLevel);
         }
@@ -450,12 +475,12 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
 
         if (!string.IsNullOrEmpty(queryDto?.Responsibilities))
         {
-            exp = exp.And(x => x.Responsibilities != null && x.Responsibilities.Contains(queryDto.Responsibilities));
+            exp = exp.And(x => x.Responsibilities.Contains(queryDto.Responsibilities));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Requirements))
         {
-            exp = exp.And(x => x.Requirements != null && x.Requirements.Contains(queryDto.Requirements));
+            exp = exp.And(x => x.Requirements.Contains(queryDto.Requirements));
         }
 
         if (queryDto?.EducationRequired.HasValue == true)
@@ -498,9 +523,9 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
             exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

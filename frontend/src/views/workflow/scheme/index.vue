@@ -11,7 +11,7 @@
   <div class="workflow-scheme">
     <TaktQueryBar
       v-model="queryKeyword"
-      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowScheme.processkey'), t('entity.flowScheme.processname')].join(t('common.tip.or')) })"
+      :placeholder="searchPlaceholder"
       :loading="loading"
       @search="handleSearch"
       @reset="handleReset"
@@ -99,14 +99,14 @@
 
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.flowScheme._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.flowscheme._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.flowScheme._self"
+        entity-i18n-key="entity.flowscheme._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -125,18 +125,18 @@
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
-      <a-form-item :label="t('entity.flowScheme.processkey')">
+      <a-form-item :label="t('entity.flowscheme.processkey')">
         <a-input v-model:value="advancedQueryForm.processKey" />
       </a-form-item>
-      <a-form-item :label="t('entity.flowScheme.processname')">
+      <a-form-item :label="t('entity.flowscheme.processname')">
         <a-input v-model:value="advancedQueryForm.processName" />
       </a-form-item>
-      <a-form-item :label="t('entity.flowScheme.processstatus')">
+      <a-form-item :label="t('entity.flowscheme.processstatus')">
         <TaktSelect
           v-model="advancedQueryForm.processStatus"
           dict-type="sys_scheme_status"
           style="width: 100%"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowScheme.processstatus') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowscheme.processstatus') })"
           allow-clear
         />
       </a-form-item>
@@ -157,6 +157,7 @@
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 流程方案列表页：查询、分页、导出、新增、编辑、删除；弹窗内使用 SchemeForm 编辑方案与 ProcessContent。
  */
@@ -188,13 +189,17 @@ import { useWorkflowSignalRRefresh, WORKFLOW_TABLE_NAMES } from '@/composables/u
 import { RiEditLine, RiDeleteBinLine, RiPlayLine, RiStopLine } from '@remixicon/vue'
 
 const { t } = useI18n()
+/** 列表快捷查询占位文案 */
+const searchPlaceholder = computed(
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.flowscheme._self') })
+)
 const tenantStore = useTenantStore()
 const userStore = useUserStore()
 const loading = ref(false)
 const queryKeyword = ref('')
 const dataSource = ref<FlowScheme[]>([])
-const currentPage = ref(1)
-const pageSize = ref(20)
+const currentPage = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const selectedRow = ref<FlowScheme | null>(null)
 const selectedRows = ref<FlowScheme[]>([])
@@ -210,7 +215,7 @@ const visibleColumnKeys = ref<string[]>([])
 /** 导入弹窗可见 */
 const importVisible = ref(false)
 /** Excel 导入导出文件名 */
-const excelNames = taktExcelEntityNames('flowScheme', t('entity.flowScheme._self'))
+const excelNames = taktExcelEntityNames('TaktFlowScheme')
 
 type TableSorterInfo = {
   field?: string
@@ -269,7 +274,7 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left'
   },
   {
-    title: t('entity.flowScheme.processkey'),
+    title: t('entity.flowscheme.processkey'),
     dataIndex: 'processKey',
     key: 'processKey',
     width: 120,
@@ -277,7 +282,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowScheme.processname'),
+    title: t('entity.flowscheme.processname'),
     dataIndex: 'processName',
     key: 'processName',
     width: 140,
@@ -285,39 +290,39 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowScheme.processcategory'),
+    title: t('entity.flowscheme.processcategory'),
     dataIndex: 'processCategory',
     key: 'processCategory',
     width: 100
   },
   {
-    title: t('entity.flowScheme.processversion'),
+    title: t('entity.flowscheme.processversion'),
     dataIndex: 'processVersion',
     key: 'processVersion',
     width: 80
   },
   {
-    title: t('entity.flowScheme.processdescription'),
+    title: t('entity.flowscheme.processdescription'),
     dataIndex: 'processDescription',
     key: 'processDescription',
     width: 140,
     ellipsis: true
   },
   {
-    title: t('entity.flowScheme.formcode'),
+    title: t('entity.flowscheme.formcode'),
     dataIndex: 'formCode',
     key: 'formCode',
     width: 100,
     ellipsis: true
   },
   {
-    title: t('entity.flowScheme.sortorder'),
+    title: t('entity.flowscheme.sortorder'),
     dataIndex: 'sortOrder',
     key: 'sortOrder',
     width: 80
   },
   {
-    title: t('entity.flowScheme.processstatus'),
+    title: t('entity.flowscheme.processstatus'),
     dataIndex: 'processStatus',
     key: 'processStatus',
     width: 90
@@ -576,7 +581,7 @@ async function handleSchemeStatusChange(record: FlowScheme, processStatus: numbe
   try {
     loading.value = true
     await updateFlowSchemeStatus({ flowSchemeId: record.flowSchemeId, processStatus })
-    message.success(processStatus === 1 ? t('workflow.scheme.page.publishSuccess') : t('workflow.scheme.page.disableSuccess'))
+    message.success(processStatus === 1 ? t('workflow.scheme.page.publish.success') : t('workflow.scheme.page.disable.success'))
     loadData()
   } catch (error: unknown) {
     message.error(getErrorMessage(error, t('common.feedback.failed')))
@@ -599,7 +604,7 @@ function handleResizeColumn(w: number, col: any) {
 
 /** 新增：清空 form、设置标题、打开弹窗并重置步骤 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.flowScheme._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.flowscheme._self') })
   delete form.flowSchemeId
   form.processKey = ''
   form.processName = ''
@@ -621,7 +626,7 @@ function handleCreate() {
 
 /** 编辑：调用 getFlowSchemeById（后端需 workflow:scheme:query）；保存需 create/update */
 async function handleEdit(record: FlowScheme) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.flowScheme._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.flowscheme._self') })
   formLoading.value = true
   try {
     const detail = await getFlowSchemeById(String(record.flowSchemeId))
@@ -646,7 +651,7 @@ async function handleEdit(record: FlowScheme) {
     /** 与库表/接口一致的 ProcessContent：拉取后立即校验，非法时提示（条数无关，仅校验当前编辑这一条） */
     if (contentStr) {
       const pv = validateProcessContentForSave(contentStr)
-      if (!pv.ok) message.warning(t('workflow.scheme.page.invalidProcessContent'))
+      if (!pv.ok) message.warning(t('workflow.scheme.page.invalid.process.content'))
     }
     if (detail.formId != null) {
       form.formId = String(detail.formId)
@@ -661,7 +666,7 @@ async function handleEdit(record: FlowScheme) {
     formVisible.value = true
     setTimeout(() => schemeFormRef.value?.resetSteps?.(), 0)
   } catch {
-    message.error(t('workflow.scheme.page.loadDetailFailed'))
+    message.error(t('workflow.scheme.page.load.detail.failed'))
   } finally {
     formLoading.value = false
   }
@@ -670,7 +675,7 @@ async function handleEdit(record: FlowScheme) {
 /** 更新：若有选中行则编辑该行，否则提示请选择 */
 function handleUpdate() {
   if (selectedRow.value) handleEdit(selectedRow.value)
-  else message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.flowScheme._self') }))
+  else message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.flowscheme._self') }))
 }
 
 /** 单条删除：二次确认后 deleteById 并刷新列表 */
@@ -679,7 +684,7 @@ function handleDeleteOne(record: FlowScheme) {
   Modal.confirm({
     centered: true,
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.flowScheme._self'), name }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.flowscheme._self'), name }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
@@ -700,13 +705,13 @@ function handleDeleteOne(record: FlowScheme) {
 /** 批量删除：无选中则提示；有选中则二次确认后逐条 deleteById 并刷新 */
 function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.flowScheme._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.flowscheme._self') }))
     return
   }
   Modal.confirm({
     centered: true,
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { count: selectedRows.value.length, entity: t('entity.flowScheme._self') }),
+    content: t('common.tip.confirm.delete.count', { count: selectedRows.value.length, entity: t('entity.flowscheme._self') }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
@@ -738,14 +743,14 @@ function handleFormCancel() {
 async function handleFormSubmit() {
   const valid = await schemeFormRef.value?.validateAllSteps?.()
   if (valid === false) {
-    message.warning(t('workflow.scheme.page.step.completeRequired'))
+    message.warning(t('workflow.scheme.page.step.complete.required'))
     return
   }
   const persisted = await schemeFormRef.value?.persistFormBeforeSchemeSave?.()
   if (persisted === false) return
   const pcCheck = validateProcessContentForSave(form.processContent)
   if (!pcCheck.ok) {
-    message.warning(t('workflow.scheme.page.invalidProcessContent'))
+    message.warning(t('workflow.scheme.page.invalid.process.content'))
     return
   }
   try {

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/identity/user/components -->
 <!-- 文件名称：user-form.vue -->
-<!-- 功能描述：用户维护弹窗内嵌表单。由 user/index.vue 引用；defineExpose 提供 validate、getValues、resetFields、setServerValidationErrors。员工/用户信息/权限多标签；TaktSelect 字典 sys_user_type、sys_normal_disable；视图模型见 `@/types/identity/user-form-view`（勿写入自动生成的 user.d.ts）；新增密码由父组件映射为 UserCreate.passwordHash。 -->
+<!-- 功能描述：用户维护弹窗内嵌表单。由 user/index.vue 引用；defineExpose 提供 validate、getValues、resetFields、setServerValidationErrors。员工/用户信息/权限多标签；TaktSelect 字典 sys_user_type、sys_normal_disable_status；视图模型见 `@/types/identity/user-form-view`（勿写入自动生成的 user.d.ts）；新增密码由父组件映射为 UserCreate.passwordHash。 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -11,6 +11,7 @@
   <!-- 根：a-form 包裹 a-tabs；formRef 供父级 validate、resetFields -->
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -20,7 +21,7 @@
       <!-- 标签1：员工信息（编辑=已绑定员工只读+描述；新增=下拉选员工，可跳转人事员工页建档，变更时带出默认 userName） -->
       <a-tab-pane
         key="employee"
-        :tab="t('identity.user.page.tabs.employeeInfo')"
+        :tab="t('identity.user.page.tabs.employee.info')"
         force-render
       >
         <div :class="formContentClass">
@@ -57,7 +58,7 @@
               v-else
               type="warning"
               show-icon
-              :message="t('identity.user.page.tip.employeeOptionMissing')"
+              :message="t('identity.user.page.tip.employee.option.missing')"
             />
           </template>
           <!-- 新增态 -->
@@ -82,11 +83,11 @@
             <a-alert
               type="info"
               show-icon
-              :message="t('identity.user.page.tip.employeeSnapshotHint')"
+              :message="t('identity.user.page.tip.employee.snapshot.hint')"
               style="margin-bottom: 16px"
             />
             <a-space style="margin-bottom: 16px">
-              <span>{{ t('identity.user.page.tip.employeeLinkCreateNewHint') }}</span>
+              <span>{{ t('identity.user.page.tip.employee.link.create.new.hint') }}</span>
               <a-button
                 type="link"
                 @click="goToEmployeeCreate"
@@ -111,7 +112,7 @@
               v-else-if="formState.employeeId"
               type="warning"
               show-icon
-              :message="t('identity.user.page.tip.employeeOptionMissing')"
+              :message="t('identity.user.page.tip.employee.option.missing')"
             />
           </template>
         </div>
@@ -120,7 +121,7 @@
       <!-- 标签2：用户信息（账号、类型/状态、备注；新增时含密码） -->
       <a-tab-pane
         key="user"
-        :tab="t('identity.user.page.tabs.userInfo')"
+        :tab="t('identity.user.page.tabs.user.info')"
         force-render
       >
         <div :class="formContentClass">
@@ -136,6 +137,7 @@
                   :disabled="!!formData?.userId"
                   show-count
                   :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -151,6 +153,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.user.nickname') })"
                   show-count
                   :maxlength="USER_NICKNAME_MAX_LENGTH"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -177,7 +180,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.userStatus"
-                  dict-type="sys_normal_disable"
+                  dict-type="sys_normal_disable_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.user.status') })"
                 />
               </a-form-item>
@@ -210,10 +213,11 @@
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.remark') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
                   :rows="4"
                   show-count
                   :maxlength="500"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -266,6 +270,7 @@ import type {
 import type { TaktSelectOption } from '@/types/common'
 import { getRoleOptions } from '@/api/identity/role'
 import { getEmployeeOptions } from '@/api/human-resource/personnel/employee'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useUserStore } from '@/stores/identity/user'
 import {
   isValidUsername,
@@ -285,6 +290,9 @@ const USERNAME_MAX_LENGTH = 20
 
 /** 用户表单日志器 */
 const userFormLogger = createLogger('identity.user.form')
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
 /** 当前激活 Tab：employee | user | permission */
 const activeTab = ref('employee')
@@ -409,10 +417,28 @@ const loadBusinessOptions = async () => {
   }
 }
 
-/** 挂载时拉取角色、员工选项 */
+/** 挂载时预加载字典并拉取角色、员工选项 */
 onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
   loadBusinessOptions()
 })
+
+/** 字典整型字段校验器 */
+function dictIntRule(fieldLabelKey: string): Rule {
+  return {
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t(fieldLabelKey) }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t(fieldLabelKey) }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change',
+  }
+}
 
 /** 校验规则：`name` 与 `a-form-item` 的 `name` 一致 */
 const rules = computed<Record<string, Rule[]>>(() => {
@@ -489,21 +515,9 @@ const rules = computed<Record<string, Rule[]>>(() => {
       }
     ],
     // userType：字典 sys_user_type，必选
-    userType: [
-      {
-        required: true,
-        message: t('common.page.form.placeholder.select', { field: t('entity.user.type') }),
-        trigger: 'change'
-      }
-    ],
-    // userStatus：字典 sys_normal_disable，必选
-    userStatus: [
-      {
-        required: true,
-        message: t('common.page.form.placeholder.select', { field: t('entity.user.status') }),
-        trigger: 'change'
-      }
-    ]
+    userType: [dictIntRule('entity.user.type')],
+    // userStatus：字典 sys_normal_disable_status，必选
+    userStatus: [dictIntRule('entity.user.status')],
   }
 })
 
@@ -585,13 +599,3 @@ defineExpose({
 })
 </script>
 
-<style scoped lang="css">
-/* 标签页内容区最小高度，与列表页弹窗内表单一致 */
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
-}
-
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
-}
-</style>

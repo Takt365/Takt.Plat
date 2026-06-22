@@ -10,7 +10,7 @@
 <template>
   <a-drawer
     v-model:open="visible"
-    :title="t('routine.help-desk.ticket.page.workflowTitle')"
+    :title="t('routine.help-desk.ticket.page.workflow.title')"
     width="640"
     destroy-on-close
     @close="handleClose"
@@ -69,7 +69,7 @@
             :loading="actionLoading"
             @click="handleConfirmClose"
           >
-            {{ t('routine.help-desk.ticket.page.action.confirmClose') }}
+            {{ t('routine.help-desk.ticket.page.action.confirm.close') }}
           </a-button>
           <a-button
             v-if="canReopen"
@@ -104,11 +104,11 @@
         <a-empty v-else class="mb-4" />
 
         <a-form layout="vertical">
-          <a-form-item :label="t('routine.help-desk.ticket.page.replyPlaceholder')">
+          <a-form-item :label="t('routine.help-desk.ticket.page.reply.placeholder')">
             <a-textarea v-model:value="replyContent" :rows="3" :disabled="actionLoading" />
           </a-form-item>
           <a-form-item v-permission="'routine:helpdesk:ticket:update'">
-            <a-checkbox v-model:checked="isInternal">{{ t('routine.help-desk.ticket.page.internalNote') }}</a-checkbox>
+            <a-checkbox v-model:checked="isInternal">{{ t('routine.help-desk.ticket.page.internal.note') }}</a-checkbox>
           </a-form-item>
           <a-button
             v-permission="'routine:helpdesk:ticket:reply'"
@@ -182,7 +182,17 @@ const STATUS_KEY: Record<number, string> = {
   3: 'waiting',
   4: 'resolved',
   5: 'closed',
-  6: 'reopened',
+  6: 'cancelled',
+  7: 'reopened',
+}
+
+/**
+ * 服务台工单状态规范化（旧版 6=重新打开 → 7）
+ * @param {number} status 状态值
+ * @returns {number} 规范化状态
+ */
+function normalizeHelpDeskTicketStatus(status: number): number {
+  return status === 6 ? 7 : status
 }
 
 /**
@@ -191,7 +201,8 @@ const STATUS_KEY: Record<number, string> = {
  * @returns {string} 文案
  */
 function statusLabel(status: number): string {
-  const key = STATUS_KEY[status] ?? 'open'
+  const normalized = normalizeHelpDeskTicketStatus(status)
+  const key = STATUS_KEY[normalized] ?? 'open'
   return t(`routine.help-desk.ticket.page.status.${key}`)
 }
 
@@ -201,6 +212,7 @@ function statusLabel(status: number): string {
  * @returns {string} 颜色
  */
 function statusColor(status: number): string {
+  const normalized = normalizeHelpDeskTicketStatus(status)
   const map: Record<number, string> = {
     0: 'blue',
     1: 'cyan',
@@ -208,9 +220,10 @@ function statusColor(status: number): string {
     3: 'orange',
     4: 'green',
     5: 'default',
-    6: 'red',
+    6: 'default',
+    7: 'red',
   }
-  return map[status] ?? 'default'
+  return map[normalized] ?? 'default'
 }
 
 /**
@@ -224,7 +237,7 @@ function authorTypeLabel(type: number): string {
   return t('routine.help-desk.ticket.page.author.agent')
 }
 
-const canPick = computed(() => ticket.value && [0, 6].includes(ticket.value.ticketStatus))
+const canPick = computed(() => ticket.value && [0, 7].includes(normalizeHelpDeskTicketStatus(ticket.value.ticketStatus)))
 const canStart = computed(() => ticket.value?.ticketStatus === 1)
 const canWait = computed(() => ticket.value?.ticketStatus === 2)
 const canResolve = computed(() => ticket.value?.ticketStatus === 2)

@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
-// 文件名称：ITaktQualityOperationIncomingService.cs
-// 创建时间：2026-06-09
+// 文件名称：ITaktQualityAssuranceIncomingService.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务来料检验费用明细应用服务接口
 // 
@@ -19,34 +19,34 @@ namespace Takt.Application.Services.Logistics.Quality.Cost;
 /// <summary>
 /// 品质业务来料检验费用明细应用服务接口
 /// </summary>
-public interface ITaktQualityOperationIncomingService
+public interface ITaktQualityAssuranceIncomingService
 {
     /// <summary>
     /// 获取品质业务来料检验费用明细列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    Task<TaktPagedResult<TaktQualityOperationIncomingDto>> GetQualityOperationIncomingListAsync(TaktQualityOperationIncomingQueryDto queryDto);
+    Task<TaktPagedResult<TaktQualityAssuranceIncomingDto>> GetQualityAssuranceIncomingListAsync(TaktQualityAssuranceIncomingQueryDto queryDto);
 
     /// <summary>
     /// 根据ID获取品质业务来料检验费用明细
     /// </summary>
     /// <param name="id">品质业务来料检验费用明细ID</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationIncomingDto?> GetQualityOperationIncomingByIdAsync(long id);
+    Task<TaktQualityAssuranceIncomingDto?> GetQualityAssuranceIncomingByIdAsync(long id);
 
     /// <summary>
     /// 获取品质业务来料检验费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetQualityOperationIncomingOptionsAsync();
+    Task<List<TaktSelectOption>> GetQualityAssuranceIncomingOptionsAsync();
 
     /// <summary>
     /// 创建品质业务来料检验费用明细
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationIncomingDto> CreateQualityOperationIncomingAsync(TaktQualityOperationIncomingCreateDto dto);
+    Task<TaktQualityAssuranceIncomingDto> CreateQualityAssuranceIncomingAsync(TaktQualityAssuranceIncomingCreateDto dto);
 
     /// <summary>
     /// 更新品质业务来料检验费用明细
@@ -54,21 +54,21 @@ public interface ITaktQualityOperationIncomingService
     /// <param name="id">品质业务来料检验费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationIncomingDto> UpdateQualityOperationIncomingAsync(long id, TaktQualityOperationIncomingUpdateDto dto);
+    Task<TaktQualityAssuranceIncomingDto> UpdateQualityAssuranceIncomingAsync(long id, TaktQualityAssuranceIncomingUpdateDto dto);
 
     /// <summary>
     /// 删除品质业务来料检验费用明细
     /// </summary>
     /// <param name="id">品质业务来料检验费用明细ID</param>
     /// <returns>任务</returns>
-    Task DeleteQualityOperationIncomingByIdAsync(long id);
+    Task DeleteQualityAssuranceIncomingByIdAsync(long id);
 
     /// <summary>
     /// 批量删除品质业务来料检验费用明细
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    Task DeleteQualityOperationIncomingBatchAsync(IEnumerable<long> ids);
+    Task DeleteQualityAssuranceIncomingBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
     /// 获取导入模板
@@ -76,7 +76,7 @@ public interface ITaktQualityOperationIncomingService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] content)> GetQualityOperationIncomingTemplateAsync(string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] content)> GetQualityAssuranceIncomingTemplateAsync(string? sheetName = null, string? fileName = null);
 
     /// <summary>
     /// 导入品质业务来料检验费用明细
@@ -84,7 +84,7 @@ public interface ITaktQualityOperationIncomingService
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    Task<(int success, int fail, List<string> errors)> ImportQualityOperationIncomingAsync(Stream fileStream, string? sheetName = null);
+    Task<(int success, int fail, List<string> errors)> ImportQualityAssuranceIncomingAsync(Stream fileStream, string? sheetName = null);
 
     /// <summary>
     /// 导出品质业务来料检验费用明细
@@ -93,6 +93,6 @@ public interface ITaktQualityOperationIncomingService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] fileContent)> ExportQualityOperationIncomingAsync(TaktQualityOperationIncomingQueryDto? query = null, string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] fileContent)> ExportQualityAssuranceIncomingAsync(TaktQualityAssuranceIncomingQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
 }

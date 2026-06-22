@@ -201,6 +201,26 @@ public class TaktDictTypesController : TaktControllerBase
     }
 
     /// <summary>
+    /// 更新字典类型是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>字典类型DTO</returns>
+    [TaktPermission("foundation:dict:update", "更新字典类型是否内置")]
+    [HttpPut("built-in")]
+    public async Task<IActionResult> UpdateDictTypeBuiltInAsync([FromBody] TaktDictTypeBuiltInDto dto)
+    {
+        try
+        {
+            var result = await _dictTypeService.UpdateDictTypeBuiltInAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 更新字典类型排序
     /// </summary>
     /// <param name="dto">排序DTO</param>

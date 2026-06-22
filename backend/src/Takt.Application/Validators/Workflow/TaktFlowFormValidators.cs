@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Workflow
 // 文件名称：TaktFlowFormValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FlowForm 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktFlowForm 生成，请按需审阅）
 // 
@@ -31,28 +31,28 @@ public class TaktFlowFormCreateValidator : AbstractValidator<TaktFlowFormCreateD
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.FormCode)
             .NotEmpty().WithMessage("表单编码不能为空")
-            .MaximumLength(40).WithMessage("表单编码长度不能超过40个字符");
+            .MaximumLength(64).WithMessage("表单编码长度不能超过64个字符");
         RuleFor(x => x.FormName)
             .NotEmpty().WithMessage("表单名称不能为空")
-            .MaximumLength(40).WithMessage("表单名称长度不能超过40个字符");
+            .MaximumLength(200).WithMessage("表单名称长度不能超过200个字符");
         RuleFor(x => x.FormVersion)
             .NotEmpty().WithMessage("表单版本标签不能为空")
             .MaximumLength(32).WithMessage("表单版本标签长度不能超过32个字符");
         RuleFor(x => x.RelatedDataBaseName)
-            .MaximumLength(40).WithMessage("关联数据库名长度不能超过40个字符");
+            .MaximumLength(128).WithMessage("关联数据库名长度不能超过128个字符");
         RuleFor(x => x.RelatedTableName)
-            .MaximumLength(40).WithMessage("关联表名长度不能超过40个字符");
+            .MaximumLength(128).WithMessage("关联表名长度不能超过128个字符");
         RuleFor(x => x.RelatedFormField)
             .MaximumLength(4000).WithMessage("关联字段映射 JSON长度不能超过4000个字符");
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -93,28 +93,28 @@ public class TaktFlowFormImportValidator : AbstractValidator<TaktFlowFormImportD
     public TaktFlowFormImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.FormCode)
             .NotEmpty().WithMessage("表单编码不能为空")
-            .MaximumLength(40).WithMessage("表单编码长度不能超过40个字符");
+            .MaximumLength(64).WithMessage("表单编码长度不能超过64个字符");
         RuleFor(x => x.FormName)
             .NotEmpty().WithMessage("表单名称不能为空")
-            .MaximumLength(40).WithMessage("表单名称长度不能超过40个字符");
+            .MaximumLength(200).WithMessage("表单名称长度不能超过200个字符");
         RuleFor(x => x.FormVersion)
             .NotEmpty().WithMessage("表单版本标签不能为空")
             .MaximumLength(32).WithMessage("表单版本标签长度不能超过32个字符");
         RuleFor(x => x.RelatedDataBaseName)
-            .MaximumLength(40).WithMessage("关联数据库名长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedDataBaseName));
+            .MaximumLength(128).WithMessage("关联数据库名长度不能超过128个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedDataBaseName));
         RuleFor(x => x.RelatedTableName)
-            .MaximumLength(40).WithMessage("关联表名长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedTableName));
+            .MaximumLength(128).WithMessage("关联表名长度不能超过128个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedTableName));
         RuleFor(x => x.RelatedFormField)
             .MaximumLength(4000).WithMessage("关联字段映射 JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedFormField));
         RuleFor(x => x.SortOrder)
             .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

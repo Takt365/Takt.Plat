@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentChangeLogI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocumentChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,101 +75,101 @@ public class TaktDocumentChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktDocumentChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.documentchangelog._self / entity.documentchangelog.{{field}}；ResourceGroup=2；ResourceType=0
+    /// I18nKey：entity.documentchangelog._self / entity.documentchangelog.{{field}}；ResourceGroup=DocumentCenter；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetDocumentChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.documentchangelog._self
-            new TranslationSeedItem("entity.documentchangelog._self", "en-US", "Document Change Log Information", "实体名称"),
+            new TranslationSeedItem("entity.documentchangelog._self", "en-US", "Document Change Log Information_us", "实体名称"),
             // entity.documentchangelog._self
-            new TranslationSeedItem("entity.documentchangelog._self", "ja-JP", "文管文档变更日志信息", "实体名称"),
+            new TranslationSeedItem("entity.documentchangelog._self", "ja-JP", "文管文档变更日志信息_jp", "实体名称"),
             // entity.documentchangelog._self
             new TranslationSeedItem("entity.documentchangelog._self", "zh-CN", "文管文档变更日志信息", "实体名称"),
             // entity.documentchangelog._self
-            new TranslationSeedItem("entity.documentchangelog._self", "zh-HK", "文管文档变更日志信息", "实体名称"),
+            new TranslationSeedItem("entity.documentchangelog._self", "zh-HK", "文管文档变更日志信息_hk", "实体名称"),
 
             // entity.documentchangelog.documentid
-            new TranslationSeedItem("entity.documentchangelog.documentid", "en-US", "文档ID", "文档 ID"),
+            new TranslationSeedItem("entity.documentchangelog.documentid", "en-US", "文档ID_us", "文档 ID"),
             // entity.documentchangelog.documentid
-            new TranslationSeedItem("entity.documentchangelog.documentid", "ja-JP", "文档ID", "文档 ID"),
+            new TranslationSeedItem("entity.documentchangelog.documentid", "ja-JP", "文档ID_jp", "文档 ID"),
             // entity.documentchangelog.documentid
             new TranslationSeedItem("entity.documentchangelog.documentid", "zh-CN", "文档ID", "文档 ID"),
             // entity.documentchangelog.documentid
-            new TranslationSeedItem("entity.documentchangelog.documentid", "zh-HK", "文档ID", "文档 ID"),
+            new TranslationSeedItem("entity.documentchangelog.documentid", "zh-HK", "文档ID_hk", "文档 ID"),
 
             // entity.documentchangelog.documentcode
-            new TranslationSeedItem("entity.documentchangelog.documentcode", "en-US", "文档编码", "文档编码（冗余，便于日志列表展示）"),
+            new TranslationSeedItem("entity.documentchangelog.documentcode", "en-US", "文档编码_us", "文档编码（冗余，便于日志列表展示）"),
             // entity.documentchangelog.documentcode
-            new TranslationSeedItem("entity.documentchangelog.documentcode", "ja-JP", "文档编码", "文档编码（冗余，便于日志列表展示）"),
+            new TranslationSeedItem("entity.documentchangelog.documentcode", "ja-JP", "文档编码_jp", "文档编码（冗余，便于日志列表展示）"),
             // entity.documentchangelog.documentcode
             new TranslationSeedItem("entity.documentchangelog.documentcode", "zh-CN", "文档编码", "文档编码（冗余，便于日志列表展示）"),
             // entity.documentchangelog.documentcode
-            new TranslationSeedItem("entity.documentchangelog.documentcode", "zh-HK", "文档编码", "文档编码（冗余，便于日志列表展示）"),
+            new TranslationSeedItem("entity.documentchangelog.documentcode", "zh-HK", "文档编码_hk", "文档编码（冗余，便于日志列表展示）"),
 
             // entity.documentchangelog.documenttitle
-            new TranslationSeedItem("entity.documentchangelog.documenttitle", "en-US", "文档标题", "文档标题（冗余，便于日志列表展示）"),
+            new TranslationSeedItem("entity.documentchangelog.documenttitle", "en-US", "文档标题_us", "文档标题（冗余，便于日志列表展示）"),
             // entity.documentchangelog.documenttitle
-            new TranslationSeedItem("entity.documentchangelog.documenttitle", "ja-JP", "文档标题", "文档标题（冗余，便于日志列表展示）"),
+            new TranslationSeedItem("entity.documentchangelog.documenttitle", "ja-JP", "文档标题_jp", "文档标题（冗余，便于日志列表展示）"),
             // entity.documentchangelog.documenttitle
             new TranslationSeedItem("entity.documentchangelog.documenttitle", "zh-CN", "文档标题", "文档标题（冗余，便于日志列表展示）"),
             // entity.documentchangelog.documenttitle
-            new TranslationSeedItem("entity.documentchangelog.documenttitle", "zh-HK", "文档标题", "文档标题（冗余，便于日志列表展示）"),
+            new TranslationSeedItem("entity.documentchangelog.documenttitle", "zh-HK", "文档标题_hk", "文档标题（冗余，便于日志列表展示）"),
 
             // entity.documentchangelog.changetype
-            new TranslationSeedItem("entity.documentchangelog.changetype", "en-US", "变更类型", "变更类型"),
+            new TranslationSeedItem("entity.documentchangelog.changetype", "en-US", "变更类型_us", "变更类型"),
             // entity.documentchangelog.changetype
-            new TranslationSeedItem("entity.documentchangelog.changetype", "ja-JP", "变更类型", "变更类型"),
+            new TranslationSeedItem("entity.documentchangelog.changetype", "ja-JP", "变更类型_jp", "变更类型"),
             // entity.documentchangelog.changetype
             new TranslationSeedItem("entity.documentchangelog.changetype", "zh-CN", "变更类型", "变更类型"),
             // entity.documentchangelog.changetype
-            new TranslationSeedItem("entity.documentchangelog.changetype", "zh-HK", "变更类型", "变更类型"),
+            new TranslationSeedItem("entity.documentchangelog.changetype", "zh-HK", "变更类型_hk", "变更类型"),
 
             // entity.documentchangelog.changesummary
-            new TranslationSeedItem("entity.documentchangelog.changesummary", "en-US", "变更内容摘要", "变更内容摘要"),
+            new TranslationSeedItem("entity.documentchangelog.changesummary", "en-US", "变更内容摘要_us", "变更内容摘要"),
             // entity.documentchangelog.changesummary
-            new TranslationSeedItem("entity.documentchangelog.changesummary", "ja-JP", "变更内容摘要", "变更内容摘要"),
+            new TranslationSeedItem("entity.documentchangelog.changesummary", "ja-JP", "变更内容摘要_jp", "变更内容摘要"),
             // entity.documentchangelog.changesummary
             new TranslationSeedItem("entity.documentchangelog.changesummary", "zh-CN", "变更内容摘要", "变更内容摘要"),
             // entity.documentchangelog.changesummary
-            new TranslationSeedItem("entity.documentchangelog.changesummary", "zh-HK", "变更内容摘要", "变更内容摘要"),
+            new TranslationSeedItem("entity.documentchangelog.changesummary", "zh-HK", "变更内容摘要_hk", "变更内容摘要"),
 
             // entity.documentchangelog.changefields
-            new TranslationSeedItem("entity.documentchangelog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON 数组）"),
+            new TranslationSeedItem("entity.documentchangelog.changefields", "en-US", "变更字段列表_us", "变更字段列表（JSON 数组）"),
             // entity.documentchangelog.changefields
-            new TranslationSeedItem("entity.documentchangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON 数组）"),
+            new TranslationSeedItem("entity.documentchangelog.changefields", "ja-JP", "变更字段列表_jp", "变更字段列表（JSON 数组）"),
             // entity.documentchangelog.changefields
             new TranslationSeedItem("entity.documentchangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON 数组）"),
             // entity.documentchangelog.changefields
-            new TranslationSeedItem("entity.documentchangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON 数组）"),
+            new TranslationSeedItem("entity.documentchangelog.changefields", "zh-HK", "变更字段列表_hk", "变更字段列表（JSON 数组）"),
 
             // entity.documentchangelog.changereason
-            new TranslationSeedItem("entity.documentchangelog.changereason", "en-US", "变更原因", "变更原因或备注"),
+            new TranslationSeedItem("entity.documentchangelog.changereason", "en-US", "变更原因_us", "变更原因或备注"),
             // entity.documentchangelog.changereason
-            new TranslationSeedItem("entity.documentchangelog.changereason", "ja-JP", "变更原因", "变更原因或备注"),
+            new TranslationSeedItem("entity.documentchangelog.changereason", "ja-JP", "变更原因_jp", "变更原因或备注"),
             // entity.documentchangelog.changereason
             new TranslationSeedItem("entity.documentchangelog.changereason", "zh-CN", "变更原因", "变更原因或备注"),
             // entity.documentchangelog.changereason
-            new TranslationSeedItem("entity.documentchangelog.changereason", "zh-HK", "变更原因", "变更原因或备注"),
+            new TranslationSeedItem("entity.documentchangelog.changereason", "zh-HK", "变更原因_hk", "变更原因或备注"),
 
             // entity.documentchangelog.versionatchange
-            new TranslationSeedItem("entity.documentchangelog.versionatchange", "en-US", "变更时文档版本号", "变更时文档版本号"),
+            new TranslationSeedItem("entity.documentchangelog.versionatchange", "en-US", "变更时文档版本号_us", "变更时文档版本号"),
             // entity.documentchangelog.versionatchange
-            new TranslationSeedItem("entity.documentchangelog.versionatchange", "ja-JP", "变更时文档版本号", "变更时文档版本号"),
+            new TranslationSeedItem("entity.documentchangelog.versionatchange", "ja-JP", "变更时文档版本号_jp", "变更时文档版本号"),
             // entity.documentchangelog.versionatchange
             new TranslationSeedItem("entity.documentchangelog.versionatchange", "zh-CN", "变更时文档版本号", "变更时文档版本号"),
             // entity.documentchangelog.versionatchange
-            new TranslationSeedItem("entity.documentchangelog.versionatchange", "zh-HK", "变更时文档版本号", "变更时文档版本号"),
+            new TranslationSeedItem("entity.documentchangelog.versionatchange", "zh-HK", "变更时文档版本号_hk", "变更时文档版本号"),
 
             // entity.documentchangelog.document
-            new TranslationSeedItem("entity.documentchangelog.document", "en-US", "文档", "文档（主表）"),
+            new TranslationSeedItem("entity.documentchangelog.document", "en-US", "文档_us", "文档（主表）"),
             // entity.documentchangelog.document
-            new TranslationSeedItem("entity.documentchangelog.document", "ja-JP", "文档", "文档（主表）"),
+            new TranslationSeedItem("entity.documentchangelog.document", "ja-JP", "文档_jp", "文档（主表）"),
             // entity.documentchangelog.document
             new TranslationSeedItem("entity.documentchangelog.document", "zh-CN", "文档", "文档（主表）"),
             // entity.documentchangelog.document
-            new TranslationSeedItem("entity.documentchangelog.document", "zh-HK", "文档", "文档（主表）"),
+            new TranslationSeedItem("entity.documentchangelog.document", "zh-HK", "文档_hk", "文档（主表）"),
         };
     }
 
@@ -187,10 +187,10 @@ public class TaktDocumentChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 2;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "DocumentCenter";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

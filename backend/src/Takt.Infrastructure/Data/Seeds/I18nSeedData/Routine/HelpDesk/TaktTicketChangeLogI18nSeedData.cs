@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketChangeLogI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicketChangeLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,83 +75,83 @@ public class TaktTicketChangeLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktTicketChangeLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.ticketchangelog._self / entity.ticketchangelog.{{field}}；ResourceGroup=2；ResourceType=0
+    /// I18nKey：entity.ticketchangelog._self / entity.ticketchangelog.{{field}}；ResourceGroup=HelpDesk；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetTicketChangeLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.ticketchangelog._self
-            new TranslationSeedItem("entity.ticketchangelog._self", "en-US", "Ticket Change Log Information", "实体名称"),
+            new TranslationSeedItem("entity.ticketchangelog._self", "en-US", "Ticket Change Log Information_us", "实体名称"),
             // entity.ticketchangelog._self
-            new TranslationSeedItem("entity.ticketchangelog._self", "ja-JP", "工单变更日志信息", "实体名称"),
+            new TranslationSeedItem("entity.ticketchangelog._self", "ja-JP", "工单变更日志信息_jp", "实体名称"),
             // entity.ticketchangelog._self
             new TranslationSeedItem("entity.ticketchangelog._self", "zh-CN", "工单变更日志信息", "实体名称"),
             // entity.ticketchangelog._self
-            new TranslationSeedItem("entity.ticketchangelog._self", "zh-HK", "工单变更日志信息", "实体名称"),
+            new TranslationSeedItem("entity.ticketchangelog._self", "zh-HK", "工单变更日志信息_hk", "实体名称"),
 
             // entity.ticketchangelog.ticketid
-            new TranslationSeedItem("entity.ticketchangelog.ticketid", "en-US", "工单ID", "工单 ID"),
+            new TranslationSeedItem("entity.ticketchangelog.ticketid", "en-US", "工单ID_us", "工单 ID"),
             // entity.ticketchangelog.ticketid
-            new TranslationSeedItem("entity.ticketchangelog.ticketid", "ja-JP", "工单ID", "工单 ID"),
+            new TranslationSeedItem("entity.ticketchangelog.ticketid", "ja-JP", "工单ID_jp", "工单 ID"),
             // entity.ticketchangelog.ticketid
             new TranslationSeedItem("entity.ticketchangelog.ticketid", "zh-CN", "工单ID", "工单 ID"),
             // entity.ticketchangelog.ticketid
-            new TranslationSeedItem("entity.ticketchangelog.ticketid", "zh-HK", "工单ID", "工单 ID"),
+            new TranslationSeedItem("entity.ticketchangelog.ticketid", "zh-HK", "工单ID_hk", "工单 ID"),
 
             // entity.ticketchangelog.ticketno
-            new TranslationSeedItem("entity.ticketchangelog.ticketno", "en-US", "工单编号", "工单编号（冗余，便于日志列表展示）"),
+            new TranslationSeedItem("entity.ticketchangelog.ticketno", "en-US", "工单编号_us", "工单编号（冗余，便于日志列表展示）"),
             // entity.ticketchangelog.ticketno
-            new TranslationSeedItem("entity.ticketchangelog.ticketno", "ja-JP", "工单编号", "工单编号（冗余，便于日志列表展示）"),
+            new TranslationSeedItem("entity.ticketchangelog.ticketno", "ja-JP", "工单编号_jp", "工单编号（冗余，便于日志列表展示）"),
             // entity.ticketchangelog.ticketno
             new TranslationSeedItem("entity.ticketchangelog.ticketno", "zh-CN", "工单编号", "工单编号（冗余，便于日志列表展示）"),
             // entity.ticketchangelog.ticketno
-            new TranslationSeedItem("entity.ticketchangelog.ticketno", "zh-HK", "工单编号", "工单编号（冗余，便于日志列表展示）"),
+            new TranslationSeedItem("entity.ticketchangelog.ticketno", "zh-HK", "工单编号_hk", "工单编号（冗余，便于日志列表展示）"),
 
             // entity.ticketchangelog.changetype
-            new TranslationSeedItem("entity.ticketchangelog.changetype", "en-US", "变更类型", "变更类型（0=创建，1=更新，2=关闭/删除）"),
+            new TranslationSeedItem("entity.ticketchangelog.changetype", "en-US", "变更类型_us", "变更类型（0=创建，1=更新，2=关闭/删除）"),
             // entity.ticketchangelog.changetype
-            new TranslationSeedItem("entity.ticketchangelog.changetype", "ja-JP", "变更类型", "变更类型（0=创建，1=更新，2=关闭/删除）"),
+            new TranslationSeedItem("entity.ticketchangelog.changetype", "ja-JP", "变更类型_jp", "变更类型（0=创建，1=更新，2=关闭/删除）"),
             // entity.ticketchangelog.changetype
             new TranslationSeedItem("entity.ticketchangelog.changetype", "zh-CN", "变更类型", "变更类型（0=创建，1=更新，2=关闭/删除）"),
             // entity.ticketchangelog.changetype
-            new TranslationSeedItem("entity.ticketchangelog.changetype", "zh-HK", "变更类型", "变更类型（0=创建，1=更新，2=关闭/删除）"),
+            new TranslationSeedItem("entity.ticketchangelog.changetype", "zh-HK", "变更类型_hk", "变更类型（0=创建，1=更新，2=关闭/删除）"),
 
             // entity.ticketchangelog.changesummary
-            new TranslationSeedItem("entity.ticketchangelog.changesummary", "en-US", "修改工单内容摘要", "修改工单内容摘要"),
+            new TranslationSeedItem("entity.ticketchangelog.changesummary", "en-US", "修改工单内容摘要_us", "修改工单内容摘要"),
             // entity.ticketchangelog.changesummary
-            new TranslationSeedItem("entity.ticketchangelog.changesummary", "ja-JP", "修改工单内容摘要", "修改工单内容摘要"),
+            new TranslationSeedItem("entity.ticketchangelog.changesummary", "ja-JP", "修改工单内容摘要_jp", "修改工单内容摘要"),
             // entity.ticketchangelog.changesummary
             new TranslationSeedItem("entity.ticketchangelog.changesummary", "zh-CN", "修改工单内容摘要", "修改工单内容摘要"),
             // entity.ticketchangelog.changesummary
-            new TranslationSeedItem("entity.ticketchangelog.changesummary", "zh-HK", "修改工单内容摘要", "修改工单内容摘要"),
+            new TranslationSeedItem("entity.ticketchangelog.changesummary", "zh-HK", "修改工单内容摘要_hk", "修改工单内容摘要"),
 
             // entity.ticketchangelog.changefields
-            new TranslationSeedItem("entity.ticketchangelog.changefields", "en-US", "变更字段列表", "变更字段列表（JSON 数组）"),
+            new TranslationSeedItem("entity.ticketchangelog.changefields", "en-US", "变更字段列表_us", "变更字段列表（JSON 数组）"),
             // entity.ticketchangelog.changefields
-            new TranslationSeedItem("entity.ticketchangelog.changefields", "ja-JP", "变更字段列表", "变更字段列表（JSON 数组）"),
+            new TranslationSeedItem("entity.ticketchangelog.changefields", "ja-JP", "变更字段列表_jp", "变更字段列表（JSON 数组）"),
             // entity.ticketchangelog.changefields
             new TranslationSeedItem("entity.ticketchangelog.changefields", "zh-CN", "变更字段列表", "变更字段列表（JSON 数组）"),
             // entity.ticketchangelog.changefields
-            new TranslationSeedItem("entity.ticketchangelog.changefields", "zh-HK", "变更字段列表", "变更字段列表（JSON 数组）"),
+            new TranslationSeedItem("entity.ticketchangelog.changefields", "zh-HK", "变更字段列表_hk", "变更字段列表（JSON 数组）"),
 
             // entity.ticketchangelog.changereason
-            new TranslationSeedItem("entity.ticketchangelog.changereason", "en-US", "变更原因", "变更原因或备注"),
+            new TranslationSeedItem("entity.ticketchangelog.changereason", "en-US", "变更原因_us", "变更原因或备注"),
             // entity.ticketchangelog.changereason
-            new TranslationSeedItem("entity.ticketchangelog.changereason", "ja-JP", "变更原因", "变更原因或备注"),
+            new TranslationSeedItem("entity.ticketchangelog.changereason", "ja-JP", "变更原因_jp", "变更原因或备注"),
             // entity.ticketchangelog.changereason
             new TranslationSeedItem("entity.ticketchangelog.changereason", "zh-CN", "变更原因", "变更原因或备注"),
             // entity.ticketchangelog.changereason
-            new TranslationSeedItem("entity.ticketchangelog.changereason", "zh-HK", "变更原因", "变更原因或备注"),
+            new TranslationSeedItem("entity.ticketchangelog.changereason", "zh-HK", "变更原因_hk", "变更原因或备注"),
 
             // entity.ticketchangelog.ticket
-            new TranslationSeedItem("entity.ticketchangelog.ticket", "en-US", "工单", "工单（主表）"),
+            new TranslationSeedItem("entity.ticketchangelog.ticket", "en-US", "工单_us", "工单（主表）"),
             // entity.ticketchangelog.ticket
-            new TranslationSeedItem("entity.ticketchangelog.ticket", "ja-JP", "工单", "工单（主表）"),
+            new TranslationSeedItem("entity.ticketchangelog.ticket", "ja-JP", "工单_jp", "工单（主表）"),
             // entity.ticketchangelog.ticket
             new TranslationSeedItem("entity.ticketchangelog.ticket", "zh-CN", "工单", "工单（主表）"),
             // entity.ticketchangelog.ticket
-            new TranslationSeedItem("entity.ticketchangelog.ticket", "zh-HK", "工单", "工单（主表）"),
+            new TranslationSeedItem("entity.ticketchangelog.ticket", "zh-HK", "工单_hk", "工单（主表）"),
         };
     }
 
@@ -169,10 +169,10 @@ public class TaktTicketChangeLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 2;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "HelpDesk";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -31,7 +31,7 @@
         :disabled="!selectedRow"
         @click="handleOpenWorkflow"
       >
-        {{ t('routine.help-desk.ticket.page.workflowTitle') }}
+        {{ t('routine.help-desk.ticket.page.workflow.title') }}
       </a-button>
     </div>
     <TaktSingleTable
@@ -50,13 +50,13 @@
         <template v-if="column.key === 'ticketStatus'">
           <TaktDictTag
             :value="record.ticketStatus"
-            dict-type="helpdesk_ticket_status"
+            dict-type="sys_ticket_status"
           />
         </template>
         <template v-else-if="column.key === 'priority'">
           <TaktDictTag
             :value="record.priority"
-            dict-type="sys_priority"
+            dict-type="sys_priority_level_category"
           />
         </template>
       </template>
@@ -65,8 +65,8 @@
       v-model:current="currentPage"
       v-model:page-size="pageSize"
       :total="total"
-      @change="loadData"
-      @show-size-change="loadData"
+      @change="handlePaginationChange"
+      @show-size-change="handlePaginationSizeChange"
     />
     <TaktModal
       v-model:open="formVisible"
@@ -82,11 +82,26 @@
         <a-form-item :label="t('entity.ticket.content')" name="content">
           <a-textarea v-model:value="formState.content" :rows="3" size="small" />
         </a-form-item>
+        <a-form-item :label="t('entity.ticket.urgency')" name="urgency">
+          <TaktSelect
+            v-model:value="formState.urgency"
+            dict-type="sys_urgency_level_category"
+            size="small"
+          />
+        </a-form-item>
+        <a-form-item :label="t('entity.ticket.impact')" name="impact">
+          <TaktSelect
+            v-model:value="formState.impact"
+            dict-type="sys_impact_level_category"
+            size="small"
+          />
+        </a-form-item>
         <a-form-item :label="t('entity.ticket.priority')" name="priority">
           <TaktSelect
-            v-model:value="formState.priority"
-            dict-type="sys_priority"
+            v-model:value="computedPriority"
+            dict-type="sys_priority_level_category"
             size="small"
+            disabled
           />
         </a-form-item>
         <a-form-item :label="t('entity.ticket.categorycode')" name="categoryCode">
@@ -120,10 +135,12 @@ import { ref, computed, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import type { Rule } from 'ant-design-vue/es/form'
 import { getMyTicketList, submitTicket } from '@/api/routine/help-desk/ticket'
 import { getAssetList } from '@/api/accounting/financial/asset'
 import type { Ticket, TicketSubmit } from '@/types/routine/help-desk/ticket'
+import { resolveTicketPriority } from '@/utils/takt-ticket-priority'
 import TicketWorkflowDrawer from '../ticket/components/ticket-workflow-drawer.vue'
 
 /** i18n 翻译函数 */
@@ -139,9 +156,9 @@ const loading = ref(false)
 /** 列表数据 */
 const dataSource = ref<Ticket[]>([])
 /** 当前页 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 总数 */
 const total = ref(0)
 /** 选中行 */
@@ -162,10 +179,15 @@ const formRef = ref()
 const formState = ref<TicketSubmit>({
   title: '',
   content: '',
-  priority: 1,
+  urgency: 3,
+  impact: 3,
   categoryCode: '',
   assetCode: '',
 })
+/** 由紧急度×影响范围自动计算的优先级预览 */
+const computedPriority = computed(() =>
+  resolveTicketPriority(formState.value.urgency, formState.value.impact),
+)
 /** 资产号码下拉选项 */
 const assetOptions = ref<Array<{ label: string; value: string }>>([])
 /** 新建表单规则 */
@@ -244,9 +266,23 @@ function handleReset() {
   currentPage.value = 1
   loadData()
 }
+
+/** 外置分页：翻页 */
+function handlePaginationChange(page: number) {
+  currentPage.value = page
+  loadData()
+}
+
+/** 外置分页：改每页条数时回到第 1 页 */
+function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = 1
+  pageSize.value = size
+  loadData()
+}
+
 /** 新建工单 */
 function handleCreate() {
-  formState.value = { title: '', content: '', priority: 1, categoryCode: '', assetCode: '' }
+  formState.value = { title: '', content: '', urgency: 3, impact: 3, categoryCode: '', assetCode: '' }
   formVisible.value = true
 }
 /** 加载资产选项 */

@@ -105,7 +105,7 @@ public class TaktEmpSalaryDto : TaktCompanyDtoBase
     public DateTime EffectiveDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int EmpSalaryStatus { get; set; } = 0;
 
@@ -196,7 +196,7 @@ public class TaktEmpSalaryQueryDto : TaktPagedQuery
     public DateTime? EffectiveDateEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? EmpSalaryStatus { get; set; }
 
@@ -218,7 +218,7 @@ public class TaktEmpSalaryQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -306,7 +306,7 @@ public class TaktEmpSalaryCreateDto
     public DateTime EffectiveDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int EmpSalaryStatus { get; set; } = 0;
 
@@ -318,7 +318,7 @@ public class TaktEmpSalaryCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -365,9 +365,9 @@ public class TaktEmpSalaryStatusDto
     public long EmpSalaryId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
     public int EmpSalaryStatus { get; set; } = 0;
 }
 
@@ -420,7 +420,7 @@ public class TaktEmpSalaryTemplateDto
     public long? SalaryItemId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? EmpSalaryStatus { get; set; }
 
@@ -432,7 +432,7 @@ public class TaktEmpSalaryTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -491,7 +491,7 @@ public class TaktEmpSalaryImportDto
     public long? SalaryItemId { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? EmpSalaryStatus { get; set; }
 
@@ -503,7 +503,7 @@ public class TaktEmpSalaryImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -588,7 +588,7 @@ public class TaktEmpSalaryExportDto
     public DateTime EffectiveDate { get; set; }
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int EmpSalaryStatus { get; set; } = 0;
 
@@ -600,7 +600,7 @@ public class TaktEmpSalaryExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

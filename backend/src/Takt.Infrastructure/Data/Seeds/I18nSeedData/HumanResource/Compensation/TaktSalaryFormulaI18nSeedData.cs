@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktSalaryFormulaI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalaryFormula 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,146 +75,146 @@ public class TaktSalaryFormulaI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktSalaryFormula 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.salaryformula._self / entity.salaryformula.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.salaryformula._self / entity.salaryformula.{{field}}；ResourceGroup=Compensation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetSalaryFormulaTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.salaryformula._self
-            new TranslationSeedItem("entity.salaryformula._self", "en-US", "Salary Formula Information", "实体名称"),
+            new TranslationSeedItem("entity.salaryformula._self", "en-US", "Salary Formula Information_us", "实体名称"),
             // entity.salaryformula._self
-            new TranslationSeedItem("entity.salaryformula._self", "ja-JP", "薪资计算公式信息", "实体名称"),
+            new TranslationSeedItem("entity.salaryformula._self", "ja-JP", "薪资计算公式信息_jp", "实体名称"),
             // entity.salaryformula._self
             new TranslationSeedItem("entity.salaryformula._self", "zh-CN", "薪资计算公式信息", "实体名称"),
             // entity.salaryformula._self
-            new TranslationSeedItem("entity.salaryformula._self", "zh-HK", "薪资计算公式信息", "实体名称"),
+            new TranslationSeedItem("entity.salaryformula._self", "zh-HK", "薪资计算公式信息_hk", "实体名称"),
 
             // entity.salaryformula.setcode
-            new TranslationSeedItem("entity.salaryformula.setcode", "en-US", "公式方案编码", "公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）"),
+            new TranslationSeedItem("entity.salaryformula.setcode", "en-US", "公式方案编码_us", "公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）"),
             // entity.salaryformula.setcode
-            new TranslationSeedItem("entity.salaryformula.setcode", "ja-JP", "公式方案编码", "公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）"),
+            new TranslationSeedItem("entity.salaryformula.setcode", "ja-JP", "公式方案编码_jp", "公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）"),
             // entity.salaryformula.setcode
             new TranslationSeedItem("entity.salaryformula.setcode", "zh-CN", "公式方案编码", "公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）"),
             // entity.salaryformula.setcode
-            new TranslationSeedItem("entity.salaryformula.setcode", "zh-HK", "公式方案编码", "公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）"),
+            new TranslationSeedItem("entity.salaryformula.setcode", "zh-HK", "公式方案编码_hk", "公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）"),
 
             // entity.salaryformula.setname
-            new TranslationSeedItem("entity.salaryformula.setname", "en-US", "公式方案名称", "公式方案名称"),
+            new TranslationSeedItem("entity.salaryformula.setname", "en-US", "公式方案名称_us", "公式方案名称"),
             // entity.salaryformula.setname
-            new TranslationSeedItem("entity.salaryformula.setname", "ja-JP", "公式方案名称", "公式方案名称"),
+            new TranslationSeedItem("entity.salaryformula.setname", "ja-JP", "公式方案名称_jp", "公式方案名称"),
             // entity.salaryformula.setname
             new TranslationSeedItem("entity.salaryformula.setname", "zh-CN", "公式方案名称", "公式方案名称"),
             // entity.salaryformula.setname
-            new TranslationSeedItem("entity.salaryformula.setname", "zh-HK", "公式方案名称", "公式方案名称"),
+            new TranslationSeedItem("entity.salaryformula.setname", "zh-HK", "公式方案名称_hk", "公式方案名称"),
 
             // entity.salaryformula.payrollid
-            new TranslationSeedItem("entity.salaryformula.payrollid", "en-US", "薪酬体系ID", "关联薪酬体系 ID（可选；同 set_code 各行取值应一致）"),
+            new TranslationSeedItem("entity.salaryformula.payrollid", "en-US", "薪酬体系ID_us", "关联薪酬体系 ID（可选；同 set_code 各行取值应一致）"),
             // entity.salaryformula.payrollid
-            new TranslationSeedItem("entity.salaryformula.payrollid", "ja-JP", "薪酬体系ID", "关联薪酬体系 ID（可选；同 set_code 各行取值应一致）"),
+            new TranslationSeedItem("entity.salaryformula.payrollid", "ja-JP", "薪酬体系ID_jp", "关联薪酬体系 ID（可选；同 set_code 各行取值应一致）"),
             // entity.salaryformula.payrollid
             new TranslationSeedItem("entity.salaryformula.payrollid", "zh-CN", "薪酬体系ID", "关联薪酬体系 ID（可选；同 set_code 各行取值应一致）"),
             // entity.salaryformula.payrollid
-            new TranslationSeedItem("entity.salaryformula.payrollid", "zh-HK", "薪酬体系ID", "关联薪酬体系 ID（可选；同 set_code 各行取值应一致）"),
+            new TranslationSeedItem("entity.salaryformula.payrollid", "zh-HK", "薪酬体系ID_hk", "关联薪酬体系 ID（可选；同 set_code 各行取值应一致）"),
 
             // entity.salaryformula.formulacode
-            new TranslationSeedItem("entity.salaryformula.formulacode", "en-US", "步骤编码", "步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）"),
+            new TranslationSeedItem("entity.salaryformula.formulacode", "en-US", "步骤编码_us", "步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）"),
             // entity.salaryformula.formulacode
-            new TranslationSeedItem("entity.salaryformula.formulacode", "ja-JP", "步骤编码", "步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）"),
+            new TranslationSeedItem("entity.salaryformula.formulacode", "ja-JP", "步骤编码_jp", "步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）"),
             // entity.salaryformula.formulacode
             new TranslationSeedItem("entity.salaryformula.formulacode", "zh-CN", "步骤编码", "步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）"),
             // entity.salaryformula.formulacode
-            new TranslationSeedItem("entity.salaryformula.formulacode", "zh-HK", "步骤编码", "步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）"),
+            new TranslationSeedItem("entity.salaryformula.formulacode", "zh-HK", "步骤编码_hk", "步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）"),
 
             // entity.salaryformula.formulaname
-            new TranslationSeedItem("entity.salaryformula.formulaname", "en-US", "步骤名称", "步骤名称（如：应发合计、社保个人、公积金个人、个税、实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulaname", "en-US", "步骤名称_us", "步骤名称（如：应发合计、社保个人、公积金个人、个税、实发）"),
             // entity.salaryformula.formulaname
-            new TranslationSeedItem("entity.salaryformula.formulaname", "ja-JP", "步骤名称", "步骤名称（如：应发合计、社保个人、公积金个人、个税、实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulaname", "ja-JP", "步骤名称_jp", "步骤名称（如：应发合计、社保个人、公积金个人、个税、实发）"),
             // entity.salaryformula.formulaname
             new TranslationSeedItem("entity.salaryformula.formulaname", "zh-CN", "步骤名称", "步骤名称（如：应发合计、社保个人、公积金个人、个税、实发）"),
             // entity.salaryformula.formulaname
-            new TranslationSeedItem("entity.salaryformula.formulaname", "zh-HK", "步骤名称", "步骤名称（如：应发合计、社保个人、公积金个人、个税、实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulaname", "zh-HK", "步骤名称_hk", "步骤名称（如：应发合计、社保个人、公积金个人、个税、实发）"),
 
             // entity.salaryformula.formulastep
-            new TranslationSeedItem("entity.salaryformula.formulastep", "en-US", "公式步骤", "公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulastep", "en-US", "公式步骤_us", "公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）"),
             // entity.salaryformula.formulastep
-            new TranslationSeedItem("entity.salaryformula.formulastep", "ja-JP", "公式步骤", "公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulastep", "ja-JP", "公式步骤_jp", "公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）"),
             // entity.salaryformula.formulastep
-            new TranslationSeedItem("entity.salaryformula.formulastep", "zh-CN", "公式步骤", "公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulastep", "zh-CN", "公式步骤", "公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）"),
             // entity.salaryformula.formulastep
-            new TranslationSeedItem("entity.salaryformula.formulastep", "zh-HK", "公式步骤", "公式步骤类型（字典 hr_salary_formula_step：应发/社保个人/公积金个人/个税/实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulastep", "zh-HK", "公式步骤_hk", "公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）"),
 
             // entity.salaryformula.sortorder
-            new TranslationSeedItem("entity.salaryformula.sortorder", "en-US", "执行顺序", "执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）"),
+            new TranslationSeedItem("entity.salaryformula.sortorder", "en-US", "执行顺序_us", "执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）"),
             // entity.salaryformula.sortorder
-            new TranslationSeedItem("entity.salaryformula.sortorder", "ja-JP", "执行顺序", "执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）"),
+            new TranslationSeedItem("entity.salaryformula.sortorder", "ja-JP", "执行顺序_jp", "执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）"),
             // entity.salaryformula.sortorder
             new TranslationSeedItem("entity.salaryformula.sortorder", "zh-CN", "执行顺序", "执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）"),
             // entity.salaryformula.sortorder
-            new TranslationSeedItem("entity.salaryformula.sortorder", "zh-HK", "执行顺序", "执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）"),
+            new TranslationSeedItem("entity.salaryformula.sortorder", "zh-HK", "执行顺序_hk", "执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）"),
 
             // entity.salaryformula.targetfield
-            new TranslationSeedItem("entity.salaryformula.targetfield", "en-US", "结果字段", "结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）"),
+            new TranslationSeedItem("entity.salaryformula.targetfield", "en-US", "结果字段_us", "结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）"),
             // entity.salaryformula.targetfield
-            new TranslationSeedItem("entity.salaryformula.targetfield", "ja-JP", "结果字段", "结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）"),
+            new TranslationSeedItem("entity.salaryformula.targetfield", "ja-JP", "结果字段_jp", "结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）"),
             // entity.salaryformula.targetfield
             new TranslationSeedItem("entity.salaryformula.targetfield", "zh-CN", "结果字段", "结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）"),
             // entity.salaryformula.targetfield
-            new TranslationSeedItem("entity.salaryformula.targetfield", "zh-HK", "结果字段", "结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）"),
+            new TranslationSeedItem("entity.salaryformula.targetfield", "zh-HK", "结果字段_hk", "结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）"),
 
             // entity.salaryformula.formulaexpression
-            new TranslationSeedItem("entity.salaryformula.formulaexpression", "en-US", "计算公式", "计算公式表达式（引擎解析；支持 + - * / 及 CUMULATIVE_TAX 等内置函数）"),
+            new TranslationSeedItem("entity.salaryformula.formulaexpression", "en-US", "计算公式_us", "计算公式表达式（引擎解析；支持 + - * / 及 CUMULATIVE_TAX 等内置函数）"),
             // entity.salaryformula.formulaexpression
-            new TranslationSeedItem("entity.salaryformula.formulaexpression", "ja-JP", "计算公式", "计算公式表达式（引擎解析；支持 + - * / 及 CUMULATIVE_TAX 等内置函数）"),
+            new TranslationSeedItem("entity.salaryformula.formulaexpression", "ja-JP", "计算公式_jp", "计算公式表达式（引擎解析；支持 + - * / 及 CUMULATIVE_TAX 等内置函数）"),
             // entity.salaryformula.formulaexpression
             new TranslationSeedItem("entity.salaryformula.formulaexpression", "zh-CN", "计算公式", "计算公式表达式（引擎解析；支持 + - * / 及 CUMULATIVE_TAX 等内置函数）"),
             // entity.salaryformula.formulaexpression
-            new TranslationSeedItem("entity.salaryformula.formulaexpression", "zh-HK", "计算公式", "计算公式表达式（引擎解析；支持 + - * / 及 CUMULATIVE_TAX 等内置函数）"),
+            new TranslationSeedItem("entity.salaryformula.formulaexpression", "zh-HK", "计算公式_hk", "计算公式表达式（引擎解析；支持 + - * / 及 CUMULATIVE_TAX 等内置函数）"),
 
             // entity.salaryformula.stepdescription
-            new TranslationSeedItem("entity.salaryformula.stepdescription", "en-US", "步骤说明", "步骤说明（可读描述，如「应发=基本+绩效+加班费+补贴」）"),
+            new TranslationSeedItem("entity.salaryformula.stepdescription", "en-US", "步骤说明_us", "步骤说明（可读描述，如「应发=基本+绩效+加班费+补贴」）"),
             // entity.salaryformula.stepdescription
-            new TranslationSeedItem("entity.salaryformula.stepdescription", "ja-JP", "步骤说明", "步骤说明（可读描述，如「应发=基本+绩效+加班费+补贴」）"),
+            new TranslationSeedItem("entity.salaryformula.stepdescription", "ja-JP", "步骤说明_jp", "步骤说明（可读描述，如「应发=基本+绩效+加班费+补贴」）"),
             // entity.salaryformula.stepdescription
             new TranslationSeedItem("entity.salaryformula.stepdescription", "zh-CN", "步骤说明", "步骤说明（可读描述，如「应发=基本+绩效+加班费+补贴」）"),
             // entity.salaryformula.stepdescription
-            new TranslationSeedItem("entity.salaryformula.stepdescription", "zh-HK", "步骤说明", "步骤说明（可读描述，如「应发=基本+绩效+加班费+补贴」）"),
+            new TranslationSeedItem("entity.salaryformula.stepdescription", "zh-HK", "步骤说明_hk", "步骤说明（可读描述，如「应发=基本+绩效+加班费+补贴」）"),
 
             // entity.salaryformula.effectivedate
-            new TranslationSeedItem("entity.salaryformula.effectivedate", "en-US", "生效日期", "方案生效日期（同 set_code 各行应一致）"),
+            new TranslationSeedItem("entity.salaryformula.effectivedate", "en-US", "生效日期_us", "方案生效日期（同 set_code 各行应一致）"),
             // entity.salaryformula.effectivedate
-            new TranslationSeedItem("entity.salaryformula.effectivedate", "ja-JP", "生效日期", "方案生效日期（同 set_code 各行应一致）"),
+            new TranslationSeedItem("entity.salaryformula.effectivedate", "ja-JP", "生效日期_jp", "方案生效日期（同 set_code 各行应一致）"),
             // entity.salaryformula.effectivedate
             new TranslationSeedItem("entity.salaryformula.effectivedate", "zh-CN", "生效日期", "方案生效日期（同 set_code 各行应一致）"),
             // entity.salaryformula.effectivedate
-            new TranslationSeedItem("entity.salaryformula.effectivedate", "zh-HK", "生效日期", "方案生效日期（同 set_code 各行应一致）"),
+            new TranslationSeedItem("entity.salaryformula.effectivedate", "zh-HK", "生效日期_hk", "方案生效日期（同 set_code 各行应一致）"),
 
             // entity.salaryformula.expirydate
-            new TranslationSeedItem("entity.salaryformula.expirydate", "en-US", "失效日期", "方案失效日期"),
+            new TranslationSeedItem("entity.salaryformula.expirydate", "en-US", "失效日期_us", "方案失效日期"),
             // entity.salaryformula.expirydate
-            new TranslationSeedItem("entity.salaryformula.expirydate", "ja-JP", "失效日期", "方案失效日期"),
+            new TranslationSeedItem("entity.salaryformula.expirydate", "ja-JP", "失效日期_jp", "方案失效日期"),
             // entity.salaryformula.expirydate
             new TranslationSeedItem("entity.salaryformula.expirydate", "zh-CN", "失效日期", "方案失效日期"),
             // entity.salaryformula.expirydate
-            new TranslationSeedItem("entity.salaryformula.expirydate", "zh-HK", "失效日期", "方案失效日期"),
+            new TranslationSeedItem("entity.salaryformula.expirydate", "zh-HK", "失效日期_hk", "方案失效日期"),
 
             // entity.salaryformula.formulastatus
-            new TranslationSeedItem("entity.salaryformula.formulastatus", "en-US", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.salaryformula.formulastatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
             // entity.salaryformula.formulastatus
-            new TranslationSeedItem("entity.salaryformula.formulastatus", "ja-JP", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.salaryformula.formulastatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
             // entity.salaryformula.formulastatus
-            new TranslationSeedItem("entity.salaryformula.formulastatus", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.salaryformula.formulastatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
             // entity.salaryformula.formulastatus
-            new TranslationSeedItem("entity.salaryformula.formulastatus", "zh-HK", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.salaryformula.formulastatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
 
             // entity.salaryformula.relatedplant
-            new TranslationSeedItem("entity.salaryformula.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.salaryformula.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.salaryformula.relatedplant
-            new TranslationSeedItem("entity.salaryformula.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.salaryformula.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.salaryformula.relatedplant
             new TranslationSeedItem("entity.salaryformula.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.salaryformula.relatedplant
-            new TranslationSeedItem("entity.salaryformula.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.salaryformula.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -232,10 +232,10 @@ public class TaktSalaryFormulaI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Compensation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

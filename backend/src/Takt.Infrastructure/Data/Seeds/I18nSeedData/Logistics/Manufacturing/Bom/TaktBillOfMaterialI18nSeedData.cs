@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterial 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/bom/bill-of-material）
 // 
@@ -75,191 +75,191 @@ public class TaktBillOfMaterialI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktBillOfMaterial 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.billofmaterial._self / entity.billofmaterial.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.billofmaterial._self / entity.billofmaterial.{{field}}；ResourceGroup=Bom；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetBillOfMaterialTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.billofmaterial._self
-            new TranslationSeedItem("entity.billofmaterial._self", "en-US", "Bill Of Material Information", "实体名称"),
+            new TranslationSeedItem("entity.billofmaterial._self", "en-US", "Bill Of Material Information_us", "实体名称"),
             // entity.billofmaterial._self
-            new TranslationSeedItem("entity.billofmaterial._self", "ja-JP", "Takt物料清单信息", "实体名称"),
+            new TranslationSeedItem("entity.billofmaterial._self", "ja-JP", "Takt物料清单信息_jp", "实体名称"),
             // entity.billofmaterial._self
             new TranslationSeedItem("entity.billofmaterial._self", "zh-CN", "Takt物料清单信息", "实体名称"),
             // entity.billofmaterial._self
-            new TranslationSeedItem("entity.billofmaterial._self", "zh-HK", "Takt物料清单信息", "实体名称"),
+            new TranslationSeedItem("entity.billofmaterial._self", "zh-HK", "Takt物料清单信息_hk", "实体名称"),
 
             // entity.billofmaterial.plantcode
-            new TranslationSeedItem("entity.billofmaterial.plantcode", "en-US", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.billofmaterial.plantcode", "en-US", "工厂代码_us", "工厂代码"),
             // entity.billofmaterial.plantcode
-            new TranslationSeedItem("entity.billofmaterial.plantcode", "ja-JP", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.billofmaterial.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
             // entity.billofmaterial.plantcode
             new TranslationSeedItem("entity.billofmaterial.plantcode", "zh-CN", "工厂代码", "工厂代码"),
             // entity.billofmaterial.plantcode
-            new TranslationSeedItem("entity.billofmaterial.plantcode", "zh-HK", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.billofmaterial.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
 
             // entity.billofmaterial.bomcode
-            new TranslationSeedItem("entity.billofmaterial.bomcode", "en-US", "BOM编码", "BOM编码（业务单据号，便于检索，非唯一键）"),
+            new TranslationSeedItem("entity.billofmaterial.bomcode", "en-US", "BOM编码_us", "BOM编码（业务单据号，便于检索，非唯一键）"),
             // entity.billofmaterial.bomcode
-            new TranslationSeedItem("entity.billofmaterial.bomcode", "ja-JP", "BOM编码", "BOM编码（业务单据号，便于检索，非唯一键）"),
+            new TranslationSeedItem("entity.billofmaterial.bomcode", "ja-JP", "BOM编码_jp", "BOM编码（业务单据号，便于检索，非唯一键）"),
             // entity.billofmaterial.bomcode
             new TranslationSeedItem("entity.billofmaterial.bomcode", "zh-CN", "BOM编码", "BOM编码（业务单据号，便于检索，非唯一键）"),
             // entity.billofmaterial.bomcode
-            new TranslationSeedItem("entity.billofmaterial.bomcode", "zh-HK", "BOM编码", "BOM编码（业务单据号，便于检索，非唯一键）"),
+            new TranslationSeedItem("entity.billofmaterial.bomcode", "zh-HK", "BOM编码_hk", "BOM编码（业务单据号，便于检索，非唯一键）"),
 
             // entity.billofmaterial.bomname
-            new TranslationSeedItem("entity.billofmaterial.bomname", "en-US", "BOM名称", "BOM名称"),
+            new TranslationSeedItem("entity.billofmaterial.bomname", "en-US", "BOM名称_us", "BOM名称"),
             // entity.billofmaterial.bomname
-            new TranslationSeedItem("entity.billofmaterial.bomname", "ja-JP", "BOM名称", "BOM名称"),
+            new TranslationSeedItem("entity.billofmaterial.bomname", "ja-JP", "BOM名称_jp", "BOM名称"),
             // entity.billofmaterial.bomname
             new TranslationSeedItem("entity.billofmaterial.bomname", "zh-CN", "BOM名称", "BOM名称"),
             // entity.billofmaterial.bomname
-            new TranslationSeedItem("entity.billofmaterial.bomname", "zh-HK", "BOM名称", "BOM名称"),
+            new TranslationSeedItem("entity.billofmaterial.bomname", "zh-HK", "BOM名称_hk", "BOM名称"),
 
             // entity.billofmaterial.parentmaterialid
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "en-US", "父物料ID", "父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "en-US", "父物料ID_us", "父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
             // entity.billofmaterial.parentmaterialid
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "ja-JP", "父物料ID", "父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "ja-JP", "父物料ID_jp", "父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
             // entity.billofmaterial.parentmaterialid
             new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "zh-CN", "父物料ID", "父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
             // entity.billofmaterial.parentmaterialid
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "zh-HK", "父物料ID", "父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "zh-HK", "父物料ID_hk", "父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
 
             // entity.billofmaterial.parentmaterialcode
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialcode", "en-US", "父物料编码", "父物料编码（父项物料编码 item_code，冗余）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialcode", "en-US", "父物料编码_us", "父物料编码（父项物料编码 item_code，冗余）"),
             // entity.billofmaterial.parentmaterialcode
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialcode", "ja-JP", "父物料编码", "父物料编码（父项物料编码 item_code，冗余）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialcode", "ja-JP", "父物料编码_jp", "父物料编码（父项物料编码 item_code，冗余）"),
             // entity.billofmaterial.parentmaterialcode
             new TranslationSeedItem("entity.billofmaterial.parentmaterialcode", "zh-CN", "父物料编码", "父物料编码（父项物料编码 item_code，冗余）"),
             // entity.billofmaterial.parentmaterialcode
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialcode", "zh-HK", "父物料编码", "父物料编码（父项物料编码 item_code，冗余）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialcode", "zh-HK", "父物料编码_hk", "父物料编码（父项物料编码 item_code，冗余）"),
 
             // entity.billofmaterial.parentmaterialname
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "en-US", "父物料名称", "父物料名称（冗余）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "en-US", "父物料名称_us", "父物料名称（冗余）"),
             // entity.billofmaterial.parentmaterialname
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "ja-JP", "父物料名称", "父物料名称（冗余）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "ja-JP", "父物料名称_jp", "父物料名称（冗余）"),
             // entity.billofmaterial.parentmaterialname
             new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "zh-CN", "父物料名称", "父物料名称（冗余）"),
             // entity.billofmaterial.parentmaterialname
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "zh-HK", "父物料名称", "父物料名称（冗余）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "zh-HK", "父物料名称_hk", "父物料名称（冗余）"),
 
             // entity.billofmaterial.bomversion
-            new TranslationSeedItem("entity.billofmaterial.bomversion", "en-US", "BOM版本号", "BOM版本号"),
+            new TranslationSeedItem("entity.billofmaterial.bomversion", "en-US", "BOM版本号_us", "BOM版本号"),
             // entity.billofmaterial.bomversion
-            new TranslationSeedItem("entity.billofmaterial.bomversion", "ja-JP", "BOM版本号", "BOM版本号"),
+            new TranslationSeedItem("entity.billofmaterial.bomversion", "ja-JP", "BOM版本号_jp", "BOM版本号"),
             // entity.billofmaterial.bomversion
             new TranslationSeedItem("entity.billofmaterial.bomversion", "zh-CN", "BOM版本号", "BOM版本号"),
             // entity.billofmaterial.bomversion
-            new TranslationSeedItem("entity.billofmaterial.bomversion", "zh-HK", "BOM版本号", "BOM版本号"),
+            new TranslationSeedItem("entity.billofmaterial.bomversion", "zh-HK", "BOM版本号_hk", "BOM版本号"),
 
             // entity.billofmaterial.bomtype
-            new TranslationSeedItem("entity.billofmaterial.bomtype", "en-US", "BOM类型", "BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）"),
+            new TranslationSeedItem("entity.billofmaterial.bomtype", "en-US", "BOM类型_us", "BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）"),
             // entity.billofmaterial.bomtype
-            new TranslationSeedItem("entity.billofmaterial.bomtype", "ja-JP", "BOM类型", "BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）"),
+            new TranslationSeedItem("entity.billofmaterial.bomtype", "ja-JP", "BOM类型_jp", "BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）"),
             // entity.billofmaterial.bomtype
             new TranslationSeedItem("entity.billofmaterial.bomtype", "zh-CN", "BOM类型", "BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）"),
             // entity.billofmaterial.bomtype
-            new TranslationSeedItem("entity.billofmaterial.bomtype", "zh-HK", "BOM类型", "BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）"),
+            new TranslationSeedItem("entity.billofmaterial.bomtype", "zh-HK", "BOM类型_hk", "BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）"),
 
             // entity.billofmaterial.alternativebomnumber
-            new TranslationSeedItem("entity.billofmaterial.alternativebomnumber", "en-US", "备选BOM编号", "备选BOM编号（对应SAP Alternative BOM，如01/02）"),
+            new TranslationSeedItem("entity.billofmaterial.alternativebomnumber", "en-US", "备选BOM编号_us", "备选BOM编号（对应SAP Alternative BOM，如01/02）"),
             // entity.billofmaterial.alternativebomnumber
-            new TranslationSeedItem("entity.billofmaterial.alternativebomnumber", "ja-JP", "备选BOM编号", "备选BOM编号（对应SAP Alternative BOM，如01/02）"),
+            new TranslationSeedItem("entity.billofmaterial.alternativebomnumber", "ja-JP", "备选BOM编号_jp", "备选BOM编号（对应SAP Alternative BOM，如01/02）"),
             // entity.billofmaterial.alternativebomnumber
             new TranslationSeedItem("entity.billofmaterial.alternativebomnumber", "zh-CN", "备选BOM编号", "备选BOM编号（对应SAP Alternative BOM，如01/02）"),
             // entity.billofmaterial.alternativebomnumber
-            new TranslationSeedItem("entity.billofmaterial.alternativebomnumber", "zh-HK", "备选BOM编号", "备选BOM编号（对应SAP Alternative BOM，如01/02）"),
+            new TranslationSeedItem("entity.billofmaterial.alternativebomnumber", "zh-HK", "备选BOM编号_hk", "备选BOM编号（对应SAP Alternative BOM，如01/02）"),
 
             // entity.billofmaterial.effectivedate
-            new TranslationSeedItem("entity.billofmaterial.effectivedate", "en-US", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.billofmaterial.effectivedate", "en-US", "生效日期_us", "生效日期"),
             // entity.billofmaterial.effectivedate
-            new TranslationSeedItem("entity.billofmaterial.effectivedate", "ja-JP", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.billofmaterial.effectivedate", "ja-JP", "生效日期_jp", "生效日期"),
             // entity.billofmaterial.effectivedate
             new TranslationSeedItem("entity.billofmaterial.effectivedate", "zh-CN", "生效日期", "生效日期"),
             // entity.billofmaterial.effectivedate
-            new TranslationSeedItem("entity.billofmaterial.effectivedate", "zh-HK", "生效日期", "生效日期"),
+            new TranslationSeedItem("entity.billofmaterial.effectivedate", "zh-HK", "生效日期_hk", "生效日期"),
 
             // entity.billofmaterial.expirydate
-            new TranslationSeedItem("entity.billofmaterial.expirydate", "en-US", "失效日期", "失效日期（为空表示永久有效）"),
+            new TranslationSeedItem("entity.billofmaterial.expirydate", "en-US", "失效日期_us", "失效日期（为空表示永久有效）"),
             // entity.billofmaterial.expirydate
-            new TranslationSeedItem("entity.billofmaterial.expirydate", "ja-JP", "失效日期", "失效日期（为空表示永久有效）"),
+            new TranslationSeedItem("entity.billofmaterial.expirydate", "ja-JP", "失效日期_jp", "失效日期（为空表示永久有效）"),
             // entity.billofmaterial.expirydate
             new TranslationSeedItem("entity.billofmaterial.expirydate", "zh-CN", "失效日期", "失效日期（为空表示永久有效）"),
             // entity.billofmaterial.expirydate
-            new TranslationSeedItem("entity.billofmaterial.expirydate", "zh-HK", "失效日期", "失效日期（为空表示永久有效）"),
+            new TranslationSeedItem("entity.billofmaterial.expirydate", "zh-HK", "失效日期_hk", "失效日期（为空表示永久有效）"),
 
             // entity.billofmaterial.parentmaterialunit
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialunit", "en-US", "父物料单位", "父物料单位"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialunit", "en-US", "父物料单位_us", "父物料单位"),
             // entity.billofmaterial.parentmaterialunit
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialunit", "ja-JP", "父物料单位", "父物料单位"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialunit", "ja-JP", "父物料单位_jp", "父物料单位"),
             // entity.billofmaterial.parentmaterialunit
             new TranslationSeedItem("entity.billofmaterial.parentmaterialunit", "zh-CN", "父物料单位", "父物料单位"),
             // entity.billofmaterial.parentmaterialunit
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialunit", "zh-HK", "父物料单位", "父物料单位"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialunit", "zh-HK", "父物料单位_hk", "父物料单位"),
 
             // entity.billofmaterial.parentmaterialquantity
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialquantity", "en-US", "基本数量", "基本数量（BOM基数，对应SAP Base quantity）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialquantity", "en-US", "基本数量_us", "基本数量（BOM基数，对应SAP Base quantity）"),
             // entity.billofmaterial.parentmaterialquantity
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialquantity", "ja-JP", "基本数量", "基本数量（BOM基数，对应SAP Base quantity）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialquantity", "ja-JP", "基本数量_jp", "基本数量（BOM基数，对应SAP Base quantity）"),
             // entity.billofmaterial.parentmaterialquantity
             new TranslationSeedItem("entity.billofmaterial.parentmaterialquantity", "zh-CN", "基本数量", "基本数量（BOM基数，对应SAP Base quantity）"),
             // entity.billofmaterial.parentmaterialquantity
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialquantity", "zh-HK", "基本数量", "基本数量（BOM基数，对应SAP Base quantity）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialquantity", "zh-HK", "基本数量_hk", "基本数量（BOM基数，对应SAP Base quantity）"),
 
             // entity.billofmaterial.isenabled
-            new TranslationSeedItem("entity.billofmaterial.isenabled", "en-US", "是否启用", "是否启用（0=否，1=是）"),
+            new TranslationSeedItem("entity.billofmaterial.isenabled", "en-US", "是否启用_us", "是否启用（0=否，1=是）"),
             // entity.billofmaterial.isenabled
-            new TranslationSeedItem("entity.billofmaterial.isenabled", "ja-JP", "是否启用", "是否启用（0=否，1=是）"),
+            new TranslationSeedItem("entity.billofmaterial.isenabled", "ja-JP", "是否启用_jp", "是否启用（0=否，1=是）"),
             // entity.billofmaterial.isenabled
             new TranslationSeedItem("entity.billofmaterial.isenabled", "zh-CN", "是否启用", "是否启用（0=否，1=是）"),
             // entity.billofmaterial.isenabled
-            new TranslationSeedItem("entity.billofmaterial.isenabled", "zh-HK", "是否启用", "是否启用（0=否，1=是）"),
+            new TranslationSeedItem("entity.billofmaterial.isenabled", "zh-HK", "是否启用_hk", "是否启用（0=否，1=是）"),
 
             // entity.billofmaterial.bomstatus
-            new TranslationSeedItem("entity.billofmaterial.bomstatus", "en-US", "BOM状态", "BOM状态（0=草稿，1=已发布，2=已停用）"),
+            new TranslationSeedItem("entity.billofmaterial.bomstatus", "en-US", "BOM状态_us", "BOM状态（0=草稿，1=已发布，2=已停用）"),
             // entity.billofmaterial.bomstatus
-            new TranslationSeedItem("entity.billofmaterial.bomstatus", "ja-JP", "BOM状态", "BOM状态（0=草稿，1=已发布，2=已停用）"),
+            new TranslationSeedItem("entity.billofmaterial.bomstatus", "ja-JP", "BOM状态_jp", "BOM状态（0=草稿，1=已发布，2=已停用）"),
             // entity.billofmaterial.bomstatus
             new TranslationSeedItem("entity.billofmaterial.bomstatus", "zh-CN", "BOM状态", "BOM状态（0=草稿，1=已发布，2=已停用）"),
             // entity.billofmaterial.bomstatus
-            new TranslationSeedItem("entity.billofmaterial.bomstatus", "zh-HK", "BOM状态", "BOM状态（0=草稿，1=已发布，2=已停用）"),
+            new TranslationSeedItem("entity.billofmaterial.bomstatus", "zh-HK", "BOM状态_hk", "BOM状态（0=草稿，1=已发布，2=已停用）"),
 
             // entity.billofmaterial.bomdescription
-            new TranslationSeedItem("entity.billofmaterial.bomdescription", "en-US", "BOM描述", "BOM描述"),
+            new TranslationSeedItem("entity.billofmaterial.bomdescription", "en-US", "BOM描述_us", "BOM描述"),
             // entity.billofmaterial.bomdescription
-            new TranslationSeedItem("entity.billofmaterial.bomdescription", "ja-JP", "BOM描述", "BOM描述"),
+            new TranslationSeedItem("entity.billofmaterial.bomdescription", "ja-JP", "BOM描述_jp", "BOM描述"),
             // entity.billofmaterial.bomdescription
             new TranslationSeedItem("entity.billofmaterial.bomdescription", "zh-CN", "BOM描述", "BOM描述"),
             // entity.billofmaterial.bomdescription
-            new TranslationSeedItem("entity.billofmaterial.bomdescription", "zh-HK", "BOM描述", "BOM描述"),
+            new TranslationSeedItem("entity.billofmaterial.bomdescription", "zh-HK", "BOM描述_hk", "BOM描述"),
 
             // entity.billofmaterial.sortorder
-            new TranslationSeedItem("entity.billofmaterial.sortorder", "en-US", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.billofmaterial.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),
             // entity.billofmaterial.sortorder
-            new TranslationSeedItem("entity.billofmaterial.sortorder", "ja-JP", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.billofmaterial.sortorder", "ja-JP", "排序号_jp", "排序号（越小越靠前）"),
             // entity.billofmaterial.sortorder
             new TranslationSeedItem("entity.billofmaterial.sortorder", "zh-CN", "排序号", "排序号（越小越靠前）"),
             // entity.billofmaterial.sortorder
-            new TranslationSeedItem("entity.billofmaterial.sortorder", "zh-HK", "排序号", "排序号（越小越靠前）"),
+            new TranslationSeedItem("entity.billofmaterial.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
 
             // entity.billofmaterial.items
-            new TranslationSeedItem("entity.billofmaterial.items", "en-US", "BOM组成件明细", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
+            new TranslationSeedItem("entity.billofmaterial.items", "en-US", "BOM组成件明细_us", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
             // entity.billofmaterial.items
-            new TranslationSeedItem("entity.billofmaterial.items", "ja-JP", "BOM组成件明细", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
+            new TranslationSeedItem("entity.billofmaterial.items", "ja-JP", "BOM组成件明细_jp", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
             // entity.billofmaterial.items
             new TranslationSeedItem("entity.billofmaterial.items", "zh-CN", "BOM组成件明细", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
             // entity.billofmaterial.items
-            new TranslationSeedItem("entity.billofmaterial.items", "zh-HK", "BOM组成件明细", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
+            new TranslationSeedItem("entity.billofmaterial.items", "zh-HK", "BOM组成件明细_hk", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
 
             // entity.billofmaterial.changelogs
-            new TranslationSeedItem("entity.billofmaterial.changelogs", "en-US", "BOM变更记录列表", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
+            new TranslationSeedItem("entity.billofmaterial.changelogs", "en-US", "BOM变更记录列表_us", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
             // entity.billofmaterial.changelogs
-            new TranslationSeedItem("entity.billofmaterial.changelogs", "ja-JP", "BOM变更记录列表", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
+            new TranslationSeedItem("entity.billofmaterial.changelogs", "ja-JP", "BOM变更记录列表_jp", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
             // entity.billofmaterial.changelogs
             new TranslationSeedItem("entity.billofmaterial.changelogs", "zh-CN", "BOM变更记录列表", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
             // entity.billofmaterial.changelogs
-            new TranslationSeedItem("entity.billofmaterial.changelogs", "zh-HK", "BOM变更记录列表", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
+            new TranslationSeedItem("entity.billofmaterial.changelogs", "zh-HK", "BOM变更记录列表_hk", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
         };
     }
 
@@ -277,10 +277,10 @@ public class TaktBillOfMaterialI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Bom";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Personnel
 // 文件名称：TaktEmployeeReassignmentValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeReassignment 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeeReassignment 生成，请按需审阅）
 // 
@@ -31,33 +31,33 @@ public class TaktEmployeeReassignmentCreateValidator : AbstractValidator<TaktEmp
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("员工ID不能为负数");
         RuleFor(x => x.FromDeptId)
             .GreaterThanOrEqualTo(0).WithMessage("调出部门ID不能为负数");
         RuleFor(x => x.FromDeptName)
             .NotEmpty().WithMessage("调出部门名称不能为空")
-            .MaximumLength(40).WithMessage("调出部门名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("调出部门名称长度不能超过100个字符");
         RuleFor(x => x.FromPostId)
             .GreaterThanOrEqualTo(0).WithMessage("调出岗位ID不能为负数");
         RuleFor(x => x.FromPostName)
-            .MaximumLength(40).WithMessage("调出岗位名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("调出岗位名称长度不能超过100个字符");
         RuleFor(x => x.ToDeptId)
             .GreaterThanOrEqualTo(0).WithMessage("调入部门ID不能为负数");
         RuleFor(x => x.ToDeptName)
             .NotEmpty().WithMessage("调入部门名称不能为空")
-            .MaximumLength(40).WithMessage("调入部门名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("调入部门名称长度不能超过100个字符");
         RuleFor(x => x.ToPostId)
             .GreaterThanOrEqualTo(0).WithMessage("调入岗位ID不能为负数");
         RuleFor(x => x.ToPostName)
-            .MaximumLength(40).WithMessage("调入岗位名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("调入岗位名称长度不能超过100个字符");
         RuleFor(x => x.Reason)
             .MaximumLength(500).WithMessage("调动原因长度不能超过500个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -98,33 +98,33 @@ public class TaktEmployeeReassignmentImportValidator : AbstractValidator<TaktEmp
     public TaktEmployeeReassignmentImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("员工ID不能为负数");
         RuleFor(x => x.FromDeptId)
             .GreaterThanOrEqualTo(0).WithMessage("调出部门ID不能为负数");
         RuleFor(x => x.FromDeptName)
             .NotEmpty().WithMessage("调出部门名称不能为空")
-            .MaximumLength(40).WithMessage("调出部门名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("调出部门名称长度不能超过100个字符");
         RuleFor(x => x.FromPostId)
             .GreaterThanOrEqualTo(0).WithMessage("调出岗位ID不能为负数");
         RuleFor(x => x.FromPostName)
-            .MaximumLength(40).WithMessage("调出岗位名称长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.FromPostName));
+            .MaximumLength(100).WithMessage("调出岗位名称长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.FromPostName));
         RuleFor(x => x.ToDeptId)
             .GreaterThanOrEqualTo(0).WithMessage("调入部门ID不能为负数");
         RuleFor(x => x.ToDeptName)
             .NotEmpty().WithMessage("调入部门名称不能为空")
-            .MaximumLength(40).WithMessage("调入部门名称长度不能超过40个字符");
+            .MaximumLength(100).WithMessage("调入部门名称长度不能超过100个字符");
         RuleFor(x => x.ToPostId)
             .GreaterThanOrEqualTo(0).WithMessage("调入岗位ID不能为负数");
         RuleFor(x => x.ToPostName)
-            .MaximumLength(40).WithMessage("调入岗位名称长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.ToPostName));
+            .MaximumLength(100).WithMessage("调入岗位名称长度不能超过100个字符").When(x => !string.IsNullOrWhiteSpace(x.ToPostName));
         RuleFor(x => x.Reason)
             .MaximumLength(500).WithMessage("调动原因长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Reason));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

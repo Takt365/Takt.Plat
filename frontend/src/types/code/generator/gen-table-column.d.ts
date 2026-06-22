@@ -39,7 +39,7 @@ export interface GenTableColumn extends TenantDtoBase {
   genTableName?: string;
 
   /**
-   * 行号（字段在表中的排列顺序，从1开始）
+   * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
 
@@ -144,11 +144,6 @@ export interface GenTableColumn extends TenantDtoBase {
   dictType?: string;
 
   /**
-   * 排序序号
-   */
-  sortOrder: number;
-
-  /**
    * 所属表配置（主表，本表 GenTableId 关联 TaktGenTable.Id） （主表：TaktGenTable）
    */
   table?: GenTable;
@@ -174,7 +169,7 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   genTableId?: string;
 
   /**
-   * 行号（字段在表中的排列顺序，从1开始）
+   * 行号（项号/序号，固定步长=10）
    */
   lineNumber?: number;
 
@@ -279,11 +274,6 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   dictType?: string;
 
   /**
-   * 排序序号
-   */
-  sortOrder?: number;
-
-  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -296,7 +286,7 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -323,7 +313,7 @@ export interface GenTableColumnCreate {
   genTableId: string;
 
   /**
-   * 行号（字段在表中的排列顺序，从1开始）
+   * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
 
@@ -428,14 +418,9 @@ export interface GenTableColumnCreate {
   dictType?: string;
 
   /**
-   * 排序序号
-   */
-  sortOrder: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -472,9 +457,9 @@ export interface GenTableColumnSort {
   genTableColumnId: string;
 
   /**
-   * 排序序号
+   * 行号（项号/序号，固定步长=10）
    */
-  sortOrder: number;
+  lineNumber: number;
 
 }
 
@@ -496,7 +481,7 @@ export interface GenTableColumnTemplate {
   genTableId?: string;
 
   /**
-   * 行号（字段在表中的排列顺序，从1开始）
+   * 行号（项号/序号，固定步长=10）
    */
   lineNumber?: number;
 
@@ -553,7 +538,7 @@ export interface GenTableColumnTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -580,7 +565,7 @@ export interface GenTableColumnImport {
   genTableId?: string;
 
   /**
-   * 行号（字段在表中的排列顺序，从1开始）
+   * 行号（项号/序号，固定步长=10）
    */
   lineNumber?: number;
 
@@ -637,7 +622,7 @@ export interface GenTableColumnImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -664,7 +649,7 @@ export interface GenTableColumnExport {
   genTableId: string;
 
   /**
-   * 行号（字段在表中的排列顺序，从1开始）
+   * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
 
@@ -769,14 +754,9 @@ export interface GenTableColumnExport {
   dictType?: string;
 
   /**
-   * 排序序号
-   */
-  sortOrder: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

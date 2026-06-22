@@ -1,7 +1,7 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Manufacturing
-// 文件名称：TaktMaterialPackaging.cs
+// 命名空间：Takt.Domain.Entities.Logistics.Materials
+// 文件名称：TaktPackaging.cs
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：Takt物料包装信息实体，定义物料海关、尺寸、重量及包装信息
@@ -13,29 +13,35 @@
 using SqlSugar;
 using Takt.Domain.Entities;
 
-namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
+namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
 /// Takt物料包装信息实体
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_packaging", "物料包装信息表")]
+[SugarTable("takt_logistics_materials_packaging", "物料包装信息表")]
 [SugarIndex("ix_packaging_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_packaging_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_packaging_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_packaging_material_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_materials_packaging_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_materials_packaging_material_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, false)]
 public class TaktPackaging : TaktCompanyEntityBase
 {
     /// <summary>
     /// 工厂代码
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? PlantCode { get; set; }
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码（关联到物料表）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料名称
+    /// </summary>
+    [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
     /// 海关商品编码（HS Code）

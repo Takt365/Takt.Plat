@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-services-from-dtos.cjs
 // 创建时间：2026-05-23
 // 创建人：Takt365(Cursor AI)
@@ -33,7 +33,6 @@ const {
 } = require('./generate-transposed-support.cjs');
 const {
   isSharedEnumType,
-  contentUsesSharedEnums,
   extractPrimaryEnableStatusMeta,
   extractBuiltInDisableStatusMeta,
   optionsBlockUsesStaleIntStatusCompare,
@@ -391,7 +390,7 @@ function buildFlatOptionsAsyncImplTemplate(
   block += ensureContextLine;
   block += `        var list = await ${repoField}.GetListAsync(\n`;
   block += `            ${optionsListPredicate},\n`;
-  block += `            x => x.${nameField},\n`;
+  block += `            x => x.${nameField} ?? string.Empty,\n`;
   block += '            false);\n';
   block += '        return list.Select(e => new TaktSelectOption\n';
   block += '        {\n';
@@ -567,9 +566,6 @@ function buildOptionsListPredicate(dtoBase, statusMeta = null) {
     dtoBase === 'TaktTenantDtoBase'
       ? 'x.TenantCode == CurrentTenantCode'
       : 'x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode';
-  if (statusMeta?.kind === 'sharedEnum' && statusMeta.enabledLiteral) {
-    return `x => ${scope} && x.${statusMeta.field} == ${statusMeta.enabledLiteral}`;
-  }
   if (statusMeta?.kind === 'int') {
     return `x => ${scope} && x.${statusMeta.field} == ${statusMeta.intEnabled ?? 1}`;
   }
@@ -1273,7 +1269,7 @@ function getNameFieldName(entityFile) {
   const standard = new Set([
     'TenantCode',
     'CompanyCode',
-    'ExtFieldJson',
+    'ExtField',
     'Remark',
     'CreatedBy',
     'UpdatedBy',
@@ -1894,7 +1890,7 @@ function extractQueryDtoProperties(dtoContent, queryDtoName, entityPropertyNames
     if (name.endsWith('Start') || name.endsWith('End')) {
       continue;
     }
-    if (!entityPropertyNames.has(name) && name !== 'Remark' && name !== 'ExtFieldJson') {
+    if (!entityPropertyNames.has(name) && name !== 'Remark' && name !== 'ExtField') {
       continue;
     }
     const bareType = rawType.replace('?', '').trim();
@@ -2010,7 +2006,7 @@ function entityHasIsBuiltIn(entityFile) {
  * @returns {string}
  */
 function buildBuiltInCreateAssignLine() {
-  return '        entity.IsBuiltIn = TaktYesNo.No;\n';
+  return '        entity.IsBuiltIn = 0;\n';
 }
 
 /**
@@ -2035,7 +2031,7 @@ function buildBuiltInUpdateBeforeAdaptLines(builtInStatusMeta) {
 function buildBuiltInUpdateAfterAdaptLines(desc, builtInStatusMeta) {
   let block = '        entity.IsBuiltIn = originalIsBuiltIn;\n';
   if (builtInStatusMeta?.kind === 'employeeResigned') {
-    block += `        if (entity.IsBuiltIn == TaktYesNo.Yes && entity.EmployeeStatus != originalEmployeeStatus
+    block += `        if (entity.IsBuiltIn == 1 && entity.EmployeeStatus != originalEmployeeStatus
             && (entity.EmployeeStatus == 3 || entity.EmployeeStatus == 4))
         {
             throw new TaktBusinessException("不允许将内置${desc}设为离职或退休");
@@ -2051,7 +2047,7 @@ function buildBuiltInUpdateAfterAdaptLines(desc, builtInStatusMeta) {
  * @returns {string}
  */
 function buildBuiltInDeleteGuardLines(desc) {
-  return `        if (entity.IsBuiltIn == TaktYesNo.Yes)
+  return `        if (entity.IsBuiltIn == 1)
         {
             throw new TaktBusinessException("内置${desc}不允许删除");
         }
@@ -2065,7 +2061,7 @@ function buildBuiltInDeleteGuardLines(desc) {
  * @returns {string}
  */
 function buildBuiltInBatchDeleteGuardLines(desc, repoField) {
-  return `        if (await ${repoField}.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == TaktYesNo.Yes))
+  return `        if (await ${repoField}.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
         {
             throw new TaktBusinessException("内置${desc}不允许删除");
         }
@@ -2083,15 +2079,8 @@ function buildBuiltInStatusDisableGuardLines(desc, builtInStatusMeta, dtoPropNam
   if (!builtInStatusMeta || builtInStatusMeta.field !== dtoPropName) {
     return '';
   }
-  if (builtInStatusMeta.kind === 'commonStatus') {
-    return `        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.${dtoPropName} != TaktCommonStatus.Enabled)
-        {
-            throw new TaktBusinessException("不允许禁用内置${desc}");
-        }
-`;
-  }
   if (builtInStatusMeta.kind === 'intEnabled') {
-    return `        if (entity.IsBuiltIn == TaktYesNo.Yes && dto.${dtoPropName} != (int)TaktCommonStatus.Enabled)
+    return `        if (entity.IsBuiltIn == 1 && dto.${dtoPropName} != 1)
         {
             throw new TaktBusinessException("不允许禁用内置${desc}");
         }
@@ -2175,11 +2164,7 @@ function generateTreeServiceMethods(
   block += '    }\n\n';
 
   let filterBlock;
-  if (statusMeta?.kind === 'sharedEnum' && statusMeta.enabledLiteral) {
-    filterBlock = `        var filtered = includeDisabled
-            ? list
-            : list.Where(x => x.${statusMeta.field} == ${statusMeta.enabledLiteral}).ToList();`;
-  } else if (statusMeta?.kind === 'int') {
+  if (statusMeta?.kind === 'int') {
     filterBlock = `        var filtered = includeDisabled
             ? list
             : list.Where(x => x.${statusMeta.field} == ${statusMeta.intEnabled ?? 1}).ToList();`;
@@ -2228,7 +2213,7 @@ function generateTreeServiceMethods(
     treeOptionsBlock,
     treeRemainderBlock: block,
     block: treeOptionsBlock + block,
-    needsEnumsUsing: statusMeta?.kind === 'sharedEnum',
+    needsEnumsUsing: false,
   };
 }
 
@@ -2667,13 +2652,7 @@ function generateServiceImplementation(
   const ensureContextLine = buildEnsureContextLine(dtoBase);
   const hasBuiltIn = entityHasIsBuiltIn(entityFile);
   const builtInStatusMeta = hasBuiltIn ? extractBuiltInDisableStatusMeta(entityContent) : null;
-  const needsSharedEnumsUsing =
-    hasBuiltIn
-    || queryProps.some((p) => p.isSharedEnum)
-    || contentUsesSharedEnums(dtoContent)
-    || contentUsesSharedEnums(entityContent)
-    || Boolean(treeGen?.needsEnumsUsing)
-    || Boolean(transposedGen?.needsEnumsUsing);
+  const needsSharedEnumsUsing = false;
 
   let content = '';
   content += '// ========================================\n';
@@ -3156,7 +3135,7 @@ function generateServiceImplementation(
     content += '            {\n';
     content += `                var entity = rows[i].Adapt<${entityName}>();\n`;
     if (hasBuiltIn) {
-      content += '                entity.IsBuiltIn = TaktYesNo.No;\n';
+      content += '                entity.IsBuiltIn = 0;\n';
     }
     if (manyToOneMaster) {
       content += `                var importDto = rows[i].Adapt<${dtoInfo.create}>();\n`;
@@ -3541,7 +3520,7 @@ function printUsage() {
   - Get*OptionsAsync：磁盘上无该方法 → 生成默认模板；已存在且实现含 \${repo}.GetListAsync → 原样保留
   - 已存在但含遗留无效调用（如 GetTenantMenuListAsync）→ 自动改用仓储查询模板重新生成
   - --refresh-options：强制重新生成所有 Get*OptionsAsync / Get*TreeOptionsAsync 实现
-  - 实体含 IsBuiltIn 时：创建强制 No；更新保留原值；单删/批删前校验（批删含任一内置则整批拒绝）；状态更新禁止禁用内置项；员工更新禁止离职(3)/退休(4)
+  - 实体含 IsBuiltIn（int，字典 sys_yes_no_type）时：创建/导入强制 0；更新保留原值；单删/批删前校验；状态更新禁止将内置项设为非启用(1)
   - 实体含 SortOrder / LineNumber：Create、Import、主子表 Save*ChildrenAsync 在值 <= 0 时经 ITaktSortOrderGenerator / ITaktLineNumberGenerator 自动生成（先仓储 GetMaxIntAsync）
 `);
 }

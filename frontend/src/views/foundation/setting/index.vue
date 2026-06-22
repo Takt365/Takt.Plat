@@ -53,26 +53,50 @@
     />
 
     <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'settingId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getSettingId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
+    <div class="foundation-setting-table-wrap">
+      <TaktSingleTable
+        :scroll="tableScroll"
+        :columns="columns"
+        entity-scope="company"
+        :visible-column-keys="visibleColumnKeys"
+        :id-column-key="'settingId'"
+        table-mode="single"
+        :data-source="dataSource"
+        :loading="loading"
+        :stripe="true"
+        :row-key="getSettingId"
+        :row-selection="rowSelection"
+        :custom-row="onClickRow"
 
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
-    >
+        @change="handleTableChange"
+        @resize-column="handleResizeColumn"
+      >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'isReadonly'">
+          <TaktDictTag
+            :value="getSettingField(record, 'isReadonly')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'isEncrypted'">
+          <TaktDictTag
+            :value="getSettingField(record, 'isEncrypted')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'isBuiltIn'">
+          <TaktDictTag
+            :value="getSettingField(record, 'isBuiltIn')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+      </template>
 
-    </TaktSingleTable>
+      </TaktSingleTable>
+    </div>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +116,7 @@
       @cancel="handleFormCancel"
     >
       <SettingForm
+        :key="formData?.settingId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -113,6 +138,8 @@
         <a-input
           v-model:value="advancedQueryForm.settingKey"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.key') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -122,6 +149,8 @@
         <a-input
           v-model:value="advancedQueryForm.settingValue"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.value') })"
+          show-count
+          :maxlength="4000"
           allow-clear
         />
       </a-form-item>
@@ -131,6 +160,8 @@
         <a-input
           v-model:value="advancedQueryForm.settingName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.name') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -165,37 +196,31 @@
       </div>
       <div v-show="isFieldVisible('isBuiltIn')">
       <a-form-item :label="t('entity.setting.isbuiltin')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.isbuiltin') })"
-          style="width: 100%"
+          dict-type="sys_yes_no_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.isbuiltin') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isReadonly')">
       <a-form-item :label="t('entity.setting.isreadonly')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.isReadonly"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.isreadonly') })"
-          style="width: 100%"
+          dict-type="sys_yes_no_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.isreadonly') })"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isEncrypted')">
       <a-form-item :label="t('entity.setting.isencrypted')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.isEncrypted"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.isencrypted') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.setting.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.setting.sortorder') })"
-          style="width: 100%"
+          dict-type="sys_yes_no_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.setting.isencrypted') })"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -221,12 +246,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -235,8 +279,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -289,12 +335,14 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SettingForm from './components/setting-form.vue'
 import { getSettingList, getSettingById, createSetting, updateSetting, deleteSettingById, deleteSettingBatch, getSettingTemplate, importSetting, exportSetting } from '@/api/foundation/setting'
 import type { Setting, SettingQuery, SettingCreate, SettingUpdate } from '@/types/foundation/setting'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -312,9 +360,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Setting[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -329,11 +377,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Setting>>({})
+const formData = ref<Partial<Setting> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -346,10 +396,9 @@ const advancedQueryForm = ref({
   isBuiltIn: undefined as number | undefined,
   isReadonly: undefined as number | undefined,
   isEncrypted: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -363,10 +412,9 @@ const queryFieldsMeta = computed(() => [
   { key: 'isBuiltIn', label: t('entity.setting.isbuiltin') },
   { key: 'isReadonly', label: t('entity.setting.isreadonly') },
   { key: 'isEncrypted', label: t('entity.setting.isencrypted') },
-  { key: 'sortOrder', label: t('entity.setting.sortorder') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -384,11 +432,37 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/** 表格 scroll.y（服务端分页固定视口高度；scroll.x 由 TaktSingleTable 按列宽累计） */
+const tableScroll = { y: 'calc(100vh - 300px)' } as const
+
+/**
+ * 构建列表/导出查询参数
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {SettingQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<SettingQuery>): SettingQuery {
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: SettingQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...advancedQueryForm.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 
 
@@ -468,7 +542,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSettingField(record, 'isBuiltIn') ?? ''
   },
   {
     title: t('entity.setting.isreadonly'),
@@ -477,7 +550,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSettingField(record, 'isReadonly') ?? ''
   },
   {
     title: t('entity.setting.isencrypted'),
@@ -486,7 +558,6 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSettingField(record, 'isEncrypted') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -518,6 +589,7 @@ const getSettingId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getSettingField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -561,16 +633,7 @@ const onClickRow = (record: Setting) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: SettingQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getSettingList(params)
+    const res = await getSettingList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -588,7 +651,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -605,21 +668,21 @@ function handleReset() {
   isBuiltIn: undefined as number | undefined,
   isReadonly: undefined as number | undefined,
   isEncrypted: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.setting._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: Setting) {
@@ -657,6 +720,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.setting._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -666,6 +731,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -697,16 +764,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: SettingQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportSetting(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportSetting(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -774,7 +836,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -789,10 +851,9 @@ function handleAdvancedQueryReset() {
   isBuiltIn: undefined as number | undefined,
   isReadonly: undefined as number | undefined,
   isEncrypted: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -822,23 +883,32 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
 
 <style scoped lang="css">
 .foundation-setting {
-  padding: 16px;
+  padding: 0 4px 0 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  height: 100%;
+}
+
+.foundation-setting-table-wrap {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
 }
 </style>

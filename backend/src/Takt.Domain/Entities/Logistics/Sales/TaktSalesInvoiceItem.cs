@@ -108,4 +108,10 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "subtotal_amount", ColumnDescription = "小计金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal SubtotalAmount { get; set; } = 0;
+
+    /// <summary>
+    /// 销售发票主表
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(SalesInvoiceId))]
+    public TaktSalesInvoice? SalesInvoice { get; set; }
 }

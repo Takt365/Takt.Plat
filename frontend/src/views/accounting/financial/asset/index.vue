@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="accounting-financial-asset">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'assetId'"
       table-mode="single"
@@ -69,23 +69,10 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'assetCategory'">
-          <TaktDictTag
-            :value="getAssetField(record, 'assetCategory')"
-            dict-type="accounting_asset_category"
-          />
-        </template>
-        <template v-else-if="column.key === 'assetType'">
-          <TaktDictTag
-            :value="getAssetField(record, 'assetType')"
-            dict-type="accounting_asset_type"
-          />
-        </template>
-      </template>
+
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -105,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <AssetForm
+        :key="formData?.assetId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -126,6 +114,8 @@
         <a-input
           v-model:value="advancedQueryForm.assetCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -135,6 +125,8 @@
         <a-input
           v-model:value="advancedQueryForm.assetName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.name') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -143,7 +135,9 @@
       <a-form-item :label="t('entity.asset.spec')">
         <a-input
           v-model:value="advancedQueryForm.assetSpec"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.spec') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.spec') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -152,27 +146,31 @@
       <a-form-item :label="t('entity.asset.desc')">
         <a-input
           v-model:value="advancedQueryForm.assetDesc"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.desc') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.desc') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('assetCategory')">
       <a-form-item :label="t('entity.asset.category')">
-        <TaktSelect
+        <a-input
           v-model:value="advancedQueryForm.assetCategory"
-          dict-type="accounting_asset_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.category') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.category') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('assetType')">
       <a-form-item :label="t('entity.asset.type')">
-        <TaktSelect
+        <a-input
           v-model:value="advancedQueryForm.assetType"
-          dict-type="accounting_asset_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.type') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.type') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -209,6 +207,8 @@
         <a-input
           v-model:value="advancedQueryForm.costCenterId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.costcenterid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -218,6 +218,8 @@
         <a-input
           v-model:value="advancedQueryForm.costCenterName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.costcentername') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -227,6 +229,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.deptid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -236,6 +240,8 @@
         <a-input
           v-model:value="advancedQueryForm.deptName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.deptname') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -245,6 +251,8 @@
         <a-input
           v-model:value="advancedQueryForm.userId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.userid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -254,6 +262,8 @@
         <a-input
           v-model:value="advancedQueryForm.userName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.username') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -263,6 +273,8 @@
         <a-input
           v-model:value="advancedQueryForm.assetLocation"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.location') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -378,7 +390,9 @@
       <a-form-item :label="t('entity.asset.relatedsupplierid')">
         <a-input
           v-model:value="advancedQueryForm.relatedSupplierId"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.relatedsupplierid') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.relatedsupplierid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -387,7 +401,9 @@
       <a-form-item :label="t('entity.asset.relatedsuppliername')">
         <a-input
           v-model:value="advancedQueryForm.relatedSupplierName"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.relatedsuppliername') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.relatedsuppliername') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -397,6 +413,8 @@
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -432,11 +450,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('entity.asset.extfield')">
+        <a-textarea
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.extfield') })"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -446,8 +465,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -500,9 +521,10 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import AssetForm from './components/asset-form.vue'
-import { getAssetList, getAssetById, createAsset, updateAsset, deleteAssetById, deleteAssetBatch, getAssetTemplate, importAsset, exportAsset } from '@/api/accounting/financial/asset'
-import type { Asset, AssetQuery, AssetCreate, AssetUpdate } from '@/types/accounting/financial/asset'
+import { getAssetList, getAssetById, createAsset, updateAsset, deleteAssetById, deleteAssetBatch, getAssetTemplate, importAsset, exportAsset, updateAssetStatus } from '@/api/accounting/financial/asset'
+import type { Asset, AssetQuery } from '@/types/accounting/financial/asset'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
@@ -523,9 +545,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Asset[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -540,11 +562,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Asset>>({})
+const formData = ref<Partial<Asset> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -581,7 +605,7 @@ const advancedQueryForm = ref({
   assetStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -602,14 +626,14 @@ const queryFieldsMeta = computed(() => [
   { key: 'userId', label: t('entity.asset.userid') },
   { key: 'userName', label: t('entity.asset.username') },
   { key: 'assetLocation', label: t('entity.asset.location') },
-  { key: 'purchaseDateStart', label: t('entity.asset.purchasedatestart') },
-  { key: 'purchaseDateEnd', label: t('entity.asset.purchasedateend') },
-  { key: 'startDateStart', label: t('entity.asset.startdatestart') },
-  { key: 'startDateEnd', label: t('entity.asset.startdateend') },
-  { key: 'scrapDateStart', label: t('entity.asset.scrapdatestart') },
-  { key: 'scrapDateEnd', label: t('entity.asset.scrapdateend') },
-  { key: 'disposalDateStart', label: t('entity.asset.disposaldatestart') },
-  { key: 'disposalDateEnd', label: t('entity.asset.disposaldateend') },
+  { key: 'purchaseDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.asset.purchasedate')) },
+  { key: 'purchaseDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.asset.purchasedate')) },
+  { key: 'startDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.asset.startdate')) },
+  { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.asset.startdate')) },
+  { key: 'scrapDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.asset.scrapdate')) },
+  { key: 'scrapDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.asset.scrapdate')) },
+  { key: 'disposalDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.asset.disposaldate')) },
+  { key: 'disposalDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.asset.disposaldate')) },
   { key: 'expectedLifeMonths', label: t('entity.asset.expectedlifemonths') },
   { key: 'depreciationMethod', label: t('entity.asset.depreciationmethod') },
   { key: 'monthlyDepreciation', label: t('entity.asset.monthlydepreciation') },
@@ -619,7 +643,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'assetStatus', label: t('entity.asset.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('entity.asset.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -638,10 +662,86 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {AssetQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<AssetQuery>): AssetQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: AssetQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof AssetQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('assetCode', form.assetCode)
+  assignTrimmed('assetName', form.assetName)
+  assignTrimmed('assetSpec', form.assetSpec)
+  assignTrimmed('assetDesc', form.assetDesc)
+  assignTrimmed('assetCategory', form.assetCategory)
+  assignTrimmed('assetType', form.assetType)
+  if (form.assetOriginalValue !== undefined && form.assetOriginalValue !== null) {
+    query.assetOriginalValue = form.assetOriginalValue
+  }
+  if (form.assetNetValue !== undefined && form.assetNetValue !== null) {
+    query.assetNetValue = form.assetNetValue
+  }
+  if (form.accumulatedDepreciation !== undefined && form.accumulatedDepreciation !== null) {
+    query.accumulatedDepreciation = form.accumulatedDepreciation
+  }
+  assignTrimmed('costCenterId', form.costCenterId)
+  assignTrimmed('costCenterName', form.costCenterName)
+  assignTrimmed('deptId', form.deptId)
+  assignTrimmed('deptName', form.deptName)
+  assignTrimmed('userId', form.userId)
+  assignTrimmed('userName', form.userName)
+  assignTrimmed('assetLocation', form.assetLocation)
+  assignTrimmed('purchaseDateStart', form.purchaseDateStart)
+  assignTrimmed('purchaseDateEnd', form.purchaseDateEnd)
+  assignTrimmed('startDateStart', form.startDateStart)
+  assignTrimmed('startDateEnd', form.startDateEnd)
+  assignTrimmed('scrapDateStart', form.scrapDateStart)
+  assignTrimmed('scrapDateEnd', form.scrapDateEnd)
+  assignTrimmed('disposalDateStart', form.disposalDateStart)
+  assignTrimmed('disposalDateEnd', form.disposalDateEnd)
+  if (form.expectedLifeMonths !== undefined && form.expectedLifeMonths !== null) {
+    query.expectedLifeMonths = form.expectedLifeMonths
+  }
+  if (form.depreciationMethod !== undefined && form.depreciationMethod !== null) {
+    query.depreciationMethod = form.depreciationMethod
+  }
+  if (form.monthlyDepreciation !== undefined && form.monthlyDepreciation !== null) {
+    query.monthlyDepreciation = form.monthlyDepreciation
+  }
+  assignTrimmed('relatedSupplierId', form.relatedSupplierId)
+  assignTrimmed('relatedSupplierName', form.relatedSupplierName)
+  assignTrimmed('relatedPlant', form.relatedPlant)
+  if (form.assetStatus !== undefined && form.assetStatus !== null) {
+    query.assetStatus = form.assetStatus
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('ExtField', form.ExtField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -691,7 +791,7 @@ const columns = computed<TableColumnsType>(() => [
     title: t('entity.asset.desc'),
     dataIndex: 'assetDesc',
     key: 'assetDesc',
-    width: 160,
+    width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getAssetField(record, 'assetDesc') ?? ''
@@ -703,6 +803,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: any }) => getAssetField(record, 'assetCategory') ?? ''
   },
   {
     title: t('entity.asset.type'),
@@ -711,6 +812,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: any }) => getAssetField(record, 'assetType') ?? ''
   },
   {
     title: t('entity.asset.originalvalue'),
@@ -932,6 +1034,7 @@ const getAssetId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getAssetField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -974,16 +1077,7 @@ const onClickRow = (record: Asset) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: AssetQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getAssetList(params)
+    const res = await getAssetList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1001,7 +1095,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1042,18 +1136,19 @@ function handleReset() {
   assetStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.asset._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: Asset) {
@@ -1091,6 +1186,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.asset._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -1100,6 +1197,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1131,16 +1230,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: AssetQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportAsset(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportAsset(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1208,7 +1302,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1247,7 +1341,7 @@ function handleAdvancedQueryReset() {
   assetStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }
@@ -1277,23 +1371,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.accounting-financial-asset {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

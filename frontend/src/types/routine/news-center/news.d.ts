@@ -154,7 +154,7 @@ export interface News extends ApprovalDtoBase {
   sortOrder: number;
 
   /**
-   * 新闻状态
+   * 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
    */
   newsStatus: number;
 
@@ -344,7 +344,7 @@ export interface NewsQuery extends TaktPagedQuery {
   sortOrder?: number;
 
   /**
-   * 新闻状态
+   * 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
    */
   newsStatus?: number;
 
@@ -396,7 +396,7 @@ export interface NewsQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -548,7 +548,7 @@ export interface NewsCreate {
   sortOrder: number;
 
   /**
-   * 新闻状态
+   * 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
    */
   newsStatus: number;
 
@@ -585,7 +585,7 @@ export interface NewsCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -622,7 +622,7 @@ export interface NewsStatus {
   newsId: string;
 
   /**
-   * 新闻状态
+   * 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
    */
   newsStatus: number;
 
@@ -727,7 +727,7 @@ export interface NewsTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -821,7 +821,7 @@ export interface NewsImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -963,14 +963,14 @@ export interface NewsExport {
   sortOrder: number;
 
   /**
-   * 新闻状态
+   * 新闻状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）
    */
   newsStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

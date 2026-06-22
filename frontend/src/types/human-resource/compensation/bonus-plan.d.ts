@@ -44,7 +44,7 @@ export interface BonusPlan extends CompanyDtoBase {
   bonusType: number;
 
   /**
-   * 计算方式（字典 hr_comp_bonus_calc_method）
+   * 计算方式（字典 hr_comp_bonus_calc_method_type）
    */
   calcMethod: number;
 
@@ -69,7 +69,7 @@ export interface BonusPlan extends CompanyDtoBase {
   effectiveDate: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   planStatus: number;
 
@@ -119,7 +119,7 @@ export interface BonusPlanQuery extends TaktPagedQuery {
   bonusType?: number;
 
   /**
-   * 计算方式（字典 hr_comp_bonus_calc_method）
+   * 计算方式（字典 hr_comp_bonus_calc_method_type）
    */
   calcMethod?: number;
 
@@ -144,7 +144,7 @@ export interface BonusPlanQuery extends TaktPagedQuery {
   effectiveDateEnd?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   planStatus?: number;
 
@@ -171,7 +171,7 @@ export interface BonusPlanQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -218,7 +218,7 @@ export interface BonusPlanCreate {
   bonusType: number;
 
   /**
-   * 计算方式（字典 hr_comp_bonus_calc_method）
+   * 计算方式（字典 hr_comp_bonus_calc_method_type）
    */
   calcMethod: number;
 
@@ -238,7 +238,7 @@ export interface BonusPlanCreate {
   effectiveDate: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   planStatus: number;
 
@@ -255,7 +255,7 @@ export interface BonusPlanCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -292,7 +292,7 @@ export interface BonusPlanStatus {
   bonusPlanId: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   planStatus: number;
 
@@ -331,7 +331,7 @@ export interface BonusPlanTemplate {
   bonusType?: number;
 
   /**
-   * 计算方式（字典 hr_comp_bonus_calc_method）
+   * 计算方式（字典 hr_comp_bonus_calc_method_type）
    */
   calcMethod?: number;
 
@@ -341,7 +341,7 @@ export interface BonusPlanTemplate {
   salaryFormulaId?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   planStatus?: number;
 
@@ -358,7 +358,7 @@ export interface BonusPlanTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -405,7 +405,7 @@ export interface BonusPlanImport {
   bonusType?: number;
 
   /**
-   * 计算方式（字典 hr_comp_bonus_calc_method）
+   * 计算方式（字典 hr_comp_bonus_calc_method_type）
    */
   calcMethod?: number;
 
@@ -415,7 +415,7 @@ export interface BonusPlanImport {
   salaryFormulaId?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   planStatus?: number;
 
@@ -432,7 +432,7 @@ export interface BonusPlanImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -474,7 +474,7 @@ export interface BonusPlanExport {
   bonusType: number;
 
   /**
-   * 计算方式（字典 hr_comp_bonus_calc_method）
+   * 计算方式（字典 hr_comp_bonus_calc_method_type）
    */
   calcMethod: number;
 
@@ -494,7 +494,7 @@ export interface BonusPlanExport {
   effectiveDate: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   planStatus: number;
 
@@ -511,7 +511,7 @@ export interface BonusPlanExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

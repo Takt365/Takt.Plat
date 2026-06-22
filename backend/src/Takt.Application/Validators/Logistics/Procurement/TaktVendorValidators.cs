@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Application.Validators.Logistics.Materials
+// 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktVendorValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Vendor 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktVendor 生成，请按需审阅）
 // 
@@ -11,10 +11,9 @@
 // ========================================
 
 using FluentValidation;
-using Takt.Application.Dtos.Logistics.Materials;
-using Takt.Shared.Enums;
+using Takt.Application.Dtos.Logistics.Procurement;
 
-namespace Takt.Application.Validators.Logistics.Materials;
+namespace Takt.Application.Validators.Logistics.Procurement;
 
 // ========================================
 // 创建Vendor 验证器
@@ -32,19 +31,19 @@ public class TaktVendorCreateValidator : AbstractValidator<TaktVendorCreateDto>
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.VendorCode)
             .NotEmpty().WithMessage("经销商编码不能为空")
-            .MaximumLength(40).WithMessage("经销商编码长度不能超过40个字符");
+            .MaximumLength(20).WithMessage("经销商编码长度不能超过20个字符");
         RuleFor(x => x.VendorName)
             .NotEmpty().WithMessage("经销商名称不能为空")
-            .MaximumLength(40).WithMessage("经销商名称长度不能超过40个字符");
+            .MaximumLength(80).WithMessage("经销商名称长度不能超过80个字符");
         RuleFor(x => x.VendorShortName)
             .MaximumLength(40).WithMessage("经销商简称长度不能超过40个字符");
         RuleFor(x => x.IndustrySector)
@@ -77,16 +76,12 @@ public class TaktVendorCreateValidator : AbstractValidator<TaktVendorCreateDto>
             .EmailAddress().WithMessage("联系人邮箱格式不正确").When(x => !string.IsNullOrWhiteSpace(x.ContactEmail));
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
-            .MaximumLength(40).WithMessage("结算币种代码长度不能超过40个字符");
+            .MaximumLength(10).WithMessage("结算币种代码长度不能超过10个字符");
         RuleFor(x => x.AuthorizedBrand)
             .MaximumLength(100).WithMessage("授权品牌长度不能超过100个字符");
         RuleFor(x => x.AgentRegion)
             .MaximumLength(200).WithMessage("代理区域长度不能超过200个字符");
-        RuleFor(x => x.VendorStatus)
-            .IsInEnum().WithMessage("经销商状态无效");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -127,18 +122,18 @@ public class TaktVendorImportValidator : AbstractValidator<TaktVendorImportDto>
     public TaktVendorImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(40).WithMessage("工厂代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.VendorCode)
             .NotEmpty().WithMessage("经销商编码不能为空")
-            .MaximumLength(40).WithMessage("经销商编码长度不能超过40个字符");
+            .MaximumLength(20).WithMessage("经销商编码长度不能超过20个字符");
         RuleFor(x => x.VendorName)
             .NotEmpty().WithMessage("经销商名称不能为空")
-            .MaximumLength(40).WithMessage("经销商名称长度不能超过40个字符");
+            .MaximumLength(80).WithMessage("经销商名称长度不能超过80个字符");
         RuleFor(x => x.VendorShortName)
             .MaximumLength(40).WithMessage("经销商简称长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.VendorShortName));
         RuleFor(x => x.IndustrySector)
@@ -155,8 +150,8 @@ public class TaktVendorImportValidator : AbstractValidator<TaktVendorImportDto>
             .MaximumLength(80).WithMessage("注册地址3长度不能超过80个字符").When(x => !string.IsNullOrWhiteSpace(x.RegistrationAddress3));
         RuleFor(x => x.VendorPhone)
             .MaximumLength(50).WithMessage("经销商电话长度不能超过50个字符").When(x => !string.IsNullOrWhiteSpace(x.VendorPhone));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

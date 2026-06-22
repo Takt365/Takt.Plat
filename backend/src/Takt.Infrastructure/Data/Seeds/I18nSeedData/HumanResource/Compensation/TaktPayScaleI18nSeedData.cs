@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktPayScaleI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPayScale 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,101 +75,101 @@ public class TaktPayScaleI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktPayScale 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.payscale._self / entity.payscale.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.payscale._self / entity.payscale.{{field}}；ResourceGroup=Compensation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetPayScaleTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.payscale._self
-            new TranslationSeedItem("entity.payscale._self", "en-US", "Pay Scale Information", "实体名称"),
+            new TranslationSeedItem("entity.payscale._self", "en-US", "Pay Scale Information_us", "实体名称"),
             // entity.payscale._self
-            new TranslationSeedItem("entity.payscale._self", "ja-JP", "薪级薪等信息", "实体名称"),
+            new TranslationSeedItem("entity.payscale._self", "ja-JP", "薪级薪等信息_jp", "实体名称"),
             // entity.payscale._self
             new TranslationSeedItem("entity.payscale._self", "zh-CN", "薪级薪等信息", "实体名称"),
             // entity.payscale._self
-            new TranslationSeedItem("entity.payscale._self", "zh-HK", "薪级薪等信息", "实体名称"),
+            new TranslationSeedItem("entity.payscale._self", "zh-HK", "薪级薪等信息_hk", "实体名称"),
 
             // entity.payscale.scalecode
-            new TranslationSeedItem("entity.payscale.scalecode", "en-US", "薪级编码", "薪级编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.payscale.scalecode", "en-US", "薪级编码_us", "薪级编码（租户+公司内唯一）"),
             // entity.payscale.scalecode
-            new TranslationSeedItem("entity.payscale.scalecode", "ja-JP", "薪级编码", "薪级编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.payscale.scalecode", "ja-JP", "薪级编码_jp", "薪级编码（租户+公司内唯一）"),
             // entity.payscale.scalecode
             new TranslationSeedItem("entity.payscale.scalecode", "zh-CN", "薪级编码", "薪级编码（租户+公司内唯一）"),
             // entity.payscale.scalecode
-            new TranslationSeedItem("entity.payscale.scalecode", "zh-HK", "薪级编码", "薪级编码（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.payscale.scalecode", "zh-HK", "薪级编码_hk", "薪级编码（租户+公司内唯一）"),
 
             // entity.payscale.scalename
-            new TranslationSeedItem("entity.payscale.scalename", "en-US", "薪级名称", "薪级名称"),
+            new TranslationSeedItem("entity.payscale.scalename", "en-US", "薪级名称_us", "薪级名称"),
             // entity.payscale.scalename
-            new TranslationSeedItem("entity.payscale.scalename", "ja-JP", "薪级名称", "薪级名称"),
+            new TranslationSeedItem("entity.payscale.scalename", "ja-JP", "薪级名称_jp", "薪级名称"),
             // entity.payscale.scalename
             new TranslationSeedItem("entity.payscale.scalename", "zh-CN", "薪级名称", "薪级名称"),
             // entity.payscale.scalename
-            new TranslationSeedItem("entity.payscale.scalename", "zh-HK", "薪级名称", "薪级名称"),
+            new TranslationSeedItem("entity.payscale.scalename", "zh-HK", "薪级名称_hk", "薪级名称"),
 
             // entity.payscale.gradelevel
-            new TranslationSeedItem("entity.payscale.gradelevel", "en-US", "等级", "等级（数字越大等级越高）"),
+            new TranslationSeedItem("entity.payscale.gradelevel", "en-US", "等级_us", "等级（数字越大等级越高）"),
             // entity.payscale.gradelevel
-            new TranslationSeedItem("entity.payscale.gradelevel", "ja-JP", "等级", "等级（数字越大等级越高）"),
+            new TranslationSeedItem("entity.payscale.gradelevel", "ja-JP", "等级_jp", "等级（数字越大等级越高）"),
             // entity.payscale.gradelevel
             new TranslationSeedItem("entity.payscale.gradelevel", "zh-CN", "等级", "等级（数字越大等级越高）"),
             // entity.payscale.gradelevel
-            new TranslationSeedItem("entity.payscale.gradelevel", "zh-HK", "等级", "等级（数字越大等级越高）"),
+            new TranslationSeedItem("entity.payscale.gradelevel", "zh-HK", "等级_hk", "等级（数字越大等级越高）"),
 
             // entity.payscale.minsalary
-            new TranslationSeedItem("entity.payscale.minsalary", "en-US", "下限金额", "下限金额（元）"),
+            new TranslationSeedItem("entity.payscale.minsalary", "en-US", "下限金额_us", "下限金额（元）"),
             // entity.payscale.minsalary
-            new TranslationSeedItem("entity.payscale.minsalary", "ja-JP", "下限金额", "下限金额（元）"),
+            new TranslationSeedItem("entity.payscale.minsalary", "ja-JP", "下限金额_jp", "下限金额（元）"),
             // entity.payscale.minsalary
             new TranslationSeedItem("entity.payscale.minsalary", "zh-CN", "下限金额", "下限金额（元）"),
             // entity.payscale.minsalary
-            new TranslationSeedItem("entity.payscale.minsalary", "zh-HK", "下限金额", "下限金额（元）"),
+            new TranslationSeedItem("entity.payscale.minsalary", "zh-HK", "下限金额_hk", "下限金额（元）"),
 
             // entity.payscale.midsalary
-            new TranslationSeedItem("entity.payscale.midsalary", "en-US", "中位金额", "中位金额（元）"),
+            new TranslationSeedItem("entity.payscale.midsalary", "en-US", "中位金额_us", "中位金额（元）"),
             // entity.payscale.midsalary
-            new TranslationSeedItem("entity.payscale.midsalary", "ja-JP", "中位金额", "中位金额（元）"),
+            new TranslationSeedItem("entity.payscale.midsalary", "ja-JP", "中位金额_jp", "中位金额（元）"),
             // entity.payscale.midsalary
             new TranslationSeedItem("entity.payscale.midsalary", "zh-CN", "中位金额", "中位金额（元）"),
             // entity.payscale.midsalary
-            new TranslationSeedItem("entity.payscale.midsalary", "zh-HK", "中位金额", "中位金额（元）"),
+            new TranslationSeedItem("entity.payscale.midsalary", "zh-HK", "中位金额_hk", "中位金额（元）"),
 
             // entity.payscale.maxsalary
-            new TranslationSeedItem("entity.payscale.maxsalary", "en-US", "上限金额", "上限金额（元）"),
+            new TranslationSeedItem("entity.payscale.maxsalary", "en-US", "上限金额_us", "上限金额（元）"),
             // entity.payscale.maxsalary
-            new TranslationSeedItem("entity.payscale.maxsalary", "ja-JP", "上限金额", "上限金额（元）"),
+            new TranslationSeedItem("entity.payscale.maxsalary", "ja-JP", "上限金额_jp", "上限金额（元）"),
             // entity.payscale.maxsalary
             new TranslationSeedItem("entity.payscale.maxsalary", "zh-CN", "上限金额", "上限金额（元）"),
             // entity.payscale.maxsalary
-            new TranslationSeedItem("entity.payscale.maxsalary", "zh-HK", "上限金额", "上限金额（元）"),
+            new TranslationSeedItem("entity.payscale.maxsalary", "zh-HK", "上限金额_hk", "上限金额（元）"),
 
             // entity.payscale.sortorder
-            new TranslationSeedItem("entity.payscale.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.payscale.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.payscale.sortorder
-            new TranslationSeedItem("entity.payscale.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.payscale.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.payscale.sortorder
             new TranslationSeedItem("entity.payscale.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.payscale.sortorder
-            new TranslationSeedItem("entity.payscale.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.payscale.sortorder", "zh-HK", "排序号_hk", "排序号"),
 
             // entity.payscale.scalestatus
-            new TranslationSeedItem("entity.payscale.scalestatus", "en-US", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.payscale.scalestatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status）"),
             // entity.payscale.scalestatus
-            new TranslationSeedItem("entity.payscale.scalestatus", "ja-JP", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.payscale.scalestatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status）"),
             // entity.payscale.scalestatus
-            new TranslationSeedItem("entity.payscale.scalestatus", "zh-CN", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.payscale.scalestatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status）"),
             // entity.payscale.scalestatus
-            new TranslationSeedItem("entity.payscale.scalestatus", "zh-HK", "状态", "状态（字典 sys_normal_disable）"),
+            new TranslationSeedItem("entity.payscale.scalestatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status）"),
 
             // entity.payscale.relatedplant
-            new TranslationSeedItem("entity.payscale.relatedplant", "en-US", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payscale.relatedplant", "en-US", "关联工厂_us", "关联工厂"),
             // entity.payscale.relatedplant
-            new TranslationSeedItem("entity.payscale.relatedplant", "ja-JP", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payscale.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂"),
             // entity.payscale.relatedplant
             new TranslationSeedItem("entity.payscale.relatedplant", "zh-CN", "关联工厂", "关联工厂"),
             // entity.payscale.relatedplant
-            new TranslationSeedItem("entity.payscale.relatedplant", "zh-HK", "关联工厂", "关联工厂"),
+            new TranslationSeedItem("entity.payscale.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂"),
         };
     }
 
@@ -187,10 +187,10 @@ public class TaktPayScaleI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Compensation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

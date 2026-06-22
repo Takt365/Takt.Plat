@@ -459,8 +459,8 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             "transfer",
             new[]
             {
-                new TaktWorkflowSignalRUserTarget { UserId = userId, UserName = CurrentUserName },
-                new TaktWorkflowSignalRUserTarget { UserId = dto.ToUserId, UserName = dto.ToUserName },
+                new TaktWorkflowSignalRUserTarget { UserId = userId, UserName = CurrentUserName ?? string.Empty },
+                new TaktWorkflowSignalRUserTarget { UserId = dto.ToUserId, UserName = dto.ToUserName ?? string.Empty },
             });
     }
 
@@ -678,7 +678,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
                 ProcessKey = s.ProcessKey,
                 ProcessName = s.ProcessName,
                 FormId = s.FormId.GetValueOrDefault(),
-                FormCode = s.FormCode
+                FormCode = s.FormCode ?? string.Empty
             };
             if (s.FormId.HasValue && formMap.TryGetValue(s.FormId.Value, out var form))
             {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：account-title-change-log.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface AccountTitleChangeLog extends CompanyDtoBase {
   accountTitleChangeLogId: string;
 
   /**
-   * 会计科目 ID
+   * 会计科目 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
    */
   accountTitleId: string;
 
@@ -63,6 +63,11 @@ export interface AccountTitleChangeLog extends CompanyDtoBase {
    */
   changeReason?: string;
 
+  /**
+   * 会计科目主表 （主表：TaktAccountTitle）
+   */
+  accountTitle?: AccountTitle;
+
 }
 
 
@@ -84,7 +89,7 @@ export interface AccountTitleChangeLogQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 会计科目 ID
+   * 会计科目 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
    */
   accountTitleId?: string;
 
@@ -131,7 +136,7 @@ export interface AccountTitleChangeLogQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -163,7 +168,7 @@ export interface AccountTitleChangeLogCreate {
   companyDefaultCulture: string;
 
   /**
-   * 会计科目 ID
+   * 会计科目 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
    */
   accountTitleId: string;
 
@@ -195,7 +200,7 @@ export interface AccountTitleChangeLogCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -237,7 +242,7 @@ export interface AccountTitleChangeLogExport {
   companyCode: string;
 
   /**
-   * 会计科目 ID
+   * 会计科目 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
    */
   accountTitleId: string;
 
@@ -269,7 +274,7 @@ export interface AccountTitleChangeLogExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

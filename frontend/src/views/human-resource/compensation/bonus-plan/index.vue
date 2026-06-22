@@ -80,13 +80,13 @@
         <template v-else-if="column.key === 'calcMethod'">
           <TaktDictTag
             :value="getBonusPlanField(record, 'calcMethod')"
-            dict-type="hr_comp_bonus_calc_method"
+            dict-type="hr_comp_bonus_calc_method_type"
           />
         </template>
         <template v-else-if="column.key === 'planStatus'">
           <TaktDictTag
             :value="getBonusPlanField(record, 'planStatus')"
-            dict-type="sys_normal_disable"
+            dict-type="sys_normal_disable_status"
           />
         </template>
       </template>
@@ -161,7 +161,7 @@
       <a-form-item :label="t('entity.bonusplan.calcmethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.calcMethod"
-          dict-type="hr_comp_bonus_calc_method"
+          dict-type="hr_comp_bonus_calc_method_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.bonusplan.calcmethod') })"
           allow-clear
         />
@@ -209,7 +209,7 @@
       <a-form-item :label="t('entity.bonusplan.planstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.planStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.bonusplan.planstatus') })"
           allow-clear
         />
@@ -256,11 +256,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -315,6 +315,7 @@
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 奖金方案管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/compensation/bonus-plan
@@ -347,9 +348,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<BonusPlan[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -385,7 +386,7 @@ const advancedQueryForm = ref({
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -403,7 +404,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'relatedPlant', label: t('entity.bonusplan.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -652,7 +653,7 @@ function handleReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
   currentPage.value = 1
@@ -837,7 +838,7 @@ function handleAdvancedQueryReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }

@@ -18,6 +18,7 @@ using System.Text;
 using Takt.Domain.Entities.Identity;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Shared.Constants;
 using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 
@@ -135,8 +136,8 @@ public class TaktMenuButtonSeedData
                     : $"{menuPerm}:{buttonPerm.ToLowerInvariant()}")
                 : $"{modulePrefix.ToLower()}:{menuPerm}:{buttonPerm.ToLowerInvariant()}";
 
-            // 生成本地化键：common.button.{操作后缀}
-            var menuL10nKey = $"common.button.{buttonPerm.ToLowerInvariant()}";
+            // 生成本地化键：common.page.button.{操作后缀}（与 TaktCommonI18nSeedData、前端 t() 一致）
+            var menuL10nKey = TaktCommonI18nKeys.MenuButton(buttonPerm);
 
             var (insert, update) = await CreateOrUpdateButtonAsync(
                 menuRepository, tenantCode, menu.Id, buttonCode, buttonName, permission, menuL10nKey, i + 1);
@@ -210,7 +211,7 @@ public class TaktMenuButtonSeedData
         "批量"
     };
 
-    /// <summary>通用 CRUD 按钮权限后缀（与 GenericButtonNames 一一对应；I18nKey 为 common.button.*）。</summary>
+    /// <summary>通用 CRUD 按钮权限后缀（与 GenericButtonNames 一一对应；I18nKey 为 common.page.button.*）。</summary>
     private static readonly string[] GenericButtonPerms =
     {
         "query", "create", "update", "delete", "detail", "preview", "print",
@@ -285,12 +286,12 @@ public class TaktMenuButtonSeedData
     /// <summary>人力资源模块扩展按钮（员工生命周期：入职 → 转正 → 调动 → 晋升 → 离职 → 返聘）。</summary>
     private static readonly string[] HumanResourceExtraNames =
     {
-        "入职", "转正", "调动", "晋升", "离职", "返聘"
+        "入职", "转正", "调转", "晋升", "离职", "返聘"
     };
 
     private static readonly string[] HumanResourceExtraPerms =
     {
-        "onboard", "regularize", "reassignment", "promote", "terminate", "rehire"
+        "onboard", "regularize", "transfer", "promote", "terminate", "rehire"
     };
 
     /// <summary>身份认证模块扩展按钮（分组：授权分配 → 密码 → 账号状态 → 重置/变更）。</summary>

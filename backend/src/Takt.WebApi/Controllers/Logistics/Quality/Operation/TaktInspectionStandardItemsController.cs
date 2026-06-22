@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardItemsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：检验标准明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktInspectionStandardItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:operation:inspectionstandarditem:list", "检验标准明细列表")]
+    [TaktPermission("logistics:quality:operation:inspectionstandard:list", "检验标准明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetInspectionStandardItemListAsync([FromQuery] TaktInspectionStandardItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktInspectionStandardItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">检验标准明细ID</param>
     /// <returns>检验标准明细DTO</returns>
-    [TaktPermission("logistics:quality:operation:inspectionstandarditem:query", "检验标准明细详情")]
+    [TaktPermission("logistics:quality:operation:inspectionstandard:query", "检验标准明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetInspectionStandardItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktInspectionStandardItemsController : TaktControllerBase
     /// 获取检验标准明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:operation:inspectionstandarditem:query", "检验标准明细选项")]
+    [TaktPermission("logistics:quality:operation:inspectionstandard:query", "检验标准明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetInspectionStandardItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktInspectionStandardItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>检验标准明细DTO</returns>
-    [TaktPermission("logistics:quality:operation:inspectionstandarditem:create", "创建检验标准明细")]
+    [TaktPermission("logistics:quality:operation:inspectionstandard:create", "创建检验标准明细")]
     [HttpPost]
     public async Task<IActionResult> CreateInspectionStandardItemAsync([FromBody] TaktInspectionStandardItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktInspectionStandardItemsController : TaktControllerBase
     /// <param name="id">检验标准明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>检验标准明细DTO</returns>
-    [TaktPermission("logistics:quality:operation:inspectionstandarditem:update", "更新检验标准明细")]
+    [TaktPermission("logistics:quality:operation:inspectionstandard:update", "更新检验标准明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateInspectionStandardItemAsync(long id, [FromBody] TaktInspectionStandardItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktInspectionStandardItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">检验标准明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:inspectionstandarditem:delete", "删除检验标准明细")]
+    [TaktPermission("logistics:quality:operation:inspectionstandard:delete", "删除检验标准明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteInspectionStandardItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktInspectionStandardItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:operation:inspectionstandarditem:delete", "批量删除检验标准明细")]
+    [TaktPermission("logistics:quality:operation:inspectionstandard:delete", "批量删除检验标准明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteInspectionStandardItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktInspectionStandardItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:inspectionstandarditem:import", "获取检验标准明细导入模板")]
+    [TaktPermission("logistics:quality:operation:inspectionstandard:import", "获取检验标准明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetInspectionStandardItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktInspectionStandardItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:operation:inspectionstandarditem:import", "导入检验标准明细")]
+    [TaktPermission("logistics:quality:operation:inspectionstandard:import", "导入检验标准明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportInspectionStandardItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktInspectionStandardItemsController : TaktControllerBase
     /// 导出检验标准明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:operation:inspectionstandarditem:export", "导出检验标准明细")]
+    [TaktPermission("logistics:quality:operation:inspectionstandard:export", "导出检验标准明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportInspectionStandardItemAsync([FromQuery] TaktInspectionStandardItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

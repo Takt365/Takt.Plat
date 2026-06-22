@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Takt.Application.Services.Workflow.FlowEngine.Business;
 using Autofac;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -113,6 +114,10 @@ public class TaktAutofacModule : Autofac.Module
             .As<ITaktSqlExecutor>()
             .InstancePerLifetimeScope();
 
+        builder.RegisterType<TaktStatQueryExecutor>()
+            .As<ITaktStatQueryExecutor>()
+            .InstancePerLifetimeScope();
+
         builder.RegisterType<TaktLineNumberGenerator>()
             .As<ITaktLineNumberGenerator>()
             .SingleInstance();
@@ -129,6 +134,10 @@ public class TaktAutofacModule : Autofac.Module
             .As<Takt.Domain.Interfaces.ITaktDatabaseSchemaProvider>()
             .InstancePerLifetimeScope();
 
+        builder.RegisterType<Takt.Application.Services.Code.Generator.GenEngine.TaktGenEngine>()
+            .As<Takt.Application.Services.Code.Generator.GenEngine.ITaktGenEngine>()
+            .InstancePerLifetimeScope();
+
         builder.RegisterType<Takt.Infrastructure.Data.Schema.TaktTableCloneProvider>()
             .As<Takt.Domain.Interfaces.ITaktTableCloneProvider>()
             .InstancePerLifetimeScope();
@@ -138,6 +147,14 @@ public class TaktAutofacModule : Autofac.Module
             .InstancePerLifetimeScope();
 
         builder.RegisterType<Takt.Application.Services.Workflow.FlowEngine.TaktFlowApproverResolverService>()
+            .AsSelf()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Application.Services.Workflow.FlowEngine.Business.TaktApprovalFlowBusinessService>()
+            .AsSelf()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Application.Services.Workflow.FlowEngine.Business.TaktApprovalFlowSubmitService>()
             .AsSelf()
             .InstancePerLifetimeScope();
 

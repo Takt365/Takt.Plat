@@ -128,7 +128,7 @@ export interface DictTypeQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -187,7 +187,7 @@ export interface DictTypeCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -227,6 +227,25 @@ export interface DictTypeStatus {
    * 状态（1=启用，0=禁用）
    */
   dictStatus: number;
+
+}
+
+
+/**
+ * DictType 是否内置更新 DTO
+ * 对应前端 DictTypeBuiltIn
+ * @description 对应后端 TaktDictTypeBuiltInDto
+ */
+export interface DictTypeBuiltIn {
+  /**
+   * DictTypeID
+   */
+  dictTypeId: string;
+
+  /**
+   * 是否内置（字典 sys_yes_no_type；1=是，0=否）
+   */
+  isBuiltIn: number;
 
 }
 
@@ -294,7 +313,7 @@ export interface DictTypeTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -348,7 +367,7 @@ export interface DictTypeImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -407,7 +426,7 @@ export interface DictTypeExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

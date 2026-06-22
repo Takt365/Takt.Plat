@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktEquipmentService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工厂设备应用服务实现
 // 
@@ -30,31 +30,35 @@ namespace Takt.Application.Services.Logistics.Maintenance;
 public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
 {
     private readonly ITaktCompanyRepository<TaktEquipment> _equipmentRepository;
-    private readonly ITaktCompanyRepository<TaktMaintenance> _maintenanceRepository;
-    private readonly ITaktLineNumberGenerator _lineNumberGenerator;
+    private readonly ITaktApprovalRepository<TaktMaintenanceNotification> _maintenanceNotificationRepository;
+    private readonly ITaktApprovalRepository<TaktMaintenanceWorkOrder> _maintenanceWorkOrderRepository;
+    private readonly ITaktCompanyRepository<TaktMaintenanceHistory> _maintenanceHistoryRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="equipmentRepository">工厂设备仓储</param>
-    /// <param name="maintenanceRepository">Maintenance仓储</param>
-    /// <param name="lineNumberGenerator">明细行号生成器</param>
+    /// <param name="maintenanceNotificationRepository">MaintenanceNotification仓储</param>
+    /// <param name="maintenanceWorkOrderRepository">MaintenanceWorkOrder仓储</param>
+    /// <param name="maintenanceHistoryRepository">MaintenanceHistory仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEquipmentService(
         ITaktCompanyRepository<TaktEquipment> equipmentRepository,
-        ITaktCompanyRepository<TaktMaintenance> maintenanceRepository,
-        ITaktLineNumberGenerator lineNumberGenerator,
+        ITaktApprovalRepository<TaktMaintenanceNotification> maintenanceNotificationRepository,
+        ITaktApprovalRepository<TaktMaintenanceWorkOrder> maintenanceWorkOrderRepository,
+        ITaktCompanyRepository<TaktMaintenanceHistory> maintenanceHistoryRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _equipmentRepository = equipmentRepository;
-        _maintenanceRepository = maintenanceRepository;
-        _lineNumberGenerator = lineNumberGenerator;
+        _maintenanceNotificationRepository = maintenanceNotificationRepository;
+        _maintenanceWorkOrderRepository = maintenanceWorkOrderRepository;
+        _maintenanceHistoryRepository = maintenanceHistoryRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -101,8 +105,8 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
     {
         EnsureThreeLayerContext();
         var list = await _equipmentRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.EquipmentName,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.WarrantyStatus == 1,
+            x => x.EquipmentName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -172,7 +176,9 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
         {
             throw new TaktBusinessException("工厂设备不存在或已删除");
         }
-        await _maintenanceRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
+        await _maintenanceNotificationRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
+        await _maintenanceWorkOrderRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
+        await _maintenanceHistoryRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
         var deleted = await _equipmentRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -306,7 +312,7 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
     // ========================================
 
     /// <summary>
-    /// 填充工厂设备详情（加载 OneToMany 子表：设备维护记录）
+    /// 填充工厂设备详情（加载 OneToMany 子表：维护通知单、维护工单、设备维护履历）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -317,71 +323,131 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
         {
             return;
         }
-        // 设备维护记录 → dto.MaintenanceRecords
-        var maintenancerecords = await _maintenanceRepository.GetListAsync(x => x.EquipmentId == entity.Id);
-        dto.MaintenanceRecords = maintenancerecords.Adapt<List<TaktMaintenanceDto>>();
+        // 维护通知单 → dto.MaintenanceNotifications
+        var maintenancenotifications = await _maintenanceNotificationRepository.GetListAsync(x => x.EquipmentId == entity.Id);
+        dto.MaintenanceNotifications = maintenancenotifications.Adapt<List<TaktMaintenanceNotificationDto>>();
+        // 维护工单 → dto.MaintenanceWorkOrders
+        var maintenanceworkorders = await _maintenanceWorkOrderRepository.GetListAsync(x => x.EquipmentId == entity.Id);
+        dto.MaintenanceWorkOrders = maintenanceworkorders.Adapt<List<TaktMaintenanceWorkOrderDto>>();
+        // 设备维护履历 → dto.MaintenanceHistories
+        var maintenancehistories = await _maintenanceHistoryRepository.GetListAsync(x => x.EquipmentId == entity.Id);
+        dto.MaintenanceHistories = maintenancehistories.Adapt<List<TaktMaintenanceHistoryDto>>();
     }
 
     /// <summary>
-    /// 保存工厂设备子表级联（设备维护记录；Create/Update 后按主表 Id 先删后插）
+    /// 保存工厂设备子表级联（维护通知单、维护工单、设备维护履历；Create/Update 后按主表 Id 先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
     /// <returns>任务</returns>
     private async Task SaveEquipmentChildrenAsync(TaktEquipment entity, TaktEquipmentCreateDto dto)
     {
-        // 设备维护记录（MaintenanceRecords）
-        if (dto.MaintenanceRecords is not { Count: > 0 })
+        // 维护通知单（MaintenanceNotifications）
+        if (dto.MaintenanceNotifications is not { Count: > 0 })
         {
-            await _maintenanceRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
+            await _maintenanceNotificationRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
         }
         else
         {
-            var maintenancerecords = dto.MaintenanceRecords.Adapt<List<TaktMaintenance>>();
-            foreach (var child in maintenancerecords)
+            var maintenancenotifications = dto.MaintenanceNotifications.Adapt<List<TaktMaintenanceNotification>>();
+            foreach (var child in maintenancenotifications)
             {
                 child.EquipmentId = entity.Id;
             }
-            var maintenancerecordsNeedLine = maintenancerecords.Where(c => c.LineNumber <= 0).ToList();
-            if (maintenancerecordsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.EquipmentCode) ? entity.EquipmentCode : entity.Id.ToString();
-                var maxLine = await _maintenanceRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EquipmentId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, maintenancerecordsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in maintenancerecords)
-                {
-                    if (child.LineNumber <= 0)
-                    {
-                        child.LineNumber = lineSeq[lineIdx++];
-                    }
-                }
-            }
                         var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < maintenancerecords.Count; i++)
+                        for (var i = 0; i < maintenancenotifications.Count; i++)
                         {
-                            var key = $"{maintenancerecords[i].CompanyCode}|{maintenancerecords[i].EquipmentId}|{maintenancerecords[i].MaintenanceDate}";
+                            var key = $"{maintenancenotifications[i].CompanyCode}|{maintenancenotifications[i].PlantCode}|{maintenancenotifications[i].NotificationCode}";
                             if (!seenKeys.Add(key))
                             {
-                                throw new TaktBusinessException($"设备维护记录第{i + 1}项与本次提交的其他项重复（CompanyCode、EquipmentId、MaintenanceDate）");
+                                throw new TaktBusinessException($"维护通知单第{i + 1}项与本次提交的其他项重复（CompanyCode、PlantCode、NotificationCode）");
                             }
                         }
-            await _maintenanceRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
-            foreach (var child in maintenancerecords)
+            await _maintenanceNotificationRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
+            foreach (var child in maintenancenotifications)
             {
-            var isUnique_ix_takt_logistics_maintenance_equipment_date_unique = await _uniqueValidator.IsUniqueAsync(
-                _maintenanceRepository,
+            var isUnique_ix_takt_logistics_maintenance_notification_code_unique = await _uniqueValidator.IsUniqueAsync(
+                _maintenanceNotificationRepository,
                 x => x.CompanyCode == child.CompanyCode
-                    && x.EquipmentId == child.EquipmentId
-                    && x.MaintenanceDate == child.MaintenanceDate);
-            if (!isUnique_ix_takt_logistics_maintenance_equipment_date_unique)
+                    && x.PlantCode == child.PlantCode
+                    && x.NotificationCode == child.NotificationCode);
+            if (!isUnique_ix_takt_logistics_maintenance_notification_code_unique)
             {
-                throw new TaktBusinessException("设备维护记录的CompanyCode、EquipmentId、MaintenanceDate已存在");
+                throw new TaktBusinessException("维护通知单的CompanyCode、PlantCode、NotificationCode已存在");
             }
             }
-            await _maintenanceRepository.CreateRangeAsync(maintenancerecords);
+            await _maintenanceNotificationRepository.CreateRangeAsync(maintenancenotifications);
+        }
+        // 维护工单（MaintenanceWorkOrders）
+        if (dto.MaintenanceWorkOrders is not { Count: > 0 })
+        {
+            await _maintenanceWorkOrderRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
+        }
+        else
+        {
+            var maintenanceworkorders = dto.MaintenanceWorkOrders.Adapt<List<TaktMaintenanceWorkOrder>>();
+            foreach (var child in maintenanceworkorders)
+            {
+                child.EquipmentId = entity.Id;
+            }
+                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
+                        for (var i = 0; i < maintenanceworkorders.Count; i++)
+                        {
+                            var key = $"{maintenanceworkorders[i].CompanyCode}|{maintenanceworkorders[i].PlantCode}|{maintenanceworkorders[i].WorkOrderCode}";
+                            if (!seenKeys.Add(key))
+                            {
+                                throw new TaktBusinessException($"维护工单第{i + 1}项与本次提交的其他项重复（CompanyCode、PlantCode、WorkOrderCode）");
+                            }
+                        }
+            await _maintenanceWorkOrderRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
+            foreach (var child in maintenanceworkorders)
+            {
+            var isUnique_ix_takt_logistics_maintenance_work_order_code_unique = await _uniqueValidator.IsUniqueAsync(
+                _maintenanceWorkOrderRepository,
+                x => x.CompanyCode == child.CompanyCode
+                    && x.PlantCode == child.PlantCode
+                    && x.WorkOrderCode == child.WorkOrderCode);
+            if (!isUnique_ix_takt_logistics_maintenance_work_order_code_unique)
+            {
+                throw new TaktBusinessException("维护工单的CompanyCode、PlantCode、WorkOrderCode已存在");
+            }
+            }
+            await _maintenanceWorkOrderRepository.CreateRangeAsync(maintenanceworkorders);
+        }
+        // 设备维护履历（MaintenanceHistories）
+        if (dto.MaintenanceHistories is not { Count: > 0 })
+        {
+            await _maintenanceHistoryRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
+        }
+        else
+        {
+            var maintenancehistories = dto.MaintenanceHistories.Adapt<List<TaktMaintenanceHistory>>();
+            foreach (var child in maintenancehistories)
+            {
+                child.EquipmentId = entity.Id;
+            }
+                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
+                        for (var i = 0; i < maintenancehistories.Count; i++)
+                        {
+                            var key = $"{maintenancehistories[i].CompanyCode}|{maintenancehistories[i].MaintenanceWorkOrderId}";
+                            if (!seenKeys.Add(key))
+                            {
+                                throw new TaktBusinessException($"设备维护履历第{i + 1}项与本次提交的其他项重复（CompanyCode、MaintenanceWorkOrderId）");
+                            }
+                        }
+            await _maintenanceHistoryRepository.DeleteAsync(x => x.EquipmentId == entity.Id);
+            foreach (var child in maintenancehistories)
+            {
+            var isUnique_ix_takt_logistics_maintenance_history_work_order_unique = await _uniqueValidator.IsUniqueAsync(
+                _maintenanceHistoryRepository,
+                x => x.CompanyCode == child.CompanyCode
+                    && x.MaintenanceWorkOrderId == child.MaintenanceWorkOrderId);
+            if (!isUnique_ix_takt_logistics_maintenance_history_work_order_unique)
+            {
+                throw new TaktBusinessException("设备维护履历的CompanyCode、MaintenanceWorkOrderId已存在");
+            }
+            }
+            await _maintenanceHistoryRepository.CreateRangeAsync(maintenancehistories);
         }
     }
     // ========================================
@@ -425,7 +491,7 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
                 || SqlFunc.ToString(x.IsCritical).Contains(keywords)
                 || SqlFunc.ToString(x.WarrantyStatus).Contains(keywords)
                 || SqlFunc.ToString(x.EquipmentStatus).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PurchaseDate).Contains(keywords)
                 || SqlFunc.ToString(x.InstallationDate).Contains(keywords)
@@ -556,9 +622,9 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
             exp = exp.And(x => x.EquipmentStatus == queryDto.EquipmentStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
-// 文件名称：ITaktQualityFailureService.cs
-// 创建时间：2026-06-09
+// 文件名称：ITaktQualityIssueService.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质问题应对主应用服务接口
 // 
@@ -19,34 +19,34 @@ namespace Takt.Application.Services.Logistics.Quality.Cost;
 /// <summary>
 /// 品质问题应对主应用服务接口
 /// </summary>
-public interface ITaktQualityFailureService
+public interface ITaktQualityIssueService
 {
     /// <summary>
     /// 获取品质问题应对主列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    Task<TaktPagedResult<TaktQualityFailureDto>> GetQualityFailureListAsync(TaktQualityFailureQueryDto queryDto);
+    Task<TaktPagedResult<TaktQualityIssueDto>> GetQualityIssueListAsync(TaktQualityIssueQueryDto queryDto);
 
     /// <summary>
     /// 根据ID获取品质问题应对主
     /// </summary>
     /// <param name="id">品质问题应对主ID</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityFailureDto?> GetQualityFailureByIdAsync(long id);
+    Task<TaktQualityIssueDto?> GetQualityIssueByIdAsync(long id);
 
     /// <summary>
     /// 获取品质问题应对主选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetQualityFailureOptionsAsync();
+    Task<List<TaktSelectOption>> GetQualityIssueOptionsAsync();
 
     /// <summary>
     /// 创建品质问题应对主
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityFailureDto> CreateQualityFailureAsync(TaktQualityFailureCreateDto dto);
+    Task<TaktQualityIssueDto> CreateQualityIssueAsync(TaktQualityIssueCreateDto dto);
 
     /// <summary>
     /// 更新品质问题应对主
@@ -54,21 +54,21 @@ public interface ITaktQualityFailureService
     /// <param name="id">品质问题应对主ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityFailureDto> UpdateQualityFailureAsync(long id, TaktQualityFailureUpdateDto dto);
+    Task<TaktQualityIssueDto> UpdateQualityIssueAsync(long id, TaktQualityIssueUpdateDto dto);
 
     /// <summary>
     /// 删除品质问题应对主
     /// </summary>
     /// <param name="id">品质问题应对主ID</param>
     /// <returns>任务</returns>
-    Task DeleteQualityFailureByIdAsync(long id);
+    Task DeleteQualityIssueByIdAsync(long id);
 
     /// <summary>
     /// 批量删除品质问题应对主
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    Task DeleteQualityFailureBatchAsync(IEnumerable<long> ids);
+    Task DeleteQualityIssueBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
     /// 获取导入模板
@@ -76,7 +76,7 @@ public interface ITaktQualityFailureService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] content)> GetQualityFailureTemplateAsync(string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] content)> GetQualityIssueTemplateAsync(string? sheetName = null, string? fileName = null);
 
     /// <summary>
     /// 导入品质问题应对主
@@ -84,7 +84,7 @@ public interface ITaktQualityFailureService
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    Task<(int success, int fail, List<string> errors)> ImportQualityFailureAsync(Stream fileStream, string? sheetName = null);
+    Task<(int success, int fail, List<string> errors)> ImportQualityIssueAsync(Stream fileStream, string? sheetName = null);
 
     /// <summary>
     /// 导出品质问题应对主
@@ -93,6 +93,6 @@ public interface ITaktQualityFailureService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] fileContent)> ExportQualityFailureAsync(TaktQualityFailureQueryDto? query = null, string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] fileContent)> ExportQualityIssueAsync(TaktQualityIssueQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
 }

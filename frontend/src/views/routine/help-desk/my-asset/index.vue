@@ -30,8 +30,8 @@
       v-model:current="currentPage"
       v-model:page-size="pageSize"
       :total="total"
-      @change="loadData"
-      @show-size-change="loadData"
+      @change="handlePaginationChange"
+      @show-size-change="handlePaginationSizeChange"
     />
   </div>
 </template>
@@ -45,6 +45,7 @@ import { ref, computed, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { getMyTicketAssetList } from '@/api/routine/help-desk/ticket'
 import type { TicketMyAsset } from '@/types/routine/help-desk/ticket'
 
@@ -61,17 +62,17 @@ const loading = ref(false)
 /** 列表数据 */
 const dataSource = ref<TicketMyAsset[]>([])
 /** 当前页 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 总数 */
 const total = ref(0)
 /** 表格列 */
 const columns = computed<TableColumnsType>(() => [
   { title: t('entity.ticket.assetcode'), dataIndex: 'assetCode', key: 'assetCode', width: 140, ellipsis: true },
   { title: t('entity.asset.name'), dataIndex: 'assetName', key: 'assetName', width: 180, ellipsis: true },
-  { title: t('routine.help-desk.my-asset.page.ticketCount'), dataIndex: 'ticketCount', key: 'ticketCount', width: 120 },
-  { title: t('routine.help-desk.my-asset.page.lastTicketAt'), dataIndex: 'lastTicketAt', key: 'lastTicketAt', width: 180, ellipsis: true },
+  { title: t('routine.help-desk.my-asset.page.ticket.count'), dataIndex: 'ticketCount', key: 'ticketCount', width: 120 },
+  { title: t('routine.help-desk.my-asset.page.last.ticket.at'), dataIndex: 'lastTicketAt', key: 'lastTicketAt', width: 180, ellipsis: true },
 ])
 /** row-key */
 const getAssetRowKey = (record: TicketMyAsset): string => record.assetCode ?? ''
@@ -114,6 +115,19 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   currentPage.value = 1
+  loadData()
+}
+
+/** 外置分页：翻页 */
+function handlePaginationChange(page: number) {
+  currentPage.value = page
+  loadData()
+}
+
+/** 外置分页：改每页条数时回到第 1 页 */
+function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = 1
+  pageSize.value = size
   loadData()
 }
 

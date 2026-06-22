@@ -14,7 +14,7 @@
   <div class="workflow-instance">
     <TaktQueryBar
       v-model="queryKeyword"
-      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowInstance.instancecode'), t('entity.flowInstance.processkey')].join(t('common.tip.or')) })"
+      :placeholder="searchPlaceholder"
       :loading="loading"
       @search="handleSearch"
       @reset="handleReset"
@@ -77,7 +77,7 @@
 
     <TaktModal
       v-model:open="detailVisible"
-      :title="t('common.dialog.title.detail', { entity: t('entity.flowInstance._self') })"
+      :title="t('common.dialog.title.detail', { entity: t('entity.flowinstance._self') })"
       width="640px"
       :footer="null"
       :cancel-text="t('common.page.button.cancel')"
@@ -97,11 +97,11 @@
       @cancel="currentSuspendInstance = null; suspendReason = ''"
     >
       <a-form layout="vertical">
-        <a-form-item :label="t('workflow.instance.page.suspendReason')">
+        <a-form-item :label="t('workflow.instance.page.suspend.reason.label')">
           <a-textarea
             v-model:value="suspendReason"
             :rows="3"
-            :placeholder="t('workflow.instance.page.suspendReasonPlaceholder')"
+            :placeholder="t('workflow.instance.page.suspend.reason.placeholder')"
           />
         </a-form-item>
       </a-form>
@@ -114,11 +114,11 @@
       @cancel="currentTerminateInstance = null; terminateReason = ''"
     >
       <a-form layout="vertical">
-        <a-form-item :label="t('entity.flowInstance.deletereason')">
+        <a-form-item :label="t('entity.flowinstance.deletereason')">
           <a-textarea
             v-model:value="terminateReason"
             :rows="3"
-            :placeholder="t('workflow.instance.page.terminateReasonPlaceholder')"
+            :placeholder="t('workflow.instance.page.terminate.reason.placeholder')"
           />
         </a-form-item>
       </a-form>
@@ -126,23 +126,23 @@
     <!-- 编辑实例（流程标题与表单数据） -->
     <TaktModal
       v-model:open="updateVisible"
-      :title="t('common.dialog.title.edit', { entity: t('entity.flowInstance._self') })"
+      :title="t('common.dialog.title.edit', { entity: t('entity.flowinstance._self') })"
       :confirm-loading="updateLoading"
       @ok="handleUpdateSubmit"
       @cancel="updateVisible = false"
     >
       <a-form layout="vertical">
-        <a-form-item :label="t('entity.flowInstance.processtitle')">
+        <a-form-item :label="t('entity.flowinstance.processtitle')">
           <a-input
             v-model:value="updateProcessTitle"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowInstance.processtitle') })"
+            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.flowinstance.processtitle') })"
           />
         </a-form-item>
-        <a-form-item :label="t('entity.flowInstance.frmdata')">
+        <a-form-item :label="t('entity.flowinstance.frmdata')">
           <a-textarea
             v-model:value="updateFrmData"
             :rows="6"
-            :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.flowInstance.frmdata') })"
+            :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.flowinstance.frmdata') })"
           />
         </a-form-item>
       </a-form>
@@ -155,16 +155,16 @@
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
-      <a-form-item :label="t('entity.flowInstance.instancecode')">
+      <a-form-item :label="t('entity.flowinstance.instancecode')">
         <a-input v-model:value="advancedQueryForm.instanceCode" />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.processkey')">
+      <a-form-item :label="t('entity.flowinstance.processkey')">
         <a-input v-model:value="advancedQueryForm.processKey" />
       </a-form-item>
-      <a-form-item :label="t('entity.flowInstance.instancestatus')">
+      <a-form-item :label="t('entity.flowinstance.instancestatus')">
         <a-select
           v-model:value="advancedQueryForm.instanceStatus"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowInstance.instancestatus') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowinstance.instancestatus') })"
           allow-clear
         >
           <a-select-option
@@ -200,6 +200,7 @@ import { ref, onMounted, computed } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import {
   getFlowEngineDetailById,
@@ -225,12 +226,16 @@ type FlowInstanceTableRow = FlowInstance & { instanceId: string; currentNodeName
 import { RiEyeLine, RiArrowGoBackLine, RiEditLine, RiDeleteBinLine, RiPauseLine, RiPlayLine, RiStopLine } from '@remixicon/vue'
 
 const { t } = useI18n()
+/** 列表快捷查询占位文案 */
+const searchPlaceholder = computed(
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.flowinstance._self') })
+)
 const loading = ref(false)
 const queryKeyword = ref('')
 const queryStatus = ref<number | undefined>(undefined)
 const dataSource = ref<FlowInstanceTableRow[]>([])
-const currentPage = ref(1)
-const pageSize = ref(20)
+const currentPage = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const selectedRow = ref<FlowInstanceTableRow | null>(null)
 const selectedRows = ref<FlowInstanceTableRow[]>([])
@@ -322,7 +327,7 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left'
   },
   {
-    title: t('entity.flowInstance.instancecode'),
+    title: t('entity.flowinstance.instancecode'),
     dataIndex: 'instanceCode',
     key: 'instanceCode',
     width: 160,
@@ -330,7 +335,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowInstance.processkey'),
+    title: t('entity.flowinstance.processkey'),
     dataIndex: 'processKey',
     key: 'processKey',
     width: 120,
@@ -338,7 +343,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowInstance.processname'),
+    title: t('entity.flowinstance.processname'),
     dataIndex: 'processName',
     key: 'processName',
     width: 120,
@@ -346,7 +351,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowInstance.processtitle'),
+    title: t('entity.flowinstance.processtitle'),
     dataIndex: 'processTitle',
     key: 'processTitle',
     width: 140,
@@ -354,32 +359,32 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true
   },
   {
-    title: t('entity.flowInstance.instancestatus'),
+    title: t('entity.flowinstance.instancestatus'),
     dataIndex: 'instanceStatus',
     key: 'instanceStatus',
     width: 90
   },
   {
-    title: t('entity.flowInstance.currentactivityname'),
+    title: t('entity.flowinstance.currentactivityname'),
     dataIndex: 'currentNodeName',
     key: 'currentNodeName',
     width: 100,
     ellipsis: true
   },
   {
-    title: t('entity.flowInstance.startusername'),
+    title: t('entity.flowinstance.startusername'),
     dataIndex: 'startUserName',
     key: 'startUserName',
     width: 100
   },
   {
-    title: t('entity.flowInstance.starttime'),
+    title: t('entity.flowinstance.starttime'),
     dataIndex: 'startTime',
     key: 'startTime',
     width: 160
   },
   {
-    title: t('entity.flowInstance.endtime'),
+    title: t('entity.flowinstance.endtime'),
     dataIndex: 'endTime',
     key: 'endTime',
     width: 160
@@ -594,7 +599,7 @@ async function handleExport() {
     const blob = await exportFlowInstance(query)
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
-    const fileName = `${t('entity.flowInstance._self')}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}.xlsx`
+    const fileName = `${t('entity.flowinstance._self')}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}.xlsx`
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
@@ -676,7 +681,7 @@ async function submitSuspend() {
     const reason = suspendReason.value.trim()
     if (reason) payload.reason = reason
     await suspendFlowEngineInstance(payload)
-    message.success(t('workflow.instance.page.msg.suspendSuccess'))
+    message.success(t('workflow.instance.page.msg.suspend.success'))
     suspendVisible.value = false
     currentSuspendInstance.value = null
     suspendReason.value = ''
@@ -694,14 +699,14 @@ function handleResume(record: FlowInstanceTableRow) {
   Modal.confirm({
     centered: true,
     title: t('common.page.button.resume'),
-    content: t('workflow.instance.page.confirmResume', { name }),
+    content: t('workflow.instance.page.confirm.resume', { name }),
     okText: t('common.page.button.ok'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       try {
         loading.value = true
         await resumeFlowEngineInstance({ flowInstanceId: record.instanceId })
-        message.success(t('workflow.instance.page.msg.resumeSuccess'))
+        message.success(t('workflow.instance.page.msg.resume.success'))
         loadData()
       } catch (error: unknown) {
         message.error(getErrorMessage(error, t('common.feedback.failed')))
@@ -728,7 +733,7 @@ async function submitTerminate() {
     const reason = terminateReason.value.trim()
     if (reason) payload.reason = reason
     await terminateFlowEngineInstance(payload)
-    message.success(t('workflow.instance.page.msg.terminateSuccess'))
+    message.success(t('workflow.instance.page.msg.terminate.success'))
     terminateVisible.value = false
     currentTerminateInstance.value = null
     terminateReason.value = ''
@@ -746,7 +751,7 @@ function handleWithdraw(record: FlowInstanceTableRow) {
   Modal.confirm({
     centered: true,
     title: t('common.tip.confirm.title', { action: t('common.page.button.withdraw') }),
-    content: t('workflow.instance.page.confirmRevoke', { name }),
+    content: t('workflow.instance.page.confirm.revoke', { name }),
     okText: t('common.page.button.ok'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
@@ -767,7 +772,7 @@ function handleWithdraw(record: FlowInstanceTableRow) {
 /** 更新：若有选中行则打编辑弹窗，否则提示请选择 */
 function handleUpdate() {
   if (selectedRow.value) handleEditInstance(selectedRow.value)
-  else message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.flowInstance._self') }))
+  else message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.flowinstance._self') }))
 }
 
 /** 打开编辑弹窗：回填标题与 frmData，拉取最新详情 */
@@ -816,7 +821,7 @@ function handleDeleteOne(record: FlowInstanceTableRow) {
   Modal.confirm({
     centered: true,
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.flowInstance._self'), name }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.flowinstance._self'), name }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
@@ -837,13 +842,13 @@ function handleDeleteOne(record: FlowInstanceTableRow) {
 /** 批量删除：无选中则提示；有选中则二次确认后 deleteBatch 并刷新 */
 function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.flowInstance._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.flowinstance._self') }))
     return
   }
   Modal.confirm({
     centered: true,
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.flowInstance._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.flowinstance._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {

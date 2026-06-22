@@ -41,9 +41,7 @@ export function getConfigurableOrderByList(queryDto: any): Promise<TaktPagedResu
   return request<TaktPagedResult<ConfigurableOrderBy>>({
     url: `${CONFIGURABLE_ORDER_BY_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportConfigurableOrderBy(
     url: `${CONFIGURABLE_ORDER_BY_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

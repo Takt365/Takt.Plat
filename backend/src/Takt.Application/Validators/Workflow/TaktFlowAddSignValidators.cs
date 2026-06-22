@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Workflow
 // 文件名称：TaktFlowAddSignValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FlowAddSign 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktFlowAddSign 生成，请按需审阅）
 // 
@@ -31,10 +31,10 @@ public class TaktFlowAddSignCreateValidator : AbstractValidator<TaktFlowAddSignC
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.InstanceId)
             .GreaterThanOrEqualTo(0).WithMessage("流程实例 ID不能为负数");
         RuleFor(x => x.NodeId)
@@ -43,13 +43,13 @@ public class TaktFlowAddSignCreateValidator : AbstractValidator<TaktFlowAddSignC
         RuleFor(x => x.SignUserId)
             .GreaterThanOrEqualTo(0).WithMessage("加签人 ID不能为负数");
         RuleFor(x => x.SignUserName)
-            .MaximumLength(40).WithMessage("加签人姓名长度不能超过40个字符");
+            .MaximumLength(20).WithMessage("加签人姓名长度不能超过20个字符");
         RuleFor(x => x.SignType)
             .NotEmpty().WithMessage("加签方式不能为空")
             .MaximumLength(32).WithMessage("加签方式长度不能超过32个字符");
         RuleFor(x => x.Reason)
             .MaximumLength(500).WithMessage("加签原因长度不能超过500个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -90,9 +90,9 @@ public class TaktFlowAddSignImportValidator : AbstractValidator<TaktFlowAddSignI
     public TaktFlowAddSignImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.InstanceId)
             .GreaterThanOrEqualTo(0).WithMessage("流程实例 ID不能为负数");
         RuleFor(x => x.NodeId)
@@ -101,14 +101,14 @@ public class TaktFlowAddSignImportValidator : AbstractValidator<TaktFlowAddSignI
         RuleFor(x => x.SignUserId)
             .GreaterThanOrEqualTo(0).WithMessage("加签人 ID不能为负数");
         RuleFor(x => x.SignUserName)
-            .MaximumLength(40).WithMessage("加签人姓名长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.SignUserName));
+            .MaximumLength(20).WithMessage("加签人姓名长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.SignUserName));
         RuleFor(x => x.SignType)
             .NotEmpty().WithMessage("加签方式不能为空")
             .MaximumLength(32).WithMessage("加签方式长度不能超过32个字符");
         RuleFor(x => x.Reason)
             .MaximumLength(500).WithMessage("加签原因长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Reason));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

@@ -18,6 +18,7 @@ import type {
 import type {
   Role,
   RoleCreate,
+  RoleBuiltIn,
   RoleSort,
   RoleStatus,
   RoleUpdate
@@ -42,9 +43,7 @@ export function getRoleList(queryDto: any): Promise<TaktPagedResult<Role>> {
   return request<TaktPagedResult<Role>>({
     url: `${ROLE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -120,6 +119,19 @@ export function deleteRoleBatch(ids: string[]): Promise<void> {
 export function updateRoleStatus(dto: RoleStatus): Promise<Role> {
   return request<Role>({
     url: `${ROLE_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新角色是否内置
+ * @param {RoleBuiltIn} dto 是否内置 DTO
+ * @returns {Promise<Role>} 角色DTO
+ */
+export function updateRoleBuiltIn(dto: RoleBuiltIn): Promise<Role> {
+  return request<Role>({
+    url: `${ROLE_API_BASE}/built-in`,
     method: 'put',
     data: dto,
   });
@@ -214,7 +226,7 @@ export function exportRole(
     url: `${ROLE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

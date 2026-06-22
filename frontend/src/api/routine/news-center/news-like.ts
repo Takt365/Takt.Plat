@@ -40,9 +40,7 @@ export function getNewsLikeList(queryDto: any): Promise<TaktPagedResult<NewsLike
   return request<TaktPagedResult<NewsLike>>({
     url: `${NEWS_LIKE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportNewsLike(
     url: `${NEWS_LIKE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

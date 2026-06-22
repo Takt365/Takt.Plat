@@ -67,11 +67,15 @@ const currentOption = computed<TaktSelectOption | undefined>(() => {
 });
 
 /**
- * 展示文案（支持 i18nKey）
+ * 展示文案（sys_culture_code 用 DictLabel；其余走 i18nKey）
  */
 const displayLabel = computed(() => {
   if (props.label) {
     return props.label;
+  }
+
+  if (props.dictType === 'sys_culture_code' && currentOption.value?.dictLabel) {
+    return currentOption.value.dictLabel;
   }
 
   if (currentOption.value?.i18nKey) {

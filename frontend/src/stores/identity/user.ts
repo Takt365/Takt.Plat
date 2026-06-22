@@ -21,7 +21,7 @@ import { normalizeUserInfoProfile } from '@/utils/takt-user-profile-normalize';
 import { getHolidayTheme } from '@/api/human-resource/attendance/holiday';
 import { useLocaleStore } from '@/stores/foundation/locale';
 import type { HolidayTheme } from '@/types/human-resource/attendance/holiday';
-import { themeColorMap, type TaktThemeColorPreset } from '@/utils/theme';
+import { resolveThemeColorPreset } from '@/utils/theme';
 import { useThemeColorStore } from '@/stores/common/theme-color';
 import {
   TAKT_ACCESS_TOKEN_STORAGE_KEY,
@@ -160,6 +160,7 @@ export const useUserStore = defineStore('user', () => {
       tenantStore.syncFromUserProfile(profile);
       tenantStore.clearOAuthTenantCode();
       await tenantStore.refreshBusinessContextAsync().catch(() => undefined);
+      await loadHolidayThemeForCurrentSession().catch(() => undefined);
       const userCulture = profile.defaultCulture?.trim();
       if (userCulture) {
         useLocaleStore().applyUserProfileLocale(userCulture);
@@ -194,6 +195,7 @@ export const useUserStore = defineStore('user', () => {
 
   function logout() {
     profileLoadPromise = null;
+    loginPreviewSyncSeq += 1;
     token.value = '';
     refreshToken.value = '';
     tokenExpiresAt.value = 0;
@@ -206,6 +208,7 @@ export const useUserStore = defineStore('user', () => {
     menus.value = [];
     userInfo.value = null;
     profileLoaded.value = false;
+    holidayFromToken.value = null;
     localStorage.removeItem(TAKT_ACCESS_TOKEN_STORAGE_KEY);
     localStorage.removeItem(TAKT_REFRESH_TOKEN_STORAGE_KEY);
     localStorage.removeItem(TAKT_TOKEN_EXPIRES_STORAGE_KEY);
@@ -221,6 +224,19 @@ export const useUserStore = defineStore('user', () => {
    */
   function invalidateUserProfile(): void {
     profileLoaded.value = false;
+  }
+
+  /**
+   * 写入假日 DTO，并在存在合法 holidayTheme 时同步主题色预设
+   * @param holidayDto 假日主题 DTO；无匹配记录时可为空对象或 null
+   */
+  function applyHolidayThemeSideEffects(holidayDto: HolidayTheme | null): void {
+    holidayFromToken.value = holidayDto;
+    const themeKey = holidayDto?.holidayTheme?.trim();
+    const resolvedPreset = resolveThemeColorPreset(themeKey);
+    if (resolvedPreset) {
+      useThemeColorStore().setColorPreset(resolvedPreset);
+    }
   }
 
   /**
@@ -264,8 +280,6 @@ export const useUserStore = defineStore('user', () => {
       }
     }
 
-    holidayFromToken.value = holidayDto;
-
     const defaultCulture = localeDto.defaultCulture?.trim();
     if (defaultCulture) {
       useLocaleStore().applyLoginUserLocale(defaultCulture, {
@@ -276,10 +290,7 @@ export const useUserStore = defineStore('user', () => {
       });
     }
 
-    const themeKey = holidayDto?.holidayTheme?.trim();
-    if (themeKey && themeKey in themeColorMap) {
-      useThemeColorStore().setColorPreset(themeKey as TaktThemeColorPreset);
-    }
+    applyHolidayThemeSideEffects(holidayDto);
 
     return localeDto;
   }
@@ -300,14 +311,19 @@ export const useUserStore = defineStore('user', () => {
 
     try {
       const holidayDto = await getHolidayTheme(trimmedTenant, trimmedCompany);
-      holidayFromToken.value = holidayDto;
-      const themeKey = holidayDto.holidayTheme?.trim();
-      if (themeKey && themeKey in themeColorMap) {
-        useThemeColorStore().setColorPreset(themeKey as TaktThemeColorPreset);
-      }
+      applyHolidayThemeSideEffects(holidayDto);
     } catch {
       // 假日提示非阻断
     }
+  }
+
+  /**
+   * 按当前会话租户与公司自动拉取当日假日并应用主题色（登录后 / 切换公司后调用）
+   * @returns {Promise<void>}
+   */
+  async function loadHolidayThemeForCurrentSession(): Promise<void> {
+    const tenantStore = useTenantStore();
+    await loadHolidayThemeByCompany(tenantStore.tenantCode, tenantStore.companyCode);
   }
 
   /** 作废进行中的登录预览请求（租户或用户名变更时调用） */
@@ -341,6 +357,7 @@ export const useUserStore = defineStore('user', () => {
     invalidateUserProfile,
     syncLoginPreviewAsync,
     loadHolidayThemeByCompany,
+    loadHolidayThemeForCurrentSession,
     invalidateLoginPreview,
   };
 });

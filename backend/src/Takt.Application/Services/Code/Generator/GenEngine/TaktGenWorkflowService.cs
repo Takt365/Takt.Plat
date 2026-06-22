@@ -10,13 +10,20 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.IO.Compression;
+using System.Security.Cryptography;
+using System.Text;
 using Takt.Application.Dtos.Code.Generator;
 using Takt.Domain.Entities.Code.Generator;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Microsoft.Extensions.Options;
+using Takt.Shared.Constants;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
+using Takt.Shared.Models.Code;
+using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Code.Generator.GenEngine;
 
@@ -36,6 +43,8 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     private readonly ITaktTenantRepository<TaktDictData> _dictDataRepository;
     private readonly ITaktGenEngine _codeEngine;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktLineNumberGenerator _lineNumberGenerator;
+    private readonly TaktGenEngineOptions _genEngineOptions;
 
     /// <summary>
     /// 构造函数
@@ -46,13 +55,17 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     /// <param name="dictDataRepository">字典数据仓储</param>
     /// <param name="codeEngine">通用代码生成引擎（Scriban 渲染）</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="lineNumberGenerator">明细行号生成器</param>
+    /// <param name="genEngineOptions">代码生成引擎配置（ContentRootPath 定位 wwwroot/Generator）</param>
     public TaktGenWorkflowService(
         ITaktDatabaseSchemaProvider schemaProvider,
         ITaktTenantRepository<TaktGenTable> genTableRepository,
         ITaktTenantRepository<TaktGenTableColumn> genTableColumnRepository,
         ITaktTenantRepository<TaktDictData> dictDataRepository,
         ITaktGenEngine codeEngine,
-        ITaktUniqueValidator uniqueValidator)
+        ITaktUniqueValidator uniqueValidator,
+        ITaktLineNumberGenerator lineNumberGenerator,
+        IOptions<TaktGenEngineOptions> genEngineOptions)
     {
         _schemaProvider = schemaProvider ?? throw new ArgumentNullException(nameof(schemaProvider));
         _genTableRepository = genTableRepository ?? throw new ArgumentNullException(nameof(genTableRepository));
@@ -60,6 +73,8 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         _dictDataRepository = dictDataRepository ?? throw new ArgumentNullException(nameof(dictDataRepository));
         _codeEngine = codeEngine ?? throw new ArgumentNullException(nameof(codeEngine));
         _uniqueValidator = uniqueValidator ?? throw new ArgumentNullException(nameof(uniqueValidator));
+        _lineNumberGenerator = lineNumberGenerator ?? throw new ArgumentNullException(nameof(lineNumberGenerator));
+        _genEngineOptions = genEngineOptions?.Value ?? new TaktGenEngineOptions();
     }
 
     /// <summary>
@@ -103,6 +118,14 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         var dbInfo = databases?.FirstOrDefault(d => string.Equals(d.TenantCode, tenantCode, StringComparison.OrdinalIgnoreCase));
         var dataSource = dbInfo != null ? $"{dbInfo.DisplayName}:{dbInfo.TenantCode}" : $":{tenantCode}";
 
+        var defaultSortField = columns
+            .Where(c => !IsEntityBaseColumn(c.DatabaseColumnName))
+            .FirstOrDefault(c => c.IsPrimaryKey)?.DatabaseColumnName
+            ?? columns
+                .Where(c => !IsEntityBaseColumn(c.DatabaseColumnName))
+                .Select(c => c.DatabaseColumnName)
+                .FirstOrDefault(name => !string.IsNullOrWhiteSpace(name))
+            ?? "id";
         var table = new TaktGenTable
         {
             DataSource = dataSource,
@@ -119,7 +142,7 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
             PermsPrefix = resolvedPermsPrefix,
             MenuButtonGroup = tableOverrides?.MenuButtonGroup,
             SortType = tableOverrides?.SortType ?? "asc",
-            SortField = tableOverrides?.SortField ?? string.Empty,
+            SortField = string.IsNullOrWhiteSpace(tableOverrides?.SortField) ? defaultSortField : tableOverrides!.SortField!,
             NamePrefix = tableOverrides?.NamePrefix ?? namePrefix,
             GenModuleName = resolvedGenModuleName,
             EntityNamespace = tableOverrides?.EntityNamespace ?? BuildNamespace(namePrefix, resolvedGenModuleName, "Domain.Entities"),
@@ -161,45 +184,92 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         table = await _genTableRepository.CreateAsync(table).ConfigureAwait(false);
         var tableId = table.Id;
 
-        int lineNumber = 0;
+        var toCreate = new List<TaktGenTableColumn>();
         foreach (var col in columns)
         {
-            var dbColName = col.DatabaseColumnName;
+            var dbColName = col.DatabaseColumnName?.Trim() ?? string.Empty;
             if (IsEntityBaseColumn(dbColName))
-                continue;
-            var csharpColName = ToPascalCase(dbColName);
-            var dbType = string.IsNullOrWhiteSpace(col.DatabaseDataType) ? "nvarchar" : col.DatabaseDataType;
-            var csharpType = MapDbTypeToCsharp(dbType);
-            var colEntity = new TaktGenTableColumn
             {
-                GenTableId = tableId,
-                LineNumber = ++lineNumber,
-                DatabaseColumnName = dbColName,
-                ColumnComment = col.ColumnComment,
-                DatabaseDataType = dbType,
-                CsharpDataType = csharpType,
-                CsharpColumnName = csharpColName,
-                Length = col.Length,
-                DecimalDigits = col.DecimalDigits,
-                IsPk = col.IsPrimaryKey ? 1 : 0,
-                IsIncrement = col.IsIdentity ? 1 : 0,
-                IsRequired = col.IsNullable ? 0 : 1,
-                IsCreate = 1,
-                IsUpdate = 1,
-                IsList = 1,
-                IsUnique = 0,
-                IsExport = 1,
-                IsSort = 0,
-                IsQuery = 0,
-                QueryType = "EQ",
-                HtmlType = "input",
-                SortOrder = lineNumber
-            };
-            await _genTableColumnRepository.CreateAsync(colEntity).ConfigureAwait(false);
+                continue;
+            }
+            toCreate.Add(BuildGenTableColumnFromSchema(col, tableId, dbColName));
+        }
+        if (toCreate.Count > 0)
+        {
+            await AssignGenTableColumnLineNumbersAsync(toCreate, table, tableId, importBatch: true).ConfigureAwait(false);
+            await _genTableColumnRepository.CreateRangeAsync(toCreate).ConfigureAwait(false);
         }
 
-        TaktLogger.Information("[CodeGenWorkflow] 导入表完成: TableName={TableName}, TableId={TableId}, 列数={ColumnCount}", tableName, tableId, lineNumber);
-        return table.Adapt<TaktGenTableDto>();
+        TaktLogger.Information("[CodeGenWorkflow] 导入表完成: TableName={TableName}, TableId={TableId}, 列数={ColumnCount}", tableName, tableId, toCreate.Count);
+        return await LoadGenTableDtoWithColumnsAsync(table).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async Task<TaktGenTableDto> SyncTableColumnsFromDatabaseAsync(long tableId)
+    {
+        if (tableId <= 0)
+        {
+            throw new ArgumentException("表配置 ID 无效。", nameof(tableId));
+        }
+        TaktLogger.Debug("[CodeGenWorkflow] 开始从数据库同步列: TableId={TableId}", tableId);
+        var table = await _genTableRepository.GetByIdAsync(tableId).ConfigureAwait(false);
+        if (table == null)
+        {
+            throw new TaktBusinessException("代码生成数据表配置不存在");
+        }
+        if (string.IsNullOrWhiteSpace(table.TableName))
+        {
+            throw new TaktBusinessException("表名为空，无法同步列");
+        }
+        var tenantCode = table.TenantCode;
+        if (string.IsNullOrWhiteSpace(tenantCode))
+        {
+            throw new TaktBusinessException("租户编码为空，无法同步列");
+        }
+        var schemaColumns = await _schemaProvider.GetColumnsAsync(tenantCode, table.TableName).ConfigureAwait(false);
+        if (schemaColumns == null || schemaColumns.Count == 0)
+        {
+            throw new InvalidOperationException($"未找到表 {table.TableName} 的列信息。");
+        }
+        var existing = await _genTableColumnRepository.GetListAsync(x => x.GenTableId == tableId).ConfigureAwait(false);
+        var existingByName = existing.ToDictionary(c => c.DatabaseColumnName, StringComparer.OrdinalIgnoreCase);
+        var schemaNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var toCreate = new List<TaktGenTableColumn>();
+        foreach (var col in schemaColumns)
+        {
+            var dbColName = col.DatabaseColumnName?.Trim() ?? string.Empty;
+            if (IsEntityBaseColumn(dbColName))
+            {
+                continue;
+            }
+            schemaNames.Add(dbColName);
+            if (existingByName.TryGetValue(dbColName, out var existingCol))
+            {
+                ApplySchemaMetadataToGenTableColumn(existingCol, col, dbColName);
+                await _genTableColumnRepository.UpdateAsync(existingCol).ConfigureAwait(false);
+            }
+            else
+            {
+                toCreate.Add(BuildGenTableColumnFromSchema(col, tableId, dbColName));
+            }
+        }
+        foreach (var removed in existing.Where(e => !schemaNames.Contains(e.DatabaseColumnName)))
+        {
+            await _genTableColumnRepository.DeleteAsync(removed.Id).ConfigureAwait(false);
+        }
+        if (toCreate.Count > 0)
+        {
+            await AssignGenTableColumnLineNumbersAsync(toCreate, table, tableId).ConfigureAwait(false);
+            await _genTableColumnRepository.CreateRangeAsync(toCreate).ConfigureAwait(false);
+        }
+        TaktLogger.Information(
+            "[CodeGenWorkflow] 同步列完成: TableName={TableName}, TableId={TableId}, 新增={Added}, 更新={Updated}, 删除={Removed}",
+            table.TableName,
+            tableId,
+            toCreate.Count,
+            schemaNames.Count - toCreate.Count,
+            existing.Count(e => !schemaNames.Contains(e.DatabaseColumnName)));
+        return await LoadGenTableDtoWithColumnsAsync(table).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -226,22 +296,45 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     }
 
     /// <summary>
-    /// 根据表配置与模板映射生成代码：使用 TaktGenTemplateContext + Scriban 渲染，返回文件名与内容（后端、前端）
+    /// 根据表配置与模板生成代码，并按 GenMethod 交付（0=zip，1=自定义路径，2=当前项目）。
     /// </summary>
-    /// <remarks>有表流程第 3 步、无表流程第 2 步：统一使用 ITaktGenEngine + TaktGenTemplateContext 根据模板生成后端/前端代码。</remarks>
-    /// <param name="tableId">代码生成表配置 ID</param>
-    /// <param name="templates">模板键（如 "Entity.cs"）→ Scriban 模板内容</param>
-    /// <param name="sqlCreateBy">生成 SQL 时写入 create_by 的当前登录用户名（如 admin、user01），未传则用表配置 GenAuthor 或 "admin"</param>
-    /// <returns>生成结果：文件名 → 生成后的内容</returns>
-    public async Task<List<TaktCodeGenResultDto>> GenerateCodeAsync(long tableId, IReadOnlyDictionary<string, string> templates, string? sqlCreateBy = null)
+    public async Task<TaktCodeGenGenerateResultDto> GenerateCodeAsync(
+        long tableId,
+        TaktGenerateCodeRequestDto request,
+        string? sqlCreateBy = null)
     {
-        ArgumentNullException.ThrowIfNull(templates);
-        if (templates.Count == 0)
+        ArgumentNullException.ThrowIfNull(request);
+        var table = await _genTableRepository.GetByIdAsync(tableId).ConfigureAwait(false);
+        if (table == null)
+            throw new InvalidOperationException($"未找到表配置 TableId={tableId}。");
+
+        var genMethod = request.GenMethod ?? table.GenMethod;
+        var effectiveTemplates = ResolveEffectiveTemplates(request.Templates, table, _genEngineOptions.ContentRootPath);
+        if (effectiveTemplates.Count == 0)
             throw new TaktBusinessException("模板字典不能为空。");
-        TaktLogger.Debug("[CodeGenWorkflow] 开始生成代码: TableId={TableId}, 模板数={TemplateCount}", tableId, templates.Count);
-        var results = await RenderTemplatesAsync(tableId, templates, sqlCreateBy, "生成").ConfigureAwait(false);
-        TaktLogger.Information("[CodeGenWorkflow] 代码生成完成: TableId={TableId}, 生成文件数={ResultCount}", tableId, results.Count);
-        return results;
+
+        TaktLogger.Debug("[CodeGenWorkflow] 开始生成代码: TableId={TableId}, GenMethod={GenMethod}, 模板数={TemplateCount}",
+            tableId, genMethod, effectiveTemplates.Count);
+        var results = await RenderTemplatesAsync(tableId, effectiveTemplates, sqlCreateBy, "生成", table).ConfigureAwait(false);
+        if (results.Count == 0)
+            throw new TaktBusinessException("未生成任何代码文件，请检查表配置、生成功能与模板。");
+
+        var output = new TaktCodeGenGenerateResultDto { GenMethod = genMethod, FileCount = results.Count };
+        if (genMethod == 0)
+        {
+            output.ZipFileName = BuildZipFileName(table.TableName, tableId);
+            output.ZipBytes = CreateZipFromResults(results);
+            TaktLogger.Information("[CodeGenWorkflow] zip 生成完成: TableId={TableId}, 文件数={Count}", tableId, results.Count);
+            return output;
+        }
+
+        var basePath = ResolveGenerationBasePath(table, request.GenPath, genMethod);
+        output.BasePath = basePath;
+        output.WrittenFilePaths = WriteGeneratedFilesToDisk(basePath, results);
+        output.FileCount = output.WrittenFilePaths.Count;
+        TaktLogger.Information("[CodeGenWorkflow] 落盘完成: TableId={TableId}, BasePath={BasePath}, 文件数={Count}",
+            tableId, basePath, output.FileCount);
+        return output;
     }
 
     /// <summary>
@@ -252,24 +345,34 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     /// <param name="resolveTargetRelativePath">根据模板键解析目标相对路径的函数</param>
     /// <param name="targetBasePath">目标根路径（可空；为空时不检查是否已存在）</param>
     /// <param name="sqlCreateBy">生成 SQL 时写入 create_by 的当前登录用户名（可空）</param>
+    /// <param name="pathMappings">模板键→目标相对路径映射（可空；为空时使用内置默认映射）</param>
     /// <returns>预览渲染结果（成功文件 + 校验问题）</returns>
     public async Task<TaktCodeGenPreviewResultDto> GeneratePreviewFilesAsync(
         long tableId,
         IReadOnlyDictionary<string, string> templates,
         Func<TaktGenTableDto, string, string?>? resolveTargetRelativePath = null,
         string? targetBasePath = null,
-        string? sqlCreateBy = null)
+        string? sqlCreateBy = null,
+        IReadOnlyDictionary<string, string>? pathMappings = null)
     {
         var result = new TaktCodeGenPreviewResultDto();
-        if (templates == null || templates.Count == 0)
-        {
-            result.IsValid = true;
-            return result;
-        }
+        ArgumentNullException.ThrowIfNull(templates);
 
         var tableEntity = await _genTableRepository.GetByIdAsync(tableId).ConfigureAwait(false);
         if (tableEntity == null)
             throw new InvalidOperationException($"未找到表配置 TableId={tableId}。");
+        var effectiveTemplates = ResolveEffectiveTemplates(templates, tableEntity, _genEngineOptions.ContentRootPath);
+        if (effectiveTemplates.Count == 0)
+        {
+            result.ValidationIssues.Add(new TaktCodeGenPreviewValidationIssueDto
+            {
+                TemplateKey = "global",
+                Message = "未找到可用模板，请检查 wwwroot/Generator 目录或表配置的生成模板类型。"
+            });
+            result.IsValid = false;
+            return result;
+        }
+        TaktLogger.Debug("[CodeGenWorkflow] 预览模板已就绪: TableId={TableId}, 模板数={TemplateCount}", tableId, effectiveTemplates.Count);
         var table = tableEntity.Adapt<TaktGenTableDto>();
 
         var columns = await _genTableColumnRepository.GetListAsync(c => c.GenTableId == tableId).ConfigureAwait(false);
@@ -283,6 +386,7 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
             result.IsValid = false;
             return result;
         }
+        var effectiveTargetBasePath = ResolvePreviewTargetBasePath(tableEntity, targetBasePath);
         var context = TaktGenTemplateContext.From(tableEntity, columns);
         context.Table.SqlCreateBy = !string.IsNullOrWhiteSpace(sqlCreateBy) ? sqlCreateBy.Trim() : (tableEntity.GenAuthor ?? "admin");
         if (context.Table.IsGenMenu == 1)
@@ -293,13 +397,13 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         if (context.Table.IsGenTranslation == 1)
             context.Table.SqlTranslationRows = BuildSqlTranslationRows(context);
 
-        var previewFiles = new List<TaktCodeGenPreviewFileDto>(templates.Count);
-        foreach (var kv in templates)
+        var previewFiles = new List<TaktCodeGenPreviewFileDto>(effectiveTemplates.Count);
+        foreach (var kv in effectiveTemplates)
         {
             var templateKey = kv.Key?.Trim() ?? string.Empty;
             if (string.IsNullOrEmpty(templateKey)) continue;
-            var relativePath = resolveTargetRelativePath?.Invoke(table, templateKey);
-            if (string.IsNullOrEmpty(relativePath)) continue;
+            var relativePath = ResolvePreviewTargetPath(tableEntity, table, templateKey, resolveTargetRelativePath, pathMappings)
+                ?? templateKey;
 
             // InDatabase=0 表示是库表，实体已存在，不生成实体文件，避免重复
             if (tableEntity.InDatabase == 0 && IsBackendEntityTemplateKey(templateKey))
@@ -311,8 +415,8 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
             try
             {
                 var content = await _codeEngine.RenderAsync(kv.Value, context).ConfigureAwait(false);
-                var isExisting = !string.IsNullOrWhiteSpace(targetBasePath)
-                                 && System.IO.File.Exists(System.IO.Path.Combine(targetBasePath, relativePath));
+                var isExisting = !string.IsNullOrWhiteSpace(effectiveTargetBasePath)
+                                 && System.IO.File.Exists(System.IO.Path.Combine(effectiveTargetBasePath, relativePath));
                 previewFiles.Add(new TaktCodeGenPreviewFileDto
                 {
                     Path = relativePath,
@@ -331,6 +435,14 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
             }
         }
         result.PreviewFiles = previewFiles;
+        if (previewFiles.Count == 0 && result.ValidationIssues.Count == 0)
+        {
+            result.ValidationIssues.Add(new TaktCodeGenPreviewValidationIssueDto
+            {
+                TemplateKey = "global",
+                Message = "模板已加载但未生成任何预览文件，请检查表配置（命名空间、生成模板类型）或 InDatabase 跳过规则。"
+            });
+        }
         result.IsValid = result.ValidationIssues.Count == 0;
         return result;
     }
@@ -342,17 +454,19 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     /// <param name="templates">模板键→模板内容</param>
     /// <param name="sqlCreateBy">SQL 创建人</param>
     /// <param name="scene">场景标识（如“预览”“生成”）</param>
+    /// <param name="tableEntity">已加载的表配置实体（可空；为空时按 tableId 查询）</param>
     /// <returns>渲染结果列表</returns>
     private async Task<List<TaktCodeGenResultDto>> RenderTemplatesAsync(
         long tableId,
         IReadOnlyDictionary<string, string> templates,
         string? sqlCreateBy,
-        string scene)
+        string scene,
+        TaktGenTable? tableEntity = null)
     {
         if (templates == null || templates.Count == 0)
             return new List<TaktCodeGenResultDto>();
 
-        var table = await _genTableRepository.GetByIdAsync(tableId).ConfigureAwait(false);
+        var table = tableEntity ?? await _genTableRepository.GetByIdAsync(tableId).ConfigureAwait(false);
         if (table == null)
         {
             TaktLogger.Warning("[CodeGenWorkflow] 未找到表配置: TableId={TableId}", tableId);
@@ -391,10 +505,148 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
             }
             TaktLogger.Debug("[CodeGenWorkflow] 渲染模板: {FileName}, Scene={Scene}", fileName, scene);
             var content = await _codeEngine.RenderAsync(kv.Value, context).ConfigureAwait(false);
-            results.Add(new TaktCodeGenResultDto { FileName = fileName, Content = content });
+            var outputPath = TaktGenTemplateLoader.ResolveOutputRelativePath(table, fileName) ?? fileName;
+            results.Add(new TaktCodeGenResultDto { FileName = outputPath, Content = content });
         }
 
         return results;
+    }
+
+    /// <summary>
+    /// 请求体未传模板时，从 wwwroot/Generator 按表配置的 GenTemplateCategory 加载。
+    /// </summary>
+    private static IReadOnlyDictionary<string, string> ResolveEffectiveTemplates(
+        IReadOnlyDictionary<string, string> templates,
+        TaktGenTable table,
+        string? contentRootPath)
+    {
+        if (templates.Count > 0)
+            return templates;
+        return TaktGenTemplateLoader.LoadTemplates(table.GenTemplateCategory, contentRootPath);
+    }
+
+    /// <summary>
+    /// 解析预览目标相对路径：PathMappings 优先，其次自定义解析器，最后内置规则。
+    /// </summary>
+    private static string? ResolvePreviewTargetPath(
+        TaktGenTable tableEntity,
+        TaktGenTableDto table,
+        string templateKey,
+        Func<TaktGenTableDto, string, string?>? resolveTargetRelativePath,
+        IReadOnlyDictionary<string, string>? pathMappings)
+    {
+        if (pathMappings != null
+            && pathMappings.TryGetValue(templateKey, out var mapped)
+            && !string.IsNullOrWhiteSpace(mapped))
+            return mapped.Trim();
+        var custom = resolveTargetRelativePath?.Invoke(table, templateKey);
+        if (!string.IsNullOrWhiteSpace(custom))
+            return custom.Trim();
+        return TaktGenTemplateLoader.ResolveOutputRelativePath(tableEntity, templateKey);
+    }
+
+    /// <summary>
+    /// 解析预览/覆盖检测用的目标根路径：显式传入优先；GenMethod=2 解析仓库根；GenMethod=1 用表 GenPath。
+    /// </summary>
+    private string? ResolvePreviewTargetBasePath(TaktGenTable tableEntity, string? targetBasePath)
+    {
+        if (!string.IsNullOrWhiteSpace(targetBasePath))
+        {
+            var trimmed = targetBasePath.Trim();
+            if (trimmed != "/")
+                return Path.GetFullPath(trimmed);
+        }
+        if (tableEntity.GenMethod == 2)
+            return TaktFileHelper.GetSolutionRootPath(_genEngineOptions.ContentRootPath);
+        if (tableEntity.GenMethod == 1
+            && !string.IsNullOrWhiteSpace(tableEntity.GenPath)
+            && tableEntity.GenPath.Trim() != "/")
+            return Path.GetFullPath(tableEntity.GenPath.Trim());
+        return null;
+    }
+
+    /// <summary>
+    /// 解析代码落盘根路径：GenMethod=2 仓库根；GenMethod=1 取请求或表 GenPath。
+    /// </summary>
+    private string ResolveGenerationBasePath(TaktGenTable table, string? genPathOverride, int genMethod)
+    {
+        var genPath = genPathOverride ?? table.GenPath;
+        if (genMethod == 2)
+            return TaktFileHelper.GetSolutionRootPath(_genEngineOptions.ContentRootPath);
+        if (genMethod == 1)
+        {
+            if (string.IsNullOrWhiteSpace(genPath) || genPath.Trim() == "/")
+                throw new TaktBusinessException("自定义路径不能为空，请填写有效的目录。");
+            return Path.GetFullPath(genPath.Trim());
+        }
+        throw new TaktBusinessException($"不支持的生成方式 GenMethod={genMethod}。");
+    }
+
+    /// <summary>
+    /// 将生成结果打包为 zip 字节数组（UTF-8 无 BOM）。
+    /// </summary>
+    private static byte[] CreateZipFromResults(IReadOnlyList<TaktCodeGenResultDto> results)
+    {
+        ArgumentNullException.ThrowIfNull(results);
+        using var ms = new MemoryStream();
+        using (var zip = new ZipArchive(ms, ZipArchiveMode.Create, leaveOpen: true))
+        {
+            foreach (var item in results)
+            {
+                if (string.IsNullOrWhiteSpace(item.FileName))
+                    continue;
+                ValidateRelativeOutputPath(item.FileName);
+                var entryName = item.FileName.Replace('\\', '/');
+                var entry = zip.CreateEntry(entryName, CompressionLevel.Optimal);
+                using var writer = new StreamWriter(entry.Open(), new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+                writer.Write(item.Content ?? string.Empty);
+            }
+        }
+        return ms.ToArray();
+    }
+
+    /// <summary>
+    /// 将生成结果写入磁盘，返回已写入的相对路径列表。
+    /// </summary>
+    private static List<string> WriteGeneratedFilesToDisk(string basePath, IReadOnlyList<TaktCodeGenResultDto> results)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(basePath);
+        ArgumentNullException.ThrowIfNull(results);
+        var written = new List<string>(results.Count);
+        foreach (var item in results)
+        {
+            if (string.IsNullOrWhiteSpace(item.FileName))
+                continue;
+            ValidateRelativeOutputPath(item.FileName);
+            var relative = item.FileName.Replace('/', Path.DirectorySeparatorChar);
+            var fullPath = Path.Combine(basePath, relative);
+            var dir = Path.GetDirectoryName(fullPath);
+            if (!string.IsNullOrEmpty(dir))
+                Directory.CreateDirectory(dir);
+            File.WriteAllText(fullPath, item.Content ?? string.Empty, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+            written.Add(item.FileName.Replace('\\', '/'));
+        }
+        return written;
+    }
+
+    /// <summary>
+    /// 校验相对输出路径，禁止目录穿越。
+    /// </summary>
+    private static void ValidateRelativeOutputPath(string relativePath)
+    {
+        if (relativePath.Contains("..", StringComparison.Ordinal))
+            throw new InvalidOperationException($"非法输出路径: {relativePath}");
+    }
+
+    /// <summary>
+    /// 构建 zip 下载文件名。
+    /// </summary>
+    private static string BuildZipFileName(string? tableName, long tableId)
+    {
+        var baseName = string.IsNullOrWhiteSpace(tableName) ? $"gen_{tableId}" : tableName.Trim();
+        foreach (var c in Path.GetInvalidFileNameChars())
+            baseName = baseName.Replace(c, '_');
+        return $"{baseName}_{DateTime.UtcNow:yyyyMMddHHmmss}.zip";
     }
 
     /// <summary>
@@ -436,7 +688,7 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
                     ResourceKey = colKey,
                     TranslationValue = col.Comment ?? "",
                     ResourceGroup = "page",
-                    SortOrder = col.SortOrder
+                    SortOrder = col.LineNumber
                 });
             }
         }
@@ -452,7 +704,7 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
                     ResourceKey = colKey,
                     TranslationValue = col.Comment ?? "",
                     ResourceGroup = "page",
-                    SortOrder = col.SortOrder
+                    SortOrder = col.LineNumber
                 });
             }
         }
@@ -460,7 +712,8 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     }
 
     /// <summary>
-    /// 构建菜单按钮行列表（用于生成 menu_and_translation.sql 中的菜单按钮 SQL）。
+    /// 构建菜单按钮行列表（仅依据 MenuButtonGroup 与 PermsPrefixCanonical，供 menu_and_translation.sql 模板）。
+    /// 与 TaktMenuButtonSeedData 一致：权限为 <c>{PermsPrefixCanonical}:{suffix}</c>，I18nKey 为 <c>common.page.button.{suffix}</c>。
     /// </summary>
     /// <param name="context">代码生成模板上下文</param>
     /// <returns>菜单按钮行列表</returns>
@@ -469,85 +722,121 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         var t = context.Table;
         var rows = new List<TaktSqlMenuButtonRowItem>();
         var basePerm = (t.PermsPrefixCanonical ?? string.Empty).Trim();
+        if (basePerm.Length == 0)
+            return rows;
+
         var menuCodeUpper = ToMenuCodeUpperFromTableName(t.TableName);
-        var menuCodeLower = menuCodeUpper.ToLowerInvariant();
-        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var (labelBySuffix, sortOrderBySuffix) = await LoadGenButtonCategoryMapsAsync().ConfigureAwait(false);
+
+        var suffixes = ResolveMenuButtonSuffixes(t);
+        var orderedSuffixes = suffixes
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(sfx => sortOrderBySuffix.TryGetValue(sfx, out var sortOrder) ? sortOrder : int.MaxValue)
+            .ThenBy(sfx => sfx, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
         var order = 0;
-
-        var labelBySuffix = await LoadSysGenMenuButtonLabelBySuffixAsync().ConfigureAwait(false);
-
-        void TryAdd(string permissionKey, string menuName, string suffixForCode)
+        foreach (var sfx in orderedSuffixes)
         {
-            if (string.IsNullOrWhiteSpace(permissionKey) || !seen.Add(permissionKey))
-                return;
+            var suffix = sfx.Trim().ToLowerInvariant();
+            if (suffix.Length == 0)
+                continue;
             order++;
-            var sfx = (suffixForCode ?? string.Empty).Trim().ToLowerInvariant();
-            if (sfx.Length == 0) sfx = "action";
+            var menuName = labelBySuffix.TryGetValue(suffix, out var label) ? label : suffix;
             rows.Add(new TaktSqlMenuButtonRowItem
             {
                 Id = SnowFlakeSingle.Instance.NextId(),
-                MenuCode = $"{menuCodeLower}_{sfx}",
-                MenuName = string.IsNullOrWhiteSpace(menuName) ? sfx : menuName.Trim(),
-                Permission = permissionKey.Trim(),
-                MenuL10nKey = $"common.button.{sfx}",
+                MenuCode = BuildSqlMenuButtonCode(menuCodeUpper, suffix),
+                MenuName = menuName,
+                Permission = $"{basePerm}:{suffix}",
+                MenuL10nKey = TaktCommonI18nKeys.MenuButton(suffix),
                 SortOrder = order
             });
-        }
-
-        foreach (var action in t.ControllerActions ?? [])
-        {
-            var pk = (action.PermissionKey ?? string.Empty).Trim();
-            if (pk.Length == 0)
-                continue;
-            if (pk.EndsWith(":list", StringComparison.OrdinalIgnoreCase))
-                continue;
-            var lastColon = pk.LastIndexOf(':');
-            var suffix = lastColon >= 0 && lastColon < pk.Length - 1 ? pk[(lastColon + 1)..] : pk;
-            var suffixLower = suffix.Trim().ToLowerInvariant();
-            // 优先使用 labelBySuffix 中的纯功能名称（如"新增"、"更新"），而不是带实体名称的 PermissionName（如"新增工厂"）
-            var actionName = suffixLower.Length > 0 && labelBySuffix.TryGetValue(suffixLower, out var lb) ? lb : string.Empty;
-            if (actionName.Length == 0)
-                actionName = (action.PermissionName ?? string.Empty).Trim();
-            if (actionName.Length == 0)
-                actionName = suffix;
-            TryAdd(pk, actionName, suffix);
-        }
-
-        if (basePerm.Length > 0)
-        {
-            foreach (var sfx in TaktGenButtonGroupParser.ParseSelectionSuffixes(t.MenuButtonGroup))
-            {
-                var nm = labelBySuffix.TryGetValue(sfx, out var lb) ? lb : sfx;
-                TryAdd($"{basePerm}:{sfx}", nm, sfx);
-            }
-        }
-
-        if (rows.Count == 0 && basePerm.Length > 0)
-        {
-            void TryAddFromDict(string sfx, string fallbackCn)
-            {
-                var nm = labelBySuffix.TryGetValue(sfx, out var lb) ? lb : fallbackCn;
-                TryAdd($"{basePerm}:{sfx}", nm, sfx);
-            }
-
-            TryAddFromDict("query", "查询");
-            TryAddFromDict("create", "新增");
-            TryAddFromDict("update", "修改");
-            TryAddFromDict("delete", "删除");
-            if (t.IsImport == 1)
-                TryAddFromDict("import", "导入");
-            if (t.IsExport == 1)
-                TryAddFromDict("export", "导出");
         }
 
         return rows;
     }
 
     /// <summary>
-    /// 加载系统生成菜单按钮标签映射（根据字典类型 GenButtonCategoryDictTypeCode）。
+    /// 解析菜单按钮权限后缀：优先 MenuButtonGroup；为空时按 GenFunction 能力回退标准 CRUD 后缀。
     /// </summary>
-    /// <returns>菜单按钮后缀到标签的映射字典</returns>
-    private async Task<IReadOnlyDictionary<string, string>> LoadSysGenMenuButtonLabelBySuffixAsync()
+    /// <param name="table">表级模板模型</param>
+    /// <returns>权限后缀列表（小写）</returns>
+    private static IReadOnlyList<string> ResolveMenuButtonSuffixes(TaktGenTableTemplateModel table)
+    {
+        var fromGroup = TaktGenButtonGroupParser.ParseSelectionSuffixes(table.MenuButtonGroup);
+        if (fromGroup.Count > 0)
+            return fromGroup;
+
+        var fallback = new List<string>();
+        void Add(string sfx)
+        {
+            var normalized = sfx.Trim().ToLowerInvariant();
+            if (normalized.Length == 0)
+                return;
+            if (!fallback.Exists(x => string.Equals(x, normalized, StringComparison.OrdinalIgnoreCase)))
+                fallback.Add(normalized);
+        }
+
+        if (table.IsQuery == 1)
+            Add("query");
+        if (table.IsCreate == 1)
+            Add("create");
+        if (table.IsUpdate == 1 || table.IsStatus == 1 || table.IsSort == 1)
+            Add("update");
+        if (table.IsDelete == 1)
+            Add("delete");
+        if (table.IsTemplate == 1 || table.IsImport == 1)
+            Add("template");
+        if (table.IsImport == 1)
+            Add("import");
+        if (table.IsExport == 1)
+            Add("export");
+
+        if (fallback.Count == 0)
+        {
+            Add("query");
+            Add("create");
+            Add("update");
+            Add("delete");
+        }
+
+        return fallback;
+    }
+
+    /// <summary>
+    /// 生成按钮 menu_code，与 TaktMenuButtonSeedData.BuildButtonCode 规则一致（后缀大写，超长截断+哈希）。
+    /// </summary>
+    /// <param name="menuCodeUpper">页面菜单编码（大写）</param>
+    /// <param name="buttonSuffix">权限后缀（小写）</param>
+    /// <returns>按钮 menu_code</returns>
+    private static string BuildSqlMenuButtonCode(string menuCodeUpper, string buttonSuffix)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(menuCodeUpper);
+        ArgumentException.ThrowIfNullOrWhiteSpace(buttonSuffix);
+        var code = $"{menuCodeUpper.Trim()}_{buttonSuffix.Trim().ToUpperInvariant()}";
+        if (code.Length <= 50)
+            return code;
+        var hash = ComputeStableMenuButtonCodeHash(code);
+        return code[..43] + "_" + hash;
+    }
+
+    /// <summary>
+    /// 计算 menu_code 稳定哈希（8 位十六进制，与按钮菜单种子一致）。
+    /// </summary>
+    /// <param name="input">待哈希字符串</param>
+    /// <returns>8 位十六进制哈希</returns>
+    private static string ComputeStableMenuButtonCodeHash(string input)
+    {
+        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(input));
+        return Convert.ToHexString(bytes)[..8];
+    }
+
+    /// <summary>
+    /// 加载 gen_button_category 字典：后缀 → 显示名、排序号。
+    /// </summary>
+    /// <returns>标签与排序映射</returns>
+    private async Task<(Dictionary<string, string> Labels, Dictionary<string, int> SortOrders)> LoadGenButtonCategoryMapsAsync()
     {
         var rows = await _dictDataRepository
             .GetListAsync(d => d.DictTypeCode == GenButtonCategoryDictTypeCode && d.IsDeleted == 0)
@@ -555,18 +844,18 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         var ordered = rows
             .OrderBy(r => r.SortOrder)
             .ThenBy(r => r.Id);
-        var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var labels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var sortOrders = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         foreach (var row in ordered)
         {
             var sfx = (row.DictValue ?? string.Empty).Trim().ToLowerInvariant();
-            if (sfx.Length == 0)
-                continue;
-            if (map.ContainsKey(sfx))
+            if (sfx.Length == 0 || labels.ContainsKey(sfx))
                 continue;
             var label = (row.DictLabel ?? string.Empty).Trim();
-            map[sfx] = label.Length > 0 ? label : sfx;
+            labels[sfx] = label.Length > 0 ? label : sfx;
+            sortOrders[sfx] = row.SortOrder;
         }
-        return map;
+        return (labels, sortOrders);
     }
 
     /// <summary>与菜单 SQL 模板中 <c>menu_code</c> 一致：去掉表名前缀 <c>takt_</c> 后转大写、横线改下划线。</summary>
@@ -667,6 +956,136 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     /// </summary>
     private static readonly HashSet<string> EntityBaseColumnNames = TaktGenEntityBaseProfile.AllImportColumnNames
         .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// 根据库表列元数据构建代码生成字段配置实体（不含行号，由 AssignGenTableColumnLineNumbersAsync 分配）
+    /// </summary>
+    /// <param name="schemaColumn">库表列元数据</param>
+    /// <param name="tableId">代码生成表 Id</param>
+    /// <param name="dbColName">数据库列名（snake_case）</param>
+    /// <returns>字段配置实体</returns>
+    private static TaktGenTableColumn BuildGenTableColumnFromSchema(
+        TaktDatabaseTableColumnInfo schemaColumn,
+        long tableId,
+        string dbColName)
+    {
+        var dbType = string.IsNullOrWhiteSpace(schemaColumn.DatabaseDataType) ? "nvarchar" : schemaColumn.DatabaseDataType;
+        return new TaktGenTableColumn
+        {
+            Id = 0,
+            GenTableId = tableId,
+            LineNumber = 0,
+            DatabaseColumnName = dbColName,
+            ColumnComment = schemaColumn.ColumnComment,
+            DatabaseDataType = dbType,
+            CsharpDataType = MapDbTypeToCsharp(dbType),
+            CsharpColumnName = ToPascalCase(dbColName),
+            Length = schemaColumn.Length,
+            DecimalDigits = schemaColumn.DecimalDigits,
+            IsPk = schemaColumn.IsPrimaryKey ? 1 : 0,
+            IsIncrement = schemaColumn.IsIdentity ? 1 : 0,
+            IsRequired = schemaColumn.IsNullable ? 0 : 1,
+            IsCreate = 1,
+            IsUpdate = 1,
+            IsList = 1,
+            IsUnique = 0,
+            IsExport = 1,
+            IsSort = 0,
+            IsQuery = 0,
+            QueryType = string.Empty,
+            HtmlType = "input"
+        };
+    }
+
+    /// <summary>
+    /// 将库表列元数据合并到已有字段配置（仅更新库表相关属性，保留生成/UI 配置）
+    /// </summary>
+    /// <param name="target">已有字段配置</param>
+    /// <param name="schemaColumn">库表列元数据</param>
+    /// <param name="dbColName">数据库列名</param>
+    private static void ApplySchemaMetadataToGenTableColumn(
+        TaktGenTableColumn target,
+        TaktDatabaseTableColumnInfo schemaColumn,
+        string dbColName)
+    {
+        var dbType = string.IsNullOrWhiteSpace(schemaColumn.DatabaseDataType) ? "nvarchar" : schemaColumn.DatabaseDataType;
+        target.DatabaseColumnName = dbColName;
+        target.ColumnComment = schemaColumn.ColumnComment;
+        target.DatabaseDataType = dbType;
+        target.CsharpDataType = MapDbTypeToCsharp(dbType);
+        target.CsharpColumnName = ToPascalCase(dbColName);
+        target.Length = schemaColumn.Length;
+        target.DecimalDigits = schemaColumn.DecimalDigits;
+        target.IsPk = schemaColumn.IsPrimaryKey ? 1 : 0;
+        target.IsIncrement = schemaColumn.IsIdentity ? 1 : 0;
+        target.IsRequired = schemaColumn.IsNullable ? 0 : 1;
+    }
+
+    /// <summary>
+    /// 为新增列分配行号（项号/序号，步长 10，首条 10；与 TaktSequenceDefaults 一致）
+    /// </summary>
+    /// <param name="columns">待插入列（保持库表列顺序）</param>
+    /// <param name="table">主表实体</param>
+    /// <param name="tableId">主表 Id</param>
+    /// <param name="importBatch">是否为库表首次导入批次；为 true 时整批从 10 起按步长 10 连续分配，不查库内最大行号</param>
+    /// <returns>任务</returns>
+    private async Task AssignGenTableColumnLineNumbersAsync(
+        List<TaktGenTableColumn> columns,
+        TaktGenTable table,
+        long tableId,
+        bool importBatch = false)
+    {
+        if (columns.Count == 0)
+        {
+            return;
+        }
+        var columnsNeedLine = importBatch
+            ? columns
+            : columns.Where(c => c.Id <= 0).ToList();
+        if (columnsNeedLine.Count == 0)
+        {
+            return;
+        }
+        var maxLine = importBatch
+            ? 0
+            : await _genTableColumnRepository.GetMaxIntAsync(
+                x => x.TenantCode == table.TenantCode && x.GenTableId == tableId,
+                x => x.LineNumber).ConfigureAwait(false);
+        var businessCode = tableId.ToString();
+        var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, columnsNeedLine.Count, maxLine).ToList();
+        if (importBatch)
+        {
+            for (var i = 0; i < columnsNeedLine.Count; i++)
+            {
+                columnsNeedLine[i].LineNumber = lineSeq[i];
+            }
+            return;
+        }
+        var lineIdx = 0;
+        foreach (var col in columns)
+        {
+            if (col.Id <= 0)
+            {
+                col.LineNumber = lineSeq[lineIdx++];
+            }
+        }
+    }
+
+    /// <summary>
+    /// 加载表配置 DTO 并填充列列表（按 LineNumber 升序）
+    /// </summary>
+    /// <param name="table">主表实体</param>
+    /// <returns>表配置 DTO</returns>
+    private async Task<TaktGenTableDto> LoadGenTableDtoWithColumnsAsync(TaktGenTable table)
+    {
+        var dto = table.Adapt<TaktGenTableDto>();
+        var columnEntities = await _genTableColumnRepository.GetListAsync(
+            x => x.GenTableId == table.Id,
+            x => x.LineNumber,
+            false).ConfigureAwait(false);
+        dto.Columns = columnEntities.Adapt<List<TaktGenTableColumnDto>>();
+        return dto;
+    }
 
     /// <summary>
     /// 判断数据库列名是否属于实体基类字段，若是则导入时排除。

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Attendance
 // 文件名称：TaktWorkShiftService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：班次信息应用服务实现
 // 
@@ -97,7 +97,7 @@ public class TaktWorkShiftService : TaktServiceBase, ITaktWorkShiftService
         EnsureThreeLayerContext();
         var list = await _workShiftRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.ShiftName,
+            x => x.ShiftName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -324,7 +324,7 @@ public class TaktWorkShiftService : TaktServiceBase, ITaktWorkShiftService
                 || SqlFunc.ToString(x.CrossMidnight).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -365,9 +365,9 @@ public class TaktWorkShiftService : TaktServiceBase, ITaktWorkShiftService
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

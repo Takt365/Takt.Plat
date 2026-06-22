@@ -76,4 +76,10 @@ public class TaktCostElement : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
+
+    /// <summary>
+    /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktCostElementChangeLog.CostElementId))]
+    public List<TaktCostElementChangeLog>? ChangeLogs { get; set; }
 }

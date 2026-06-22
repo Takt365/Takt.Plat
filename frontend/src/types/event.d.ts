@@ -41,9 +41,14 @@ export interface Events {
   };
 
   /**
-   * 主动登出
+   * 主动登出（含强退）
    */
-  'user:logout': undefined;
+  'user:logout': {
+    /** 登出后提示（hardRedirect 时写入 sessionStorage 供登录页展示） */
+    message?: string;
+    /** 整页跳转登录页（强退/会话失效场景，避免动态路由清掉后 SPA 内导航失败） */
+    hardRedirect?: boolean;
+  } | undefined;
 
   /**
    * 登录成功

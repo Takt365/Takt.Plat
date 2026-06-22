@@ -13,10 +13,10 @@
 /*
  * 色板 token：color-base.css（--takt-cn-* / --takt-jp-* / --takt-*）
  * 按钮语义 token：:root --takt-btn-fg-solid / --takt-btn-fg-on-light（实心字色，非色板）
- * 各 action 配色段：.takt-button-{action} 注入 --takt-btn-*；交互见 button-base.rules.css
+ * 各 action 配色段：.takt-button-{action} 注入 --takt-btn-*；交互见 button-interaction-base.css
  */
 
-@import './button-base.rules.css';
+@import './button-interaction-base.css';
 
 /* ---------- 禁用态颜色（与 Ant Design Vue genDisabledStyle token 一致） ---------- */
 :root {
@@ -31,7 +31,7 @@
 }
 
 /* @takt-generated variants-begin */
-/* 共 130 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-base.rules.css */
+/* 共 133 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-interaction-base.css */
 
 /* query · var(--takt-cn-qunqing) · fg var(--takt-btn-fg-solid) */
 .takt-button-query {
@@ -1071,5 +1071,29 @@
   --takt-btn-border: var(--takt-memorial-gray);
   --takt-btn-fg: var(--takt-btn-fg-solid);
   --takt-btn-tone: var(--takt-memorial-gray);
+}
+
+/* kick · var(--takt-jp-kaki) · fg var(--takt-btn-fg-solid) */
+.takt-button-kick {
+  --takt-btn-bg: var(--takt-jp-kaki);
+  --takt-btn-border: var(--takt-jp-kaki);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-kaki);
+}
+
+/* quit · var(--takt-cn-jiangzi) · fg var(--takt-btn-fg-solid) */
+.takt-button-quit {
+  --takt-btn-bg: var(--takt-cn-jiangzi);
+  --takt-btn-border: var(--takt-cn-jiangzi);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-jiangzi);
+}
+
+/* exit · var(--takt-cn-bise) · fg var(--takt-btn-fg-solid) */
+.takt-button-exit {
+  --takt-btn-bg: var(--takt-cn-bise);
+  --takt-btn-border: var(--takt-cn-bise);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-bise);
 }
 /* @takt-generated variants-end */

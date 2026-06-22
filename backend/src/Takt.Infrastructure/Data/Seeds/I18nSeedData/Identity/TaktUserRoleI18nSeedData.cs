@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktUserRoleI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktUserRole 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,56 +75,56 @@ public class TaktUserRoleI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktUserRole 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.userrole._self / entity.userrole.{{field}}；ResourceGroup=1；ResourceType=0
+    /// I18nKey：entity.userrole._self / entity.userrole.{{field}}；ResourceGroup=Identity；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetUserRoleTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.userrole._self
-            new TranslationSeedItem("entity.userrole._self", "en-US", "User Role Information", "实体名称"),
+            new TranslationSeedItem("entity.userrole._self", "en-US", "User Role Information_us", "实体名称"),
             // entity.userrole._self
-            new TranslationSeedItem("entity.userrole._self", "ja-JP", "用户-角色关联信息", "实体名称"),
+            new TranslationSeedItem("entity.userrole._self", "ja-JP", "用户-角色关联信息_jp", "实体名称"),
             // entity.userrole._self
             new TranslationSeedItem("entity.userrole._self", "zh-CN", "用户-角色关联信息", "实体名称"),
             // entity.userrole._self
-            new TranslationSeedItem("entity.userrole._self", "zh-HK", "用户-角色关联信息", "实体名称"),
+            new TranslationSeedItem("entity.userrole._self", "zh-HK", "用户-角色关联信息_hk", "实体名称"),
 
             // entity.userrole.userid
-            new TranslationSeedItem("entity.userrole.userid", "en-US", "用户ID", "用户ID"),
+            new TranslationSeedItem("entity.userrole.userid", "en-US", "用户ID_us", "用户ID"),
             // entity.userrole.userid
-            new TranslationSeedItem("entity.userrole.userid", "ja-JP", "用户ID", "用户ID"),
+            new TranslationSeedItem("entity.userrole.userid", "ja-JP", "用户ID_jp", "用户ID"),
             // entity.userrole.userid
             new TranslationSeedItem("entity.userrole.userid", "zh-CN", "用户ID", "用户ID"),
             // entity.userrole.userid
-            new TranslationSeedItem("entity.userrole.userid", "zh-HK", "用户ID", "用户ID"),
+            new TranslationSeedItem("entity.userrole.userid", "zh-HK", "用户ID_hk", "用户ID"),
 
             // entity.userrole.roleid
-            new TranslationSeedItem("entity.userrole.roleid", "en-US", "角色ID", "角色ID"),
+            new TranslationSeedItem("entity.userrole.roleid", "en-US", "角色ID_us", "角色ID"),
             // entity.userrole.roleid
-            new TranslationSeedItem("entity.userrole.roleid", "ja-JP", "角色ID", "角色ID"),
+            new TranslationSeedItem("entity.userrole.roleid", "ja-JP", "角色ID_jp", "角色ID"),
             // entity.userrole.roleid
             new TranslationSeedItem("entity.userrole.roleid", "zh-CN", "角色ID", "角色ID"),
             // entity.userrole.roleid
-            new TranslationSeedItem("entity.userrole.roleid", "zh-HK", "角色ID", "角色ID"),
+            new TranslationSeedItem("entity.userrole.roleid", "zh-HK", "角色ID_hk", "角色ID"),
 
             // entity.userrole.user
-            new TranslationSeedItem("entity.userrole.user", "en-US", "用户", "用户（多对一）"),
+            new TranslationSeedItem("entity.userrole.user", "en-US", "用户_us", "用户（多对一）"),
             // entity.userrole.user
-            new TranslationSeedItem("entity.userrole.user", "ja-JP", "用户", "用户（多对一）"),
+            new TranslationSeedItem("entity.userrole.user", "ja-JP", "用户_jp", "用户（多对一）"),
             // entity.userrole.user
             new TranslationSeedItem("entity.userrole.user", "zh-CN", "用户", "用户（多对一）"),
             // entity.userrole.user
-            new TranslationSeedItem("entity.userrole.user", "zh-HK", "用户", "用户（多对一）"),
+            new TranslationSeedItem("entity.userrole.user", "zh-HK", "用户_hk", "用户（多对一）"),
 
             // entity.userrole.role
-            new TranslationSeedItem("entity.userrole.role", "en-US", "角色", "角色（多对一）"),
+            new TranslationSeedItem("entity.userrole.role", "en-US", "角色_us", "角色（多对一）"),
             // entity.userrole.role
-            new TranslationSeedItem("entity.userrole.role", "ja-JP", "角色", "角色（多对一）"),
+            new TranslationSeedItem("entity.userrole.role", "ja-JP", "角色_jp", "角色（多对一）"),
             // entity.userrole.role
             new TranslationSeedItem("entity.userrole.role", "zh-CN", "角色", "角色（多对一）"),
             // entity.userrole.role
-            new TranslationSeedItem("entity.userrole.role", "zh-HK", "角色", "角色（多对一）"),
+            new TranslationSeedItem("entity.userrole.role", "zh-HK", "角色_hk", "角色（多对一）"),
         };
     }
 
@@ -142,10 +142,10 @@ public class TaktUserRoleI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 1;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Identity";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

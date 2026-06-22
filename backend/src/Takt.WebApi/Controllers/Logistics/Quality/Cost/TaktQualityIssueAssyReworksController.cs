@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailureAssyReworksController.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityIssueAssyReworksController.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题组装不良改修费用明细控制器
 // 
@@ -23,17 +23,17 @@ namespace Takt.WebApi.Controllers.Logistics.Quality.Cost;
 /// </summary>
 [ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "质量问题组装不良改修费用明细")]
-public class TaktQualityFailureAssyReworksController : TaktControllerBase
+public class TaktQualityIssueAssyReworksController : TaktControllerBase
 {
-    private readonly ITaktQualityFailureAssyReworkService _qualityFailureAssyReworkService;
+    private readonly ITaktQualityIssueAssyReworkService _qualityIssueAssyReworkService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="qualityFailureAssyReworkService">质量问题组装不良改修费用明细服务</param>
-    public TaktQualityFailureAssyReworksController(ITaktQualityFailureAssyReworkService qualityFailureAssyReworkService)
+    /// <param name="qualityIssueAssyReworkService">质量问题组装不良改修费用明细服务</param>
+    public TaktQualityIssueAssyReworksController(ITaktQualityIssueAssyReworkService qualityIssueAssyReworkService)
     {
-        _qualityFailureAssyReworkService = qualityFailureAssyReworkService;
+        _qualityIssueAssyReworkService = qualityIssueAssyReworkService;
     }
 
     /// <summary>
@@ -41,13 +41,13 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailureassyrework:list", "质量问题组装不良改修费用明细列表")]
+    [TaktPermission("logistics:quality:cost:issue:list", "质量问题组装不良改修费用明细列表")]
     [HttpGet("list")]
-    public async Task<IActionResult> GetQualityFailureAssyReworkListAsync([FromQuery] TaktQualityFailureAssyReworkQueryDto queryDto)
+    public async Task<IActionResult> GetQualityIssueAssyReworkListAsync([FromQuery] TaktQualityIssueAssyReworkQueryDto queryDto)
     {
         try
         {
-            var result = await _qualityFailureAssyReworkService.GetQualityFailureAssyReworkListAsync(queryDto);
+            var result = await _qualityIssueAssyReworkService.GetQualityIssueAssyReworkListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
         }
         catch (Exception ex)
@@ -61,13 +61,13 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
     /// </summary>
     /// <param name="id">质量问题组装不良改修费用明细ID</param>
     /// <returns>质量问题组装不良改修费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailureassyrework:query", "质量问题组装不良改修费用明细详情")]
+    [TaktPermission("logistics:quality:cost:issue:query", "质量问题组装不良改修费用明细详情")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetQualityFailureAssyReworkByIdAsync(long id)
+    public async Task<IActionResult> GetQualityIssueAssyReworkByIdAsync(long id)
     {
         try
         {
-            var result = await _qualityFailureAssyReworkService.GetQualityFailureAssyReworkByIdAsync(id);
+            var result = await _qualityIssueAssyReworkService.GetQualityIssueAssyReworkByIdAsync(id);
             if (result == null)
             {
                 return NotFound("质量问题组装不良改修费用明细不存在");
@@ -84,13 +84,13 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
     /// 获取质量问题组装不良改修费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailureassyrework:query", "质量问题组装不良改修费用明细选项")]
+    [TaktPermission("logistics:quality:cost:issue:query", "质量问题组装不良改修费用明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQualityFailureAssyReworkOptionsAsync()
+    public async Task<IActionResult> GetQualityIssueAssyReworkOptionsAsync()
     {
         try
         {
-            var result = await _qualityFailureAssyReworkService.GetQualityFailureAssyReworkOptionsAsync();
+            var result = await _qualityIssueAssyReworkService.GetQualityIssueAssyReworkOptionsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -104,13 +104,13 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>质量问题组装不良改修费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailureassyrework:create", "创建质量问题组装不良改修费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:create", "创建质量问题组装不良改修费用明细")]
     [HttpPost]
-    public async Task<IActionResult> CreateQualityFailureAssyReworkAsync([FromBody] TaktQualityFailureAssyReworkCreateDto dto)
+    public async Task<IActionResult> CreateQualityIssueAssyReworkAsync([FromBody] TaktQualityIssueAssyReworkCreateDto dto)
     {
         try
         {
-            var result = await _qualityFailureAssyReworkService.CreateQualityFailureAssyReworkAsync(dto);
+            var result = await _qualityIssueAssyReworkService.CreateQualityIssueAssyReworkAsync(dto);
             return Success(result, "创建成功");
         }
         catch (Exception ex)
@@ -125,13 +125,13 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
     /// <param name="id">质量问题组装不良改修费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>质量问题组装不良改修费用明细DTO</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailureassyrework:update", "更新质量问题组装不良改修费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:update", "更新质量问题组装不良改修费用明细")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateQualityFailureAssyReworkAsync(long id, [FromBody] TaktQualityFailureAssyReworkUpdateDto dto)
+    public async Task<IActionResult> UpdateQualityIssueAssyReworkAsync(long id, [FromBody] TaktQualityIssueAssyReworkUpdateDto dto)
     {
         try
         {
-            var result = await _qualityFailureAssyReworkService.UpdateQualityFailureAssyReworkAsync(id, dto);
+            var result = await _qualityIssueAssyReworkService.UpdateQualityIssueAssyReworkAsync(id, dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)
@@ -145,13 +145,13 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
     /// </summary>
     /// <param name="id">质量问题组装不良改修费用明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailureassyrework:delete", "删除质量问题组装不良改修费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:delete", "删除质量问题组装不良改修费用明细")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteQualityFailureAssyReworkByIdAsync(long id)
+    public async Task<IActionResult> DeleteQualityIssueAssyReworkByIdAsync(long id)
     {
         try
         {
-            await _qualityFailureAssyReworkService.DeleteQualityFailureAssyReworkByIdAsync(id);
+            await _qualityIssueAssyReworkService.DeleteQualityIssueAssyReworkByIdAsync(id);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -165,13 +165,13 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailureassyrework:delete", "批量删除质量问题组装不良改修费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:delete", "批量删除质量问题组装不良改修费用明细")]
     [HttpDelete("batch")]
-    public async Task<IActionResult> DeleteQualityFailureAssyReworkBatchAsync([FromBody] IEnumerable<long> ids)
+    public async Task<IActionResult> DeleteQualityIssueAssyReworkBatchAsync([FromBody] IEnumerable<long> ids)
     {
         try
         {
-            await _qualityFailureAssyReworkService.DeleteQualityFailureAssyReworkBatchAsync(ids);
+            await _qualityIssueAssyReworkService.DeleteQualityIssueAssyReworkBatchAsync(ids);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -184,13 +184,13 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailureassyrework:import", "获取质量问题组装不良改修费用明细导入模板")]
+    [TaktPermission("logistics:quality:cost:issue:import", "获取质量问题组装不良改修费用明细导入模板")]
     [HttpGet("template")]
-    public async Task<IActionResult> GetQualityFailureAssyReworkTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    public async Task<IActionResult> GetQualityIssueAssyReworkTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
         try
         {
-            var (resultFileName, content) = await _qualityFailureAssyReworkService.GetQualityFailureAssyReworkTemplateAsync(sheetName, templateName);
+            var (resultFileName, content) = await _qualityIssueAssyReworkService.GetQualityIssueAssyReworkTemplateAsync(sheetName, templateName);
             return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)
@@ -204,9 +204,9 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailureassyrework:import", "导入质量问题组装不良改修费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:import", "导入质量问题组装不良改修费用明细")]
     [HttpPost("import")]
-    public async Task<IActionResult> ImportQualityFailureAssyReworkAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    public async Task<IActionResult> ImportQualityIssueAssyReworkAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
         try
         {
@@ -216,7 +216,7 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
             }
 
             await using var stream = file.OpenReadStream();
-            var (success, fail, errors) = await _qualityFailureAssyReworkService.ImportQualityFailureAssyReworkAsync(stream, sheetName);
+            var (success, fail, errors) = await _qualityIssueAssyReworkService.ImportQualityIssueAssyReworkAsync(stream, sheetName);
             return Success(new
             {
                 SuccessCount = success,
@@ -234,13 +234,13 @@ public class TaktQualityFailureAssyReworksController : TaktControllerBase
     /// 导出质量问题组装不良改修费用明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:qualityfailureassyrework:export", "导出质量问题组装不良改修费用明细")]
+    [TaktPermission("logistics:quality:cost:issue:export", "导出质量问题组装不良改修费用明细")]
     [HttpGet("export")]
-    public async Task<IActionResult> ExportQualityFailureAssyReworkAsync([FromQuery] TaktQualityFailureAssyReworkQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    public async Task<IActionResult> ExportQualityIssueAssyReworkAsync([FromQuery] TaktQualityIssueAssyReworkQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {
         try
         {
-            var (resultFileName, fileContent) = await _qualityFailureAssyReworkService.ExportQualityFailureAssyReworkAsync(query, sheetName, exportName);
+            var (resultFileName, fileContent) = await _qualityIssueAssyReworkService.ExportQualityIssueAssyReworkAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

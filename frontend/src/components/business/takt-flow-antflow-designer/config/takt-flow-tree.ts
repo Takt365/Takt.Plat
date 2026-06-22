@@ -10,6 +10,10 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+import type { FlowDesignTranslate } from './takt-flow-design-validate'
+
+const P = 'workflow.designer.page.'
+
 export function idGenerator(): string {
   let q = Date.now() - new Date('2024-05-01').getTime() + Math.ceil(Math.random() * 1000)
   const chars = '0123456789ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz'
@@ -72,11 +76,12 @@ export interface FlowTreeNode {
 }
 
 /** 创建发起人节点 */
-export function createStartNode(child?: FlowTreeNode | null): FlowTreeNode {
+export function createStartNode(child?: FlowTreeNode | null, t?: FlowDesignTranslate): FlowTreeNode {
+  const name = t ? t(`${P}promoter`) : '发起人'
   return {
     nodeId: idGenerator(),
-    nodeName: '发起人',
-    nodeDisplayName: '发起人',
+    nodeName: name,
+    nodeDisplayName: name,
     nodeType: 1,
     childNode: child ?? null,
     nodeApproveList: []
@@ -84,11 +89,12 @@ export function createStartNode(child?: FlowTreeNode | null): FlowTreeNode {
 }
 
 /** 创建审核人节点 */
-export function createApproveNode(child?: FlowTreeNode | null): FlowTreeNode {
+export function createApproveNode(child?: FlowTreeNode | null, t?: FlowDesignTranslate): FlowTreeNode {
+  const name = t ? t(`${P}approver`) : '审核人'
   return {
     nodeId: idGenerator(),
-    nodeName: '审核人',
-    nodeDisplayName: '审核人',
+    nodeName: name,
+    nodeDisplayName: name,
     nodeType: 4,
     setType: 1,
     directorLevel: 1,
@@ -101,11 +107,12 @@ export function createApproveNode(child?: FlowTreeNode | null): FlowTreeNode {
 }
 
 /** 创建抄送人节点 */
-export function createCopyNode(child?: FlowTreeNode | null): FlowTreeNode {
+export function createCopyNode(child?: FlowTreeNode | null, t?: FlowDesignTranslate): FlowTreeNode {
+  const name = t ? t(`${P}copyer`) : '抄送人'
   return {
     nodeId: idGenerator(),
-    nodeName: '抄送人',
-    nodeDisplayName: '抄送人',
+    nodeName: name,
+    nodeDisplayName: name,
     nodeType: 6,
     childNode: child ?? null,
     error: true,
@@ -140,11 +147,14 @@ export function createParallelBranchApproverNode(
   name: string,
   childNode: FlowTreeNode | null,
   priority: number,
-  isDefault: number
+  isDefault: number,
+  t?: FlowDesignTranslate
 ): FlowTreeNode {
+  const defaultName = t ? t(`${P}parallelapproverdefault`) : '并行审核人'
+  const nodeName = name || defaultName
   return {
     nodeId: idGenerator(),
-    nodeName: name || '并行审核人',
+    nodeName: nodeName,
     nodeDisplayName: '',
     nodeType: 4,
     priorityLevel: priority,
@@ -160,67 +170,93 @@ export function createParallelBranchApproverNode(
 }
 
 /** 创建并行审核网关（nodeType 7） */
-export function createParallelWayNode(child?: FlowTreeNode | null): FlowTreeNode {
+export function createParallelWayNode(child?: FlowTreeNode | null, t?: FlowDesignTranslate): FlowTreeNode {
+  const gw = t ? t(`${P}parallelgateway`) : '并行审核网关'
+  const agg = t ? t(`${P}parallelaggregatenode`) : '并行聚合节点'
+  const br1 = t ? t(`${P}parallelapprovernwithindex`, { n: '1' }) : '并行审核人1'
+  const br2 = t ? t(`${P}parallelapprovernwithindex`, { n: '2' }) : '并行审核人2'
   return {
     nodeId: idGenerator(),
-    nodeName: '并行审核网关',
+    nodeName: gw,
     nodeType: 7,
-    childNode: createParallelBranchApproverNode('并行聚合节点', null, 1, 0),
+    childNode: createParallelBranchApproverNode(agg, null, 1, 0, t),
     error: false,
     parallelNodes: [
-      createParallelBranchApproverNode('并行审核人1', child ?? null, 1, 0),
-      createParallelBranchApproverNode('并行审核人2', null, 2, 0)
+      createParallelBranchApproverNode(br1, child ?? null, 1, 0, t),
+      createParallelBranchApproverNode(br2, null, 2, 0, t)
     ]
   }
 }
 
 /** 创建动态条件网关 */
-export function createDynamicConditionWayNode(child?: FlowTreeNode | null): FlowTreeNode {
+export function createDynamicConditionWayNode(child?: FlowTreeNode | null, t?: FlowDesignTranslate): FlowTreeNode {
+  const gw = t ? t(`${P}dynamicgateway`) : '动态网关'
+  const c1 = t ? t(`${P}dynamicconditionnamewithindex`, { n: '1' }) : '动态条件1'
+  const c2 = t ? t(`${P}dynamicconditionnamewithindex`, { n: '2' }) : '动态条件2'
   return {
     nodeId: idGenerator(),
-    nodeName: '动态网关',
+    nodeName: gw,
     nodeType: 2,
     childNode: null,
     isDynamicCondition: true,
     isParallel: false,
     error: false,
     conditionNodes: [
-      createConditionNode('动态条件1', child ?? null, 1, 0),
-      createConditionNode('动态条件2', null, 2, 1)
+      createConditionNode(c1, child ?? null, 1, 0),
+      createConditionNode(c2, null, 2, 1)
     ]
   }
 }
 
 /** 创建条件并行网关 */
-export function createParallelConditionWayNode(child?: FlowTreeNode | null): FlowTreeNode {
+export function createParallelConditionWayNode(child?: FlowTreeNode | null, t?: FlowDesignTranslate): FlowTreeNode {
+  const gw = t ? t(`${P}parallelconditiongateway`) : '条件并行网关'
+  const agg = t ? t(`${P}parallelconditionaggregatenode`) : '条件并行聚合审批人'
+  const c1 = t ? t(`${P}parallelconditionnamewithindex`, { n: '1' }) : '并行条件1'
+  const c2 = t ? t(`${P}parallelconditionnamewithindex`, { n: '2' }) : '并行条件2'
   return {
     nodeId: idGenerator(),
-    nodeName: '条件并行网关',
+    nodeName: gw,
     nodeType: 2,
-    childNode: createParallelBranchApproverNode('条件并行聚合审批人', null, 1, 0),
+    childNode: createParallelBranchApproverNode(agg, null, 1, 0, t),
     isDynamicCondition: false,
     isParallel: true,
     error: false,
     conditionNodes: [
-      createConditionNode('并行条件1', child ?? null, 1, 0),
-      createConditionNode('并行条件2', null, 2, 0)
+      createConditionNode(c1, child ?? null, 1, 0),
+      createConditionNode(c2, null, 2, 0)
     ]
   }
 }
 
 /** 创建网关（条件分支）节点 — 首条件挂原链 child，网关 childNode 为 null（与 AntFlow createGatewayNode 一致） */
-export function createGatewayNode(child?: FlowTreeNode | null): FlowTreeNode {
+export function createGatewayNode(child?: FlowTreeNode | null, t?: FlowDesignTranslate): FlowTreeNode {
+  const gw = t ? t(`${P}gateway`) : '网关'
+  const c1 = t ? t(`${P}conditionnamewithindex`, { n: '1' }) : '条件1'
+  const c2 = t ? t(`${P}conditionnamewithindex`, { n: '2' }) : '条件2'
   return {
     nodeId: idGenerator(),
-    nodeName: '网关',
+    nodeName: gw,
     nodeType: 2,
     childNode: null,
     isDynamicCondition: false,
     isParallel: false,
     error: true,
     conditionNodes: [
-      createConditionNode('条件1', child ?? null, 1, 0),
-      createConditionNode('条件2', null, 2, 1)
+      createConditionNode(c1, child ?? null, 1, 0),
+      createConditionNode(c2, null, 2, 1)
     ]
   }
+}
+
+/** 与 AntFlow addNode.vue createNodeMap 键 1~6 完全一致 */
+export function buildCreateNodeMap(t: FlowDesignTranslate): Map<number, (child: FlowTreeNode | null) => FlowTreeNode> {
+  return new Map([
+    [1, (child) => createApproveNode(child ?? null, t)],
+    [2, (child) => createCopyNode(child ?? null, t)],
+    [3, (child) => createParallelWayNode(child ?? null, t)],
+    [4, (child) => createGatewayNode(child ?? null, t)],
+    [5, (child) => createDynamicConditionWayNode(child ?? null, t)],
+    [6, (child) => createParallelConditionWayNode(child ?? null, t)]
+  ])
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktAccountTitleService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会计科目应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Accounting.Financial;
 
@@ -31,6 +30,7 @@ namespace Takt.Application.Services.Accounting.Financial;
 public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
 {
     private readonly ITaktCompanyRepository<TaktAccountTitle> _accountTitleRepository;
+    private readonly ITaktCompanyRepository<TaktAccountTitleChangeLog> _accountTitleChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,12 +38,14 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     /// 构造函数
     /// </summary>
     /// <param name="accountTitleRepository">会计科目仓储</param>
+    /// <param name="accountTitleChangeLogRepository">AccountTitleChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAccountTitleService(
         ITaktCompanyRepository<TaktAccountTitle> accountTitleRepository,
+        ITaktCompanyRepository<TaktAccountTitleChangeLog> accountTitleChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -51,6 +53,7 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
         : base(userContext, localizationService)
     {
         _accountTitleRepository = accountTitleRepository;
+        _accountTitleChangeLogRepository = accountTitleChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -86,8 +89,9 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
         {
             return null;
         }
-        return entity.Adapt<TaktAccountTitleDto>();
-    }
+        var dto = entity.Adapt<TaktAccountTitleDto>();
+        await FillAccountTitleDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取会计科目树形选项列表
@@ -186,6 +190,7 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
             entity.SortOrder = _sortOrderGenerator.GenerateNext(entity.ParentId, maxSort);
         }
         entity = await _accountTitleRepository.CreateAsync(entity);
+                await SaveAccountTitleChildrenAsync(entity, dto);
         return await GetAccountTitleByIdAsync(entity.Id) ?? entity.Adapt<TaktAccountTitleDto>();
     }
 
@@ -212,6 +217,7 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
             throw new TaktBusinessException("会计科目的TitleCode已存在");
         }
         await _accountTitleRepository.UpdateAsync(entity);
+                await SaveAccountTitleChildrenAsync(entity, dto);
         return await GetAccountTitleByIdAsync(id) ?? throw new TaktBusinessException("会计科目不存在");
     }
 
@@ -222,12 +228,12 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     /// <returns>任务</returns>
     public async Task DeleteAccountTitleByIdAsync(long id)
     {
-
-        var hasChildren = await _accountTitleRepository.ExistsAsync(x => x.ParentId == id);
-        if (hasChildren)
+        var entity = await _accountTitleRepository.GetByIdAsync(id);
+        if (entity == null)
         {
-            throw new TaktBusinessException("存在子节点，无法删除");
+            throw new TaktBusinessException("会计科目不存在或已删除");
         }
+        await _accountTitleChangeLogRepository.DeleteAsync(x => x.AccountTitleId == entity.Id);
         var deleted = await _accountTitleRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -380,6 +386,54 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充会计科目详情（加载 OneToMany 子表：会计科目变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillAccountTitleDetailsAsync(TaktAccountTitleDto dto, TaktAccountTitle entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 会计科目变更记录 → dto.ChangeLogs
+        var changelogs = await _accountTitleChangeLogRepository.GetListAsync(x => x.AccountTitleId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktAccountTitleChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存会计科目子表级联（会计科目变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveAccountTitleChildrenAsync(TaktAccountTitle entity, TaktAccountTitleCreateDto dto)
+    {
+        // 会计科目变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _accountTitleChangeLogRepository.DeleteAsync(x => x.AccountTitleId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktAccountTitleChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.AccountTitleId = entity.Id;
+            }
+            await _accountTitleChangeLogRepository.DeleteAsync(x => x.AccountTitleId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _accountTitleChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -398,7 +452,6 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
             exp = exp.And(x =>
                 (x.TitleCode != null && x.TitleCode.Contains(keywords))
                 || (x.TitleName != null && x.TitleName.Contains(keywords))
-                || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ParentId).Contains(keywords)
                 || SqlFunc.ToString(x.TitleType).Contains(keywords)
                 || SqlFunc.ToString(x.BalanceDirection).Contains(keywords)
@@ -413,7 +466,7 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || SqlFunc.ToString(x.TitleStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
                 || SqlFunc.ToString(x.ValidTo).Contains(keywords)
@@ -429,16 +482,6 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
         if (!string.IsNullOrEmpty(queryDto?.TitleName))
         {
             exp = exp.And(x => x.TitleName != null && x.TitleName.Contains(queryDto.TitleName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ShortName))
-        {
-            exp = exp.And(x => x.TitleName != null && x.TitleName.Contains(queryDto.ShortName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TitleDesc))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.TitleDesc));
         }
 
         if (queryDto?.ParentId.HasValue == true)
@@ -511,9 +554,9 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

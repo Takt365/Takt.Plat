@@ -5,6 +5,8 @@
 // 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：编号规则应用服务实现（CRUD + 预览/生成业务编号）
+// · 新增/导入/更新：服务端按规则自动生成或刷新起始编码 ExampleCode（Create/Import 同时写入 CurrentSequence）
+// · 运行时：GenerateNumberingAsync 递增流水并产出下一业务编号（服务核心）
 // 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -97,7 +99,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         EnsureThreeLayerContext();
         var list = await _numberingRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.RuleName,
+            x => x.RuleName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -113,8 +115,15 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     /// <returns>DTO</returns>
     public async Task<TaktNumberingDto> CreateNumberingAsync(TaktNumberingCreateDto dto)
     {
+        EnsureThreeLayerContext();
         var entity = dto.Adapt<TaktNumbering>();
+        entity.TenantCode = CurrentTenantCode;
+        entity.CompanyCode = CurrentCompanyCode;
         entity.IsBuiltIn = 0;
+        NormalizeNumberingRule(entity);
+        var (initialCode, initialSequence) = BuildInitialExampleCode(entity, DateTime.Now);
+        entity.ExampleCode = initialCode;
+        entity.CurrentSequence = initialSequence;
         var isUnique_ix_numbering_code_unique = await _uniqueValidator.IsUniqueAsync(
             _numberingRepository,
             x => x.RuleCode == entity.RuleCode);
@@ -140,8 +149,15 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             throw new TaktBusinessException("编号规则不存在");
         }
         var originalIsBuiltIn = entity.IsBuiltIn;
+        var originalCurrentSequence = entity.CurrentSequence;
         dto.Adapt(entity);
         entity.IsBuiltIn = originalIsBuiltIn;
+        entity.CurrentSequence = originalCurrentSequence;
+        NormalizeNumberingRule(entity);
+        var sequenceForExample = entity.CurrentSequence <= 0
+            ? (entity.SequenceStep <= 0 ? 1 : entity.SequenceStep)
+            : entity.CurrentSequence;
+        entity.ExampleCode = FormatBusinessCode(entity, sequenceForExample, DateTime.Now);
         var isUnique_ix_numbering_code_unique = await _uniqueValidator.IsUniqueAsync(
             _numberingRepository,
             x => x.RuleCode == entity.RuleCode,
@@ -241,6 +257,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     /// <returns>导入结果</returns>
     public async Task<(int success, int fail, List<string> errors)> ImportNumberingAsync(Stream fileStream, string? sheetName = null)
     {
+        EnsureThreeLayerContext();
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
@@ -257,6 +274,10 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             {
                 var entity = rows[i].Adapt<TaktNumbering>();
                 entity.IsBuiltIn = 0;
+                entity.TenantCode = CurrentTenantCode;
+                entity.CompanyCode = CurrentCompanyCode;
+                NormalizeNumberingRule(entity);
+                ApplyExampleCodeOnCreate(entity, rows[i].ExampleCode, autoGenerateWhenEmpty: true);
                 var importKey = $"{entity.RuleCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -325,21 +346,21 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             exp = exp.And(x =>
                 (x.RuleCode != null && x.RuleCode.Contains(keywords))
                 || (x.RuleName != null && x.RuleName.Contains(keywords))
-                || SqlFunc.ToString(x.DocumentType).Contains(keywords)
+                || (x.DocumentType != null && x.DocumentType.Contains(keywords))
                 || (x.DepartmentCode != null && x.DepartmentCode.Contains(keywords))
-                || (x.Prefix != null && x.Prefix.Contains(keywords))
+                || (x.PrefixCode != null && x.PrefixCode.Contains(keywords))
                 || (x.DateFormat != null && x.DateFormat.Contains(keywords))
                 || SqlFunc.ToString(x.SequenceLength).Contains(keywords)
                 || SqlFunc.ToString(x.SequenceStep).Contains(keywords)
-                || (x.Suffix != null && x.Suffix.Contains(keywords))
+                || (x.SuffixCode != null && x.SuffixCode.Contains(keywords))
                 || (x.ResetPeriod != null && x.ResetPeriod.Contains(keywords))
                 || SqlFunc.ToString(x.CurrentSequence).Contains(keywords)
-                || (x.ExampleCode != null && x.ExampleCode.Contains(keywords))
+                || x.ExampleCode.Contains(keywords)
                 || (x.Separator != null && x.Separator.Contains(keywords))
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || SqlFunc.ToString(x.Status).Contains(keywords)
                 || (x.Description != null && x.Description.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -355,9 +376,9 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             exp = exp.And(x => x.RuleName != null && x.RuleName.Contains(queryDto.RuleName));
         }
 
-        if (queryDto?.DocumentType.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentType))
         {
-            exp = exp.And(x => x.DocumentType == queryDto.DocumentType);
+            exp = exp.And(x => x.DocumentType == queryDto.DocumentType.Trim());
         }
 
         if (!string.IsNullOrEmpty(queryDto?.DepartmentCode))
@@ -365,9 +386,9 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             exp = exp.And(x => x.DepartmentCode != null && x.DepartmentCode.Contains(queryDto.DepartmentCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Prefix))
+        if (!string.IsNullOrEmpty(queryDto?.PrefixCode))
         {
-            exp = exp.And(x => x.Prefix != null && x.Prefix.Contains(queryDto.Prefix));
+            exp = exp.And(x => x.PrefixCode != null && x.PrefixCode.Contains(queryDto.PrefixCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.DateFormat))
@@ -385,9 +406,9 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             exp = exp.And(x => x.SequenceStep == queryDto.SequenceStep);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Suffix))
+        if (!string.IsNullOrEmpty(queryDto?.SuffixCode))
         {
-            exp = exp.And(x => x.Suffix != null && x.Suffix.Contains(queryDto.Suffix));
+            exp = exp.And(x => x.SuffixCode != null && x.SuffixCode.Contains(queryDto.SuffixCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ResetPeriod))
@@ -402,7 +423,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
 
         if (!string.IsNullOrEmpty(queryDto?.ExampleCode))
         {
-            exp = exp.And(x => x.ExampleCode != null && x.ExampleCode.Contains(queryDto.ExampleCode));
+            exp = exp.And(x => x.ExampleCode.Contains(queryDto.ExampleCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Separator))
@@ -425,9 +446,9 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))
@@ -453,16 +474,14 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     // ========================================
 
     /// <summary>
-    /// 默认编码段顺序：单据类型、公司、部门、前缀、日期、流水号
+    /// 默认编码段顺序：公司、部门、前缀、日期+流水（DateSequence）
     /// </summary>
     private static readonly string[] DefaultSegmentKeys =
     {
-        nameof(TaktNumbering.DocumentType),
         nameof(TaktCompanyEntityBase.CompanyCode),
         nameof(TaktNumbering.DepartmentCode),
-        nameof(TaktNumbering.Prefix),
-        nameof(TaktNumbering.DateFormat),
-        "Sequence",
+        nameof(TaktNumbering.PrefixCode),
+        "DateSequence",
     };
 
     /// <summary>
@@ -491,7 +510,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     }
 
     /// <summary>
-    /// 生成下一个业务编号（递增 CurrentSequence 并写回规则）
+    /// 生成下一个业务编号（服务核心：递增 CurrentSequence、写回 ExampleCode，供业务单据调用）
     /// </summary>
     /// <param name="request">生成参数（须含 RuleCode）</param>
     /// <returns>生成结果</returns>
@@ -504,13 +523,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         }
         var rule = await LoadActiveRuleByCodeAsync(request.RuleCode.Trim());
         var now = DateTime.Now;
-        if (ShouldResetSequence(rule.ResetPeriod, rule.UpdatedAt, now))
-        {
-            rule.CurrentSequence = 0;
-        }
-        var step = rule.SequenceStep <= 0 ? 1 : rule.SequenceStep;
-        var nextSequence = rule.CurrentSequence + step;
-        var code = FormatBusinessCode(rule, nextSequence, now);
+        var (code, nextSequence) = BuildNextBusinessCode(rule, now);
         rule.CurrentSequence = nextSequence;
         rule.ExampleCode = code;
         rule.UpdatedAt = now;
@@ -541,32 +554,34 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             }
             return byId;
         }
+        if (!string.IsNullOrWhiteSpace(request.DepartmentCode))
+        {
+            var draft = new TaktNumbering
+            {
+                TenantCode = CurrentTenantCode,
+                CompanyCode = CurrentCompanyCode,
+                RuleCode = request.RuleCode ?? "PREVIEW",
+                RuleName = request.RuleName ?? "PREVIEW",
+                DocumentType = TaktNumberingHelper.NormalizeDocumentType(request.DocumentType),
+                DepartmentCode = request.DepartmentCode,
+                PrefixCode = request.PrefixCode,
+                DateFormat = request.DateFormat,
+                SequenceLength = request.SequenceLength <= 0 ? 6 : request.SequenceLength,
+                SequenceStep = request.SequenceStep <= 0 ? 1 : request.SequenceStep,
+                SuffixCode = request.SuffixCode,
+                ResetPeriod = string.IsNullOrWhiteSpace(request.ResetPeriod) ? "none" : request.ResetPeriod,
+                CurrentSequence = request.CurrentSequence,
+                Separator = request.Separator,
+                Status = 1,
+            };
+            NormalizeNumberingRule(draft);
+            return draft;
+        }
         if (!string.IsNullOrWhiteSpace(request.RuleCode))
         {
             return await LoadActiveRuleByCodeAsync(request.RuleCode.Trim());
         }
-        if (string.IsNullOrWhiteSpace(request.DepartmentCode))
-        {
-            throw new TaktBusinessException("预览编号需提供规则 Id、规则编码或完整规则字段");
-        }
-        return new TaktNumbering
-        {
-            TenantCode = CurrentTenantCode,
-            CompanyCode = CurrentCompanyCode,
-            RuleCode = request.RuleCode ?? "PREVIEW",
-            RuleName = request.RuleName ?? "PREVIEW",
-            DocumentType = request.DocumentType,
-            DepartmentCode = request.DepartmentCode,
-            Prefix = request.Prefix,
-            DateFormat = request.DateFormat,
-            SequenceLength = request.SequenceLength <= 0 ? 6 : request.SequenceLength,
-            SequenceStep = request.SequenceStep <= 0 ? 1 : request.SequenceStep,
-            Suffix = request.Suffix,
-            ResetPeriod = string.IsNullOrWhiteSpace(request.ResetPeriod) ? "none" : request.ResetPeriod,
-            CurrentSequence = request.CurrentSequence,
-            Separator = string.IsNullOrWhiteSpace(request.Separator) ? "-" : request.Separator,
-            Status = 1,
-        };
+        throw new TaktBusinessException("预览编号需提供规则 Id、规则编码或完整规则字段");
     }
 
     /// <summary>
@@ -617,11 +632,13 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
                 parts.Add(part);
             }
         }
-        var code = string.Join(separator, parts);
-        var suffix = rule.Suffix?.Trim();
-        if (!string.IsNullOrWhiteSpace(suffix))
+        var code = string.IsNullOrEmpty(separator)
+            ? string.Concat(parts)
+            : string.Join(separator, parts);
+        var suffixCode = rule.SuffixCode?.Trim();
+        if (!string.IsNullOrWhiteSpace(suffixCode))
         {
-            code += suffix.StartsWith(separator, StringComparison.Ordinal) ? suffix : suffix;
+            code += suffixCode.StartsWith(separator, StringComparison.Ordinal) ? suffixCode : suffixCode;
         }
         return code;
     }
@@ -643,9 +660,232 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     }
 
     /// <summary>
+    /// 默认编码段：公司、部门、前缀、日期+流水（DateSequence）
+    /// </summary>
+    private const string DefaultSegmentsDescription =
+        "segments:CompanyCode,DepartmentCode,PrefixCode,DateSequence";
+
+    private const string SegmentsCompanyLevelDescription =
+        "segments:CompanyCode,PrefixCode,DateSequence";
+    private const string SegmentsCompanyNoDateDescription =
+        "segments:CompanyCode,PrefixCode,Sequence";
+    private const string SegmentsWithDepartmentNoDateDescription =
+        "segments:CompanyCode,DepartmentCode,PrefixCode,Sequence";
+
+    /// <summary>
+    /// 规范化编号规则默认值（流水位数、步长、重置周期、日期格式 none、段配置、分隔符）
+    /// </summary>
+    /// <param name="rule">编号规则</param>
+    private static void NormalizeNumberingRule(TaktNumbering rule)
+    {
+        if (rule.SequenceLength <= 0)
+        {
+            rule.SequenceLength = 6;
+        }
+        if (rule.SequenceStep <= 0)
+        {
+            rule.SequenceStep = 1;
+        }
+        if (string.IsNullOrWhiteSpace(rule.ResetPeriod))
+        {
+            rule.ResetPeriod = "none";
+        }
+        if (string.Equals(rule.DateFormat?.Trim(), "none", StringComparison.OrdinalIgnoreCase))
+        {
+            rule.DateFormat = null;
+        }
+        else
+        {
+            rule.DateFormat = TaktNumberingHelper.NormalizeSupportedDateFormat(rule.DateFormat);
+        }
+        if (TaktNumberingHelper.TryResolveRequiredResetPeriod(rule.DateFormat, out var requiredResetPeriod))
+        {
+            rule.ResetPeriod = requiredResetPeriod;
+        }
+        else
+        {
+            rule.ResetPeriod = TaktNumberingHelper.NormalizeResetPeriod(rule.ResetPeriod);
+        }
+        MigrateLegacySegmentDescription(rule);
+        rule.DocumentType = TaktNumberingHelper.NormalizeDocumentType(rule.DocumentType);
+        if (string.IsNullOrWhiteSpace(rule.Separator))
+        {
+            rule.Separator = "-";
+        }
+    }
+
+    /// <summary>
+    /// 将旧版 segments（含 DocumentType 或 DateFormat+Sequence 分列）迁移为新段配置
+    /// </summary>
+    /// <param name="description">原始 Description</param>
+    /// <returns>有效段配置</returns>
+    private static string ResolveEffectiveSegmentDescription(string? description)
+    {
+        var text = description?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(text)
+            || !text.StartsWith("segments:", StringComparison.OrdinalIgnoreCase))
+        {
+            return DefaultSegmentsDescription;
+        }
+        var body = text["segments:".Length..];
+        var isLegacy = body.Contains("DocumentType", StringComparison.OrdinalIgnoreCase)
+            || body.Contains("DateFormat,Sequence", StringComparison.OrdinalIgnoreCase);
+        if (!isLegacy)
+        {
+            return text;
+        }
+        var hasDepartment = body.Contains("DepartmentCode", StringComparison.OrdinalIgnoreCase);
+        var hasDate = body.Contains("DateFormat", StringComparison.OrdinalIgnoreCase)
+            || body.Contains("DateSequence", StringComparison.OrdinalIgnoreCase);
+        if (hasDepartment)
+        {
+            return hasDate ? DefaultSegmentsDescription : SegmentsWithDepartmentNoDateDescription;
+        }
+        return hasDate ? SegmentsCompanyLevelDescription : SegmentsCompanyNoDateDescription;
+    }
+
+    /// <summary>
+    /// 将旧版 segments 写入实体 Description
+    /// </summary>
+    /// <param name="rule">编号规则</param>
+    private static void MigrateLegacySegmentDescription(TaktNumbering rule)
+    {
+        rule.Description = TaktNumberingHelper.NormalizeSegmentDescription(
+            ResolveEffectiveSegmentDescription(rule.Description));
+    }
+
+    /// <summary>
+    /// 创建/导入时写入起始编码 ExampleCode 与 CurrentSequence（更新规则时不走此方法）
+    /// </summary>
+    /// <param name="entity">待持久化的编号规则</param>
+    /// <param name="exampleCodeInput">起始编码</param>
+    /// <param name="autoGenerateWhenEmpty">为空时是否按规则自动生成初始编码（仅导入场景）</param>
+    private static void ApplyExampleCodeOnCreate(
+        TaktNumbering entity,
+        string exampleCodeInput,
+        bool autoGenerateWhenEmpty)
+    {
+        var now = DateTime.Now;
+        if (string.IsNullOrWhiteSpace(exampleCodeInput))
+        {
+            if (!autoGenerateWhenEmpty)
+            {
+                throw new TaktBusinessException("起始编码不能为空");
+            }
+            var (code, sequence) = BuildInitialExampleCode(entity, now);
+            entity.ExampleCode = code;
+            entity.CurrentSequence = sequence;
+            return;
+        }
+        entity.ExampleCode = exampleCodeInput.Trim();
+        if (!TryParseCurrentSequenceFromExampleCode(
+                entity.ExampleCode,
+                entity.SequenceLength,
+                entity.Separator,
+                out var currentSequence))
+        {
+            throw new TaktBusinessException("起始编码末段须为有效流水号");
+        }
+        entity.CurrentSequence = currentSequence;
+    }
+
+    /// <summary>
+    /// 按规则生成初始业务编号（首个流水号 = 步长，与预览逻辑一致）
+    /// </summary>
+    /// <param name="rule">编号规则</param>
+    /// <param name="referenceTime">参考时间</param>
+    /// <returns>起始编码与当前流水号</returns>
+    private static (string ExampleCode, int CurrentSequence) BuildInitialExampleCode(
+        TaktNumbering rule,
+        DateTime referenceTime)
+    {
+        var step = rule.SequenceStep <= 0 ? 1 : rule.SequenceStep;
+        var initialSequence = step;
+        var code = FormatBusinessCode(rule, initialSequence, referenceTime);
+        return (code, initialSequence);
+    }
+
+    /// <summary>
+    /// 按规则生成下一个业务编号（含重置周期判断）
+    /// </summary>
+    /// <param name="rule">编号规则（会临时修改 CurrentSequence 以应用重置）</param>
+    /// <param name="now">当前时间</param>
+    /// <returns>业务编号与下一流水号</returns>
+    private static (string BusinessCode, int NextSequence) BuildNextBusinessCode(TaktNumbering rule, DateTime now)
+    {
+        if (ShouldResetSequence(rule.ResetPeriod, rule.UpdatedAt, now))
+        {
+            rule.CurrentSequence = 0;
+        }
+        var step = rule.SequenceStep <= 0 ? 1 : rule.SequenceStep;
+        var nextSequence = checked(rule.CurrentSequence + step);
+        var code = FormatBusinessCode(rule, nextSequence, now);
+        return (code, nextSequence);
+    }
+
+    /// <summary>
+    /// 从起始编码末段解析当前流水号（末段须为纯数字，如 SO-20250120-000001 → 1）
+    /// </summary>
+    /// <param name="exampleCode">起始编码</param>
+    /// <param name="sequenceLength">流水位数（未传有效值时不校验位数）</param>
+    /// <param name="separator">规则分隔符（单字符时优先按此分段）</param>
+    /// <param name="currentSequence">解析出的流水号</param>
+    /// <returns>是否解析成功</returns>
+    private static bool TryParseCurrentSequenceFromExampleCode(
+        string exampleCode,
+        int sequenceLength,
+        string? separator,
+        out int currentSequence)
+    {
+        currentSequence = 0;
+        if (string.IsNullOrWhiteSpace(exampleCode))
+        {
+            return false;
+        }
+        var trimmed = exampleCode.Trim();
+        var lastSegment = trimmed;
+        var sep = separator?.Trim();
+        if (!string.IsNullOrEmpty(sep) && sep.Length == 1)
+        {
+            var idx = trimmed.LastIndexOf(sep[0]);
+            if (idx >= 0)
+            {
+                lastSegment = trimmed[(idx + 1)..];
+            }
+        }
+        else
+        {
+            var lastSeparator = Math.Max(trimmed.LastIndexOf('-'), trimmed.LastIndexOf('_'));
+            lastSegment = lastSeparator >= 0 ? trimmed[(lastSeparator + 1)..] : trimmed;
+        }
+        if (string.IsNullOrWhiteSpace(lastSegment) || lastSegment.Length > 18)
+        {
+            return false;
+        }
+        for (var i = 0; i < lastSegment.Length; i++)
+        {
+            if (!char.IsDigit(lastSegment[i]))
+            {
+                return false;
+            }
+        }
+        if (!int.TryParse(lastSegment, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out var parsed)
+            || parsed < 0)
+        {
+            return false;
+        }
+        if (sequenceLength > 0 && lastSegment.Length > sequenceLength)
+        {
+            return false;
+        }
+        currentSequence = parsed;
+        return true;
+    }
+
+    /// <summary>
     /// 是否应根据重置周期将流水号归零
     /// </summary>
-    /// <param name="resetPeriod">重置周期（daily/monthly/yearly/none）</param>
+    /// <param name="resetPeriod">重置周期（none/day/month/year/hour；兼容 daily/monthly/yearly/hourly）</param>
     /// <param name="lastUpdatedAt">规则上次更新时间</param>
     /// <param name="now">当前时间</param>
     /// <returns>是否重置</returns>
@@ -659,9 +899,13 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         var last = lastUpdatedAt.Value;
         return period switch
         {
-            "daily" => last.Date < now.Date,
-            "monthly" => last.Year < now.Year || (last.Year == now.Year && last.Month < now.Month),
-            "yearly" => last.Year < now.Year,
+            "day" or "daily" => last.Date < now.Date,
+            "month" or "monthly" => last.Year < now.Year || (last.Year == now.Year && last.Month < now.Month),
+            "year" or "yearly" => last.Year < now.Year,
+            "hour" or "hourly" => last.Year != now.Year
+                || last.Month != now.Month
+                || last.Day != now.Day
+                || last.Hour != now.Hour,
             _ => false,
         };
     }
@@ -673,7 +917,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     /// <returns>段键列表（属性名或 Sequence）</returns>
     private static IReadOnlyList<string> ResolveSegmentKeys(TaktNumbering rule)
     {
-        var fromDescription = TryParseSegmentKeysFromDescription(rule.Description);
+        var fromDescription = TryParseSegmentKeysFromDescription(ResolveEffectiveSegmentDescription(rule.Description));
         return fromDescription ?? DefaultSegmentKeys;
     }
 
@@ -697,6 +941,13 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         {
             return sequence.ToString().PadLeft(sequenceLength, '0');
         }
+        if (segmentKey.Equals("DateSequence", StringComparison.OrdinalIgnoreCase))
+        {
+            var datePart = FormatDateSegment(rule.DateFormat, time);
+            var seqPart = sequence.ToString().PadLeft(sequenceLength, '0');
+            var combined = string.Concat(datePart, seqPart);
+            return string.IsNullOrWhiteSpace(combined) ? null : combined;
+        }
         if (segmentKey.Equals(nameof(TaktNumbering.DateFormat), StringComparison.OrdinalIgnoreCase))
         {
             return FormatDateSegment(rule.DateFormat, time);
@@ -718,7 +969,8 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         if (raw is string text)
         {
             var trimmed = text.Trim();
-            if (segmentKey.Equals(nameof(TaktNumbering.Prefix), StringComparison.OrdinalIgnoreCase))
+            if (segmentKey.Equals(nameof(TaktNumbering.PrefixCode), StringComparison.OrdinalIgnoreCase)
+                || segmentKey.Equals("Prefix", StringComparison.OrdinalIgnoreCase))
             {
                 return string.IsNullOrWhiteSpace(trimmed) ? null : TrimTrailingSeparators(trimmed);
             }
@@ -739,7 +991,8 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     /// <returns>属性信息；未找到返回 null</returns>
     private static PropertyInfo? ResolveSegmentProperty(string segmentKey)
     {
-        return SegmentPropertyCache.GetOrAdd(segmentKey, key =>
+        var normalizedKey = TaktNumberingHelper.NormalizeSegmentKey(segmentKey);
+        return SegmentPropertyCache.GetOrAdd(normalizedKey, key =>
         {
             for (var type = typeof(TaktNumbering); type != null; type = type.BaseType)
             {
@@ -789,7 +1042,8 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     /// <returns>日期段文本</returns>
     private static string FormatDateSegment(string? dateFormat, DateTime time)
     {
-        if (string.IsNullOrWhiteSpace(dateFormat))
+        if (string.IsNullOrWhiteSpace(dateFormat)
+            || dateFormat.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
         {
             return string.Empty;
         }
@@ -799,7 +1053,6 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             "yyyyMM" => time.ToString("yyyyMM"),
             "yyyyMMdd" => time.ToString("yyyyMMdd"),
             "yyyyMMddHH" => time.ToString("yyyyMMddHH"),
-            "yyyyMMddHHmm" => time.ToString("yyyyMMddHHmm"),
             _ => time.ToString(dateFormat.Trim()),
         };
     }

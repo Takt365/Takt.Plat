@@ -13,6 +13,8 @@
 using Takt.Application.Dtos.Code.Database;
 using Takt.Domain.Interfaces;
 using Takt.Shared.Exceptions;
+using Takt.Shared.Helpers;
+using Takt.Shared.Models;
 
 namespace Takt.Application.Services.Code.Database;
 
@@ -69,6 +71,41 @@ public class TaktDatabaseInfoService : TaktServiceBase, ITaktDatabaseInfoService
             TableName = t.Name ?? string.Empty,
             TableComment = t.Description
         }).ToList();
+    }
+
+    /// <summary>
+    /// 分页获取当前登录租户业务库下用户表摘要
+    /// </summary>
+    /// <param name="queryDto">分页与关键字查询</param>
+    /// <returns>分页结果</returns>
+    public async Task<TaktPagedResult<TaktDatabaseTableInfoDto>> GetDatabaseTableInfoPageListAsync(TaktDatabaseTableInfoQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        var tenantCode = CurrentTenantCode?.Trim();
+        if (string.IsNullOrWhiteSpace(tenantCode))
+        {
+            throw new TaktBusinessException("租户编码不能为空");
+        }
+        var pageIndex = TaktPagedClamp.NormalizePageIndex(queryDto.PageIndex);
+        var pageSize = TaktPagedClamp.NormalizePageSize(queryDto.PageSize);
+        var tables = await _schemaProvider.GetTablesAsync(tenantCode).ConfigureAwait(false);
+        var list = tables.Select(t => new TaktDatabaseTableInfoDto
+        {
+            TableName = t.Name ?? string.Empty,
+            TableComment = t.Description
+        }).ToList();
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            var keyword = queryDto.KeyWords.Trim().ToLowerInvariant();
+            list = list.Where(t =>
+                t.TableName.ToLowerInvariant().Contains(keyword) ||
+                (t.TableComment?.ToLowerInvariant().Contains(keyword) ?? false)).ToList();
+        }
+        list = list.OrderBy(t => t.TableName, StringComparer.OrdinalIgnoreCase).ToList();
+        var total = list.Count;
+        var skip = TaktPagedClamp.ComputeSkip(pageIndex, pageSize);
+        var pageData = list.Skip(skip).Take(pageSize).ToList();
+        return TaktPagedResult<TaktDatabaseTableInfoDto>.Create(pageData, total, pageIndex, pageSize);
     }
 
     /// <summary>

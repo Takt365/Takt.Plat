@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -34,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -47,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -60,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -73,8 +77,10 @@
                 <a-input
                   v-model:value="formState.plantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.plantcode') })"
-                  size="small"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.customerId"
                 />
               </a-form-item>
             </a-col>
@@ -86,8 +92,10 @@
                 <a-input
                   v-model:value="formState.customerCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.code') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.customerId"
                 />
               </a-form-item>
             </a-col>
@@ -99,7 +107,8 @@
                 <a-input
                   v-model:value="formState.customerName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.name') })"
-                  size="small"
+                  show-count
+                  :maxlength="80"
                   allow-clear
                 />
               </a-form-item>
@@ -112,7 +121,8 @@
                 <a-input
                   v-model:value="formState.customerShortName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.shortname') })"
-                  size="small"
+                  show-count
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
@@ -122,11 +132,10 @@
                 :label="t('entity.customer.type')"
                 name="customerType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.customerType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.type') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="logistics_customer_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.type') })"
                 />
               </a-form-item>
             </a-col>
@@ -138,7 +147,8 @@
                 <a-input
                   v-model:value="formState.industrySector"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.industrysector') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -151,7 +161,8 @@
                 <a-input
                   v-model:value="formState.customerTaxNumber"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.taxnumber') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -174,7 +185,8 @@
                 <a-input
                   v-model:value="formState.registrationCountry"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.registrationcountry') })"
-                  size="small"
+                  show-count
+                  :maxlength="2"
                   allow-clear
                 />
               </a-form-item>
@@ -188,7 +200,6 @@
                   v-model:value="formState.registrationAddress1"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.customer.registrationaddress1') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -201,7 +212,6 @@
                   v-model:value="formState.registrationAddress2"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.customer.registrationaddress2') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -214,7 +224,6 @@
                   v-model:value="formState.registrationAddress3"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.customer.registrationaddress3') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -226,7 +235,8 @@
                 <a-input
                   v-model:value="formState.customerPhone"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.phone') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -239,7 +249,8 @@
                 <a-input
                   v-model:value="formState.customerFax"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.fax') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -252,7 +263,8 @@
                 <a-input
                   v-model:value="formState.customerEmail"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.email') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -265,7 +277,8 @@
                 <a-input
                   v-model:value="formState.customerWebsite"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.website') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -278,7 +291,8 @@
                 <a-input
                   v-model:value="formState.contactPerson"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.contactperson') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -291,7 +305,8 @@
                 <a-input
                   v-model:value="formState.contactPhone"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.contactphone') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -314,7 +329,8 @@
                 <a-input
                   v-model:value="formState.contactEmail"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.contactemail') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -327,8 +343,10 @@
                 <a-input
                   v-model:value="formState.currencyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.currencycode') })"
-                  size="small"
+                  show-count
+                  :maxlength="10"
                   allow-clear
+                  :disabled="!!formData?.customerId"
                 />
               </a-form-item>
             </a-col>
@@ -337,11 +355,10 @@
                 :label="t('entity.customer.paymentterms')"
                 name="paymentTerms"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.paymentTerms"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.paymentterms') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="logistics_payment_terms_param"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.paymentterms') })"
                 />
               </a-form-item>
             </a-col>
@@ -350,11 +367,10 @@
                 :label="t('entity.customer.creditlevel')"
                 name="creditLevel"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.creditLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.creditlevel') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="logistics_credit_rating_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.creditlevel') })"
                 />
               </a-form-item>
             </a-col>
@@ -366,7 +382,6 @@
                 <a-input-number
                   v-model:value="formState.creditAmount"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.creditamount') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -376,11 +391,10 @@
                 :label="t('entity.customer.discountrate')"
                 name="discountRate"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.discountRate"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.discountrate') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="logistics_discount_rate_param"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.discountrate') })"
                 />
               </a-form-item>
             </a-col>
@@ -392,7 +406,8 @@
                 <a-input
                   v-model:value="formState.salesBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.salesby') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -402,11 +417,10 @@
                 :label="t('entity.customer.level')"
                 name="customerLevel"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.customerLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.level') })"
-                  size="small"
-                  style="width: 100%"
+                  dict-type="logistics_customer_level_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.level') })"
                 />
               </a-form-item>
             </a-col>
@@ -418,7 +432,6 @@
                 <a-input-number
                   v-model:value="formState.evaluationScore"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.evaluationscore') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -431,7 +444,6 @@
                 <a-input-number
                   v-model:value="formState.isQualified"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.isqualified') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -446,41 +458,40 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.customer.status')"
                 name="customerStatus"
               >
                 <TaktSelect
                   v-model:value="formState.customerStatus"
-                  dict-type="sys_normal_disable"
+                  dict-type="sys_normal_disable_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customer.status') })"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.customer.sortorder')"
-                name="sortOrder"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customer.sortorder') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
-              >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -493,15 +504,16 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-
     </a-tabs>
   </a-form>
 </template>
@@ -511,11 +523,13 @@
  * Takt客户信息实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/sales/customer/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { CustomerCreate } from '@/types/logistics/sales/customer'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -548,7 +562,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","customerCode","customerName","customerShortName","customerType","industrySector","customerTaxNumber","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","customerPhone","customerFax","customerEmail","customerWebsite","contactPerson","contactPhone","contactEmail","currencyCode","paymentTerms","creditLevel","creditAmount","discountRate","salesBy","customerLevel","evaluationScore","isQualified","customerStatus","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","customerCode","customerName","customerShortName","customerType","industrySector","customerTaxNumber","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","customerPhone","customerFax","customerEmail","customerWebsite","contactPerson","contactPhone","contactEmail","currencyCode","paymentTerms","creditLevel","creditAmount","discountRate","salesBy","customerLevel","evaluationScore","isQualified","customerStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -559,7 +573,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -567,18 +581,51 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  customerType: 0,
+  paymentTerms: 0,
+  creditLevel: 0,
+  discountRate: 0,
+  customerLevel: 0,
+  customerStatus: 1
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 customerId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.customerId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
 
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -615,13 +662,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  customerType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customer.type') }),
-      trigger: 'change'
-    }
-  ],
+  customerType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.type') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.type') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   currencyCode: [
     {
       required: true,
@@ -629,69 +682,110 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  paymentTerms: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customer.paymentterms') }),
-      trigger: 'change'
-    }
-  ],
-  creditLevel: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customer.creditlevel') }),
-      trigger: 'change'
-    }
-  ],
-  creditAmount: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customer.creditamount') }),
-      trigger: 'change'
-    }
-  ],
-  discountRate: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customer.discountrate') }),
-      trigger: 'change'
-    }
-  ],
-  customerLevel: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customer.level') }),
-      trigger: 'change'
-    }
-  ],
-  evaluationScore: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customer.evaluationscore') }),
-      trigger: 'change'
-    }
-  ],
-  isQualified: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customer.isqualified') }),
-      trigger: 'change'
-    }
-  ],
-  customerStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customer.status') }),
-      trigger: 'change'
-    }
-  ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customer.sortorder') }),
-      trigger: 'change'
-    }
-  ],
+  paymentTerms: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.paymentterms') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.paymentterms') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  creditLevel: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.creditlevel') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.creditlevel') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  creditAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.creditamount') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.creditamount') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  discountRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.discountrate') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.discountrate') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  customerLevel: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.level') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.level') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  evaluationScore: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.evaluationscore') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.evaluationscore') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isQualified: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.isqualified') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.isqualified') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  customerStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customer.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -702,15 +796,58 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('customerType' in payload) {
+    const rawcustomerType = payload.customerType
+    payload.customerType = typeof rawcustomerType === 'number' ? rawcustomerType : Number(rawcustomerType)
+  }
+  if ('paymentTerms' in payload) {
+    const rawpaymentTerms = payload.paymentTerms
+    payload.paymentTerms = typeof rawpaymentTerms === 'number' ? rawpaymentTerms : Number(rawpaymentTerms)
+  }
+  if ('creditLevel' in payload) {
+    const rawcreditLevel = payload.creditLevel
+    payload.creditLevel = typeof rawcreditLevel === 'number' ? rawcreditLevel : Number(rawcreditLevel)
+  }
+  if ('creditAmount' in payload) {
+    const rawcreditAmount = payload.creditAmount
+    payload.creditAmount = typeof rawcreditAmount === 'number' ? rawcreditAmount : Number(rawcreditAmount)
+  }
+  if ('discountRate' in payload) {
+    const rawdiscountRate = payload.discountRate
+    payload.discountRate = typeof rawdiscountRate === 'number' ? rawdiscountRate : Number(rawdiscountRate)
+  }
+  if ('customerLevel' in payload) {
+    const rawcustomerLevel = payload.customerLevel
+    payload.customerLevel = typeof rawcustomerLevel === 'number' ? rawcustomerLevel : Number(rawcustomerLevel)
+  }
+  if ('evaluationScore' in payload) {
+    const rawevaluationScore = payload.evaluationScore
+    payload.evaluationScore = typeof rawevaluationScore === 'number' ? rawevaluationScore : Number(rawevaluationScore)
+  }
+  if ('isQualified' in payload) {
+    const rawisQualified = payload.isQualified
+    payload.isQualified = typeof rawisQualified === 'number' ? rawisQualified : Number(rawisQualified)
+  }
+  if ('customerStatus' in payload) {
+    const rawcustomerStatus = payload.customerStatus
+    payload.customerStatus = typeof rawcustomerStatus === 'number' ? rawcustomerStatus : Number(rawcustomerStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.customerId)
 
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

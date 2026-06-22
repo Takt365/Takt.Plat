@@ -32,6 +32,7 @@ import { getMessageStatistics } from '@/api/foundation/message';
 import { getOnlineStatistics } from '@/api/foundation/online';
 import { useTenantStore } from '@/stores/identity/tenant';
 import { taktSignalRManager } from '@/utils/takt-signalr';
+import { executeForceLogoutAsync } from '@/bootstrap/takt-logout-flow';
 import { EventBus } from '@/utils/event-bus';
 import { createLogger } from '@/utils/logger';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
@@ -47,11 +48,6 @@ import type {
   QuartzTaskChangedEvent,
   QuartzTaskExecutedEvent,
 } from '@/types/foundation/quartz-signal-r';
-import {
-  STORE_I18N_FEEDBACK_CONNECT_SUCCESS,
-  STORE_I18N_FEEDBACK_SIGNALR_ERROR,
-  STORE_I18N_TIP_FORCE_LOGOUT,
-} from '@/utils/takt-store-i18n';
 
 const signalrStoreLogger = createLogger('signalr-store');
 
@@ -195,11 +191,8 @@ export const useSignalRStore = defineStore('signalr', () => {
    * 处理强退事件
    */
   function handleForceLogout(event: ForceLogoutEvent): void {
-    EventBus.emit('notification:show', {
-      type: 'warning',
-      message: event.message || translateLocaleMessage(STORE_I18N_TIP_FORCE_LOGOUT),
-    });
-    EventBus.emit('user:logout', undefined);
+    const message = event.message || translateLocaleMessage('common.tip.force.logout');
+    void executeForceLogoutAsync(message);
   }
 
   /**
@@ -291,7 +284,7 @@ export const useSignalRStore = defineStore('signalr', () => {
           broadcastMessages.value.push(msg);
           notify({
             type: 'info',
-            message: msg.messageTitle?.trim() || translateLocaleMessage('common.page.signalr.newMessage'),
+            message: msg.messageTitle?.trim() || translateLocaleMessage('common.page.signalr.new.message'),
             description: msg.messageContent,
             duration: 5,
           });
@@ -326,7 +319,7 @@ export const useSignalRStore = defineStore('signalr', () => {
         onOnlineMessage: (event) => {
           notify({
             type: 'success',
-            message: translateLocaleMessage(STORE_I18N_FEEDBACK_CONNECT_SUCCESS),
+            message: translateLocaleMessage('common.feedback.connect.success'),
             description: String(event.message ?? ''),
             duration: 5,
             center: {
@@ -345,7 +338,7 @@ export const useSignalRStore = defineStore('signalr', () => {
         onError: (error) => {
           EventBus.emit('notification:show', {
             type: 'error',
-            message: error.message || translateLocaleMessage(STORE_I18N_FEEDBACK_SIGNALR_ERROR),
+            message: error.message || translateLocaleMessage('common.feedback.signalr.error'),
           });
         },
       });

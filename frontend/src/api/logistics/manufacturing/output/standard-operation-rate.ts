@@ -41,9 +41,7 @@ export function getStandardOperationRateList(queryDto: any): Promise<TaktPagedRe
   return request<TaktPagedResult<StandardOperationRate>>({
     url: `${STANDARD_OPERATION_RATE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportStandardOperationRate(
     url: `${STANDARD_OPERATION_RATE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

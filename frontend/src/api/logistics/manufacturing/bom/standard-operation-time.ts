@@ -40,9 +40,7 @@ export function getStandardOperationTimeList(queryDto: any): Promise<TaktPagedRe
   return request<TaktPagedResult<StandardOperationTime>>({
     url: `${STANDARD_OPERATION_TIME_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportStandardOperationTime(
     url: `${STANDARD_OPERATION_TIME_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

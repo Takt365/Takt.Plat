@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostCenterService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本中心应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Accounting.Controlling;
 
@@ -31,6 +30,7 @@ namespace Takt.Application.Services.Accounting.Controlling;
 public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
 {
     private readonly ITaktCompanyRepository<TaktCostCenter> _costCenterRepository;
+    private readonly ITaktCompanyRepository<TaktCostCenterChangeLog> _costCenterChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,12 +38,14 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     /// 构造函数
     /// </summary>
     /// <param name="costCenterRepository">成本中心仓储</param>
+    /// <param name="costCenterChangeLogRepository">CostCenterChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktCostCenterService(
         ITaktCompanyRepository<TaktCostCenter> costCenterRepository,
+        ITaktCompanyRepository<TaktCostCenterChangeLog> costCenterChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -51,6 +53,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         : base(userContext, localizationService)
     {
         _costCenterRepository = costCenterRepository;
+        _costCenterChangeLogRepository = costCenterChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -86,8 +89,9 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         {
             return null;
         }
-        return entity.Adapt<TaktCostCenterDto>();
-    }
+        var dto = entity.Adapt<TaktCostCenterDto>();
+        await FillCostCenterDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取成本中心树形选项列表
@@ -186,6 +190,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             entity.SortOrder = _sortOrderGenerator.GenerateNext(entity.ParentId, maxSort);
         }
         entity = await _costCenterRepository.CreateAsync(entity);
+                await SaveCostCenterChildrenAsync(entity, dto);
         return await GetCostCenterByIdAsync(entity.Id) ?? entity.Adapt<TaktCostCenterDto>();
     }
 
@@ -212,6 +217,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             throw new TaktBusinessException("成本中心的CostCenterCode已存在");
         }
         await _costCenterRepository.UpdateAsync(entity);
+                await SaveCostCenterChildrenAsync(entity, dto);
         return await GetCostCenterByIdAsync(id) ?? throw new TaktBusinessException("成本中心不存在");
     }
 
@@ -222,12 +228,12 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     /// <returns>任务</returns>
     public async Task DeleteCostCenterByIdAsync(long id)
     {
-
-        var hasChildren = await _costCenterRepository.ExistsAsync(x => x.ParentId == id);
-        if (hasChildren)
+        var entity = await _costCenterRepository.GetByIdAsync(id);
+        if (entity == null)
         {
-            throw new TaktBusinessException("存在子节点，无法删除");
+            throw new TaktBusinessException("成本中心不存在或已删除");
         }
+        await _costCenterChangeLogRepository.DeleteAsync(x => x.CostCenterId == entity.Id);
         var deleted = await _costCenterRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -380,6 +386,54 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充成本中心详情（加载 OneToMany 子表：成本中心变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillCostCenterDetailsAsync(TaktCostCenterDto dto, TaktCostCenter entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 成本中心变更记录 → dto.ChangeLogs
+        var changelogs = await _costCenterChangeLogRepository.GetListAsync(x => x.CostCenterId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktCostCenterChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存成本中心子表级联（成本中心变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveCostCenterChildrenAsync(TaktCostCenter entity, TaktCostCenterCreateDto dto)
+    {
+        // 成本中心变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _costCenterChangeLogRepository.DeleteAsync(x => x.CostCenterId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktCostCenterChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.CostCenterId = entity.Id;
+            }
+            await _costCenterChangeLogRepository.DeleteAsync(x => x.CostCenterId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _costCenterChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -398,7 +452,6 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             exp = exp.And(x =>
                 (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
                 || (x.CostCenterName != null && x.CostCenterName.Contains(keywords))
-                || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ParentId).Contains(keywords)
                 || SqlFunc.ToString(x.CostCenterType).Contains(keywords)
                 || SqlFunc.ToString(x.ManagerId).Contains(keywords)
@@ -409,7 +462,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || SqlFunc.ToString(x.CostCenterStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
                 || SqlFunc.ToString(x.ValidTo).Contains(keywords)
@@ -425,16 +478,6 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         if (!string.IsNullOrEmpty(queryDto?.CostCenterName))
         {
             exp = exp.And(x => x.CostCenterName != null && x.CostCenterName.Contains(queryDto.CostCenterName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ShortName))
-        {
-            exp = exp.And(x => x.CostCenterName != null && x.CostCenterName.Contains(queryDto.ShortName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CostCenterDesc))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.CostCenterDesc));
         }
 
         if (queryDto?.ParentId.HasValue == true)
@@ -487,9 +530,9 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

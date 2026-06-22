@@ -58,14 +58,14 @@ public class TaktPostDto : TaktCompanyDtoBase
     public string? DeptName { get; set; }
 
     /// <summary>
-    /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+    /// 岗位类别（字典 sys_post_category；MGT/PRO/TEC/SUP/OPS）
     /// </summary>
-    public int PostType { get; set; }
+    public string PostCategory { get; set; } = "TEC";
 
     /// <summary>
-    /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
     /// </summary>
-    public int? PostLevel { get; set; }
+    public string PostLevel { get; set; } = "P1";
 
     /// <summary>
     /// 编制人数
@@ -80,22 +80,22 @@ public class TaktPostDto : TaktCompanyDtoBase
     /// <summary>
     /// 岗位职责
     /// </summary>
-    public string? Responsibilities { get; set; } = string.Empty;
+    public string Responsibilities { get; set; } = string.Empty;
 
     /// <summary>
     /// 任职要求
     /// </summary>
-    public string? Requirements { get; set; } = string.Empty;
+    public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
     /// </summary>
-    public int? EducationRequired { get; set; }
+    public int EducationRequired { get; set; } = 1;
 
     /// <summary>
     /// 工作经验要求（年）
     /// </summary>
-    public int? ExperienceYears { get; set; }
+    public int ExperienceYears { get; set; } = 1;
 
     /// <summary>
     /// 薪资范围（最低）
@@ -172,14 +172,14 @@ public class TaktPostQueryDto : TaktPagedQuery
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+    /// 岗位类别（字典 sys_post_category；MGT/PRO/TEC/SUP/OPS）
     /// </summary>
-    public int? PostType { get; set; }
+    public string? PostCategory { get; set; }
 
     /// <summary>
-    /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
     /// </summary>
-    public int? PostLevel { get; set; }
+    public string? PostLevel { get; set; }
 
     /// <summary>
     /// 编制人数
@@ -254,7 +254,7 @@ public class TaktPostQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -305,14 +305,14 @@ public class TaktPostCreateDto
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+    /// 岗位类别（字典 sys_post_category；MGT/PRO/TEC/SUP/OPS）
     /// </summary>
-    public int PostType { get; set; }
+    public string PostCategory { get; set; } = "TEC";
 
     /// <summary>
-    /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
     /// </summary>
-    public int? PostLevel { get; set; }
+    public string PostLevel { get; set; } = "P1";
 
     /// <summary>
     /// 编制人数
@@ -327,22 +327,22 @@ public class TaktPostCreateDto
     /// <summary>
     /// 岗位职责
     /// </summary>
-    public string? Responsibilities { get; set; } = string.Empty;
+    public string Responsibilities { get; set; } = string.Empty;
 
     /// <summary>
     /// 任职要求
     /// </summary>
-    public string? Requirements { get; set; } = string.Empty;
+    public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
     /// </summary>
-    public int? EducationRequired { get; set; }
+    public int EducationRequired { get; set; } = 1;
 
     /// <summary>
     /// 工作经验要求（年）
     /// </summary>
-    public int? ExperienceYears { get; set; }
+    public int ExperienceYears { get; set; } = 1;
 
     /// <summary>
     /// 薪资范围（最低）
@@ -382,7 +382,7 @@ public class TaktPostCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -433,6 +433,30 @@ public class TaktPostStatusDto
     /// </summary>
     [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
     public int PostStatus { get; set; }
+}
+
+// ========================================
+// Post 是否内置 DTO
+// ========================================
+
+/// <summary>
+/// Post 是否内置更新 DTO
+/// </summary>
+public class TaktPostBuiltInDto
+{
+    /// <summary>
+    /// PostID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long PostId { get; set; }
+
+    /// <summary>
+    /// 是否内置（字典 sys_yes_no_type；1=是，0=否）
+    /// </summary>
+    [Required(ErrorMessage = "是否内置不能为空")]
+    public int IsBuiltIn { get; set; }
 }
 
 // ========================================
@@ -495,14 +519,14 @@ public class TaktPostTemplateDto
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+    /// 岗位类别（字典 sys_post_category；MGT/PRO/TEC/SUP/OPS）
     /// </summary>
-    public int? PostType { get; set; }
+    public string? PostCategory { get; set; }
 
     /// <summary>
-    /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
     /// </summary>
-    public int? PostLevel { get; set; }
+    public string PostLevel { get; set; } = "P1";
 
     /// <summary>
     /// 编制人数
@@ -517,22 +541,22 @@ public class TaktPostTemplateDto
     /// <summary>
     /// 岗位职责
     /// </summary>
-    public string? Responsibilities { get; set; } = string.Empty;
+    public string Responsibilities { get; set; } = string.Empty;
 
     /// <summary>
     /// 任职要求
     /// </summary>
-    public string? Requirements { get; set; } = string.Empty;
+    public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
     /// </summary>
-    public int? EducationRequired { get; set; }
+    public int EducationRequired { get; set; } = 1;
 
     /// <summary>
     /// 工作经验要求（年）
     /// </summary>
-    public int? ExperienceYears { get; set; }
+    public int ExperienceYears { get; set; } = 1;
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
@@ -542,7 +566,7 @@ public class TaktPostTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -588,14 +612,14 @@ public class TaktPostImportDto
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+    /// 岗位类别（字典 sys_post_category；MGT/PRO/TEC/SUP/OPS）
     /// </summary>
-    public int? PostType { get; set; }
+    public string? PostCategory { get; set; }
 
     /// <summary>
-    /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
     /// </summary>
-    public int? PostLevel { get; set; }
+    public string PostLevel { get; set; } = "P1";
 
     /// <summary>
     /// 编制人数
@@ -610,22 +634,22 @@ public class TaktPostImportDto
     /// <summary>
     /// 岗位职责
     /// </summary>
-    public string? Responsibilities { get; set; } = string.Empty;
+    public string Responsibilities { get; set; } = string.Empty;
 
     /// <summary>
     /// 任职要求
     /// </summary>
-    public string? Requirements { get; set; } = string.Empty;
+    public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
     /// </summary>
-    public int? EducationRequired { get; set; }
+    public int EducationRequired { get; set; } = 1;
 
     /// <summary>
     /// 工作经验要求（年）
     /// </summary>
-    public int? ExperienceYears { get; set; }
+    public int ExperienceYears { get; set; } = 1;
 
     /// <summary>
     /// 状态（1=启用，0=禁用）
@@ -635,7 +659,7 @@ public class TaktPostImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -682,14 +706,14 @@ public class TaktPostExportDto
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类型（0=管理岗，1=技术岗，2=业务岗，3=职能岗，4=操作岗）
+    /// 岗位类别（字典 sys_post_category；MGT/PRO/TEC/SUP/OPS）
     /// </summary>
-    public int PostType { get; set; }
+    public string PostCategory { get; set; } = "TEC";
 
     /// <summary>
-    /// 岗位职级（0=一线/基层，1=技术/骨干层，2=管理/决策层）
+    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
     /// </summary>
-    public int? PostLevel { get; set; }
+    public string PostLevel { get; set; } = "P1";
 
     /// <summary>
     /// 编制人数
@@ -704,22 +728,22 @@ public class TaktPostExportDto
     /// <summary>
     /// 岗位职责
     /// </summary>
-    public string? Responsibilities { get; set; } = string.Empty;
+    public string Responsibilities { get; set; } = string.Empty;
 
     /// <summary>
     /// 任职要求
     /// </summary>
-    public string? Requirements { get; set; } = string.Empty;
+    public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
     /// </summary>
-    public int? EducationRequired { get; set; }
+    public int EducationRequired { get; set; } = 1;
 
     /// <summary>
     /// 工作经验要求（年）
     /// </summary>
-    public int? ExperienceYears { get; set; }
+    public int ExperienceYears { get; set; } = 1;
 
     /// <summary>
     /// 薪资范围（最低）
@@ -754,7 +778,7 @@ public class TaktPostExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

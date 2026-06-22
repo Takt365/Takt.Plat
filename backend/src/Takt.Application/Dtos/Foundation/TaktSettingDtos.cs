@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktSettingDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-14
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Setting 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSetting 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Foundation;
 
@@ -59,27 +58,27 @@ public class TaktSettingDto : TaktCompanyDtoBase
     /// <summary>
     /// 设置类别（0=前端，1=后端）
     /// </summary>
-    public int SettingGroup { get; set; }
+    public int SettingGroup { get; set; } = 0;
 
     /// <summary>
     /// 值类型（用于前端渲染不同的输入控件）
     /// </summary>
-    public int ValueType { get; set; }
+    public int ValueType { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（0=否，1=是，系统内置的不可删除）
+    /// 是否内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 是否只读（0=否，1=是，只读设置不可修改）
+    /// 是否只读（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int IsReadonly { get; set; }
+    public int IsReadonly { get; set; } = 0;
 
     /// <summary>
-    /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+    /// 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int IsEncrypted { get; set; }
+    public int IsEncrypted { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -139,17 +138,17 @@ public class TaktSettingQueryDto : TaktPagedQuery
     public int? ValueType { get; set; }
 
     /// <summary>
-    /// 是否内置（0=否，1=是，系统内置的不可删除）
+    /// 是否内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 是否只读（0=否，1=是，只读设置不可修改）
+    /// 是否只读（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsReadonly { get; set; }
 
     /// <summary>
-    /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+    /// 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsEncrypted { get; set; }
 
@@ -171,7 +170,7 @@ public class TaktSettingQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -228,37 +227,32 @@ public class TaktSettingCreateDto
     /// <summary>
     /// 设置类别（0=前端，1=后端）
     /// </summary>
-    public int SettingGroup { get; set; }
+    public int SettingGroup { get; set; } = 0;
 
     /// <summary>
     /// 值类型（用于前端渲染不同的输入控件）
     /// </summary>
-    public int ValueType { get; set; }
+    public int ValueType { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（0=否，1=是，系统内置的不可删除）
+    /// 是否内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 是否只读（0=否，1=是，只读设置不可修改）
+    /// 是否只读（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int IsReadonly { get; set; }
+    public int IsReadonly { get; set; } = 0;
 
     /// <summary>
-    /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+    /// 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int IsEncrypted { get; set; }
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int IsEncrypted { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -361,29 +355,24 @@ public class TaktSettingTemplateDto
     public int? ValueType { get; set; }
 
     /// <summary>
-    /// 是否内置（0=否，1=是，系统内置的不可删除）
+    /// 是否内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 是否只读（0=否，1=是，只读设置不可修改）
+    /// 是否只读（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsReadonly { get; set; }
 
     /// <summary>
-    /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+    /// 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsEncrypted { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -443,29 +432,24 @@ public class TaktSettingImportDto
     public int? ValueType { get; set; }
 
     /// <summary>
-    /// 是否内置（0=否，1=是，系统内置的不可删除）
+    /// 是否内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 是否只读（0=否，1=是，只读设置不可修改）
+    /// 是否只读（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsReadonly { get; set; }
 
     /// <summary>
-    /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+    /// 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsEncrypted { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -518,27 +502,27 @@ public class TaktSettingExportDto
     /// <summary>
     /// 设置类别（0=前端，1=后端）
     /// </summary>
-    public int SettingGroup { get; set; }
+    public int SettingGroup { get; set; } = 0;
 
     /// <summary>
     /// 值类型（用于前端渲染不同的输入控件）
     /// </summary>
-    public int ValueType { get; set; }
+    public int ValueType { get; set; } = 0;
 
     /// <summary>
-    /// 是否内置（0=否，1=是，系统内置的不可删除）
+    /// 是否内置（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 是否只读（0=否，1=是，只读设置不可修改）
+    /// 是否只读（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int IsReadonly { get; set; }
+    public int IsReadonly { get; set; } = 0;
 
     /// <summary>
-    /// 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+    /// 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    public int IsEncrypted { get; set; }
+    public int IsEncrypted { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -548,7 +532,7 @@ public class TaktSettingExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

@@ -47,7 +47,7 @@ public class TaktGenTableColumnDto : TaktTenantDtoBase
     public string? GenTableName { get; set; }
 
     /// <summary>
-    /// 行号（字段在表中的排列顺序，从1开始）
+    /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
@@ -137,7 +137,7 @@ public class TaktGenTableColumnDto : TaktTenantDtoBase
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（EQ=等于，NE=不等于，GT=大于，GTE=大于等于，LT=小于，LTE=小于等于，LIKE=模糊，BETWEEN=范围）
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between；IsQuery=0 为空，IsQuery=1 必填）
     /// </summary>
     public string QueryType { get; set; } = string.Empty;
 
@@ -150,11 +150,6 @@ public class TaktGenTableColumnDto : TaktTenantDtoBase
     /// 字典类型（关联数据字典）
     /// </summary>
     public string? DictType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 排序序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
 
     /// <summary>
     /// 所属表配置（主表，本表 GenTableId 关联 TaktGenTable.Id）
@@ -186,7 +181,7 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     public long? GenTableId { get; set; }
 
     /// <summary>
-    /// 行号（字段在表中的排列顺序，从1开始）
+    /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
@@ -276,7 +271,7 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     public int? IsQuery { get; set; }
 
     /// <summary>
-    /// 查询方式（EQ=等于，NE=不等于，GT=大于，GTE=大于等于，LT=小于，LTE=小于等于，LIKE=模糊，BETWEEN=范围）
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between；IsQuery=0 为空，IsQuery=1 必填）
     /// </summary>
     public string? QueryType { get; set; } = string.Empty;
 
@@ -291,11 +286,6 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     public string? DictType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -308,7 +298,7 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -337,14 +327,13 @@ public class TaktGenTableColumnCreateDto
     public long GenTableId { get; set; }
 
     /// <summary>
-    /// 行号（字段在表中的排列顺序，从1开始）
+    /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
     /// 数据库列名称（唯一索引：租户内生成表+列名唯一，见 ix_gen_table_column_column_unique；snake_case，如 column_name）
     /// </summary>
-    [Required(ErrorMessage = "数据库列名称（唯一索引：租户内生成表+列名唯一，见 ix_gen_table_column_column_unique；snake_case，如 column_name）不能为空")]
     public string DatabaseColumnName { get; set; } = string.Empty;
 
     /// <summary>
@@ -355,19 +344,16 @@ public class TaktGenTableColumnCreateDto
     /// <summary>
     /// 数据库数据类型（如：varchar、int、datetime、decimal等）
     /// </summary>
-    [Required(ErrorMessage = "数据库数据类型（如：varchar、int、datetime、decimal等）不能为空")]
     public string DatabaseDataType { get; set; } = string.Empty;
 
     /// <summary>
     /// C#类型（对应C#数据类型，如：string、int、long、DateTime、decimal、bool、Guid等）
     /// </summary>
-    [Required(ErrorMessage = "C#类型（对应C#数据类型，如：string、int、long、DateTime、decimal、bool、Guid等）不能为空")]
     public string CsharpDataType { get; set; } = string.Empty;
 
     /// <summary>
     /// C#列名（C#属性名，首字母大写，帕斯卡命名法）
     /// </summary>
-    [Required(ErrorMessage = "C#列名（C#属性名，首字母大写，帕斯卡命名法）不能为空")]
     public string CsharpColumnName { get; set; } = string.Empty;
 
     /// <summary>
@@ -431,15 +417,13 @@ public class TaktGenTableColumnCreateDto
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（EQ=等于，NE=不等于，GT=大于，GTE=大于等于，LT=小于，LTE=小于等于，LIKE=模糊，BETWEEN=范围）
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between；IsQuery=0 为空，IsQuery=1 必填）
     /// </summary>
-    [Required(ErrorMessage = "查询方式（EQ=等于，NE=不等于，GT=大于，GTE=大于等于，LT=小于，LTE=小于等于，LIKE=模糊，BETWEEN=范围）不能为空")]
     public string QueryType { get; set; } = string.Empty;
 
     /// <summary>
     /// 显示类型（input=输入框，textarea=文本域，select=下拉框，checkbox=复选框，radio=单选框，date=日期控件，time=时间控件，image=图片上传，file=文件上传，slider=滑块，switch=开关，editor=富文本编辑器）
     /// </summary>
-    [Required(ErrorMessage = "显示类型（input=输入框，textarea=文本域，select=下拉框，checkbox=复选框，radio=单选框，date=日期控件，time=时间控件，image=图片上传，file=文件上传，slider=滑块，switch=开关，editor=富文本编辑器）不能为空")]
     public string HtmlType { get; set; } = string.Empty;
 
     /// <summary>
@@ -448,14 +432,9 @@ public class TaktGenTableColumnCreateDto
     public string? DictType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -477,7 +456,6 @@ public class TaktGenTableColumnUpdateDto : TaktGenTableColumnCreateDto
     /// <summary>
     /// GenTableColumnID（标识要更新的实体）
     /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long GenTableColumnId { get; set; }
@@ -496,16 +474,15 @@ public class TaktGenTableColumnSortDto
     /// <summary>
     /// GenTableColumnID
     /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long GenTableColumnId { get; set; }
 
     /// <summary>
-    /// 排序序号
+    /// 行号（项号/序号，固定步长=10）
     /// </summary>
-    [Required(ErrorMessage = "排序序号不能为空")]
-    public int SortOrder { get; set; } = 0;
+    [Required(ErrorMessage = "行号不能为空")]
+    public int LineNumber { get; set; } = 0;
 }
 
 // ========================================
@@ -529,7 +506,7 @@ public class TaktGenTableColumnTemplateDto
     public long? GenTableId { get; set; }
 
     /// <summary>
-    /// 行号（字段在表中的排列顺序，从1开始）
+    /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
@@ -586,7 +563,7 @@ public class TaktGenTableColumnTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -612,7 +589,7 @@ public class TaktGenTableColumnImportDto
     public long? GenTableId { get; set; }
 
     /// <summary>
-    /// 行号（字段在表中的排列顺序，从1开始）
+    /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
@@ -669,7 +646,7 @@ public class TaktGenTableColumnImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -701,7 +678,7 @@ public class TaktGenTableColumnExportDto
     public long GenTableId { get; set; }
 
     /// <summary>
-    /// 行号（字段在表中的排列顺序，从1开始）
+    /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
@@ -791,7 +768,7 @@ public class TaktGenTableColumnExportDto
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（EQ=等于，NE=不等于，GT=大于，GTE=大于等于，LT=小于，LTE=小于等于，LIKE=模糊，BETWEEN=范围）
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between；IsQuery=0 为空，IsQuery=1 必填）
     /// </summary>
     public string QueryType { get; set; } = string.Empty;
 
@@ -806,14 +783,9 @@ public class TaktGenTableColumnExportDto
     public string? DictType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

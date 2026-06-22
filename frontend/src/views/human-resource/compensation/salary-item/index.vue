@@ -80,37 +80,37 @@
         <template v-else-if="column.key === 'calcMethod'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'calcMethod')"
-            dict-type="hr_salary_calc_method"
+            dict-type="hr_salary_calc_method_type"
           />
         </template>
         <template v-else-if="column.key === 'isDeduction'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'isDeduction')"
-            dict-type="sys_yes_no"
+            dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'isTaxable'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'isTaxable')"
-            dict-type="sys_yes_no"
+            dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'includeSocialSecurityBase'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'includeSocialSecurityBase')"
-            dict-type="sys_yes_no"
+            dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'includeHousingFundBase'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'includeHousingFundBase')"
-            dict-type="sys_yes_no"
+            dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'itemStatus'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'itemStatus')"
-            dict-type="sys_normal_disable"
+            dict-type="sys_normal_disable_status"
           />
         </template>
       </template>
@@ -194,7 +194,7 @@
       <a-form-item :label="t('entity.salaryitem.calcmethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.calcMethod"
-          dict-type="hr_salary_calc_method"
+          dict-type="hr_salary_calc_method_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.calcmethod') })"
           allow-clear
         />
@@ -249,7 +249,7 @@
       <a-form-item :label="t('entity.salaryitem.isdeduction')">
         <TaktSelect
           v-model:value="advancedQueryForm.isDeduction"
-          dict-type="sys_yes_no"
+          dict-type="sys_yes_no_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.isdeduction') })"
           allow-clear
         />
@@ -259,7 +259,7 @@
       <a-form-item :label="t('entity.salaryitem.istaxable')">
         <TaktSelect
           v-model:value="advancedQueryForm.isTaxable"
-          dict-type="sys_yes_no"
+          dict-type="sys_yes_no_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.istaxable') })"
           allow-clear
         />
@@ -269,7 +269,7 @@
       <a-form-item :label="t('entity.salaryitem.includesocialsecuritybase')">
         <TaktSelect
           v-model:value="advancedQueryForm.includeSocialSecurityBase"
-          dict-type="sys_yes_no"
+          dict-type="sys_yes_no_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includesocialsecuritybase') })"
           allow-clear
         />
@@ -279,7 +279,7 @@
       <a-form-item :label="t('entity.salaryitem.includehousingfundbase')">
         <TaktSelect
           v-model:value="advancedQueryForm.includeHousingFundBase"
-          dict-type="sys_yes_no"
+          dict-type="sys_yes_no_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.includehousingfundbase') })"
           allow-clear
         />
@@ -298,7 +298,7 @@
       <a-form-item :label="t('entity.salaryitem.itemstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.itemStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemstatus') })"
           allow-clear
         />
@@ -335,11 +335,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -394,6 +394,7 @@
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 薪资项目管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/compensation/salary-item
@@ -426,9 +427,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<SalaryItem[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -470,7 +471,7 @@ const advancedQueryForm = ref({
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -494,7 +495,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'relatedPlant', label: t('entity.salaryitem.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -799,7 +800,7 @@ function handleReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
   currentPage.value = 1
@@ -990,7 +991,7 @@ function handleAdvancedQueryReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }

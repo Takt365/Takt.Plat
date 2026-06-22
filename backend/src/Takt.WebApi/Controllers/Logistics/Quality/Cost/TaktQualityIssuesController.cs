@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailuresController.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityIssuesController.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质问题应对主控制器
 // 
@@ -23,17 +23,17 @@ namespace Takt.WebApi.Controllers.Logistics.Quality.Cost;
 /// </summary>
 [ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "品质问题应对主")]
-public class TaktQualityFailuresController : TaktControllerBase
+public class TaktQualityIssuesController : TaktControllerBase
 {
-    private readonly ITaktQualityFailureService _qualityFailureService;
+    private readonly ITaktQualityIssueService _qualityIssueService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="qualityFailureService">品质问题应对主服务</param>
-    public TaktQualityFailuresController(ITaktQualityFailureService qualityFailureService)
+    /// <param name="qualityIssueService">品质问题应对主服务</param>
+    public TaktQualityIssuesController(ITaktQualityIssueService qualityIssueService)
     {
-        _qualityFailureService = qualityFailureService;
+        _qualityIssueService = qualityIssueService;
     }
 
     /// <summary>
@@ -41,13 +41,13 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:cost:failure:list", "品质问题应对主列表")]
+    [TaktPermission("logistics:quality:cost:issue:list", "品质问题应对主列表")]
     [HttpGet("list")]
-    public async Task<IActionResult> GetQualityFailureListAsync([FromQuery] TaktQualityFailureQueryDto queryDto)
+    public async Task<IActionResult> GetQualityIssueListAsync([FromQuery] TaktQualityIssueQueryDto queryDto)
     {
         try
         {
-            var result = await _qualityFailureService.GetQualityFailureListAsync(queryDto);
+            var result = await _qualityIssueService.GetQualityIssueListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
         }
         catch (Exception ex)
@@ -61,13 +61,13 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="id">品质问题应对主ID</param>
     /// <returns>品质问题应对主DTO</returns>
-    [TaktPermission("logistics:quality:cost:failure:query", "品质问题应对主详情")]
+    [TaktPermission("logistics:quality:cost:issue:query", "品质问题应对主详情")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetQualityFailureByIdAsync(long id)
+    public async Task<IActionResult> GetQualityIssueByIdAsync(long id)
     {
         try
         {
-            var result = await _qualityFailureService.GetQualityFailureByIdAsync(id);
+            var result = await _qualityIssueService.GetQualityIssueByIdAsync(id);
             if (result == null)
             {
                 return NotFound("品质问题应对主不存在");
@@ -84,13 +84,13 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// 获取品质问题应对主选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:cost:failure:query", "品质问题应对主选项")]
+    [TaktPermission("logistics:quality:cost:issue:query", "品质问题应对主选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQualityFailureOptionsAsync()
+    public async Task<IActionResult> GetQualityIssueOptionsAsync()
     {
         try
         {
-            var result = await _qualityFailureService.GetQualityFailureOptionsAsync();
+            var result = await _qualityIssueService.GetQualityIssueOptionsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -104,13 +104,13 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>品质问题应对主DTO</returns>
-    [TaktPermission("logistics:quality:cost:failure:create", "创建品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:issue:create", "创建品质问题应对主")]
     [HttpPost]
-    public async Task<IActionResult> CreateQualityFailureAsync([FromBody] TaktQualityFailureCreateDto dto)
+    public async Task<IActionResult> CreateQualityIssueAsync([FromBody] TaktQualityIssueCreateDto dto)
     {
         try
         {
-            var result = await _qualityFailureService.CreateQualityFailureAsync(dto);
+            var result = await _qualityIssueService.CreateQualityIssueAsync(dto);
             return Success(result, "创建成功");
         }
         catch (Exception ex)
@@ -125,13 +125,13 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// <param name="id">品质问题应对主ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>品质问题应对主DTO</returns>
-    [TaktPermission("logistics:quality:cost:failure:update", "更新品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:issue:update", "更新品质问题应对主")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateQualityFailureAsync(long id, [FromBody] TaktQualityFailureUpdateDto dto)
+    public async Task<IActionResult> UpdateQualityIssueAsync(long id, [FromBody] TaktQualityIssueUpdateDto dto)
     {
         try
         {
-            var result = await _qualityFailureService.UpdateQualityFailureAsync(id, dto);
+            var result = await _qualityIssueService.UpdateQualityIssueAsync(id, dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)
@@ -145,13 +145,13 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="id">品质问题应对主ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:failure:delete", "删除品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:issue:delete", "删除品质问题应对主")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteQualityFailureByIdAsync(long id)
+    public async Task<IActionResult> DeleteQualityIssueByIdAsync(long id)
     {
         try
         {
-            await _qualityFailureService.DeleteQualityFailureByIdAsync(id);
+            await _qualityIssueService.DeleteQualityIssueByIdAsync(id);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -165,13 +165,13 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:cost:failure:delete", "批量删除品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:issue:delete", "批量删除品质问题应对主")]
     [HttpDelete("batch")]
-    public async Task<IActionResult> DeleteQualityFailureBatchAsync([FromBody] IEnumerable<long> ids)
+    public async Task<IActionResult> DeleteQualityIssueBatchAsync([FromBody] IEnumerable<long> ids)
     {
         try
         {
-            await _qualityFailureService.DeleteQualityFailureBatchAsync(ids);
+            await _qualityIssueService.DeleteQualityIssueBatchAsync(ids);
             return Success("删除成功");
         }
         catch (Exception ex)
@@ -184,13 +184,13 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:failure:import", "获取品质问题应对主导入模板")]
+    [TaktPermission("logistics:quality:cost:issue:import", "获取品质问题应对主导入模板")]
     [HttpGet("template")]
-    public async Task<IActionResult> GetQualityFailureTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    public async Task<IActionResult> GetQualityIssueTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
         try
         {
-            var (resultFileName, content) = await _qualityFailureService.GetQualityFailureTemplateAsync(sheetName, templateName);
+            var (resultFileName, content) = await _qualityIssueService.GetQualityIssueTemplateAsync(sheetName, templateName);
             return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)
@@ -204,9 +204,9 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:cost:failure:import", "导入品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:issue:import", "导入品质问题应对主")]
     [HttpPost("import")]
-    public async Task<IActionResult> ImportQualityFailureAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    public async Task<IActionResult> ImportQualityIssueAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
         try
         {
@@ -216,7 +216,7 @@ public class TaktQualityFailuresController : TaktControllerBase
             }
 
             await using var stream = file.OpenReadStream();
-            var (success, fail, errors) = await _qualityFailureService.ImportQualityFailureAsync(stream, sheetName);
+            var (success, fail, errors) = await _qualityIssueService.ImportQualityIssueAsync(stream, sheetName);
             return Success(new
             {
                 SuccessCount = success,
@@ -234,13 +234,13 @@ public class TaktQualityFailuresController : TaktControllerBase
     /// 导出品质问题应对主
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:cost:failure:export", "导出品质问题应对主")]
+    [TaktPermission("logistics:quality:cost:issue:export", "导出品质问题应对主")]
     [HttpGet("export")]
-    public async Task<IActionResult> ExportQualityFailureAsync([FromQuery] TaktQualityFailureQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    public async Task<IActionResult> ExportQualityIssueAsync([FromQuery] TaktQualityIssueQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {
         try
         {
-            var (resultFileName, fileContent) = await _qualityFailureService.ExportQualityFailureAsync(query, sheetName, exportName);
+            var (resultFileName, fileContent) = await _qualityIssueService.ExportQualityIssueAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

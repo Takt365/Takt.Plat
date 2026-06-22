@@ -17,10 +17,11 @@ using Takt.Application.Dtos.Statistics.Report;
 using Takt.Domain.Entities.Statistics.Report;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Shared.Constants;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Options;
+using Takt.Shared.Models.Statistics;
 using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Statistics.Report;
@@ -39,6 +40,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
     private readonly ITaktCompanyRepository<TaktConfigurableOrderBy> _configurableOrderByRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktStatQueryExecutor _statQueryExecutor;
 
     /// <summary>
     /// 构造函数
@@ -52,6 +54,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
     /// <param name="configurableOrderByRepository">ConfigurableOrderBy仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="statQueryExecutor">SqlSugar Queryable 报表执行器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktConfigurableService(
@@ -64,6 +67,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         ITaktCompanyRepository<TaktConfigurableOrderBy> configurableOrderByRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
+        ITaktStatQueryExecutor statQueryExecutor,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -77,6 +81,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         _configurableOrderByRepository = configurableOrderByRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
+        _statQueryExecutor = statQueryExecutor;
     }
 
     /// <summary>
@@ -117,8 +122,12 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
     /// <inheritdoc />
     public async Task<List<TaktSelectOption>> GetConfigurableOptionsAsync()
     {
+        var currentUserId = CurrentUserId ?? 0;
         var list = await _configurableRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ReportStatus == 1,
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.ReportStatus == 1
+                && (x.IsPublic == 0 || x.CreatedBy == currentUserId),
             x => x.SortOrder,
             false);
         return list.Select(e => new TaktSelectOption
@@ -136,7 +145,6 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
     public async Task<TaktConfigurableDto> CreateConfigurableAsync(TaktConfigurableCreateDto dto)
     {
         var entity = dto.Adapt<TaktConfigurable>();
-        entity.IsBuiltIn = 0;
         var isUnique_ix_configurable_code_unique = await _uniqueValidator.IsUniqueAsync(
             _configurableRepository,
             x => x.ReportCode == entity.ReportCode);
@@ -147,10 +155,12 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         if (entity.SortOrder <= 0)
         {
             var maxSort = await _configurableRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.OwnerUserId == entity.OwnerUserId,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
                 x => x.SortOrder);
-            entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.OwnerUserId.GetValueOrDefault(), maxSort);
+            entity.SortOrder = _sortOrderGenerator.GenerateNext(maxSort);
         }
+        entity.MaxQueryRows = NormalizeConfigurableRowLimit(entity.MaxQueryRows);
+        entity.MaxExportRows = NormalizeConfigurableRowLimit(entity.MaxExportRows);
         entity = await _configurableRepository.CreateAsync(entity);
                 await SaveConfigurableChildrenAsync(entity, dto);
         return await GetConfigurableByIdAsync(entity.Id) ?? entity.Adapt<TaktConfigurableDto>();
@@ -169,9 +179,9 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         {
             throw new TaktBusinessException("自定义报表主不存在");
         }
-        var originalIsBuiltIn = entity.IsBuiltIn;
         dto.Adapt(entity);
-        entity.IsBuiltIn = originalIsBuiltIn;
+        entity.MaxQueryRows = NormalizeConfigurableRowLimit(entity.MaxQueryRows);
+        entity.MaxExportRows = NormalizeConfigurableRowLimit(entity.MaxExportRows);
         var isUnique_ix_configurable_code_unique = await _uniqueValidator.IsUniqueAsync(
             _configurableRepository,
             x => x.ReportCode == entity.ReportCode,
@@ -196,10 +206,6 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         if (entity == null)
         {
             throw new TaktBusinessException("自定义报表主不存在或已删除");
-        }
-        if (entity.IsBuiltIn == 1)
-        {
-            throw new TaktBusinessException("内置自定义报表主不允许删除");
         }
         await _configurableSourceRepository.DeleteAsync(x => x.ConfigurableId == entity.Id);
         await _configurableJoinRepository.DeleteAsync(x => x.ConfigurableId == entity.Id);
@@ -226,10 +232,6 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         {
             return;
         }
-        if (await _configurableRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
-        {
-            throw new TaktBusinessException("内置自定义报表主不允许删除");
-        }
         foreach (var id in idList)
         {
             await DeleteConfigurableByIdAsync(id);
@@ -247,10 +249,6 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         if (entity == null)
         {
             throw new TaktBusinessException("自定义报表主不存在");
-        }
-        if (entity.IsBuiltIn == 1 && dto.ReportStatus != 1)
-        {
-            throw new TaktBusinessException("不允许禁用内置自定义报表主");
         }
         entity.ReportStatus = dto.ReportStatus;
         await _configurableRepository.UpdateAsync(entity);
@@ -310,7 +308,6 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
             try
             {
                 var entity = rows[i].Adapt<TaktConfigurable>();
-                entity.IsBuiltIn = 0;
                 var importKey = $"{entity.ReportCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -326,10 +323,12 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
                 if (entity.SortOrder <= 0)
                 {
                     var maxSort = await _configurableRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.OwnerUserId == entity.OwnerUserId,
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
                         x => x.SortOrder);
-                    entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.OwnerUserId.GetValueOrDefault(), maxSort);
+                    entity.SortOrder = _sortOrderGenerator.GenerateNext(maxSort);
                 }
+                entity.MaxQueryRows = NormalizeConfigurableRowLimit(entity.MaxQueryRows);
+                entity.MaxExportRows = NormalizeConfigurableRowLimit(entity.MaxExportRows);
                 await _configurableRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -525,22 +524,7 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
             {
                 child.ConfigurableId = entity.Id;
             }
-            var selectionsNeedSort = selections.Where(c => c.SortOrder <= 0).ToList();
-            if (selectionsNeedSort.Count > 0)
-            {
-                var maxSort = await _configurableSelectionRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ConfigurableId == entity.Id,
-                    x => x.SortOrder);
-                var sortSeq = _sortOrderGenerator.GenerateSequenceForMaster(entity.Id, selectionsNeedSort.Count, maxSort).ToList();
-                var sortIdx = 0;
-                foreach (var child in selections)
-                {
-                    if (child.SortOrder <= 0)
-                    {
-                        child.SortOrder = sortSeq[sortIdx++];
-                    }
-                }
-            }
+            EnsureUniqueSelectionSortOrders(selections);
             await _configurableSelectionRepository.DeleteAsync(x => x.ConfigurableId == entity.Id);
             foreach (var child in selections)
             {
@@ -616,18 +600,509 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
             await _configurableOrderByRepository.CreateRangeAsync(orderbys);
         }
     }
+
+    /// <inheritdoc />
+    public async Task<TaktConfigurableRuntimeScreenDto> GetConfigurableRuntimeScreenAsync(long id)
+    {
+        var bundle = await LoadConfigurableRuntimeBundleAsync(id);
+        return new TaktConfigurableRuntimeScreenDto
+        {
+            ConfigurableId = bundle.Entity.Id,
+            ReportCode = bundle.Entity.ReportCode,
+            ReportName = bundle.Entity.ReportName,
+            MaxQueryRows = bundle.Entity.MaxQueryRows,
+            MaxExportRows = bundle.Entity.MaxExportRows,
+            Columns = BuildRuntimeColumns(bundle.Fields),
+            Selections = bundle.Selections
+                .OrderBy(x => x.SortOrder)
+                .ThenBy(x => x.Id)
+                .Select(x => new TaktConfigurableRuntimeSelectionDto
+                {
+                    ConfigurableSelectionId = x.Id,
+                    SortOrder = x.SortOrder,
+                    SourceAlias = x.SourceAlias,
+                    ColumnName = x.ColumnName,
+                    DisplayName = x.DisplayName,
+                    FilterOperator = x.FilterOperator,
+                    IsRequired = x.IsRequired,
+                    DefaultValue = x.DefaultValue,
+                    DefaultValueTo = x.DefaultValueTo,
+                })
+                .ToList(),
+        };
+    }
+
+    /// <inheritdoc />
+    public async Task<TaktConfigurableQueryResultDto> ExecuteConfigurableQueryAsync(
+        long id,
+        TaktConfigurableExecuteQueryDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(dto);
+        var bundle = await LoadConfigurableRuntimeBundleAsync(id);
+        return await ExecuteQueryFromBundleAsync(bundle, dto);
+    }
+
+    /// <inheritdoc />
+    public async Task<TaktConfigurableQueryResultDto> PreviewConfigurableQueryAsync(
+        TaktConfigurablePreviewQueryDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(dto);
+        var bundle = BuildPreviewRuntimeBundle(dto);
+        return await ExecuteQueryFromBundleAsync(bundle, dto);
+    }
+
+    /// <inheritdoc />
+    public async Task<(string fileName, byte[] content)> ExportConfigurableDataAsync(
+        long id,
+        TaktConfigurableExportDataDto dto,
+        string? sheetName = null,
+        string? fileName = null)
+    {
+        ArgumentNullException.ThrowIfNull(dto);
+        var bundle = await LoadConfigurableRuntimeBundleAsync(id);
+        var runtimeValues = BuildRuntimeSelectionValues(bundle.Selections, dto.SelectionValues);
+        var buildRequest = MapBuildRequest(bundle, runtimeValues);
+        var maxRows = ResolveRuntimeRowLimit(dto.RowLimit, bundle.Entity.MaxExportRows);
+        var queryResult = await ExecuteStatQueryTopAsync(buildRequest, maxRows);
+        var dictRows = queryResult.Rows
+            .Select(row => (IReadOnlyDictionary<string, object?>)row)
+            .ToList();
+        var resolvedSheet = string.IsNullOrWhiteSpace(sheetName)
+            ? TaktNamingHelper.DefaultSheetNameEnglish("ConfigurableData")
+            : sheetName;
+        var resolvedFileName = string.IsNullOrWhiteSpace(fileName)
+            ? $"{bundle.Entity.ReportCode}_data"
+            : fileName;
+        return await TaktExcelHelper.ExportDictionaryRowsAsync(
+            dictRows,
+            queryResult.OutputKeys,
+            queryResult.OutputLabels,
+            resolvedSheet,
+            resolvedFileName);
+    }
+
+    /// <summary>
+    /// 加载报表运行时定义（校验启用状态与归属）
+    /// </summary>
+    /// <param name="id">报表主键</param>
+    /// <returns>运行时定义包</returns>
+    private async Task<ConfigurableRuntimeBundle> LoadConfigurableRuntimeBundleAsync(long id)
+    {
+        var entity = await _configurableRepository.GetByIdAsync(id);
+        if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            ThrowBusinessException("自定义报表不存在");
+        }
+        if (entity.ReportStatus != 1)
+        {
+            ThrowBusinessException("报表已禁用，无法执行");
+        }
+        if (entity.IsPublic == 1 && CurrentUserId.HasValue && entity.CreatedBy != CurrentUserId.Value)
+        {
+            ThrowBusinessException("无权执行该私有报表");
+        }
+        var sources = await _configurableSourceRepository.GetListAsync(x => x.ConfigurableId == id);
+        if (sources.Count == 0)
+        {
+            ThrowBusinessException("报表未配置数据源");
+        }
+        var fields = await _configurableFieldRepository.GetListAsync(x => x.ConfigurableId == id);
+        if (fields.Count(x => x.IsVisible == 1) == 0)
+        {
+            ThrowBusinessException("报表未配置输出字段");
+        }
+        var joins = await _configurableJoinRepository.GetListAsync(x => x.ConfigurableId == id);
+        var selections = await _configurableSelectionRepository.GetListAsync(x => x.ConfigurableId == id);
+        EnsureUniqueSelectionSortOrders(selections);
+        var groupBys = await _configurableGroupByRepository.GetListAsync(x => x.ConfigurableId == id);
+        var orderBys = await _configurableOrderByRepository.GetListAsync(x => x.ConfigurableId == id);
+        return new ConfigurableRuntimeBundle(
+            entity,
+            sources,
+            joins,
+            fields,
+            selections,
+            groupBys,
+            orderBys);
+    }
+
+    /// <summary>
+    /// 由设计态 DTO 构建运行时定义包（不落库）
+    /// </summary>
+    /// <param name="dto">预览查询 DTO</param>
+    /// <returns>运行时定义包</returns>
+    private ConfigurableRuntimeBundle BuildPreviewRuntimeBundle(TaktConfigurablePreviewQueryDto dto)
+    {
+        var sources = dto.Sources?.Adapt<List<TaktConfigurableSource>>() ?? new List<TaktConfigurableSource>();
+        if (sources.Count == 0)
+        {
+            ThrowBusinessException("报表未配置数据源");
+        }
+        var fields = dto.Fields?.Adapt<List<TaktConfigurableField>>() ?? new List<TaktConfigurableField>();
+        if (fields.Count(x => x.IsVisible == 1) == 0)
+        {
+            ThrowBusinessException("报表未配置输出字段");
+        }
+        var joins = dto.Joins?.Adapt<List<TaktConfigurableJoin>>() ?? new List<TaktConfigurableJoin>();
+        var selections = dto.Selections?.Adapt<List<TaktConfigurableSelection>>() ?? new List<TaktConfigurableSelection>();
+        EnsureUniqueSelectionSortOrders(selections);
+        var groupBys = dto.GroupBys?.Adapt<List<TaktConfigurableGroupBy>>() ?? new List<TaktConfigurableGroupBy>();
+        var orderBys = dto.OrderBys?.Adapt<List<TaktConfigurableOrderBy>>() ?? new List<TaktConfigurableOrderBy>();
+        var maxQueryRows = NormalizeConfigurableRowLimit(dto.MaxQueryRows);
+        var entity = new TaktConfigurable
+        {
+            DistinctRows = dto.DistinctRows,
+            MaxQueryRows = maxQueryRows,
+            ReportStatus = 1,
+        };
+        return new ConfigurableRuntimeBundle(entity, sources, joins, fields, selections, groupBys, orderBys);
+    }
+
+    /// <summary>
+    /// 按运行时定义包执行分页查询
+    /// </summary>
+    /// <param name="bundle">运行时定义包</param>
+    /// <param name="dto">分页与筛选值</param>
+    /// <returns>查询结果</returns>
+    private async Task<TaktConfigurableQueryResultDto> ExecuteQueryFromBundleAsync(
+        ConfigurableRuntimeBundle bundle,
+        TaktConfigurableExecuteQueryDto dto)
+    {
+        var pageIndex = TaktPagedClamp.NormalizePageIndex(dto.PageIndex);
+        var queryRowCap = ResolveRuntimeRowLimit(dto.RowLimit, bundle.Entity.MaxQueryRows);
+        var maxPageSize = Math.Min(queryRowCap, TaktPagedClamp.DefaultMaxPageSize);
+        var pageSize = TaktPagedClamp.NormalizePageSize(dto.PageSize, maxPageSize);
+        var runtimeValues = BuildRuntimeSelectionValues(bundle.Selections, dto.SelectionValues);
+        var buildRequest = MapBuildRequest(bundle, runtimeValues);
+        var queryResult = await ExecuteStatQueryPagedAsync(
+            buildRequest,
+            pageIndex,
+            pageSize,
+            maxPageSize);
+        var cappedTotal = Math.Min(queryResult.Total, queryRowCap);
+        var skip = TaktPagedClamp.ComputeSkip(pageIndex, pageSize);
+        var rows = skip >= cappedTotal
+            ? new List<Dictionary<string, object?>>()
+            : queryResult.Rows.ToList();
+        var columns = queryResult.OutputKeys
+            .Select((key, index) => new TaktConfigurableRuntimeColumnDto
+            {
+                Key = key,
+                Label = queryResult.OutputLabels[index],
+            })
+            .ToList();
+        return new TaktConfigurableQueryResultDto
+        {
+            Columns = columns,
+            Rows = rows,
+            Total = cappedTotal,
+            PageIndex = pageIndex,
+            PageSize = pageSize,
+        };
+    }
+
+    /// <summary>
+    /// 将运行时定义包映射为 SqlSugar Queryable 编译请求
+    /// </summary>
+    /// <param name="bundle">运行时定义包</param>
+    /// <param name="runtimeValues">筛选值</param>
+    /// <returns>编译请求</returns>
+    private TaktStatQueryBuildRequest MapBuildRequest(
+        ConfigurableRuntimeBundle bundle,
+        IReadOnlyDictionary<long, TaktStatQuerySelectionValue> runtimeValues)
+    {
+        return TaktConfigurableQueryMapper.MapBuildRequest(
+            bundle.Entity,
+            CurrentTenantCode,
+            CurrentCompanyCode,
+            bundle.Sources,
+            bundle.Joins,
+            bundle.Fields,
+            bundle.Selections,
+            bundle.GroupBys,
+            bundle.OrderBys,
+            runtimeValues);
+    }
+
+    /// <summary>
+    /// 执行 SqlSugar Queryable 分页查询
+    /// </summary>
+    /// <param name="request">编译请求</param>
+    /// <param name="pageIndex">页码</param>
+    /// <param name="pageSize">每页大小</param>
+    /// <param name="maxPageSize">pageSize 上限</param>
+    /// <returns>分页结果</returns>
+    private async Task<TaktStatQueryPageResult> ExecuteStatQueryPagedAsync(
+        TaktStatQueryBuildRequest request,
+        int pageIndex,
+        int pageSize,
+        int maxPageSize)
+    {
+        try
+        {
+            return await _statQueryExecutor.ExecutePagedAsync(
+                request,
+                pageIndex,
+                pageSize,
+                maxPageSize);
+        }
+        catch (ArgumentException ex)
+        {
+            ThrowBusinessException(ex.Message);
+            return null!;
+        }
+    }
+
+    /// <summary>
+    /// 执行 SqlSugar Queryable 导出行数上限查询
+    /// </summary>
+    /// <param name="request">编译请求</param>
+    /// <param name="maxRows">最大行数</param>
+    /// <returns>查询结果</returns>
+    private async Task<TaktStatQueryPageResult> ExecuteStatQueryTopAsync(
+        TaktStatQueryBuildRequest request,
+        int maxRows)
+    {
+        try
+        {
+            return await _statQueryExecutor.ExecuteTopAsync(request, maxRows);
+        }
+        catch (ArgumentException ex)
+        {
+            ThrowBusinessException(ex.Message);
+            return null!;
+        }
+    }
+
+    /// <summary>
+    /// 构建运行时输出列（不含 SQL 编译）
+    /// </summary>
+    /// <param name="fields">输出字段</param>
+    /// <returns>列定义</returns>
+    private static List<TaktConfigurableRuntimeColumnDto> BuildRuntimeColumns(IReadOnlyList<TaktConfigurableField> fields)
+    {
+        return fields
+            .Where(x => x.IsVisible == 1)
+            .OrderBy(x => x.SortOrder)
+            .Select(field => new TaktConfigurableRuntimeColumnDto
+            {
+                Key = ResolveFieldOutputKey(field),
+                Label = string.IsNullOrWhiteSpace(field.DisplayName) ? field.ColumnName : field.DisplayName,
+            })
+            .ToList();
+    }
+
+    /// <summary>
+    /// 保证筛选项 SortOrder 唯一且从 1 递增（避免多条件共用同一输入键）
+    /// </summary>
+    /// <param name="selections">筛选定义</param>
+    private static void EnsureUniqueSelectionSortOrders(List<TaktConfigurableSelection> selections)
+    {
+        if (selections.Count == 0)
+        {
+            return;
+        }
+        var ordered = selections
+            .OrderBy(x => x.SortOrder)
+            .ThenBy(x => x.Id)
+            .ToList();
+        for (var i = 0; i < ordered.Count; i++)
+        {
+            ordered[i].SortOrder = i + 1;
+        }
+        selections.Clear();
+        selections.AddRange(ordered);
+    }
+
+    /// <summary>
+    /// 合并用户提交的筛选值（未提交或空值视为不限制，查询全部；不使用库内 DefaultValue 回填）
+    /// </summary>
+    /// <param name="selections">筛选定义</param>
+    /// <param name="inputValues">用户输入</param>
+    /// <returns>运行时筛选字典</returns>
+    private static Dictionary<long, TaktStatQuerySelectionValue> BuildRuntimeSelectionValues(
+        IReadOnlyList<TaktConfigurableSelection> selections,
+        IReadOnlyList<TaktConfigurableRuntimeSelectionValueDto>? inputValues)
+    {
+        var inputById = new Dictionary<long, TaktConfigurableRuntimeSelectionValueDto>();
+        var inputBySort = new Dictionary<int, TaktConfigurableRuntimeSelectionValueDto>();
+        if (inputValues != null)
+        {
+            foreach (var item in inputValues)
+            {
+                if (item.ConfigurableSelectionId > 0 && !inputById.ContainsKey(item.ConfigurableSelectionId))
+                {
+                    inputById[item.ConfigurableSelectionId] = item;
+                }
+                if (!inputBySort.ContainsKey(item.SortOrder))
+                {
+                    inputBySort[item.SortOrder] = item;
+                }
+            }
+        }
+        var result = new Dictionary<long, TaktStatQuerySelectionValue>();
+        foreach (var selection in selections)
+        {
+            TaktConfigurableRuntimeSelectionValueDto? input = null;
+            var hasInput = false;
+            if (selection.Id > 0 && inputById.TryGetValue(selection.Id, out var byId))
+            {
+                input = byId;
+                hasInput = true;
+            }
+            else if (inputBySort.TryGetValue(selection.SortOrder, out var bySort))
+            {
+                input = bySort;
+                hasInput = true;
+            }
+            if (!hasInput)
+            {
+                continue;
+            }
+            var value = input?.Value?.Trim();
+            var valueTo = input?.ValueTo?.Trim();
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                continue;
+            }
+            var runtimeKey = ResolveSelectionRuntimeKey(selection.Id, selection.SortOrder);
+            result[runtimeKey] = new TaktStatQuerySelectionValue
+            {
+                Value = value,
+                ValueTo = valueTo,
+                FilterOperator = input?.FilterOperator ?? 0,
+            };
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// 运行时筛选值字典键（持久化行用 Id；预览无 Id 时用 -SortOrder）
+    /// </summary>
+    /// <param name="selectionId">筛选项主键</param>
+    /// <param name="sortOrder">排序号</param>
+    /// <returns>运行时键</returns>
+    private static long ResolveSelectionRuntimeKey(long selectionId, int sortOrder) =>
+        selectionId > 0 ? selectionId : -sortOrder;
+
+    /// <summary>
+    /// 解析输出字段键名
+    /// </summary>
+    /// <param name="field">输出字段</param>
+    /// <returns>输出键</returns>
+    private static string ResolveFieldOutputKey(TaktConfigurableField field)
+    {
+        if (!string.IsNullOrWhiteSpace(field.OutputAlias))
+        {
+            return field.OutputAlias;
+        }
+        return $"{field.SourceAlias}_{field.ColumnName}";
+    }
+
+    /// <summary>
+    /// 报表运行时定义包
+    /// </summary>
+    private sealed class ConfigurableRuntimeBundle
+    {
+        /// <summary>
+        /// 初始化运行时定义包
+        /// </summary>
+        public ConfigurableRuntimeBundle(
+            TaktConfigurable entity,
+            List<TaktConfigurableSource> sources,
+            List<TaktConfigurableJoin> joins,
+            List<TaktConfigurableField> fields,
+            List<TaktConfigurableSelection> selections,
+            List<TaktConfigurableGroupBy> groupBys,
+            List<TaktConfigurableOrderBy> orderBys)
+        {
+            Entity = entity;
+            Sources = sources;
+            Joins = joins;
+            Fields = fields;
+            Selections = selections;
+            GroupBys = groupBys;
+            OrderBys = orderBys;
+        }
+
+        /// <summary>
+        /// 报表主表
+        /// </summary>
+        public TaktConfigurable Entity { get; }
+
+        /// <summary>
+        /// 数据源
+        /// </summary>
+        public List<TaktConfigurableSource> Sources { get; }
+
+        /// <summary>
+        /// 关联
+        /// </summary>
+        public List<TaktConfigurableJoin> Joins { get; }
+
+        /// <summary>
+        /// 输出字段
+        /// </summary>
+        public List<TaktConfigurableField> Fields { get; }
+
+        /// <summary>
+        /// 筛选
+        /// </summary>
+        public List<TaktConfigurableSelection> Selections { get; }
+
+        /// <summary>
+        /// 分组
+        /// </summary>
+        public List<TaktConfigurableGroupBy> GroupBys { get; }
+
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public List<TaktConfigurableOrderBy> OrderBys { get; }
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
+
+    /// <summary>
+    /// 规范化查询/导出行数（未配置用默认 500，上限 50000）
+    /// </summary>
+    /// <param name="value">原始行数</param>
+    /// <returns>合法行数</returns>
+    private static int NormalizeConfigurableRowLimit(int value)
+    {
+        if (value <= 0)
+        {
+            return TaktConfigurableConstants.DefaultRowLimit;
+        }
+        return Math.Min(value, TaktConfigurableConstants.MaxRowLimit);
+    }
+
+    /// <summary>
+    /// 解析运行时本次查询/导出行数（可选，默认 500，全局最大 50000，且不超过报表配置）
+    /// </summary>
+    /// <param name="dtoRowLimit">请求中的行数（0 表示默认）</param>
+    /// <param name="entityConfiguredLimit">报表配置的行数上限</param>
+    /// <returns>实际行数上限</returns>
+    private static int ResolveRuntimeRowLimit(int dtoRowLimit, int entityConfiguredLimit)
+    {
+        var requested = dtoRowLimit > 0 ? dtoRowLimit : TaktConfigurableConstants.DefaultRowLimit;
+        requested = Math.Min(requested, TaktConfigurableConstants.MaxRowLimit);
+        var entityCap = NormalizeConfigurableRowLimit(entityConfiguredLimit);
+        return Math.Min(requested, entityCap);
+    }
 
     /// <summary>
     /// 构建自定义报表主查询表达式
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>查询表达式</returns>
-    private static Expression<Func<TaktConfigurable, bool>> QueryExpression(TaktConfigurableQueryDto? queryDto)
+    private Expression<Func<TaktConfigurable, bool>> QueryExpression(TaktConfigurableQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktConfigurable>();
+        var currentUserId = CurrentUserId ?? 0;
+        exp = exp.And(x => x.IsPublic == 0 || x.CreatedBy == currentUserId);
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
@@ -640,12 +1115,11 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
                 || SqlFunc.ToString(x.DistinctRows).Contains(keywords)
                 || SqlFunc.ToString(x.MaxExportRows).Contains(keywords)
                 || SqlFunc.ToString(x.MaxQueryRows).Contains(keywords)
-                || SqlFunc.ToString(x.OwnerUserId).Contains(keywords)
-                || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
+                || SqlFunc.ToString(x.IsPublic).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.ReportStatus).Contains(keywords)
                 || (x.Description != null && x.Description.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -686,14 +1160,9 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
             exp = exp.And(x => x.MaxQueryRows == queryDto.MaxQueryRows);
         }
 
-        if (queryDto?.OwnerUserId.HasValue == true)
+        if (queryDto?.IsPublic.HasValue == true)
         {
-            exp = exp.And(x => x.OwnerUserId == queryDto.OwnerUserId);
-        }
-
-        if (queryDto?.IsBuiltIn.HasValue == true)
-        {
-            exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
+            exp = exp.And(x => x.IsPublic == queryDto.IsPublic);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -711,9 +1180,9 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
             exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

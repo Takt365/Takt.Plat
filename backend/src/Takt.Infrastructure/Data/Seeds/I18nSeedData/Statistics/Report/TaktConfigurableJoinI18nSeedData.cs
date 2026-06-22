@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Report
 // 文件名称：TaktConfigurableJoinI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConfigurableJoin 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,92 +75,92 @@ public class TaktConfigurableJoinI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktConfigurableJoin 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.configurablejoin._self / entity.configurablejoin.{{field}}；ResourceGroup=9；ResourceType=0
+    /// I18nKey：entity.configurablejoin._self / entity.configurablejoin.{{field}}；ResourceGroup=Report；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetConfigurableJoinTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.configurablejoin._self
-            new TranslationSeedItem("entity.configurablejoin._self", "en-US", "Configurable Join Information", "实体名称"),
+            new TranslationSeedItem("entity.configurablejoin._self", "en-US", "Configurable Join Information_us", "实体名称"),
             // entity.configurablejoin._self
-            new TranslationSeedItem("entity.configurablejoin._self", "ja-JP", "自定义报表多表关联定义信息", "实体名称"),
+            new TranslationSeedItem("entity.configurablejoin._self", "ja-JP", "自定义报表多表关联定义信息_jp", "实体名称"),
             // entity.configurablejoin._self
             new TranslationSeedItem("entity.configurablejoin._self", "zh-CN", "自定义报表多表关联定义信息", "实体名称"),
             // entity.configurablejoin._self
-            new TranslationSeedItem("entity.configurablejoin._self", "zh-HK", "自定义报表多表关联定义信息", "实体名称"),
+            new TranslationSeedItem("entity.configurablejoin._self", "zh-HK", "自定义报表多表关联定义信息_hk", "实体名称"),
 
             // entity.configurablejoin.configurableid
-            new TranslationSeedItem("entity.configurablejoin.configurableid", "en-US", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablejoin.configurableid", "en-US", "报表主表ID_us", "关联报表主表 ID（主子表关系）"),
             // entity.configurablejoin.configurableid
-            new TranslationSeedItem("entity.configurablejoin.configurableid", "ja-JP", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablejoin.configurableid", "ja-JP", "报表主表ID_jp", "关联报表主表 ID（主子表关系）"),
             // entity.configurablejoin.configurableid
             new TranslationSeedItem("entity.configurablejoin.configurableid", "zh-CN", "报表主表ID", "关联报表主表 ID（主子表关系）"),
             // entity.configurablejoin.configurableid
-            new TranslationSeedItem("entity.configurablejoin.configurableid", "zh-HK", "报表主表ID", "关联报表主表 ID（主子表关系）"),
+            new TranslationSeedItem("entity.configurablejoin.configurableid", "zh-HK", "报表主表ID_hk", "关联报表主表 ID（主子表关系）"),
 
             // entity.configurablejoin.jointype
-            new TranslationSeedItem("entity.configurablejoin.jointype", "en-US", "关联类型", "关联类型（内/左/右/全连接）"),
+            new TranslationSeedItem("entity.configurablejoin.jointype", "en-US", "关联类型_us", "关联类型（内/左/右/全连接）"),
             // entity.configurablejoin.jointype
-            new TranslationSeedItem("entity.configurablejoin.jointype", "ja-JP", "关联类型", "关联类型（内/左/右/全连接）"),
+            new TranslationSeedItem("entity.configurablejoin.jointype", "ja-JP", "关联类型_jp", "关联类型（内/左/右/全连接）"),
             // entity.configurablejoin.jointype
             new TranslationSeedItem("entity.configurablejoin.jointype", "zh-CN", "关联类型", "关联类型（内/左/右/全连接）"),
             // entity.configurablejoin.jointype
-            new TranslationSeedItem("entity.configurablejoin.jointype", "zh-HK", "关联类型", "关联类型（内/左/右/全连接）"),
+            new TranslationSeedItem("entity.configurablejoin.jointype", "zh-HK", "关联类型_hk", "关联类型（内/左/右/全连接）"),
 
             // entity.configurablejoin.leftsourcealias
-            new TranslationSeedItem("entity.configurablejoin.leftsourcealias", "en-US", "左表别名", "左表数据源别名"),
+            new TranslationSeedItem("entity.configurablejoin.leftsourcealias", "en-US", "左表别名_us", "左表数据源别名"),
             // entity.configurablejoin.leftsourcealias
-            new TranslationSeedItem("entity.configurablejoin.leftsourcealias", "ja-JP", "左表别名", "左表数据源别名"),
+            new TranslationSeedItem("entity.configurablejoin.leftsourcealias", "ja-JP", "左表别名_jp", "左表数据源别名"),
             // entity.configurablejoin.leftsourcealias
             new TranslationSeedItem("entity.configurablejoin.leftsourcealias", "zh-CN", "左表别名", "左表数据源别名"),
             // entity.configurablejoin.leftsourcealias
-            new TranslationSeedItem("entity.configurablejoin.leftsourcealias", "zh-HK", "左表别名", "左表数据源别名"),
+            new TranslationSeedItem("entity.configurablejoin.leftsourcealias", "zh-HK", "左表别名_hk", "左表数据源别名"),
 
             // entity.configurablejoin.leftcolumnname
-            new TranslationSeedItem("entity.configurablejoin.leftcolumnname", "en-US", "左表关联列", "左表关联列名"),
+            new TranslationSeedItem("entity.configurablejoin.leftcolumnname", "en-US", "左表关联列_us", "左表关联列名"),
             // entity.configurablejoin.leftcolumnname
-            new TranslationSeedItem("entity.configurablejoin.leftcolumnname", "ja-JP", "左表关联列", "左表关联列名"),
+            new TranslationSeedItem("entity.configurablejoin.leftcolumnname", "ja-JP", "左表关联列_jp", "左表关联列名"),
             // entity.configurablejoin.leftcolumnname
             new TranslationSeedItem("entity.configurablejoin.leftcolumnname", "zh-CN", "左表关联列", "左表关联列名"),
             // entity.configurablejoin.leftcolumnname
-            new TranslationSeedItem("entity.configurablejoin.leftcolumnname", "zh-HK", "左表关联列", "左表关联列名"),
+            new TranslationSeedItem("entity.configurablejoin.leftcolumnname", "zh-HK", "左表关联列_hk", "左表关联列名"),
 
             // entity.configurablejoin.rightsourcealias
-            new TranslationSeedItem("entity.configurablejoin.rightsourcealias", "en-US", "右表别名", "右表数据源别名"),
+            new TranslationSeedItem("entity.configurablejoin.rightsourcealias", "en-US", "右表别名_us", "右表数据源别名"),
             // entity.configurablejoin.rightsourcealias
-            new TranslationSeedItem("entity.configurablejoin.rightsourcealias", "ja-JP", "右表别名", "右表数据源别名"),
+            new TranslationSeedItem("entity.configurablejoin.rightsourcealias", "ja-JP", "右表别名_jp", "右表数据源别名"),
             // entity.configurablejoin.rightsourcealias
             new TranslationSeedItem("entity.configurablejoin.rightsourcealias", "zh-CN", "右表别名", "右表数据源别名"),
             // entity.configurablejoin.rightsourcealias
-            new TranslationSeedItem("entity.configurablejoin.rightsourcealias", "zh-HK", "右表别名", "右表数据源别名"),
+            new TranslationSeedItem("entity.configurablejoin.rightsourcealias", "zh-HK", "右表别名_hk", "右表数据源别名"),
 
             // entity.configurablejoin.rightcolumnname
-            new TranslationSeedItem("entity.configurablejoin.rightcolumnname", "en-US", "右表关联列", "右表关联列名"),
+            new TranslationSeedItem("entity.configurablejoin.rightcolumnname", "en-US", "右表关联列_us", "右表关联列名"),
             // entity.configurablejoin.rightcolumnname
-            new TranslationSeedItem("entity.configurablejoin.rightcolumnname", "ja-JP", "右表关联列", "右表关联列名"),
+            new TranslationSeedItem("entity.configurablejoin.rightcolumnname", "ja-JP", "右表关联列_jp", "右表关联列名"),
             // entity.configurablejoin.rightcolumnname
             new TranslationSeedItem("entity.configurablejoin.rightcolumnname", "zh-CN", "右表关联列", "右表关联列名"),
             // entity.configurablejoin.rightcolumnname
-            new TranslationSeedItem("entity.configurablejoin.rightcolumnname", "zh-HK", "右表关联列", "右表关联列名"),
+            new TranslationSeedItem("entity.configurablejoin.rightcolumnname", "zh-HK", "右表关联列_hk", "右表关联列名"),
 
             // entity.configurablejoin.sortorder
-            new TranslationSeedItem("entity.configurablejoin.sortorder", "en-US", "排序号", "排序号（JOIN 应用顺序）"),
+            new TranslationSeedItem("entity.configurablejoin.sortorder", "en-US", "排序号_us", "排序号（JOIN 应用顺序）"),
             // entity.configurablejoin.sortorder
-            new TranslationSeedItem("entity.configurablejoin.sortorder", "ja-JP", "排序号", "排序号（JOIN 应用顺序）"),
+            new TranslationSeedItem("entity.configurablejoin.sortorder", "ja-JP", "排序号_jp", "排序号（JOIN 应用顺序）"),
             // entity.configurablejoin.sortorder
             new TranslationSeedItem("entity.configurablejoin.sortorder", "zh-CN", "排序号", "排序号（JOIN 应用顺序）"),
             // entity.configurablejoin.sortorder
-            new TranslationSeedItem("entity.configurablejoin.sortorder", "zh-HK", "排序号", "排序号（JOIN 应用顺序）"),
+            new TranslationSeedItem("entity.configurablejoin.sortorder", "zh-HK", "排序号_hk", "排序号（JOIN 应用顺序）"),
 
             // entity.configurablejoin.configurable
-            new TranslationSeedItem("entity.configurablejoin.configurable", "en-US", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablejoin.configurable", "en-US", "关联的报表主表_us", "关联的报表主表"),
             // entity.configurablejoin.configurable
-            new TranslationSeedItem("entity.configurablejoin.configurable", "ja-JP", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablejoin.configurable", "ja-JP", "关联的报表主表_jp", "关联的报表主表"),
             // entity.configurablejoin.configurable
             new TranslationSeedItem("entity.configurablejoin.configurable", "zh-CN", "关联的报表主表", "关联的报表主表"),
             // entity.configurablejoin.configurable
-            new TranslationSeedItem("entity.configurablejoin.configurable", "zh-HK", "关联的报表主表", "关联的报表主表"),
+            new TranslationSeedItem("entity.configurablejoin.configurable", "zh-HK", "关联的报表主表_hk", "关联的报表主表"),
         };
     }
 
@@ -178,10 +178,10 @@ public class TaktConfigurableJoinI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 9;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Report";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

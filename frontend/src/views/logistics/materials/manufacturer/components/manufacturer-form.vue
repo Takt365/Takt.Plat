@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/manufacturer/components -->
 <!-- 文件名称：manufacturer-form.vue -->
-<!-- 功能描述：Takt制造商实体维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt制造商实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form manufacturer-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="manufacturer-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -74,8 +77,10 @@
                 <a-input
                   v-model:value="formState.manufacturerCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.code') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.manufacturerId"
                 />
               </a-form-item>
             </a-col>
@@ -87,7 +92,8 @@
                 <a-input
                   v-model:value="formState.manufacturerName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.name') })"
-                  size="small"
+                  show-count
+                  :maxlength="80"
                   allow-clear
                 />
               </a-form-item>
@@ -100,7 +106,8 @@
                 <a-input
                   v-model:value="formState.manufacturerShortName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.shortname') })"
-                  size="small"
+                  show-count
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
@@ -113,7 +120,6 @@
                 <a-input-number
                   v-model:value="formState.manufacturerType"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.type') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -126,7 +132,8 @@
                 <a-input
                   v-model:value="formState.industrySector"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.industrysector') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -139,7 +146,8 @@
                 <a-input
                   v-model:value="formState.manufacturerTaxNumber"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.taxnumber') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -152,7 +160,8 @@
                 <a-input
                   v-model:value="formState.registrationCountry"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.registrationcountry') })"
-                  size="small"
+                  show-count
+                  :maxlength="2"
                   allow-clear
                 />
               </a-form-item>
@@ -176,7 +185,6 @@
                   v-model:value="formState.registrationAddress1"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.manufacturer.registrationaddress1') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -189,7 +197,6 @@
                   v-model:value="formState.registrationAddress2"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.manufacturer.registrationaddress2') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -202,7 +209,6 @@
                   v-model:value="formState.registrationAddress3"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.manufacturer.registrationaddress3') })"
                   :rows="2"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -214,7 +220,8 @@
                 <a-input
                   v-model:value="formState.manufacturerPhone"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.phone') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -227,7 +234,8 @@
                 <a-input
                   v-model:value="formState.manufacturerFax"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.fax') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -240,7 +248,8 @@
                 <a-input
                   v-model:value="formState.manufacturerEmail"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.email') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -253,7 +262,8 @@
                 <a-input
                   v-model:value="formState.manufacturerWebsite"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.website') })"
-                  size="small"
+                  show-count
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -266,7 +276,8 @@
                 <a-input
                   v-model:value="formState.contactPerson"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.contactperson') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -279,7 +290,8 @@
                 <a-input
                   v-model:value="formState.contactPhone"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.contactphone') })"
-                  size="small"
+                  show-count
+                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -292,7 +304,8 @@
                 <a-input
                   v-model:value="formState.contactEmail"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.contactemail') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -307,7 +320,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.manufacturer.level')"
                 name="manufacturerLevel"
@@ -315,12 +328,11 @@
                 <a-input-number
                   v-model:value="formState.manufacturerLevel"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.level') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.manufacturer.qualitycertification')"
                 name="qualityCertification"
@@ -328,12 +340,11 @@
                 <a-input-number
                   v-model:value="formState.qualityCertification"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.qualitycertification') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.manufacturer.evaluationscore')"
                 name="evaluationScore"
@@ -341,12 +352,11 @@
                 <a-input-number
                   v-model:value="formState.evaluationScore"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.evaluationscore') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.manufacturer.isqualified')"
                 name="isQualified"
@@ -354,46 +364,44 @@
                 <a-input-number
                   v-model:value="formState.isQualified"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.isqualified') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.manufacturer.status')"
                 name="manufacturerStatus"
               >
                 <TaktSelect
                   v-model:value="formState.manufacturerStatus"
-                  dict-type="sys_normal_disable"
+                  dict-type="sys_normal_disable_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.status') })"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.manufacturer.sortorder')"
-                name="sortOrder"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.sortorder') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
-              >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -406,131 +414,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：manufacturerMaterial -->
-      <a-tab-pane
-        key="child-manufacturerMaterials"
-        :tab="t('entity.manufacturerMaterial._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddManufacturerMaterialRow">
-            {{ t('common.page.button.create') }}{{ t('entity.manufacturerMaterial._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="manufacturerMaterialFormColumns"
-          :data-source="childManufacturerMaterialRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturerMaterial.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'materialType'">
-              <a-input-number
-                v-model:value="record.materialType"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturerMaterial.materialtype') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'manufacturerMaterialCode'">
-              <a-input
-                v-model:value="record.manufacturerMaterialCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturerMaterial.code') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'manufacturerMaterialName'">
-              <a-input
-                v-model:value="record.manufacturerMaterialName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturerMaterial.name') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'manufacturerMaterialSpecification'">
-              <a-input
-                v-model:value="record.manufacturerMaterialSpecification"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturerMaterial.specification') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'materialCode'">
-              <a-input
-                v-model:value="record.materialCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturerMaterial.materialcode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'extFieldJson'">
-              <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'remark'">
-              <a-textarea
-                v-model:value="record.remark"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveManufacturerMaterialRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 manufacturerMaterials -->
+    <TaktEditableTable
+      ref="manufacturerMaterialTableRef"
+      v-model="childManufacturerMaterialRows"
+      :columns="manufacturerMaterialFormColumns"
+      :title="t('entity.manufacturermaterial._self')"
+      :add-button-entity="t('entity.manufacturermaterial._self')"
+      id-field="manufacturerMaterialId"
+      :default-row="createDefaultManufacturerMaterialRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -539,11 +445,13 @@
  * Takt制造商实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/manufacturer/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { ManufacturerCreate, ManufacturerMaterialCreate, ManufacturerMaterial } from '@/types/logistics/materials/manufacturer'
+import type { ManufacturerCreate } from '@/types/logistics/materials/manufacturer'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -576,123 +484,103 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","manufacturerCode","manufacturerName","manufacturerShortName","manufacturerType","industrySector","manufacturerTaxNumber","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","manufacturerPhone","manufacturerFax","manufacturerEmail","manufacturerWebsite","contactPerson","contactPhone","contactEmail","manufacturerLevel","qualityCertification","evaluationScore","isQualified","manufacturerStatus","sortOrder","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","manufacturerCode","manufacturerName","manufacturerShortName","manufacturerType","industrySector","manufacturerTaxNumber","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","manufacturerPhone","manufacturerFax","manufacturerEmail","manufacturerWebsite","contactPerson","contactPhone","contactEmail","manufacturerLevel","qualityCertification","evaluationScore","isQualified","manufacturerStatus","extField","remark"]
 
-/** manufacturerMaterial 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childManufacturerMaterialRows = ref<Record<string, unknown>[]>([])
+const manufacturerMaterialTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 manufacturerMaterial 表单列定义 */
-const manufacturerMaterialFormColumns = computed(() => [
+/** 子表 manufacturerMaterial 可编辑列 */
+const manufacturerMaterialFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.manufacturerMaterial.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.manufacturermaterial.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.manufacturerMaterial.materialtype'),
-    dataIndex: 'materialType',
     key: 'materialType',
+    title: t('entity.manufacturermaterial.materialtype'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.manufacturerMaterial.code'),
-    dataIndex: 'manufacturerMaterialCode',
     key: 'manufacturerMaterialCode',
+    title: t('entity.manufacturermaterial.code'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.manufacturerMaterial.name'),
-    dataIndex: 'manufacturerMaterialName',
     key: 'manufacturerMaterialName',
+    title: t('entity.manufacturermaterial.name'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.manufacturerMaterial.specification'),
-    dataIndex: 'manufacturerMaterialSpecification',
     key: 'manufacturerMaterialSpecification',
-    width: 140,
+    title: t('entity.manufacturermaterial.specification'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.manufacturermaterial.specification') }),
   },
   {
-    title: t('entity.manufacturerMaterial.materialcode'),
-    dataIndex: 'materialCode',
     key: 'materialCode',
+    title: t('entity.manufacturermaterial.materialcode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
+    key: 'ExtField',
+    title: t('entity.manufacturermaterial.extfield'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.manufacturermaterial.extfield') }),
     width: 140,
   },
   {
-    title: t('common.page.entity.remark'),
-    dataIndex: 'remark',
     key: 'remark',
+    title: t('common.page.entity.remark'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<ManufacturerCreate & { manufacturerId?: string }> | null | undefined) {
-  childManufacturerMaterialRows.value = ((val as any)?.manufacturerMaterials ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.manufacturerMaterialId ?? `new-${index}`,
-  }))
+  childManufacturerMaterialRows.value = ((val as any)?.manufacturerMaterials ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 manufacturerMaterial 行 */
-function handleAddManufacturerMaterialRow() {
-  childManufacturerMaterialRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      lineNumber: 0,
-      materialType: 0,
-      manufacturerMaterialCode: '',
-      manufacturerMaterialName: '',
-      manufacturerMaterialSpecification: '',
-      materialCode: '',
-      extFieldJson: '',
-      remark: '',
-  })
-}
-
-/** 表单 Tab 内删除 manufacturerMaterial 行 */
-function handleRemoveManufacturerMaterialRow(index: number) {
-  childManufacturerMaterialRows.value.splice(index, 1)
+function createDefaultManufacturerMaterialRow(): Record<string, unknown> {
+  return {
+    lineNumber: (childManufacturerMaterialRows.value.length + 1) * 10,
+    materialType: 0,
+    manufacturerMaterialCode: '',
+    manufacturerMaterialName: '',
+    manufacturerMaterialSpecification: '',
+    materialCode: '',
+    ExtField: '',
+    remark: '',
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.manufacturerId ?? ''
   return {
     ...formState,
-    manufacturerMaterials: childManufacturerMaterialRows.value.map(({ __rowKey, ...rest }) => rest),
+    manufacturerMaterials: manufacturerMaterialTableRef.value?.getRows?.() ?? childManufacturerMaterialRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      manufacturerId: masterId,
+    })),
   }
 }
 
@@ -704,7 +592,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -712,19 +600,47 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  manufacturerStatus: 1
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 manufacturerId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.manufacturerId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).manufacturerMaterials
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -754,74 +670,136 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  manufacturerType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.manufacturer.type') }),
-      trigger: 'change'
-    }
-  ],
-  manufacturerLevel: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.manufacturer.level') }),
-      trigger: 'change'
-    }
-  ],
-  qualityCertification: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.manufacturer.qualitycertification') }),
-      trigger: 'change'
-    }
-  ],
-  evaluationScore: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.manufacturer.evaluationscore') }),
-      trigger: 'change'
-    }
-  ],
-  isQualified: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.manufacturer.isqualified') }),
-      trigger: 'change'
-    }
-  ],
-  manufacturerStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.manufacturer.status') }),
-      trigger: 'change'
-    }
-  ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.manufacturer.sortorder') }),
-      trigger: 'change'
-    }
-  ],
+  manufacturerType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.type') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.type') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  manufacturerLevel: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.level') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.level') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  qualityCertification: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.qualitycertification') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.qualitycertification') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  evaluationScore: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.evaluationscore') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.evaluationscore') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isQualified: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.isqualified') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.isqualified') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  manufacturerStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await manufacturerMaterialTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('manufacturerType' in payload) {
+    const rawmanufacturerType = payload.manufacturerType
+    payload.manufacturerType = typeof rawmanufacturerType === 'number' ? rawmanufacturerType : Number(rawmanufacturerType)
+  }
+  if ('manufacturerLevel' in payload) {
+    const rawmanufacturerLevel = payload.manufacturerLevel
+    payload.manufacturerLevel = typeof rawmanufacturerLevel === 'number' ? rawmanufacturerLevel : Number(rawmanufacturerLevel)
+  }
+  if ('qualityCertification' in payload) {
+    const rawqualityCertification = payload.qualityCertification
+    payload.qualityCertification = typeof rawqualityCertification === 'number' ? rawqualityCertification : Number(rawqualityCertification)
+  }
+  if ('evaluationScore' in payload) {
+    const rawevaluationScore = payload.evaluationScore
+    payload.evaluationScore = typeof rawevaluationScore === 'number' ? rawevaluationScore : Number(rawevaluationScore)
+  }
+  if ('isQualified' in payload) {
+    const rawisQualified = payload.isQualified
+    payload.isQualified = typeof rawisQualified === 'number' ? rawisQualified : Number(rawisQualified)
+  }
+  if ('manufacturerStatus' in payload) {
+    const rawmanufacturerStatus = payload.manufacturerStatus
+    payload.manufacturerStatus = typeof rawmanufacturerStatus === 'number' ? rawmanufacturerStatus : Number(rawmanufacturerStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.manufacturerId)
   childManufacturerMaterialRows.value = []
+  manufacturerMaterialTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

@@ -17,6 +17,7 @@ import type {
 } from '@/types/common';
 import type {
   DictType,
+  DictTypeBuiltIn,
   DictTypeCreate,
   DictTypeSort,
   DictTypeStatus,
@@ -42,9 +43,7 @@ export function getDictTypeList(queryDto: any): Promise<TaktPagedResult<DictType
   return request<TaktPagedResult<DictType>>({
     url: `${DICT_TYPE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -120,6 +119,19 @@ export function deleteDictTypeBatch(ids: string[]): Promise<void> {
 export function updateDictTypeStatus(dto: DictTypeStatus): Promise<DictType> {
   return request<DictType>({
     url: `${DICT_TYPE_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新字典类型是否内置
+ * @param {DictTypeBuiltIn} dto 是否内置 DTO
+ * @returns {Promise<DictType>} 字典类型DTO
+ */
+export function updateDictTypeBuiltIn(dto: DictTypeBuiltIn): Promise<DictType> {
+  return request<DictType>({
+    url: `${DICT_TYPE_API_BASE}/built-in`,
     method: 'put',
     data: dto,
   });
@@ -214,7 +226,7 @@ export function exportDictType(
     url: `${DICT_TYPE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

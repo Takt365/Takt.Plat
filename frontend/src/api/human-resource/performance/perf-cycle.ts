@@ -41,9 +41,7 @@ export function getPerfCycleList(queryDto: any): Promise<TaktPagedResult<PerfCyc
   return request<TaktPagedResult<PerfCycle>>({
     url: `${PERF_CYCLE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportPerfCycle(
     url: `${PERF_CYCLE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

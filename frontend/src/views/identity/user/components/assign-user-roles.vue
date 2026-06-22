@@ -28,20 +28,22 @@
           disabled
         />
       </a-form-item>
-      <a-form-item :label="t('entity.role._self')">
-        <a-transfer
-          v-model:target-keys="targetKeys"
-          :data-source="dataSource"
-          :list-style="{
-            width: '250px',
-            height: '50vh',
-          }"
-          :titles="[t('common.tip.transfer.unassigned'), t('common.tip.transfer.assigned')]"
-          show-search
-          :loading="optionsLoading"
-          :render="item => item.title"
-        />
-      </a-form-item>
+      <a-row :gutter="24">
+        <a-col :span="24">
+          <a-form-item
+            :label="t('entity.role._self')"
+            :label-col="{ span: 24 }"
+            :wrapper-col="{ span: 24 }"
+          >
+            <takt-transfer
+              v-model:target-keys="targetKeys"
+              :data-source="dataSource"
+              :titles="[t('common.tip.transfer.unassigned'), t('common.tip.transfer.assigned')]"
+              :loading="optionsLoading"
+            />
+          </a-form-item>
+        </a-col>
+      </a-row>
     </a-form>
   </a-modal>
 </template>
@@ -113,7 +115,8 @@ const userInfo = ref('')
 const dataSource = computed(() =>
   allOptions.value.map((item) => ({
     key: String(item.dictValue),
-    title: item.dictLabel ?? ''
+    title: item.dictLabel ?? '',
+    description: String(item.dictValue ?? ''),
   }))
 )
 

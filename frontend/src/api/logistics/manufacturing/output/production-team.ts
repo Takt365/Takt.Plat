@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/output
 // 文件名称：production-team.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -41,9 +41,7 @@ export function getProductionTeamList(queryDto: any): Promise<TaktPagedResult<Pr
   return request<TaktPagedResult<ProductionTeam>>({
     url: `${PRODUCTION_TEAM_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -113,7 +111,7 @@ export function deleteProductionTeamBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新生产班组状态
- * @param {ProductionTeamStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {ProductionTeamStatus} dto 状态 DTO
  * @returns {Promise<ProductionTeam>} 生产班组DTO
  */
 export function updateProductionTeamStatus(dto: ProductionTeamStatus): Promise<ProductionTeam> {
@@ -200,7 +198,7 @@ export function exportProductionTeam(
     url: `${PRODUCTION_TEAM_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

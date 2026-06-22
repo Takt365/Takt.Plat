@@ -65,6 +65,26 @@ public class TaktGenEnginesController : TaktControllerBase
         }
     }
 
+    /// <summary>
+    /// 从数据库同步指定表的列元数据到代码生成配置（增量更新，保留用户生成配置）
+    /// </summary>
+    /// <param name="tableId">代码生成表配置 ID</param>
+    /// <returns>同步后的表配置信息（含列列表）</returns>
+    [HttpPost("database/sync/{tableId}")]
+    [TaktPermission("code:generator:sync", "同步数据库表列")]
+    public async Task<IActionResult> SyncTableColumnsFromDatabaseAsync(long tableId)
+    {
+        try
+        {
+            var result = await _workflowService.SyncTableColumnsFromDatabaseAsync(tableId);
+            return Success(result, "同步成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
     #endregion
 
     #region 实体表初始化（无表导入流程）
@@ -106,11 +126,8 @@ public class TaktGenEnginesController : TaktControllerBase
     #region 代码生成
 
     /// <summary>
-    /// 根据表配置和模板生成代码
+    /// 根据表配置和模板生成代码（GenMethod=0 返回 zip；1/2 写入磁盘）
     /// </summary>
-    /// <param name="tableId">代码生成表配置 ID</param>
-    /// <param name="dto">生成请求（模板字典可空，空则从 wwwroot/Generator 加载）</param>
-    /// <returns>生成的代码文件列表（文件名 + 内容）</returns>
     [HttpPost("generate/{tableId}")]
     [TaktPermission("code:generator:generate", "生成代码")]
     public async Task<IActionResult> GenerateCodeAsync(long tableId, [FromBody] TaktGenerateCodeRequestDto dto)
@@ -118,8 +135,10 @@ public class TaktGenEnginesController : TaktControllerBase
         try
         {
             var sqlCreateBy = CurrentUserName ?? User?.Identity?.Name ?? "admin";
-            var results = await _workflowService.GenerateCodeAsync(tableId, dto.Templates, sqlCreateBy);
-            return Success(results, "生成成功");
+            var result = await _workflowService.GenerateCodeAsync(tableId, dto, sqlCreateBy);
+            if (result.GenMethod == 0 && result.ZipBytes != null && result.ZipBytes.Length > 0)
+                return File(result.ZipBytes, "application/zip", result.ZipFileName ?? "codegen.zip");
+            return Success(result, "生成成功");
         }
         catch (Exception ex)
         {
@@ -144,20 +163,13 @@ public class TaktGenEnginesController : TaktControllerBase
         try
         {
             var sqlCreateBy = CurrentUserName ?? User?.Identity?.Name ?? "admin";
-            string? ResolveTargetRelativePath(TaktGenTableDto table, string templateKey)
-            {
-                if (dto.PathMappings != null
-                    && dto.PathMappings.TryGetValue(templateKey, out var mapped)
-                    && !string.IsNullOrWhiteSpace(mapped))
-                    return mapped.Trim();
-                return null;
-            }
             var preview = await _workflowService.GeneratePreviewFilesAsync(
                 tableId,
                 dto.Templates,
-                ResolveTargetRelativePath,
+                null,
                 dto.TargetBasePath,
-                sqlCreateBy);
+                sqlCreateBy,
+                dto.PathMappings);
             return Success(preview, "预览成功");
         }
         catch (Exception ex)

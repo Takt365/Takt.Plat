@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeResignationI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeResignation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,83 +75,83 @@ public class TaktEmployeeResignationI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktEmployeeResignation 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.employeeresignation._self / entity.employeeresignation.{{field}}；ResourceGroup=5；ResourceType=0
+    /// I18nKey：entity.employeeresignation._self / entity.employeeresignation.{{field}}；ResourceGroup=Personnel；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetEmployeeResignationTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.employeeresignation._self
-            new TranslationSeedItem("entity.employeeresignation._self", "en-US", "Employee Resignation Information", "实体名称"),
+            new TranslationSeedItem("entity.employeeresignation._self", "en-US", "Employee Resignation Information_us", "实体名称"),
             // entity.employeeresignation._self
-            new TranslationSeedItem("entity.employeeresignation._self", "ja-JP", "员工离职办理记录信息", "实体名称"),
+            new TranslationSeedItem("entity.employeeresignation._self", "ja-JP", "员工离职办理记录信息_jp", "实体名称"),
             // entity.employeeresignation._self
             new TranslationSeedItem("entity.employeeresignation._self", "zh-CN", "员工离职办理记录信息", "实体名称"),
             // entity.employeeresignation._self
-            new TranslationSeedItem("entity.employeeresignation._self", "zh-HK", "员工离职办理记录信息", "实体名称"),
+            new TranslationSeedItem("entity.employeeresignation._self", "zh-HK", "员工离职办理记录信息_hk", "实体名称"),
 
             // entity.employeeresignation.employeeid
-            new TranslationSeedItem("entity.employeeresignation.employeeid", "en-US", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeeresignation.employeeid", "en-US", "员工ID_us", "员工ID"),
             // entity.employeeresignation.employeeid
-            new TranslationSeedItem("entity.employeeresignation.employeeid", "ja-JP", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeeresignation.employeeid", "ja-JP", "员工ID_jp", "员工ID"),
             // entity.employeeresignation.employeeid
             new TranslationSeedItem("entity.employeeresignation.employeeid", "zh-CN", "员工ID", "员工ID"),
             // entity.employeeresignation.employeeid
-            new TranslationSeedItem("entity.employeeresignation.employeeid", "zh-HK", "员工ID", "员工ID"),
+            new TranslationSeedItem("entity.employeeresignation.employeeid", "zh-HK", "员工ID_hk", "员工ID"),
 
             // entity.employeeresignation.resignationtype
-            new TranslationSeedItem("entity.employeeresignation.resignationtype", "en-US", "离职类型", "离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）"),
+            new TranslationSeedItem("entity.employeeresignation.resignationtype", "en-US", "离职类型_us", "离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）"),
             // entity.employeeresignation.resignationtype
-            new TranslationSeedItem("entity.employeeresignation.resignationtype", "ja-JP", "离职类型", "离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）"),
+            new TranslationSeedItem("entity.employeeresignation.resignationtype", "ja-JP", "离职类型_jp", "离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）"),
             // entity.employeeresignation.resignationtype
             new TranslationSeedItem("entity.employeeresignation.resignationtype", "zh-CN", "离职类型", "离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）"),
             // entity.employeeresignation.resignationtype
-            new TranslationSeedItem("entity.employeeresignation.resignationtype", "zh-HK", "离职类型", "离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）"),
+            new TranslationSeedItem("entity.employeeresignation.resignationtype", "zh-HK", "离职类型_hk", "离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）"),
 
             // entity.employeeresignation.applydate
-            new TranslationSeedItem("entity.employeeresignation.applydate", "en-US", "申请日期", "申请日期"),
+            new TranslationSeedItem("entity.employeeresignation.applydate", "en-US", "申请日期_us", "申请日期"),
             // entity.employeeresignation.applydate
-            new TranslationSeedItem("entity.employeeresignation.applydate", "ja-JP", "申请日期", "申请日期"),
+            new TranslationSeedItem("entity.employeeresignation.applydate", "ja-JP", "申请日期_jp", "申请日期"),
             // entity.employeeresignation.applydate
             new TranslationSeedItem("entity.employeeresignation.applydate", "zh-CN", "申请日期", "申请日期"),
             // entity.employeeresignation.applydate
-            new TranslationSeedItem("entity.employeeresignation.applydate", "zh-HK", "申请日期", "申请日期"),
+            new TranslationSeedItem("entity.employeeresignation.applydate", "zh-HK", "申请日期_hk", "申请日期"),
 
             // entity.employeeresignation.lastworkdate
-            new TranslationSeedItem("entity.employeeresignation.lastworkdate", "en-US", "最后工作日", "最后工作日"),
+            new TranslationSeedItem("entity.employeeresignation.lastworkdate", "en-US", "最后工作日_us", "最后工作日"),
             // entity.employeeresignation.lastworkdate
-            new TranslationSeedItem("entity.employeeresignation.lastworkdate", "ja-JP", "最后工作日", "最后工作日"),
+            new TranslationSeedItem("entity.employeeresignation.lastworkdate", "ja-JP", "最后工作日_jp", "最后工作日"),
             // entity.employeeresignation.lastworkdate
             new TranslationSeedItem("entity.employeeresignation.lastworkdate", "zh-CN", "最后工作日", "最后工作日"),
             // entity.employeeresignation.lastworkdate
-            new TranslationSeedItem("entity.employeeresignation.lastworkdate", "zh-HK", "最后工作日", "最后工作日"),
+            new TranslationSeedItem("entity.employeeresignation.lastworkdate", "zh-HK", "最后工作日_hk", "最后工作日"),
 
             // entity.employeeresignation.terminationdate
-            new TranslationSeedItem("entity.employeeresignation.terminationdate", "en-US", "实际离职日期", "实际离职日期"),
+            new TranslationSeedItem("entity.employeeresignation.terminationdate", "en-US", "实际离职日期_us", "实际离职日期"),
             // entity.employeeresignation.terminationdate
-            new TranslationSeedItem("entity.employeeresignation.terminationdate", "ja-JP", "实际离职日期", "实际离职日期"),
+            new TranslationSeedItem("entity.employeeresignation.terminationdate", "ja-JP", "实际离职日期_jp", "实际离职日期"),
             // entity.employeeresignation.terminationdate
             new TranslationSeedItem("entity.employeeresignation.terminationdate", "zh-CN", "实际离职日期", "实际离职日期"),
             // entity.employeeresignation.terminationdate
-            new TranslationSeedItem("entity.employeeresignation.terminationdate", "zh-HK", "实际离职日期", "实际离职日期"),
+            new TranslationSeedItem("entity.employeeresignation.terminationdate", "zh-HK", "实际离职日期_hk", "实际离职日期"),
 
             // entity.employeeresignation.reason
-            new TranslationSeedItem("entity.employeeresignation.reason", "en-US", "离职原因", "离职原因"),
+            new TranslationSeedItem("entity.employeeresignation.reason", "en-US", "离职原因_us", "离职原因"),
             // entity.employeeresignation.reason
-            new TranslationSeedItem("entity.employeeresignation.reason", "ja-JP", "离职原因", "离职原因"),
+            new TranslationSeedItem("entity.employeeresignation.reason", "ja-JP", "离职原因_jp", "离职原因"),
             // entity.employeeresignation.reason
             new TranslationSeedItem("entity.employeeresignation.reason", "zh-CN", "离职原因", "离职原因"),
             // entity.employeeresignation.reason
-            new TranslationSeedItem("entity.employeeresignation.reason", "zh-HK", "离职原因", "离职原因"),
+            new TranslationSeedItem("entity.employeeresignation.reason", "zh-HK", "离职原因_hk", "离职原因"),
 
             // entity.employeeresignation.handovernotes
-            new TranslationSeedItem("entity.employeeresignation.handovernotes", "en-US", "工作交接说明", "工作交接说明"),
+            new TranslationSeedItem("entity.employeeresignation.handovernotes", "en-US", "工作交接说明_us", "工作交接说明"),
             // entity.employeeresignation.handovernotes
-            new TranslationSeedItem("entity.employeeresignation.handovernotes", "ja-JP", "工作交接说明", "工作交接说明"),
+            new TranslationSeedItem("entity.employeeresignation.handovernotes", "ja-JP", "工作交接说明_jp", "工作交接说明"),
             // entity.employeeresignation.handovernotes
             new TranslationSeedItem("entity.employeeresignation.handovernotes", "zh-CN", "工作交接说明", "工作交接说明"),
             // entity.employeeresignation.handovernotes
-            new TranslationSeedItem("entity.employeeresignation.handovernotes", "zh-HK", "工作交接说明", "工作交接说明"),
+            new TranslationSeedItem("entity.employeeresignation.handovernotes", "zh-HK", "工作交接说明_hk", "工作交接说明"),
         };
     }
 
@@ -169,10 +169,10 @@ public class TaktEmployeeResignationI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 5;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Personnel";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

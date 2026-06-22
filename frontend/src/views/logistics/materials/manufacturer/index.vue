@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="logistics-materials-manufacturer">
+  <div class="p-4 flex flex-col min-h-0 h-full">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -30,7 +30,7 @@
       :show-delete="true"
       :show-import="true"
       :show-export="true"
-      :show-expand="true"
+      :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
@@ -52,73 +52,56 @@
       @refresh="handleRefresh"
     />
 
-    <!-- 表格 -->
-    <TaktSingleTable
-      :columns="columns"
-      entity-scope="company"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'manufacturerId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :row-key="getManufacturerId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      :expanded-row-keys="expandedRowKeys"
-      @expand="handleExpand"
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getManufacturerId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="manufacturerId"
+      :master-visible-column-keys="visibleColumnKeys"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
     >
-      <!-- 字典列渲染 -->
+      <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'manufacturerStatus'">
-          <TaktDictTag
-            :value="getManufacturerField(record, 'manufacturerStatus')"
-            dict-type="sys_normal_disable"
+          <a-switch
+            :checked="getManufacturerField(record, 'manufacturerStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handleManufacturerStatusChange(record, Boolean(checked))"
           />
         </template>
       </template>
-      <!-- 展开行渲染 -->
-      <template #expandedRowRender="{ record }">
-        <div class="p-4">
-          <div class="mb-2 text-sm font-medium">{{ t('entity.manufacturerMaterial._self') }}</div>
-          <a-table
-            v-if="hasManufacturerMaterialRows(record)"
-            :columns="manufacturerMaterialExpandColumns"
-            :data-source="getManufacturerMaterialRows(record)"
-            :row-key="(row: ManufacturerMaterial, index?: number) => row?.manufacturerMaterialId || String(index ?? 0)"
-            :pagination="false"
-            size="small"
-            bordered
-            class="mb-4"
-          />
-          <a-empty v-else class="mb-4" />
-        </div>
+      <template #detail>
+        <ManufacturerMaterialPanel
+          ref="manufacturerMaterialPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
       </template>
-    </TaktSingleTable>
-
-    <!-- 分页组件 -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
       <ManufacturerForm
+        :key="formData?.manufacturerId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -140,6 +123,8 @@
         <a-input
           v-model:value="advancedQueryForm.manufacturerCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.code') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -149,6 +134,8 @@
         <a-input
           v-model:value="advancedQueryForm.manufacturerName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.name') })"
+          show-count
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
@@ -158,6 +145,8 @@
         <a-input
           v-model:value="advancedQueryForm.manufacturerShortName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.shortname') })"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -176,6 +165,8 @@
         <a-input
           v-model:value="advancedQueryForm.industrySector"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.industrysector') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -185,6 +176,8 @@
         <a-input
           v-model:value="advancedQueryForm.manufacturerTaxNumber"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.taxnumber') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -194,6 +187,8 @@
         <a-input
           v-model:value="advancedQueryForm.registrationCountry"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.registrationcountry') })"
+          show-count
+          :maxlength="2"
           allow-clear
         />
       </a-form-item>
@@ -233,6 +228,8 @@
         <a-input
           v-model:value="advancedQueryForm.manufacturerPhone"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.phone') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -242,6 +239,8 @@
         <a-input
           v-model:value="advancedQueryForm.manufacturerFax"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.fax') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -251,6 +250,8 @@
         <a-input
           v-model:value="advancedQueryForm.manufacturerEmail"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.email') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -260,6 +261,8 @@
         <a-input
           v-model:value="advancedQueryForm.manufacturerWebsite"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.website') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -269,6 +272,8 @@
         <a-input
           v-model:value="advancedQueryForm.contactPerson"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.contactperson') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -278,6 +283,8 @@
         <a-input
           v-model:value="advancedQueryForm.contactPhone"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.contactphone') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -287,6 +294,8 @@
         <a-input
           v-model:value="advancedQueryForm.contactEmail"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.contactemail') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -331,18 +340,9 @@
       <a-form-item :label="t('entity.manufacturer.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.manufacturerStatus"
-          dict-type="sys_normal_disable"
+          dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.status') })"
           allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sortOrder')">
-      <a-form-item :label="t('entity.manufacturer.sortorder')">
-        <a-input-number
-          v-model:value="advancedQueryForm.sortOrder"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.sortorder') })"
-          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -368,12 +368,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -382,8 +401,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -436,14 +457,16 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ManufacturerForm from './components/manufacturer-form.vue'
-import { getManufacturerList, getManufacturerById, createManufacturer, updateManufacturer, deleteManufacturerById, deleteManufacturerBatch, getManufacturerTemplate, importManufacturer, exportManufacturer } from '@/api/logistics/materials/manufacturer'
-import * as manufacturerMaterialApi from '@/api/logistics/materials/manufacturer-material'
-import type { ManufacturerMaterial, ManufacturerMaterialQuery } from '@/types/logistics/materials/manufacturer-material'
-import type { Manufacturer, ManufacturerQuery, ManufacturerCreate, ManufacturerUpdate } from '@/types/logistics/materials/manufacturer'
+import ManufacturerMaterialPanel from './components/manufacturer-material-panel.vue'
+import { provideManufacturerMasterContext } from './composables/use-manufacturer-master-context'
+import { getManufacturerList, getManufacturerById, createManufacturer, updateManufacturer, deleteManufacturerById, deleteManufacturerBatch, getManufacturerTemplate, importManufacturer, exportManufacturer, updateManufacturerStatus } from '@/api/logistics/materials/manufacturer'
+import type { Manufacturer, ManufacturerQuery } from '@/types/logistics/materials/manufacturer'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -461,9 +484,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Manufacturer[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -478,11 +501,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Manufacturer>>({})
+const formData = ref<Partial<Manufacturer> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -508,10 +533,9 @@ const advancedQueryForm = ref({
   evaluationScore: undefined as number | undefined,
   isQualified: undefined as number | undefined,
   manufacturerStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -538,10 +562,9 @@ const queryFieldsMeta = computed(() => [
   { key: 'evaluationScore', label: t('entity.manufacturer.evaluationscore') },
   { key: 'isQualified', label: t('entity.manufacturer.isqualified') },
   { key: 'manufacturerStatus', label: t('entity.manufacturer.status') },
-  { key: 'sortOrder', label: t('entity.manufacturer.sortorder') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -559,76 +582,112 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-/** 主子表展开行 keys（手风琴，仅一行展开） */
-const expandedRowKeys = ref<string[]>([])
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideManufacturerMasterContext()
+const manufacturerMaterialPanelRef = ref<InstanceType<typeof ManufacturerMaterialPanel> | null>(null)
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {ManufacturerQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<ManufacturerQuery>): ManufacturerQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: ManufacturerQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof ManufacturerQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('manufacturerCode', form.manufacturerCode)
+  assignTrimmed('manufacturerName', form.manufacturerName)
+  assignTrimmed('manufacturerShortName', form.manufacturerShortName)
+  if (form.manufacturerType !== undefined && form.manufacturerType !== null) {
+    query.manufacturerType = form.manufacturerType
+  }
+  assignTrimmed('industrySector', form.industrySector)
+  assignTrimmed('manufacturerTaxNumber', form.manufacturerTaxNumber)
+  assignTrimmed('registrationCountry', form.registrationCountry)
+  assignTrimmed('registrationAddress1', form.registrationAddress1)
+  assignTrimmed('registrationAddress2', form.registrationAddress2)
+  assignTrimmed('registrationAddress3', form.registrationAddress3)
+  assignTrimmed('manufacturerPhone', form.manufacturerPhone)
+  assignTrimmed('manufacturerFax', form.manufacturerFax)
+  assignTrimmed('manufacturerEmail', form.manufacturerEmail)
+  assignTrimmed('manufacturerWebsite', form.manufacturerWebsite)
+  assignTrimmed('contactPerson', form.contactPerson)
+  assignTrimmed('contactPhone', form.contactPhone)
+  assignTrimmed('contactEmail', form.contactEmail)
+  if (form.manufacturerLevel !== undefined && form.manufacturerLevel !== null) {
+    query.manufacturerLevel = form.manufacturerLevel
+  }
+  if (form.qualityCertification !== undefined && form.qualityCertification !== null) {
+    query.qualityCertification = form.qualityCertification
+  }
+  if (form.evaluationScore !== undefined && form.evaluationScore !== null) {
+    query.evaluationScore = form.evaluationScore
+  }
+  if (form.isQualified !== undefined && form.isQualified !== null) {
+    query.isQualified = form.isQualified
+  }
+  if (form.manufacturerStatus !== undefined && form.manufacturerStatus !== null) {
+    query.manufacturerStatus = form.manufacturerStatus
+  }
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
-/** 展开行预览：manufacturerMaterial 列 */
-const manufacturerMaterialExpandColumns = computed(() => [
-  {
-    title: t('entity.manufacturerMaterial.manufacturername'),
-    dataIndex: 'manufacturerName',
-    key: 'manufacturerName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.manufacturerMaterial.manufacturercode'),
-    dataIndex: 'manufacturerCode',
-    key: 'manufacturerCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.manufacturerMaterial.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.manufacturerMaterial.materialtype'),
-    dataIndex: 'materialType',
-    key: 'materialType',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.manufacturerMaterial.code'),
-    dataIndex: 'manufacturerMaterialCode',
-    key: 'manufacturerMaterialCode',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.manufacturerMaterial.name'),
-    dataIndex: 'manufacturerMaterialName',
-    key: 'manufacturerMaterialName',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.manufacturerMaterial.specification'),
-    dataIndex: 'manufacturerMaterialSpecification',
-    key: 'manufacturerMaterialSpecification',
-    ellipsis: true,
-  },
-  {
-    title: t('entity.manufacturerMaterial.materialcode'),
-    dataIndex: 'materialCode',
-    key: 'materialCode',
-    ellipsis: true,
-  },
-])
 
-/** 读取主表行上的 manufacturerMaterial 子表缓存 */
-function getManufacturerMaterialRows(record: Manufacturer): ManufacturerMaterial[] {
-  return (record as any)?.manufacturerMaterials ?? []
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: Manufacturer | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getManufacturerId(record) : ''
 }
 
-/** 主表行是否已加载 manufacturerMaterial 子表 */
-function hasManufacturerMaterialRows(record: Manufacturer): boolean {
-  return getManufacturerMaterialRows(record).length > 0
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as Manufacturer
+  const key = getManufacturerId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
 }
 
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadManufacturerDetail(record: Manufacturer): Promise<Manufacturer | null> {
@@ -647,52 +706,6 @@ async function loadManufacturerDetail(record: Manufacturer): Promise<Manufacture
     message.error(error?.message || t('common.feedback.load.data.failed'))
     return null
   }
-}
-/** 懒加载 manufacturerMaterial 子表（ManufacturerMaterialQuery + manufacturerMaterialApi，与主表 ManufacturerQuery 分离） */
-async function loadManufacturerMaterialForManufacturer(record: Manufacturer): Promise<ManufacturerMaterial[]> {
-  const masterId = getManufacturerId(record)
-  if (!masterId) {
-    return []
-  }
-  try {
-    const childQuery: ManufacturerMaterialQuery = {
-      pageIndex: 1,
-      pageSize: 500,
-      manufacturerId: masterId,
-    }
-    const result = await manufacturerMaterialApi.getManufacturerMaterialList(childQuery)
-    const rows = result?.data ?? []
-    const index = dataSource.value.findIndex((row) => getManufacturerId(row) === masterId)
-    if (index !== -1) {
-      const row = dataSource.value[index]
-      dataSource.value[index] = { ...row, manufacturerMaterials: rows } as Manufacturer
-    }
-    return rows
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return []
-  }
-}
-
-/** 展开前确保各子表已懒加载 */
-async function ensureManufacturerChildrenLoaded(record: Manufacturer) {
-  if (!hasManufacturerMaterialRows(record)) {
-    await loadManufacturerMaterialForManufacturer(record)
-  }
-}
-
-/** 主表展开行：手风琴懒加载子表 */
-async function handleExpand(expanded: boolean, record: Manufacturer) {
-  const key = getManufacturerId(record)
-  if (!expanded || !key) {
-    expandedRowKeys.value = []
-    return
-  }
-  if (expandedRowKeys.value.length > 0 && expandedRowKeys.value[0] !== key) {
-    expandedRowKeys.value = []
-  }
-  await ensureManufacturerChildrenLoaded(record)
-  expandedRowKeys.value = [key]
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
@@ -935,6 +948,7 @@ const getManufacturerId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getManufacturerField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -942,51 +956,32 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: Manufacturer, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (getManufacturerId(selectedRow.value) === getManufacturerId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: Manufacturer[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Manufacturer) => ({
-  onClick: () => {
-    const key = getManufacturerId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getManufacturerId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: ManufacturerQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getManufacturerList(params)
+    const res = await getManufacturerList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -1004,7 +999,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1034,21 +1029,21 @@ function handleReset() {
   evaluationScore: undefined as number | undefined,
   isQualified: undefined as number | undefined,
   manufacturerStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.manufacturer._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: Manufacturer) {
@@ -1092,6 +1087,11 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.manufacturer._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  manufacturerMaterialPanelRef.value?.reload?.()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1101,6 +1101,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -1132,16 +1134,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: ManufacturerQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportManufacturer(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportManufacturer(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1178,6 +1175,10 @@ async function handleDeleteOne(record: Manufacturer) {
     onOk: async () => {
       await deleteManufacturerById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: t('entity.manufacturer._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1197,9 +1198,37 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteManufacturerBatch(ids)
       message.success(t('common.feedback.deleted', { target: t('entity.manufacturer._self') }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
+}
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handleManufacturerStatusChange(record: Manufacturer, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = getManufacturerField(record, 'manufacturerStatus')
+  const id = getManufacturerId(record)
+  const row = dataSource.value.find((item) => getManufacturerId(item) === id)
+  if (row) {
+    row.manufacturerStatus = newVal
+  }
+  try {
+    await updateManufacturerStatus({ manufacturerId: id, manufacturerStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.manufacturerStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
 }
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
@@ -1209,7 +1238,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1237,10 +1266,9 @@ function handleAdvancedQueryReset() {
   evaluationScore: undefined as number | undefined,
   isQualified: undefined as number | undefined,
   manufacturerStatus: undefined as number | undefined,
-  sortOrder: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1269,24 +1297,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number) {
-  currentPage.value = page
-  loadData()
-}
-/** 分页每页条数变更 */
-function handlePaginationSizeChange(_current: number, size: number) {
-  pageSize.value = size
-  currentPage.value = 1
-  loadData()
-}
 </script>
-
-<style scoped lang="css">
-.logistics-materials-manufacturer {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

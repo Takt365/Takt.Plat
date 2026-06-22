@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostElementService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本要素应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Accounting.Controlling;
 
@@ -31,6 +30,7 @@ namespace Takt.Application.Services.Accounting.Controlling;
 public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
 {
     private readonly ITaktCompanyRepository<TaktCostElement> _costElementRepository;
+    private readonly ITaktCompanyRepository<TaktCostElementChangeLog> _costElementChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,12 +38,14 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     /// 构造函数
     /// </summary>
     /// <param name="costElementRepository">成本要素仓储</param>
+    /// <param name="costElementChangeLogRepository">CostElementChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktCostElementService(
         ITaktCompanyRepository<TaktCostElement> costElementRepository,
+        ITaktCompanyRepository<TaktCostElementChangeLog> costElementChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -51,6 +53,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         : base(userContext, localizationService)
     {
         _costElementRepository = costElementRepository;
+        _costElementChangeLogRepository = costElementChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -86,8 +89,9 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         {
             return null;
         }
-        return entity.Adapt<TaktCostElementDto>();
-    }
+        var dto = entity.Adapt<TaktCostElementDto>();
+        await FillCostElementDetailsAsync(dto, entity);
+        return dto;    }
 
     /// <summary>
     /// 获取成本要素树形选项列表
@@ -186,6 +190,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             entity.SortOrder = _sortOrderGenerator.GenerateNext(entity.ParentId, maxSort);
         }
         entity = await _costElementRepository.CreateAsync(entity);
+                await SaveCostElementChildrenAsync(entity, dto);
         return await GetCostElementByIdAsync(entity.Id) ?? entity.Adapt<TaktCostElementDto>();
     }
 
@@ -212,6 +217,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             throw new TaktBusinessException("成本要素的CostElementCode已存在");
         }
         await _costElementRepository.UpdateAsync(entity);
+                await SaveCostElementChildrenAsync(entity, dto);
         return await GetCostElementByIdAsync(id) ?? throw new TaktBusinessException("成本要素不存在");
     }
 
@@ -222,12 +228,12 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     /// <returns>任务</returns>
     public async Task DeleteCostElementByIdAsync(long id)
     {
-
-        var hasChildren = await _costElementRepository.ExistsAsync(x => x.ParentId == id);
-        if (hasChildren)
+        var entity = await _costElementRepository.GetByIdAsync(id);
+        if (entity == null)
         {
-            throw new TaktBusinessException("存在子节点，无法删除");
+            throw new TaktBusinessException("成本要素不存在或已删除");
         }
+        await _costElementChangeLogRepository.DeleteAsync(x => x.CostElementId == entity.Id);
         var deleted = await _costElementRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -380,6 +386,54 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充成本要素详情（加载 OneToMany 子表：成本要素变更记录）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillCostElementDetailsAsync(TaktCostElementDto dto, TaktCostElement entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 成本要素变更记录 → dto.ChangeLogs
+        var changelogs = await _costElementChangeLogRepository.GetListAsync(x => x.CostElementId == entity.Id);
+        dto.ChangeLogs = changelogs.Adapt<List<TaktCostElementChangeLogDto>>();
+    }
+
+    /// <summary>
+    /// 保存成本要素子表级联（成本要素变更记录；Create/Update 后按主表 Id 先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveCostElementChildrenAsync(TaktCostElement entity, TaktCostElementCreateDto dto)
+    {
+        // 成本要素变更记录（ChangeLogs）
+        if (dto.ChangeLogs is not { Count: > 0 })
+        {
+            await _costElementChangeLogRepository.DeleteAsync(x => x.CostElementId == entity.Id);
+        }
+        else
+        {
+            var changelogs = dto.ChangeLogs.Adapt<List<TaktCostElementChangeLog>>();
+            foreach (var child in changelogs)
+            {
+                child.CostElementId = entity.Id;
+            }
+            await _costElementChangeLogRepository.DeleteAsync(x => x.CostElementId == entity.Id);
+            foreach (var child in changelogs)
+            {
+            }
+            await _costElementChangeLogRepository.CreateRangeAsync(changelogs);
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -398,14 +452,13 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             exp = exp.And(x =>
                 (x.CostElementCode != null && x.CostElementCode.Contains(keywords))
                 || (x.CostElementName != null && x.CostElementName.Contains(keywords))
-                || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CostElementType).Contains(keywords)
                 || SqlFunc.ToString(x.CostElementCategory).Contains(keywords)
                 || SqlFunc.ToString(x.ParentId).Contains(keywords)
                 || SqlFunc.ToString(x.CostElementLevel).Contains(keywords)
                 || SqlFunc.ToString(x.CostElementStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
                 || SqlFunc.ToString(x.ValidTo).Contains(keywords)
@@ -421,16 +474,6 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         if (!string.IsNullOrEmpty(queryDto?.CostElementName))
         {
             exp = exp.And(x => x.CostElementName != null && x.CostElementName.Contains(queryDto.CostElementName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ShortName))
-        {
-            exp = exp.And(x => x.CostElementName != null && x.CostElementName.Contains(queryDto.ShortName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CostElementDesc))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.CostElementDesc));
         }
 
         if (queryDto?.CostElementType.HasValue == true)
@@ -463,9 +506,9 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

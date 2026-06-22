@@ -101,7 +101,7 @@ public class TaktOvertimeItemService : TaktServiceBase, ITaktOvertimeItemService
         EnsureThreeLayerContext();
         var list = await _overtimeItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.EmployeeName,
+            x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -341,7 +341,7 @@ public class TaktOvertimeItemService : TaktServiceBase, ITaktOvertimeItemService
                 || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedHours).Contains(keywords)
                 || SqlFunc.ToString(x.ActualHours).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ActualStartTime).Contains(keywords)
                 || SqlFunc.ToString(x.ActualEndTime).Contains(keywords)
@@ -379,9 +379,9 @@ public class TaktOvertimeItemService : TaktServiceBase, ITaktOvertimeItemService
             exp = exp.And(x => x.ActualHours == queryDto.ActualHours);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

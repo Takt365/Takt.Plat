@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/conference-center
 // 文件名称：conference.ts
-// 创建时间：2026-06-11
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -33,7 +33,7 @@ const CONFERENCE_API_BASE = 'TaktConferences';
 // ========================================
 
 /**
- * 获取会议列表（分页）
+ * 获取会议中心列表（分页）
  * @param {any} queryDto 查询DTO
  * @returns {Promise<TaktPagedResult<Conference>>} 分页结果
  */
@@ -41,16 +41,14 @@ export function getConferenceList(queryDto: any): Promise<TaktPagedResult<Confer
   return request<TaktPagedResult<Conference>>({
     url: `${CONFERENCE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
 /**
- * 根据ID获取会议
- * @param {string} id 会议ID
- * @returns {Promise<Conference>} 会议DTO
+ * 根据ID获取会议中心
+ * @param {string} id 会议中心ID
+ * @returns {Promise<Conference>} 会议中心DTO
  */
 export function getConferenceById(id: string): Promise<Conference> {
   return request<Conference>({
@@ -60,9 +58,9 @@ export function getConferenceById(id: string): Promise<Conference> {
 }
 
 /**
- * 创建会议
+ * 创建会议中心
  * @param {ConferenceCreate} dto 创建DTO
- * @returns {Promise<Conference>} 会议DTO
+ * @returns {Promise<Conference>} 会议中心DTO
  */
 export function createConference(dto: ConferenceCreate): Promise<Conference> {
   return request<Conference>({
@@ -73,10 +71,10 @@ export function createConference(dto: ConferenceCreate): Promise<Conference> {
 }
 
 /**
- * 更新会议
- * @param {string} id 会议ID
+ * 更新会议中心
+ * @param {string} id 会议中心ID
  * @param {ConferenceUpdate} dto 更新DTO
- * @returns {Promise<Conference>} 会议DTO
+ * @returns {Promise<Conference>} 会议中心DTO
  */
 export function updateConference(id: string, dto: ConferenceUpdate): Promise<Conference> {
   return request<Conference>({
@@ -87,8 +85,8 @@ export function updateConference(id: string, dto: ConferenceUpdate): Promise<Con
 }
 
 /**
- * 删除会议
- * @param {string} id 会议ID
+ * 删除会议中心
+ * @param {string} id 会议中心ID
  * @returns {Promise<void>} 操作结果
  */
 export function deleteConferenceById(id: string): Promise<void> {
@@ -99,7 +97,7 @@ export function deleteConferenceById(id: string): Promise<void> {
 }
 
 /**
- * 批量删除会议
+ * 批量删除会议中心
  * @param {string[]} ids ID列表
  * @returns {Promise<void>} 操作结果
  */
@@ -112,9 +110,9 @@ export function deleteConferenceBatch(ids: string[]): Promise<void> {
 }
 
 /**
- * 更新会议状态
- * @param {ConferenceStatus} dto 状态 DTO（TaktConferenceStatus 枚举）
- * @returns {Promise<Conference>} 会议DTO
+ * 更新会议中心状态
+ * @param {ConferenceStatus} dto 状态 DTO
+ * @returns {Promise<Conference>} 会议中心DTO
  */
 export function updateConferenceStatus(dto: ConferenceStatus): Promise<Conference> {
   return request<Conference>({
@@ -162,7 +160,7 @@ export function getConferenceTemplate(sheetName?: string, templateName?: string)
 }
 
 /**
- * 导入会议
+ * 导入会议中心
  * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
@@ -185,7 +183,7 @@ export function importConference(file: globalThis.File, sheetName?: string): Pro
 }
 
 /**
- * 导出会议
+ * 导出会议中心
  * @param {any} query query
  * @param {string} sheetName sheetName
  * @param {string} exportName exportName
@@ -200,7 +198,7 @@ export function exportConference(
     url: `${CONFERENCE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

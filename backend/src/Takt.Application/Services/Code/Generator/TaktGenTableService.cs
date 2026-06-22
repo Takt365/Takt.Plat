@@ -31,7 +31,6 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
 {
     private readonly ITaktTenantRepository<TaktGenTable> _genTableRepository;
     private readonly ITaktTenantRepository<TaktGenTableColumn> _genTableColumnRepository;
-    private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -40,7 +39,6 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
     /// </summary>
     /// <param name="genTableRepository">代码生成数据表配置仓储</param>
     /// <param name="genTableColumnRepository">GenTableColumn仓储</param>
-    /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -48,7 +46,6 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
     public TaktGenTableService(
         ITaktTenantRepository<TaktGenTable> genTableRepository,
         ITaktTenantRepository<TaktGenTableColumn> genTableColumnRepository,
-        ITaktSortOrderGenerator sortOrderGenerator,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -57,7 +54,6 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
     {
         _genTableRepository = genTableRepository;
         _genTableColumnRepository = genTableColumnRepository;
-        _sortOrderGenerator = sortOrderGenerator;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -105,7 +101,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
     {
         var list = await _genTableRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
-            x => x.TableName,
+            x => x.TableName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -131,7 +127,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
             throw new TaktBusinessException("代码生成数据表配置的DataSource、TableName已存在");
         }
         entity = await _genTableRepository.CreateAsync(entity);
-                await SaveGenTableChildrenAsync(entity, dto);
+        await SaveGenTableChildrenAsync(entity.Id, entity, dto);
         return await GetGenTableByIdAsync(entity.Id) ?? entity.Adapt<TaktGenTableDto>();
     }
 
@@ -159,7 +155,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
             throw new TaktBusinessException("代码生成数据表配置的DataSource、TableName已存在");
         }
         await _genTableRepository.UpdateAsync(entity);
-                await SaveGenTableChildrenAsync(entity, dto);
+        await SaveGenTableChildrenAsync(id, entity, dto);
         return await GetGenTableByIdAsync(id) ?? throw new TaktBusinessException("代码生成数据表配置不存在");
     }
 
@@ -175,7 +171,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
         {
             throw new TaktBusinessException("代码生成数据表配置不存在或已删除");
         }
-        await _genTableColumnRepository.DeleteAsync(x => x.GenTableId == entity.Id);
+        await _genTableColumnRepository.DeletePhysicallyAsync(x => x.GenTableId == entity.Id);
         var deleted = await _genTableRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -304,85 +300,174 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
             return;
         }
         // 代码生成数据表列配置 → dto.Columns
-        var columns = await _genTableColumnRepository.GetListAsync(x => x.GenTableId == entity.Id);
+        var columns = await _genTableColumnRepository.GetListAsync(
+            x => x.GenTableId == entity.Id,
+            x => x.LineNumber,
+            false);
         dto.Columns = columns.Adapt<List<TaktGenTableColumnDto>>();
     }
 
     /// <summary>
-    /// 保存代码生成数据表配置子表级联（代码生成数据表列配置；Create/Update 后按主表 Id 先删后插）
+    /// 保存代码生成数据表配置子表级联（编辑时按 GenTableColumnId 更新已有行，Id=0 新增，未提交行软删；禁止先删后插）
     /// </summary>
+    /// <param name="tableId">主表 Id（路由或新建后的实体 Id，避免 Adapt 后主键歧义）</param>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
     /// <returns>任务</returns>
-    private async Task SaveGenTableChildrenAsync(TaktGenTable entity, TaktGenTableCreateDto dto)
+    private async Task SaveGenTableChildrenAsync(long tableId, TaktGenTable entity, TaktGenTableCreateDto dto)
     {
-        // 代码生成数据表列配置（Columns）
+        if (tableId <= 0)
+        {
+            throw new TaktBusinessException("代码生成数据表配置主键无效");
+        }
         if (dto.Columns is not { Count: > 0 })
         {
-            await _genTableColumnRepository.DeleteAsync(x => x.GenTableId == entity.Id);
+            await _genTableColumnRepository.DeleteAsync(x => x.GenTableId == tableId);
+            return;
         }
-        else
+        var columnDtos = dto.Columns;
+        for (var i = 0; i < columnDtos.Count; i++)
         {
-            var columns = dto.Columns.Adapt<List<TaktGenTableColumn>>();
-            foreach (var child in columns)
+            var col = columnDtos[i];
+            col.DatabaseColumnName = (col.DatabaseColumnName ?? string.Empty).Trim();
+            if (string.IsNullOrEmpty(col.DatabaseColumnName))
             {
-                child.GenTableId = entity.Id;
+                throw new TaktBusinessException($"代码生成数据表列配置第{i + 1}项数据库列名不能为空");
             }
-            var columnsNeedSort = columns.Where(c => c.SortOrder <= 0).ToList();
-            if (columnsNeedSort.Count > 0)
+            col.GenTableId = tableId;
+            col.TenantCode = entity.TenantCode;
+        }
+        var seenNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        for (var i = 0; i < columnDtos.Count; i++)
+        {
+            if (!seenNames.Add(columnDtos[i].DatabaseColumnName))
             {
-                var maxSort = await _genTableColumnRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.GenTableId == entity.Id,
-                    x => x.SortOrder);
-                var sortSeq = _sortOrderGenerator.GenerateSequenceForMaster(entity.Id, columnsNeedSort.Count, maxSort).ToList();
-                var sortIdx = 0;
-                foreach (var child in columns)
+                throw new TaktBusinessException($"代码生成数据表列配置第{i + 1}项与本次提交的其他项重复（DatabaseColumnName={columnDtos[i].DatabaseColumnName}）");
+            }
+        }
+        var existing = await _genTableColumnRepository.GetListAsync(x => x.GenTableId == tableId);
+        var existingById = existing.ToDictionary(x => x.Id);
+        var submittedIds = new HashSet<long>();
+        var toCreate = new List<TaktGenTableColumn>();
+        foreach (var colDto in columnDtos)
+        {
+            if (colDto.GenTableColumnId > 0)
+            {
+                if (!existingById.TryGetValue(colDto.GenTableColumnId, out var target))
                 {
-                    if (child.SortOrder <= 0)
-                    {
-                        child.SortOrder = sortSeq[sortIdx++];
-                    }
+                    throw new TaktBusinessException($"代码生成数据表列配置不存在（GenTableColumnId={colDto.GenTableColumnId}）");
                 }
-            }
-            var columnsNeedLine = columns.Where(c => c.LineNumber <= 0).ToList();
-            if (columnsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.TreeCode) ? entity.TreeCode : entity.Id.ToString();
-                var maxLine = await _genTableColumnRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.GenTableId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, columnsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in columns)
+                if (target.GenTableId != tableId)
                 {
-                    if (child.LineNumber <= 0)
-                    {
-                        child.LineNumber = lineSeq[lineIdx++];
-                    }
+                    throw new TaktBusinessException($"代码生成数据表列配置不属于当前表（GenTableColumnId={colDto.GenTableColumnId}）");
                 }
+                submittedIds.Add(colDto.GenTableColumnId);
+                var isUnique_ix_gen_table_column_column_unique = await _uniqueValidator.IsUniqueAsync(
+                    _genTableColumnRepository,
+                    x => x.GenTableId == tableId
+                        && x.DatabaseColumnName == colDto.DatabaseColumnName,
+                    colDto.GenTableColumnId);
+                if (!isUnique_ix_gen_table_column_column_unique)
+                {
+                    throw new TaktBusinessException("代码生成数据表列配置的GenTableId、DatabaseColumnName已存在");
+                }
+                ApplyIncomingGenTableColumnFields(target, colDto);
+                await _genTableColumnRepository.UpdateAsync(target);
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < columns.Count; i++)
-                        {
-                            var key = $"{columns[i].GenTableId}|{columns[i].DatabaseColumnName}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"代码生成数据表列配置第{i + 1}项与本次提交的其他项重复（GenTableId、DatabaseColumnName）");
-                            }
-                        }
-            await _genTableColumnRepository.DeleteAsync(x => x.GenTableId == entity.Id);
-            foreach (var child in columns)
+            else
             {
-            var isUnique_ix_gen_table_column_column_unique = await _uniqueValidator.IsUniqueAsync(
-                _genTableColumnRepository,
-                x => x.GenTableId == child.GenTableId
-                    && x.DatabaseColumnName == child.DatabaseColumnName);
-            if (!isUnique_ix_gen_table_column_column_unique)
+                var isUnique_ix_gen_table_column_column_unique = await _uniqueValidator.IsUniqueAsync(
+                    _genTableColumnRepository,
+                    x => x.GenTableId == tableId
+                        && x.DatabaseColumnName == colDto.DatabaseColumnName);
+                if (!isUnique_ix_gen_table_column_column_unique)
+                {
+                    throw new TaktBusinessException("代码生成数据表列配置的GenTableId、DatabaseColumnName已存在");
+                }
+                var child = colDto.Adapt<TaktGenTableColumn>();
+                child.Id = 0;
+                child.GenTableId = tableId;
+                child.TenantCode = entity.TenantCode;
+                child.LineNumber = 0;
+                child.QueryType = TaktGenQueryTypeHelper.Resolve(child.IsQuery, child.QueryType, child.CsharpDataType);
+                toCreate.Add(child);
+            }
+        }
+        foreach (var removed in existing.Where(e => !submittedIds.Contains(e.Id)))
+        {
+            await _genTableColumnRepository.DeleteAsync(removed.Id);
+        }
+        if (toCreate.Count > 0)
+        {
+            await AssignGenTableColumnLineNumbersAsync(toCreate, entity, tableId);
+            await _genTableColumnRepository.CreateRangeAsync(toCreate);
+        }
+    }
+
+    /// <summary>
+    /// 将提交列字段合并到已持久化列（保留 Id/GenTableId/TenantCode/审计字段）
+    /// </summary>
+    /// <param name="target">库内已有列</param>
+    /// <param name="source">本次提交列</param>
+    private static void ApplyIncomingGenTableColumnFields(TaktGenTableColumn target, TaktGenTableColumnUpdateDto source)
+    {
+        target.DatabaseColumnName = (source.DatabaseColumnName ?? string.Empty).Trim();
+        if (source.LineNumber > 0)
+        {
+            target.LineNumber = source.LineNumber;
+        }
+        target.ColumnComment = source.ColumnComment;
+        target.DatabaseDataType = source.DatabaseDataType;
+        target.CsharpDataType = source.CsharpDataType;
+        target.CsharpColumnName = source.CsharpColumnName;
+        target.Length = source.Length;
+        target.DecimalDigits = source.DecimalDigits;
+        target.IsPk = source.IsPk;
+        target.IsIncrement = source.IsIncrement;
+        target.IsRequired = source.IsRequired;
+        target.IsCreate = source.IsCreate;
+        target.IsUpdate = source.IsUpdate;
+        target.IsUnique = source.IsUnique;
+        target.IsList = source.IsList;
+        target.IsExport = source.IsExport;
+        target.IsSort = source.IsSort;
+        target.IsQuery = source.IsQuery;
+        target.QueryType = TaktGenQueryTypeHelper.Resolve(source.IsQuery, source.QueryType, source.CsharpDataType);
+        target.HtmlType = source.HtmlType;
+        target.DictType = source.DictType;
+        target.ExtField = source.ExtField;
+        target.Remark = source.Remark;
+    }
+
+    /// <summary>
+    /// 为新增列分配行号（项号/序号，固定步长=10；仅未持久化列 GenTableColumnId/Id≤0 参与；最大行号仍按 GenTableId 作用域查询）
+    /// </summary>
+    /// <param name="columns">待插入列</param>
+    /// <param name="entity">主表实体</param>
+    /// <param name="tableId">主表 Id</param>
+    /// <returns>任务</returns>
+    private async Task AssignGenTableColumnLineNumbersAsync(
+        List<TaktGenTableColumn> columns,
+        TaktGenTable entity,
+        long tableId)
+    {
+        var columnsNeedLine = columns.Where(c => c.Id <= 0).ToList();
+        if (columnsNeedLine.Count == 0)
+        {
+            return;
+        }
+        var businessCode = !string.IsNullOrWhiteSpace(entity.TreeCode) ? entity.TreeCode : tableId.ToString();
+        var maxLine = await _genTableColumnRepository.GetMaxIntAsync(
+            x => x.TenantCode == CurrentTenantCode && x.GenTableId == tableId,
+            x => x.LineNumber);
+        var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, columnsNeedLine.Count, maxLine).ToList();
+        var lineIdx = 0;
+        foreach (var child in columns)
+        {
+            if (child.Id <= 0)
             {
-                throw new TaktBusinessException("代码生成数据表列配置的GenTableId、DatabaseColumnName已存在");
+                child.LineNumber = lineSeq[lineIdx++];
             }
-            }
-            await _genTableColumnRepository.CreateRangeAsync(columns);
         }
     }
     // ========================================
@@ -449,7 +534,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
                 || SqlFunc.ToString(x.TabsFieldCount).Contains(keywords)
                 || (x.GenAuthor != null && x.GenAuthor.Contains(keywords))
                 || (x.OtherGenOptions != null && x.OtherGenOptions.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -690,9 +775,9 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
             exp = exp.And(x => x.OtherGenOptions != null && x.OtherGenOptions.Contains(queryDto.OtherGenOptions));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

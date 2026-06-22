@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.ConferenceCenter
 // 文件名称：TaktConferenceRoomDtos.cs
-// 创建时间：2026-06-11
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConferenceRoom 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConferenceRoom 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Routine.ConferenceCenter;
 
@@ -74,7 +73,7 @@ public class TaktConferenceRoomDto : TaktCompanyDtoBase
     /// <summary>
     /// 会议室状态
     /// </summary>
-    public int RoomStatus { get; set; }
+    public int RoomStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -161,7 +160,7 @@ public class TaktConferenceRoomQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -233,17 +232,12 @@ public class TaktConferenceRoomCreateDto
     /// <summary>
     /// 会议室状态
     /// </summary>
-    public int RoomStatus { get; set; }
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int RoomStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -293,7 +287,7 @@ public class TaktConferenceRoomStatusDto
     /// 会议室状态
     /// </summary>
     [Required(ErrorMessage = "会议室状态不能为空")]
-    public int RoomStatus { get; set; }
+    public int RoomStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -380,14 +374,9 @@ public class TaktConferenceRoomTemplateDto
     public int? RoomStatus { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -457,14 +446,9 @@ public class TaktConferenceRoomImportDto
     public int? RoomStatus { get; set; }
 
     /// <summary>
-    /// 排序号
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -532,7 +516,7 @@ public class TaktConferenceRoomExportDto
     /// <summary>
     /// 会议室状态
     /// </summary>
-    public int RoomStatus { get; set; }
+    public int RoomStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号
@@ -542,7 +526,7 @@ public class TaktConferenceRoomExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

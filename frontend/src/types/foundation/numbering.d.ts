@@ -41,7 +41,7 @@ export interface Numbering extends CompanyDtoBase {
   /**
    * 单据类型
    */
-  documentType: number;
+  documentType: string;
 
   /**
    * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -49,12 +49,12 @@ export interface Numbering extends CompanyDtoBase {
   departmentCode: string;
 
   /**
-   * 前缀（如：SO-, PO-, INV-）
+   * 前缀编码（如：PUR、SORD，最多 4 位）
    */
-  prefix?: string;
+  prefixCode?: string;
 
   /**
-   * 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
    */
   dateFormat?: string;
 
@@ -69,9 +69,9 @@ export interface Numbering extends CompanyDtoBase {
   sequenceStep: number;
 
   /**
-   * 后缀（如：-CN, -USD, -V2）
+   * 后缀编码（可选，最多 4 位）
    */
-  suffix?: string;
+  suffixCode?: string;
 
   /**
    * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -84,12 +84,12 @@ export interface Numbering extends CompanyDtoBase {
   currentSequence: number;
 
   /**
-   * 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+   * 起始编码（完整业务编号，末段为流水号） 如：SO-20250120-000001
    */
-  exampleCode?: string;
+  exampleCode: string;
 
   /**
-   * 分隔符（默认 -，也可用 _ 或 /）
+   * 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
    */
   separator: string;
 
@@ -141,7 +141,7 @@ export interface NumberingQuery extends TaktPagedQuery {
   /**
    * 单据类型
    */
-  documentType?: number;
+  documentType?: string;
 
   /**
    * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -149,12 +149,12 @@ export interface NumberingQuery extends TaktPagedQuery {
   departmentCode?: string;
 
   /**
-   * 前缀（如：SO-, PO-, INV-）
+   * 前缀编码（如：PUR、SORD，最多 4 位）
    */
-  prefix?: string;
+  prefixCode?: string;
 
   /**
-   * 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
    */
   dateFormat?: string;
 
@@ -169,9 +169,9 @@ export interface NumberingQuery extends TaktPagedQuery {
   sequenceStep?: number;
 
   /**
-   * 后缀（如：-CN, -USD, -V2）
+   * 后缀编码（可选，最多 4 位）
    */
-  suffix?: string;
+  suffixCode?: string;
 
   /**
    * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -184,14 +184,9 @@ export interface NumberingQuery extends TaktPagedQuery {
   currentSequence?: number;
 
   /**
-   * 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+   * 起始编码（模糊查询，可选） 如：SO-20250120-000001
    */
   exampleCode?: string;
-
-  /**
-   * 分隔符（默认 -，也可用 _ 或 /）
-   */
-  separator?: string;
 
   /**
    * 是否内置（0=否，1=是，系统内置的不可删除）
@@ -221,7 +216,7 @@ export interface NumberingQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -265,7 +260,7 @@ export interface NumberingCreate {
   /**
    * 单据类型
    */
-  documentType: number;
+  documentType: string;
 
   /**
    * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -273,12 +268,12 @@ export interface NumberingCreate {
   departmentCode: string;
 
   /**
-   * 前缀（如：SO-, PO-, INV-）
+   * 前缀编码（如：PUR、SORD，最多 4 位）
    */
-  prefix?: string;
+  prefixCode?: string;
 
   /**
-   * 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
    */
   dateFormat?: string;
 
@@ -293,9 +288,9 @@ export interface NumberingCreate {
   sequenceStep: number;
 
   /**
-   * 后缀（如：-CN, -USD, -V2）
+   * 后缀编码（可选，最多 4 位）
    */
-  suffix?: string;
+  suffixCode?: string;
 
   /**
    * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -303,17 +298,17 @@ export interface NumberingCreate {
   resetPeriod: string;
 
   /**
-   * 当前流水号（用于记录下一个流水号值）
+   * 当前流水号（服务端创建/导入时写入，客户端无须提交）
    */
-  currentSequence: number;
+  currentSequence?: number;
 
   /**
-   * 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+   * 起始编码（服务端创建/导入/更新时按规则生成，客户端无须提交） 如：SO-20250120-000001
    */
   exampleCode?: string;
 
   /**
-   * 分隔符（默认 -，也可用 _ 或 /）
+   * 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
    */
   separator: string;
 
@@ -335,7 +330,7 @@ export interface NumberingCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -408,7 +403,7 @@ export interface NumberingTemplate {
   /**
    * 单据类型
    */
-  documentType?: number;
+  documentType?: string;
 
   /**
    * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -416,12 +411,12 @@ export interface NumberingTemplate {
   departmentCode?: string;
 
   /**
-   * 前缀（如：SO-, PO-, INV-）
+   * 前缀编码（如：PUR、SORD，最多 4 位）
    */
-  prefix?: string;
+  prefixCode?: string;
 
   /**
-   * 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
    */
   dateFormat?: string;
 
@@ -436,9 +431,9 @@ export interface NumberingTemplate {
   sequenceStep?: number;
 
   /**
-   * 后缀（如：-CN, -USD, -V2）
+   * 后缀编码（可选，最多 4 位）
    */
-  suffix?: string;
+  suffixCode?: string;
 
   /**
    * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -451,14 +446,14 @@ export interface NumberingTemplate {
   currentSequence?: number;
 
   /**
-   * 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+   * 起始编码（完整业务编号，末段为流水号） 如：SO-20250120-000001
    */
-  exampleCode?: string;
+  exampleCode: string;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -502,7 +497,7 @@ export interface NumberingImport {
   /**
    * 单据类型
    */
-  documentType?: number;
+  documentType?: string;
 
   /**
    * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -510,12 +505,12 @@ export interface NumberingImport {
   departmentCode?: string;
 
   /**
-   * 前缀（如：SO-, PO-, INV-）
+   * 前缀编码（如：PUR、SORD，最多 4 位）
    */
-  prefix?: string;
+  prefixCode?: string;
 
   /**
-   * 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
    */
   dateFormat?: string;
 
@@ -530,9 +525,9 @@ export interface NumberingImport {
   sequenceStep?: number;
 
   /**
-   * 后缀（如：-CN, -USD, -V2）
+   * 后缀编码（可选，最多 4 位）
    */
-  suffix?: string;
+  suffixCode?: string;
 
   /**
    * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -545,14 +540,14 @@ export interface NumberingImport {
   currentSequence?: number;
 
   /**
-   * 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+   * 起始编码（完整业务编号，末段为流水号） 如：SO-20250120-000001
    */
-  exampleCode?: string;
+  exampleCode: string;
 
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -591,7 +586,7 @@ export interface NumberingExport {
   /**
    * 单据类型
    */
-  documentType: number;
+  documentType: string;
 
   /**
    * 部门编码（如：DEPT01, DEPT02，不可为空） 从 TaktDepartment 实体自动获取 DisplayCode
@@ -599,12 +594,12 @@ export interface NumberingExport {
   departmentCode: string;
 
   /**
-   * 前缀（如：SO-, PO-, INV-）
+   * 前缀编码（如：PUR、SORD，最多 4 位）
    */
-  prefix?: string;
+  prefixCode?: string;
 
   /**
-   * 日期格式（yyyy, yyyyMM, yyyyMMdd, yyyyMMddHH, yyyyMMddHHmm） 为空表示不使用日期
+   * 日期格式（yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH） 为空表示不使用日期
    */
   dateFormat?: string;
 
@@ -619,9 +614,9 @@ export interface NumberingExport {
   sequenceStep: number;
 
   /**
-   * 后缀（如：-CN, -USD, -V2）
+   * 后缀编码（可选，最多 4 位）
    */
-  suffix?: string;
+  suffixCode?: string;
 
   /**
    * 重置周期（daily=每日重置，monthly=每月重置，yearly=每年重置，none=不重置）
@@ -634,12 +629,12 @@ export interface NumberingExport {
   currentSequence: number;
 
   /**
-   * 示例编码（自动生成，用于预览规则效果） 如：SO-20250120-000001
+   * 起始编码（完整业务编号，末段为流水号） 如：SO-20250120-000001
    */
-  exampleCode?: string;
+  exampleCode: string;
 
   /**
-   * 分隔符（默认 -，也可用 _ 或 /）
+   * 分隔符（空=段直接拼接；-=连字符分隔，默认 -）
    */
   separator: string;
 
@@ -661,7 +656,7 @@ export interface NumberingExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -698,7 +693,7 @@ export interface NumberingPreviewRequest {
   /**
    * 单据类型（草稿预览）
    */
-  documentType: number;
+  documentType: string;
 
   /**
    * 部门编码（草稿预览必填）
@@ -708,7 +703,7 @@ export interface NumberingPreviewRequest {
   /**
    * 前缀
    */
-  prefix?: string;
+  prefixCode?: string;
 
   /**
    * 日期格式
@@ -728,7 +723,7 @@ export interface NumberingPreviewRequest {
   /**
    * 后缀
    */
-  suffix?: string;
+  suffixCode?: string;
 
   /**
    * 重置周期

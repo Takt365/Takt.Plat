@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/output/assy-output/components -->
 <!-- 文件名称：assy-output-form.vue -->
-<!-- 功能描述：组立日报维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：组立日报维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form assy-output-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,7 +20,6 @@
       v-model:active-key="activeTab"
       class="assy-output-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
         :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,99 +63,100 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.plantcode')"
+                :label="t('entity.assyoutput.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.plantcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.plantcode') })"
+                  show-count
+                  :maxlength="4"
                   allow-clear
+                  :disabled="!!formData?.assyOutputId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.prodcategory')"
+                :label="t('entity.assyoutput.prodcategory')"
                 name="prodCategory"
               >
                 <a-input
                   v-model:value="formState.prodCategory"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.prodcategory') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodcategory') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.proddate')"
+                :label="t('entity.assyoutput.proddate')"
                 name="prodDate"
               >
                 <a-date-picker
                   v-model:value="formState.prodDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyOutput.proddate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyoutput.proddate') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.prodline')"
+                :label="t('entity.assyoutput.prodline')"
                 name="prodLine"
               >
                 <a-input
                   v-model:value="formState.prodLine"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.prodline') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodline') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.directlabor')"
+                :label="t('entity.assyoutput.directlabor')"
                 name="directLabor"
               >
                 <a-input-number
                   v-model:value="formState.directLabor"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.directlabor') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.directlabor') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.indirectlabor')"
+                :label="t('entity.assyoutput.indirectlabor')"
                 name="indirectLabor"
               >
                 <a-input-number
                   v-model:value="formState.indirectLabor"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.indirectlabor') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.indirectlabor') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.shiftno')"
+                :label="t('entity.assyoutput.shiftno')"
                 name="shiftNo"
               >
                 <a-input-number
                   v-model:value="formState.shiftNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.shiftno') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.shiftno') })"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -170,130 +173,147 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.prodordertype')"
+                :label="t('entity.assyoutput.prodordertype')"
                 name="prodOrderType"
               >
                 <a-input
                   v-model:value="formState.prodOrderType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.prodordertype') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodordertype') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.prodordercode')"
+                :label="t('entity.assyoutput.prodordercode')"
                 name="prodOrderCode"
               >
                 <a-input
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.prodordercode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodordercode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.assyOutputId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.modelcode')"
+                :label="t('entity.assyoutput.modelcode')"
                 name="modelCode"
               >
                 <a-input
                   v-model:value="formState.modelCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.modelcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.modelcode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.assyOutputId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.materialcode')"
+                :label="t('entity.assyoutput.materialcode')"
                 name="materialCode"
               >
                 <a-input
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.materialcode') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.materialcode') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.assyOutputId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.batchno')"
+                :label="t('entity.assyoutput.batchno')"
                 name="batchNo"
               >
                 <a-input
                   v-model:value="formState.batchNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.batchno') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.batchno') })"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.prodorderqty')"
+                :label="t('entity.assyoutput.prodorderqty')"
                 name="prodOrderQty"
               >
                 <a-input-number
                   v-model:value="formState.prodOrderQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.prodorderqty') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodorderqty') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.stdminutes')"
+                :label="t('entity.assyoutput.stdminutes')"
                 name="stdMinutes"
               >
                 <a-input-number
                   v-model:value="formState.stdMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.stdminutes') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.stdminutes') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.stdcapacity')"
+                :label="t('entity.assyoutput.stdcapacity')"
                 name="stdCapacity"
               >
                 <a-input-number
                   v-model:value="formState.stdCapacity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.stdcapacity') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.stdcapacity') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assyOutput.status')"
+                :label="t('entity.assyoutput.status')"
                 name="status"
               >
                 <a-input-number
                   v-model:value="formState.status"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutput.status') })"
-                  size="small"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.status') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -316,131 +336,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：assyOutputDetail -->
-      <a-tab-pane
-        key="child-assyOutputDetails"
-        :tab="t('entity.assyOutputDetail._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddAssyOutputDetailRow">
-            {{ t('common.page.button.create') }}{{ t('entity.assyOutputDetail._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="assyOutputDetailFormColumns"
-          :data-source="childAssyOutputDetailRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'prodOrderCode'">
-              <a-input
-                v-model:value="record.prodOrderCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutputDetail.prodordercode') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutputDetail.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'timePeriod'">
-              <a-input
-                v-model:value="record.timePeriod"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutputDetail.timeperiod') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'prodActualQty'">
-              <a-input-number
-                v-model:value="record.prodActualQty"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutputDetail.prodactualqty') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'downtimeMinutes'">
-              <a-input-number
-                v-model:value="record.downtimeMinutes"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutputDetail.downtimeminutes') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'downtimeReason'">
-              <a-input
-                v-model:value="record.downtimeReason"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutputDetail.downtimereason') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'downtimeDescription'">
-              <a-textarea
-                v-model:value="record.downtimeDescription"
-                :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.assyOutputDetail.downtimedescription') })"
-                :rows="2"
-                size="small"
-              />
-            </template>
-            <template v-else-if="column.key === 'unachievedReason'">
-              <a-input
-                v-model:value="record.unachievedReason"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyOutputDetail.unachievedreason') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveAssyOutputDetailRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 assyOutputDetails -->
+    <TaktEditableTable
+      ref="assyOutputDetailTableRef"
+      v-model="childAssyOutputDetailRows"
+      :columns="assyOutputDetailFormColumns"
+      :title="t('entity.assyoutputdetail._self')"
+      :add-button-entity="t('entity.assyoutputdetail._self')"
+      id-field="assyOutputDetailId"
+      :default-row="createDefaultAssyOutputDetailRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -452,7 +370,8 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { AssyOutputCreate, AssyOutputDetailCreate, AssyOutputDetail } from '@/types/logistics/manufacturing/output/assy-output'
+import type { AssyOutputCreate } from '@/types/logistics/manufacturing/output/assy-output'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -485,123 +404,101 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodLine","directLabor","indirectLabor","shiftNo","prodOrderType","prodOrderCode","modelCode","materialCode","batchNo","prodOrderQty","stdMinutes","stdCapacity","status","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodLine","directLabor","indirectLabor","shiftNo","prodOrderType","prodOrderCode","modelCode","materialCode","batchNo","prodOrderQty","stdMinutes","stdCapacity","status","extField","remark"]
 
-/** assyOutputDetail 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childAssyOutputDetailRows = ref<Record<string, unknown>[]>([])
+const assyOutputDetailTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 assyOutputDetail 表单列定义 */
-const assyOutputDetailFormColumns = computed(() => [
+/** 子表 assyOutputDetail 可编辑列 */
+const assyOutputDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.assyOutputDetail.prodordercode'),
-    dataIndex: 'prodOrderCode',
     key: 'prodOrderCode',
+    title: t('entity.assyoutputdetail.prodordercode'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.assyOutputDetail.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.assyoutputdetail.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.assyOutputDetail.timeperiod'),
-    dataIndex: 'timePeriod',
     key: 'timePeriod',
+    title: t('entity.assyoutputdetail.timeperiod'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.assyOutputDetail.prodactualqty'),
-    dataIndex: 'prodActualQty',
     key: 'prodActualQty',
+    title: t('entity.assyoutputdetail.prodactualqty'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.assyOutputDetail.downtimeminutes'),
-    dataIndex: 'downtimeMinutes',
     key: 'downtimeMinutes',
+    title: t('entity.assyoutputdetail.downtimeminutes'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.assyOutputDetail.downtimereason'),
-    dataIndex: 'downtimeReason',
     key: 'downtimeReason',
-    width: 140,
+    title: t('entity.assyoutputdetail.downtimereason'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.assyoutputdetail.downtimereason') }),
   },
   {
-    title: t('entity.assyOutputDetail.downtimedescription'),
-    dataIndex: 'downtimeDescription',
     key: 'downtimeDescription',
+    title: t('entity.assyoutputdetail.downtimedescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.assyoutputdetail.downtimedescription') }),
     width: 140,
   },
   {
-    title: t('entity.assyOutputDetail.unachievedreason'),
-    dataIndex: 'unachievedReason',
     key: 'unachievedReason',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
+    title: t('entity.assyoutputdetail.unachievedreason'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.assyoutputdetail.unachievedreason') }),
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<AssyOutputCreate & { assyOutputId?: string }> | null | undefined) {
-  childAssyOutputDetailRows.value = ((val as any)?.assyOutputDetails ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.assyOutputDetailId ?? `new-${index}`,
-  }))
+  childAssyOutputDetailRows.value = ((val as any)?.assyOutputDetails ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 assyOutputDetail 行 */
-function handleAddAssyOutputDetailRow() {
-  childAssyOutputDetailRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      prodOrderCode: '',
-      lineNumber: 0,
-      timePeriod: '',
-      prodActualQty: 0,
-      downtimeMinutes: 0,
-      downtimeReason: '',
-      downtimeDescription: '',
-      unachievedReason: '',
-  })
-}
-
-/** 表单 Tab 内删除 assyOutputDetail 行 */
-function handleRemoveAssyOutputDetailRow(index: number) {
-  childAssyOutputDetailRows.value.splice(index, 1)
+function createDefaultAssyOutputDetailRow(): Record<string, unknown> {
+  return {
+    prodOrderCode: '',
+    lineNumber: (childAssyOutputDetailRows.value.length + 1) * 10,
+    timePeriod: '',
+    prodActualQty: 0,
+    downtimeMinutes: 0,
+    downtimeReason: '',
+    downtimeDescription: '',
+    unachievedReason: '',
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.assyOutputId ?? ''
   return {
     ...formState,
-    assyOutputDetails: childAssyOutputDetailRows.value.map(({ __rowKey, ...rest }) => rest),
+    assyOutputDetails: assyOutputDetailTableRef.value?.getRows?.() ?? childAssyOutputDetailRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      assyOutputId: masterId,
+    })),
   }
 }
 
@@ -613,7 +510,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -621,19 +518,35 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 assyOutputId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.assyOutputId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).assyOutputDetails
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -652,120 +565,199 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyOutput.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assyoutput.plantcode') }),
       trigger: 'blur'
     }
   ],
   prodCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyOutput.prodcategory') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodcategory') }),
       trigger: 'blur'
     }
   ],
   prodDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyOutput.proddate') }),
+      message: t('common.page.form.placeholder.select', { field: t('entity.assyoutput.proddate') }),
       trigger: 'change'
     }
   ],
   prodLine: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyOutput.prodline') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodline') }),
       trigger: 'blur'
     }
   ],
-  directLabor: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyOutput.directlabor') }),
-      trigger: 'change'
-    }
-  ],
-  indirectLabor: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyOutput.indirectlabor') }),
-      trigger: 'change'
-    }
-  ],
-  shiftNo: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyOutput.shiftno') }),
-      trigger: 'change'
-    }
-  ],
+  directLabor: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.directlabor') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.directlabor') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  indirectLabor: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.indirectlabor') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.indirectlabor') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  shiftNo: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.shiftno') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.shiftno') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   prodOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyOutput.prodordercode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodordercode') }),
       trigger: 'blur'
     }
   ],
   modelCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyOutput.modelcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assyoutput.modelcode') }),
       trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assyOutput.materialcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.assyoutput.materialcode') }),
       trigger: 'blur'
     }
   ],
-  prodOrderQty: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyOutput.prodorderqty') }),
-      trigger: 'change'
-    }
-  ],
-  stdMinutes: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyOutput.stdminutes') }),
-      trigger: 'change'
-    }
-  ],
-  stdCapacity: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyOutput.stdcapacity') }),
-      trigger: 'change'
-    }
-  ],
-  status: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.assyOutput.status') }),
-      trigger: 'change'
-    }
-  ],
+  prodOrderQty: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.prodorderqty') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.prodorderqty') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  stdMinutes: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.stdminutes') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.stdminutes') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  stdCapacity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.stdcapacity') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.stdcapacity') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  status: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assyoutput.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await assyOutputDetailTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('directLabor' in payload) {
+    const rawdirectLabor = payload.directLabor
+    payload.directLabor = typeof rawdirectLabor === 'number' ? rawdirectLabor : Number(rawdirectLabor)
+  }
+  if ('indirectLabor' in payload) {
+    const rawindirectLabor = payload.indirectLabor
+    payload.indirectLabor = typeof rawindirectLabor === 'number' ? rawindirectLabor : Number(rawindirectLabor)
+  }
+  if ('shiftNo' in payload) {
+    const rawshiftNo = payload.shiftNo
+    payload.shiftNo = typeof rawshiftNo === 'number' ? rawshiftNo : Number(rawshiftNo)
+  }
+  if ('prodOrderQty' in payload) {
+    const rawprodOrderQty = payload.prodOrderQty
+    payload.prodOrderQty = typeof rawprodOrderQty === 'number' ? rawprodOrderQty : Number(rawprodOrderQty)
+  }
+  if ('stdMinutes' in payload) {
+    const rawstdMinutes = payload.stdMinutes
+    payload.stdMinutes = typeof rawstdMinutes === 'number' ? rawstdMinutes : Number(rawstdMinutes)
+  }
+  if ('stdCapacity' in payload) {
+    const rawstdCapacity = payload.stdCapacity
+    payload.stdCapacity = typeof rawstdCapacity === 'number' ? rawstdCapacity : Number(rawstdCapacity)
+  }
+  if ('status' in payload) {
+    const rawstatus = payload.status
+    payload.status = typeof rawstatus === 'number' ? rawstatus : Number(rawstatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.assyOutputId)
   childAssyOutputDetailRows.value = []
+  assyOutputDetailTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

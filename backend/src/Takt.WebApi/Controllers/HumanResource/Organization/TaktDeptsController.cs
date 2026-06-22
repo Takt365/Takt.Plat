@@ -220,6 +220,26 @@ public class TaktDeptsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 更新部门是否内置
+    /// </summary>
+    /// <param name="dto">是否内置 DTO</param>
+    /// <returns>部门DTO</returns>
+    [TaktPermission("humanresource:organization:dept:update", "更新部门是否内置")]
+    [HttpPut("built-in")]
+    public async Task<IActionResult> UpdateDeptBuiltInAsync([FromBody] TaktDeptBuiltInDto dto)
+    {
+        try
+        {
+            var result = await _deptService.UpdateDeptBuiltInAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 更新部门排序
     /// </summary>
     /// <param name="dto">排序DTO</param>

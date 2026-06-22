@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：setting.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-14
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -59,17 +59,17 @@ export interface Setting extends CompanyDtoBase {
   valueType: number;
 
   /**
-   * 是否内置（0=否，1=是，系统内置的不可删除）
+   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 是否只读（0=否，1=是，只读设置不可修改）
+   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly: number;
 
   /**
-   * 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted: number;
 
@@ -129,17 +129,17 @@ export interface SettingQuery extends TaktPagedQuery {
   valueType?: number;
 
   /**
-   * 是否内置（0=否，1=是，系统内置的不可删除）
+   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 是否只读（0=否，1=是，只读设置不可修改）
+   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly?: number;
 
   /**
-   * 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted?: number;
 
@@ -161,7 +161,7 @@ export interface SettingQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -223,29 +223,24 @@ export interface SettingCreate {
   valueType: number;
 
   /**
-   * 是否内置（0=否，1=是，系统内置的不可删除）
+   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 是否只读（0=否，1=是，只读设置不可修改）
+   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly: number;
 
   /**
-   * 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted: number;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -336,29 +331,24 @@ export interface SettingTemplate {
   valueType?: number;
 
   /**
-   * 是否内置（0=否，1=是，系统内置的不可删除）
+   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 是否只读（0=否，1=是，只读设置不可修改）
+   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly?: number;
 
   /**
-   * 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -420,29 +410,24 @@ export interface SettingImport {
   valueType?: number;
 
   /**
-   * 是否内置（0=否，1=是，系统内置的不可删除）
+   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 是否只读（0=否，1=是，只读设置不可修改）
+   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly?: number;
 
   /**
-   * 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -499,17 +484,17 @@ export interface SettingExport {
   valueType: number;
 
   /**
-   * 是否内置（0=否，1=是，系统内置的不可删除）
+   * 是否内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 是否只读（0=否，1=是，只读设置不可修改）
+   * 是否只读（字典 sys_yes_no_type；0=否 1=是）
    */
   isReadonly: number;
 
   /**
-   * 是否加密存储（0=否，1=是，如密码、密钥等敏感信息）
+   * 是否加密存储（字典 sys_yes_no_type；0=否 1=是）
    */
   isEncrypted: number;
 
@@ -521,7 +506,7 @@ export interface SettingExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

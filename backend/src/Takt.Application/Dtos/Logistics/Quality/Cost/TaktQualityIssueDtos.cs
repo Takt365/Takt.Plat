@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
-// 文件名称：TaktQualityFailureDtos.cs
-// 创建时间：2026-06-09
+// 文件名称：TaktQualityIssueDtos.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
-// 功能描述：QualityFailure 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityFailure 生成，请按需审阅）
+// 功能描述：QualityIssue 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityIssue 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,22 +18,22 @@ using Takt.Shared.Models;
 namespace Takt.Application.Dtos.Logistics.Quality.Cost;
 
 // ========================================
-// QualityFailure 响应 DTO
+// QualityIssue 响应 DTO
 // ========================================
 
 /// <summary>
 /// 品质问题应对主表,用于记录质量问题的基础信息(年月日、机种、批次)及汇总数据
-/// 对应前端 TaktQualityFailureDto
+/// 对应前端 TaktQualityIssueDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
-public class TaktQualityFailureDto : TaktCompanyDtoBase
+public class TaktQualityIssueDto : TaktCompanyDtoBase
 {
     /// <summary>
-    /// QualityFailureID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// QualityIssueID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureId { get; set; }
+    public long QualityIssueId { get; set; }
 
     /// <summary>
     /// 工厂代码
@@ -43,12 +43,12 @@ public class TaktQualityFailureDto : TaktCompanyDtoBase
     /// <summary>
     /// 品质问题编码（唯一，如：QF-2026-0001）
     /// </summary>
-    public string QualityFailureCode { get; set; } = string.Empty;
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 问题日期
     /// </summary>
-    public DateTime FailureDate { get; set; }
+    public DateTime IssueDate { get; set; }
 
     /// <summary>
     /// 机种/产品型号
@@ -92,33 +92,33 @@ public class TaktQualityFailureDto : TaktCompanyDtoBase
 
     /// <summary>
     /// 会议/调查/试验费用明细列表
-    /// （子表：TaktQualityFailureMeeting）
+    /// （子表：TaktQualityIssueMeeting）
     /// </summary>
-    public List<TaktQualityFailureMeetingDto>? MeetingItems { get; set; }
+    public List<TaktQualityIssueMeetingDto>? MeetingItems { get; set; }
 
     /// <summary>
     /// 组装不良改修应对明细列表
-    /// （子表：TaktQualityFailureAssyRework）
+    /// （子表：TaktQualityIssueAssyRework）
     /// </summary>
-    public List<TaktQualityFailureAssyReworkDto>? AssyReworkItems { get; set; }
+    public List<TaktQualityIssueAssyReworkDto>? AssyReworkItems { get; set; }
 
     /// <summary>
     /// PCBA不良改修应对明细列表
-    /// （子表：TaktQualityFailurePcbaRework）
+    /// （子表：TaktQualityIssuePcbaRework）
     /// </summary>
-    public List<TaktQualityFailurePcbaReworkDto>? PcbaReworkItems { get; set; }
+    public List<TaktQualityIssuePcbaReworkDto>? PcbaReworkItems { get; set; }
 
 }
 
 // ========================================
-// QualityFailure 查询 DTO
+// QualityIssue 查询 DTO
 // ========================================
 
 /// <summary>
-/// QualityFailure 分页查询 DTO
+/// QualityIssue 分页查询 DTO
 /// 继承 TaktPagedQuery
 /// </summary>
-public class TaktQualityFailureQueryDto : TaktPagedQuery
+public class TaktQualityIssueQueryDto : TaktPagedQuery
 {
     /// <summary>
     /// 租户编码
@@ -138,17 +138,17 @@ public class TaktQualityFailureQueryDto : TaktPagedQuery
     /// <summary>
     /// 品质问题编码（唯一，如：QF-2026-0001）
     /// </summary>
-    public string? QualityFailureCode { get; set; } = string.Empty;
+    public string? QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 问题日期（范围查询-开始）
     /// </summary>
-    public DateTime? FailureDateStart { get; set; }
+    public DateTime? IssueDateStart { get; set; }
 
     /// <summary>
     /// 问题日期（范围查询-结束）
     /// </summary>
-    public DateTime? FailureDateEnd { get; set; }
+    public DateTime? IssueDateEnd { get; set; }
 
     /// <summary>
     /// 机种/产品型号
@@ -203,7 +203,7 @@ public class TaktQualityFailureQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -212,13 +212,13 @@ public class TaktQualityFailureQueryDto : TaktPagedQuery
 }
 
 // ========================================
-// 创建QualityFailure DTO
+// 创建QualityIssue DTO
 // ========================================
 
 /// <summary>
-/// 创建QualityFailure DTO
+/// 创建QualityIssue DTO
 /// </summary>
-public class TaktQualityFailureCreateDto
+public class TaktQualityIssueCreateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -245,12 +245,12 @@ public class TaktQualityFailureCreateDto
     /// 品质问题编码（唯一，如：QF-2026-0001）
     /// </summary>
     [Required(ErrorMessage = "品质问题编码（唯一，如：QF-2026-0001）不能为空")]
-    public string QualityFailureCode { get; set; } = string.Empty;
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 问题日期
     /// </summary>
-    public DateTime FailureDate { get; set; }
+    public DateTime IssueDate { get; set; }
 
     /// <summary>
     /// 机种/产品型号
@@ -298,22 +298,22 @@ public class TaktQualityFailureCreateDto
     /// <summary>
     /// 会议/调查/试验费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityFailureMeetingCreateDto>? MeetingItems { get; set; }
+    public List<TaktQualityIssueMeetingCreateDto>? MeetingItems { get; set; }
 
     /// <summary>
     /// 组装不良改修应对明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityFailureAssyReworkCreateDto>? AssyReworkItems { get; set; }
+    public List<TaktQualityIssueAssyReworkCreateDto>? AssyReworkItems { get; set; }
 
     /// <summary>
     /// PCBA不良改修应对明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityFailurePcbaReworkCreateDto>? PcbaReworkItems { get; set; }
+    public List<TaktQualityIssuePcbaReworkCreateDto>? PcbaReworkItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -323,22 +323,22 @@ public class TaktQualityFailureCreateDto
 }
 
 // ========================================
-// 更新QualityFailure DTO
+// 更新QualityIssue DTO
 // ========================================
 
 /// <summary>
-/// 更新QualityFailure DTO
-/// 继承 TaktQualityFailureCreateDto，添加 QualityFailureId 字段
+/// 更新QualityIssue DTO
+/// 继承 TaktQualityIssueCreateDto，添加 QualityIssueId 字段
 /// </summary>
-public class TaktQualityFailureUpdateDto : TaktQualityFailureCreateDto
+public class TaktQualityIssueUpdateDto : TaktQualityIssueCreateDto
 {
     /// <summary>
-    /// QualityFailureID（标识要更新的实体）
+    /// QualityIssueID（标识要更新的实体）
     /// </summary>
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureId { get; set; }
+    public long QualityIssueId { get; set; }
 
 }
 
@@ -347,9 +347,9 @@ public class TaktQualityFailureUpdateDto : TaktQualityFailureCreateDto
 // ========================================
 
 /// <summary>
-/// QualityFailure 导入模板行 DTO
+/// QualityIssue 导入模板行 DTO
 /// </summary>
-public class TaktQualityFailureTemplateDto
+public class TaktQualityIssueTemplateDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -369,7 +369,7 @@ public class TaktQualityFailureTemplateDto
     /// <summary>
     /// 品质问题编码（唯一，如：QF-2026-0001）
     /// </summary>
-    public string? QualityFailureCode { get; set; } = string.Empty;
+    public string? QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种/产品型号
@@ -409,7 +409,7 @@ public class TaktQualityFailureTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -419,9 +419,9 @@ public class TaktQualityFailureTemplateDto
 }
 
 /// <summary>
-/// QualityFailure 导入 DTO（独立实现，不继承 TemplateDto）
+/// QualityIssue 导入 DTO（独立实现，不继承 TemplateDto）
 /// </summary>
-public class TaktQualityFailureImportDto
+public class TaktQualityIssueImportDto
 {
     /// <summary>
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
@@ -446,7 +446,7 @@ public class TaktQualityFailureImportDto
     /// <summary>
     /// 品质问题编码（唯一，如：QF-2026-0001）
     /// </summary>
-    public string? QualityFailureCode { get; set; } = string.Empty;
+    public string? QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种/产品型号
@@ -486,7 +486,7 @@ public class TaktQualityFailureImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -500,16 +500,16 @@ public class TaktQualityFailureImportDto
 // ========================================
 
 /// <summary>
-/// QualityFailure 导出 DTO（独立实现，不继承响应 Dto）
+/// QualityIssue 导出 DTO（独立实现，不继承响应 Dto）
 /// </summary>
-public class TaktQualityFailureExportDto
+public class TaktQualityIssueExportDto
 {
     /// <summary>
-    /// QualityFailureID
+    /// QualityIssueID
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long QualityFailureId { get; set; }
+    public long QualityIssueId { get; set; }
 
     /// <summary>
     /// 公司代码
@@ -524,12 +524,12 @@ public class TaktQualityFailureExportDto
     /// <summary>
     /// 品质问题编码（唯一，如：QF-2026-0001）
     /// </summary>
-    public string QualityFailureCode { get; set; } = string.Empty;
+    public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 问题日期
     /// </summary>
-    public DateTime FailureDate { get; set; }
+    public DateTime IssueDate { get; set; }
 
     /// <summary>
     /// 机种/产品型号
@@ -574,7 +574,7 @@ public class TaktQualityFailureExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

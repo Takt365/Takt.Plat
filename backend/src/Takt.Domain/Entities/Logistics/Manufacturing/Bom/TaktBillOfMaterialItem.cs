@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItem.cs
@@ -135,5 +135,11 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     /// 子项物料（工厂物料主数据）
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(MaterialId))]
-    public TaktMaterial? Material { get; set; }
+    public TaktMaterialPlant? MaterialPlant { get; set; }
+
+    /// <summary>
+    /// 替代料明细（一行主件可维护多条替代物料）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktBillOfMaterialSubstitute.BillOfMaterialItemId))]
+    public List<TaktBillOfMaterialSubstitute>? Substitutes { get; set; }
 }

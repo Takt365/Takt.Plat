@@ -42,9 +42,7 @@ export function getDocumentList(queryDto: any): Promise<TaktPagedResult<Document
   return request<TaktPagedResult<Document>>({
     url: `${DOCUMENT_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportDocument(
     url: `${DOCUMENT_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

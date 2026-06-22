@@ -40,9 +40,7 @@ export function getBillOfMaterialItemList(queryDto: any): Promise<TaktPagedResul
   return request<TaktPagedResult<BillOfMaterialItem>>({
     url: `${BILL_OF_MATERIAL_ITEM_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportBillOfMaterialItem(
     url: `${BILL_OF_MATERIAL_ITEM_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

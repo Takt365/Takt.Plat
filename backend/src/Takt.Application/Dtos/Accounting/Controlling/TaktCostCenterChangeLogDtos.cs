@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktCostCenterChangeLogDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostCenterChangeLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCostCenterChangeLog 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktCostCenterChangeLogDto : TaktCompanyDtoBase
     public long CostCenterChangeLogId { get; set; }
 
     /// <summary>
-    /// 成本中心 ID
+    /// 成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CostCenterId { get; set; }
@@ -71,6 +71,12 @@ public class TaktCostCenterChangeLogDto : TaktCompanyDtoBase
     /// </summary>
     public string? ChangeReason { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 成本中心主表
+    /// （主表：TaktCostCenter）
+    /// </summary>
+    public TaktCostCenterDto? CostCenter { get; set; }
+
 }
 
 // ========================================
@@ -94,7 +100,7 @@ public class TaktCostCenterChangeLogQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心 ID
+    /// 成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CostCenterId { get; set; }
@@ -142,7 +148,7 @@ public class TaktCostCenterChangeLogQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -175,7 +181,7 @@ public class TaktCostCenterChangeLogCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心 ID
+    /// 成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CostCenterId { get; set; }
@@ -209,7 +215,7 @@ public class TaktCostCenterChangeLogCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -260,7 +266,7 @@ public class TaktCostCenterChangeLogExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心 ID
+    /// 成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CostCenterId { get; set; }
@@ -293,7 +299,7 @@ public class TaktCostCenterChangeLogExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

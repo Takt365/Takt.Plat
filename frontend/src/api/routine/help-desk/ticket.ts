@@ -49,9 +49,7 @@ export function getTicketList(queryDto: any): Promise<TaktPagedResult<Ticket>> {
   return request<TaktPagedResult<Ticket>>({
     url: `${TICKET_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -64,9 +62,7 @@ export function getMyTicketList(queryDto: any): Promise<TaktPagedResult<Ticket>>
   return request<TaktPagedResult<Ticket>>({
     url: `${TICKET_API_BASE}/my-list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -79,9 +75,7 @@ export function getMyTicketAssetList(queryDto: any): Promise<TaktPagedResult<Tic
   return request<TaktPagedResult<TicketMyAsset>>({
     url: `${TICKET_API_BASE}/my-assets`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -372,7 +366,7 @@ export function exportTicket(
     url: `${TICKET_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

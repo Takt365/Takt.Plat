@@ -38,9 +38,19 @@ public class TaktFileUploadOptions
     public long MaxFileSizeBytes { get; set; } = 524_288_000;
 
     /// <summary>
-    /// 单文件最大分片数（防滥用）
+    /// 单文件最大分片数（防滥用；超大文件时自动放大分片大小以满足此上限）
     /// </summary>
     public int MaxChunkCount { get; set; } = 10_000;
+
+    /// <summary>
+    /// 默认分片大小（字节，默认 2MB）
+    /// </summary>
+    public long DefaultChunkSizeBytes { get; set; } = 2_097_152;
+
+    /// <summary>
+    /// 分片上传阈值（字节，默认 5MB；不超过此值可整文件上传）
+    /// </summary>
+    public long ChunkThresholdBytes { get; set; } = 5_242_880;
 
     /// <summary>
     /// 允许上传的扩展名（小写、不含点；空数组表示不限制）

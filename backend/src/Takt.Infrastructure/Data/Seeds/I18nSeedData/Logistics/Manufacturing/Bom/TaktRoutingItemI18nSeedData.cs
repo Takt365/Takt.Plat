@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRoutingItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,173 +75,200 @@ public class TaktRoutingItemI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktRoutingItem 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.routingitem._self / entity.routingitem.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.routingitem._self / entity.routingitem.{{field}}；ResourceGroup=Bom；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetRoutingItemTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.routingitem._self
-            new TranslationSeedItem("entity.routingitem._self", "en-US", "Routing Item Information", "实体名称"),
+            new TranslationSeedItem("entity.routingitem._self", "en-US", "Routing Item Information_us", "实体名称"),
             // entity.routingitem._self
-            new TranslationSeedItem("entity.routingitem._self", "ja-JP", "工艺路线明细表信息", "实体名称"),
+            new TranslationSeedItem("entity.routingitem._self", "ja-JP", "工艺路线明细表信息_jp", "实体名称"),
             // entity.routingitem._self
             new TranslationSeedItem("entity.routingitem._self", "zh-CN", "工艺路线明细表信息", "实体名称"),
             // entity.routingitem._self
-            new TranslationSeedItem("entity.routingitem._self", "zh-HK", "工艺路线明细表信息", "实体名称"),
+            new TranslationSeedItem("entity.routingitem._self", "zh-HK", "工艺路线明细表信息_hk", "实体名称"),
 
             // entity.routingitem.routingid
-            new TranslationSeedItem("entity.routingitem.routingid", "en-US", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.routingitem.routingid", "en-US", "工艺路线ID_us", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.routingitem.routingid
-            new TranslationSeedItem("entity.routingitem.routingid", "ja-JP", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.routingitem.routingid", "ja-JP", "工艺路线ID_jp", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.routingitem.routingid
             new TranslationSeedItem("entity.routingitem.routingid", "zh-CN", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.routingitem.routingid
-            new TranslationSeedItem("entity.routingitem.routingid", "zh-HK", "工艺路线ID", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.routingitem.routingid", "zh-HK", "工艺路线ID_hk", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
             // entity.routingitem.routingcode
-            new TranslationSeedItem("entity.routingitem.routingcode", "en-US", "工艺路线编码", "工艺路线编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.routingitem.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码（冗余字段，便于查询）"),
             // entity.routingitem.routingcode
-            new TranslationSeedItem("entity.routingitem.routingcode", "ja-JP", "工艺路线编码", "工艺路线编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.routingitem.routingcode", "ja-JP", "工艺路线编码_jp", "工艺路线编码（冗余字段，便于查询）"),
             // entity.routingitem.routingcode
             new TranslationSeedItem("entity.routingitem.routingcode", "zh-CN", "工艺路线编码", "工艺路线编码（冗余字段，便于查询）"),
             // entity.routingitem.routingcode
-            new TranslationSeedItem("entity.routingitem.routingcode", "zh-HK", "工艺路线编码", "工艺路线编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.routingitem.routingcode", "zh-HK", "工艺路线编码_hk", "工艺路线编码（冗余字段，便于查询）"),
 
             // entity.routingitem.linenumber
-            new TranslationSeedItem("entity.routingitem.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.routingitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
             // entity.routingitem.linenumber
-            new TranslationSeedItem("entity.routingitem.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.routingitem.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
             // entity.routingitem.linenumber
             new TranslationSeedItem("entity.routingitem.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
             // entity.routingitem.linenumber
-            new TranslationSeedItem("entity.routingitem.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.routingitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.routingitem.baseunit
-            new TranslationSeedItem("entity.routingitem.baseunit", "en-US", "计量单位", "作业/工序计量单位（PC或EA）"),
+            new TranslationSeedItem("entity.routingitem.baseunit", "en-US", "计量单位_us", "作业/工序计量单位（PC或EA）"),
             // entity.routingitem.baseunit
-            new TranslationSeedItem("entity.routingitem.baseunit", "ja-JP", "计量单位", "作业/工序计量单位（PC或EA）"),
+            new TranslationSeedItem("entity.routingitem.baseunit", "ja-JP", "计量单位_jp", "作业/工序计量单位（PC或EA）"),
             // entity.routingitem.baseunit
             new TranslationSeedItem("entity.routingitem.baseunit", "zh-CN", "计量单位", "作业/工序计量单位（PC或EA）"),
             // entity.routingitem.baseunit
-            new TranslationSeedItem("entity.routingitem.baseunit", "zh-HK", "计量单位", "作业/工序计量单位（PC或EA）"),
+            new TranslationSeedItem("entity.routingitem.baseunit", "zh-HK", "计量单位_hk", "作业/工序计量单位（PC或EA）"),
 
             // entity.routingitem.basequantity
-            new TranslationSeedItem("entity.routingitem.basequantity", "en-US", "基本数量", "基本数量"),
+            new TranslationSeedItem("entity.routingitem.basequantity", "en-US", "基本数量_us", "基本数量"),
             // entity.routingitem.basequantity
-            new TranslationSeedItem("entity.routingitem.basequantity", "ja-JP", "基本数量", "基本数量"),
+            new TranslationSeedItem("entity.routingitem.basequantity", "ja-JP", "基本数量_jp", "基本数量"),
             // entity.routingitem.basequantity
             new TranslationSeedItem("entity.routingitem.basequantity", "zh-CN", "基本数量", "基本数量"),
             // entity.routingitem.basequantity
-            new TranslationSeedItem("entity.routingitem.basequantity", "zh-HK", "基本数量", "基本数量"),
+            new TranslationSeedItem("entity.routingitem.basequantity", "zh-HK", "基本数量_hk", "基本数量"),
 
             // entity.routingitem.standardminutes
-            new TranslationSeedItem("entity.routingitem.standardminutes", "en-US", "标准工时", "标准工时（分钟）"),
+            new TranslationSeedItem("entity.routingitem.standardminutes", "en-US", "标准工时_us", "标准工时（分钟）"),
             // entity.routingitem.standardminutes
-            new TranslationSeedItem("entity.routingitem.standardminutes", "ja-JP", "标准工时", "标准工时（分钟）"),
+            new TranslationSeedItem("entity.routingitem.standardminutes", "ja-JP", "标准工时_jp", "标准工时（分钟）"),
             // entity.routingitem.standardminutes
             new TranslationSeedItem("entity.routingitem.standardminutes", "zh-CN", "标准工时", "标准工时（分钟）"),
             // entity.routingitem.standardminutes
-            new TranslationSeedItem("entity.routingitem.standardminutes", "zh-HK", "标准工时", "标准工时（分钟）"),
+            new TranslationSeedItem("entity.routingitem.standardminutes", "zh-HK", "标准工时_hk", "标准工时（分钟）"),
 
             // entity.routingitem.timeunit
-            new TranslationSeedItem("entity.routingitem.timeunit", "en-US", "工时单位", "工时单位"),
+            new TranslationSeedItem("entity.routingitem.timeunit", "en-US", "工时单位_us", "工时单位"),
             // entity.routingitem.timeunit
-            new TranslationSeedItem("entity.routingitem.timeunit", "ja-JP", "工时单位", "工时单位"),
+            new TranslationSeedItem("entity.routingitem.timeunit", "ja-JP", "工时单位_jp", "工时单位"),
             // entity.routingitem.timeunit
             new TranslationSeedItem("entity.routingitem.timeunit", "zh-CN", "工时单位", "工时单位"),
             // entity.routingitem.timeunit
-            new TranslationSeedItem("entity.routingitem.timeunit", "zh-HK", "工时单位", "工时单位"),
+            new TranslationSeedItem("entity.routingitem.timeunit", "zh-HK", "工时单位_hk", "工时单位"),
 
             // entity.routingitem.standardshorts
-            new TranslationSeedItem("entity.routingitem.standardshorts", "en-US", "标准点数", "标准点数"),
+            new TranslationSeedItem("entity.routingitem.standardshorts", "en-US", "标准点数_us", "标准点数"),
             // entity.routingitem.standardshorts
-            new TranslationSeedItem("entity.routingitem.standardshorts", "ja-JP", "标准点数", "标准点数"),
+            new TranslationSeedItem("entity.routingitem.standardshorts", "ja-JP", "标准点数_jp", "标准点数"),
             // entity.routingitem.standardshorts
             new TranslationSeedItem("entity.routingitem.standardshorts", "zh-CN", "标准点数", "标准点数"),
             // entity.routingitem.standardshorts
-            new TranslationSeedItem("entity.routingitem.standardshorts", "zh-HK", "标准点数", "标准点数"),
+            new TranslationSeedItem("entity.routingitem.standardshorts", "zh-HK", "标准点数_hk", "标准点数"),
 
             // entity.routingitem.pointsunit
-            new TranslationSeedItem("entity.routingitem.pointsunit", "en-US", "点数单位", "点数单位"),
+            new TranslationSeedItem("entity.routingitem.pointsunit", "en-US", "点数单位_us", "点数单位"),
             // entity.routingitem.pointsunit
-            new TranslationSeedItem("entity.routingitem.pointsunit", "ja-JP", "点数单位", "点数单位"),
+            new TranslationSeedItem("entity.routingitem.pointsunit", "ja-JP", "点数单位_jp", "点数单位"),
             // entity.routingitem.pointsunit
             new TranslationSeedItem("entity.routingitem.pointsunit", "zh-CN", "点数单位", "点数单位"),
             // entity.routingitem.pointsunit
-            new TranslationSeedItem("entity.routingitem.pointsunit", "zh-HK", "点数单位", "点数单位"),
+            new TranslationSeedItem("entity.routingitem.pointsunit", "zh-HK", "点数单位_hk", "点数单位"),
 
             // entity.routingitem.pointstominutesrate
-            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "en-US", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
+            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "en-US", "转换汇率_us", "点数转分钟汇率（1 点数 = 多少分钟）"),
             // entity.routingitem.pointstominutesrate
-            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "ja-JP", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
+            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "ja-JP", "转换汇率_jp", "点数转分钟汇率（1 点数 = 多少分钟）"),
             // entity.routingitem.pointstominutesrate
             new TranslationSeedItem("entity.routingitem.pointstominutesrate", "zh-CN", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
             // entity.routingitem.pointstominutesrate
-            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "zh-HK", "转换汇率", "点数转分钟汇率（1 点数 = 多少分钟）"),
+            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "zh-HK", "转换汇率_hk", "点数转分钟汇率（1 点数 = 多少分钟）"),
 
             // entity.routingitem.convertedminutes
-            new TranslationSeedItem("entity.routingitem.convertedminutes", "en-US", "转换工时", "转换后标准工时（分钟）"),
+            new TranslationSeedItem("entity.routingitem.convertedminutes", "en-US", "转换工时_us", "转换后标准工时（分钟）"),
             // entity.routingitem.convertedminutes
-            new TranslationSeedItem("entity.routingitem.convertedminutes", "ja-JP", "转换工时", "转换后标准工时（分钟）"),
+            new TranslationSeedItem("entity.routingitem.convertedminutes", "ja-JP", "转换工时_jp", "转换后标准工时（分钟）"),
             // entity.routingitem.convertedminutes
             new TranslationSeedItem("entity.routingitem.convertedminutes", "zh-CN", "转换工时", "转换后标准工时（分钟）"),
             // entity.routingitem.convertedminutes
-            new TranslationSeedItem("entity.routingitem.convertedminutes", "zh-HK", "转换工时", "转换后标准工时（分钟）"),
+            new TranslationSeedItem("entity.routingitem.convertedminutes", "zh-HK", "转换工时_hk", "转换后标准工时（分钟）"),
 
             // entity.routingitem.setupminutes
-            new TranslationSeedItem("entity.routingitem.setupminutes", "en-US", "准备时间", "准备时间（分钟），如换模、调试等"),
+            new TranslationSeedItem("entity.routingitem.setupminutes", "en-US", "准备时间_us", "准备时间（分钟），如换模、调试等"),
             // entity.routingitem.setupminutes
-            new TranslationSeedItem("entity.routingitem.setupminutes", "ja-JP", "准备时间", "准备时间（分钟），如换模、调试等"),
+            new TranslationSeedItem("entity.routingitem.setupminutes", "ja-JP", "准备时间_jp", "准备时间（分钟），如换模、调试等"),
             // entity.routingitem.setupminutes
             new TranslationSeedItem("entity.routingitem.setupminutes", "zh-CN", "准备时间", "准备时间（分钟），如换模、调试等"),
             // entity.routingitem.setupminutes
-            new TranslationSeedItem("entity.routingitem.setupminutes", "zh-HK", "准备时间", "准备时间（分钟），如换模、调试等"),
+            new TranslationSeedItem("entity.routingitem.setupminutes", "zh-HK", "准备时间_hk", "准备时间（分钟），如换模、调试等"),
 
             // entity.routingitem.teardownminutes
-            new TranslationSeedItem("entity.routingitem.teardownminutes", "en-US", "清理时间", "清理时间（分钟），如清洁、整理等"),
+            new TranslationSeedItem("entity.routingitem.teardownminutes", "en-US", "清理时间_us", "清理时间（分钟），如清洁、整理等"),
             // entity.routingitem.teardownminutes
-            new TranslationSeedItem("entity.routingitem.teardownminutes", "ja-JP", "清理时间", "清理时间（分钟），如清洁、整理等"),
+            new TranslationSeedItem("entity.routingitem.teardownminutes", "ja-JP", "清理时间_jp", "清理时间（分钟），如清洁、整理等"),
             // entity.routingitem.teardownminutes
             new TranslationSeedItem("entity.routingitem.teardownminutes", "zh-CN", "清理时间", "清理时间（分钟），如清洁、整理等"),
             // entity.routingitem.teardownminutes
-            new TranslationSeedItem("entity.routingitem.teardownminutes", "zh-HK", "清理时间", "清理时间（分钟），如清洁、整理等"),
+            new TranslationSeedItem("entity.routingitem.teardownminutes", "zh-HK", "清理时间_hk", "清理时间（分钟），如清洁、整理等"),
 
             // entity.routingitem.isqualitycheck
-            new TranslationSeedItem("entity.routingitem.isqualitycheck", "en-US", "是否质检点", "是否质量检验点"),
+            new TranslationSeedItem("entity.routingitem.isqualitycheck", "en-US", "是否质检点_us", "是否质量检验点"),
             // entity.routingitem.isqualitycheck
-            new TranslationSeedItem("entity.routingitem.isqualitycheck", "ja-JP", "是否质检点", "是否质量检验点"),
+            new TranslationSeedItem("entity.routingitem.isqualitycheck", "ja-JP", "是否质检点_jp", "是否质量检验点"),
             // entity.routingitem.isqualitycheck
             new TranslationSeedItem("entity.routingitem.isqualitycheck", "zh-CN", "是否质检点", "是否质量检验点"),
             // entity.routingitem.isqualitycheck
-            new TranslationSeedItem("entity.routingitem.isqualitycheck", "zh-HK", "是否质检点", "是否质量检验点"),
+            new TranslationSeedItem("entity.routingitem.isqualitycheck", "zh-HK", "是否质检点_hk", "是否质量检验点"),
 
             // entity.routingitem.sortorder
-            new TranslationSeedItem("entity.routingitem.sortorder", "en-US", "排序号", "排序号"),
+            new TranslationSeedItem("entity.routingitem.sortorder", "en-US", "排序号_us", "排序号"),
             // entity.routingitem.sortorder
-            new TranslationSeedItem("entity.routingitem.sortorder", "ja-JP", "排序号", "排序号"),
+            new TranslationSeedItem("entity.routingitem.sortorder", "ja-JP", "排序号_jp", "排序号"),
             // entity.routingitem.sortorder
             new TranslationSeedItem("entity.routingitem.sortorder", "zh-CN", "排序号", "排序号"),
             // entity.routingitem.sortorder
-            new TranslationSeedItem("entity.routingitem.sortorder", "zh-HK", "排序号", "排序号"),
+            new TranslationSeedItem("entity.routingitem.sortorder", "zh-HK", "排序号_hk", "排序号"),
 
             // entity.routingitem.processdescription
-            new TranslationSeedItem("entity.routingitem.processdescription", "en-US", "工序说明", "工序说明"),
+            new TranslationSeedItem("entity.routingitem.processdescription", "en-US", "工序说明_us", "工序说明"),
             // entity.routingitem.processdescription
-            new TranslationSeedItem("entity.routingitem.processdescription", "ja-JP", "工序说明", "工序说明"),
+            new TranslationSeedItem("entity.routingitem.processdescription", "ja-JP", "工序说明_jp", "工序说明"),
             // entity.routingitem.processdescription
             new TranslationSeedItem("entity.routingitem.processdescription", "zh-CN", "工序说明", "工序说明"),
             // entity.routingitem.processdescription
-            new TranslationSeedItem("entity.routingitem.processdescription", "zh-HK", "工序说明", "工序说明"),
+            new TranslationSeedItem("entity.routingitem.processdescription", "zh-HK", "工序说明_hk", "工序说明"),
+
+            // entity.routingitem.processsegmenttype
+            new TranslationSeedItem("entity.routingitem.processsegmenttype", "en-US", "工艺段类型_us", "工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）"),
+            // entity.routingitem.processsegmenttype
+            new TranslationSeedItem("entity.routingitem.processsegmenttype", "ja-JP", "工艺段类型_jp", "工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）"),
+            // entity.routingitem.processsegmenttype
+            new TranslationSeedItem("entity.routingitem.processsegmenttype", "zh-CN", "工艺段类型", "工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）"),
+            // entity.routingitem.processsegmenttype
+            new TranslationSeedItem("entity.routingitem.processsegmenttype", "zh-HK", "工艺段类型_hk", "工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）"),
+
+            // entity.routingitem.extjson
+            new TranslationSeedItem("entity.routingitem.extjson", "en-US", "工序扩展JSON_us", "工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）"),
+            // entity.routingitem.extjson
+            new TranslationSeedItem("entity.routingitem.extjson", "ja-JP", "工序扩展JSON_jp", "工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）"),
+            // entity.routingitem.extjson
+            new TranslationSeedItem("entity.routingitem.extjson", "zh-CN", "工序扩展JSON", "工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）"),
+            // entity.routingitem.extjson
+            new TranslationSeedItem("entity.routingitem.extjson", "zh-HK", "工序扩展JSON_hk", "工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）"),
 
             // entity.routingitem.routing
-            new TranslationSeedItem("entity.routingitem.routing", "en-US", "工艺路线主表", "工艺路线主表（主表）"),
+            new TranslationSeedItem("entity.routingitem.routing", "en-US", "工艺路线主表_us", "工艺路线主表（主表）"),
             // entity.routingitem.routing
-            new TranslationSeedItem("entity.routingitem.routing", "ja-JP", "工艺路线主表", "工艺路线主表（主表）"),
+            new TranslationSeedItem("entity.routingitem.routing", "ja-JP", "工艺路线主表_jp", "工艺路线主表（主表）"),
             // entity.routingitem.routing
             new TranslationSeedItem("entity.routingitem.routing", "zh-CN", "工艺路线主表", "工艺路线主表（主表）"),
             // entity.routingitem.routing
-            new TranslationSeedItem("entity.routingitem.routing", "zh-HK", "工艺路线主表", "工艺路线主表（主表）"),
+            new TranslationSeedItem("entity.routingitem.routing", "zh-HK", "工艺路线主表_hk", "工艺路线主表（主表）"),
+
+            // entity.routingitem.arguments
+            new TranslationSeedItem("entity.routingitem.arguments", "en-US", "工序参数定义_us", "工序参数定义"),
+            // entity.routingitem.arguments
+            new TranslationSeedItem("entity.routingitem.arguments", "ja-JP", "工序参数定义_jp", "工序参数定义"),
+            // entity.routingitem.arguments
+            new TranslationSeedItem("entity.routingitem.arguments", "zh-CN", "工序参数定义", "工序参数定义"),
+            // entity.routingitem.arguments
+            new TranslationSeedItem("entity.routingitem.arguments", "zh-HK", "工序参数定义_hk", "工序参数定义"),
         };
     }
 
@@ -259,10 +286,10 @@ public class TaktRoutingItemI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Bom";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

@@ -41,9 +41,7 @@ export function getPerfAnalysisList(queryDto: any): Promise<TaktPagedResult<Perf
   return request<TaktPagedResult<PerfAnalysis>>({
     url: `${PERF_ANALYSIS_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportPerfAnalysis(
     url: `${PERF_ANALYSIS_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

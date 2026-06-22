@@ -23,7 +23,7 @@ namespace Takt.Application.Dtos.Statistics.Report;
 // ========================================
 
 /// <summary>
-/// 自定义报表筛选条件（对标 SAP Selection Screen）
+/// 自定义报表筛选条件（SQVI 运行时筛选项）
 /// 对应前端 TaktConfigurableSelectionDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -58,7 +58,7 @@ public class TaktConfigurableSelectionDto : TaktCompanyDtoBase
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（Selection Screen 标签）
+    /// 显示名称（SQVI 筛选项 标签）
     /// </summary>
     public string DisplayName { get; set; } = string.Empty;
 
@@ -83,7 +83,7 @@ public class TaktConfigurableSelectionDto : TaktCompanyDtoBase
     public int IsRequired { get; set; }
 
     /// <summary>
-    /// 排序号（Selection Screen 展示顺序）
+    /// 排序号（SQVI 筛选项 展示顺序）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -132,7 +132,7 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     public string? ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（Selection Screen 标签）
+    /// 显示名称（SQVI 筛选项 标签）
     /// </summary>
     public string? DisplayName { get; set; } = string.Empty;
 
@@ -157,7 +157,7 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     public int? IsRequired { get; set; }
 
     /// <summary>
-    /// 排序号（Selection Screen 展示顺序）
+    /// 排序号（SQVI 筛选项 展示顺序）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -174,7 +174,7 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -225,9 +225,9 @@ public class TaktConfigurableSelectionCreateDto
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（Selection Screen 标签）
+    /// 显示名称（SQVI 筛选项 标签）
     /// </summary>
-    [Required(ErrorMessage = "显示名称（Selection Screen 标签）不能为空")]
+    [Required(ErrorMessage = "显示名称（SQVI 筛选项 标签）不能为空")]
     public string DisplayName { get; set; } = string.Empty;
 
     /// <summary>
@@ -251,14 +251,14 @@ public class TaktConfigurableSelectionCreateDto
     public int IsRequired { get; set; }
 
     /// <summary>
-    /// 排序号（Selection Screen 展示顺序）
+    /// 排序号（SQVI 筛选项 展示顺序）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -305,9 +305,9 @@ public class TaktConfigurableSelectionSortDto
     public long ConfigurableSelectionId { get; set; }
 
     /// <summary>
-    /// 排序号（Selection Screen 展示顺序）
+    /// 排序号（SQVI 筛选项 展示顺序）
     /// </summary>
-    [Required(ErrorMessage = "排序号（Selection Screen 展示顺序）不能为空")]
+    [Required(ErrorMessage = "排序号（SQVI 筛选项 展示顺序）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -347,7 +347,7 @@ public class TaktConfigurableSelectionTemplateDto
     public string? ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（Selection Screen 标签）
+    /// 显示名称（SQVI 筛选项 标签）
     /// </summary>
     public string? DisplayName { get; set; } = string.Empty;
 
@@ -372,14 +372,14 @@ public class TaktConfigurableSelectionTemplateDto
     public int? IsRequired { get; set; }
 
     /// <summary>
-    /// 排序号（Selection Screen 展示顺序）
+    /// 排序号（SQVI 筛选项 展示顺序）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -425,7 +425,7 @@ public class TaktConfigurableSelectionImportDto
     public string? ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（Selection Screen 标签）
+    /// 显示名称（SQVI 筛选项 标签）
     /// </summary>
     public string? DisplayName { get; set; } = string.Empty;
 
@@ -450,14 +450,14 @@ public class TaktConfigurableSelectionImportDto
     public int? IsRequired { get; set; }
 
     /// <summary>
-    /// 排序号（Selection Screen 展示顺序）
+    /// 排序号（SQVI 筛选项 展示顺序）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -504,7 +504,7 @@ public class TaktConfigurableSelectionExportDto
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（Selection Screen 标签）
+    /// 显示名称（SQVI 筛选项 标签）
     /// </summary>
     public string DisplayName { get; set; } = string.Empty;
 
@@ -529,14 +529,14 @@ public class TaktConfigurableSelectionExportDto
     public int IsRequired { get; set; }
 
     /// <summary>
-    /// 排序号（Selection Screen 展示顺序）
+    /// 排序号（SQVI 筛选项 展示顺序）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

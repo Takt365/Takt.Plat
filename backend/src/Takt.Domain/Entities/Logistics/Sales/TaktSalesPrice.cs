@@ -32,8 +32,8 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     /// <summary>
     /// 工厂代码
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? PlantCode { get; set; }
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售价格编码（唯一索引）
@@ -48,7 +48,7 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     public string? CustomerCode { get; set; }
 
     /// <summary>
-    /// 价格类型（0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
+    /// 价格类型（字典 logistics_sales_price_type；0=标准价格，1=客户价格，2=促销价格，3=合同价格，4=临时价格）
     /// </summary>
     [SugarColumn(ColumnName = "price_type", ColumnDescription = "价格类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PriceType { get; set; } = 0;

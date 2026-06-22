@@ -78,7 +78,7 @@ public class TaktFile : TaktCompanyEntityBase
     public string FileHash { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件分类（字典 sys_file_category）
+    /// 文件分类（根据 FileType/MIME 自动推断：0=文档，1=图片，2=视频，3=音频，4=压缩包，5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "file_category", ColumnDescription = "文件分类", ColumnDataType = "int", IsNullable = false, DefaultValue = "5")]
     public int FileCategory { get; set; } = 5;
@@ -114,15 +114,15 @@ public class TaktFile : TaktCompanyEntityBase
     public DateTime? LastDownloadTime { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "file_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FileStatus { get; set; } = 1;
 
     /// <summary>
-    /// 是否公开（字典 sys_is_public；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
+    /// 公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）
     /// </summary>
-    [SugarColumn(ColumnName = "is_public", ColumnDescription = "是否公开", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_public", ColumnDescription = "公开", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsPublic { get; set; } = 0;
 
     /// <summary>

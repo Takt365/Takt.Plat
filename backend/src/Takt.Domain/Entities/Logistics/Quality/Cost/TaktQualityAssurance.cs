@@ -1,7 +1,7 @@
 // ========================================
 // 项目名称:节拍数字工厂 ·Takt Plat (TDF)
 // 命名空间:Takt.Domain.Entities.Logistics.Quality.Cost
-// 文件名称:TaktQualityOperation.cs
+// 文件名称:TaktQualityAssurance.cs
 // 创建时间:2026-05-07
 // 创建人:Takt365(Qoder AI)
 // 功能描述:品质业务主表,用于记录品质业务的基础信息(年月)及汇总数据
@@ -19,11 +19,11 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 /// <summary>
 /// 品质业务主表,用于记录品质业务的基础信息(年月、顾客)及汇总数据
 /// </summary>
-[SugarTable("takt_logistics_quality_operation", "品质业务主表")]
-[SugarIndex("ix_quality_operation_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_quality_operation_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_quality_operation_qo_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(QualityOperationCode), OrderByType.Asc, nameof(OperationMonth), OrderByType.Asc, nameof(DebitNoteNo), OrderByType.Asc, true)]
-public class TaktQualityOperation : TaktCompanyEntityBase
+[SugarTable("takt_logistics_quality_assurance", "品质业务主表")]
+[SugarIndex("ix_quality_assurance_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_quality_assurance_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_quality_assurance_qo_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(QualityAssuranceCode), OrderByType.Asc, nameof(AssuranceMonth), OrderByType.Asc, nameof(DebitNoteNo), OrderByType.Asc, true)]
+public class TaktQualityAssurance : TaktCompanyEntityBase
 {
     /// <summary>
     /// 工厂代码
@@ -34,16 +34,16 @@ public class TaktQualityOperation : TaktCompanyEntityBase
     /// <summary>
     /// 品质业务编码(唯一,如:QO-2026-0001)
     /// </summary>
-    [SugarColumn(ColumnName = "quality_operation_code", ColumnDescription = "品质业务编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string QualityOperationCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "quality_assurance_code", ColumnDescription = "品质业务编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string QualityAssuranceCode { get; set; } = string.Empty;
 
     // ==================== 基础日期与信息 ====================
 
     /// <summary>
     /// 业务年月(格式:2026-05)
     /// </summary>
-    [SugarColumn(ColumnName = "operation_month", ColumnDescription = "业务年月", Length = 7, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string OperationMonth { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "assurance_month", ColumnDescription = "业务年月", Length = 7, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
     /// 顾客名
@@ -82,42 +82,42 @@ public class TaktQualityOperation : TaktCompanyEntityBase
     /// <summary>
     /// 来料检验费用明细列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktQualityOperationIncoming.QualityOperationId))]
-    public List<TaktQualityOperationIncoming>? IncomingItems { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktQualityAssuranceIncoming.QualityAssuranceId))]
+    public List<TaktQualityAssuranceIncoming>? IncomingItems { get; set; }
 
     /// <summary>
     /// 初期/定期检定费用明细列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktQualityOperationFirstArticle.QualityOperationId))]
-    public List<TaktQualityOperationFirstArticle>? FirstArticleItems { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktQualityAssuranceFirstArticle.QualityAssuranceId))]
+    public List<TaktQualityAssuranceFirstArticle>? FirstArticleItems { get; set; }
 
     /// <summary>
     /// 设备校正费用明细列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktQualityOperationCalibration.QualityOperationId))]
-    public List<TaktQualityOperationCalibration>? CalibrationItems { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktQualityAssuranceCalibration.QualityAssuranceId))]
+    public List<TaktQualityAssuranceCalibration>? CalibrationItems { get; set; }
 
     /// <summary>
     /// 其他通常业务费用明细列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktQualityOperationOther.QualityOperationId))]
-    public List<TaktQualityOperationOther>? OtherItems { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktQualityAssuranceOther.QualityAssuranceId))]
+    public List<TaktQualityAssuranceOther>? OtherItems { get; set; }
 
     /// <summary>
     /// 出货检验费用明细列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktQualityOperationOutgoing.QualityOperationId))]
-    public List<TaktQualityOperationOutgoing>? OutgoingItems { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktQualityAssuranceOutgoing.QualityAssuranceId))]
+    public List<TaktQualityAssuranceOutgoing>? OutgoingItems { get; set; }
 
     /// <summary>
     /// 信赖性评价/ORT费用明细列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktQualityOperationReliability.QualityOperationId))]
-    public List<TaktQualityOperationReliability>? ReliabilityItems { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktQualityAssuranceReliability.QualityAssuranceId))]
+    public List<TaktQualityAssuranceReliability>? ReliabilityItems { get; set; }
 
     /// <summary>
     /// 顾客品质要求对应费用明细列表
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktQualityOperationCustomerResponse.QualityOperationId))]
-    public List<TaktQualityOperationCustomerResponse>? CustomerResponseItems { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktQualityAssuranceCustomerResponse.QualityAssuranceId))]
+    public List<TaktQualityAssuranceCustomerResponse>? CustomerResponseItems { get; set; }
 }

@@ -53,4 +53,10 @@ public class TaktSalesPriceChangeLog : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "change_reason", ColumnDescription = "变更原因", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? ChangeReason { get; set; }
+
+    /// <summary>
+    /// 销售价格主表
+    /// </summary>
+    [Navigate(NavigateType.ManyToOne, nameof(SalesPriceId))]
+    public TaktSalesPrice? SalesPrice { get; set; }
 }

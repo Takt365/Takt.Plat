@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import type { SelectValue, DefaultOptionType } from 'ant-design-vue/es/select'
-import type { TaktSelectOption } from '@/types/common'
+import type { TaktDictSelectFieldNames, TaktDictSelectOption, TaktSelectOption } from '@/types/common'
 import request from '@/api/request'
 import { createLogger } from '@/utils/logger'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -285,9 +285,16 @@ const options = computed(() => {
     
     // 转换 fieldNames 为 getDictOptions 需要的格式
     const dictLabelField: 'dictLabel' | 'extLabel' = (labelField === 'extLabel' ? 'extLabel' : 'dictLabel')
-    const dictValueField: 'dictValue' | 'extLabel' | 'extValue' = 
-      (valueField === 'extLabel' ? 'extLabel' : valueField === 'extValue' ? 'extValue' : 'dictValue')
-    
+    const valueFieldKey = props.fieldNames?.value
+    const dictValueField: TaktDictSelectFieldNames['valueField'] =
+      valueFieldKey === 'extLabel'
+        ? 'extLabel'
+        : valueFieldKey === 'extValue'
+          ? 'extValue'
+          : valueFieldKey === 'sortOrder'
+            ? 'sortOrder'
+            : 'dictValue'
+
     const dictOptions = dictDataStore.getDictOptionsForSelect(props.dictType, {
       valueField: dictValueField,
       labelField: dictLabelField
@@ -303,10 +310,17 @@ const options = computed(() => {
       }
     }
     
-    return dictOptions.map((option: { label: string; value: string | number }) => ({
-      ...option,
-      value: convertValueType(option.value, expectedValueType, props.dictType || '')
-    }))
+    return dictOptions.map((option: TaktDictSelectOption) => {
+      // sys_culture_code：DictLabel 即 NativeName（本族语+地区缩写），全球统一展示，不走 t(i18nKey)
+      const resolvedLabel = props.dictType === 'sys_culture_code'
+        ? String(option.dictLabel ?? option.label ?? '')
+        : (option.i18nKey?.trim() ? t(option.i18nKey) : String(option.label ?? option.dictLabel ?? ''))
+      return {
+        ...option,
+        label: resolvedLabel,
+        value: convertValueType(option.value, expectedValueType, props.dictType || '')
+      }
+    })
   }
   
   // 否则使用从 API 加载的数据
@@ -392,12 +406,20 @@ const loadData = async () => {
   if (props.options?.length) {
     return
   }
-  
-  // 如果提供了 dictType，从字典 store 加载，不需要 API 请求
+
+  // dict-type：预热 Pinia 字典缓存，避免选项空白（登录 bootstrap 未完成时弹窗已打开）
   if (props.dictType) {
+    try {
+      loading.value = true
+      await dictDataStore.loadAllDictDataAsync()
+    } catch (error) {
+      selectLogger.warn('加载字典数据失败', { action: 'loadData', dictType: props.dictType }, error)
+    } finally {
+      loading.value = false
+    }
     return
   }
-  
+
   // 如果提供了 apiUrl，通过 API 加载数据
   if (props.apiUrl) {
     try {
@@ -482,21 +504,19 @@ const handleSearch = (value: string) => {
 
 // 监听 dictType、API URL 和 options 变化
 watch(() => [props.dictType, props.apiUrl, props.options], () => {
-  // 只有在使用 API 加载时才需要重新加载数据
-  // 如果使用 dictType 或 options，数据会自动更新（通过 computed）
-  if (!props.options?.length && !props.dictType && props.apiUrl) {
-    loadData()
+  if (props.options?.length) {
+    return
+  }
+  if (props.dictType || props.apiUrl) {
+    void loadData()
   }
 })
 
 onMounted(() => {
   // 使用 nextTick 确保 props 已经完全初始化（特别是在条件渲染的场景下）
   nextTick(() => {
-    // 只有在使用 API 加载时才需要加载数据
-    // 如果使用 dictType 或 options，数据会自动更新（通过 computed）
-    // 只有在确认有 apiUrl 且没有 dictType 和 options 时才调用 loadData
-    if (props.apiUrl && !props.dictType && !props.options?.length) {
-      loadData()
+    if (props.dictType || (props.apiUrl && !props.options?.length)) {
+      void loadData()
     }
   })
 })

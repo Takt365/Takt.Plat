@@ -1,8 +1,8 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
-// 文件名称：ITaktQualityOperationFirstArticleService.cs
-// 创建时间：2026-06-09
+// 文件名称：ITaktQualityAssuranceFirstArticleService.cs
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务初期定期检定费用明细应用服务接口
 // 
@@ -19,34 +19,34 @@ namespace Takt.Application.Services.Logistics.Quality.Cost;
 /// <summary>
 /// 品质业务初期定期检定费用明细应用服务接口
 /// </summary>
-public interface ITaktQualityOperationFirstArticleService
+public interface ITaktQualityAssuranceFirstArticleService
 {
     /// <summary>
     /// 获取品质业务初期定期检定费用明细列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    Task<TaktPagedResult<TaktQualityOperationFirstArticleDto>> GetQualityOperationFirstArticleListAsync(TaktQualityOperationFirstArticleQueryDto queryDto);
+    Task<TaktPagedResult<TaktQualityAssuranceFirstArticleDto>> GetQualityAssuranceFirstArticleListAsync(TaktQualityAssuranceFirstArticleQueryDto queryDto);
 
     /// <summary>
     /// 根据ID获取品质业务初期定期检定费用明细
     /// </summary>
     /// <param name="id">品质业务初期定期检定费用明细ID</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationFirstArticleDto?> GetQualityOperationFirstArticleByIdAsync(long id);
+    Task<TaktQualityAssuranceFirstArticleDto?> GetQualityAssuranceFirstArticleByIdAsync(long id);
 
     /// <summary>
     /// 获取品质业务初期定期检定费用明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetQualityOperationFirstArticleOptionsAsync();
+    Task<List<TaktSelectOption>> GetQualityAssuranceFirstArticleOptionsAsync();
 
     /// <summary>
     /// 创建品质业务初期定期检定费用明细
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationFirstArticleDto> CreateQualityOperationFirstArticleAsync(TaktQualityOperationFirstArticleCreateDto dto);
+    Task<TaktQualityAssuranceFirstArticleDto> CreateQualityAssuranceFirstArticleAsync(TaktQualityAssuranceFirstArticleCreateDto dto);
 
     /// <summary>
     /// 更新品质业务初期定期检定费用明细
@@ -54,21 +54,21 @@ public interface ITaktQualityOperationFirstArticleService
     /// <param name="id">品质业务初期定期检定费用明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktQualityOperationFirstArticleDto> UpdateQualityOperationFirstArticleAsync(long id, TaktQualityOperationFirstArticleUpdateDto dto);
+    Task<TaktQualityAssuranceFirstArticleDto> UpdateQualityAssuranceFirstArticleAsync(long id, TaktQualityAssuranceFirstArticleUpdateDto dto);
 
     /// <summary>
     /// 删除品质业务初期定期检定费用明细
     /// </summary>
     /// <param name="id">品质业务初期定期检定费用明细ID</param>
     /// <returns>任务</returns>
-    Task DeleteQualityOperationFirstArticleByIdAsync(long id);
+    Task DeleteQualityAssuranceFirstArticleByIdAsync(long id);
 
     /// <summary>
     /// 批量删除品质业务初期定期检定费用明细
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
-    Task DeleteQualityOperationFirstArticleBatchAsync(IEnumerable<long> ids);
+    Task DeleteQualityAssuranceFirstArticleBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
     /// 获取导入模板
@@ -76,7 +76,7 @@ public interface ITaktQualityOperationFirstArticleService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] content)> GetQualityOperationFirstArticleTemplateAsync(string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] content)> GetQualityAssuranceFirstArticleTemplateAsync(string? sheetName = null, string? fileName = null);
 
     /// <summary>
     /// 导入品质业务初期定期检定费用明细
@@ -84,7 +84,7 @@ public interface ITaktQualityOperationFirstArticleService
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
     /// <returns>导入结果</returns>
-    Task<(int success, int fail, List<string> errors)> ImportQualityOperationFirstArticleAsync(Stream fileStream, string? sheetName = null);
+    Task<(int success, int fail, List<string> errors)> ImportQualityAssuranceFirstArticleAsync(Stream fileStream, string? sheetName = null);
 
     /// <summary>
     /// 导出品质业务初期定期检定费用明细
@@ -93,6 +93,6 @@ public interface ITaktQualityOperationFirstArticleService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] fileContent)> ExportQualityOperationFirstArticleAsync(TaktQualityOperationFirstArticleQueryDto? query = null, string? sheetName = null, string? fileName = null);
+    Task<(string fileName, byte[] fileContent)> ExportQualityAssuranceFirstArticleAsync(TaktQualityAssuranceFirstArticleQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
 }

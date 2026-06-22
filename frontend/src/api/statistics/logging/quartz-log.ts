@@ -41,9 +41,7 @@ export function getQuartzLogList(queryDto: any): Promise<TaktPagedResult<QuartzL
   return request<TaktPagedResult<QuartzLog>>({
     url: `${QUARTZ_LOG_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -159,7 +157,7 @@ export function exportQuartzLog(
     url: `${QUARTZ_LOG_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

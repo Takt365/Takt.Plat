@@ -101,7 +101,7 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
         EnsureThreeLayerContext();
         var list = await _apsScheduleItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.ProductName,
+            x => x.ProductName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -369,7 +369,7 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
                 || SqlFunc.ToString(x.PlanQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.ProcessStatus).Contains(keywords)
                 || SqlFunc.ToString(x.Priority).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlanStartTime).Contains(keywords)
                 || SqlFunc.ToString(x.PlanEndTime).Contains(keywords)
@@ -464,9 +464,9 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
             exp = exp.And(x => x.Priority == queryDto.Priority);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

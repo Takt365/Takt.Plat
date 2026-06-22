@@ -1,4 +1,4 @@
-﻿<!-- ======================================== -->
+<!-- ======================================== -->
 <!-- 项目名称：节拍工厂·Takt Plat -->
 <!-- 命名空间：frontend/src/components/common/takt-theme-toggle -->
 <!-- 文件名称：index.vue -->
@@ -24,7 +24,7 @@
     :mouse-enter-delay="0.15"
     v-bind="$attrs"
   >
-    <a-button type="text" :size="size" :aria-label="t('common.page.theme.switch')">
+    <a-button type="text" :size="size" :aria-label="t('common.page.theme.switch.label')">
       <template #icon>
         <ri-moon-line class="takt-remix-icon" v-if="themeStore.resolvedTheme === 'light'" />
         <ri-sun-line class="takt-remix-icon" v-else />
@@ -92,8 +92,8 @@ const themeStore = useThemeStore();
  */
 const tooltipTitle = computed(() =>
   themeStore.resolvedTheme === 'dark'
-    ? t('common.page.theme.switchToLight')
-    : t('common.page.theme.switchToDark')
+    ? t('common.page.theme.switch.to.light')
+    : t('common.page.theme.switch.to.dark')
 );
 
 /**

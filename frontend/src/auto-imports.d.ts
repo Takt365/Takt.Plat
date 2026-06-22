@@ -11,6 +11,7 @@ declare global {
   const QUARTZ_TABLE_NAME: typeof import('./composables/use-quartz-signalr-refresh').QUARTZ_TABLE_NAME
   const TAKT_CAPTCHA_BEHAVIOR_TRACK_HEIGHT: typeof import('./composables/use-takt-captcha-behavior').TAKT_CAPTCHA_BEHAVIOR_TRACK_HEIGHT
   const TAKT_CAPTCHA_SLIDER_TRACK_HEIGHT: typeof import('./composables/use-takt-captcha-slider').TAKT_CAPTCHA_SLIDER_TRACK_HEIGHT
+  const TAKT_MASTER_DETAIL_LR_SCROLL_Y_KEY: typeof import('./composables/use-takt-master-detail-lr-scroll-y').TAKT_MASTER_DETAIL_LR_SCROLL_Y_KEY
   const WORKFLOW_TABLE_NAMES: typeof import('./composables/use-workflow-signalr-refresh').WORKFLOW_TABLE_NAMES
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
   const computed: typeof import('vue').computed
@@ -41,6 +42,7 @@ declare global {
   const mapStores: typeof import('pinia').mapStores
   const mapWritableState: typeof import('pinia').mapWritableState
   const markRaw: typeof import('vue').markRaw
+  const measureMasterDetailLrTableScrollY: typeof import('./composables/use-takt-master-detail-lr-scroll-y').measureMasterDetailLrTableScrollY
   const message: typeof import('ant-design-vue').message
   const nextTick: typeof import('vue').nextTick
   const notification: typeof import('ant-design-vue').notification
@@ -62,6 +64,7 @@ declare global {
   const onWatcherCleanup: typeof import('vue').onWatcherCleanup
   const probeSessionCaptchaRequiredAsync: typeof import('./composables/use-takt-login-captcha').probeSessionCaptchaRequiredAsync
   const provide: typeof import('vue').provide
+  const provideTaktMasterDetailLrScrollY: typeof import('./composables/use-takt-master-detail-lr-scroll-y').provideTaktMasterDetailLrScrollY
   const reactive: typeof import('vue').reactive
   const readonly: typeof import('vue').readonly
   const ref: typeof import('vue').ref
@@ -97,6 +100,10 @@ declare global {
   const useTaktComponentLocale: typeof import('./composables/use-takt-component-locale').useTaktComponentLocale
   const useTaktFlowSubmit: typeof import('./composables/use-takt-flow-submit').useTaktFlowSubmit
   const useTaktLoginCaptcha: typeof import('./composables/use-takt-login-captcha').useTaktLoginCaptcha
+  const useTaktMasterDetailLrScrollY: typeof import('./composables/use-takt-master-detail-lr-scroll-y').useTaktMasterDetailLrScrollY
+  const useTaktTableBodyScrollY: typeof import('./composables/use-takt-table-body-scroll-y').useTaktTableBodyScrollY
+  const useTaktTableContainerScrollY: typeof import('./composables/use-takt-table-container-scroll-y').useTaktTableContainerScrollY
+  const useTaktTableViewportScrollY: typeof import('./composables/use-takt-table-viewport-scroll-y').useTaktTableViewportScrollY
   const useTemplateRef: typeof import('vue').useTemplateRef
   const useWorkflowSignalRRefresh: typeof import('./composables/use-workflow-signalr-refresh').useWorkflowSignalRRefresh
   const watch: typeof import('vue').watch
@@ -115,6 +122,9 @@ declare global {
   // @ts-ignore
   export type { TaktCaptchaPanelExpose, UseTaktLoginCaptchaOptions } from './composables/use-takt-login-captcha'
   import('./composables/use-takt-login-captcha')
+  // @ts-ignore
+  export type { TaktMasterDetailLrScrollMeasureRefs } from './composables/use-takt-master-detail-lr-scroll-y'
+  import('./composables/use-takt-master-detail-lr-scroll-y')
 }
 
 // for vue template auto import
@@ -127,6 +137,7 @@ declare module 'vue' {
     readonly QUARTZ_TABLE_NAME: UnwrapRef<typeof import('./composables/use-quartz-signalr-refresh')['QUARTZ_TABLE_NAME']>
     readonly TAKT_CAPTCHA_BEHAVIOR_TRACK_HEIGHT: UnwrapRef<typeof import('./composables/use-takt-captcha-behavior')['TAKT_CAPTCHA_BEHAVIOR_TRACK_HEIGHT']>
     readonly TAKT_CAPTCHA_SLIDER_TRACK_HEIGHT: UnwrapRef<typeof import('./composables/use-takt-captcha-slider')['TAKT_CAPTCHA_SLIDER_TRACK_HEIGHT']>
+    readonly TAKT_MASTER_DETAIL_LR_SCROLL_Y_KEY: UnwrapRef<typeof import('./composables/use-takt-master-detail-lr-scroll-y')['TAKT_MASTER_DETAIL_LR_SCROLL_Y_KEY']>
     readonly WORKFLOW_TABLE_NAMES: UnwrapRef<typeof import('./composables/use-workflow-signalr-refresh')['WORKFLOW_TABLE_NAMES']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
@@ -157,6 +168,7 @@ declare module 'vue' {
     readonly mapStores: UnwrapRef<typeof import('pinia')['mapStores']>
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
+    readonly measureMasterDetailLrTableScrollY: UnwrapRef<typeof import('./composables/use-takt-master-detail-lr-scroll-y')['measureMasterDetailLrTableScrollY']>
     readonly message: UnwrapRef<typeof import('ant-design-vue')['message']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly notification: UnwrapRef<typeof import('ant-design-vue')['notification']>
@@ -178,6 +190,7 @@ declare module 'vue' {
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
     readonly probeSessionCaptchaRequiredAsync: UnwrapRef<typeof import('./composables/use-takt-login-captcha')['probeSessionCaptchaRequiredAsync']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
+    readonly provideTaktMasterDetailLrScrollY: UnwrapRef<typeof import('./composables/use-takt-master-detail-lr-scroll-y')['provideTaktMasterDetailLrScrollY']>
     readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
     readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
@@ -213,6 +226,9 @@ declare module 'vue' {
     readonly useTaktComponentLocale: UnwrapRef<typeof import('./composables/use-takt-component-locale')['useTaktComponentLocale']>
     readonly useTaktFlowSubmit: UnwrapRef<typeof import('./composables/use-takt-flow-submit')['useTaktFlowSubmit']>
     readonly useTaktLoginCaptcha: UnwrapRef<typeof import('./composables/use-takt-login-captcha')['useTaktLoginCaptcha']>
+    readonly useTaktMasterDetailLrScrollY: UnwrapRef<typeof import('./composables/use-takt-master-detail-lr-scroll-y')['useTaktMasterDetailLrScrollY']>
+    readonly useTaktTableContainerScrollY: UnwrapRef<typeof import('./composables/use-takt-table-container-scroll-y')['useTaktTableContainerScrollY']>
+    readonly useTaktTableViewportScrollY: UnwrapRef<typeof import('./composables/use-takt-table-viewport-scroll-y')['useTaktTableViewportScrollY']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
     readonly useWorkflowSignalRRefresh: UnwrapRef<typeof import('./composables/use-workflow-signalr-refresh')['useWorkflowSignalRRefresh']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>

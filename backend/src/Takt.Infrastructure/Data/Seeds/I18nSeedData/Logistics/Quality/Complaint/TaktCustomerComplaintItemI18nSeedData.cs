@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintItemI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerComplaintItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,191 +75,191 @@ public class TaktCustomerComplaintItemI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktCustomerComplaintItem 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.customercomplaintitem._self / entity.customercomplaintitem.{{field}}；ResourceGroup=4；ResourceType=0
+    /// I18nKey：entity.customercomplaintitem._self / entity.customercomplaintitem.{{field}}；ResourceGroup=Complaint；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetCustomerComplaintItemTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.customercomplaintitem._self
-            new TranslationSeedItem("entity.customercomplaintitem._self", "en-US", "Customer Complaint Item Information", "实体名称"),
+            new TranslationSeedItem("entity.customercomplaintitem._self", "en-US", "Customer Complaint Item Information_us", "实体名称"),
             // entity.customercomplaintitem._self
-            new TranslationSeedItem("entity.customercomplaintitem._self", "ja-JP", "客诉明细信息", "实体名称"),
+            new TranslationSeedItem("entity.customercomplaintitem._self", "ja-JP", "客诉明细信息_jp", "实体名称"),
             // entity.customercomplaintitem._self
             new TranslationSeedItem("entity.customercomplaintitem._self", "zh-CN", "客诉明细信息", "实体名称"),
             // entity.customercomplaintitem._self
-            new TranslationSeedItem("entity.customercomplaintitem._self", "zh-HK", "客诉明细信息", "实体名称"),
+            new TranslationSeedItem("entity.customercomplaintitem._self", "zh-HK", "客诉明细信息_hk", "实体名称"),
 
             // entity.customercomplaintitem.complaintid
-            new TranslationSeedItem("entity.customercomplaintitem.complaintid", "en-US", "客诉ID", "客诉ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.customercomplaintitem.complaintid", "en-US", "客诉ID_us", "客诉ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.customercomplaintitem.complaintid
-            new TranslationSeedItem("entity.customercomplaintitem.complaintid", "ja-JP", "客诉ID", "客诉ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.customercomplaintitem.complaintid", "ja-JP", "客诉ID_jp", "客诉ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.customercomplaintitem.complaintid
             new TranslationSeedItem("entity.customercomplaintitem.complaintid", "zh-CN", "客诉ID", "客诉ID（主子表关系，序列化为string以避免Javascript精度问题）"),
             // entity.customercomplaintitem.complaintid
-            new TranslationSeedItem("entity.customercomplaintitem.complaintid", "zh-HK", "客诉ID", "客诉ID（主子表关系，序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.customercomplaintitem.complaintid", "zh-HK", "客诉ID_hk", "客诉ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
             // entity.customercomplaintitem.customercomplaintcode
-            new TranslationSeedItem("entity.customercomplaintitem.customercomplaintcode", "en-US", "客诉单号", "客诉单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customercomplaintitem.customercomplaintcode", "en-US", "客诉单号_us", "客诉单号（冗余字段，便于查询）"),
             // entity.customercomplaintitem.customercomplaintcode
-            new TranslationSeedItem("entity.customercomplaintitem.customercomplaintcode", "ja-JP", "客诉单号", "客诉单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customercomplaintitem.customercomplaintcode", "ja-JP", "客诉单号_jp", "客诉单号（冗余字段，便于查询）"),
             // entity.customercomplaintitem.customercomplaintcode
             new TranslationSeedItem("entity.customercomplaintitem.customercomplaintcode", "zh-CN", "客诉单号", "客诉单号（冗余字段，便于查询）"),
             // entity.customercomplaintitem.customercomplaintcode
-            new TranslationSeedItem("entity.customercomplaintitem.customercomplaintcode", "zh-HK", "客诉单号", "客诉单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customercomplaintitem.customercomplaintcode", "zh-HK", "客诉单号_hk", "客诉单号（冗余字段，便于查询）"),
 
             // entity.customercomplaintitem.linenumber
-            new TranslationSeedItem("entity.customercomplaintitem.linenumber", "en-US", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.customercomplaintitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
             // entity.customercomplaintitem.linenumber
-            new TranslationSeedItem("entity.customercomplaintitem.linenumber", "ja-JP", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.customercomplaintitem.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
             // entity.customercomplaintitem.linenumber
             new TranslationSeedItem("entity.customercomplaintitem.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
             // entity.customercomplaintitem.linenumber
-            new TranslationSeedItem("entity.customercomplaintitem.linenumber", "zh-HK", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.customercomplaintitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.customercomplaintitem.productcode
-            new TranslationSeedItem("entity.customercomplaintitem.productcode", "en-US", "产品编码", "产品编码"),
+            new TranslationSeedItem("entity.customercomplaintitem.productcode", "en-US", "产品编码_us", "产品编码"),
             // entity.customercomplaintitem.productcode
-            new TranslationSeedItem("entity.customercomplaintitem.productcode", "ja-JP", "产品编码", "产品编码"),
+            new TranslationSeedItem("entity.customercomplaintitem.productcode", "ja-JP", "产品编码_jp", "产品编码"),
             // entity.customercomplaintitem.productcode
             new TranslationSeedItem("entity.customercomplaintitem.productcode", "zh-CN", "产品编码", "产品编码"),
             // entity.customercomplaintitem.productcode
-            new TranslationSeedItem("entity.customercomplaintitem.productcode", "zh-HK", "产品编码", "产品编码"),
+            new TranslationSeedItem("entity.customercomplaintitem.productcode", "zh-HK", "产品编码_hk", "产品编码"),
 
             // entity.customercomplaintitem.productname
-            new TranslationSeedItem("entity.customercomplaintitem.productname", "en-US", "产品名称", "产品名称"),
+            new TranslationSeedItem("entity.customercomplaintitem.productname", "en-US", "产品名称_us", "产品名称"),
             // entity.customercomplaintitem.productname
-            new TranslationSeedItem("entity.customercomplaintitem.productname", "ja-JP", "产品名称", "产品名称"),
+            new TranslationSeedItem("entity.customercomplaintitem.productname", "ja-JP", "产品名称_jp", "产品名称"),
             // entity.customercomplaintitem.productname
             new TranslationSeedItem("entity.customercomplaintitem.productname", "zh-CN", "产品名称", "产品名称"),
             // entity.customercomplaintitem.productname
-            new TranslationSeedItem("entity.customercomplaintitem.productname", "zh-HK", "产品名称", "产品名称"),
+            new TranslationSeedItem("entity.customercomplaintitem.productname", "zh-HK", "产品名称_hk", "产品名称"),
 
             // entity.customercomplaintitem.batchno
-            new TranslationSeedItem("entity.customercomplaintitem.batchno", "en-US", "批次号", "批次号"),
+            new TranslationSeedItem("entity.customercomplaintitem.batchno", "en-US", "批次号_us", "批次号"),
             // entity.customercomplaintitem.batchno
-            new TranslationSeedItem("entity.customercomplaintitem.batchno", "ja-JP", "批次号", "批次号"),
+            new TranslationSeedItem("entity.customercomplaintitem.batchno", "ja-JP", "批次号_jp", "批次号"),
             // entity.customercomplaintitem.batchno
             new TranslationSeedItem("entity.customercomplaintitem.batchno", "zh-CN", "批次号", "批次号"),
             // entity.customercomplaintitem.batchno
-            new TranslationSeedItem("entity.customercomplaintitem.batchno", "zh-HK", "批次号", "批次号"),
+            new TranslationSeedItem("entity.customercomplaintitem.batchno", "zh-HK", "批次号_hk", "批次号"),
 
             // entity.customercomplaintitem.itemtype
-            new TranslationSeedItem("entity.customercomplaintitem.itemtype", "en-US", "不良项目类型", "不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）"),
+            new TranslationSeedItem("entity.customercomplaintitem.itemtype", "en-US", "不良项目类型_us", "不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）"),
             // entity.customercomplaintitem.itemtype
-            new TranslationSeedItem("entity.customercomplaintitem.itemtype", "ja-JP", "不良项目类型", "不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）"),
+            new TranslationSeedItem("entity.customercomplaintitem.itemtype", "ja-JP", "不良项目类型_jp", "不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）"),
             // entity.customercomplaintitem.itemtype
             new TranslationSeedItem("entity.customercomplaintitem.itemtype", "zh-CN", "不良项目类型", "不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）"),
             // entity.customercomplaintitem.itemtype
-            new TranslationSeedItem("entity.customercomplaintitem.itemtype", "zh-HK", "不良项目类型", "不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）"),
+            new TranslationSeedItem("entity.customercomplaintitem.itemtype", "zh-HK", "不良项目类型_hk", "不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）"),
 
             // entity.customercomplaintitem.defectdescription
-            new TranslationSeedItem("entity.customercomplaintitem.defectdescription", "en-US", "不良现象描述", "不良现象描述"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectdescription", "en-US", "不良现象描述_us", "不良现象描述"),
             // entity.customercomplaintitem.defectdescription
-            new TranslationSeedItem("entity.customercomplaintitem.defectdescription", "ja-JP", "不良现象描述", "不良现象描述"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectdescription", "ja-JP", "不良现象描述_jp", "不良现象描述"),
             // entity.customercomplaintitem.defectdescription
             new TranslationSeedItem("entity.customercomplaintitem.defectdescription", "zh-CN", "不良现象描述", "不良现象描述"),
             // entity.customercomplaintitem.defectdescription
-            new TranslationSeedItem("entity.customercomplaintitem.defectdescription", "zh-HK", "不良现象描述", "不良现象描述"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectdescription", "zh-HK", "不良现象描述_hk", "不良现象描述"),
 
             // entity.customercomplaintitem.defectlevel
-            new TranslationSeedItem("entity.customercomplaintitem.defectlevel", "en-US", "缺点等级", "缺点等级（CR=严重，MA=主要，MI=次要）"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectlevel", "en-US", "缺点等级_us", "缺点等级（CR=严重，MA=主要，MI=次要）"),
             // entity.customercomplaintitem.defectlevel
-            new TranslationSeedItem("entity.customercomplaintitem.defectlevel", "ja-JP", "缺点等级", "缺点等级（CR=严重，MA=主要，MI=次要）"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectlevel", "ja-JP", "缺点等级_jp", "缺点等级（CR=严重，MA=主要，MI=次要）"),
             // entity.customercomplaintitem.defectlevel
             new TranslationSeedItem("entity.customercomplaintitem.defectlevel", "zh-CN", "缺点等级", "缺点等级（CR=严重，MA=主要，MI=次要）"),
             // entity.customercomplaintitem.defectlevel
-            new TranslationSeedItem("entity.customercomplaintitem.defectlevel", "zh-HK", "缺点等级", "缺点等级（CR=严重，MA=主要，MI=次要）"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectlevel", "zh-HK", "缺点等级_hk", "缺点等级（CR=严重，MA=主要，MI=次要）"),
 
             // entity.customercomplaintitem.defectquantity
-            new TranslationSeedItem("entity.customercomplaintitem.defectquantity", "en-US", "不良数量", "不良数量"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectquantity", "en-US", "不良数量_us", "不良数量"),
             // entity.customercomplaintitem.defectquantity
-            new TranslationSeedItem("entity.customercomplaintitem.defectquantity", "ja-JP", "不良数量", "不良数量"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectquantity", "ja-JP", "不良数量_jp", "不良数量"),
             // entity.customercomplaintitem.defectquantity
             new TranslationSeedItem("entity.customercomplaintitem.defectquantity", "zh-CN", "不良数量", "不良数量"),
             // entity.customercomplaintitem.defectquantity
-            new TranslationSeedItem("entity.customercomplaintitem.defectquantity", "zh-HK", "不良数量", "不良数量"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectquantity", "zh-HK", "不良数量_hk", "不良数量"),
 
             // entity.customercomplaintitem.defectrate
-            new TranslationSeedItem("entity.customercomplaintitem.defectrate", "en-US", "不良率", "不良率（%）"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectrate", "en-US", "不良率_us", "不良率（%）"),
             // entity.customercomplaintitem.defectrate
-            new TranslationSeedItem("entity.customercomplaintitem.defectrate", "ja-JP", "不良率", "不良率（%）"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectrate", "ja-JP", "不良率_jp", "不良率（%）"),
             // entity.customercomplaintitem.defectrate
             new TranslationSeedItem("entity.customercomplaintitem.defectrate", "zh-CN", "不良率", "不良率（%）"),
             // entity.customercomplaintitem.defectrate
-            new TranslationSeedItem("entity.customercomplaintitem.defectrate", "zh-HK", "不良率", "不良率（%）"),
+            new TranslationSeedItem("entity.customercomplaintitem.defectrate", "zh-HK", "不良率_hk", "不良率（%）"),
 
             // entity.customercomplaintitem.causeanalysis
-            new TranslationSeedItem("entity.customercomplaintitem.causeanalysis", "en-US", "原因分析", "原因分析"),
+            new TranslationSeedItem("entity.customercomplaintitem.causeanalysis", "en-US", "原因分析_us", "原因分析"),
             // entity.customercomplaintitem.causeanalysis
-            new TranslationSeedItem("entity.customercomplaintitem.causeanalysis", "ja-JP", "原因分析", "原因分析"),
+            new TranslationSeedItem("entity.customercomplaintitem.causeanalysis", "ja-JP", "原因分析_jp", "原因分析"),
             // entity.customercomplaintitem.causeanalysis
             new TranslationSeedItem("entity.customercomplaintitem.causeanalysis", "zh-CN", "原因分析", "原因分析"),
             // entity.customercomplaintitem.causeanalysis
-            new TranslationSeedItem("entity.customercomplaintitem.causeanalysis", "zh-HK", "原因分析", "原因分析"),
+            new TranslationSeedItem("entity.customercomplaintitem.causeanalysis", "zh-HK", "原因分析_hk", "原因分析"),
 
             // entity.customercomplaintitem.improvementaction
-            new TranslationSeedItem("entity.customercomplaintitem.improvementaction", "en-US", "改善对策", "改善对策"),
+            new TranslationSeedItem("entity.customercomplaintitem.improvementaction", "en-US", "改善对策_us", "改善对策"),
             // entity.customercomplaintitem.improvementaction
-            new TranslationSeedItem("entity.customercomplaintitem.improvementaction", "ja-JP", "改善对策", "改善对策"),
+            new TranslationSeedItem("entity.customercomplaintitem.improvementaction", "ja-JP", "改善对策_jp", "改善对策"),
             // entity.customercomplaintitem.improvementaction
             new TranslationSeedItem("entity.customercomplaintitem.improvementaction", "zh-CN", "改善对策", "改善对策"),
             // entity.customercomplaintitem.improvementaction
-            new TranslationSeedItem("entity.customercomplaintitem.improvementaction", "zh-HK", "改善对策", "改善对策"),
+            new TranslationSeedItem("entity.customercomplaintitem.improvementaction", "zh-HK", "改善对策_hk", "改善对策"),
 
             // entity.customercomplaintitem.improvementresponsible
-            new TranslationSeedItem("entity.customercomplaintitem.improvementresponsible", "en-US", "改善责任人", "改善责任人"),
+            new TranslationSeedItem("entity.customercomplaintitem.improvementresponsible", "en-US", "改善责任人_us", "改善责任人"),
             // entity.customercomplaintitem.improvementresponsible
-            new TranslationSeedItem("entity.customercomplaintitem.improvementresponsible", "ja-JP", "改善责任人", "改善责任人"),
+            new TranslationSeedItem("entity.customercomplaintitem.improvementresponsible", "ja-JP", "改善责任人_jp", "改善责任人"),
             // entity.customercomplaintitem.improvementresponsible
             new TranslationSeedItem("entity.customercomplaintitem.improvementresponsible", "zh-CN", "改善责任人", "改善责任人"),
             // entity.customercomplaintitem.improvementresponsible
-            new TranslationSeedItem("entity.customercomplaintitem.improvementresponsible", "zh-HK", "改善责任人", "改善责任人"),
+            new TranslationSeedItem("entity.customercomplaintitem.improvementresponsible", "zh-HK", "改善责任人_hk", "改善责任人"),
 
             // entity.customercomplaintitem.plannedcompletiondate
-            new TranslationSeedItem("entity.customercomplaintitem.plannedcompletiondate", "en-US", "计划完成日期", "计划完成日期"),
+            new TranslationSeedItem("entity.customercomplaintitem.plannedcompletiondate", "en-US", "计划完成日期_us", "计划完成日期"),
             // entity.customercomplaintitem.plannedcompletiondate
-            new TranslationSeedItem("entity.customercomplaintitem.plannedcompletiondate", "ja-JP", "计划完成日期", "计划完成日期"),
+            new TranslationSeedItem("entity.customercomplaintitem.plannedcompletiondate", "ja-JP", "计划完成日期_jp", "计划完成日期"),
             // entity.customercomplaintitem.plannedcompletiondate
             new TranslationSeedItem("entity.customercomplaintitem.plannedcompletiondate", "zh-CN", "计划完成日期", "计划完成日期"),
             // entity.customercomplaintitem.plannedcompletiondate
-            new TranslationSeedItem("entity.customercomplaintitem.plannedcompletiondate", "zh-HK", "计划完成日期", "计划完成日期"),
+            new TranslationSeedItem("entity.customercomplaintitem.plannedcompletiondate", "zh-HK", "计划完成日期_hk", "计划完成日期"),
 
             // entity.customercomplaintitem.actualcompletiondate
-            new TranslationSeedItem("entity.customercomplaintitem.actualcompletiondate", "en-US", "实际完成日期", "实际完成日期"),
+            new TranslationSeedItem("entity.customercomplaintitem.actualcompletiondate", "en-US", "实际完成日期_us", "实际完成日期"),
             // entity.customercomplaintitem.actualcompletiondate
-            new TranslationSeedItem("entity.customercomplaintitem.actualcompletiondate", "ja-JP", "实际完成日期", "实际完成日期"),
+            new TranslationSeedItem("entity.customercomplaintitem.actualcompletiondate", "ja-JP", "实际完成日期_jp", "实际完成日期"),
             // entity.customercomplaintitem.actualcompletiondate
             new TranslationSeedItem("entity.customercomplaintitem.actualcompletiondate", "zh-CN", "实际完成日期", "实际完成日期"),
             // entity.customercomplaintitem.actualcompletiondate
-            new TranslationSeedItem("entity.customercomplaintitem.actualcompletiondate", "zh-HK", "实际完成日期", "实际完成日期"),
+            new TranslationSeedItem("entity.customercomplaintitem.actualcompletiondate", "zh-HK", "实际完成日期_hk", "实际完成日期"),
 
             // entity.customercomplaintitem.improvementstatus
-            new TranslationSeedItem("entity.customercomplaintitem.improvementstatus", "en-US", "改善状态", "改善状态（0=待改善，1=改善中，2=已完成，3=已验证）"),
+            new TranslationSeedItem("entity.customercomplaintitem.improvementstatus", "en-US", "改善状态_us", "改善状态（0=待改善，1=改善中，2=已完成，3=已验证）"),
             // entity.customercomplaintitem.improvementstatus
-            new TranslationSeedItem("entity.customercomplaintitem.improvementstatus", "ja-JP", "改善状态", "改善状态（0=待改善，1=改善中，2=已完成，3=已验证）"),
+            new TranslationSeedItem("entity.customercomplaintitem.improvementstatus", "ja-JP", "改善状态_jp", "改善状态（0=待改善，1=改善中，2=已完成，3=已验证）"),
             // entity.customercomplaintitem.improvementstatus
             new TranslationSeedItem("entity.customercomplaintitem.improvementstatus", "zh-CN", "改善状态", "改善状态（0=待改善，1=改善中，2=已完成，3=已验证）"),
             // entity.customercomplaintitem.improvementstatus
-            new TranslationSeedItem("entity.customercomplaintitem.improvementstatus", "zh-HK", "改善状态", "改善状态（0=待改善，1=改善中，2=已完成，3=已验证）"),
+            new TranslationSeedItem("entity.customercomplaintitem.improvementstatus", "zh-HK", "改善状态_hk", "改善状态（0=待改善，1=改善中，2=已完成，3=已验证）"),
 
             // entity.customercomplaintitem.attachmentpaths
-            new TranslationSeedItem("entity.customercomplaintitem.attachmentpaths", "en-US", "附件路径", "附件路径（多个附件用逗号分隔）"),
+            new TranslationSeedItem("entity.customercomplaintitem.attachmentpaths", "en-US", "附件路径_us", "附件路径（多个附件用逗号分隔）"),
             // entity.customercomplaintitem.attachmentpaths
-            new TranslationSeedItem("entity.customercomplaintitem.attachmentpaths", "ja-JP", "附件路径", "附件路径（多个附件用逗号分隔）"),
+            new TranslationSeedItem("entity.customercomplaintitem.attachmentpaths", "ja-JP", "附件路径_jp", "附件路径（多个附件用逗号分隔）"),
             // entity.customercomplaintitem.attachmentpaths
             new TranslationSeedItem("entity.customercomplaintitem.attachmentpaths", "zh-CN", "附件路径", "附件路径（多个附件用逗号分隔）"),
             // entity.customercomplaintitem.attachmentpaths
-            new TranslationSeedItem("entity.customercomplaintitem.attachmentpaths", "zh-HK", "附件路径", "附件路径（多个附件用逗号分隔）"),
+            new TranslationSeedItem("entity.customercomplaintitem.attachmentpaths", "zh-HK", "附件路径_hk", "附件路径（多个附件用逗号分隔）"),
 
             // entity.customercomplaintitem.complaint
-            new TranslationSeedItem("entity.customercomplaintitem.complaint", "en-US", "客诉主表", "客诉主表"),
+            new TranslationSeedItem("entity.customercomplaintitem.complaint", "en-US", "客诉主表_us", "客诉主表"),
             // entity.customercomplaintitem.complaint
-            new TranslationSeedItem("entity.customercomplaintitem.complaint", "ja-JP", "客诉主表", "客诉主表"),
+            new TranslationSeedItem("entity.customercomplaintitem.complaint", "ja-JP", "客诉主表_jp", "客诉主表"),
             // entity.customercomplaintitem.complaint
             new TranslationSeedItem("entity.customercomplaintitem.complaint", "zh-CN", "客诉主表", "客诉主表"),
             // entity.customercomplaintitem.complaint
-            new TranslationSeedItem("entity.customercomplaintitem.complaint", "zh-HK", "客诉主表", "客诉主表"),
+            new TranslationSeedItem("entity.customercomplaintitem.complaint", "zh-HK", "客诉主表_hk", "客诉主表"),
         };
     }
 
@@ -277,10 +277,10 @@ public class TaktCustomerComplaintItemI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 4;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Complaint";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

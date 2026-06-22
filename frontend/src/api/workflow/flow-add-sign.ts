@@ -40,9 +40,7 @@ export function getFlowAddSignList(queryDto: any): Promise<TaktPagedResult<FlowA
   return request<TaktPagedResult<FlowAddSign>>({
     url: `${FLOW_ADD_SIGN_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportFlowAddSign(
     url: `${FLOW_ADD_SIGN_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

@@ -40,9 +40,7 @@ export function getGenTableList(queryDto: any): Promise<TaktPagedResult<GenTable
   return request<TaktPagedResult<GenTable>>({
     url: `${GEN_TABLE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -186,7 +184,7 @@ export function exportGenTable(
     url: `${GEN_TABLE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

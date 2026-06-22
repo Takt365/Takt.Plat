@@ -10,7 +10,7 @@
     class="flow-pending-add"
   >
     <div class="flow-pending-add__title">
-      {{ t('entity.flowInstance.addsigns') }}
+      {{ t('entity.flowinstance.addsigns') }}
     </div>
     <div
       v-for="p in pendingAddApproverItems"
@@ -80,11 +80,11 @@ async function onReduce(flowAddSignId: string) {
       instanceCode: d?.instanceCode,
       flowAddSignId
     })
-    message.success(t('workflow.instance.page.msg.reduceSignSuccess'))
+    message.success(t('workflow.instance.page.msg.reduce.sign.success'))
     emit('refresh')
   } catch (e: unknown) {
     const err = e as { message?: string }
-    message.error(err?.message || t('workflow.instance.page.msg.reduceSignFail'))
+    message.error(err?.message || t('workflow.instance.page.msg.reduce.sign.fail'))
   } finally {
     loadingId.value = null
   }

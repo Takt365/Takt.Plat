@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SupplierEvaluationItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSupplierEvaluationItem 生成，请按需审阅）
 // 
@@ -31,18 +31,18 @@ public class TaktSupplierEvaluationItemCreateValidator : AbstractValidator<TaktS
     {
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符");
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符");
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.EvaluationId)
             .GreaterThanOrEqualTo(0).WithMessage("评价表ID不能为负数");
         RuleFor(x => x.SupplierEvaluationCode)
             .NotEmpty().WithMessage("评价表编号不能为空")
-            .MaximumLength(40).WithMessage("评价表编号长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("评价表编号长度不能超过50个字符");
         RuleFor(x => x.ItemName)
             .NotEmpty().WithMessage("评价项目名称不能为空")
-            .MaximumLength(40).WithMessage("评价项目名称长度不能超过40个字符");
+            .MaximumLength(200).WithMessage("评价项目名称长度不能超过200个字符");
         RuleFor(x => x.ItemDescription)
             .MaximumLength(500).WithMessage("评价项目说明长度不能超过500个字符");
         RuleFor(x => x.ScoringStandard)
@@ -53,7 +53,7 @@ public class TaktSupplierEvaluationItemCreateValidator : AbstractValidator<TaktS
             .MaximumLength(1000).WithMessage("存在问题长度不能超过1000个字符");
         RuleFor(x => x.ImprovementRequirement)
             .MaximumLength(1000).WithMessage("改进要求长度不能超过1000个字符");
-        RuleFor(x => x.ExtFieldJson)
+        RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
@@ -94,17 +94,17 @@ public class TaktSupplierEvaluationItemImportValidator : AbstractValidator<TaktS
     public TaktSupplierEvaluationItemImportValidator()
     {
         RuleFor(x => x.TenantCode)
-            .MaximumLength(40).WithMessage("租户编码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
-            .MaximumLength(40).WithMessage("公司代码长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.EvaluationId)
             .GreaterThanOrEqualTo(0).WithMessage("评价表ID不能为负数");
         RuleFor(x => x.SupplierEvaluationCode)
             .NotEmpty().WithMessage("评价表编号不能为空")
-            .MaximumLength(40).WithMessage("评价表编号长度不能超过40个字符");
+            .MaximumLength(50).WithMessage("评价表编号长度不能超过50个字符");
         RuleFor(x => x.ItemName)
             .NotEmpty().WithMessage("评价项目名称不能为空")
-            .MaximumLength(40).WithMessage("评价项目名称长度不能超过40个字符");
+            .MaximumLength(200).WithMessage("评价项目名称长度不能超过200个字符");
         RuleFor(x => x.ItemDescription)
             .MaximumLength(500).WithMessage("评价项目说明长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.ItemDescription));
         RuleFor(x => x.ScoringStandard)
@@ -113,8 +113,8 @@ public class TaktSupplierEvaluationItemImportValidator : AbstractValidator<TaktS
             .MaximumLength(1000).WithMessage("评价说明/事实依据长度不能超过1000个字符").When(x => !string.IsNullOrWhiteSpace(x.EvaluationComment));
         RuleFor(x => x.ExistingIssues)
             .MaximumLength(1000).WithMessage("存在问题长度不能超过1000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExistingIssues));
-        RuleFor(x => x.ExtFieldJson)
-            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtFieldJson));
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符").When(x => !string.IsNullOrWhiteSpace(x.Remark));
     }

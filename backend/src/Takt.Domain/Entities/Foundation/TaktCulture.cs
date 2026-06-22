@@ -64,7 +64,7 @@ public class TaktCulture : TaktTenantEntityBase
     public int IsDefault { get; set; } = 0;
 
     /// <summary>
-    /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
+    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "language_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int LanguageStatus { get; set; } = 1;

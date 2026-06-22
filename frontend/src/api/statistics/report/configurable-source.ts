@@ -41,9 +41,7 @@ export function getConfigurableSourceList(queryDto: any): Promise<TaktPagedResul
   return request<TaktPagedResult<ConfigurableSource>>({
     url: `${CONFIGURABLE_SOURCE_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportConfigurableSource(
     url: `${CONFIGURABLE_SOURCE_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

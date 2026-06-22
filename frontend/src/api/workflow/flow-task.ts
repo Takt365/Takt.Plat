@@ -42,9 +42,7 @@ export function getFlowTaskList(queryDto: any): Promise<TaktPagedResult<FlowTask
   return request<TaktPagedResult<FlowTask>>({
     url: `${FLOW_TASK_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportFlowTask(
     url: `${FLOW_TASK_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

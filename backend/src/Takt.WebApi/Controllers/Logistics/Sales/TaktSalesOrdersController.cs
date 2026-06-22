@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Sales
 // 文件名称：TaktSalesOrdersController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单控制器
 // 
@@ -183,7 +183,7 @@ public class TaktSalesOrdersController : TaktControllerBase
     /// <summary>
     /// 更新销售订单状态
     /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
+    /// <param name="dto">状态 DTO</param>
     /// <returns>销售订单DTO</returns>
     [TaktPermission("logistics:sales:order:update", "更新销售订单状态")]
     [HttpPut("status")]

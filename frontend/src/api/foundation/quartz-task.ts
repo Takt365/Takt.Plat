@@ -41,9 +41,7 @@ export function getQuartzTaskList(queryDto: any): Promise<TaktPagedResult<Quartz
   return request<TaktPagedResult<QuartzTask>>({
     url: `${QUARTZ_TASK_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -200,7 +198,7 @@ export function exportQuartzTask(
     url: `${QUARTZ_TASK_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

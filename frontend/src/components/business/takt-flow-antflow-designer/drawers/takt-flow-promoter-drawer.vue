@@ -19,19 +19,19 @@
   >
     <template v-if="config && config.nodeType === 1">
       <a-form layout="vertical">
-        <a-form-item label="发起人权限">
+        <a-form-item :label="t('workflow.designer.page.promoterrange')">
           <a-radio-group v-model:value="form.allPerson">
             <a-radio :value="true">
-              所有人可发起
+              {{ t('workflow.designer.page.allcanstart') }}
             </a-radio>
             <a-radio :value="false">
-              指定成员/角色可发起
+              {{ t('workflow.designer.page.membercanstart') }}
             </a-radio>
           </a-radio-group>
         </a-form-item>
         <a-form-item
           v-if="!form.allPerson"
-          label="指定成员"
+          :label="t('workflow.designer.page.designatedmembers')"
         >
           <a-select
             v-model:value="form.selectedUserIds"
@@ -39,7 +39,7 @@
             show-search
             :filter-option="filterOption"
             :options="userOptions"
-            placeholder="选择可发起人员"
+            :placeholder="t('workflow.designer.page.placeholderselectpromoters')"
             style="width: 100%"
             :field-names="{ label: 'dictLabel', value: 'dictValue' }"
           />
@@ -51,13 +51,13 @@
         style="margin-right: 8px"
         @click="handleClose"
       >
-        取消
+        {{ t('common.page.button.cancel') }}
       </a-button>
       <a-button
         type="primary"
         @click="handleSave"
       >
-        确定
+        {{ t('common.page.button.ok') }}
       </a-button>
     </template>
   </a-drawer>

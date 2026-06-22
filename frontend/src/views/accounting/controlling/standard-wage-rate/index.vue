@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="accounting-controlling-standard-wage-rate">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="company"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'standardWageRateId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <StandardWageRateForm
+        :key="formData?.standardWageRateId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -109,127 +110,131 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('yearMonth')">
-      <a-form-item :label="t('entity.standardWageRate.yearmonth')">
+      <a-form-item :label="t('entity.standardwagerate.yearmonth')">
         <a-input
           v-model:value="advancedQueryForm.yearMonth"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.yearmonth') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.yearmonth') })"
+          show-count
+          :maxlength="6"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('workingDays')">
-      <a-form-item :label="t('entity.standardWageRate.workingdays')">
+      <a-form-item :label="t('entity.standardwagerate.workingdays')">
         <a-input-number
           v-model:value="advancedQueryForm.workingDays"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.workingdays') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.workingdays') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesAmount')">
-      <a-form-item :label="t('entity.standardWageRate.salesamount')">
+      <a-form-item :label="t('entity.standardwagerate.salesamount')">
         <a-input-number
           v-model:value="advancedQueryForm.salesAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.salesamount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.salesamount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('directLaborCount')">
-      <a-form-item :label="t('entity.standardWageRate.directlaborcount')">
+      <a-form-item :label="t('entity.standardwagerate.directlaborcount')">
         <a-input-number
           v-model:value="advancedQueryForm.directLaborCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.directlaborcount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.directlaborcount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('directLaborWage')">
-      <a-form-item :label="t('entity.standardWageRate.directlaborwage')">
+      <a-form-item :label="t('entity.standardwagerate.directlaborwage')">
         <a-input-number
           v-model:value="advancedQueryForm.directLaborWage"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.directlaborwage') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.directlaborwage') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('directOvertimeHours')">
-      <a-form-item :label="t('entity.standardWageRate.directovertimehours')">
+      <a-form-item :label="t('entity.standardwagerate.directovertimehours')">
         <a-input-number
           v-model:value="advancedQueryForm.directOvertimeHours"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.directovertimehours') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.directovertimehours') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('directOvertimeTotal')">
-      <a-form-item :label="t('entity.standardWageRate.directovertimetotal')">
+      <a-form-item :label="t('entity.standardwagerate.directovertimetotal')">
         <a-input-number
           v-model:value="advancedQueryForm.directOvertimeTotal"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.directovertimetotal') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.directovertimetotal') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('directWageRate')">
-      <a-form-item :label="t('entity.standardWageRate.directwagerate')">
+      <a-form-item :label="t('entity.standardwagerate.directwagerate')">
         <a-input-number
           v-model:value="advancedQueryForm.directWageRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.directwagerate') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.directwagerate') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('indirectLaborCount')">
-      <a-form-item :label="t('entity.standardWageRate.indirectlaborcount')">
+      <a-form-item :label="t('entity.standardwagerate.indirectlaborcount')">
         <a-input-number
           v-model:value="advancedQueryForm.indirectLaborCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.indirectlaborcount') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.indirectlaborcount') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('indirectLaborWage')">
-      <a-form-item :label="t('entity.standardWageRate.indirectlaborwage')">
+      <a-form-item :label="t('entity.standardwagerate.indirectlaborwage')">
         <a-input-number
           v-model:value="advancedQueryForm.indirectLaborWage"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.indirectlaborwage') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.indirectlaborwage') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('indirectOvertimeHours')">
-      <a-form-item :label="t('entity.standardWageRate.indirectovertimehours')">
+      <a-form-item :label="t('entity.standardwagerate.indirectovertimehours')">
         <a-input-number
           v-model:value="advancedQueryForm.indirectOvertimeHours"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.indirectovertimehours') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.indirectovertimehours') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('indirectOvertimeTotal')">
-      <a-form-item :label="t('entity.standardWageRate.indirectovertimetotal')">
+      <a-form-item :label="t('entity.standardwagerate.indirectovertimetotal')">
         <a-input-number
           v-model:value="advancedQueryForm.indirectOvertimeTotal"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.indirectovertimetotal') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.indirectovertimetotal') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('indirectWageRate')">
-      <a-form-item :label="t('entity.standardWageRate.indirectwagerate')">
+      <a-form-item :label="t('entity.standardwagerate.indirectwagerate')">
         <a-input-number
           v-model:value="advancedQueryForm.indirectWageRate"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.indirectwagerate') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.indirectwagerate') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="t('entity.standardWageRate.relatedplant')">
+      <a-form-item :label="t('entity.standardwagerate.relatedplant')">
         <a-input
           v-model:value="advancedQueryForm.relatedPlant"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardWageRate.relatedplant') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardwagerate.relatedplant') })"
+          show-count
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -256,12 +261,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -270,8 +294,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -281,14 +307,14 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.standardWageRate._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.standardwagerate._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.standardWageRate._self"
+        entity-i18n-key="entity.standardwagerate._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -324,12 +350,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import StandardWageRateForm from './components/standard-wage-rate-form.vue'
 import { getStandardWageRateList, getStandardWageRateById, createStandardWageRate, updateStandardWageRate, deleteStandardWageRateById, deleteStandardWageRateBatch, getStandardWageRateTemplate, importStandardWageRate, exportStandardWageRate } from '@/api/accounting/controlling/standard-wage-rate'
-import type { StandardWageRate, StandardWageRateQuery, StandardWageRateCreate, StandardWageRateUpdate } from '@/types/accounting/controlling/standard-wage-rate'
+import type { StandardWageRate, StandardWageRateQuery } from '@/types/accounting/controlling/standard-wage-rate'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -337,7 +364,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktStandardWageRate')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.standardWageRate._self') })
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.standardwagerate._self') })
 )
 
 /** 快捷查询关键字 */
@@ -347,9 +374,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<StandardWageRate[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -364,11 +391,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<StandardWageRate>>({})
+const formData = ref<Partial<StandardWageRate> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -388,28 +417,28 @@ const advancedQueryForm = ref({
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'yearMonth', label: t('entity.standardWageRate.yearmonth') },
-  { key: 'workingDays', label: t('entity.standardWageRate.workingdays') },
-  { key: 'salesAmount', label: t('entity.standardWageRate.salesamount') },
-  { key: 'directLaborCount', label: t('entity.standardWageRate.directlaborcount') },
-  { key: 'directLaborWage', label: t('entity.standardWageRate.directlaborwage') },
-  { key: 'directOvertimeHours', label: t('entity.standardWageRate.directovertimehours') },
-  { key: 'directOvertimeTotal', label: t('entity.standardWageRate.directovertimetotal') },
-  { key: 'directWageRate', label: t('entity.standardWageRate.directwagerate') },
-  { key: 'indirectLaborCount', label: t('entity.standardWageRate.indirectlaborcount') },
-  { key: 'indirectLaborWage', label: t('entity.standardWageRate.indirectlaborwage') },
-  { key: 'indirectOvertimeHours', label: t('entity.standardWageRate.indirectovertimehours') },
-  { key: 'indirectOvertimeTotal', label: t('entity.standardWageRate.indirectovertimetotal') },
-  { key: 'indirectWageRate', label: t('entity.standardWageRate.indirectwagerate') },
-  { key: 'relatedPlant', label: t('entity.standardWageRate.relatedplant') },
+  { key: 'yearMonth', label: t('entity.standardwagerate.yearmonth') },
+  { key: 'workingDays', label: t('entity.standardwagerate.workingdays') },
+  { key: 'salesAmount', label: t('entity.standardwagerate.salesamount') },
+  { key: 'directLaborCount', label: t('entity.standardwagerate.directlaborcount') },
+  { key: 'directLaborWage', label: t('entity.standardwagerate.directlaborwage') },
+  { key: 'directOvertimeHours', label: t('entity.standardwagerate.directovertimehours') },
+  { key: 'directOvertimeTotal', label: t('entity.standardwagerate.directovertimetotal') },
+  { key: 'directWageRate', label: t('entity.standardwagerate.directwagerate') },
+  { key: 'indirectLaborCount', label: t('entity.standardwagerate.indirectlaborcount') },
+  { key: 'indirectLaborWage', label: t('entity.standardwagerate.indirectlaborwage') },
+  { key: 'indirectOvertimeHours', label: t('entity.standardwagerate.indirectovertimehours') },
+  { key: 'indirectOvertimeTotal', label: t('entity.standardwagerate.indirectovertimetotal') },
+  { key: 'indirectWageRate', label: t('entity.standardwagerate.indirectwagerate') },
+  { key: 'relatedPlant', label: t('entity.standardwagerate.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -428,10 +457,79 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {StandardWageRateQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<StandardWageRateQuery>): StandardWageRateQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: StandardWageRateQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof StandardWageRateQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('yearMonth', form.yearMonth)
+  if (form.workingDays !== undefined && form.workingDays !== null) {
+    query.workingDays = form.workingDays
+  }
+  if (form.salesAmount !== undefined && form.salesAmount !== null) {
+    query.salesAmount = form.salesAmount
+  }
+  if (form.directLaborCount !== undefined && form.directLaborCount !== null) {
+    query.directLaborCount = form.directLaborCount
+  }
+  if (form.directLaborWage !== undefined && form.directLaborWage !== null) {
+    query.directLaborWage = form.directLaborWage
+  }
+  if (form.directOvertimeHours !== undefined && form.directOvertimeHours !== null) {
+    query.directOvertimeHours = form.directOvertimeHours
+  }
+  if (form.directOvertimeTotal !== undefined && form.directOvertimeTotal !== null) {
+    query.directOvertimeTotal = form.directOvertimeTotal
+  }
+  if (form.directWageRate !== undefined && form.directWageRate !== null) {
+    query.directWageRate = form.directWageRate
+  }
+  if (form.indirectLaborCount !== undefined && form.indirectLaborCount !== null) {
+    query.indirectLaborCount = form.indirectLaborCount
+  }
+  if (form.indirectLaborWage !== undefined && form.indirectLaborWage !== null) {
+    query.indirectLaborWage = form.indirectLaborWage
+  }
+  if (form.indirectOvertimeHours !== undefined && form.indirectOvertimeHours !== null) {
+    query.indirectOvertimeHours = form.indirectOvertimeHours
+  }
+  if (form.indirectOvertimeTotal !== undefined && form.indirectOvertimeTotal !== null) {
+    query.indirectOvertimeTotal = form.indirectOvertimeTotal
+  }
+  if (form.indirectWageRate !== undefined && form.indirectWageRate !== null) {
+    query.indirectWageRate = form.indirectWageRate
+  }
+  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -451,7 +549,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'standardWageRateId') ?? ''
   },
   {
-    title: t('entity.standardWageRate.yearmonth'),
+    title: t('entity.standardwagerate.yearmonth'),
     dataIndex: 'yearMonth',
     key: 'yearMonth',
     width: 120,
@@ -460,7 +558,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'yearMonth') ?? ''
   },
   {
-    title: t('entity.standardWageRate.workingdays'),
+    title: t('entity.standardwagerate.workingdays'),
     dataIndex: 'workingDays',
     key: 'workingDays',
     width: 120,
@@ -469,7 +567,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'workingDays') ?? ''
   },
   {
-    title: t('entity.standardWageRate.salesamount'),
+    title: t('entity.standardwagerate.salesamount'),
     dataIndex: 'salesAmount',
     key: 'salesAmount',
     width: 120,
@@ -478,7 +576,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'salesAmount') ?? ''
   },
   {
-    title: t('entity.standardWageRate.directlaborcount'),
+    title: t('entity.standardwagerate.directlaborcount'),
     dataIndex: 'directLaborCount',
     key: 'directLaborCount',
     width: 120,
@@ -487,7 +585,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'directLaborCount') ?? ''
   },
   {
-    title: t('entity.standardWageRate.directlaborwage'),
+    title: t('entity.standardwagerate.directlaborwage'),
     dataIndex: 'directLaborWage',
     key: 'directLaborWage',
     width: 120,
@@ -496,7 +594,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'directLaborWage') ?? ''
   },
   {
-    title: t('entity.standardWageRate.directovertimehours'),
+    title: t('entity.standardwagerate.directovertimehours'),
     dataIndex: 'directOvertimeHours',
     key: 'directOvertimeHours',
     width: 120,
@@ -505,7 +603,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'directOvertimeHours') ?? ''
   },
   {
-    title: t('entity.standardWageRate.directovertimetotal'),
+    title: t('entity.standardwagerate.directovertimetotal'),
     dataIndex: 'directOvertimeTotal',
     key: 'directOvertimeTotal',
     width: 120,
@@ -514,7 +612,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'directOvertimeTotal') ?? ''
   },
   {
-    title: t('entity.standardWageRate.directwagerate'),
+    title: t('entity.standardwagerate.directwagerate'),
     dataIndex: 'directWageRate',
     key: 'directWageRate',
     width: 120,
@@ -523,7 +621,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'directWageRate') ?? ''
   },
   {
-    title: t('entity.standardWageRate.indirectlaborcount'),
+    title: t('entity.standardwagerate.indirectlaborcount'),
     dataIndex: 'indirectLaborCount',
     key: 'indirectLaborCount',
     width: 120,
@@ -532,7 +630,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'indirectLaborCount') ?? ''
   },
   {
-    title: t('entity.standardWageRate.indirectlaborwage'),
+    title: t('entity.standardwagerate.indirectlaborwage'),
     dataIndex: 'indirectLaborWage',
     key: 'indirectLaborWage',
     width: 120,
@@ -541,7 +639,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'indirectLaborWage') ?? ''
   },
   {
-    title: t('entity.standardWageRate.indirectovertimehours'),
+    title: t('entity.standardwagerate.indirectovertimehours'),
     dataIndex: 'indirectOvertimeHours',
     key: 'indirectOvertimeHours',
     width: 120,
@@ -550,7 +648,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'indirectOvertimeHours') ?? ''
   },
   {
-    title: t('entity.standardWageRate.indirectovertimetotal'),
+    title: t('entity.standardwagerate.indirectovertimetotal'),
     dataIndex: 'indirectOvertimeTotal',
     key: 'indirectOvertimeTotal',
     width: 120,
@@ -559,7 +657,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'indirectOvertimeTotal') ?? ''
   },
   {
-    title: t('entity.standardWageRate.indirectwagerate'),
+    title: t('entity.standardwagerate.indirectwagerate'),
     dataIndex: 'indirectWageRate',
     key: 'indirectWageRate',
     width: 120,
@@ -568,7 +666,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardWageRateField(record, 'indirectWageRate') ?? ''
   },
   {
-    title: t('entity.standardWageRate.relatedplant'),
+    title: t('entity.standardwagerate.relatedplant'),
     dataIndex: 'relatedPlant',
     key: 'relatedPlant',
     width: 120,
@@ -606,6 +704,7 @@ const getStandardWageRateId = (record: any): string => record?.[entityIdName] ??
  * @param field 字段名
  */
 const getStandardWageRateField = (record: any, field: string): any => record?.[field]
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -649,16 +748,7 @@ const onClickRow = (record: StandardWageRate) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: StandardWageRateQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getStandardWageRateList(params)
+    const res = await getStandardWageRateList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -676,7 +766,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -700,22 +790,23 @@ function handleReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.standardWageRate._self') })
-  formData.value = {}
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.standardwagerate._self') })
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: StandardWageRate) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.standardWageRate._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.standardwagerate._self') })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -725,7 +816,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.standardWageRate._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.standardwagerate._self') }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -743,12 +834,14 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateStandardWageRate(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.standardWageRate._self') }))
+      message.success(t('common.feedback.updated', { target: t('entity.standardwagerate._self') }))
     } else {
       await createStandardWageRate(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.standardWageRate._self') }))
+      message.success(t('common.feedback.created', { target: t('entity.standardwagerate._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -758,6 +851,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -789,16 +884,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: StandardWageRateQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportStandardWageRate(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportStandardWageRate(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -817,10 +907,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.standardWageRate._self') }))
+    message.success(t('common.feedback.export.success', { target: t('entity.standardwagerate._self') }))
   } catch (error: any) {
     logger.error('[StandardWageRate] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.standardWageRate._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.standardwagerate._self') }))
   } finally {
     loading.value = false
   }
@@ -829,12 +919,12 @@ async function handleExport() {
 async function handleDeleteOne(record: StandardWageRate) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.standardWageRate._self'), name: t('common.tip.this.target', { target: t('entity.standardWageRate._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.standardwagerate._self'), name: t('common.tip.this.target', { target: t('entity.standardwagerate._self') }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteStandardWageRateById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.standardWageRate._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.standardwagerate._self') }))
       loadData()
     }
   })
@@ -842,18 +932,18 @@ async function handleDeleteOne(record: StandardWageRate) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.standardWageRate._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.standardwagerate._self') }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.standardWageRate._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: t('entity.standardwagerate._self'), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteStandardWageRateBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.standardWageRate._self') }))
+      message.success(t('common.feedback.deleted', { target: t('entity.standardwagerate._self') }))
       loadData()
     }
   })
@@ -866,7 +956,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -888,7 +978,7 @@ function handleAdvancedQueryReset() {
   relatedPlant: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -918,23 +1008,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.accounting-controlling-standard-wage-rate {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

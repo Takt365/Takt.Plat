@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/attendance/overtime/components -->
 <!-- 文件名称：overtime-form.vue -->
-<!-- 功能描述：加班申请维护弹窗内嵌表单。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：加班申请维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form overtime-form flex flex-col min-h-0"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -19,10 +20,9 @@
       v-model:active-key="activeTab"
       class="overtime-form-tabs"
     >
-      <!-- 主表 -->
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
@@ -35,8 +35,9 @@
                 <a-input
                   v-model:value="formState.tenantCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -48,8 +49,9 @@
                 <a-input
                   v-model:value="formState.companyCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -61,8 +63,9 @@
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  size="small"
-                  readonly
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -74,7 +77,8 @@
                 <a-input
                   v-model:value="formState.deptId"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.deptid') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -87,7 +91,8 @@
                 <a-input
                   v-model:value="formState.deptName"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.deptname') })"
-                  size="small"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -101,7 +106,6 @@
                   v-model:value="formState.overtimeDate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.date') })"
                   value-format="YYYY-MM-DD"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -114,7 +118,8 @@
                 <a-input
                   v-model:value="formState.plannedStartTime"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.plannedstarttime') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -127,7 +132,8 @@
                 <a-input
                   v-model:value="formState.plannedEndTime"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.plannedendtime') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -140,7 +146,6 @@
                 <a-input-number
                   v-model:value="formState.totalEmployees"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.totalemployees') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -153,7 +158,6 @@
                 <a-input-number
                   v-model:value="formState.totalPlannedHours"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.totalplannedhours') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -163,7 +167,7 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
         force-render
       >
         <div :class="formContentClass">
@@ -176,7 +180,6 @@
                 <a-input-number
                   v-model:value="formState.totalActualHours"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.totalactualhours') })"
-                  size="small"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -190,7 +193,6 @@
                   v-model:value="formState.overtimeType"
                   dict-type="hr_overtime_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.type') })"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
@@ -202,7 +204,8 @@
                 <a-input
                   v-model:value="formState.reason"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.reason') })"
-                  size="small"
+                  show-count
+                  :maxlength="1000"
                   allow-clear
                 />
               </a-form-item>
@@ -215,20 +218,8 @@
                 <a-input
                   v-model:value="formState.relatedPlant"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.relatedplant') })"
-                  size="small"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.overtime.flowinstanceid')"
-                name="flowInstanceId"
-              >
-                <a-input
-                  v-model:value="formState.flowInstanceId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.flowinstanceid') })"
-                  size="small"
+                  show-count
+                  :maxlength="4"
                   allow-clear
                 />
               </a-form-item>
@@ -241,7 +232,8 @@
                 <a-input
                   v-model:value="formState.handlingBy"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.handlingby') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -254,7 +246,8 @@
                 <a-input
                   v-model:value="formState.handlingAt"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.handlingat') })"
-                  size="small"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
@@ -267,7 +260,8 @@
                 <a-input
                   v-model:value="formState.handlingComment"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.handlingcomment') })"
-                  size="small"
+                  show-count
+                  :maxlength="500"
                   allow-clear
                 />
               </a-form-item>
@@ -279,35 +273,37 @@
               >
                 <TaktSelect
                   v-model:value="formState.overtimeStatus"
-                  dict-type="hr_overtime_status"
+                  dict-type="sys_approval_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.overtime.status') })"
-                  size="small"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfieldjson')"
-                name="extFieldJson"
+                name="extField"
+                class="takt-form-item-ext-field"
               >
-                <a-input
-                  v-model:value="formState.extFieldJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                  size="small"
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ t('common.page.entity.extfield') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('common.page.entity.remark')"
@@ -316,131 +312,29 @@
                 <a-textarea
                   v-model:value="formState.remark"
                   :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="2"
-                  size="small"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
           </a-row>
         </div>
       </a-tab-pane>
-      <!-- 子表：overtimeItem -->
-      <a-tab-pane
-        key="child-items"
-        :tab="t('entity.overtimeItem._self')"
-        force-render
-      >
-        <div class="mb-2">
-          <a-button type="primary" size="small" @click="handleAddOvertimeItemRow">
-            {{ t('common.page.button.create') }}{{ t('entity.overtimeItem._self') }}
-          </a-button>
-        </div>
-        <a-table
-          :columns="overtimeItemFormColumns"
-          :data-source="childOvertimeItemRows"
-          :pagination="false"
-          :row-key="(row: Record<string, unknown>, index?: number) => String(row.__rowKey ?? index ?? 0)"
-          size="small"
-          bordered
-        >
-          <template #bodyCell="{ column, record, index }">
-            <template v-if="column.key === 'tenantCode'">
-              <a-input
-                v-model:value="record.tenantCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyCode'">
-              <a-input
-                v-model:value="record.companyCode"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'companyDefaultCulture'">
-              <a-input
-                v-model:value="record.companyDefaultCulture"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                size="small"
-                readonly
-              />
-            </template>
-            <template v-else-if="column.key === 'lineNumber'">
-              <a-input-number
-                v-model:value="record.lineNumber"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtimeItem.linenumber') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'employeeId'">
-              <a-input
-                v-model:value="record.employeeId"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtimeItem.employeeid') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'employeeName'">
-              <a-input
-                v-model:value="record.employeeName"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtimeItem.employeename') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'plannedHours'">
-              <a-input-number
-                v-model:value="record.plannedHours"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtimeItem.plannedhours') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'actualStartTime'">
-              <a-input
-                v-model:value="record.actualStartTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtimeItem.actualstarttime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'actualEndTime'">
-              <a-input
-                v-model:value="record.actualEndTime"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtimeItem.actualendtime') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === 'actualHours'">
-              <a-input-number
-                v-model:value="record.actualHours"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtimeItem.actualhours') })"
-                size="small"
-                style="width: 100%"
-              />
-            </template>
-            <template v-else-if="column.key === 'extFieldJson'">
-              <a-input
-                v-model:value="record.extFieldJson"
-                :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-                size="small"
-                allow-clear
-              />
-            </template>
-            <template v-else-if="column.key === '__action'">
-              <a-button type="link" danger size="small" @click="handleRemoveOvertimeItemRow(index)">
-                {{ t('common.page.button.delete') }}
-              </a-button>
-            </template>
-          </template>
-        </a-table>
-      </a-tab-pane>
     </a-tabs>
+    <!-- 下：子表 items -->
+    <TaktEditableTable
+      ref="overtimeItemTableRef"
+      v-model="childOvertimeItemRows"
+      :columns="overtimeItemFormColumns"
+      :title="t('entity.overtimeitem._self')"
+      :add-button-entity="t('entity.overtimeitem._self')"
+      id-field="overtimeItemId"
+      :default-row="createDefaultOvertimeItemRow"
+      :disabled="loading"
+      section-border
+    />
   </a-form>
 </template>
 
@@ -449,11 +343,13 @@
  * 加班申请维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/attendance/overtime/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import type { OvertimeCreate, OvertimeItemCreate, OvertimeItem } from '@/types/human-resource/attendance/overtime'
+import type { OvertimeCreate } from '@/types/human-resource/attendance/overtime'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -486,123 +382,101 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","deptId","deptName","overtimeDate","plannedStartTime","plannedEndTime","totalEmployees","totalPlannedHours","totalActualHours","overtimeType","reason","relatedPlant","flowInstanceId","handlingBy","handlingAt","handlingComment","overtimeStatus","extFieldJson","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","deptId","deptName","overtimeDate","plannedStartTime","plannedEndTime","totalEmployees","totalPlannedHours","totalActualHours","overtimeType","reason","relatedPlant","handlingBy","handlingAt","handlingComment","overtimeStatus","extField","remark"]
 
-/** overtimeItem 子表行（表单 Tab 内嵌） */
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
 const childOvertimeItemRows = ref<Record<string, unknown>[]>([])
+const overtimeItemTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
 
-/** 子表 overtimeItem 表单列定义 */
-const overtimeItemFormColumns = computed(() => [
+/** 子表 overtimeItem 可编辑列 */
+const overtimeItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    title: t('common.page.entity.tenantcode'),
-    dataIndex: 'tenantCode',
-    key: 'tenantCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companycode'),
-    dataIndex: 'companyCode',
-    key: 'companyCode',
-    width: 140,
-  },
-  {
-    title: t('common.page.entity.companydefaultculture'),
-    dataIndex: 'companyDefaultCulture',
-    key: 'companyDefaultCulture',
-    width: 140,
-  },
-  {
-    title: t('entity.overtimeItem.linenumber'),
-    dataIndex: 'lineNumber',
     key: 'lineNumber',
-    width: 140,
+    title: t('entity.overtimeitem.linenumber'),
+    editor: 'inputNumber',
+    width: 140, summary: 'sum',
   },
   {
-    title: t('entity.overtimeItem.employeeid'),
-    dataIndex: 'employeeId',
     key: 'employeeId',
+    title: t('entity.overtimeitem.employeeid'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.overtimeItem.employeename'),
-    dataIndex: 'employeeName',
     key: 'employeeName',
+    title: t('entity.overtimeitem.employeename'),
+    editor: 'input',
     width: 140,
   },
   {
-    title: t('entity.overtimeItem.plannedhours'),
-    dataIndex: 'plannedHours',
     key: 'plannedHours',
+    title: t('entity.overtimeitem.plannedhours'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('entity.overtimeItem.actualstarttime'),
-    dataIndex: 'actualStartTime',
     key: 'actualStartTime',
-    width: 140,
+    title: t('entity.overtimeitem.actualstarttime'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.overtimeitem.actualstarttime') }),
   },
   {
-    title: t('entity.overtimeItem.actualendtime'),
-    dataIndex: 'actualEndTime',
     key: 'actualEndTime',
-    width: 140,
+    title: t('entity.overtimeitem.actualendtime'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.overtimeitem.actualendtime') }),
   },
   {
-    title: t('entity.overtimeItem.actualhours'),
-    dataIndex: 'actualHours',
     key: 'actualHours',
+    title: t('entity.overtimeitem.actualhours'),
+    editor: 'inputNumber',
     width: 140,
   },
   {
-    title: t('common.page.entity.extfieldjson'),
-    dataIndex: 'extFieldJson',
-    key: 'extFieldJson',
+    key: 'ExtField',
+    title: t('entity.overtimeitem.extfield'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.overtimeitem.extfield') }),
     width: 140,
-  },
-  {
-    title: t('common.page.entity.action'),
-    key: '__action',
-    width: 80,
-    fixed: 'right',
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<OvertimeCreate & { overtimeId?: string }> | null | undefined) {
-  childOvertimeItemRows.value = ((val as any)?.items ?? []).map((item: Record<string, unknown>, index: number) => ({
-    ...item,
-    __rowKey: item.overtimeItemId ?? `new-${index}`,
-  }))
+  childOvertimeItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
 }
 
-/** 表单 Tab 内新增 overtimeItem 行 */
-function handleAddOvertimeItemRow() {
-  childOvertimeItemRows.value.push({
-    __rowKey: `new-${Date.now()}`,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      lineNumber: 0,
-      employeeId: '',
-      employeeName: '',
-      plannedHours: 0,
-      actualStartTime: '',
-      actualEndTime: '',
-      actualHours: 0,
-      extFieldJson: '',
-  })
-}
-
-/** 表单 Tab 内删除 overtimeItem 行 */
-function handleRemoveOvertimeItemRow(index: number) {
-  childOvertimeItemRows.value.splice(index, 1)
+function createDefaultOvertimeItemRow(): Record<string, unknown> {
+  return {
+    lineNumber: (childOvertimeItemRows.value.length + 1) * 10,
+    employeeId: '',
+    employeeName: '',
+    plannedHours: 0,
+    actualStartTime: '',
+    actualEndTime: '',
+    actualHours: 0,
+    ExtField: '',
+  }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
+  const masterId = props.formData?.overtimeId ?? ''
   return {
     ...formState,
-    items: childOvertimeItemRows.value.map(({ __rowKey, ...rest }) => rest),
+    items: overtimeItemTableRef.value?.getRows?.() ?? childOvertimeItemRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      overtimeId: masterId,
+    })),
   }
 }
 
@@ -614,7 +488,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  formData: () => ({}),
+  formData: null,
   loading: false,
 })
 
@@ -622,19 +496,47 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  overtimeStatus: 0
+}
 
-/** 编辑态灌入 formData；新增态 reset */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 overtimeId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    const next = val ? { ...val } : {}
-    Object.keys(formState).forEach((k) => delete formState[k])
+    if (val?.overtimeId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).items
-    applyScopeDefaults(next)
-    Object.assign(formState, next)
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
   },
-  { immediate: true, deep: true }
+  { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
@@ -678,34 +580,58 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  totalEmployees: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.overtime.totalemployees') }),
-      trigger: 'change'
-    }
-  ],
-  totalPlannedHours: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.overtime.totalplannedhours') }),
-      trigger: 'change'
-    }
-  ],
-  totalActualHours: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.overtime.totalactualhours') }),
-      trigger: 'change'
-    }
-  ],
-  overtimeType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.overtime.type') }),
-      trigger: 'change'
-    }
-  ],
+  totalEmployees: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.overtime.totalemployees') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.overtime.totalemployees') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  totalPlannedHours: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.overtime.totalplannedhours') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.overtime.totalplannedhours') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  totalActualHours: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.overtime.totalactualhours') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.overtime.totalactualhours') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  overtimeType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.overtime.type') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.overtime.type') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   handlingBy: [
     {
       required: true,
@@ -713,32 +639,67 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  overtimeStatus: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.overtime.status') }),
-      trigger: 'change'
-    }
-  ],
+  overtimeStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.overtime.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.overtime.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
+  await overtimeItemTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return buildSubmitPayload()
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('totalEmployees' in payload) {
+    const rawtotalEmployees = payload.totalEmployees
+    payload.totalEmployees = typeof rawtotalEmployees === 'number' ? rawtotalEmployees : Number(rawtotalEmployees)
+  }
+  if ('totalPlannedHours' in payload) {
+    const rawtotalPlannedHours = payload.totalPlannedHours
+    payload.totalPlannedHours = typeof rawtotalPlannedHours === 'number' ? rawtotalPlannedHours : Number(rawtotalPlannedHours)
+  }
+  if ('totalActualHours' in payload) {
+    const rawtotalActualHours = payload.totalActualHours
+    payload.totalActualHours = typeof rawtotalActualHours === 'number' ? rawtotalActualHours : Number(rawtotalActualHours)
+  }
+  if ('overtimeType' in payload) {
+    const rawovertimeType = payload.overtimeType
+    payload.overtimeType = typeof rawovertimeType === 'number' ? rawovertimeType : Number(rawovertimeType)
+  }
+  if ('overtimeStatus' in payload) {
+    const rawovertimeStatus = payload.overtimeStatus
+    payload.overtimeStatus = typeof rawovertimeStatus === 'number' ? rawovertimeStatus : Number(rawovertimeStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
-/** 重置表单与子表行 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
-  formRef.value?.resetFields()
   Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.overtimeId)
   childOvertimeItemRows.value = []
+  overtimeItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })

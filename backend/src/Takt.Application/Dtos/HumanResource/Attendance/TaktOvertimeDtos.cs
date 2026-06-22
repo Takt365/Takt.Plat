@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktOvertimeDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Overtime 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOvertime 生成，请按需审阅）
 // 
@@ -92,11 +92,6 @@ public class TaktOvertimeDto : TaktApprovalDtoBase
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 名称（填充字段）
-    /// </summary>
-    public string? FlowInstanceName { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -113,7 +108,7 @@ public class TaktOvertimeDto : TaktApprovalDtoBase
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+    /// 加班状态（字典 sys_approval_status）
     /// </summary>
     public int OvertimeStatus { get; set; } = 0;
 
@@ -217,12 +212,6 @@ public class TaktOvertimeQueryDto : TaktPagedQuery
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -244,14 +233,14 @@ public class TaktOvertimeQueryDto : TaktPagedQuery
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+    /// 加班状态（字典 sys_approval_status）
     /// </summary>
     public int? OvertimeStatus { get; set; }
 
     /// <summary>
     /// 审批状态（TaktApprovalStatus）
     /// </summary>
-    public int? ApprovalStatus { get; set; }
+    public TaktApprovalStatus? ApprovalStatus { get; set; }
 
     /// <summary>
     /// 发起人ID
@@ -286,6 +275,12 @@ public class TaktOvertimeQueryDto : TaktPagedQuery
     public DateTime? ApprovedAtEnd { get; set; }
 
     /// <summary>
+    /// 流程实例 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? FlowInstanceId { get; set; }
+
+    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -298,7 +293,7 @@ public class TaktOvertimeQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -387,12 +382,6 @@ public class TaktOvertimeCreateDto
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -409,7 +398,7 @@ public class TaktOvertimeCreateDto
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+    /// 加班状态（字典 sys_approval_status）
     /// </summary>
     public int OvertimeStatus { get; set; } = 0;
 
@@ -421,7 +410,7 @@ public class TaktOvertimeCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -468,9 +457,9 @@ public class TaktOvertimeStatusDto
     public long OvertimeId { get; set; }
 
     /// <summary>
-    /// 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+    /// 加班状态（字典 sys_approval_status）
     /// </summary>
-    [Required(ErrorMessage = "加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）不能为空")]
+    [Required(ErrorMessage = "加班状态（字典 sys_approval_status）不能为空")]
     public int OvertimeStatus { get; set; } = 0;
 }
 
@@ -525,12 +514,6 @@ public class TaktOvertimeTemplateDto
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -542,14 +525,14 @@ public class TaktOvertimeTemplateDto
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+    /// 加班状态（字典 sys_approval_status）
     /// </summary>
     public int? OvertimeStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -610,12 +593,6 @@ public class TaktOvertimeImportDto
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -627,14 +604,14 @@ public class TaktOvertimeImportDto
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+    /// 加班状态（字典 sys_approval_status）
     /// </summary>
     public int? OvertimeStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -716,12 +693,6 @@ public class TaktOvertimeExportDto
     public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
-
-    /// <summary>
     /// 经办人（关联 TaktEmployee）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -738,14 +709,14 @@ public class TaktOvertimeExportDto
     public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 加班状态（字典 hr_overtime_status：0=草稿 1=已提交 2=已通过 3=已驳回）
+    /// 加班状态（字典 sys_approval_status）
     /// </summary>
     public int OvertimeStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

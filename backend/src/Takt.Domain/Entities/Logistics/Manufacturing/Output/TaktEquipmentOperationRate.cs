@@ -191,4 +191,10 @@ public class TaktEquipmentOperationRate : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int Status { get; set; } = 0;
+
+    /// <summary>
+    /// 机器稼动率变更记录列表（外键在子表 TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId))]
+    public List<TaktEquipmentOperationRateChangeLog>? ChangeLogs { get; set; }
 }

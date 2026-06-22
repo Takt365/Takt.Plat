@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/complaint
 // 文件名称：customer-satisfaction-survey.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -42,9 +42,7 @@ export function getCustomerSatisfactionSurveyList(queryDto: any): Promise<TaktPa
   return request<TaktPagedResult<CustomerSatisfactionSurvey>>({
     url: `${CUSTOMER_SATISFACTION_SURVEY_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportCustomerSatisfactionSurvey(
     url: `${CUSTOMER_SATISFACTION_SURVEY_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyOutput 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyOutput 生成，请按需审阅）
 // 
@@ -41,7 +41,7 @@ public class TaktAssyOutputDto : TaktCompanyDtoBase
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发  EVT: 工程验证测试  DVT: 设计验证测试  EPP: 工程试产  PP: 试产  FPP: 正式生产  MP: 大规模生产  RPR: 维修生产  RWR: 返工生产
+    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -149,7 +149,7 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发  EVT: 工程验证测试  DVT: 设计验证测试  EPP: 工程试产  PP: 试产  FPP: 正式生产  MP: 大规模生产  RPR: 维修生产  RWR: 返工生产
+    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -241,7 +241,7 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -280,9 +280,9 @@ public class TaktAssyOutputCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发  EVT: 工程验证测试  DVT: 设计验证测试  EPP: 工程试产  PP: 试产  FPP: 正式生产  MP: 大规模生产  RPR: 维修生产  RWR: 返工生产
+    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
     /// </summary>
-    [Required(ErrorMessage = "生产类别 RD: 研发  EVT: 工程验证测试  DVT: 设计验证测试  EPP: 工程试产  PP: 试产  FPP: 正式生产  MP: 大规模生产  RPR: 维修生产  RWR: 返工生产不能为空")]
+    [Required(ErrorMessage = "生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产不能为空")]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -367,7 +367,7 @@ public class TaktAssyOutputCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -445,7 +445,7 @@ public class TaktAssyOutputTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发  EVT: 工程验证测试  DVT: 设计验证测试  EPP: 工程试产  PP: 试产  FPP: 正式生产  MP: 大规模生产  RPR: 维修生产  RWR: 返工生产
+    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -502,7 +502,7 @@ public class TaktAssyOutputTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -537,7 +537,7 @@ public class TaktAssyOutputImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发  EVT: 工程验证测试  DVT: 设计验证测试  EPP: 工程试产  PP: 试产  FPP: 正式生产  MP: 大规模生产  RPR: 维修生产  RWR: 返工生产
+    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -594,7 +594,7 @@ public class TaktAssyOutputImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -630,7 +630,7 @@ public class TaktAssyOutputExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别 RD: 研发  EVT: 工程验证测试  DVT: 设计验证测试  EPP: 工程试产  PP: 试产  FPP: 正式生产  MP: 大规模生产  RPR: 维修生产  RWR: 返工生产
+    /// 生产类别 RD: 研发 EVT: 工程验证测试 DVT: 设计验证测试 EPP: 工程试产 PP: 试产 FPP: 正式生产 MP: 大规模生产 RPR: 维修生产 RWR: 返工生产
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -707,7 +707,7 @@ public class TaktAssyOutputExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

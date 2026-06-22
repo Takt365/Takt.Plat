@@ -98,4 +98,10 @@ public class TaktStandardOperationTime : TaktApprovalEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "expiry_date", ColumnDescription = "失效日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktStandardOperationTimeChangeLog.StandardOperationTimeId))]
+    public List<TaktStandardOperationTimeChangeLog>? ChangeLogs { get; set; }
 }

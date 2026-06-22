@@ -291,11 +291,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -350,6 +350,7 @@
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 招聘计划管理页 · 由 generate-vue-from-api 根据 types/api 生成
  * @module views/human-resource/talent/talent-recruitment-plan
@@ -375,8 +376,8 @@ const searchPlaceholder = computed(
 const queryKeyword = ref('')
 const loading = ref(false)
 const dataSource = ref<TalentRecruitmentPlan[]>([])
-const currentPage = ref(1)
-const pageSize = ref(20)
+const currentPage = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const selectedRow = ref<TalentRecruitmentPlan | null>(null)
 const selectedRows = ref<TalentRecruitmentPlan[]>([])
@@ -408,7 +409,7 @@ const advancedQueryForm = ref({
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（显隐配置） */
@@ -432,7 +433,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'approvedAtEnd', label: t('entity.talentRecruitmentPlan.approvedatend') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -670,7 +671,7 @@ function handleReset() {
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
   currentPage.value = 1
@@ -846,7 +847,7 @@ function handleAdvancedQueryReset() {
   approvedAtEnd: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }

@@ -12,17 +12,17 @@
 <template>
   <a-drawer
     v-model:open="visible"
-    title="条件设置"
+    :title="t('workflow.designer.page.conditiontitle')"
     width="480"
     :footer-style="{ textAlign: 'right' }"
     @close="handleClose"
   >
     <template v-if="config">
       <a-form layout="vertical">
-        <a-form-item label="条件名称">
+        <a-form-item :label="t('workflow.designer.page.conditionname')">
           <a-input
             v-model:value="form.nodeName"
-            placeholder="如：条件1"
+            :placeholder="t('workflow.designer.page.conditionnameplaceholder')"
           />
         </a-form-item>
         <a-form-item :label="t('workflow.designer.page.edgecondition')">
@@ -39,13 +39,13 @@
         style="margin-right: 8px"
         @click="handleClose"
       >
-        取消
+        {{ t('common.page.button.cancel') }}
       </a-button>
       <a-button
         type="primary"
         @click="handleSave"
       >
-        确定
+        {{ t('common.page.button.ok') }}
       </a-button>
     </template>
   </a-drawer>

@@ -173,6 +173,13 @@ public interface ITaktTenantRepository<TEntity> : ITaktUniqueExistenceRepository
     /// <returns>删除的实体数量</returns>
     Task<int> DeleteAsync(Expression<Func<TEntity, bool>> predicate);
 
+    /// <summary>
+    /// 根据条件物理删除（主子表先删后插级联专用；避免软删行仍占用唯一索引）
+    /// </summary>
+    /// <param name="predicate">删除条件</param>
+    /// <returns>删除的实体数量</returns>
+    Task<int> DeletePhysicallyAsync(Expression<Func<TEntity, bool>> predicate);
+
     // ========================================
     // 存在性检查
     // ========================================

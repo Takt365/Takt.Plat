@@ -89,7 +89,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
         EnsureThreeLayerContext();
         var list = await _onlineRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.UserName,
+            x => x.UserName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -122,7 +122,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
             && online.CompanyCode == CurrentCompanyCode
             && online.UserId == userId);
 
-        var connectLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(dto.ConnectIp, dto.ConnectLocation);
+        var (_, connectLocation) = TaktLocationHelper.ResolveIpAndLocationForLog(dto.ConnectIp, dto.ConnectLocation);
         TaktOnline entity;
 
         if (userRecords.Count > 0)
@@ -405,7 +405,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
                 || SqlFunc.ToString(x.BrowserType).Contains(keywords)
                 || SqlFunc.ToString(x.OperatingSystem).Contains(keywords)
                 || SqlFunc.ToString(x.ConnectionDuration).Contains(keywords)
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ConnectTime).Contains(keywords)
                 || SqlFunc.ToString(x.LastActiveTime).Contains(keywords)
@@ -469,9 +469,9 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
             exp = exp.And(x => x.ConnectionDuration == queryDto.ConnectionDuration);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

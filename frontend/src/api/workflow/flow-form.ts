@@ -42,9 +42,7 @@ export function getFlowFormList(queryDto: any): Promise<TaktPagedResult<FlowForm
   return request<TaktPagedResult<FlowForm>>({
     url: `${FLOW_FORM_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -214,7 +212,7 @@ export function exportFlowForm(
     url: `${FLOW_FORM_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

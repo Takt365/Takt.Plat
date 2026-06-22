@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktStandardWageRateService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：标准工资率应用服务实现
 // 
@@ -93,7 +93,7 @@ public class TaktStandardWageRateService : TaktServiceBase, ITaktStandardWageRat
         EnsureThreeLayerContext();
         var list = await _standardWageRateRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.YearMonth,
+            x => x.YearMonth ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
@@ -298,7 +298,7 @@ public class TaktStandardWageRateService : TaktServiceBase, ITaktStandardWageRat
                 || SqlFunc.ToString(x.IndirectOvertimeTotal).Contains(keywords)
                 || SqlFunc.ToString(x.IndirectWageRate).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || (x.ExtFieldJson != null && x.ExtFieldJson.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
@@ -374,9 +374,9 @@ public class TaktStandardWageRateService : TaktServiceBase, ITaktStandardWageRat
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtFieldJson))
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtFieldJson != null && x.ExtFieldJson.Contains(queryDto.ExtFieldJson));
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Remark))

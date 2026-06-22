@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktFileI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktFile 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktFile 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/file）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -75,200 +75,200 @@ public class TaktFileI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktFile 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.file._self / entity.file.{{field}}；ResourceGroup=8；ResourceType=0
+    /// I18nKey：entity.file._self / entity.file.{{field}}；ResourceGroup=Foundation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetFileTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.file._self
-            new TranslationSeedItem("entity.file._self", "en-US", "File Information", "实体名称"),
+            new TranslationSeedItem("entity.file._self", "en-US", "File Information_us", "实体名称"),
             // entity.file._self
-            new TranslationSeedItem("entity.file._self", "ja-JP", "文件信息", "实体名称"),
+            new TranslationSeedItem("entity.file._self", "ja-JP", "文件信息_jp", "实体名称"),
             // entity.file._self
             new TranslationSeedItem("entity.file._self", "zh-CN", "文件信息", "实体名称"),
             // entity.file._self
-            new TranslationSeedItem("entity.file._self", "zh-HK", "文件信息", "实体名称"),
+            new TranslationSeedItem("entity.file._self", "zh-HK", "文件信息_hk", "实体名称"),
 
             // entity.file.code
-            new TranslationSeedItem("entity.file.code", "en-US", "文件编码", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
+            new TranslationSeedItem("entity.file.code", "en-US", "文件编码_us", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
             // entity.file.code
-            new TranslationSeedItem("entity.file.code", "ja-JP", "文件编码", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
+            new TranslationSeedItem("entity.file.code", "ja-JP", "文件编码_jp", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
             // entity.file.code
             new TranslationSeedItem("entity.file.code", "zh-CN", "文件编码", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
             // entity.file.code
-            new TranslationSeedItem("entity.file.code", "zh-HK", "文件编码", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
+            new TranslationSeedItem("entity.file.code", "zh-HK", "文件编码_hk", "文件编码（唯一索引：租户+公司内唯一，见 ix_file_code_unique）"),
 
             // entity.file.name
-            new TranslationSeedItem("entity.file.name", "en-US", "文件名称", "文件名称（存储文件名）"),
+            new TranslationSeedItem("entity.file.name", "en-US", "文件名称_us", "文件名称（存储文件名）"),
             // entity.file.name
-            new TranslationSeedItem("entity.file.name", "ja-JP", "文件名称", "文件名称（存储文件名）"),
+            new TranslationSeedItem("entity.file.name", "ja-JP", "文件名称_jp", "文件名称（存储文件名）"),
             // entity.file.name
             new TranslationSeedItem("entity.file.name", "zh-CN", "文件名称", "文件名称（存储文件名）"),
             // entity.file.name
-            new TranslationSeedItem("entity.file.name", "zh-HK", "文件名称", "文件名称（存储文件名）"),
+            new TranslationSeedItem("entity.file.name", "zh-HK", "文件名称_hk", "文件名称（存储文件名）"),
 
             // entity.file.originalname
-            new TranslationSeedItem("entity.file.originalname", "en-US", "文件原始名称", "文件原始名称（上传时的原始文件名）"),
+            new TranslationSeedItem("entity.file.originalname", "en-US", "文件原始名称_us", "文件原始名称（上传时的原始文件名）"),
             // entity.file.originalname
-            new TranslationSeedItem("entity.file.originalname", "ja-JP", "文件原始名称", "文件原始名称（上传时的原始文件名）"),
+            new TranslationSeedItem("entity.file.originalname", "ja-JP", "文件原始名称_jp", "文件原始名称（上传时的原始文件名）"),
             // entity.file.originalname
             new TranslationSeedItem("entity.file.originalname", "zh-CN", "文件原始名称", "文件原始名称（上传时的原始文件名）"),
             // entity.file.originalname
-            new TranslationSeedItem("entity.file.originalname", "zh-HK", "文件原始名称", "文件原始名称（上传时的原始文件名）"),
+            new TranslationSeedItem("entity.file.originalname", "zh-HK", "文件原始名称_hk", "文件原始名称（上传时的原始文件名）"),
 
             // entity.file.path
-            new TranslationSeedItem("entity.file.path", "en-US", "文件路径", "文件路径（相对路径或完整路径）"),
+            new TranslationSeedItem("entity.file.path", "en-US", "文件路径_us", "文件路径（相对路径或完整路径）"),
             // entity.file.path
-            new TranslationSeedItem("entity.file.path", "ja-JP", "文件路径", "文件路径（相对路径或完整路径）"),
+            new TranslationSeedItem("entity.file.path", "ja-JP", "文件路径_jp", "文件路径（相对路径或完整路径）"),
             // entity.file.path
             new TranslationSeedItem("entity.file.path", "zh-CN", "文件路径", "文件路径（相对路径或完整路径）"),
             // entity.file.path
-            new TranslationSeedItem("entity.file.path", "zh-HK", "文件路径", "文件路径（相对路径或完整路径）"),
+            new TranslationSeedItem("entity.file.path", "zh-HK", "文件路径_hk", "文件路径（相对路径或完整路径）"),
 
             // entity.file.size
-            new TranslationSeedItem("entity.file.size", "en-US", "文件大小（字节）", "文件大小（字节）"),
+            new TranslationSeedItem("entity.file.size", "en-US", "文件大小（字节）_us", "文件大小（字节）"),
             // entity.file.size
-            new TranslationSeedItem("entity.file.size", "ja-JP", "文件大小（字节）", "文件大小（字节）"),
+            new TranslationSeedItem("entity.file.size", "ja-JP", "文件大小（字节）_jp", "文件大小（字节）"),
             // entity.file.size
             new TranslationSeedItem("entity.file.size", "zh-CN", "文件大小（字节）", "文件大小（字节）"),
             // entity.file.size
-            new TranslationSeedItem("entity.file.size", "zh-HK", "文件大小（字节）", "文件大小（字节）"),
+            new TranslationSeedItem("entity.file.size", "zh-HK", "文件大小（字节）_hk", "文件大小（字节）"),
 
             // entity.file.type
-            new TranslationSeedItem("entity.file.type", "en-US", "文件MIME类型", "文件 MIME 类型"),
+            new TranslationSeedItem("entity.file.type", "en-US", "文件MIME类型_us", "文件 MIME 类型"),
             // entity.file.type
-            new TranslationSeedItem("entity.file.type", "ja-JP", "文件MIME类型", "文件 MIME 类型"),
+            new TranslationSeedItem("entity.file.type", "ja-JP", "文件MIME类型_jp", "文件 MIME 类型"),
             // entity.file.type
             new TranslationSeedItem("entity.file.type", "zh-CN", "文件MIME类型", "文件 MIME 类型"),
             // entity.file.type
-            new TranslationSeedItem("entity.file.type", "zh-HK", "文件MIME类型", "文件 MIME 类型"),
+            new TranslationSeedItem("entity.file.type", "zh-HK", "文件MIME类型_hk", "文件 MIME 类型"),
 
             // entity.file.extension
-            new TranslationSeedItem("entity.file.extension", "en-US", "文件扩展名", "文件扩展名"),
+            new TranslationSeedItem("entity.file.extension", "en-US", "文件扩展名_us", "文件扩展名"),
             // entity.file.extension
-            new TranslationSeedItem("entity.file.extension", "ja-JP", "文件扩展名", "文件扩展名"),
+            new TranslationSeedItem("entity.file.extension", "ja-JP", "文件扩展名_jp", "文件扩展名"),
             // entity.file.extension
             new TranslationSeedItem("entity.file.extension", "zh-CN", "文件扩展名", "文件扩展名"),
             // entity.file.extension
-            new TranslationSeedItem("entity.file.extension", "zh-HK", "文件扩展名", "文件扩展名"),
+            new TranslationSeedItem("entity.file.extension", "zh-HK", "文件扩展名_hk", "文件扩展名"),
 
             // entity.file.hash
-            new TranslationSeedItem("entity.file.hash", "en-US", "文件哈希值", "文件哈希值（MD5 或 SHA256，用于去重与校验）"),
+            new TranslationSeedItem("entity.file.hash", "en-US", "文件哈希值_us", "文件哈希值（MD5 或 SHA256，用于去重与校验）"),
             // entity.file.hash
-            new TranslationSeedItem("entity.file.hash", "ja-JP", "文件哈希值", "文件哈希值（MD5 或 SHA256，用于去重与校验）"),
+            new TranslationSeedItem("entity.file.hash", "ja-JP", "文件哈希值_jp", "文件哈希值（MD5 或 SHA256，用于去重与校验）"),
             // entity.file.hash
             new TranslationSeedItem("entity.file.hash", "zh-CN", "文件哈希值", "文件哈希值（MD5 或 SHA256，用于去重与校验）"),
             // entity.file.hash
-            new TranslationSeedItem("entity.file.hash", "zh-HK", "文件哈希值", "文件哈希值（MD5 或 SHA256，用于去重与校验）"),
+            new TranslationSeedItem("entity.file.hash", "zh-HK", "文件哈希值_hk", "文件哈希值（MD5 或 SHA256，用于去重与校验）"),
 
             // entity.file.category
-            new TranslationSeedItem("entity.file.category", "en-US", "文件分类", "文件分类（字典 sys_file_category）"),
+            new TranslationSeedItem("entity.file.category", "en-US", "文件分类_us", "文件分类（根据 FileType/MIME 自动推断：0=文档，1=图片，2=视频，3=音频，4=压缩包，5=其他）"),
             // entity.file.category
-            new TranslationSeedItem("entity.file.category", "ja-JP", "文件分类", "文件分类（字典 sys_file_category）"),
+            new TranslationSeedItem("entity.file.category", "ja-JP", "文件分类_jp", "文件分类（根据 FileType/MIME 自动推断：0=文档，1=图片，2=视频，3=音频，4=压缩包，5=其他）"),
             // entity.file.category
-            new TranslationSeedItem("entity.file.category", "zh-CN", "文件分类", "文件分类（字典 sys_file_category）"),
+            new TranslationSeedItem("entity.file.category", "zh-CN", "文件分类", "文件分类（根据 FileType/MIME 自动推断：0=文档，1=图片，2=视频，3=音频，4=压缩包，5=其他）"),
             // entity.file.category
-            new TranslationSeedItem("entity.file.category", "zh-HK", "文件分类", "文件分类（字典 sys_file_category）"),
+            new TranslationSeedItem("entity.file.category", "zh-HK", "文件分类_hk", "文件分类（根据 FileType/MIME 自动推断：0=文档，1=图片，2=视频，3=音频，4=压缩包，5=其他）"),
 
             // entity.file.storagetype
-            new TranslationSeedItem("entity.file.storagetype", "en-US", "存储方式", "存储方式（字典 sys_storage_type）"),
+            new TranslationSeedItem("entity.file.storagetype", "en-US", "存储方式_us", "存储方式（字典 sys_storage_type）"),
             // entity.file.storagetype
-            new TranslationSeedItem("entity.file.storagetype", "ja-JP", "存储方式", "存储方式（字典 sys_storage_type）"),
+            new TranslationSeedItem("entity.file.storagetype", "ja-JP", "存储方式_jp", "存储方式（字典 sys_storage_type）"),
             // entity.file.storagetype
             new TranslationSeedItem("entity.file.storagetype", "zh-CN", "存储方式", "存储方式（字典 sys_storage_type）"),
             // entity.file.storagetype
-            new TranslationSeedItem("entity.file.storagetype", "zh-HK", "存储方式", "存储方式（字典 sys_storage_type）"),
+            new TranslationSeedItem("entity.file.storagetype", "zh-HK", "存储方式_hk", "存储方式（字典 sys_storage_type）"),
 
             // entity.file.storageconfig
-            new TranslationSeedItem("entity.file.storageconfig", "en-US", "存储配置", "存储配置（JSON，OSS/FTP 等扩展配置）"),
+            new TranslationSeedItem("entity.file.storageconfig", "en-US", "存储配置_us", "存储配置（JSON，OSS/FTP 等扩展配置）"),
             // entity.file.storageconfig
-            new TranslationSeedItem("entity.file.storageconfig", "ja-JP", "存储配置", "存储配置（JSON，OSS/FTP 等扩展配置）"),
+            new TranslationSeedItem("entity.file.storageconfig", "ja-JP", "存储配置_jp", "存储配置（JSON，OSS/FTP 等扩展配置）"),
             // entity.file.storageconfig
             new TranslationSeedItem("entity.file.storageconfig", "zh-CN", "存储配置", "存储配置（JSON，OSS/FTP 等扩展配置）"),
             // entity.file.storageconfig
-            new TranslationSeedItem("entity.file.storageconfig", "zh-HK", "存储配置", "存储配置（JSON，OSS/FTP 等扩展配置）"),
+            new TranslationSeedItem("entity.file.storageconfig", "zh-HK", "存储配置_hk", "存储配置（JSON，OSS/FTP 等扩展配置）"),
 
             // entity.file.accessurl
-            new TranslationSeedItem("entity.file.accessurl", "en-US", "访问地址", "访问地址（文件 URL）"),
+            new TranslationSeedItem("entity.file.accessurl", "en-US", "访问地址_us", "访问地址（文件 URL）"),
             // entity.file.accessurl
-            new TranslationSeedItem("entity.file.accessurl", "ja-JP", "访问地址", "访问地址（文件 URL）"),
+            new TranslationSeedItem("entity.file.accessurl", "ja-JP", "访问地址_jp", "访问地址（文件 URL）"),
             // entity.file.accessurl
             new TranslationSeedItem("entity.file.accessurl", "zh-CN", "访问地址", "访问地址（文件 URL）"),
             // entity.file.accessurl
-            new TranslationSeedItem("entity.file.accessurl", "zh-HK", "访问地址", "访问地址（文件 URL）"),
+            new TranslationSeedItem("entity.file.accessurl", "zh-HK", "访问地址_hk", "访问地址（文件 URL）"),
 
             // entity.file.downloadcount
-            new TranslationSeedItem("entity.file.downloadcount", "en-US", "下载次数", "下载次数"),
+            new TranslationSeedItem("entity.file.downloadcount", "en-US", "下载次数_us", "下载次数"),
             // entity.file.downloadcount
-            new TranslationSeedItem("entity.file.downloadcount", "ja-JP", "下载次数", "下载次数"),
+            new TranslationSeedItem("entity.file.downloadcount", "ja-JP", "下载次数_jp", "下载次数"),
             // entity.file.downloadcount
             new TranslationSeedItem("entity.file.downloadcount", "zh-CN", "下载次数", "下载次数"),
             // entity.file.downloadcount
-            new TranslationSeedItem("entity.file.downloadcount", "zh-HK", "下载次数", "下载次数"),
+            new TranslationSeedItem("entity.file.downloadcount", "zh-HK", "下载次数_hk", "下载次数"),
 
             // entity.file.lastdownloadtime
-            new TranslationSeedItem("entity.file.lastdownloadtime", "en-US", "最后下载时间", "最后下载时间"),
+            new TranslationSeedItem("entity.file.lastdownloadtime", "en-US", "最后下载时间_us", "最后下载时间"),
             // entity.file.lastdownloadtime
-            new TranslationSeedItem("entity.file.lastdownloadtime", "ja-JP", "最后下载时间", "最后下载时间"),
+            new TranslationSeedItem("entity.file.lastdownloadtime", "ja-JP", "最后下载时间_jp", "最后下载时间"),
             // entity.file.lastdownloadtime
             new TranslationSeedItem("entity.file.lastdownloadtime", "zh-CN", "最后下载时间", "最后下载时间"),
             // entity.file.lastdownloadtime
-            new TranslationSeedItem("entity.file.lastdownloadtime", "zh-HK", "最后下载时间", "最后下载时间"),
+            new TranslationSeedItem("entity.file.lastdownloadtime", "zh-HK", "最后下载时间_hk", "最后下载时间"),
 
             // entity.file.status
-            new TranslationSeedItem("entity.file.status", "en-US", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.file.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
             // entity.file.status
-            new TranslationSeedItem("entity.file.status", "ja-JP", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.file.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
             // entity.file.status
-            new TranslationSeedItem("entity.file.status", "zh-CN", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.file.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
             // entity.file.status
-            new TranslationSeedItem("entity.file.status", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.file.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
 
             // entity.file.ispublic
-            new TranslationSeedItem("entity.file.ispublic", "en-US", "是否公开", "是否公开（字典 sys_is_public；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
+            new TranslationSeedItem("entity.file.ispublic", "en-US", "公开_us", "公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
             // entity.file.ispublic
-            new TranslationSeedItem("entity.file.ispublic", "ja-JP", "是否公开", "是否公开（字典 sys_is_public；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
+            new TranslationSeedItem("entity.file.ispublic", "ja-JP", "公开_jp", "公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
             // entity.file.ispublic
-            new TranslationSeedItem("entity.file.ispublic", "zh-CN", "是否公开", "是否公开（字典 sys_is_public；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
+            new TranslationSeedItem("entity.file.ispublic", "zh-CN", "公开", "公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
             // entity.file.ispublic
-            new TranslationSeedItem("entity.file.ispublic", "zh-HK", "是否公开", "是否公开（字典 sys_is_public；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
+            new TranslationSeedItem("entity.file.ispublic", "zh-HK", "公开_hk", "公开（字典 sys_is_public_type；0=公开同公司可见，1=私有仅创建人可见/可改/可下载）"),
 
             // entity.file.description
-            new TranslationSeedItem("entity.file.description", "en-US", "文件描述", "文件描述"),
+            new TranslationSeedItem("entity.file.description", "en-US", "文件描述_us", "文件描述"),
             // entity.file.description
-            new TranslationSeedItem("entity.file.description", "ja-JP", "文件描述", "文件描述"),
+            new TranslationSeedItem("entity.file.description", "ja-JP", "文件描述_jp", "文件描述"),
             // entity.file.description
             new TranslationSeedItem("entity.file.description", "zh-CN", "文件描述", "文件描述"),
             // entity.file.description
-            new TranslationSeedItem("entity.file.description", "zh-HK", "文件描述", "文件描述"),
+            new TranslationSeedItem("entity.file.description", "zh-HK", "文件描述_hk", "文件描述"),
 
             // entity.file.tags
-            new TranslationSeedItem("entity.file.tags", "en-US", "文件标签", "文件标签（多个标签用逗号分隔）"),
+            new TranslationSeedItem("entity.file.tags", "en-US", "文件标签_us", "文件标签（多个标签用逗号分隔）"),
             // entity.file.tags
-            new TranslationSeedItem("entity.file.tags", "ja-JP", "文件标签", "文件标签（多个标签用逗号分隔）"),
+            new TranslationSeedItem("entity.file.tags", "ja-JP", "文件标签_jp", "文件标签（多个标签用逗号分隔）"),
             // entity.file.tags
             new TranslationSeedItem("entity.file.tags", "zh-CN", "文件标签", "文件标签（多个标签用逗号分隔）"),
             // entity.file.tags
-            new TranslationSeedItem("entity.file.tags", "zh-HK", "文件标签", "文件标签（多个标签用逗号分隔）"),
+            new TranslationSeedItem("entity.file.tags", "zh-HK", "文件标签_hk", "文件标签（多个标签用逗号分隔）"),
 
             // entity.file.ipaddress
-            new TranslationSeedItem("entity.file.ipaddress", "en-US", "IP地址", "IP 地址（上传或访问来源）"),
+            new TranslationSeedItem("entity.file.ipaddress", "en-US", "IP地址_us", "IP 地址（上传或访问来源）"),
             // entity.file.ipaddress
-            new TranslationSeedItem("entity.file.ipaddress", "ja-JP", "IP地址", "IP 地址（上传或访问来源）"),
+            new TranslationSeedItem("entity.file.ipaddress", "ja-JP", "IP地址_jp", "IP 地址（上传或访问来源）"),
             // entity.file.ipaddress
             new TranslationSeedItem("entity.file.ipaddress", "zh-CN", "IP地址", "IP 地址（上传或访问来源）"),
             // entity.file.ipaddress
-            new TranslationSeedItem("entity.file.ipaddress", "zh-HK", "IP地址", "IP 地址（上传或访问来源）"),
+            new TranslationSeedItem("entity.file.ipaddress", "zh-HK", "IP地址_hk", "IP 地址（上传或访问来源）"),
 
             // entity.file.location
-            new TranslationSeedItem("entity.file.location", "en-US", "位置", "位置（IP 对应地理位置）"),
+            new TranslationSeedItem("entity.file.location", "en-US", "位置_us", "位置（IP 对应地理位置）"),
             // entity.file.location
-            new TranslationSeedItem("entity.file.location", "ja-JP", "位置", "位置（IP 对应地理位置）"),
+            new TranslationSeedItem("entity.file.location", "ja-JP", "位置_jp", "位置（IP 对应地理位置）"),
             // entity.file.location
             new TranslationSeedItem("entity.file.location", "zh-CN", "位置", "位置（IP 对应地理位置）"),
             // entity.file.location
-            new TranslationSeedItem("entity.file.location", "zh-HK", "位置", "位置（IP 对应地理位置）"),
+            new TranslationSeedItem("entity.file.location", "zh-HK", "位置_hk", "位置（IP 对应地理位置）"),
         };
     }
 
@@ -286,10 +286,10 @@ public class TaktFileI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 8;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Foundation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

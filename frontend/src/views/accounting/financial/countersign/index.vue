@@ -8,7 +8,7 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="accounting-financial-countersign">
+  <div class="p-4">
     <!-- 查询栏 -->
     <TaktQueryBar
       v-model="queryKeyword"
@@ -54,8 +54,8 @@
 
     <!-- 表格 -->
     <TaktSingleTable
-      :columns="columns"
       entity-scope="approval"
+      :columns="columns"
       :visible-column-keys="visibleColumnKeys"
       :id-column-key="'countersignId'"
       table-mode="single"
@@ -72,7 +72,7 @@
 
     </TaktSingleTable>
 
-    <!-- 分页组件 -->
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -92,6 +92,7 @@
       @cancel="handleFormCancel"
     >
       <CountersignForm
+        :key="formData?.countersignId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -113,6 +114,8 @@
         <a-input
           v-model:value="advancedQueryForm.countersignCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.code') })"
+          show-count
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
@@ -122,6 +125,8 @@
         <a-input
           v-model:value="advancedQueryForm.countersignDepts"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.depts') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -131,6 +136,8 @@
         <a-input
           v-model:value="advancedQueryForm.financeDept"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.financedept') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -140,6 +147,8 @@
         <a-input
           v-model:value="advancedQueryForm.budgetReviewComment"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.budgetreviewcomment') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -149,15 +158,8 @@
         <a-input
           v-model:value="advancedQueryForm.executiveOffice"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.executiveoffice') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.countersign.flowinstanceid')">
-        <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.flowinstanceid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -167,6 +169,8 @@
         <a-input
           v-model:value="advancedQueryForm.applicantBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicantby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -176,6 +180,8 @@
         <a-input
           v-model:value="advancedQueryForm.applicationDept"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicationdept') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -185,6 +191,8 @@
         <a-input
           v-model:value="advancedQueryForm.costBearerDept"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.costbearerdept') })"
+          show-count
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
@@ -203,6 +211,8 @@
         <a-input
           v-model:value="advancedQueryForm.budgetItem"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.budgetitem') })"
+          show-count
+          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -230,6 +240,8 @@
         <a-input
           v-model:value="advancedQueryForm.countersignTitle"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.title') })"
+          show-count
+          :maxlength="500"
           allow-clear
         />
       </a-form-item>
@@ -239,6 +251,8 @@
         <a-input
           v-model:value="advancedQueryForm.applicationReason"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.applicationreason') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -258,6 +272,8 @@
         <a-input
           v-model:value="advancedQueryForm.targetAndExpectedBenefit"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.targetandexpectedbenefit') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -267,6 +283,8 @@
         <a-input
           v-model:value="advancedQueryForm.attachments"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.attachments') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -294,6 +312,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.initiatorid') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -303,6 +323,8 @@
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.initiatedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -322,6 +344,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.approvedby') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -331,6 +355,8 @@
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.approvedatstart') })"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -342,6 +368,17 @@
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.countersign.approvedatend') })"
           value-format="YYYY-MM-DD"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('flowInstanceId')">
+      <a-form-item :label="t('entity.countersign.flowinstanceid')">
+        <a-input
+          v-model:value="advancedQueryForm.flowInstanceId"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.countersign.flowinstanceid') })"
+          show-count
+          :maxlength="20"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -367,12 +404,31 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
-        <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
-          allow-clear
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ t('common.page.entity.extfield') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -381,8 +437,10 @@
         <a-textarea
           v-model:value="advancedQueryForm.remark"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-          :rows="2"
-          allow-clear
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
         />
       </a-form-item>
       </div>
@@ -435,12 +493,13 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import CountersignForm from './components/countersign-form.vue'
-import { getCountersignList, getCountersignById, createCountersign, updateCountersign, deleteCountersignById, deleteCountersignBatch, getCountersignTemplate, importCountersign, exportCountersign } from '@/api/accounting/financial/countersign'
-import type { Countersign, CountersignQuery, CountersignCreate, CountersignUpdate } from '@/types/accounting/financial/countersign'
+import { getCountersignList, getCountersignById, createCountersign, updateCountersign, deleteCountersignById, deleteCountersignBatch, getCountersignTemplate, importCountersign, exportCountersign, updateCountersignStatus } from '@/api/accounting/financial/countersign'
+import type { Countersign, CountersignQuery } from '@/types/accounting/financial/countersign'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -458,9 +517,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Countersign[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -475,11 +534,13 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Countersign>>({})
+const formData = ref<Partial<Countersign> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()/** 高级查询抽屉是否打开 */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
@@ -488,7 +549,6 @@ const advancedQueryForm = ref({
   financeDept: '',
   budgetReviewComment: '',
   executiveOffice: '',
-  flowInstanceId: '',
   applicantBy: '',
   applicationDept: '',
   costBearerDept: '',
@@ -509,9 +569,10 @@ const advancedQueryForm = ref({
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -521,7 +582,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'financeDept', label: t('entity.countersign.financedept') },
   { key: 'budgetReviewComment', label: t('entity.countersign.budgetreviewcomment') },
   { key: 'executiveOffice', label: t('entity.countersign.executiveoffice') },
-  { key: 'flowInstanceId', label: t('entity.countersign.flowinstanceid') },
   { key: 'applicantBy', label: t('entity.countersign.applicantby') },
   { key: 'applicationDept', label: t('entity.countersign.applicationdept') },
   { key: 'costBearerDept', label: t('entity.countersign.costbearerdept') },
@@ -542,9 +602,10 @@ const queryFieldsMeta = computed(() => [
   { key: 'approvedBy', label: t('entity.countersign.approvedby') },
   { key: 'approvedAtStart', label: t('entity.countersign.approvedatstart') },
   { key: 'approvedAtEnd', label: t('entity.countersign.approvedatend') },
+  { key: 'flowInstanceId', label: t('entity.countersign.flowinstanceid') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'extField', label: t('common.page.entity.extfield') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -563,10 +624,77 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 
-/** 页面挂载后加载分页列表 */
-onMounted(() => {
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {CountersignQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<CountersignQuery>): CountersignQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: CountersignQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof CountersignQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  assignTrimmed('countersignCode', form.countersignCode)
+  assignTrimmed('countersignDepts', form.countersignDepts)
+  assignTrimmed('financeDept', form.financeDept)
+  assignTrimmed('budgetReviewComment', form.budgetReviewComment)
+  assignTrimmed('executiveOffice', form.executiveOffice)
+  assignTrimmed('applicantBy', form.applicantBy)
+  assignTrimmed('applicationDept', form.applicationDept)
+  assignTrimmed('costBearerDept', form.costBearerDept)
+  if (form.isBudget !== undefined && form.isBudget !== null) {
+    query.isBudget = form.isBudget
+  }
+  assignTrimmed('budgetItem', form.budgetItem)
+  if (form.budgetAmount !== undefined && form.budgetAmount !== null) {
+    query.budgetAmount = form.budgetAmount
+  }
+  if (form.applicationAmount !== undefined && form.applicationAmount !== null) {
+    query.applicationAmount = form.applicationAmount
+  }
+  assignTrimmed('countersignTitle', form.countersignTitle)
+  assignTrimmed('applicationReason', form.applicationReason)
+  assignTrimmed('budgetUsageDescription', form.budgetUsageDescription)
+  assignTrimmed('targetAndExpectedBenefit', form.targetAndExpectedBenefit)
+  assignTrimmed('attachments', form.attachments)
+  if (form.countersignStatus !== undefined && form.countersignStatus !== null) {
+    query.countersignStatus = form.countersignStatus
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  assignTrimmed('initiatorId', form.initiatorId)
+  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
+  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
+  assignTrimmed('approvedBy', form.approvedBy)
+  assignTrimmed('approvedAtStart', form.approvedAtStart)
+  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
+  assignTrimmed('flowInstanceId', form.flowInstanceId)
+  assignTrimmed('createdAtStart', form.createdAtStart)
+  assignTrimmed('createdAtEnd', form.createdAtEnd)
+  assignTrimmed('extField', form.extField)
+  assignTrimmed('remark', form.remark)
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
   loadData()
 })
+
 
 
 
@@ -629,24 +757,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getCountersignField(record, 'executiveOffice') ?? ''
-  },
-  {
-    title: t('entity.countersign.flowinstanceid'),
-    dataIndex: 'flowInstanceId',
-    key: 'flowInstanceId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCountersignField(record, 'flowInstanceId') ?? ''
-  },
-  {
-    title: t('entity.countersign.flowinstancename'),
-    dataIndex: 'flowInstanceName',
-    key: 'flowInstanceName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCountersignField(record, 'flowInstanceName') ?? ''
   },
   {
     title: t('entity.countersign.applicantby'),
@@ -796,6 +906,7 @@ const getCountersignId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getCountersignField = (record: any, field: string): any => record?.[field]
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -838,16 +949,7 @@ const onClickRow = (record: Countersign) => ({
 async function loadData() {
   loading.value = true
   try {
-    const kw = (queryKeyword.value ?? '').trim()
-    const params: CountersignQuery = {
-      pageIndex: currentPage.value,
-      pageSize: pageSize.value,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      params.keyWords = kw
-    }
-    const res = await getCountersignList(params)
+    const res = await getCountersignList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -865,7 +967,7 @@ useTableRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -878,7 +980,6 @@ function handleReset() {
   financeDept: '',
   budgetReviewComment: '',
   executiveOffice: '',
-  flowInstanceId: '',
   applicantBy: '',
   applicationDept: '',
   costBearerDept: '',
@@ -899,20 +1000,22 @@ function handleReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.countersign._self') })
-  formData.value = {}
+  formData.value = null
   formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: Countersign) {
@@ -950,6 +1053,8 @@ async function handleFormSubmit() {
       message.success(t('common.feedback.created', { target: t('entity.countersign._self') }))
     }
     formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
     loadData()
   } finally {
     formLoading.value = false
@@ -959,6 +1064,8 @@ async function handleFormSubmit() {
 /** 关闭新增/编辑弹窗（不提交） */
 function handleFormCancel() {
   formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
 }
 /** 打开导入对话框 */
 function handleImport() {
@@ -990,16 +1097,11 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const kw = (queryKeyword.value ?? '').trim()
-    const exportQuery: CountersignQuery = {
-      pageIndex: 1,
-      pageSize: 100000,
-      ...advancedQueryForm.value
-    }
-    if (kw.length > 0) {
-      exportQuery.keyWords = kw
-    }
-    const exportMeta = await exportCountersign(exportQuery, excelNames.sheet, excelNames.fileBase)
+    const exportMeta = await exportCountersign(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
     const ts = new Date()
     const pad = (n: number, w = 2) => String(n).padStart(w, '0')
     const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
@@ -1067,7 +1169,7 @@ function handleAdvancedQuery() {
 /** 高级查询提交：关闭抽屉并重置分页 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  currentPage.value = 1
+  currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
@@ -1078,7 +1180,6 @@ function handleAdvancedQueryReset() {
   financeDept: '',
   budgetReviewComment: '',
   executiveOffice: '',
-  flowInstanceId: '',
   applicantBy: '',
   applicationDept: '',
   costBearerDept: '',
@@ -1099,9 +1200,10 @@ function handleAdvancedQueryReset() {
   approvedBy: '',
   approvedAtStart: '',
   approvedAtEnd: '',
+  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  extField: '',
   remark: '',
   }
 }
@@ -1131,23 +1233,16 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 /** 分页页码变更 */
-function handlePaginationChange(page: number) {
+function handlePaginationChange(page: number, size: number) {
   currentPage.value = page
+  pageSize.value = size
   loadData()
 }
-/** 分页每页条数变更 */
+
+/** 分页每页条数变更（重置到第 1 页） */
 function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
   pageSize.value = size
-  currentPage.value = 1
   loadData()
 }
 </script>
-
-<style scoped lang="css">
-.accounting-financial-countersign {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-</style>

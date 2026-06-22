@@ -28,54 +28,70 @@
           disabled
         />
       </a-form-item>
-      <a-form-item :label="t('entity.menu._self')">
-        <a-transfer
-          v-model:target-keys="selectedMenuIds"
-          class="tree-transfer"
-          :data-source="transferDataSource"
-          :list-style="{
-            width: '250px',
-            height: '50vh',
-          }"
-          :render="item => item.title"
-          :show-select-all="false"
-          :loading="menuOptionsLoading"
-          :disabled="!roleId"
-        >
-          <template #children="{ direction, selectedKeys, onItemSelect }">
-            <a-tree
-              v-if="direction === 'left'"
-              block-node
-              checkable
-              :check-strictly="false"
-              default-expand-all
-              :checked-keys="[...selectedKeys.map((k: string | number) => String(k)), ...selectedMenuIds]"
-              :tree-data="treeData"
-              :field-names="{ title: 'dictLabel', key: 'dictValue', children: 'children' }"
-              @check="(checked: unknown, info: { node?: unknown }) => {
-                if (!info) return
-                const checkedKeys = Array.isArray(checked) ? checked : (checked as { checked?: string[] }).checked || []
-                const allKeys = [...selectedKeys.map((k: string | number) => String(k)), ...selectedMenuIds]
-                const newKeys = checkedKeys.filter((k: string | number) => !allKeys.includes(String(k)))
-                const removedKeys = allKeys.filter((k: string) => !checkedKeys.map((ck: string | number) => String(ck)).includes(k))
-                newKeys.forEach((key: string | number) => onItemSelect(String(key), true))
-                removedKeys.forEach((key: string) => onItemSelect(key, false))
-              }"
-            />
-            <a-tree
-              v-else-if="direction === 'right'"
-              block-node
-              checkable
-              :check-strictly="false"
-              default-expand-all
-              :checked-keys="selectedMenuIds"
-              :tree-data="rightTreeData"
-              :field-names="{ title: 'dictLabel', key: 'dictValue', children: 'children' }"
-              @check="handleRightTreeCheck"
-            />
-          </template>
-        </a-transfer>
-      </a-form-item>
+      <a-row :gutter="24">
+        <a-col :span="24">
+          <a-form-item
+            :label="t('entity.menu._self')"
+            :label-col="{ span: 24 }"
+            :wrapper-col="{ span: 24 }"
+          >
+            <takt-transfer
+              v-model:target-keys="selectedMenuIds"
+              :data-source="transferDataSource"
+              :titles="[t('common.tip.transfer.unassigned'), t('common.tip.transfer.assigned')]"
+              :loading="menuOptionsLoading"
+              :disabled="!roleId"
+            >
+              <template #children="{ direction, selectedKeys, onItemSelect }">
+                <a-tree
+                  v-if="direction === 'left'"
+                  block-node
+                  checkable
+                  :check-strictly="false"
+                  default-expand-all
+                  :checked-keys="[...selectedKeys.map((k: string | number) => String(k)), ...selectedMenuIds]"
+                  :tree-data="treeData"
+                  :field-names="{ title: 'dictLabel', key: 'dictValue', children: 'children' }"
+                  @check="(checked: unknown, info: { node?: unknown }) => {
+                    if (!info) return
+                    const checkedKeys = Array.isArray(checked) ? checked : (checked as { checked?: string[] }).checked || []
+                    const allKeys = [...selectedKeys.map((k: string | number) => String(k)), ...selectedMenuIds]
+                    const newKeys = checkedKeys.filter((k: string | number) => !allKeys.includes(String(k)))
+                    const removedKeys = allKeys.filter((k: string) => !checkedKeys.map((ck: string | number) => String(ck)).includes(k))
+                    newKeys.forEach((key: string | number) => onItemSelect(String(key), true))
+                    removedKeys.forEach((key: string) => onItemSelect(key, false))
+                  }"
+                >
+                  <template #title="node">
+                    <span
+                      @click.stop="handleMenuTreeNodeClick(node, selectedKeys, onItemSelect)"
+                      @dblclick.stop="handleMenuTreeNodeDblClick(node, 'left')"
+                    >{{ node.dictLabel }}</span>
+                  </template>
+                </a-tree>
+                <a-tree
+                  v-else-if="direction === 'right'"
+                  block-node
+                  checkable
+                  :check-strictly="false"
+                  default-expand-all
+                  :checked-keys="selectedMenuIds"
+                  :tree-data="rightTreeData"
+                  :field-names="{ title: 'dictLabel', key: 'dictValue', children: 'children' }"
+                  @check="handleRightTreeCheck"
+                >
+                  <template #title="node">
+                    <span
+                      @click.stop="handleMenuTreeNodeClick(node, selectedKeys, onItemSelect)"
+                      @dblclick.stop="handleMenuTreeNodeDblClick(node, 'right')"
+                    >{{ node.dictLabel }}</span>
+                  </template>
+                </a-tree>
+              </template>
+            </takt-transfer>
+          </a-form-item>
+        </a-col>
+      </a-row>
     </a-form>
   </a-modal>
 </template>
@@ -91,6 +107,11 @@ import { getRoleMenuIds, assignRoleMenus } from '@/api/identity/rbac'
 import { getMenuTreeOptions } from '@/api/identity/menu'
 import type { Role } from '@/types/identity/role'
 import type { TaktTreeSelectOption } from '@/types/common'
+import {
+  taktAssignTransferHandleItemClick,
+  taktAssignTransferShuttleByDblClick,
+  type TaktAssignTransferDirection,
+} from '@/components/business/takt-transfer/interaction'
 
 /** 树节点（Transfer / Tree 共用） */
 interface MenuTreeNode {
@@ -166,6 +187,7 @@ function flattenMenuTree(list: TaktTreeSelectOption[] = []) {
     transferDataSource.value!.push({
       key: String(item.dictValue),
       title: item.dictLabel || '',
+      description: item.dictLabel || '',
     })
     if (item.children?.length) {
       flattenMenuTree(item.children)
@@ -222,6 +244,34 @@ const rightTreeData = computed(() => {
   if (selectedMenuIds.value.length === 0 || allMenuOptions.value.length === 0) return []
   return filterMenuTreeBySelectedKeys(allMenuOptions.value, selectedMenuIds.value)
 })
+
+/**
+ * 树节点单击切换 Transfer 选中
+ * @param node 树节点
+ * @param selectedKeys 当前列已选
+ * @param onItemSelect Transfer 回调
+ */
+function handleMenuTreeNodeClick(
+  node: MenuTreeNode,
+  selectedKeys: readonly (string | number)[],
+  onItemSelect: (itemKey: string, selected: boolean) => void,
+): void {
+  taktAssignTransferHandleItemClick(node.dictValue, selectedKeys, onItemSelect)
+}
+
+/**
+ * 树节点双击穿梭
+ * @param node 树节点
+ * @param direction 列方向
+ */
+function handleMenuTreeNodeDblClick(node: MenuTreeNode, direction: TaktAssignTransferDirection): void {
+  taktAssignTransferShuttleByDblClick(
+    node.dictValue,
+    direction,
+    () => selectedMenuIds.value,
+    (keys) => { selectedMenuIds.value = keys },
+  )
+}
 
 /**
  * 右侧树取消勾选
@@ -310,10 +360,3 @@ function handleCancel() {
   roleInfo.value = ''
 }
 </script>
-
-<style scoped lang="css">
-.tree-transfer :deep(.ant-transfer-list:first-child) {
-  width: 50%;
-  flex: none;
-}
-</style>

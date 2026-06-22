@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesInvoiceDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesInvoice 生成，请按需审阅）
 // 
@@ -38,7 +38,7 @@ public class TaktSalesInvoiceDto : TaktCompanyDtoBase
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票编码（唯一索引）
@@ -81,12 +81,12 @@ public class TaktSalesInvoiceDto : TaktCompanyDtoBase
     public decimal ActualAmount { get; set; }
 
     /// <summary>
-    /// 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
     /// </summary>
     public int InvoiceStatus { get; set; } = 0;
 
     /// <summary>
-    /// 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
@@ -174,12 +174,12 @@ public class TaktSalesInvoiceQueryDto : TaktPagedQuery
     public decimal? ActualAmount { get; set; }
 
     /// <summary>
-    /// 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
     /// </summary>
     public int? InvoiceStatus { get; set; }
 
     /// <summary>
-    /// 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
@@ -201,7 +201,7 @@ public class TaktSalesInvoiceQueryDto : TaktPagedQuery
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注（模糊查询）
@@ -236,7 +236,8 @@ public class TaktSalesInvoiceCreateDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "工厂代码不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票编码（唯一索引）
@@ -282,12 +283,12 @@ public class TaktSalesInvoiceCreateDto
     public decimal ActualAmount { get; set; }
 
     /// <summary>
-    /// 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
     /// </summary>
     public int InvoiceStatus { get; set; } = 0;
 
     /// <summary>
-    /// 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
@@ -304,7 +305,7 @@ public class TaktSalesInvoiceCreateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -351,9 +352,9 @@ public class TaktSalesInvoiceStatusDto
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
     /// </summary>
-    [Required(ErrorMessage = "发票状态（0=草稿，1=已开票，2=已收款，3=已作废）不能为空")]
+    [Required(ErrorMessage = "发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）不能为空")]
     public int InvoiceStatus { get; set; } = 0;
 }
 
@@ -402,12 +403,12 @@ public class TaktSalesInvoiceTemplateDto
     public string? CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
     /// </summary>
     public int? InvoiceStatus { get; set; }
 
     /// <summary>
-    /// 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
@@ -419,7 +420,7 @@ public class TaktSalesInvoiceTemplateDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -474,12 +475,12 @@ public class TaktSalesInvoiceImportDto
     public string? CustomerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
     /// </summary>
     public int? InvoiceStatus { get; set; }
 
     /// <summary>
-    /// 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
@@ -491,7 +492,7 @@ public class TaktSalesInvoiceImportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注
@@ -524,7 +525,7 @@ public class TaktSalesInvoiceExportDto
     /// <summary>
     /// 工厂代码
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票编码（唯一索引）
@@ -567,12 +568,12 @@ public class TaktSalesInvoiceExportDto
     public decimal ActualAmount { get; set; }
 
     /// <summary>
-    /// 发票状态（0=草稿，1=已开票，2=已收款，3=已作废）
+    /// 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
     /// </summary>
     public int InvoiceStatus { get; set; } = 0;
 
     /// <summary>
-    /// 收款方式（0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 收款方式（字典 logistics_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
@@ -584,7 +585,7 @@ public class TaktSalesInvoiceExportDto
     /// <summary>
     /// 扩展字段JSON
     /// </summary>
-    public string? ExtFieldJson { get; set; }
+    public string? ExtField { get; set; }
 
     /// <summary>
     /// 备注

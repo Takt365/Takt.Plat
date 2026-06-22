@@ -94,7 +94,7 @@ export interface EmpSalary extends CompanyDtoBase {
   effectiveDate: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   empSalaryStatus: number;
 
@@ -179,7 +179,7 @@ export interface EmpSalaryQuery extends TaktPagedQuery {
   effectiveDateEnd?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   empSalaryStatus?: number;
 
@@ -201,7 +201,7 @@ export interface EmpSalaryQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -283,7 +283,7 @@ export interface EmpSalaryCreate {
   effectiveDate: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   empSalaryStatus: number;
 
@@ -295,7 +295,7 @@ export interface EmpSalaryCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -332,7 +332,7 @@ export interface EmpSalaryStatus {
   empSalaryId: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   empSalaryStatus: number;
 
@@ -381,7 +381,7 @@ export interface EmpSalaryTemplate {
   salaryItemId?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   empSalaryStatus?: number;
 
@@ -393,7 +393,7 @@ export interface EmpSalaryTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -450,7 +450,7 @@ export interface EmpSalaryImport {
   salaryItemId?: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   empSalaryStatus?: number;
 
@@ -462,7 +462,7 @@ export interface EmpSalaryImport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -539,7 +539,7 @@ export interface EmpSalaryExport {
   effectiveDate: string;
 
   /**
-   * 状态（字典 sys_normal_disable）
+   * 状态（字典 sys_normal_disable_status）
    */
   empSalaryStatus: number;
 
@@ -551,7 +551,7 @@ export interface EmpSalaryExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

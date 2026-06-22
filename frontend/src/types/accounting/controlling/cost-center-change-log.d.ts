@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/controlling
 // 文件名称：cost-center-change-log.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface CostCenterChangeLog extends CompanyDtoBase {
   costCenterChangeLogId: string;
 
   /**
-   * 成本中心 ID
+   * 成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
    */
   costCenterId: string;
 
@@ -63,6 +63,11 @@ export interface CostCenterChangeLog extends CompanyDtoBase {
    */
   changeReason?: string;
 
+  /**
+   * 成本中心主表 （主表：TaktCostCenter）
+   */
+  costCenter?: CostCenter;
+
 }
 
 
@@ -84,7 +89,7 @@ export interface CostCenterChangeLogQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 成本中心 ID
+   * 成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
    */
   costCenterId?: string;
 
@@ -131,7 +136,7 @@ export interface CostCenterChangeLogQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -163,7 +168,7 @@ export interface CostCenterChangeLogCreate {
   companyDefaultCulture: string;
 
   /**
-   * 成本中心 ID
+   * 成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
    */
   costCenterId: string;
 
@@ -195,7 +200,7 @@ export interface CostCenterChangeLogCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -237,7 +242,7 @@ export interface CostCenterChangeLogExport {
   companyCode: string;
 
   /**
-   * 成本中心 ID
+   * 成本中心 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
    */
   costCenterId: string;
 
@@ -269,7 +274,7 @@ export interface CostCenterChangeLogExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  extField?: string;
 
   /**
    * 备注

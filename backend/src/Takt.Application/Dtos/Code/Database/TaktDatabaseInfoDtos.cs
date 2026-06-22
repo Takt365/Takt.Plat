@@ -12,6 +12,8 @@
 
 namespace Takt.Application.Dtos.Code.Database;
 
+using Takt.Shared.Models;
+
 /// <summary>
 /// 数据库摘要（可连接租户业务库，与 appsettings Database:TenantCodes / ConnectionStrings:Tenant_* 对齐）
 /// </summary>
@@ -42,6 +44,13 @@ public class TaktDatabaseTableInfoDto
     /// 表描述（表注释）
     /// </summary>
     public string? TableComment { get; set; }
+}
+
+/// <summary>
+/// 数据库表摘要分页查询（租户取自当前登录上下文，页内不可切换）
+/// </summary>
+public class TaktDatabaseTableInfoQueryDto : TaktPagedQuery
+{
 }
 
 /// <summary>

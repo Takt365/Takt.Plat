@@ -1,0 +1,885 @@
+<!-- ======================================== -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
+<!-- 命名空间：@/views/accounting/financial/asset-change-log/components -->
+<!-- 文件名称：asset-form.vue -->
+<!-- 功能描述：资产实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
+<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
+<!-- ======================================== -->
+
+<template>
+  <a-form
+    ref="formRef"
+    class="takt-generated-form asset-form flex flex-col min-h-0"
+    :model="formState"
+    :rules="rules"
+    layout="horizontal"
+    label-align="right"
+  >
+    <a-tabs
+      v-model:active-key="activeTab"
+      class="asset-form-tabs"
+    >
+      <a-tab-pane
+        key="tab-0"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.entity.tenantcode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.entity.companycode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('common.page.entity.companydefaultculture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.code')"
+                name="assetCode"
+              >
+                <a-input
+                  v-model:value="formState.assetCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.code') })"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                  :disabled="!!formData?.assetId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.name')"
+                name="assetName"
+              >
+                <a-input
+                  v-model:value="formState.assetName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.name') })"
+                  show-count
+                  :maxlength="200"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.spec')"
+                name="assetSpec"
+              >
+                <a-input
+                  v-model:value="formState.assetSpec"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.spec') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.desc')"
+                name="assetDesc"
+              >
+                <a-input
+                  v-model:value="formState.assetDesc"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.desc') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.category')"
+                name="assetCategory"
+              >
+                <a-input
+                  v-model:value="formState.assetCategory"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.category') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.type')"
+                name="assetType"
+              >
+                <a-input
+                  v-model:value="formState.assetType"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.type') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.originalvalue')"
+                name="assetOriginalValue"
+              >
+                <a-input-number
+                  v-model:value="formState.assetOriginalValue"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.originalvalue') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.netvalue')"
+                name="assetNetValue"
+              >
+                <a-input-number
+                  v-model:value="formState.assetNetValue"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.netvalue') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.accumulateddepreciation')"
+                name="accumulatedDepreciation"
+              >
+                <a-input-number
+                  v-model:value="formState.accumulatedDepreciation"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.accumulateddepreciation') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.costcenterid')"
+                name="costCenterId"
+              >
+                <a-input
+                  v-model:value="formState.costCenterId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.costcenterid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.costcentername')"
+                name="costCenterName"
+              >
+                <a-input
+                  v-model:value="formState.costCenterName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.costcentername') })"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.deptid')"
+                name="deptId"
+              >
+                <a-input
+                  v-model:value="formState.deptId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.deptid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.deptname')"
+                name="deptName"
+              >
+                <a-input
+                  v-model:value="formState.deptName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.deptname') })"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.userid')"
+                name="userId"
+              >
+                <a-input
+                  v-model:value="formState.userId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.userid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.username')"
+                name="userName"
+              >
+                <a-input
+                  v-model:value="formState.userName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.username') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.location')"
+                name="assetLocation"
+              >
+                <a-input
+                  v-model:value="formState.assetLocation"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.location') })"
+                  show-count
+                  :maxlength="200"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.purchasedate')"
+                name="purchaseDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.purchaseDate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.purchasedate') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.startdate')"
+                name="startDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.startDate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.startdate') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.scrapdate')"
+                name="scrapDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.scrapDate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.scrapdate') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.disposaldate')"
+                name="disposalDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.disposalDate"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.disposaldate') })"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.expectedlifemonths')"
+                name="expectedLifeMonths"
+              >
+                <a-input-number
+                  v-model:value="formState.expectedLifeMonths"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.expectedlifemonths') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.depreciationmethod')"
+                name="depreciationMethod"
+              >
+                <a-input-number
+                  v-model:value="formState.depreciationMethod"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.depreciationmethod') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.monthlydepreciation')"
+                name="monthlyDepreciation"
+              >
+                <a-input-number
+                  v-model:value="formState.monthlyDepreciation"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.monthlydepreciation') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.relatedsupplierid')"
+                name="relatedSupplierId"
+              >
+                <a-input
+                  v-model:value="formState.relatedSupplierId"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.relatedsupplierid') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.relatedsuppliername')"
+                name="relatedSupplierName"
+              >
+                <a-input
+                  v-model:value="formState.relatedSupplierName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.relatedsuppliername') })"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.relatedplant')"
+                name="relatedPlant"
+              >
+                <a-input
+                  v-model:value="formState.relatedPlant"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.relatedplant') })"
+                  show-count
+                  :maxlength="4"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.asset.status')"
+                name="assetStatus"
+              >
+                <a-input-number
+                  v-model:value="formState.assetStatus"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.status') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.asset.extfield')"
+                name="ExtField"
+              >
+                <a-textarea
+                  v-model:value="formState.ExtField"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.extfield') })"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('common.page.entity.remark')"
+                name="remark"
+              >
+                <a-textarea
+                  v-model:value="formState.remark"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+    </a-tabs>
+    <!-- 下：子表 changeLogs -->
+    <TaktEditableTable
+      ref="assetChangeLogTableRef"
+      v-model="childAssetChangeLogRows"
+      :columns="assetChangeLogFormColumns"
+      :title="t('entity.assetchangelog._self')"
+      :add-button-entity="t('entity.assetchangelog._self')"
+      id-field="assetChangeLogId"
+      :default-row="createDefaultAssetChangeLogRow"
+      :disabled="loading"
+      section-border
+    />
+  </a-form>
+</template>
+
+<script setup lang="ts">
+/**
+ * 资产实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * @module views/accounting/financial/asset-change-log/components
+ */
+import { reactive, watch, computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import type { Rule } from 'ant-design-vue/es/form'
+import type { AssetCreate } from '@/types/accounting/financial/asset'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
+
+/** i18n 翻译函数 */
+const { t } = useI18n()
+
+/** Pinia：租户/公司上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文 */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或公司切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
+    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  }
+}
+/** 表单内容区高度 class（字段多时 tab-10 行） */
+const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
+const activeTab = ref('tab-0')
+/** CreateDto 字段名列表（与 formState 键对齐） */
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","assetName","assetSpec","assetDesc","assetCategory","assetType","assetOriginalValue","assetNetValue","accumulatedDepreciation","costCenterId","costCenterName","deptId","deptName","userId","userName","assetLocation","purchaseDate","startDate","scrapDate","disposalDate","expectedLifeMonths","depreciationMethod","monthlyDepreciation","relatedSupplierId","relatedSupplierName","relatedPlant","assetStatus","ExtField","remark"]
+
+import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+
+const childAssetChangeLogRows = ref<Record<string, unknown>[]>([])
+const assetChangeLogTableRef = ref<{
+  getRows: () => Record<string, unknown>[]
+  validate: () => Promise<unknown>
+  resetRows: () => void
+} | null>(null)
+
+/** 子表 assetChangeLog 可编辑列 */
+const assetChangeLogFormColumns = computed<TaktEditableTableColumn[]>(() => [
+  {
+    key: 'changeFields',
+    title: t('entity.assetchangelog.changefields'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.assetchangelog.changefields') }),
+  },
+  {
+    key: 'changeTime',
+    title: t('entity.assetchangelog.changetime'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
+    width: 140,
+  },
+  {
+    key: 'changeBy',
+    title: t('entity.assetchangelog.changeby'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.assetchangelog.changeby') }),
+  },
+  {
+    key: 'changeReason',
+    title: t('entity.assetchangelog.changereason'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.assetchangelog.changereason') }),
+  },
+  {
+    key: 'ExtField',
+    title: t('entity.assetchangelog.extfield'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.assetchangelog.extfield') }),
+    width: 140,
+  },
+  {
+    key: 'remark',
+    title: t('common.page.entity.remark'),
+    editor: 'textarea',
+    rows: 2,
+    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
+    width: 140,
+  },
+])
+
+/** 编辑态从 formData 同步各子表行 */
+function syncChildRowsFromFormData(val: Partial<AssetCreate & { assetId?: string }> | null | undefined) {
+  childAssetChangeLogRows.value = ((val as any)?.changeLogs ?? []) as Record<string, unknown>[]
+}
+
+function createDefaultAssetChangeLogRow(): Record<string, unknown> {
+  return {
+    changeFields: '',
+    changeTime: '',
+    changeBy: '',
+    changeReason: '',
+    ExtField: '',
+    remark: '',
+  }
+}
+
+/** 组装 Create/Update 载荷（主表 + 子表数组） */
+function buildSubmitPayload() {
+  const masterId = props.formData?.assetId ?? ''
+  return {
+    ...formState,
+    changeLogs: assetChangeLogTableRef.value?.getRows?.() ?? childAssetChangeLogRows.value.map((rest) => ({
+      ...rest,
+      tenantCode: tenantStore.tenantCode,
+      companyCode: tenantStore.companyCode,
+      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      assetId: masterId,
+    })),
+  }
+}
+
+/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
+interface Props {
+  formData?: Partial<AssetCreate & { assetId?: string }> | null
+  /** 父级提交 loading，禁用表单项 */
+  loading?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  formData: null,
+  loading: false,
+})
+
+/** a-form 实例 ref */
+const formRef = ref()
+/** 表单双向绑定模型 */
+const formState = reactive<Record<string, any>>({})
+/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}
+
+
+/** 编辑态灌入 formData；新增态恢复默认值（须含 assetId 才视为编辑） */
+watch(
+  () => props.formData,
+  (val) => {
+    if (val?.assetId) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
+    delete (next as any).changeLogs
+      applyScopeDefaults(next)
+      Object.assign(formState, next)
+    syncChildRowsFromFormData(val)
+      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
+      formRef.value?.clearValidate()
+    }
+  },
+  { immediate: true }
+)
+
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => {
+    const isCreate = !props.formData?.assetId
+    if (isCreate) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
+/** 表单校验规则（与 FluentValidation 必填对齐） */
+const rules = computed<Record<string, Rule[]>>(() => ({
+  assetCode: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.asset.code') }),
+      trigger: 'blur'
+    }
+  ],
+  assetName: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.asset.name') }),
+      trigger: 'blur'
+    }
+  ],
+  assetCategory: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.asset.category') }),
+      trigger: 'blur'
+    }
+  ],
+  assetType: [
+    {
+      required: true,
+      message: t('common.page.form.placeholder.required', { field: t('entity.asset.type') }),
+      trigger: 'blur'
+    }
+  ],
+  assetOriginalValue: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.originalvalue') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.originalvalue') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  assetNetValue: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.netvalue') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.netvalue') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  accumulatedDepreciation: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.accumulateddepreciation') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.accumulateddepreciation') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  expectedLifeMonths: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.expectedlifemonths') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.expectedlifemonths') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  depreciationMethod: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.depreciationmethod') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.depreciationmethod') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  monthlyDepreciation: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.monthlydepreciation') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.monthlydepreciation') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  assetStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.status') }))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.status') }))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+}))
+
+/** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
+async function validate() {
+  await formRef.value?.validate()
+  await assetChangeLogTableRef.value?.validate?.()
+  return formState
+}
+
+/** 映射为 Create/Update DTO */
+function getValues(): Record<string, any> {
+  const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('assetOriginalValue' in payload) {
+    const rawassetOriginalValue = payload.assetOriginalValue
+    payload.assetOriginalValue = typeof rawassetOriginalValue === 'number' ? rawassetOriginalValue : Number(rawassetOriginalValue)
+  }
+  if ('assetNetValue' in payload) {
+    const rawassetNetValue = payload.assetNetValue
+    payload.assetNetValue = typeof rawassetNetValue === 'number' ? rawassetNetValue : Number(rawassetNetValue)
+  }
+  if ('accumulatedDepreciation' in payload) {
+    const rawaccumulatedDepreciation = payload.accumulatedDepreciation
+    payload.accumulatedDepreciation = typeof rawaccumulatedDepreciation === 'number' ? rawaccumulatedDepreciation : Number(rawaccumulatedDepreciation)
+  }
+  if ('expectedLifeMonths' in payload) {
+    const rawexpectedLifeMonths = payload.expectedLifeMonths
+    payload.expectedLifeMonths = typeof rawexpectedLifeMonths === 'number' ? rawexpectedLifeMonths : Number(rawexpectedLifeMonths)
+  }
+  if ('depreciationMethod' in payload) {
+    const rawdepreciationMethod = payload.depreciationMethod
+    payload.depreciationMethod = typeof rawdepreciationMethod === 'number' ? rawdepreciationMethod : Number(rawdepreciationMethod)
+  }
+  if ('monthlyDepreciation' in payload) {
+    const rawmonthlyDepreciation = payload.monthlyDepreciation
+    payload.monthlyDepreciation = typeof rawmonthlyDepreciation === 'number' ? rawmonthlyDepreciation : Number(rawmonthlyDepreciation)
+  }
+  if ('assetStatus' in payload) {
+    const rawassetStatus = payload.assetStatus
+    payload.assetStatus = typeof rawassetStatus === 'number' ? rawassetStatus : Number(rawassetStatus)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
+}
+
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
+function resetFields() {
+  Object.keys(formState).forEach((k) => delete formState[k])
+  if (props.formData && typeof props.formData === 'object') {
+    Object.assign(formState, props.formData)
+  }
+  applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.assetId)
+  childAssetChangeLogRows.value = []
+  assetChangeLogTableRef.value?.resetRows?.()
+  activeTab.value = 'tab-0'
+  formRef.value?.clearValidate()
+}
+
+defineExpose({ validate, getValues, resetFields })
+</script>
+
+<style scoped lang="css">
+:deep(.ant-tabs-content-holder) {
+  min-height: 50vh;
+}
+
+:deep(.ant-tabs-tabpane) {
+  min-height: 50vh;
+}
+</style>

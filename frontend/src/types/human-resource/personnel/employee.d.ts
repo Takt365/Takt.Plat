@@ -46,17 +46,17 @@ export interface Employee extends CompanyDtoBase {
   /**
    * 出生日期
    */
-  birthDate?: string;
+  birthDate: string;
 
   /**
    * 身份证号
    */
-  idCardNo?: string;
+  idCardNo: string;
 
   /**
    * 手机号码
    */
-  mobile?: string;
+  mobile: string;
 
   /**
    * 电子邮箱
@@ -64,24 +64,24 @@ export interface Employee extends CompanyDtoBase {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place 编码或文本）
+   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
    */
-  nativePlace?: string;
+  nativePlace: string;
 
   /**
-   * 民族（字典 hr_ethnic_group 编码或文本）
+   * 民族（字典 hr_ethnic_code，1～56）
    */
-  ethnicity?: string;
+  ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_status 编码或文本）
+   * 政治面貌（字典 hr_political_status，0～12）
    */
-  politicalStatus?: string;
+  politicalStatus: number;
 
   /**
    * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
    */
-  maritalStatus?: number;
+  maritalStatus: number;
 
   /**
    * 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
@@ -166,17 +166,17 @@ export interface Employee extends CompanyDtoBase {
   /**
    * 紧急联系人姓名
    */
-  emergencyContactName?: string;
+  emergencyContactName: string;
 
   /**
    * 紧急联系人电话
    */
-  emergencyContactPhone?: string;
+  emergencyContactPhone: string;
 
   /**
    * 家庭住址
    */
-  homeAddress?: string;
+  homeAddress: string;
 
   /**
    * 照片URL
@@ -254,19 +254,19 @@ export interface EmployeeQuery extends TaktPagedQuery {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place 编码或文本）
+   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_group 编码或文本）
+   * 民族（字典 hr_ethnic_code 编码或文本）
    */
-  ethnicity?: string;
+  ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_status 编码或文本）
+   * 政治面貌（字典 hr_political_status，0～12）
    */
-  politicalStatus?: string;
+  politicalStatus?: number;
 
   /**
    * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
@@ -401,7 +401,7 @@ export interface EmployeeQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注（模糊查询）
@@ -450,17 +450,17 @@ export interface EmployeeCreate {
   /**
    * 出生日期
    */
-  birthDate?: string;
+  birthDate: string;
 
   /**
    * 身份证号
    */
-  idCardNo?: string;
+  idCardNo: string;
 
   /**
    * 手机号码
    */
-  mobile?: string;
+  mobile: string;
 
   /**
    * 电子邮箱
@@ -468,24 +468,24 @@ export interface EmployeeCreate {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place 编码或文本）
+   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
    */
-  nativePlace?: string;
+  nativePlace: string;
 
   /**
-   * 民族（字典 hr_ethnic_group 编码或文本）
+   * 民族（字典 hr_ethnic_code，1～56）
    */
-  ethnicity?: string;
+  ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_status 编码或文本）
+   * 政治面貌（字典 hr_political_status，0～12）
    */
-  politicalStatus?: string;
+  politicalStatus: number;
 
   /**
    * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
    */
-  maritalStatus?: number;
+  maritalStatus: number;
 
   /**
    * 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
@@ -560,17 +560,17 @@ export interface EmployeeCreate {
   /**
    * 紧急联系人姓名
    */
-  emergencyContactName?: string;
+  emergencyContactName: string;
 
   /**
    * 紧急联系人电话
    */
-  emergencyContactPhone?: string;
+  emergencyContactPhone: string;
 
   /**
    * 家庭住址
    */
-  homeAddress?: string;
+  homeAddress: string;
 
   /**
    * 照片URL
@@ -590,7 +590,7 @@ export interface EmployeeCreate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -681,19 +681,19 @@ export interface EmployeeTemplate {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place 编码或文本）
+   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_group 编码或文本）
+   * 民族（字典 hr_ethnic_code 编码或文本）
    */
-  ethnicity?: string;
+  ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_status 编码或文本）
+   * 政治面貌（字典 hr_political_status，0～12）
    */
-  politicalStatus?: string;
+  politicalStatus?: number;
 
   /**
    * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
@@ -713,7 +713,7 @@ export interface EmployeeTemplate {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -760,6 +760,11 @@ export interface EmployeeImport {
   gender?: number;
 
   /**
+   * 出生日期
+   */
+  birthDate?: string;
+
+  /**
    * 身份证号
    */
   idCardNo?: string;
@@ -775,19 +780,19 @@ export interface EmployeeImport {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place 编码或文本）
+   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_group 编码或文本）
+   * 民族（字典 hr_ethnic_code 编码或文本）
    */
-  ethnicity?: string;
+  ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_status 编码或文本）
+   * 政治面貌（字典 hr_political_status，0～12）
    */
-  politicalStatus?: string;
+  politicalStatus?: number;
 
   /**
    * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
@@ -805,9 +810,24 @@ export interface EmployeeImport {
   graduateSchool?: string;
 
   /**
+   * 紧急联系人姓名
+   */
+  emergencyContactName?: string;
+
+  /**
+   * 紧急联系人电话
+   */
+  emergencyContactPhone?: string;
+
+  /**
+   * 家庭住址
+   */
+  homeAddress?: string;
+
+  /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注
@@ -851,17 +871,17 @@ export interface EmployeeExport {
   /**
    * 出生日期
    */
-  birthDate?: string;
+  birthDate: string;
 
   /**
    * 身份证号
    */
-  idCardNo?: string;
+  idCardNo: string;
 
   /**
    * 手机号码
    */
-  mobile?: string;
+  mobile: string;
 
   /**
    * 电子邮箱
@@ -869,24 +889,24 @@ export interface EmployeeExport {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place 编码或文本）
+   * 籍贯（6 位 GB 行政区划代码，字典 hr_native_place_code）
    */
-  nativePlace?: string;
+  nativePlace: string;
 
   /**
-   * 民族（字典 hr_ethnic_group 编码或文本）
+   * 民族（字典 hr_ethnic_code，1～56）
    */
-  ethnicity?: string;
+  ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_status 编码或文本）
+   * 政治面貌（字典 hr_political_status，0～12）
    */
-  politicalStatus?: string;
+  politicalStatus: number;
 
   /**
    * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶）
    */
-  maritalStatus?: number;
+  maritalStatus: number;
 
   /**
    * 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
@@ -961,17 +981,17 @@ export interface EmployeeExport {
   /**
    * 紧急联系人姓名
    */
-  emergencyContactName?: string;
+  emergencyContactName: string;
 
   /**
    * 紧急联系人电话
    */
-  emergencyContactPhone?: string;
+  emergencyContactPhone: string;
 
   /**
    * 家庭住址
    */
-  homeAddress?: string;
+  homeAddress: string;
 
   /**
    * 照片URL
@@ -981,7 +1001,7 @@ export interface EmployeeExport {
   /**
    * 扩展字段JSON
    */
-  extFieldJson?: string;
+  ExtField?: string;
 
   /**
    * 备注

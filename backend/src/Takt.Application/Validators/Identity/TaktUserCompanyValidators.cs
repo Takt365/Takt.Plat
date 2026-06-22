@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Identity
 // 文件名称：TaktUserCompanyValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：UserCompany 关联 DTO FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktUserCompany 生成，请按需审阅）
 // 
@@ -12,7 +12,6 @@
 
 using FluentValidation;
 using Takt.Application.Dtos.Identity;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Validators.Identity;
 
@@ -32,8 +31,6 @@ public class TaktUserCompanyDtoValidator : AbstractValidator<TaktUserCompanyDto>
     {
         RuleFor(x => x.UserId)
             .GreaterThan(0).WithMessage("用户ID无效");
-        RuleFor(x => x.IsDefault)
-            .IsInEnum().WithMessage("是否默认登录公司无效");
         RuleFor(x => x.UserName)
             .MaximumLength(200).WithMessage("UserName长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.UserName));
     }

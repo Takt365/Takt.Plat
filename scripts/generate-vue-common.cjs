@@ -1,6 +1,6 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：frontend/scripts
+// 命名空间：scripts
 // 文件名称：generate-vue-common.cjs
 // 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
@@ -9,6 +9,8 @@
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
+
+// @ts-nocheck
 
 const fs = require('fs');
 const path = require('path');
@@ -21,6 +23,11 @@ const {
   parseSingleEntityGenerateArgsFromArgv,
   entityClassToSlug,
   buildEntityI18nKey,
+  stripModulePrefixFromEntityKebab,
+  resolveFrontendModuleFileName,
+  resolveViewModulePath,
+  resolveFrontendOutputRelPath,
+  isModuleLeafSameAsEntityKebab,
 } = require('./generate-script-common.cjs');
 const {
   shouldExcludeDtoSourceBase,
@@ -45,6 +52,17 @@ const CONFIG = {
   viewsDir: 'src/views',
 };
 
+/** 生成表单 a-input 默认最大长度（与 user-form 短文本字段一致） */
+const DEFAULT_A_INPUT_MAX_LENGTH = 20;
+
+/** 备注 / 扩展字段 JSON textarea 固定 UI（全模块一致） */
+const REMARK_TEXTAREA_ROWS = 4;
+const REMARK_TEXTAREA_MAX_LENGTH = 400;
+/** extField（前端 camelCase，对应后端 ExtField）标签 tooltip 与输入占位 */
+const EXT_FIELD_FORM_NAME = 'extField';
+const EXT_FIELD_HINT_I18N_KEY = 'common.page.entity.extfieldhint';
+const EXT_FIELD_PLACEHOLDER_I18N_KEY = 'common.page.form.placeholder.extfield';
+
 /**
  * 模板类型中文标签
  * @param {string} templateType
@@ -68,11 +86,30 @@ function pascalToKebab(str) {
 }
 
 /**
+ * 统一模块路径（小写、正斜杠）
+ * @param {string} modulePath
+ * @returns {string}
+ */
+function normalizeModulePath(modulePath) {
+  if (!modulePath) {
+    return '';
+  }
+  return modulePath.replace(/\\/g, '/').toLowerCase();
+}
+
+/**
  * @param {string|null} entityPrefix
  * @returns {string[]}
  */
 function collectApiFiles(entityPrefix) {
   const root = path.join(CONFIG.frontendRoot, CONFIG.apiDir);
+  if (entityPrefix) {
+    const { resolveApiFilePathForEntity } = require('./generate-master-detail-associations.cjs');
+    const resolved = resolveApiFilePathForEntity(entityPrefix);
+    if (resolved) {
+      return [resolved];
+    }
+  }
   /** @type {string[]} */
   const files = [];
   function scan(dir) {
@@ -80,10 +117,19 @@ function collectApiFiles(entityPrefix) {
       const full = path.join(dir, entry.name);
       if (entry.isDirectory()) {
         scan(full);
-      } else if (entry.name.endsWith('.ts') && entry.name !== 'request.ts') {
+      } else if (entry.name.endsWith('.ts')) {
+        const relFromApi = path.relative(root, full).replace(/\\/g, '/');
         if (entityPrefix) {
-          const expected = `${pascalToKebab(entityPrefix)}.ts`;
-          if (entry.name !== expected) {
+          const modulePath = path.dirname(relFromApi);
+          const rawKebab = pascalToKebab(entityPrefix);
+          const shortKebab = resolveFrontendModuleFileName(rawKebab, modulePath);
+          const baseName = entry.name;
+          const dir = path.dirname(full);
+          const canonicalPath = path.join(dir, `${rawKebab}.ts`);
+          if (shortKebab !== rawKebab && baseName === `${shortKebab}.ts` && fs.existsSync(canonicalPath)) {
+            continue;
+          }
+          if (baseName !== `${rawKebab}.ts` && baseName !== `${shortKebab}.ts`) {
             continue;
           }
         }
@@ -162,7 +208,7 @@ const SKIP_LIST_FIELDS = new Set([
   'createdBy',
   'updatedBy',
   'isDeleted',
-  'extFieldJson',
+  'extField',
   'orderNum',
   'sortOrder',
 ]);
@@ -173,6 +219,8 @@ const SKIP_FORM_FIELDS = new Set([
   'createdBy',
   'updatedBy',
   'isDeleted',
+  /** 排序号由后端 ITaktSortOrderGenerator 自动生成；专用 SortDto / 树拖拽改序，不入维护表单 */
+  'sortOrder',
 ]);
 
 /** CreateDto 上下文隔离字段（与 generate-dtos-from-entity 固定字段对齐，表单只读自动注入） */
@@ -188,12 +236,29 @@ const SKIP_QUERY_FIELDS = new Set([
   'KeyWords',
   'tenantCode',
   'companyCode',
+  'sortOrder',
 ]);
 
-const TEXTAREA_NAME_HINTS = ['remark', 'quote', 'description', 'content', 'note', 'greeting', 'address', 'scope'];
+const TEXTAREA_NAME_HINTS = ['remark', 'extfield', 'quote', 'description', 'content', 'note', 'greeting', 'address', 'scope'];
 
-/** 表单 Tabs 分页标准：每 Tab 最多字段数（2 列布局，约 5 行 × 2 列 = 10 项） */
+/** 表单 Tabs 分页标准：每 Tab 最多字段数（满 Tab 时 2 列 × 5 行 = 10 项；不足 10 项时单列） */
 const FORM_TAB_FIELDS_PER_TAB = 10;
+
+/**
+ * 解析表单字段 a-col span：Tab 内 < 10 项时整行单列；满 Tab（≥10）时 textarea 24、其余 12
+ * @param {{ htmlType?: string }} field
+ * @param {number} tabFieldCount 当前 Tab（或扁平表单）内字段数
+ * @returns {number}
+ */
+function resolveFormFieldColSpan(field, tabFieldCount) {
+  if (tabFieldCount < FORM_TAB_FIELDS_PER_TAB) {
+    return 24;
+  }
+  if (field.htmlType === 'textarea') {
+    return 24;
+  }
+  return 12;
+}
 
 /** @type {Map<string, { componentPath: string, permissionPrefix: string }>} */
 const MENU_INDEX = new Map();
@@ -210,19 +275,10 @@ function pascalToCamel(str) {
   return str.charAt(0).toLowerCase() + str.slice(1);
 }
 
-/**
- * PascalCase 转 kebab-case
- * @param {string} str
- * @returns {string}
- */
-function pascalToKebab(str) {
-  return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-}
-
 /** 通用实体字段 → common.page.entity.* 完整翻译键（与 TaktCommonI18nSeedData 对齐） */
 const COMMON_ENTITY_FIELD_T_KEYS = {
   remark: 'common.page.entity.remark',
-  extFieldJson: 'common.page.entity.extfieldjson',
+  extField: 'common.page.entity.extfield',
   tenantCode: 'common.page.entity.tenantcode',
   companyCode: 'common.page.entity.companycode',
   companyDefaultCulture: 'common.page.entity.companydefaultculture',
@@ -231,7 +287,7 @@ const COMMON_ENTITY_FIELD_T_KEYS = {
 };
 
 /**
- * 解析字段完整 i18n 键（remark / extFieldJson 等走 common.page.entity.*，其余走 entity.{slug}.*）
+ * 解析字段完整 i18n 键（remark / extField 等走 common.page.entity.*，其余走 entity.{slug}.*）
  * 与 generate-entity-i18n-seed.cjs / TaktXxxI18nSeedData 键规则一致（slug 全小写 + 末段别名）
  * @param {string} name 属性 camelCase
  * @param {string} entityI18nSlug 实体 slug（全小写，如 itasset）
@@ -264,6 +320,131 @@ function fieldPlaceholderTExpr(field, placeholderKey) {
 }
 
 /**
+ * 高级查询 queryFieldsMeta 单行（*DateStart/*DateEnd、*TimeStart/*TimeEnd 用 common 区间文案 + 实体字段名替换）
+ * @param {{ name: string, i18nKey?: string }} field
+ * @param {string} entityI18nSlug
+ * @returns {string}
+ */
+function buildQueryFieldMetaLine(field, entityI18nSlug) {
+  const rangeMatch = field.name.match(/^(.+?)(Start|End)$/);
+  if (rangeMatch) {
+    const baseName = rangeMatch[1];
+    const baseLower = baseName.toLowerCase();
+    if (baseLower.includes('time') || baseLower.includes('date')) {
+      const baseField = { name: baseName, i18nKey: resolveFieldTranslationKey(baseName, entityI18nSlug) };
+      const commonKey = rangeMatch[2] === 'Start' ? 'common.page.entity.createdatstart' : 'common.page.entity.createdatend';
+      return `  { key: '${field.name}', label: t('${commonKey}').replace(t('common.page.entity.createdat'), ${fieldLabelTExpr(baseField)}) },`;
+    }
+  }
+  return `  { key: '${field.name}', label: ${fieldLabelTExpr(field)} },`;
+}
+
+/**
+ * 是否为 extField 扩展字段（前端字段名，对应后端 ExtField）
+ * @param {{ name?: string }} field
+ * @returns {boolean}
+ */
+function isExtFieldField(field) {
+  return field?.name === EXT_FIELD_FORM_NAME;
+}
+
+/**
+ * extField 输入框 placeholder t() 表达式
+ * @returns {string}
+ */
+function fieldExtFieldPlaceholderTExpr() {
+  return `t('${EXT_FIELD_PLACEHOLDER_I18N_KEY}')`;
+}
+
+/**
+ * span=24 时表单项 label/wrapper（extField 图标+长文案自适应；其余 textarea 4/20）
+ * @param {{ name?: string, htmlType?: string }} field
+ * @param {string} indent
+ * @param {number} colSpan
+ * @returns {string}
+ */
+function renderFormItemLabelColAttrs(field, indent, colSpan, useUnifiedLabelCol = false) {
+  if (useUnifiedLabelCol) {
+    return isExtFieldField(field) ? `\n${indent}  class="takt-form-item-ext-field"` : '';
+  }
+  if (colSpan < 24) {
+    return '';
+  }
+  if (isExtFieldField(field)) {
+    return `\n${indent}  class="takt-form-item-ext-field"\n${indent}  :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"\n${indent}  :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"`;
+  }
+  if (field.htmlType === 'textarea') {
+    return `\n${indent}  :label-col="{ span: 4 }"\n${indent}  :wrapper-col="{ span: 20 }"`;
+  }
+  return '';
+}
+
+/**
+ * 生成 a-form-item 开头（extField 带 RiQuestionLine 标签提示，图标在标签文字前）
+ * @param {{ name: string, i18nKey: string, htmlType?: string }} field
+ * @param {string} [indent]
+ * @param {number} [colSpan]
+ * @param {boolean} [useUnifiedLabelCol]
+ * @returns {string}
+ */
+function renderFormItemOpening(field, indent = '              ', colSpan = 12, useUnifiedLabelCol = false) {
+  const labelColAttrs = renderFormItemLabelColAttrs(field, indent, colSpan, useUnifiedLabelCol);
+  if (isExtFieldField(field)) {
+    return `${indent}<a-form-item
+${indent}  name="${field.name}"${labelColAttrs}
+${indent}>
+${indent}  <template #label>
+${indent}    <span class="takt-form-ext-field-label">
+${indent}      <a-tooltip
+${indent}        :title="t('${EXT_FIELD_HINT_I18N_KEY}')"
+${indent}        placement="top"
+${indent}      >
+${indent}        <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+${indent}      </a-tooltip>
+${indent}      <span>{{ ${fieldLabelTExpr(field)} }}</span>
+${indent}    </span>
+${indent}  </template>`;
+  }
+  return `${indent}<a-form-item
+${indent}  :label="${fieldLabelTExpr(field)}"
+${indent}  name="${field.name}"${labelColAttrs}
+${indent}>`;
+}
+
+/**
+ * 表单 / 高级查询含 extField 时追加 RiQuestionLine 导入
+ * @param {...object[]} fieldLists 字段元数据数组（可传多个列表）
+ * @returns {string}
+ */
+function buildExtFieldIconImportLine(...fieldLists) {
+  const flat = fieldLists.flat();
+  if (!flat.some(isExtFieldField)) {
+    return '';
+  }
+  return "import { RiQuestionLine } from '@remixicon/vue'\n";
+}
+
+/**
+ * 生成 index / 表单共用的 @remixicon/vue 导入行
+ * @param {{ includeActionIcons?: boolean, formFields?: object[], queryFields?: object[] }} [options]
+ * @returns {string}
+ */
+function buildRemixIconImportLine(options = {}) {
+  const { includeActionIcons = false, formFields = [], queryFields = [] } = options;
+  const icons = [];
+  if (includeActionIcons) {
+    icons.push('RiEditLine', 'RiDeleteBinLine');
+  }
+  if ([...formFields, ...queryFields].some(isExtFieldField)) {
+    icons.push('RiQuestionLine');
+  }
+  if (!icons.length) {
+    return '';
+  }
+  return `import { ${[...new Set(icons)].join(', ')} } from '@remixicon/vue'\n`;
+}
+
+/**
  * 隔离字段在表单中是否只读（Tenant / Company 实体本身可编辑）
  * @param {string} entityPascal
  * @param {string} fieldName
@@ -277,6 +458,39 @@ function isScopeFieldReadOnly(entityPascal, fieldName) {
     return false;
   }
   return !SCOPE_FIELD_EDITABLE_ENTITIES.has(entityPascal);
+}
+
+/**
+ * 业务编码字段：camelCase 以 Code 结尾（编辑态 disabled，新增可编辑）
+ * @param {string} fieldName
+ * @returns {boolean}
+ */
+function isBusinessCodeFormFieldName(fieldName) {
+  if (!fieldName || fieldName.length <= 4 || !fieldName.endsWith('Code')) {
+    return false;
+  }
+  return !BUSINESS_CODE_EDIT_LOCK_SKIP_NAMES.has(fieldName);
+}
+
+/**
+ * 表单 *Code 字段：编辑态 disabled，新增不禁用（已 readOnly 的隔离字段不重复处理）
+ * @param {{ name: string, readOnly?: boolean }} field
+ * @param {string} indent
+ * @param {{ entityIdField?: string, formDataExpr?: string, rowIdField?: string, rowRecordExpr?: string }} [opts]
+ * @returns {string}
+ */
+function renderFormCodeEditDisabledAttrs(field, indent, opts = {}) {
+  if (field.readOnly || !isBusinessCodeFormFieldName(field.name)) {
+    return '';
+  }
+  const formDataExpr = opts.formDataExpr ?? 'formData';
+  if (opts.rowIdField && opts.rowRecordExpr) {
+    return `\n${indent}  :disabled="!!${opts.rowRecordExpr}.${opts.rowIdField}"`;
+  }
+  if (opts.entityIdField) {
+    return `\n${indent}  :disabled="!!${formDataExpr}?.${opts.entityIdField}"`;
+  }
+  return '';
 }
 
 /**
@@ -308,7 +522,7 @@ function buildScopeFormFields(createProperties, entityPascal) {
 }
 
 /**
- * 表单控件只读/disabled 属性（隔离字段展示当前租户/公司）
+ * 表单控件 disabled 属性（隔离字段展示当前租户/公司；禁止 HTML readonly，与 user-form 对齐）
  * @param {{ readOnly?: boolean, htmlType?: string }} field
  * @param {string} indent
  * @returns {string}
@@ -317,10 +531,7 @@ function renderReadOnlyControlAttrs(field, indent) {
   if (!field.readOnly) {
     return '';
   }
-  if (field.htmlType === 'switch' || field.htmlType === 'select' || field.htmlType === 'date') {
-    return `\n${indent}  disabled`;
-  }
-  return `\n${indent}  readonly`;
+  return `\n${indent}  disabled`;
 }
 
 /**
@@ -354,6 +565,130 @@ function buildFormContentClassComputedExpr() {
 }
 
 /**
+ * 单表 CRUD 是否使用 a-tabs 包裹（多 Tab 或主子表须保留）
+ * @param {number} tabCount
+ * @param {boolean} hasMasterDetail
+ * @param {boolean} hasExtraTabPanes
+ * @returns {boolean}
+ */
+function shouldWrapFormInTabs(tabCount, hasMasterDetail, hasExtraTabPanes, forceFormTabs = false) {
+  if (forceFormTabs || hasMasterDetail || hasExtraTabPanes) {
+    return true;
+  }
+  return tabCount > 1;
+}
+
+/** 单列 Tab（字段数 < 10）：整行单列布局 */
+function shouldUseSingleColumnFormLayout(tabFieldCount) {
+  return tabFieldCount < FORM_TAB_FIELDS_PER_TAB;
+}
+
+/**
+ * 生成表单 a-row 块（各 Tab 样式由根 a-form.takt-generated-form 统一）
+ * @param {string} itemsHtml
+ * @param {string} [indent]
+ * @returns {string}
+ */
+function buildFormRowMarkup(itemsHtml, indent = '    ') {
+  const innerIndent = `${indent}  `;
+  return `${innerIndent}<a-row :gutter="24">
+${itemsHtml}
+${innerIndent}</a-row>`;
+}
+
+/**
+ * 生成表单字段 a-col 块
+ * @param {object[]} tabFields
+ * @param {object} formCodeControlOptions
+ * @returns {string}
+ */
+function buildFormFieldColItems(tabFields, formCodeControlOptions = {}) {
+  const tabFieldCount = formCodeControlOptions.colSpanFieldCount ?? tabFields.length;
+  return tabFields.map((f) => {
+    const colSpan = resolveFormFieldColSpan(f, tabFieldCount);
+    const control = renderFormControl(f, 'formState.', '                ', formCodeControlOptions);
+    return `            <a-col :span="${colSpan}">
+${renderFormItemOpening(f, '              ', colSpan, true)}
+${control}
+              </a-form-item>
+            </a-col>`;
+  }).join('\n');
+}
+
+/**
+ * 生成 *-form.vue 主表区模板（单 Tab 无主子表时扁平 a-row，与手工 CRUD 表单对齐）
+ * @param {object} options
+ * @returns {{ useFormTabs: boolean, body: string }}
+ */
+function buildGeneratedFormTemplateBody(options) {
+  const {
+    formFields,
+    formCodeControlOptions,
+    hasMasterDetail,
+    extraTabPanes = '',
+    entityKebab,
+    forceFormTabs = false,
+  } = options;
+  const tabCount = computeFormTabCount(formFields.length);
+  const useFormTabs = shouldWrapFormInTabs(tabCount, hasMasterDetail, Boolean(extraTabPanes), forceFormTabs);
+  if (!useFormTabs) {
+    return {
+      useFormTabs: false,
+      body: buildFormRowMarkup(buildFormFieldColItems(formFields, formCodeControlOptions)),
+    };
+  }
+  const tabs = [];
+  for (let tabIndex = 1; tabIndex <= tabCount; tabIndex += 1) {
+    const start = (tabIndex - 1) * FORM_TAB_FIELDS_PER_TAB;
+    const end = tabIndex * FORM_TAB_FIELDS_PER_TAB;
+    const tabFields = formFields.slice(start, end);
+    const rowBlock = buildFormRowMarkup(buildFormFieldColItems(tabFields, formCodeControlOptions), '        ');
+    const tabLabel = buildFormTabLabelAttr(tabIndex, tabCount);
+    const tabComment = tabIndex === 1 && hasMasterDetail ? '      <!-- 主表 -->\n' : '';
+    tabs.push(`${tabComment}      <a-tab-pane
+        key="tab-${tabIndex - 1}"
+        ${tabLabel}
+        force-render
+      >
+        <div :class="formContentClass">
+${rowBlock}
+        </div>
+      </a-tab-pane>`);
+  }
+  const extraTabs = extraTabPanes ? `\n${extraTabPanes}` : '';
+  return {
+    useFormTabs: true,
+    body: `    <a-tabs
+      v-model:active-key="activeTab"
+      class="${entityKebab}-form-tabs"
+    >
+${tabs.join('\n')}${extraTabs}
+    </a-tabs>`,
+  };
+}
+
+/**
+ * 表单使用 a-tabs 时的 scoped 样式块
+ * @param {boolean} useFormTabs
+ * @returns {string}
+ */
+function buildFormTabsScopedStyleBlock(useFormTabs) {
+  if (!useFormTabs) {
+    return '';
+  }
+  return `
+<style scoped lang="css">
+:deep(.ant-tabs-content-holder) {
+  min-height: 50vh;
+}
+
+:deep(.ant-tabs-tabpane) {
+  min-height: 50vh;
+}
+</style>`;
+}
+
+/**
  * 扫描菜单种子，建立 entityKebab → ComponentPath / Permission 索引
  */
 function buildMenuIndex() {
@@ -363,16 +698,21 @@ function buildMenuIndex() {
     return;
   }
   const files = fs.readdirSync(seedsDir).filter((f) => f.startsWith('TaktMenu') && f.endsWith('.cs'));
-  const componentRe = /ComponentPath\s*=\s*"([^"]+)"/g;
-  const permissionRe = /Permission\s*=\s*"([^"]+)"/g;
+  const componentRe = /menu\.ComponentPath\s*=\s*"([^"]+)"/g;
+  const permissionInBlockRe = /menu\.Permission\s*=\s*"([^"]+)"/g;
   files.forEach((file) => {
     const content = fs.readFileSync(path.join(seedsDir, file), 'utf-8');
-    const components = [...content.matchAll(componentRe)].map((m) => m[1]);
-    const permissions = [...content.matchAll(permissionRe)].map((m) => m[1]);
-    components.forEach((componentPath, idx) => {
+    [...content.matchAll(componentRe)].forEach((match) => {
+      const componentPath = match[1];
       if (!componentPath || !componentPath.endsWith('/index')) {
         return;
       }
+      const blockStart = Math.max(0, match.index - 1200);
+      const blockBefore = content.slice(blockStart, match.index);
+      const permissionMatches = [...blockBefore.matchAll(permissionInBlockRe)];
+      const perm = permissionMatches.length
+        ? permissionMatches[permissionMatches.length - 1][1]
+        : '';
       const segments = componentPath.split('/');
       const entityKebab = segments[segments.length - 1] === 'index'
         ? segments[segments.length - 2]
@@ -380,10 +720,14 @@ function buildMenuIndex() {
       if (!entityKebab) {
         return;
       }
-      const perm = permissions[idx] || permissions.find((p) => p.endsWith(`:${entityKebab}:list`));
-      const permissionPrefix = perm ? perm.replace(/:list$/, '') : '';
+      const permissionPrefix = perm.endsWith(':list') ? perm.replace(/:list$/, '') : '';
       const viewModulePath = componentPath.replace(/\/index$/, '');
-      MENU_INDEX.set(entityKebab, { componentPath: viewModulePath, permissionPrefix });
+      const entry = { componentPath: viewModulePath, permissionPrefix };
+      MENU_INDEX.set(viewModulePath, entry);
+      const existingByKebab = MENU_INDEX.get(entityKebab);
+      if (!existingByKebab || existingByKebab.componentPath === viewModulePath) {
+        MENU_INDEX.set(entityKebab, entry);
+      }
     });
   });
 }
@@ -421,6 +765,27 @@ function resolvePermissionPrefixFromController(entityShort) {
   return found;
 }
 
+/** 非主实体 interface 后缀（types 文件内） */
+const MAIN_ENTITY_SKIP_SUFFIXES = [
+  'Query', 'Create', 'Update', 'Template', 'Import', 'Export', 'Status', 'Sort', 'Tree',
+  'Transposed', 'TransposedQuery', 'TransposedResult', 'TransposedBatch',
+];
+
+/**
+ * 从 types 文件解析主实体 PascalCase 名（文件名去重后可能与类型名不一致）
+ * @param {ReturnType<typeof parseTypeInterfaces>} interfaces
+ * @returns {string|null}
+ */
+function resolveMainEntityPascalFromTypes(interfaces) {
+  for (const name of interfaces.keys()) {
+    if (MAIN_ENTITY_SKIP_SUFFIXES.some((suffix) => name.endsWith(suffix))) {
+      continue;
+    }
+    return name;
+  }
+  return null;
+}
+
 /**
  * 解析 .d.ts 中的 export interface
  * @param {string} content
@@ -428,7 +793,7 @@ function resolvePermissionPrefixFromController(entityShort) {
  */
 function parseTypeInterfaces(content) {
   /** @type {Map<string, { name: string, properties: Array<{ name: string, type: string, optional: boolean, doc: string }> }>} */
-  const interfaces = new Map();
+  const ifaceMap = new Map();
   const chunks = content.split(/export interface /);
   chunks.slice(1).forEach((chunk) => {
     const nameMatch = chunk.match(/^(\w+)/);
@@ -453,9 +818,9 @@ function parseTypeInterfaces(content) {
         doc: m[1].replace(/^\s*\*\s?/gm, '').replace(/\s+/g, ' ').trim(),
       });
     }
-    interfaces.set(name, { name, properties });
+    ifaceMap.set(name, { name, properties });
   });
-  return interfaces;
+  return ifaceMap;
 }
 
 /**
@@ -478,8 +843,20 @@ function isDtoFillField(doc) {
   return /填充字段/.test(doc || '');
 }
 
-/** sys_normal_disable：注释含「1=启用…0=禁用」的通用状态字段 */
-const COMMON_STATUS_DICT_TYPE = 'sys_normal_disable';
+/** sys_normal_disable_status：注释含「1=启用…0=禁用」的通用状态字段 */
+const COMMON_STATUS_DICT_TYPE = 'sys_normal_disable_status';
+
+/** sys_yes_no_type：是否/内置等 */
+const YES_NO_DICT_TYPE = 'sys_yes_no_type';
+
+/** 编辑态不锁定：隔离字段 / 外键引用编码（非本实体业务主码） */
+const BUSINESS_CODE_EDIT_LOCK_SKIP_NAMES = new Set([
+  'tenantCode',
+  'companyCode',
+  'companyDefaultCulture',
+  'departmentCode',
+  'parentCode',
+]);
 
 /**
  * 是否为启用/禁用通用状态（对齐 TaktCommonStatus）
@@ -491,6 +868,83 @@ function isCommonEnableDisableStatus(doc) {
     return false;
   }
   return /1\s*=\s*启用/.test(doc) && /0\s*=\s*禁用/.test(doc);
+}
+
+/**
+ * 是否为通用启用/禁用状态列（列表用 a-switch）
+ * @param {{ name?: string, doc?: string, dictType?: string }} field
+ * @returns {boolean}
+ */
+function isNormalDisableStatusField(field) {
+  const dictType = field.dictType || resolveDictType(field);
+  return dictType === COMMON_STATUS_DICT_TYPE || isCommonEnableDisableStatus(field.doc);
+}
+
+/**
+ * 是否为内置 sys_yes_no_type 列（列表用 a-switch）
+ * @param {{ name?: string, doc?: string, dictType?: string }} field
+ * @returns {boolean}
+ */
+function isBuiltinYesNoField(field) {
+  const name = field.name || '';
+  const doc = field.doc || '';
+  if (/^isBuiltIn$/i.test(name)) {
+    return true;
+  }
+  const dictType = field.dictType || resolveDictType(field);
+  if (dictType !== YES_NO_DICT_TYPE) {
+    return false;
+  }
+  return /builtin|built_in|isbuiltin/i.test(name) || /内置/.test(doc);
+}
+
+/**
+ * 列表列是否应渲染为 a-switch（状态 / 内置）；仅 index 表格，表单仍用 TaktSelect
+ * @param {{ name?: string, doc?: string, dictType?: string }} field
+ * @returns {boolean}
+ */
+function isListSwitchField(field) {
+  return isNormalDisableStatusField(field) || isBuiltinYesNoField(field);
+}
+
+/**
+ * 解析启用态对应字典值（默认 1=启用）
+ * @param {{ doc?: string, dictType?: string }} field
+ * @returns {number}
+ */
+function resolveEnableCheckedValue(field) {
+  if (field.doc && /0\s*=\s*启用/.test(field.doc) && /1\s*=\s*禁用/.test(field.doc)) {
+    return 0;
+  }
+  return 1;
+}
+
+/**
+ * 附加列表开关列元数据
+ * @param {{ name: string, doc?: string, dictType?: string, htmlType?: string }} field
+ */
+function attachListSwitchMeta(field) {
+  if (!isListSwitchField(field)) {
+    return field;
+  }
+  const isBuiltin = isBuiltinYesNoField(field);
+  const checked = isBuiltin ? 1 : resolveEnableCheckedValue(field);
+  return {
+    ...field,
+    isListSwitch: true,
+    switchKind: isBuiltin ? 'builtin' : 'status',
+    switchCheckedValue: checked,
+    switchUncheckedValue: checked === 1 ? 0 : 1,
+  };
+}
+
+/**
+ * 字段名转处理器后缀（status → Status）
+ * @param {string} name
+ * @returns {string}
+ */
+function fieldNameToHandlerSuffix(name) {
+  return name ? name.charAt(0).toUpperCase() + name.slice(1) : '';
 }
 
 /**
@@ -506,32 +960,96 @@ function resolveDictType(field) {
   if (isCommonEnableDisableStatus(field.doc)) {
     return COMMON_STATUS_DICT_TYPE;
   }
+  if (field.doc && /内置/.test(field.doc) && /1\s*=\s*是/.test(field.doc)) {
+    return YES_NO_DICT_TYPE;
+  }
+  if (/^isBuiltIn$/i.test(field.name || '')) {
+    return YES_NO_DICT_TYPE;
+  }
   return '';
 }
 
 /**
+ * 是否为 DateTime/DateOnly 业务字段（types 为 string，须结合实体列或命名/注释推断）
+ * @param {{ name?: string, doc?: string, isDateTime?: boolean }} field
+ * @returns {boolean}
+ */
+function isDateTimeField(field) {
+  if (field.isDateTime) {
+    return true;
+  }
+  const name = String(field.name || '');
+  const lower = name.toLowerCase();
+  const doc = String(field.doc || '');
+  if (/^(validfrom|validto)$/.test(lower)) {
+    return true;
+  }
+  if (/date/i.test(name)) {
+    return true;
+  }
+  if (/Start$/.test(name) || /End$/.test(name)) {
+    if (/date|time|validfrom|validto|createdat|updatedat/i.test(lower)) {
+      return true;
+    }
+  }
+  if (/^(created|updated|deleted|approved|published|submitted|completed|closed|opened)at$/i.test(name)) {
+    return true;
+  }
+  if (/日期|datetime|dateonly|生效日期|失效日期|年月日/.test(doc.toLowerCase())) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * 表单/查询 DatePicker 是否带时分秒（审计时间等；业务生效/失效日期仅选日）
+ * @param {{ name?: string }} field
+ * @returns {boolean}
+ */
+function shouldDatePickerShowTime(field) {
+  const name = String(field.name || '');
+  const lower = name.toLowerCase();
+  if (/createdat|updatedat|deletedat/.test(lower)) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * DatePicker value-format 与 show-time 属性片段
+ * @param {{ name?: string }} field
+ * @param {string} indent
+ * @returns {{ valueFormat: string, showTimeAttr: string }}
+ */
+function resolveDatePickerTemplateAttrs(field, indent = '                ') {
+  const showTime = shouldDatePickerShowTime(field);
+  return {
+    valueFormat: showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD',
+    showTimeAttr: showTime ? `\n${indent}  show-time` : '',
+  };
+}
+
+/**
  * 推断表单控件类型
- * @param {{ name: string, type: string, doc: string }} field
+ * @param {{ name: string, type: string, doc: string, isDateTime?: boolean }} field
  * @returns {'select'|'textarea'|'date'|'switch'|'input'}
  */
 function inferHtmlType(field) {
-  const dict = resolveDictType(field);
+  const dict = field.dictType || resolveDictType(field);
   if (dict) {
     return 'select';
   }
   if (field.type === 'boolean') {
     return 'switch';
   }
-  const lower = field.name.toLowerCase();
-  if (/Start$/.test(field.name) || /End$/.test(field.name)) {
-    if (/date|time|validfrom|validto|createdat|updatedat/i.test(lower)) {
-      return 'date';
-    }
-  }
-  if (lower.includes('date') && field.type === 'string') {
+  if (isDateTimeField(field)) {
     return 'date';
   }
-  if (TEXTAREA_NAME_HINTS.some((hint) => lower.includes(hint))) {
+  if (/time$/i.test(field.name) && field.type === 'string' && !/Start$|End$/.test(field.name)) {
+    return 'date';
+  }
+  const lower = field.name.toLowerCase();
+  if (TEXTAREA_NAME_HINTS.some((hint) => lower.includes(hint.toLowerCase()))) {
     return 'textarea';
   }
   if (field.type === 'number') {
@@ -579,6 +1097,8 @@ function detectApiCapabilities(entityPascal, methods) {
     hasGetTemplate: Boolean(pick(`get${entityPascal}Template`)),
     hasImport: Boolean(pick(`import${entityPascal}`, `import${entityPascal}Data`)),
     hasExport: Boolean(pick(`export${entityPascal}`, `export${entityPascal}Data`)),
+    hasUpdateStatus: Boolean(pick(`update${entityPascal}Status`)),
+    hasUpdateBuiltIn: Boolean(pick(`update${entityPascal}BuiltIn`)),
     apiGetList: pick(`get${entityPascal}List`),
     apiCreate: pick(`create${entityPascal}`),
     apiUpdate: pick(`update${entityPascal}`),
@@ -587,6 +1107,8 @@ function detectApiCapabilities(entityPascal, methods) {
     apiGetTemplate: pick(`get${entityPascal}Template`),
     apiImport: pick(`import${entityPascal}`, `import${entityPascal}Data`),
     apiExport: pick(`export${entityPascal}`, `export${entityPascal}Data`),
+    apiUpdateStatus: pick(`update${entityPascal}Status`),
+    apiUpdateBuiltIn: pick(`update${entityPascal}BuiltIn`),
     entityIdName: `${camel}Id`,
     entityClassName: `Takt${entityPascal}`,
   };
@@ -697,7 +1219,7 @@ function parseOneToManyNavigations(entityFile) {
  * @param {string} childPascal
  */
 function resolveChildTypesFilePath(modulePath, childPascal) {
-  const childKebab = pascalToKebab(childPascal);
+  const childKebab = resolveFrontendModuleFileName(pascalToKebab(childPascal), modulePath);
   return path.join(CONFIG.frontendRoot, CONFIG.typesDir, modulePath, `${childKebab}.d.ts`);
 }
 
@@ -716,9 +1238,11 @@ function childTypesFileExists(modulePath, childPascal) {
  * @param {string} childPascal
  * @param {string} [childTypeOverride]
  */
-function buildMasterDetailChildMeta(fieldName, childPascal, childTypeOverride) {
+function buildMasterDetailChildMeta(fieldName, childPascal, childTypeOverride, modulePath = '') {
+  const { resolveChildEntityFrontendKebab } = require('./generate-master-detail-associations.cjs');
   const childCamel = pascalToCamel(childPascal);
   const childType = childTypeOverride || childPascal;
+  const childKebab = resolveChildEntityFrontendKebab(childPascal, normalizeModulePath(modulePath));
   return {
     fieldName,
     childPascal,
@@ -726,7 +1250,7 @@ function buildMasterDetailChildMeta(fieldName, childPascal, childTypeOverride) {
     childType,
     childCamel,
     childI18nSlug: entityClassToSlug(`Takt${childPascal}`),
-    childKebab: pascalToKebab(childPascal),
+    childKebab,
     childIdField: `${childCamel}Id`,
   };
 }
@@ -773,7 +1297,7 @@ function detectMasterDetailChildren(interfaces, entityPascal, modulePath = '') {
     if (!isChildEntity && !docHint) {
       return;
     }
-    children.push(buildMasterDetailChildMeta(prop.name, childPascal, entityElement || childPascal));
+    children.push(buildMasterDetailChildMeta(prop.name, childPascal, entityElement || childPascal, modulePath));
   });
   return children;
 }
@@ -795,7 +1319,7 @@ function detectMasterDetailChildrenFromEntity(entityPascal, modulePath = '', int
     .map((nav) => {
       const typesChild = fromTypes.find((c) => c.childPascal === nav.childShort);
       const fieldName = typesChild?.fieldName || pascalToCamel(nav.navPropName);
-      return buildMasterDetailChildMeta(fieldName, nav.childShort, typesChild?.childType);
+      return buildMasterDetailChildMeta(fieldName, nav.childShort, typesChild?.childType, modulePath);
     });
 }
 
@@ -814,19 +1338,233 @@ function resolveMasterDetailChildren(interfaces, entityPascal, modulePath) {
 }
 
 /**
+ * 主子表关联视图目录：与主表 view 平级，落在同一 module 目录下（如 logistics/maintenance/work-order）
+ * @param {string} masterViewModulePath 主表 views 路径（如 logistics/maintenance/equipment）
+ * @param {{ viewChildKebab?: string, childKebab?: string }} child
+ * @param {string} [modulePath] API/types 模块目录（如 logistics/maintenance）
+ * @returns {string}
+ */
+function resolveMasterDetailChildViewModulePath(masterViewModulePath, child, modulePath = '') {
+  const segment = child.viewChildKebab || child.childKebab;
+  if (!segment) {
+    throw new Error('[generate-vue] 子表缺少 viewChildKebab / childKebab，无法拆分主子视图');
+  }
+  const parentDir = normalizeModulePath(modulePath)
+    || normalizeModulePath(path.dirname(masterViewModulePath));
+  if (!parentDir || parentDir === '.') {
+    return segment;
+  }
+  return `${parentDir}/${segment}`;
+}
+
+/**
+ * 子表 view 目录（module + viewChildKebab，与菜单 ComponentPath 末段对齐）
+ * @param {object} child
+ * @param {string} modulePath
+ * @returns {string}
+ */
+function resolveChildMenuViewPath(child, modulePath) {
+  const normalized = normalizeModulePath(modulePath);
+  if (!normalized) {
+    return '';
+  }
+  const childKebab = child.viewChildKebab || child.childKebab;
+  if (!childKebab) {
+    return '';
+  }
+  const viewEntityKebab = stripModulePrefixFromEntityKebab(childKebab, normalized);
+  return `${normalized}/${viewEntityKebab}`;
+}
+
+/**
+ * 子实体是否已有独立实体菜单页（菜单存在且该实体可独立生成主视图，见 shouldExcludeVueGeneration）
+ * @param {object} child
+ * @param {string} modulePath
+ * @returns {boolean}
+ */
+function childHasStandaloneMenu(child, modulePath) {
+  const childKebab = child.viewChildKebab || child.childKebab;
+  const menuByKebab = childKebab ? MENU_INDEX.get(childKebab) : null;
+  if (menuByKebab?.componentPath) {
+    return !shouldExcludeVueGeneration('', child.childPascal);
+  }
+  const menuPath = resolveChildMenuViewPath(child, modulePath);
+  if (!menuPath || !MENU_INDEX.has(menuPath)) {
+    return false;
+  }
+  return !shouldExcludeVueGeneration('', child.childPascal);
+}
+
+/**
+ * 过滤已有独立实体菜单的子表（不计入主表主子视图规划）
+ * @param {object[]} masterDetailChildren
+ * @param {string} modulePath
+ * @returns {object[]}
+ */
+function filterStandaloneMenuChildren(masterDetailChildren, modulePath) {
+  return (masterDetailChildren || []).filter((child) => !childHasStandaloneMenu(child, modulePath));
+}
+
+/**
+ * 按菜单 ComponentPath 规划主子视图（导航数 = 视图目录数，无额外单表目录）
+ * - 主菜单 viewModulePath：绑定「尚无独立 ComponentPath 菜单」的首个子表（OneToMany 顺序）
+ * - 其余菜单：ComponentPath 与子表 viewChildKebab 路径一致则各生成 1 个主子视图
+ * @param {string} masterViewModulePath
+ * @param {string} modulePath
+ * @param {object[]} masterDetailChildren
+ * @returns {Array<{ viewModulePath: string, childMeta: object }>}
+ */
+function resolveMasterDetailViewPlans(masterViewModulePath, modulePath, masterDetailChildren) {
+  const eligibleChildren = filterStandaloneMenuChildren(masterDetailChildren, modulePath);
+  if (!eligibleChildren.length) {
+    return [];
+  }
+  /** @type {Array<{ viewModulePath: string, childMeta: object }>} */
+  const plans = [];
+  const reservedPaths = new Set();
+  eligibleChildren.forEach((child) => {
+    const childViewPath = resolveChildMenuViewPath(child, modulePath);
+    if (!childViewPath || childViewPath === masterViewModulePath) {
+      return;
+    }
+    if (MENU_INDEX.has(childViewPath)) {
+      plans.push({ viewModulePath: childViewPath, childMeta: child });
+      reservedPaths.add(childViewPath);
+      return;
+    }
+    console.log(
+      `  ⏭️  跳过子导航视图（无菜单 ComponentPath=${childViewPath}/index）: Takt${child.childPascal}`,
+    );
+  });
+  const defaultChild = eligibleChildren.find(
+    (child) => !isChangeLogEntity(child.childPascal) && !MENU_INDEX.has(resolveChildMenuViewPath(child, modulePath)),
+  ) || eligibleChildren.find((child) => !isChangeLogEntity(child.childPascal))
+  || eligibleChildren.find((child) => !MENU_INDEX.has(resolveChildMenuViewPath(child, modulePath)))
+  || eligibleChildren[0];
+  const skipMainMasterPlan = defaultChild
+    && isChangeLogEntity(defaultChild.childPascal)
+    && MENU_INDEX.has(resolveChildMenuViewPath(defaultChild, modulePath));
+  if (masterViewModulePath && !skipMainMasterPlan) {
+    plans.unshift({ viewModulePath: masterViewModulePath, childMeta: defaultChild });
+  }
+  return plans.filter((plan, index, arr) => arr.findIndex(
+    (item) => item.viewModulePath === plan.viewModulePath,
+  ) === index);
+}
+
+/**
+ * 主实体仅有 ChangeLog 子表且变更页已有独立菜单：主菜单走单表/树表 CRUD，变更页单独主子视图
+ * @param {object} bundle loadVueModuleContext 返回值
+ * @returns {boolean}
+ */
+function isChangeLogOnlySeparateMenuMaster(bundle) {
+  if (!bundle.isMasterDetailEntity || bundle.isTreeEntity) {
+    return false;
+  }
+  const { viewModulePath, modulePath, fields } = bundle.fullCtx;
+  const children = fields.masterDetailChildren || [];
+  if (!children.length) {
+    return false;
+  }
+  const plans = resolveMasterDetailViewPlans(viewModulePath, modulePath, children);
+  if (plans.some((plan) => plan.viewModulePath === viewModulePath)) {
+    return false;
+  }
+  const standaloneChildren = filterStandaloneMenuChildren(children, modulePath);
+  return standaloneChildren.length > 0
+    && standaloneChildren.every((child) => isChangeLogEntity(child.childPascal));
+}
+
+/**
+ * 解析某一子实体应对应的 views 目录（与 resolveMasterDetailViewPlans 一致）
+ * @param {string} masterViewModulePath
+ * @param {string} modulePath
+ * @param {object[]} masterDetailChildren
+ * @param {object} childMeta
+ * @returns {string}
+ */
+function resolveMasterDetailChildViewPath(masterViewModulePath, modulePath, masterDetailChildren, childMeta) {
+  const plans = resolveMasterDetailViewPlans(masterViewModulePath, modulePath, masterDetailChildren);
+  const hit = plans.find((plan) => plan.childMeta.childPascal === childMeta.childPascal);
+  if (hit) {
+    return hit.viewModulePath;
+  }
+  return resolveMasterDetailChildViewModulePath(masterViewModulePath, childMeta, modulePath);
+}
+
+/**
+ * 校验 Domain OneToMany 导航数量与已解析子表一致（以实体导航为权威）
+ * @param {string} entityPascal
+ * @param {string} modulePath
+ * @param {object[]} children
+ * @param {ReturnType<typeof parseTypeInterfaces>} [interfaces]
+ */
+function validateMasterDetailChildrenAlignment(entityPascal, modulePath, children, interfaces = new Map()) {
+  const entityFile = findDomainEntityFile(entityPascal, CONFIG.backendRoot);
+  if (!entityFile) {
+    return;
+  }
+  const navs = parseOneToManyNavigations(entityFile).filter(
+    (nav) => !RBAC_ASSOCIATION_ENTITY_SHORT_NAMES.has(nav.childShort),
+  );
+  if (!navs.length) {
+    return;
+  }
+  const navChildSet = new Set(navs.map((nav) => nav.childShort));
+  const childSet = new Set((children || []).map((c) => c.childPascal));
+  if (navs.length !== (children || []).length) {
+    console.warn(
+      `⚠️  实体 Takt${entityPascal} OneToMany 导航 ${navs.length} 个（${[...navChildSet].join(', ')}），` +
+      `已解析子表 ${(children || []).length} 个（${[...childSet].join(', ') || '无'}）`,
+    );
+  }
+  navs.forEach((nav) => {
+    if (!childSet.has(nav.childShort)) {
+      console.warn(`⚠️  缺少子表元数据: ${nav.navPropName} → Takt${nav.childShort}（types/Create DTO 未对齐）`);
+    }
+  });
+  (children || []).forEach((child) => {
+    if (!navChildSet.has(child.childPascal)) {
+      console.warn(`⚠️  子表 Takt${child.childPascal} 无对应实体 OneToMany 导航（${child.fieldName}）`);
+    }
+  });
+  const { validateMasterDetailChildrenManyToOnePairs } = require('./generate-master-detail-associations.cjs');
+  validateMasterDetailChildrenManyToOnePairs(entityPascal, children);
+}
+
+/**
+ * 复制 fields 并替换 masterDetailChildren
+ * @param {object} fields
+ * @param {object[]} masterDetailChildren
+ * @returns {object}
+ */
+function cloneFieldMetaWithMasterDetailChildren(fields, masterDetailChildren) {
+  return { ...fields, masterDetailChildren };
+}
+
+/**
  * 子表 Query 中指向主表的外键字段（默认 {masterCamel}Id）
  * @param {ReturnType<typeof parseTypeInterfaces>} interfaces
  * @param {string} childPascal
  * @param {string} masterCamel
  */
 function resolveChildMasterFkField(interfaces, childPascal, masterCamel) {
+  const create = interfaces.get(`${childPascal}Create`);
   const query = interfaces.get(`${childPascal}Query`);
+  const pickMasterFkFromDoc = (properties) => {
+    const hit = (properties || []).find((p) => /主子表关系/.test(p.doc || ''));
+    return hit?.name || '';
+  };
+  const docFk = pickMasterFkFromDoc(create?.properties) || pickMasterFkFromDoc(query?.properties);
+  if (docFk) {
+    return docFk;
+  }
   const fkId = `${masterCamel}Id`;
-  if (query?.properties.some((p) => p.name === fkId)) {
+  if (query?.properties.some((p) => p.name === fkId) || create?.properties.some((p) => p.name === fkId)) {
     return fkId;
   }
   const fkCode = `${masterCamel}Code`;
-  if (query?.properties.some((p) => p.name === fkCode)) {
+  if (query?.properties.some((p) => p.name === fkCode) || create?.properties.some((p) => p.name === fkCode)) {
     return fkCode;
   }
   return fkId;
@@ -898,7 +1636,7 @@ function collectDomainEntityFiles(rootDir = path.join(CONFIG.backendRoot, 'Takt.
 }
 
 /**
- * 扫描全部 types + Domain 实体，建立「从实体 → 主实体」映射（OneToMany 子表不单独生成 Vue）
+ * 扫描全部 types + Domain 实体，建立「从实体 → 主实体」映射（从实体默认不单独生成单表 Vue；关联主子视图落在 module 平级目录）
  * @returns {Map<string, { masterPascal: string, fieldName: string }>}
  */
 function buildMasterDetailChildRegistry() {
@@ -925,13 +1663,13 @@ function buildMasterDetailChildRegistry() {
     const relTypes = path.relative(path.join(CONFIG.frontendRoot, CONFIG.typesDir), typesFile).replace(/\\/g, '/');
     const modulePath = path.dirname(relTypes);
     const entityKebab = path.basename(typesFile, '.d.ts');
-    const entityPascal = kebabToPascal(entityKebab);
     const content = fs.readFileSync(typesFile, 'utf-8');
-    const interfaces = parseTypeInterfaces(content);
-    if (!interfaces.has(entityPascal)) {
+    const ifaceMap = parseTypeInterfaces(content);
+    const entityPascal = resolveMainEntityPascalFromTypes(ifaceMap) || kebabToPascal(entityKebab);
+    if (!ifaceMap.has(entityPascal)) {
       continue;
     }
-    resolveMasterDetailChildren(interfaces, entityPascal, modulePath === '.' ? '' : modulePath).forEach((child) => {
+    resolveMasterDetailChildren(ifaceMap, entityPascal, modulePath === '.' ? '' : modulePath).forEach((child) => {
       if (!registry.has(child.childPascal)) {
         registry.set(child.childPascal, {
           masterPascal: entityPascal,
@@ -954,7 +1692,8 @@ function buildChildFormFieldProps(interfaces, childPascal, masterCamel) {
   if (!create) {
     return [];
   }
-  const masterFkNames = new Set([`${masterCamel}Id`, `${masterCamel}Code`]);
+  const masterFkField = resolveChildMasterFkField(interfaces, childPascal, masterCamel);
+  const masterFkNames = new Set([`${masterCamel}Id`, `${masterCamel}Code`, masterFkField]);
   const scopeFields = buildScopeFormFields(create.properties || [], childPascal);
   const scopeNames = new Set(scopeFields.map((f) => f.name));
   const rest = (create.properties || []).filter((p) => {
@@ -994,26 +1733,37 @@ function getSkipListFields(entityPascal) {
 
 /**
  * 构建实体字段元数据
- * @param {ReturnType<typeof parseTypeInterfaces>} interfaces
+ * @param {ReturnType<typeof parseTypeInterfaces>} ifaceMap
  * @param {string} entityPascal
- * @param {string} [typesContent]
+ * @param {string} [typesFileContent]
  */
-function buildFieldMeta(interfaces, entityPascal, typesContent = '', modulePath = '') {
+function buildFieldMeta(ifaceMap, entityPascal, typesFileContent = '', modulePath = '') {
+  const normalizedModulePath = normalizeModulePath(modulePath);
   const skipListFields = getSkipListFields(entityPascal);
-  const entityScope = resolveEntityScope(entityPascal, typesContent, CONFIG.backendRoot);
-  const entity = interfaces.get(entityPascal);
-  const create = interfaces.get(`${entityPascal}Create`);
-  const query = interfaces.get(`${entityPascal}Query`);
-  const masterDetailChildren = resolveMasterDetailChildren(interfaces, entityPascal, modulePath);
+  const entityScope = resolveEntityScope(entityPascal, typesFileContent, CONFIG.backendRoot);
+  const entity = ifaceMap.get(entityPascal);
+  const create = ifaceMap.get(`${entityPascal}Create`);
+  const query = ifaceMap.get(`${entityPascal}Query`);
+  const masterDetailChildren = resolveMasterDetailChildren(ifaceMap, entityPascal, normalizedModulePath);
   const childFieldNames = new Set(masterDetailChildren.map((c) => c.fieldName));
   const entityCamel = pascalToCamel(entityPascal);
   const entityI18nSlug = entityClassToSlug(`Takt${entityPascal}`);
-  const enrich = (fields, i18nSlug) => fields.map((f) => ({
-    ...f,
-    htmlType: inferHtmlType(f),
-    dictType: resolveDictType(f),
-    i18nKey: resolveFieldTranslationKey(f.name, i18nSlug),
-  }));
+  const inputMaxLengths = loadEntityInputMaxLengths(entityPascal);
+  const enrich = (fields, i18nSlug, metaEntityPascal = entityPascal) => {
+    const dateTimeFields = loadEntityDateTimeFields(metaEntityPascal);
+    return fields.map((f) => {
+      const dictType = resolveDictType(f);
+      const isDateTime = dateTimeFields.has(f.name);
+      return attachListSwitchMeta({
+        ...f,
+        dictType,
+        isDateTime,
+        htmlType: inferHtmlType({ ...f, dictType, isDateTime }),
+        i18nKey: resolveFieldTranslationKey(f.name, i18nSlug),
+        maxLength: inputMaxLengths.get(f.name) ?? DEFAULT_A_INPUT_MAX_LENGTH,
+      });
+    });
+  };
   const listFields = (entity?.properties || []).filter((p) => {
     if (skipListFields.has(p.name) || childFieldNames.has(p.name)) {
       return false;
@@ -1054,11 +1804,13 @@ function buildFieldMeta(interfaces, entityPascal, typesContent = '', modulePath 
   });
   const queryFields = enrich(queryFieldsRaw, entityI18nSlug);
   const enrichedChildren = masterDetailChildren.map((child) => {
-    const childTypesPath = path.join(CONFIG.frontendRoot, CONFIG.typesDir, modulePath, `${child.childKebab}.d.ts`);
-    const childTypesContent = fs.existsSync(childTypesPath) ? fs.readFileSync(childTypesPath, 'utf-8') : '';
-    const childInterfaces = childTypesContent ? parseTypeInterfaces(childTypesContent) : interfaces;
-    const childFormRaw = buildChildFormFieldProps(childInterfaces, child.childPascal, entityCamel);
-    const childEntity = interfaces.get(child.childType) || childInterfaces.get(child.childType);
+    const { resolveChildEntityFrontendKebab } = require('./generate-master-detail-associations.cjs');
+    const childFileKebab = resolveChildEntityFrontendKebab(child.childPascal, normalizedModulePath);
+    const childDtsFile = path.join(CONFIG.frontendRoot, CONFIG.typesDir, normalizedModulePath, `${childFileKebab}.d.ts`);
+    const childDtsText = fs.existsSync(childDtsFile) ? fs.readFileSync(childDtsFile, 'utf-8') : '';
+    const childIfaceMap = childDtsText ? parseTypeInterfaces(childDtsText) : ifaceMap;
+    const childFormRaw = buildChildFormFieldProps(childIfaceMap, child.childPascal, entityCamel);
+    const childEntity = ifaceMap.get(child.childType) || childIfaceMap.get(child.childType);
     const childListRaw = (childEntity?.properties || []).filter((p) => {
       if (SKIP_LIST_FIELDS.has(p.name)) {
         return false;
@@ -1072,12 +1824,37 @@ function buildFieldMeta(interfaces, entityPascal, typesContent = '', modulePath 
       return true;
     }).slice(0, 8);
     const childI18nSlug = child.childI18nSlug || entityClassToSlug(`Takt${child.childPascal}`);
+    const masterFkField = resolveChildMasterFkField(childIfaceMap, child.childPascal, entityCamel);
+    const masterFkNames = new Set([masterFkField, `${entityCamel}Id`]);
+    const childQuery = childIfaceMap.get(`${child.childPascal}Query`);
+    const childQueryRaw = (childQuery?.properties || []).filter((p) => {
+      if (SKIP_QUERY_FIELDS.has(p.name)) {
+        return false;
+      }
+      if (isDtoFillField(p.doc)) {
+        return false;
+      }
+      if (masterFkNames.has(p.name)) {
+        return false;
+      }
+      return true;
+    });
+    const childApiPath = path.join(CONFIG.frontendRoot, CONFIG.apiDir, normalizedModulePath, `${childFileKebab}.ts`);
+    const childCaps = fs.existsSync(childApiPath)
+      ? detectApiCapabilities(child.childPascal, parseApiFile(fs.readFileSync(childApiPath, 'utf-8')).methods)
+      : detectApiCapabilities(child.childPascal, {});
     return {
       ...child,
-      masterFkField: resolveChildMasterFkField(childInterfaces, child.childPascal, entityCamel),
-      apiGetList: resolveChildListApiMethod(modulePath, child.childKebab, child.childPascal),
-      formFields: enrich(childFormRaw, childI18nSlug),
-      listFields: enrich(childListRaw, childI18nSlug),
+      childKebab: childFileKebab,
+      viewChildKebab: childFileKebab,
+      masterFkField,
+      childI18nSlug,
+      childCaps,
+      childEntityClassName: `Takt${child.childPascal}`,
+      apiGetList: resolveChildListApiMethod(normalizedModulePath, childFileKebab, child.childPascal),
+      formFields: enrich(childFormRaw, childI18nSlug, child.childPascal),
+      listFields: enrich(childListRaw, childI18nSlug, child.childPascal),
+      queryFields: enrich(childQueryRaw, childI18nSlug, child.childPascal),
     };
   });
   return {
@@ -1097,82 +1874,283 @@ function buildFieldMeta(interfaces, entityPascal, typesContent = '', modulePath 
  */
 function resolveModuleContext(apiFilePath, entityShort, overrides) {
   const relApi = path.relative(path.join(CONFIG.frontendRoot, CONFIG.apiDir), apiFilePath).replace(/\\/g, '/');
-  const modulePath = path.dirname(relApi);
-  const entityKebab = path.basename(relApi, '.ts');
-  const entityPascal = kebabToPascal(entityKebab);
-  const menu = MENU_INDEX.get(entityKebab);
+  const relNoExt = normalizeModulePath(relApi.replace(/\.ts$/, ''));
+  const entityKebab = path.basename(relNoExt);
+  const parentModulePath = normalizeModulePath(path.dirname(relNoExt) === '.' ? '' : path.dirname(relNoExt));
+  const entityPascal = entityShort;
+  const canonicalKebab = pascalToKebab(entityPascal);
+  const viewEntityKebab = stripModulePrefixFromEntityKebab(canonicalKebab, relNoExt);
+  const moduleViewPathKey = resolveViewModulePath(parentModulePath, viewEntityKebab);
+  const menu = MENU_INDEX.get(moduleViewPathKey)
+    || MENU_INDEX.get(relNoExt)
+    || MENU_INDEX.get(viewEntityKebab)
+    || MENU_INDEX.get(canonicalKebab)
+    || MENU_INDEX.get(entityKebab);
   const viewModulePath = overrides.viewPath
-    || menu?.componentPath
-    || `${modulePath}/${entityKebab}`;
-  let permissionPrefix = menu?.permissionPrefix || resolvePermissionPrefixFromController(entityShort);
+    || (menu?.componentPath ? menu.componentPath.replace(/\/index$/, '') : '')
+    || moduleViewPathKey;
+  const outputRel = resolveFrontendOutputRelPath(parentModulePath, entityKebab);
+  const modulePath = outputRel.importPath.includes('/')
+    ? outputRel.importPath.split('/').slice(0, -1).join('/')
+    : '';
+  const apiEntityKebab = outputRel.file;
+  let permissionPrefix = resolvePermissionPrefixFromController(entityShort) || menu?.permissionPrefix;
   if (!permissionPrefix) {
-    permissionPrefix = `${modulePath.replace(/\//g, ':')}:${entityKebab}`;
+    permissionPrefix = `${modulePath.replace(/\//g, ':')}:${apiEntityKebab}`;
   }
   const entityCamel = pascalToCamel(entityPascal);
   const entityI18nSlug = entityClassToSlug(`Takt${entityPascal}`);
   return {
     modulePath,
     viewModulePath,
-    entityKebab,
+    entityKebab: apiEntityKebab,
+    viewEntityKebab,
     entityPascal,
     entityCamel,
     entityI18nSlug,
     entitySlug: entityCamel,
     permissionPrefix,
     cssRootClass: viewModulePath.replace(/\//g, '-'),
+    apiImportRel: outputRel.importPath,
   };
 }
 
 /**
- * 生成表单控件模板片段（主子表子行 / 主表共用）
- * @param {{ name: string, htmlType: string, dictType: string, i18nKey: string, optional: boolean }} field
- * @param {string} modelPrefix 如 formState. / record.
+ * 从 SugarColumn 特性解析字符串最大长度
+ * @param {string} blockBeforeProperty
+ * @returns {number | null}
+ */
+function parseSugarColumnMaxLength(blockBeforeProperty) {
+  const matches = [...blockBeforeProperty.matchAll(/\[SugarColumn\(([\s\S]*?)\)\]/g)];
+  if (matches.length === 0) {
+    return null;
+  }
+  const attrs = matches[matches.length - 1][1];
+  const lengthMatch = attrs.match(/Length\s*=\s*(\d+)/);
+  return lengthMatch ? parseInt(lengthMatch[1], 10) : null;
+}
+
+/**
+ * 读取 Domain 实体 DateTime/DateOnly 列（camelCase 字段名集合）
+ * @param {string} entityPascal
+ * @returns {Set<string>}
+ */
+function loadEntityDateTimeFields(entityPascal) {
+  /** @type {Set<string>} */
+  const set = new Set();
+  const entityFile = findDomainEntityFile(entityPascal, CONFIG.backendRoot);
+  if (!entityFile) {
+    return set;
+  }
+  const content = fs.readFileSync(entityFile, 'utf-8');
+  const classOpen = content.search(/public\s+class\s+Takt\w+/);
+  if (classOpen < 0) {
+    return set;
+  }
+  const braceStart = content.indexOf('{', classOpen);
+  if (braceStart < 0) {
+    return set;
+  }
+  let depth = 1;
+  let i = braceStart + 1;
+  while (i < content.length && depth > 0) {
+    if (content[i] === '{') {
+      depth += 1;
+    } else if (content[i] === '}') {
+      depth -= 1;
+    }
+    i += 1;
+  }
+  const classBody = content.slice(braceStart + 1, i - 1);
+  const propertyRegex =
+    /\/\/\/\s*<summary>([\s\S]*?)<\/summary>(?:[\s\S]*?)?([\w.?[\]]+)\s+(\w+)\s*\{[\s\S]*?get;\s*set;/g;
+  let match;
+  while ((match = propertyRegex.exec(classBody)) !== null) {
+    if (/\[Navigate\s*\(/.test(match[0])) {
+      continue;
+    }
+    const csharpType = match[2].trim().replace('?', '');
+    if (csharpType !== 'DateTime' && csharpType !== 'DateOnly') {
+      continue;
+    }
+    set.add(pascalToCamel(match[3]));
+  }
+  return set;
+}
+
+/**
+ * 读取 Domain 实体字符串字段 maxLength（camelCase 字段名 → 长度）
+ * @param {string} entityPascal
+ * @returns {Map<string, number>}
+ */
+function loadEntityInputMaxLengths(entityPascal) {
+  /** @type {Map<string, number>} */
+  const map = new Map();
+  const entityFile = findDomainEntityFile(entityPascal, CONFIG.backendRoot);
+  if (!entityFile) {
+    return map;
+  }
+  const content = fs.readFileSync(entityFile, 'utf-8');
+  const classOpen = content.search(/public\s+class\s+Takt\w+/);
+  if (classOpen < 0) {
+    return map;
+  }
+  const braceStart = content.indexOf('{', classOpen);
+  if (braceStart < 0) {
+    return map;
+  }
+  let depth = 1;
+  let i = braceStart + 1;
+  while (i < content.length && depth > 0) {
+    if (content[i] === '{') {
+      depth += 1;
+    } else if (content[i] === '}') {
+      depth -= 1;
+    }
+    i += 1;
+  }
+  const classBody = content.slice(braceStart + 1, i - 1);
+  const propertyRegex =
+    /\/\/\/\s*<summary>([\s\S]*?)<\/summary>(?:[\s\S]*?)?([\w.?[\]]+)\s+(\w+)\s*\{[\s\S]*?get;\s*set;/g;
+  let match;
+  while ((match = propertyRegex.exec(classBody)) !== null) {
+    if (/\[Navigate\s*\(/.test(match[0])) {
+      continue;
+    }
+    const csharpType = match[2].trim();
+    if (!csharpType.replace('?', '').includes('string')) {
+      continue;
+    }
+    const name = match[3];
+    const publicDecl = `public ${csharpType} ${name}`;
+    const publicIndex = classBody.indexOf(publicDecl, match.index);
+    const blockEnd = publicIndex >= 0 ? publicIndex : match.index + match[0].length;
+    const block = classBody.slice(Math.max(0, blockEnd - 600), blockEnd);
+    const maxLength = parseSugarColumnMaxLength(block);
+    if (maxLength != null && maxLength > 0) {
+      map.set(pascalToCamel(name), maxLength);
+    }
+  }
+  return map;
+}
+
+/**
+ * 解析 a-input maxlength（实体列长优先，否则默认 20）
+ * @param {{ maxLength?: number }} field
+ * @returns {number}
+ */
+function resolveInputMaxLength(field) {
+  if (field?.maxLength != null && field.maxLength > 0) {
+    return field.maxLength;
+  }
+  return DEFAULT_A_INPUT_MAX_LENGTH;
+}
+
+/**
+ * a-input 字数统计与 maxlength 属性
+ * @param {{ maxLength?: number }} field
  * @param {string} indent
  * @returns {string}
  */
-function renderFormControl(field, modelPrefix, indent = '                ') {
+function renderAInputLimitAttrs(field, indent) {
+  const maxLength = resolveInputMaxLength(field);
+  return `\n${indent}  show-count\n${indent}  :maxlength="${maxLength}"`;
+}
+
+/**
+ * 是否为 remark / extField 固定长文本字段
+ * @param {{ name?: string }} field
+ * @returns {boolean}
+ */
+function isFixedLongTextareaField(field) {
+  return field?.name === 'remark' || isExtFieldField(field);
+}
+
+/** @deprecated 使用 isFixedLongTextareaField */
+function isRemarkField(field) {
+  return isFixedLongTextareaField(field);
+}
+
+/**
+ * remark / extField 专用 a-textarea 固定属性（rows=4、show-count、maxlength=400、allow-clear）
+ * @param {string} indent
+ * @param {{ readOnly?: boolean }} [field]
+ * @param {{ includeAllowClear?: boolean }} [options]
+ * @returns {string}
+ */
+function renderFixedLongTextareaAttrs(indent, field = {}, options = {}) {
+  const { includeAllowClear = true } = options;
   const readOnlyAttrs = renderReadOnlyControlAttrs(field, indent);
+  const clearAttr = includeAllowClear && !field.readOnly ? `\n${indent}  allow-clear` : '';
+  return `\n${indent}  :rows="${REMARK_TEXTAREA_ROWS}"
+${indent}  show-count
+${indent}  :maxlength="${REMARK_TEXTAREA_MAX_LENGTH}"${clearAttr}${readOnlyAttrs}`;
+}
+
+/** @deprecated 使用 renderFixedLongTextareaAttrs */
+function renderRemarkTextareaAttrs(indent, field = {}, options = {}) {
+  return renderFixedLongTextareaAttrs(indent, field, options);
+}
+
+/**
+ * 生成表单控件模板片段（主子表子行 / 主表共用；禁止 size="small"，与手工 CRUD 表单默认尺寸对齐）
+ * @param {{ name: string, htmlType: string, dictType: string, i18nKey: string, optional: boolean }} field
+ * @param {string} modelPrefix 如 formState. / record.
+ * @param {string} indent
+ * @param {{ entityIdField?: string, formDataExpr?: string, rowIdField?: string, rowRecordExpr?: string }} [controlOptions]
+ * @returns {string}
+ */
+function renderFormControl(field, modelPrefix, indent = '                ', controlOptions = {}) {
+  const readOnlyAttrs = renderReadOnlyControlAttrs(field, indent);
+  const codeEditDisabledAttrs = renderFormCodeEditDisabledAttrs(field, indent, controlOptions);
+  const editLockAttrs = readOnlyAttrs || codeEditDisabledAttrs;
   const clearAttr = field.readOnly ? '' : `\n${indent}  allow-clear`;
   if (field.htmlType === 'select' && field.dictType) {
     return `${indent}<TaktSelect
 ${indent}  v-model:value="${modelPrefix}${field.name}"
 ${indent}  dict-type="${field.dictType}"
-${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.select')}"
-${indent}  size="small"${readOnlyAttrs}
+${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.select')}"${editLockAttrs}
 ${indent}/>`;
   }
   if (field.htmlType === 'textarea') {
+    if (isFixedLongTextareaField(field)) {
+      const placeholderExpr = isExtFieldField(field)
+        ? fieldExtFieldPlaceholderTExpr()
+        : fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional');
+      const fixedAttrs = renderFixedLongTextareaAttrs(indent, field);
+      return `${indent}<a-textarea
+${indent}  v-model:value="${modelPrefix}${field.name}"
+${indent}  :placeholder="${placeholderExpr}"${fixedAttrs}${codeEditDisabledAttrs}
+${indent}/>`;
+    }
     return `${indent}<a-textarea
 ${indent}  v-model:value="${modelPrefix}${field.name}"
 ${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional')}"
-${indent}  :rows="2"
-${indent}  size="small"${readOnlyAttrs}
+${indent}  :rows="2"${editLockAttrs}
 ${indent}/>`;
   }
   if (field.htmlType === 'date') {
+    const { valueFormat, showTimeAttr } = resolveDatePickerTemplateAttrs(field, indent);
     return `${indent}<a-date-picker
 ${indent}  v-model:value="${modelPrefix}${field.name}"
 ${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.select')}"
-${indent}  value-format="YYYY-MM-DD"
-${indent}  size="small"
-${indent}  style="width: 100%"${readOnlyAttrs}
+${indent}  value-format="${valueFormat}"${showTimeAttr}
+${indent}  style="width: 100%"${editLockAttrs}
 ${indent}/>`;
   }
   if (field.htmlType === 'switch') {
-    return `${indent}<a-switch v-model:checked="${modelPrefix}${field.name}" size="small"${readOnlyAttrs} />`;
+    return `${indent}<a-switch v-model:checked="${modelPrefix}${field.name}"${editLockAttrs} />`;
   }
   if (field.type === 'number') {
     return `${indent}<a-input-number
 ${indent}  v-model:value="${modelPrefix}${field.name}"
 ${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.required')}"
-${indent}  size="small"
-${indent}  style="width: 100%"${readOnlyAttrs}
+${indent}  style="width: 100%"${editLockAttrs}
 ${indent}/>`;
   }
   return `${indent}<a-input
 ${indent}  v-model:value="${modelPrefix}${field.name}"
-${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.required')}"
-${indent}  size="small"${clearAttr}${readOnlyAttrs}
+${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.required')}"${renderAInputLimitAttrs(field, indent)}${clearAttr}${editLockAttrs}
 ${indent}/>`;
 }
 
@@ -1205,12 +2183,40 @@ function renderQueryFormItemBody(field) {
       </a-form-item>`;
   }
   if (field.htmlType === 'textarea') {
+    const placeholderExpr = isExtFieldField(field)
+      ? fieldExtFieldPlaceholderTExpr()
+      : fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional');
+    const fixedLongAttrs = isFixedLongTextareaField(field)
+      ? renderFixedLongTextareaAttrs('          ', field)
+      : `\n          :rows="2"\n          allow-clear`;
+    if (isExtFieldField(field)) {
+      return `      <a-form-item
+        name="${field.name}"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('${EXT_FIELD_HINT_I18N_KEY}')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ ${fieldLabelTExpr(field)} }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.${field.name}"
+          :placeholder="${placeholderExpr}"${fixedLongAttrs}
+        />
+      </a-form-item>`;
+    }
     return `      <a-form-item :label="${fieldLabelTExpr(field)}">
         <a-textarea
           v-model:value="advancedQueryForm.${field.name}"
-          :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.optional')}"
-          :rows="2"
-          allow-clear
+          :placeholder="${placeholderExpr}"${fixedLongAttrs}
         />
       </a-form-item>`;
   }
@@ -1224,9 +2230,7 @@ function renderQueryFormItemBody(field) {
       </a-form-item>`;
   }
   if (field.htmlType === 'date') {
-    const showTime = /createdat|updatedat|time/i.test(field.name);
-    const valueFormat = showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
-    const showTimeAttr = showTime ? '\n          show-time' : '';
+    const { valueFormat, showTimeAttr } = resolveDatePickerTemplateAttrs(field, '          ');
     return `      <a-form-item :label="${fieldLabelTExpr(field)}">
         <a-date-picker
           v-model:value="advancedQueryForm.${field.name}"
@@ -1243,6 +2247,8 @@ function renderQueryFormItemBody(field) {
         <a-input
           v-model:value="advancedQueryForm.${field.name}"
           :placeholder="${fieldPlaceholderTExpr(field, placeholderKey)}"
+          show-count
+          :maxlength="${resolveInputMaxLength(field)}"
           allow-clear
         />
       </a-form-item>`;
@@ -1287,10 +2293,44 @@ function writeVueModuleOutputs(bundle, indexContent, formContent, options) {
   writeGeneratedFile(bundle.indexPath, indexContent);
   console.log(`✅ 已生成: ${bundle.indexPath}`);
   if (formContent) {
+    assertGeneratedFormNoSmallSize(formContent, bundle.formPath);
     writeGeneratedFile(bundle.formPath, formContent);
     console.log(`✅ 已生成: ${bundle.formPath}`);
   }
   return { skipped: false, created: true };
+}
+
+/**
+ * 生成表单模板策略校验（禁止 size="small"、HTML readonly）
+ * @param {string} formContent 表单 Vue 源码
+ * @param {string} formPath 目标路径（报错用）
+ */
+function assertGeneratedFormNoSmallSize(formContent, formPath) {
+  if (/\bsize\s*=\s*["']small["']/.test(formContent)) {
+    throw new Error(
+      `[generate-vue] 表单禁止 size="small"（须使用 Ant Design 默认尺寸）: ${formPath}`,
+    );
+  }
+  if (/(^|\n)\s*readonly\s*(\n|$)/.test(formContent)) {
+    throw new Error(
+      `[generate-vue] 表单禁止 HTML readonly（隔离/只读字段须用 disabled，参照 user-form.vue）: ${formPath}`,
+    );
+  }
+}
+
+/**
+ * 由 API 相对路径加载 types 与 interfaces
+ * @param {string} rel 相对 frontend/src/api 的路径（如 logistics/serial/inbound.ts）
+ * @returns {{ content: string, ifaceMap: ReturnType<typeof parseTypeInterfaces> } | null}
+ */
+function loadTypesInterfacesForApiRel(rel) {
+  const dtsFilePath = path.join(CONFIG.frontendRoot, CONFIG.typesDir, `${rel.replace(/\.ts$/, '.d.ts')}`);
+  if (!fs.existsSync(dtsFilePath)) {
+    console.warn(`⚠️  缺少类型文件，跳过: ${dtsFilePath}`);
+    return null;
+  }
+  const content = fs.readFileSync(dtsFilePath, 'utf-8');
+  return { content, ifaceMap: parseTypeInterfaces(content) };
 }
 
 /**
@@ -1299,7 +2339,27 @@ function writeVueModuleOutputs(bundle, indexContent, formContent, options) {
 function loadVueModuleContext(apiFilePath, options, masterDetailChildRegistry) {
   const rel = path.relative(path.join(CONFIG.frontendRoot, CONFIG.apiDir), apiFilePath).replace(/\\/g, '/');
   const entityKebab = path.basename(rel, '.ts');
-  const entityShort = kebabToPascal(entityKebab);
+  const typesBundle = loadTypesInterfacesForApiRel(rel);
+  if (!typesBundle) {
+    return { skipped: true };
+  }
+  const modulePathFromRel = path.dirname(rel);
+  const inferredShort = resolveMainEntityPascalFromTypes(typesBundle.ifaceMap) || kebabToPascal(entityKebab);
+  let entityShort = inferredShort;
+  if (options.entityPrefix) {
+    const prefixKebab = pascalToKebab(options.entityPrefix);
+    const shortKebab = resolveFrontendModuleFileName(
+      prefixKebab,
+      modulePathFromRel === '.' ? '' : modulePathFromRel,
+    );
+    if (
+      inferredShort === options.entityPrefix
+      || entityKebab === prefixKebab
+      || entityKebab === shortKebab
+    ) {
+      entityShort = options.entityPrefix;
+    }
+  }
   const dtoSourceBase = `Takt${entityShort}Dtos`;
   if (shouldExcludeDtoSourceBase(dtoSourceBase)) {
     console.log(`⏭️  跳过手工/排除模块: ${rel}`);
@@ -1312,24 +2372,29 @@ function loadVueModuleContext(apiFilePath, options, masterDetailChildRegistry) {
     console.log(`⏭️  跳过 Vue 生成（${reason}）: ${rel}`);
     return { skipped: true };
   }
+  const normalizedModule = normalizeModulePath(modulePathFromRel === '.' ? '' : modulePathFromRel);
+  const canonicalKebab = pascalToKebab(entityShort);
+  const viewEntityKebab = stripModulePrefixFromEntityKebab(canonicalKebab, normalizedModule);
+  const ownMenuPath = resolveViewModulePath(normalizedModule, viewEntityKebab);
+  const menuEntry = MENU_INDEX.get(ownMenuPath)
+    || MENU_INDEX.get(viewEntityKebab)
+    || MENU_INDEX.get(canonicalKebab)
+    || MENU_INDEX.get(entityKebab);
+  const hasOwnMenuPage = Boolean(menuEntry?.componentPath);
   const masterRef = masterDetailChildRegistry.get(entityShort);
-  if (masterRef && !isStandaloneChildVueEntity(entityShort)) {
+  if (masterRef && !options.bypassChildRegistrySkip && !isStandaloneChildVueEntity(entityShort) && !hasOwnMenuPage) {
     console.log(`⏭️  跳过主子表从实体: ${rel}（视图由主表 ${masterRef.masterPascal}.${masterRef.fieldName} 承载）`);
     return { skipped: true };
   }
-  if (masterRef && isStandaloneChildVueEntity(entityShort)) {
-    console.log(`ℹ️  从实体 ${entityShort} 仍有独立菜单页，继续生成 Vue（主表 ${masterRef.masterPascal}.${masterRef.fieldName} 展开区并存）`);
-  }
-  const typesPath = path.join(CONFIG.frontendRoot, CONFIG.typesDir, `${rel.replace(/\.ts$/, '.d.ts')}`);
-  if (!fs.existsSync(typesPath)) {
-    console.warn(`⚠️  缺少类型文件，跳过: ${typesPath}`);
-    return { skipped: true };
+  if (masterRef && (isStandaloneChildVueEntity(entityShort) || hasOwnMenuPage)) {
+    console.log(
+      `ℹ️  从实体 ${entityShort} 有独立菜单页（${ownMenuPath}），按主实体生成视图` +
+      (masterRef ? `（主表 ${masterRef.masterPascal}.${masterRef.fieldName} 展开区可并存）` : ''),
+    );
   }
   const apiContent = fs.readFileSync(apiFilePath, 'utf-8');
-  const typesContent = fs.readFileSync(typesPath, 'utf-8');
   const { methods, apiBase } = parseApiFile(apiContent);
-  const interfaces = parseTypeInterfaces(typesContent);
-  if (!interfaces.has(entityShort)) {
+  if (!typesBundle.ifaceMap.has(entityShort)) {
     console.warn(`⚠️  类型文件中未找到主实体 interface ${entityShort}，跳过: ${rel}`);
     return { skipped: true };
   }
@@ -1337,9 +2402,9 @@ function loadVueModuleContext(apiFilePath, options, masterDetailChildRegistry) {
   const treeCaps = extendTreeApiCapabilities(entityShort, methods);
   const capsMerged = { ...caps, ...treeCaps };
   const ctx = resolveModuleContext(apiFilePath, entityShort, options);
-  const fields = buildFieldMeta(interfaces, entityShort, typesContent, ctx.modulePath);
-  const comment = parseEntityComment(typesContent, entityShort);
-  const create = interfaces.get(`${entityShort}Create`);
+  const fields = buildFieldMeta(typesBundle.ifaceMap, entityShort, typesBundle.content, ctx.modulePath);
+  const comment = parseEntityComment(typesBundle.content, entityShort);
+  const create = typesBundle.ifaceMap.get(`${entityShort}Create`);
   const fullCtx = {
     ...ctx,
     caps: capsMerged,
@@ -1353,7 +2418,7 @@ function loadVueModuleContext(apiFilePath, options, masterDetailChildRegistry) {
   };
   const viewDir = path.join(CONFIG.frontendRoot, CONFIG.viewsDir, ctx.viewModulePath);
   const indexPath = path.join(viewDir, 'index.vue');
-  const formPath = path.join(viewDir, 'components', `${ctx.entityKebab}-form.vue`);
+  const formPath = path.join(viewDir, 'components', `${ctx.viewEntityKebab}-form.vue`);
   const needsForm = capsMerged.hasCreate || capsMerged.hasUpdate;
   return {
     skipped: false,
@@ -1363,11 +2428,25 @@ function loadVueModuleContext(apiFilePath, options, masterDetailChildRegistry) {
     indexPath,
     formPath,
     needsForm,
-    interfaces,
+    ifaceMap: typesBundle.ifaceMap,
     capsMerged,
     isTreeEntity: entityHasParentId(entityShort, CONFIG.backendRoot) && capsMerged.hasGetTree,
-    isMasterDetailEntity: (fields.masterDetailChildren || []).length > 0,
+    isMasterDetailEntity: filterStandaloneMenuChildren(fields.masterDetailChildren, ctx.modulePath).length > 0,
   };
+}
+
+/**
+ * 主表 *-form.vue types 导入（仅主表 Create；子表类型由 *-item-form.vue 独立导入）
+ * @param {object} options
+ * @param {string} options.entityPascal
+ * @param {string} options.entityKebab API/types 文件名（kebab）
+ * @param {string} options.modulePath
+ * @returns {{ masterTypeImport: string }}
+ */
+function buildMasterDetailFormTypeImportLines(options) {
+  const { entityPascal, entityKebab, modulePath } = options;
+  const masterTypeImport = `import type { ${entityPascal}Create } from '@/types/${modulePath}/${entityKebab}'`;
+  return { masterTypeImport };
 }
 
 /**
@@ -1392,6 +2471,671 @@ function parseEntityComment(content, entityName) {
   return firstLine.split(/[，,。；;（(]/)[0].trim() || entityName;
 }
 
+/** TaktDictDataSeedData 解析缓存：dictType → IsDefault=1 的 dictValue */
+let dictTypeDefaultsCache = null;
+
+/**
+ * 从 TaktDictDataSeedData 读取各字典类型默认项（IsDefault=1 的 dictValue）
+ * @returns {Record<string, string>}
+ */
+function getDictTypeDefaultsMap() {
+  if (dictTypeDefaultsCache) {
+    return dictTypeDefaultsCache;
+  }
+  /** @type {Record<string, string>} */
+  const map = {};
+  const seedPath = path.join(
+    CONFIG.backendRoot,
+    'Takt.Infrastructure',
+    'Data',
+    'Seeds',
+    'EntitySeedData',
+    'TaktDictDataSeedData.cs',
+  );
+  if (!fs.existsSync(seedPath)) {
+    dictTypeDefaultsCache = map;
+    return map;
+  }
+  const content = fs.readFileSync(seedPath, 'utf-8');
+  const tupleRe = /\("([^"]+)","(?:[^"\\]|\\.)*","([^"]*)","(?:[^"\\]|\\.)*",\d+,\d+,(\d+),/g;
+  let match = tupleRe.exec(content);
+  while (match) {
+    const [, dictType, dictValue, isDefault] = match;
+    if (isDefault === '1') {
+      map[dictType] = dictValue;
+    }
+    match = tupleRe.exec(content);
+  }
+  dictTypeDefaultsCache = map;
+  return map;
+}
+
+/**
+ * 推断表单字段初始默认值（字典 IsDefault + 通用状态/是否内置）
+ * @param {{ name: string, type?: string, doc?: string, dictType?: string, readOnly?: boolean }} field
+ * @param {Record<string, string>} dictDefaults
+ * @returns {string|number|undefined}
+ */
+function resolveFormFieldDefaultValue(field, dictDefaults) {
+  if (field.readOnly) {
+    return undefined;
+  }
+  if (field.dictType && dictDefaults[field.dictType] !== undefined) {
+    const raw = dictDefaults[field.dictType];
+    if (field.type === 'number') {
+      const num = Number(raw);
+      return Number.isFinite(num) ? num : undefined;
+    }
+    return raw;
+  }
+  if (field.type === 'number' && isCommonEnableDisableStatus(field.doc)) {
+    return 1;
+  }
+  if (/^isBuiltIn$/i.test(field.name || '')) {
+    return 0;
+  }
+  if (field.dictType === 'sys_yes_no_type' && /builtin|built_in|isbuiltin/i.test(field.name)) {
+    return 0;
+  }
+  return undefined;
+}
+
+/**
+ * 生成 *-form.vue：FORM_FIELD_DEFAULTS + applyFormDefaults
+ * @param {Array<{ name: string, type?: string, doc?: string, dictType?: string, readOnly?: boolean }>} formFields
+ * @returns {string}
+ */
+function buildFormDefaultsScriptBlock(formFields) {
+  const dictDefaults = getDictTypeDefaultsMap();
+  const entries = (formFields || [])
+    .map((f) => {
+      const val = resolveFormFieldDefaultValue(f, dictDefaults);
+      if (val === undefined) {
+        return null;
+      }
+      return `  ${f.name}: ${JSON.stringify(val)}`;
+    })
+    .filter(Boolean);
+  if (entries.length === 0) {
+    return `/** 表单字段默认值（无字典默认项） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  void target
+}`;
+  }
+  return `/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+${entries.join(',\n')}
+}
+
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}`;
+}
+
+/**
+ * resetPeriod 列表/表单归一化脚本（sys_reset_period；兼容 daily/monthly/yearly）
+ * @returns {string}
+ */
+function buildResetPeriodNormalizerScriptBlock() {
+  return `/** resetPeriod：后端 legacy 与字典 dictValue 归一化 */
+const RESET_PERIOD_TO_DICT: Record<string, string> = {
+  none: 'none',
+  day: 'day',
+  daily: 'day',
+  month: 'month',
+  monthly: 'month',
+  year: 'year',
+  yearly: 'year',
+}
+
+/** 编辑回填：归一化为 sys_reset_period dictValue */
+function normalizeResetPeriodForForm(value: unknown): string {
+  const fallback = String(FORM_FIELD_DEFAULTS.resetPeriod ?? 'year')
+  const key = String(value ?? fallback).trim().toLowerCase()
+  return RESET_PERIOD_TO_DICT[key] ?? fallback
+}
+
+/** 提交：与实体 reset_period、字典 sys_reset_period 一致 */
+function normalizeResetPeriodForSubmit(value: unknown): string {
+  const fallback = String(FORM_FIELD_DEFAULTS.resetPeriod ?? 'year')
+  const key = String(value ?? '').trim().toLowerCase()
+  return RESET_PERIOD_TO_DICT[key] ?? fallback
+}
+`;
+}
+
+/**
+ * 生成 *-form.vue：提交前字段归一化（resetPeriod、number 字典项）
+ * @param {Array<{ name: string, type?: string, readOnly?: boolean }>} formFields
+ * @param {{ useBuildSubmitPayload?: boolean }} [options]
+ * @returns {{ script: string, editNormalizeLines: string[], getValuesBody: string }}
+ */
+function buildFormSubmitNormalizerScriptBlock(formFields, options = {}) {
+  const { useBuildSubmitPayload = false } = options;
+  const hasResetPeriod = (formFields || []).some((f) => f.name === 'resetPeriod');
+  const numberFields = (formFields || []).filter((f) => f.type === 'number' && !f.readOnly);
+  /** @type {string[]} */
+  const editNormalizeLines = [];
+  /** @type {string[]} */
+  const coerceLines = [];
+  let script = '';
+  if (hasResetPeriod) {
+    script += buildResetPeriodNormalizerScriptBlock();
+    editNormalizeLines.push('      if (\'resetPeriod\' in next) next.resetPeriod = normalizeResetPeriodForForm((next as Record<string, unknown>).resetPeriod)');
+    coerceLines.push('  if (\'resetPeriod\' in payload) payload.resetPeriod = normalizeResetPeriodForSubmit(payload.resetPeriod)');
+  }
+  numberFields.forEach((f) => {
+    coerceLines.push(`  if ('${f.name}' in payload) {
+    const raw${f.name} = payload.${f.name}
+    payload.${f.name} = typeof raw${f.name} === 'number' ? raw${f.name} : Number(raw${f.name})
+  }`);
+  });
+  const payloadInit = useBuildSubmitPayload
+    ? '  const payload = buildSubmitPayload() as Record<string, unknown>'
+    : '  const payload = { ...formState }';
+  const sortOrderCleanup = `  if ('sortOrder' in payload) delete payload.sortOrder`;
+  const getValuesBody = coerceLines.length > 0
+    ? `${payloadInit}
+${coerceLines.join('\n')}
+${sortOrderCleanup}
+  return payload`
+    : `${payloadInit}
+${sortOrderCleanup}
+  return payload`;
+  return { script, editNormalizeLines, getValuesBody };
+}
+
+/**
+ * index.vue：resetPeriod 列 TaktDictTag 展示归一化
+ * @param {Array<{ name: string }>} listFields
+ * @returns {string}
+ */
+function buildResetPeriodListMapperScriptBlock(listFields) {
+  if (!(listFields || []).some((f) => f.name === 'resetPeriod')) {
+    return '';
+  }
+  return `/** 列表 TaktDictTag：resetPeriod 归一化为 sys_reset_period dictValue */
+const RESET_PERIOD_TO_DICT: Record<string, string> = {
+  none: 'none',
+  day: 'day',
+  daily: 'day',
+  month: 'month',
+  monthly: 'month',
+  year: 'year',
+  yearly: 'year',
+}
+
+/** @param value 后端 resetPeriod */
+function mapResetPeriodDictValue(value?: string | number | null): string {
+  const key = String(value ?? 'year').trim().toLowerCase()
+  return RESET_PERIOD_TO_DICT[key] ?? 'year'
+}
+`;
+}
+
+/**
+ * 列表字典列 :value 表达式（resetPeriod 需 legacy 归一化）
+ * @param {{ name: string }} field
+ * @param {string} entityPascal
+ * @returns {string}
+ */
+function buildListDictTagValueExpr(field, entityPascal) {
+  if (field.name === 'resetPeriod') {
+    return `mapResetPeriodDictValue(get${entityPascal}Field(record, '${field.name}') as string | number | undefined)`;
+  }
+  return `get${entityPascal}Field(record, '${field.name}')`;
+}
+
+/**
+ * 拆分列表字典列：开关列 vs DictTag 列
+ * @param {Array<{ dictType?: string, isListSwitch?: boolean }>} listCols
+ */
+function splitListDictColumns(listCols) {
+  const switchListCols = (listCols || []).filter((f) => f.isListSwitch);
+  const dictTagListCols = (listCols || []).filter((f) => f.dictType && !f.isListSwitch);
+  return { switchListCols, dictTagListCols };
+}
+
+/**
+ * 按 API 能力拆分列表列：有对应更新 API 的用 switch，否则回退 DictTag
+ * @param {Array<object>} listColsWithDictOrSwitch
+ * @param {{ apiUpdateStatus?: string, apiUpdateBuiltIn?: string }} caps
+ * @returns {{ switchListCols: Array<object>, dictTagListCols: Array<object> }}
+ */
+function resolveListSwitchAndDictColsForIndex(listColsWithDictOrSwitch, caps) {
+  const { switchListCols: rawSwitch, dictTagListCols: rawDict } = splitListDictColumns(listColsWithDictOrSwitch);
+  const switchListCols = [];
+  const dictTagListCols = [...rawDict];
+  for (const field of rawSwitch) {
+    const hasApi = field.switchKind === 'builtin'
+      ? Boolean(caps.apiUpdateBuiltIn)
+      : Boolean(caps.apiUpdateStatus);
+    if (hasApi) {
+      switchListCols.push(field);
+    } else {
+      const {
+        isListSwitch: _isListSwitch,
+        switchKind: _switchKind,
+        switchCheckedValue: _switchCheckedValue,
+        switchUncheckedValue: _switchUncheckedValue,
+        ...dictField
+      } = field;
+      dictTagListCols.push(dictField);
+    }
+  }
+  return { switchListCols, dictTagListCols };
+}
+
+/**
+ * 生成列表开关列 bodyCell 片段
+ * @param {{ name: string, switchKind?: string, switchCheckedValue?: number }} field
+ * @param {string} entityPascal
+ * @param {string} branch
+ * @returns {string}
+ */
+function buildListSwitchBodyCellLine(field, entityPascal, branch) {
+  const checkedExpr = `get${entityPascal}Field(record, '${field.name}') === ${field.switchCheckedValue}`;
+  const childrenAttrs = field.switchKind === 'builtin'
+    ? `:checked-children="t('dict.sys.yes.no.1')" :un-checked-children="t('dict.sys.yes.no.0')"`
+    : `:checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"`;
+  const handlerName = `handle${fieldNameToHandlerSuffix(field.name)}Change`;
+  return `        <template ${branch}="column.key === '${field.name}'">
+          <a-switch
+            :checked="${checkedExpr}"
+            ${childrenAttrs}
+            @change="(checked: unknown) => ${handlerName}(record, Boolean(checked))"
+          />
+        </template>`;
+}
+
+/**
+ * 生成列表 bodyCell（开关 + DictTag）
+ * @param {Array<object>} dictTagListCols
+ * @param {Array<object>} switchListCols
+ * @param {string} entityPascal
+ * @returns {string}
+ */
+function buildListBodyCellBlock(dictTagListCols, switchListCols, entityPascal) {
+  if (!dictTagListCols.length && !switchListCols.length) {
+    return '';
+  }
+  const lines = [];
+  switchListCols.forEach((f, i) => {
+    lines.push(buildListSwitchBodyCellLine(f, entityPascal, i === 0 ? 'v-if' : 'v-else-if'));
+  });
+  dictTagListCols.forEach((f, i) => {
+    const branch = lines.length === 0 && i === 0 ? 'v-if' : 'v-else-if';
+    lines.push(`        <template ${branch}="column.key === '${f.name}'">
+          <TaktDictTag
+            :value="${buildListDictTagValueExpr(f, entityPascal)}"
+            dict-type="${f.dictType}"
+          />
+        </template>`);
+  });
+  return `      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+${lines.join('\n')}
+      </template>
+`;
+}
+
+/**
+ * 生成列表开关列 change 处理器
+ * @param {Array<object>} switchListCols
+ * @param {string} entityPascal
+ * @param {{ entityIdName: string, apiUpdateStatus?: string, apiUpdateBuiltIn?: string }} caps
+ * @param {{ reloadAfterSuccess?: boolean, recordType?: string }} [options]
+ * @returns {string}
+ */
+function buildListSwitchHandlersBlock(switchListCols, entityPascal, caps, options = {}) {
+  const reloadAfterSuccess = options.reloadAfterSuccess === true;
+  const recordType = options.recordType || entityPascal;
+  return (switchListCols || []).map((field) => {
+    const handlerName = `handle${fieldNameToHandlerSuffix(field.name)}Change`;
+    const apiMethod = field.switchKind === 'builtin' ? caps.apiUpdateBuiltIn : caps.apiUpdateStatus;
+    if (!apiMethod) {
+      return '';
+    }
+    const idField = caps.entityIdName;
+    if (field.switchKind === 'builtin') {
+      return `
+/**
+ * 行内切换是否内置（sys_yes_no_type：1=是，0=否）
+ * @param record 当前行
+ * @param checked 开关是否选中
+ */
+async function ${handlerName}(record: ${recordType}, checked: boolean) {
+  const id = get${entityPascal}Id(record)
+  if (!id) {
+    return
+  }
+  const newVal = checked ? ${field.switchCheckedValue} : ${field.switchUncheckedValue}
+  const oldVal = get${entityPascal}Field(record, '${field.name}')
+  const row = ${reloadAfterSuccess ? 'null' : `dataSource.value.find((item) => get${entityPascal}Id(item) === id)`}
+  if (row) {
+    row.${field.name} = newVal
+  }
+  try {
+    await ${apiMethod}({ ${idField}: id, ${field.name}: newVal })
+    message.success(t('common.feedback.updated'))
+    ${reloadAfterSuccess ? 'await loadData()' : ''}
+  } catch (error: unknown) {
+    if (row) {
+      row.${field.name} = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
+}`;
+    }
+    return `
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function ${handlerName}(record: ${recordType}, checked: boolean) {
+  const newVal = checked ? ${field.switchCheckedValue} : ${field.switchUncheckedValue}
+  const oldVal = get${entityPascal}Field(record, '${field.name}')
+  const id = get${entityPascal}Id(record)
+  const row = ${reloadAfterSuccess ? 'null' : `dataSource.value.find((item) => get${entityPascal}Id(item) === id)`}
+  if (row) {
+    row.${field.name} = newVal
+  }
+  try {
+    await ${apiMethod}({ ${idField}: id, ${field.name}: newVal })
+    message.success(t('common.feedback.updated'))
+    ${reloadAfterSuccess ? 'await loadData()' : ''}
+  } catch (error: unknown) {
+    if (row) {
+      row.${field.name} = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
+}`;
+  }).filter(Boolean).join('\n');
+}
+
+/** index.vue：关闭/提交/新增后重置内嵌表单（弹窗未 destroy 时须 nextTick） */
+const INDEX_FORM_RESET_NEXT_TICK = `
+  nextTick(() => formRef.value?.resetFields())`;
+
+/**
+ * 字段列表是否含 dict-type 的 TaktSelect
+ * @param {Array<{ htmlType?: string, dictType?: string }>} fields
+ * @returns {boolean}
+ */
+function fieldsUseDictSelect(fields) {
+  return (fields || []).some((f) => f.htmlType === 'select' && f.dictType);
+}
+
+/**
+ * 生成表单必填校验规则（数值字典项用 validator，避免 0 被 required 判空）
+ * @param {Array<{ name: string, htmlType: string, dictType?: string, type?: string, optional?: boolean, readOnly?: boolean }>} formFields
+ * @returns {string}
+ */
+function buildFormRequiredRuleLines(formFields) {
+  return formFields
+    .filter((f) => !f.optional && f.name !== 'remark' && !isExtFieldField(f) && !f.readOnly)
+    .map((f) => {
+      const trigger = f.htmlType === 'select' || f.htmlType === 'date' || f.htmlType === 'switch' ? 'change' : 'blur';
+      const placeholderKey = f.htmlType === 'select' || f.htmlType === 'date'
+        ? 'common.page.form.placeholder.select'
+        : 'common.page.form.placeholder.required';
+      if (f.htmlType === 'select' && f.type === 'number') {
+        return `  ${f.name}: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(${fieldPlaceholderTExpr(f, placeholderKey)})
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(${fieldPlaceholderTExpr(f, placeholderKey)})
+      }
+      return Promise.resolve()
+    },
+    trigger: '${trigger}'
+  }],`;
+      }
+      return `  ${f.name}: [
+    {
+      required: true,
+      message: ${fieldPlaceholderTExpr(f, placeholderKey)},
+      trigger: '${trigger}'
+    }
+  ],`;
+    })
+    .join('\n');
+}
+
+/** @returns {string} useDictDataStore 导入行 */
+function buildDictDataStoreImportLine() {
+  return "import { useDictDataStore } from '@/stores/foundation/dict-data'\n";
+}
+
+/**
+ * 表单 script：字典预热（TaktSelect dict-type 打开弹窗前加载缓存）
+ * @returns {string}
+ */
+function buildDictDataStoreFormBootstrap() {
+  return `/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+`;
+}
+
+/**
+ * index.vue script：字典预热 setup 块
+ * @returns {string}
+ */
+function buildDictDataStoreIndexSetup() {
+  return `/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+`;
+}
+
+/**
+ * 生成 *-form.vue 的 formData watch（仅含主键时灌编辑态）
+ * @param {object} options
+ * @returns {string}
+ */
+function buildFormDataWatchBlock(options) {
+  const {
+    entityIdField,
+    childFieldStrip = '',
+    hasScopeContextFields = false,
+    watchSyncChild = '',
+    editNormalizeLines = [],
+  } = options;
+  const scopeOnCreate = hasScopeContextFields
+    ? `      applyScopeDefaults(formState as Record<string, unknown>, true)
+`
+    : '';
+  const scopeOnEdit = hasScopeContextFields
+    ? `      applyScopeDefaults(next)
+`
+    : '';
+  const editNormalizeBlock = editNormalizeLines.length > 0
+    ? `${editNormalizeLines.join('\n')}\n`
+    : '';
+  return `/** 编辑态灌入 formData；新增态恢复默认值（须含 ${entityIdField} 才视为编辑） */
+watch(
+  () => props.formData,
+  (val) => {
+    if (val?.${entityIdField}) {
+      const next = { ...val } as Record<string, unknown>
+      Object.keys(formState).forEach((k) => delete formState[k])
+${childFieldStrip}
+${editNormalizeBlock}${scopeOnEdit}      Object.assign(formState, next)
+${watchSyncChild}      formRef.value?.clearValidate()
+    } else {
+      Object.keys(formState).forEach((k) => delete formState[k])
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        Object.assign(formState, val)
+      }
+      applyFormDefaults(formState)
+${scopeOnCreate}      formRef.value?.clearValidate()
+    }
+  },
+  { immediate: true }
+)`;
+}
+
+/**
+ * 生成 *-form.vue script 段公共片段（三模板共用）
+ * @param {object} options
+ * @returns {{ vueImportLine: string, dictImportLine: string, dictBootstrap: string, requiredRules: string, watchBlock: string }}
+ */
+function buildGeneratedFormVueScriptFragments(options) {
+  const needsDictSelect = fieldsUseDictSelect(options.formFields);
+  const normalizer = buildFormSubmitNormalizerScriptBlock(options.formFields, {
+    useBuildSubmitPayload: !!options.useBuildSubmitPayload,
+  });
+  return {
+    vueImportLine: `import { reactive, watch, computed, ref${needsDictSelect ? ', onMounted' : ''} } from 'vue'`,
+    dictImportLine: needsDictSelect ? buildDictDataStoreImportLine() : '',
+    dictBootstrap: needsDictSelect ? buildDictDataStoreFormBootstrap() : '',
+    defaultsBlock: buildFormDefaultsScriptBlock(options.formFields),
+    normalizerBlock: normalizer.script,
+    getValuesBody: normalizer.getValuesBody,
+    requiredRules: buildFormRequiredRuleLines(options.formFields),
+    watchBlock: buildFormDataWatchBlock({
+      ...options,
+      editNormalizeLines: normalizer.editNormalizeLines,
+    }),
+  };
+}
+
+
+/**
+ * index.vue：buildListQuery 函数（列表/导出共用；空查询项不下发，避免 DateTime? 绑定 400）
+ * @param {string} entityPascal
+ * @param {object[]} [queryFields]
+ * @returns {string}
+ */
+function buildServerPagedListQueryBlock(entityPascal, queryFields = []) {
+  const assignLines = queryFields.map((f) => {
+    if (f.type === 'number') {
+      return `  if (form.${f.name} !== undefined && form.${f.name} !== null) {
+    query.${f.name} = form.${f.name}
+  }`;
+    }
+    return `  assignTrimmed('${f.name}', form.${f.name})`;
+  }).join('\n');
+  const assignBlock = assignLines ? `\n${assignLines}` : '';
+  return `
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {${entityPascal}Query} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<${entityPascal}Query>): ${entityPascal}Query {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: ${entityPascal}Query = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof ${entityPascal}Query, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }${assignBlock}
+  return query
+}
+`;
+}
+
+/**
+ * loadData 内请求列表片段
+ * @param {string} apiGetList
+ * @returns {string}
+ */
+function buildServerPagedLoadDataBody(apiGetList) {
+  return `    const res = await ${apiGetList}(buildListQuery())
+    dataSource.value = res.data ?? []
+    total.value = res.total ?? 0`;
+}
+
+/**
+ * handleExport 内 export API 调用片段
+ * @param {string} apiExport
+ * @returns {string}
+ */
+function buildServerPagedExportApiCall(apiExport) {
+  return `    const exportMeta = await ${apiExport}(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )`;
+}
+
+/**
+ * index.vue：onMounted（先 ensure 分页配置，再 loadData / 字典预热等）
+ * @param {string} [extraMountedBody] 额外挂载逻辑（如 dictDataStore.loadAllDictDataAsync）
+ * @returns {string}
+ */
+function buildServerPagedOnMountedBlock(extraMountedBody = '') {
+  const body = extraMountedBody.trimEnd();
+  const mid = body ? `${body}\n` : '';
+  return `/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+${mid}  loadData()
+})
+`;
+}
+
+/**
+ * index.vue：外置 TaktPagination 事件处理
+ * @returns {string}
+ */
+function buildServerPagedPaginationHandlersBlock() {
+  return `/** 分页页码变更 */
+function handlePaginationChange(page: number, size: number) {
+  currentPage.value = page
+  pageSize.value = size
+  loadData()
+}
+
+/** 分页每页条数变更（重置到第 1 页） */
+function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
+  pageSize.value = size
+  loadData()
+}`;
+}
+
+/**
+ * resetFields 内补全租户/公司/语言（父级 nextTick 调用时会清空 watch 已写入的隔离字段）
+ * @param {string} entityIdField 主键字段名
+ * @param {boolean} hasScopeContextFields
+ * @returns {string}
+ */
+function buildFormResetScopeDefaultsBlock(entityIdField, hasScopeContextFields) {
+  if (!hasScopeContextFields) {
+    return '';
+  }
+  return `  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.${entityIdField})
+`;
+}
+
+/**
+ * index.vue：单表列表页不生成 scoped 样式（表格高度/滚动由 TaktSingleTable 统一处理）
+ * @returns {string}
+ */
+function buildServerPagedIndexStyleBlock() {
+  return '';
+}
 
 module.exports = {
   VUE_TEMPLATE,
@@ -1406,19 +3150,37 @@ module.exports = {
   SKIP_FORM_FIELDS,
   SKIP_QUERY_FIELDS,
   FORM_TAB_FIELDS_PER_TAB,
+  resolveFormFieldColSpan,
   MENU_INDEX,
   pascalToCamel,
   entityClassToSlug,
   buildEntityI18nKey,
   resolveFieldTranslationKey,
   fieldLabelTExpr,
+  buildQueryFieldMetaLine,
   fieldPlaceholderTExpr,
+  isExtFieldField,
+  fieldExtFieldPlaceholderTExpr,
+  renderFormItemOpening,
+  buildExtFieldIconImportLine,
+  buildRemixIconImportLine,
+  EXT_FIELD_FORM_NAME,
+  EXT_FIELD_HINT_I18N_KEY,
+  EXT_FIELD_PLACEHOLDER_I18N_KEY,
   hasScopeContextFormFields,
   buildScopeFormFields,
   renderReadOnlyControlAttrs,
+  isBusinessCodeFormFieldName,
+  renderFormCodeEditDisabledAttrs,
   computeFormTabCount,
   buildFormTabLabelAttr,
   buildFormContentClassComputedExpr,
+  shouldWrapFormInTabs,
+  buildFormRowMarkup,
+  buildFormFieldColItems,
+  buildGeneratedFormTemplateBody,
+  buildMasterDetailFormTypeImportLines,
+  buildFormTabsScopedStyleBlock,
   buildMenuIndex,
   resolvePermissionPrefixFromController,
   parseApiFile,
@@ -1428,13 +3190,61 @@ module.exports = {
   entityHasParentId,
   extendTreeApiCapabilities,
   parseOneToManyNavigations,
+  collectDomainEntityFiles,
   buildMasterDetailChildRegistry,
   resolveMasterDetailChildren,
+  normalizeModulePath,
+  resolveMasterDetailChildViewModulePath,
+  resolveMasterDetailChildViewPath,
+  resolveMasterDetailViewPlans,
+  isChangeLogOnlySeparateMenuMaster,
+  resolveChildMenuViewPath,
+  filterStandaloneMenuChildren,
+  childHasStandaloneMenu,
+  validateMasterDetailChildrenAlignment,
+  cloneFieldMetaWithMasterDetailChildren,
   buildFieldMeta,
   resolveModuleContext,
+  resolveMainEntityPascalFromTypes,
+  stripModulePrefixFromEntityKebab,
   renderFormControl,
+  renderAInputLimitAttrs,
+  resolveInputMaxLength,
+  DEFAULT_A_INPUT_MAX_LENGTH,
+  REMARK_TEXTAREA_ROWS,
+  REMARK_TEXTAREA_MAX_LENGTH,
+  isFixedLongTextareaField,
+  renderFixedLongTextareaAttrs,
+  isRemarkField,
+  renderRemarkTextareaAttrs,
   renderQueryFormItem,
   parseEntityComment,
   loadVueModuleContext,
   writeVueModuleOutputs,
+  fieldsUseDictSelect,
+  buildFormRequiredRuleLines,
+  buildDictDataStoreImportLine,
+  buildDictDataStoreFormBootstrap,
+  buildDictDataStoreIndexSetup,
+  buildFormDataWatchBlock,
+  buildGeneratedFormVueScriptFragments,
+  getDictTypeDefaultsMap,
+  resolveFormFieldDefaultValue,
+  buildFormDefaultsScriptBlock,
+  buildFormSubmitNormalizerScriptBlock,
+  buildResetPeriodListMapperScriptBlock,
+  buildListDictTagValueExpr,
+  splitListDictColumns,
+  resolveListSwitchAndDictColsForIndex,
+  buildListBodyCellBlock,
+  buildListSwitchHandlersBlock,
+  buildListSwitchBodyCellLine,
+  INDEX_FORM_RESET_NEXT_TICK,
+  buildServerPagedListQueryBlock,
+  buildServerPagedLoadDataBody,
+  buildServerPagedExportApiCall,
+  buildServerPagedOnMountedBlock,
+  buildServerPagedPaginationHandlersBlock,
+  buildServerPagedIndexStyleBlock,
+  buildFormResetScopeDefaultsBlock,
 };

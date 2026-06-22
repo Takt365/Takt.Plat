@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktQuartzLogI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQuartzLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,137 +75,137 @@ public class TaktQuartzLogI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktQuartzLog 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.quartzlog._self / entity.quartzlog.{{field}}；ResourceGroup=9；ResourceType=0
+    /// I18nKey：entity.quartzlog._self / entity.quartzlog.{{field}}；ResourceGroup=Logging；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetQuartzLogTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.quartzlog._self
-            new TranslationSeedItem("entity.quartzlog._self", "en-US", "Quartz Log Information", "实体名称"),
+            new TranslationSeedItem("entity.quartzlog._self", "en-US", "Quartz Log Information_us", "实体名称"),
             // entity.quartzlog._self
-            new TranslationSeedItem("entity.quartzlog._self", "ja-JP", "Quartz 任务执行日志信息", "实体名称"),
+            new TranslationSeedItem("entity.quartzlog._self", "ja-JP", "Quartz 任务执行日志信息_jp", "实体名称"),
             // entity.quartzlog._self
             new TranslationSeedItem("entity.quartzlog._self", "zh-CN", "Quartz 任务执行日志信息", "实体名称"),
             // entity.quartzlog._self
-            new TranslationSeedItem("entity.quartzlog._self", "zh-HK", "Quartz 任务执行日志信息", "实体名称"),
+            new TranslationSeedItem("entity.quartzlog._self", "zh-HK", "Quartz 任务执行日志信息_hk", "实体名称"),
 
             // entity.quartzlog.quartztaskid
-            new TranslationSeedItem("entity.quartzlog.quartztaskid", "en-US", "定时任务ID", "关联定时任务 ID"),
+            new TranslationSeedItem("entity.quartzlog.quartztaskid", "en-US", "定时任务ID_us", "关联定时任务 ID"),
             // entity.quartzlog.quartztaskid
-            new TranslationSeedItem("entity.quartzlog.quartztaskid", "ja-JP", "定时任务ID", "关联定时任务 ID"),
+            new TranslationSeedItem("entity.quartzlog.quartztaskid", "ja-JP", "定时任务ID_jp", "关联定时任务 ID"),
             // entity.quartzlog.quartztaskid
             new TranslationSeedItem("entity.quartzlog.quartztaskid", "zh-CN", "定时任务ID", "关联定时任务 ID"),
             // entity.quartzlog.quartztaskid
-            new TranslationSeedItem("entity.quartzlog.quartztaskid", "zh-HK", "定时任务ID", "关联定时任务 ID"),
+            new TranslationSeedItem("entity.quartzlog.quartztaskid", "zh-HK", "定时任务ID_hk", "关联定时任务 ID"),
 
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "en-US", "任务名称", "任务名称（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "en-US", "任务名称_us", "任务名称（执行时快照）"),
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "ja-JP", "任务名称", "任务名称（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "ja-JP", "任务名称_jp", "任务名称（执行时快照）"),
             // entity.quartzlog.taskname
             new TranslationSeedItem("entity.quartzlog.taskname", "zh-CN", "任务名称", "任务名称（执行时快照）"),
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "zh-HK", "任务名称", "任务名称（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "zh-HK", "任务名称_hk", "任务名称（执行时快照）"),
 
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "en-US", "任务组名", "任务组名（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "en-US", "任务组名_us", "任务组名（执行时快照）"),
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "ja-JP", "任务组名", "任务组名（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "ja-JP", "任务组名_jp", "任务组名（执行时快照）"),
             // entity.quartzlog.jobgroup
             new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-CN", "任务组名", "任务组名（执行时快照）"),
             // entity.quartzlog.jobgroup
-            new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-HK", "任务组名", "任务组名（执行时快照）"),
+            new TranslationSeedItem("entity.quartzlog.jobgroup", "zh-HK", "任务组名_hk", "任务组名（执行时快照）"),
 
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "en-US", "任务类型", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "en-US", "任务类型_us", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "ja-JP", "任务类型", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "ja-JP", "任务类型_jp", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
             // entity.quartzlog.tasktype
             new TranslationSeedItem("entity.quartzlog.tasktype", "zh-CN", "任务类型", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
             // entity.quartzlog.tasktype
-            new TranslationSeedItem("entity.quartzlog.tasktype", "zh-HK", "任务类型", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
+            new TranslationSeedItem("entity.quartzlog.tasktype", "zh-HK", "任务类型_hk", "任务类型（1=程序集 2=网络请求 3=SQL语句）"),
 
             // entity.quartzlog.executetime
-            new TranslationSeedItem("entity.quartzlog.executetime", "en-US", "执行时间", "执行时间"),
+            new TranslationSeedItem("entity.quartzlog.executetime", "en-US", "执行时间_us", "执行时间"),
             // entity.quartzlog.executetime
-            new TranslationSeedItem("entity.quartzlog.executetime", "ja-JP", "执行时间", "执行时间"),
+            new TranslationSeedItem("entity.quartzlog.executetime", "ja-JP", "执行时间_jp", "执行时间"),
             // entity.quartzlog.executetime
             new TranslationSeedItem("entity.quartzlog.executetime", "zh-CN", "执行时间", "执行时间"),
             // entity.quartzlog.executetime
-            new TranslationSeedItem("entity.quartzlog.executetime", "zh-HK", "执行时间", "执行时间"),
+            new TranslationSeedItem("entity.quartzlog.executetime", "zh-HK", "执行时间_hk", "执行时间"),
 
             // entity.quartzlog.executeduration
-            new TranslationSeedItem("entity.quartzlog.executeduration", "en-US", "执行耗时（毫秒）", "执行耗时（毫秒）"),
+            new TranslationSeedItem("entity.quartzlog.executeduration", "en-US", "执行耗时（毫秒）_us", "执行耗时（毫秒）"),
             // entity.quartzlog.executeduration
-            new TranslationSeedItem("entity.quartzlog.executeduration", "ja-JP", "执行耗时（毫秒）", "执行耗时（毫秒）"),
+            new TranslationSeedItem("entity.quartzlog.executeduration", "ja-JP", "执行耗时（毫秒）_jp", "执行耗时（毫秒）"),
             // entity.quartzlog.executeduration
             new TranslationSeedItem("entity.quartzlog.executeduration", "zh-CN", "执行耗时（毫秒）", "执行耗时（毫秒）"),
             // entity.quartzlog.executeduration
-            new TranslationSeedItem("entity.quartzlog.executeduration", "zh-HK", "执行耗时（毫秒）", "执行耗时（毫秒）"),
+            new TranslationSeedItem("entity.quartzlog.executeduration", "zh-HK", "执行耗时（毫秒）_hk", "执行耗时（毫秒）"),
 
             // entity.quartzlog.executeparams
-            new TranslationSeedItem("entity.quartzlog.executeparams", "en-US", "执行参数", "执行参数"),
+            new TranslationSeedItem("entity.quartzlog.executeparams", "en-US", "执行参数_us", "执行参数"),
             // entity.quartzlog.executeparams
-            new TranslationSeedItem("entity.quartzlog.executeparams", "ja-JP", "执行参数", "执行参数"),
+            new TranslationSeedItem("entity.quartzlog.executeparams", "ja-JP", "执行参数_jp", "执行参数"),
             // entity.quartzlog.executeparams
             new TranslationSeedItem("entity.quartzlog.executeparams", "zh-CN", "执行参数", "执行参数"),
             // entity.quartzlog.executeparams
-            new TranslationSeedItem("entity.quartzlog.executeparams", "zh-HK", "执行参数", "执行参数"),
+            new TranslationSeedItem("entity.quartzlog.executeparams", "zh-HK", "执行参数_hk", "执行参数"),
 
             // entity.quartzlog.executemessage
-            new TranslationSeedItem("entity.quartzlog.executemessage", "en-US", "执行消息", "执行消息"),
+            new TranslationSeedItem("entity.quartzlog.executemessage", "en-US", "执行消息_us", "执行消息"),
             // entity.quartzlog.executemessage
-            new TranslationSeedItem("entity.quartzlog.executemessage", "ja-JP", "执行消息", "执行消息"),
+            new TranslationSeedItem("entity.quartzlog.executemessage", "ja-JP", "执行消息_jp", "执行消息"),
             // entity.quartzlog.executemessage
             new TranslationSeedItem("entity.quartzlog.executemessage", "zh-CN", "执行消息", "执行消息"),
             // entity.quartzlog.executemessage
-            new TranslationSeedItem("entity.quartzlog.executemessage", "zh-HK", "执行消息", "执行消息"),
+            new TranslationSeedItem("entity.quartzlog.executemessage", "zh-HK", "执行消息_hk", "执行消息"),
 
             // entity.quartzlog.errorinfo
-            new TranslationSeedItem("entity.quartzlog.errorinfo", "en-US", "错误信息", "错误信息"),
+            new TranslationSeedItem("entity.quartzlog.errorinfo", "en-US", "错误信息_us", "错误信息"),
             // entity.quartzlog.errorinfo
-            new TranslationSeedItem("entity.quartzlog.errorinfo", "ja-JP", "错误信息", "错误信息"),
+            new TranslationSeedItem("entity.quartzlog.errorinfo", "ja-JP", "错误信息_jp", "错误信息"),
             // entity.quartzlog.errorinfo
             new TranslationSeedItem("entity.quartzlog.errorinfo", "zh-CN", "错误信息", "错误信息"),
             // entity.quartzlog.errorinfo
-            new TranslationSeedItem("entity.quartzlog.errorinfo", "zh-HK", "错误信息", "错误信息"),
+            new TranslationSeedItem("entity.quartzlog.errorinfo", "zh-HK", "错误信息_hk", "错误信息"),
 
             // entity.quartzlog.executeip
-            new TranslationSeedItem("entity.quartzlog.executeip", "en-US", "执行机器IP", "执行机器 IP"),
+            new TranslationSeedItem("entity.quartzlog.executeip", "en-US", "执行机器IP_us", "执行机器 IP"),
             // entity.quartzlog.executeip
-            new TranslationSeedItem("entity.quartzlog.executeip", "ja-JP", "执行机器IP", "执行机器 IP"),
+            new TranslationSeedItem("entity.quartzlog.executeip", "ja-JP", "执行机器IP_jp", "执行机器 IP"),
             // entity.quartzlog.executeip
             new TranslationSeedItem("entity.quartzlog.executeip", "zh-CN", "执行机器IP", "执行机器 IP"),
             // entity.quartzlog.executeip
-            new TranslationSeedItem("entity.quartzlog.executeip", "zh-HK", "执行机器IP", "执行机器 IP"),
+            new TranslationSeedItem("entity.quartzlog.executeip", "zh-HK", "执行机器IP_hk", "执行机器 IP"),
 
             // entity.quartzlog.executehost
-            new TranslationSeedItem("entity.quartzlog.executehost", "en-US", "执行机器名", "执行机器名"),
+            new TranslationSeedItem("entity.quartzlog.executehost", "en-US", "执行机器名_us", "执行机器名"),
             // entity.quartzlog.executehost
-            new TranslationSeedItem("entity.quartzlog.executehost", "ja-JP", "执行机器名", "执行机器名"),
+            new TranslationSeedItem("entity.quartzlog.executehost", "ja-JP", "执行机器名_jp", "执行机器名"),
             // entity.quartzlog.executehost
             new TranslationSeedItem("entity.quartzlog.executehost", "zh-CN", "执行机器名", "执行机器名"),
             // entity.quartzlog.executehost
-            new TranslationSeedItem("entity.quartzlog.executehost", "zh-HK", "执行机器名", "执行机器名"),
+            new TranslationSeedItem("entity.quartzlog.executehost", "zh-HK", "执行机器名_hk", "执行机器名"),
 
             // entity.quartzlog.executestatus
-            new TranslationSeedItem("entity.quartzlog.executestatus", "en-US", "执行状态", "执行状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.quartzlog.executestatus", "en-US", "执行状态_us", "执行状态（0=失败，1=成功）"),
             // entity.quartzlog.executestatus
-            new TranslationSeedItem("entity.quartzlog.executestatus", "ja-JP", "执行状态", "执行状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.quartzlog.executestatus", "ja-JP", "执行状态_jp", "执行状态（0=失败，1=成功）"),
             // entity.quartzlog.executestatus
             new TranslationSeedItem("entity.quartzlog.executestatus", "zh-CN", "执行状态", "执行状态（0=失败，1=成功）"),
             // entity.quartzlog.executestatus
-            new TranslationSeedItem("entity.quartzlog.executestatus", "zh-HK", "执行状态", "执行状态（0=失败，1=成功）"),
+            new TranslationSeedItem("entity.quartzlog.executestatus", "zh-HK", "执行状态_hk", "执行状态（0=失败，1=成功）"),
 
             // entity.quartzlog.quartztask
-            new TranslationSeedItem("entity.quartzlog.quartztask", "en-US", "关联的定时任务", "关联的定时任务"),
+            new TranslationSeedItem("entity.quartzlog.quartztask", "en-US", "关联的定时任务_us", "关联的定时任务"),
             // entity.quartzlog.quartztask
-            new TranslationSeedItem("entity.quartzlog.quartztask", "ja-JP", "关联的定时任务", "关联的定时任务"),
+            new TranslationSeedItem("entity.quartzlog.quartztask", "ja-JP", "关联的定时任务_jp", "关联的定时任务"),
             // entity.quartzlog.quartztask
             new TranslationSeedItem("entity.quartzlog.quartztask", "zh-CN", "关联的定时任务", "关联的定时任务"),
             // entity.quartzlog.quartztask
-            new TranslationSeedItem("entity.quartzlog.quartztask", "zh-HK", "关联的定时任务", "关联的定时任务"),
+            new TranslationSeedItem("entity.quartzlog.quartztask", "zh-HK", "关联的定时任务_hk", "关联的定时任务"),
         };
     }
 
@@ -223,10 +223,10 @@ public class TaktQuartzLogI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 9;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Logging";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

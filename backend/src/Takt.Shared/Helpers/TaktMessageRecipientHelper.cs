@@ -20,7 +20,7 @@ public static class TaktMessageRecipientHelper
     /// <summary>
     /// 是否启用抄送发送者本人（自审计）
     /// </summary>
-    /// <param name="isCc">是否抄送（sys_yes_no，1=是）</param>
+    /// <param name="isCc">是否抄送（sys_yes_no_type，1=是）</param>
     /// <returns>是否为「是」</returns>
     public static bool IsSelfAuditCcEnabled(int isCc) => isCc == 1;
 

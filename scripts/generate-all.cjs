@@ -36,6 +36,16 @@ const {
 
 } = require('./generate-script-common.cjs');
 
+const {
+
+  validateEntityMasterDetailAssociations,
+
+  listAssociationsForMaster,
+
+  forEachPairedChildAssociation,
+
+} = require('./generate-master-detail-associations.cjs');
+
 
 
 /** 手工独立服务/控制器（单实体生成时须 --force 才覆盖） */
@@ -234,6 +244,8 @@ function printUsage() {
 
   - 已禁用 --all；每次必须指定一个实体
 
+  - 主实体 OneToMany 子表将级联执行完整流水线（DTO/服务/控制器/types/api/Vue），须与子表 ManyToOne 成对
+
 
 
 流水线顺序:
@@ -354,23 +366,42 @@ try {
 
   const summary = { ran: 0, skipped: 0 };
 
+  /** @type {Set<string>} */
+  const processedEntities = new Set();
 
-
-  for (const step of PIPELINE) {
-
-    const status = runPipelineStep(step, options);
-
-    if (status === 'skipped') {
-
-      summary.skipped += 1;
-
-    } else {
-
-      summary.ran += 1;
-
+  /**
+   * 单实体 + OneToMany 级联子实体完整流水线
+   * @param {string} entityPrefix
+   */
+  function runFullPipelineForEntity(entityPrefix) {
+    if (processedEntities.has(entityPrefix)) {
+      console.log(`⏭️  已执行过 Takt${entityPrefix}，跳过重复级联`);
+      return;
     }
-
+    processedEntities.add(entityPrefix);
+    validateEntityMasterDetailAssociations(entityPrefix);
+    console.log(`\n${'═'.repeat(60)}`);
+    console.log(`📦 实体 Takt${entityPrefix}`);
+    console.log(`${'═'.repeat(60)}\n`);
+    const entityOptions = { ...options, entityPrefix };
+    for (const step of PIPELINE) {
+      const status = runPipelineStep(step, entityOptions);
+      if (status === 'skipped') {
+        summary.skipped += 1;
+      } else {
+        summary.ran += 1;
+      }
+    }
+    forEachPairedChildAssociation(entityPrefix, (childShort, assoc) => {
+      console.log(
+        `\n── 关联对 [OneToMany ↔ ManyToOne] Takt${assoc.masterPascal}.${assoc.masterNavProp} → ` +
+        `Takt${assoc.childPascal}.${assoc.childNavProp}（外键 ${assoc.fkFieldOnChild}）完整流水线 ──\n`,
+      );
+      runFullPipelineForEntity(childShort);
+    });
   }
+
+  runFullPipelineForEntity(options.entityPrefix);
 
 
 

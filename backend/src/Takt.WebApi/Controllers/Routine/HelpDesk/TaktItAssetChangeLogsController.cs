@@ -41,7 +41,7 @@ public class TaktItAssetChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:helpdesk:itassetchangelog:list", "IT设备保修变更日志列表")]
+    [TaktPermission("routine:helpdesk:itasset:list", "IT设备保修变更日志列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetItAssetChangeLogListAsync([FromQuery] TaktItAssetChangeLogQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktItAssetChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">IT设备保修变更日志ID</param>
     /// <returns>IT设备保修变更日志DTO</returns>
-    [TaktPermission("routine:helpdesk:itassetchangelog:query", "IT设备保修变更日志详情")]
+    [TaktPermission("routine:helpdesk:itasset:query", "IT设备保修变更日志详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetItAssetChangeLogByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktItAssetChangeLogsController : TaktControllerBase
     /// 获取IT设备保修变更日志选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:helpdesk:itassetchangelog:query", "IT设备保修变更日志选项")]
+    [TaktPermission("routine:helpdesk:itasset:query", "IT设备保修变更日志选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetItAssetChangeLogOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktItAssetChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>IT设备保修变更日志DTO</returns>
-    [TaktPermission("routine:helpdesk:itassetchangelog:create", "创建IT设备保修变更日志")]
+    [TaktPermission("routine:helpdesk:itasset:create", "创建IT设备保修变更日志")]
     [HttpPost]
     public async Task<IActionResult> CreateItAssetChangeLogAsync([FromBody] TaktItAssetChangeLogCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktItAssetChangeLogsController : TaktControllerBase
     /// <param name="id">IT设备保修变更日志ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>IT设备保修变更日志DTO</returns>
-    [TaktPermission("routine:helpdesk:itassetchangelog:update", "更新IT设备保修变更日志")]
+    [TaktPermission("routine:helpdesk:itasset:update", "更新IT设备保修变更日志")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateItAssetChangeLogAsync(long id, [FromBody] TaktItAssetChangeLogUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktItAssetChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="id">IT设备保修变更日志ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:helpdesk:itassetchangelog:delete", "删除IT设备保修变更日志")]
+    [TaktPermission("routine:helpdesk:itasset:delete", "删除IT设备保修变更日志")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteItAssetChangeLogByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktItAssetChangeLogsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:helpdesk:itassetchangelog:delete", "批量删除IT设备保修变更日志")]
+    [TaktPermission("routine:helpdesk:itasset:delete", "批量删除IT设备保修变更日志")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteItAssetChangeLogBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktItAssetChangeLogsController : TaktControllerBase
     /// 导出IT设备保修变更日志
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:helpdesk:itassetchangelog:export", "导出IT设备保修变更日志")]
+    [TaktPermission("routine:helpdesk:itasset:export", "导出IT设备保修变更日志")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportItAssetChangeLogAsync([FromQuery] TaktItAssetChangeLogQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

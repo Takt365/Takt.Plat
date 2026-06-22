@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemsController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供应商评价考核项目明细控制器
 // 
@@ -41,7 +41,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:list", "供应商评价考核项目明细列表")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:list", "供应商评价考核项目明细列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSupplierEvaluationItemListAsync([FromQuery] TaktSupplierEvaluationItemQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">供应商评价考核项目明细ID</param>
     /// <returns>供应商评价考核项目明细DTO</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:query", "供应商评价考核项目明细详情")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:query", "供应商评价考核项目明细详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSupplierEvaluationItemByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// 获取供应商评价考核项目明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:query", "供应商评价考核项目明细选项")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:query", "供应商评价考核项目明细选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSupplierEvaluationItemOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>供应商评价考核项目明细DTO</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:create", "创建供应商评价考核项目明细")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:create", "创建供应商评价考核项目明细")]
     [HttpPost]
     public async Task<IActionResult> CreateSupplierEvaluationItemAsync([FromBody] TaktSupplierEvaluationItemCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// <param name="id">供应商评价考核项目明细ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>供应商评价考核项目明细DTO</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:update", "更新供应商评价考核项目明细")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:update", "更新供应商评价考核项目明细")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSupplierEvaluationItemAsync(long id, [FromBody] TaktSupplierEvaluationItemUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// </summary>
     /// <param name="id">供应商评价考核项目明细ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:delete", "删除供应商评价考核项目明细")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:delete", "删除供应商评价考核项目明细")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSupplierEvaluationItemByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:delete", "批量删除供应商评价考核项目明细")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:delete", "批量删除供应商评价考核项目明细")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSupplierEvaluationItemBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>供应商评价考核项目明细DTO</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:update", "更新供应商评价考核项目明细状态")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:update", "更新供应商评价考核项目明细状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateSupplierEvaluationItemStatusAsync([FromBody] TaktSupplierEvaluationItemStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:import", "获取供应商评价考核项目明细导入模板")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:import", "获取供应商评价考核项目明细导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSupplierEvaluationItemTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:import", "导入供应商评价考核项目明细")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:import", "导入供应商评价考核项目明细")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSupplierEvaluationItemAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktSupplierEvaluationItemsController : TaktControllerBase
     /// 导出供应商评价考核项目明细
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:quality:complaint:supplierevaluationitem:export", "导出供应商评价考核项目明细")]
+    [TaktPermission("logistics:quality:complaint:supplierevaluation:export", "导出供应商评价考核项目明细")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSupplierEvaluationItemAsync([FromQuery] TaktSupplierEvaluationItemQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

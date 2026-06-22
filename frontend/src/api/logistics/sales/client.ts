@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
 // 文件名称：client.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-06-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -42,9 +42,7 @@ export function getClientList(queryDto: any): Promise<TaktPagedResult<Client>> {
   return request<TaktPagedResult<Client>>({
     url: `${CLIENT_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -114,7 +112,7 @@ export function deleteClientBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新客户端信息状态
- * @param {ClientStatus} dto 状态 DTO（TaktCommonStatus 枚举）
+ * @param {ClientStatus} dto 状态 DTO
  * @returns {Promise<Client>} 客户端信息DTO
  */
 export function updateClientStatus(dto: ClientStatus): Promise<Client> {
@@ -214,7 +212,7 @@ export function exportClient(
     url: `${CLIENT_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

@@ -96,9 +96,9 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         }
 
         var disconnectTime = DateTime.Now;
-        online.ConnectLocation = TaktLocationHelper.ResolveIpLocationForLogOrKeep(
+        online.ConnectLocation = TaktLocationHelper.ResolveIpAndLocationForLog(
             online.ConnectIp,
-            online.ConnectLocation);
+            online.ConnectLocation).Location;
         online.OnlineStatus = 2;
         online.DisconnectTime = disconnectTime;
         online.ConnectionDuration = (int)(disconnectTime - online.ConnectTime).TotalSeconds;

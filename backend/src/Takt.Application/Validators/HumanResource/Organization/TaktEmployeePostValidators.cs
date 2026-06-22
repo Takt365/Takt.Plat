@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Organization
 // 文件名称：TaktEmployeePostValidators.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeePost 关联 DTO FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeePost 生成，请按需审阅）
 // 
@@ -34,8 +34,8 @@ public class TaktEmployeePostDtoValidator : AbstractValidator<TaktEmployeePostDt
         RuleFor(x => x.PostId)
             .GreaterThan(0).WithMessage("岗位ID无效");
         RuleFor(x => x.EmployeeName)
-            .MaximumLength(40).WithMessage("EmployeeName长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.EmployeeName));
+            .MaximumLength(200).WithMessage("EmployeeName长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.EmployeeName));
         RuleFor(x => x.PostName)
-            .MaximumLength(40).WithMessage("PostName长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.PostName));
+            .MaximumLength(200).WithMessage("PostName长度不能超过200个字符").When(x => !string.IsNullOrWhiteSpace(x.PostName));
     }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.Announcement
 // 文件名称：TaktAnnouncementI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAnnouncement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,164 +75,164 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktAnnouncement 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.announcement._self / entity.announcement.{{field}}；ResourceGroup=2；ResourceType=0
+    /// I18nKey：entity.announcement._self / entity.announcement.{{field}}；ResourceGroup=Announcement；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetAnnouncementTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.announcement._self
-            new TranslationSeedItem("entity.announcement._self", "en-US", "Announcement Information", "实体名称"),
+            new TranslationSeedItem("entity.announcement._self", "en-US", "Announcement Information_us", "实体名称"),
             // entity.announcement._self
-            new TranslationSeedItem("entity.announcement._self", "ja-JP", "公告通知信息", "实体名称"),
+            new TranslationSeedItem("entity.announcement._self", "ja-JP", "公告通知信息_jp", "实体名称"),
             // entity.announcement._self
             new TranslationSeedItem("entity.announcement._self", "zh-CN", "公告通知信息", "实体名称"),
             // entity.announcement._self
-            new TranslationSeedItem("entity.announcement._self", "zh-HK", "公告通知信息", "实体名称"),
+            new TranslationSeedItem("entity.announcement._self", "zh-HK", "公告通知信息_hk", "实体名称"),
 
             // entity.announcement.title
-            new TranslationSeedItem("entity.announcement.title", "en-US", "公告标题", "公告标题"),
+            new TranslationSeedItem("entity.announcement.title", "en-US", "公告标题_us", "公告标题"),
             // entity.announcement.title
-            new TranslationSeedItem("entity.announcement.title", "ja-JP", "公告标题", "公告标题"),
+            new TranslationSeedItem("entity.announcement.title", "ja-JP", "公告标题_jp", "公告标题"),
             // entity.announcement.title
             new TranslationSeedItem("entity.announcement.title", "zh-CN", "公告标题", "公告标题"),
             // entity.announcement.title
-            new TranslationSeedItem("entity.announcement.title", "zh-HK", "公告标题", "公告标题"),
+            new TranslationSeedItem("entity.announcement.title", "zh-HK", "公告标题_hk", "公告标题"),
 
             // entity.announcement.type
-            new TranslationSeedItem("entity.announcement.type", "en-US", "公告类型", "公告类型（1=公告，2=通知，3=新闻，4=紧急通知）"),
+            new TranslationSeedItem("entity.announcement.type", "en-US", "公告类型_us", "公告类型（字典 sys_announcement_category）"),
             // entity.announcement.type
-            new TranslationSeedItem("entity.announcement.type", "ja-JP", "公告类型", "公告类型（1=公告，2=通知，3=新闻，4=紧急通知）"),
+            new TranslationSeedItem("entity.announcement.type", "ja-JP", "公告类型_jp", "公告类型（字典 sys_announcement_category）"),
             // entity.announcement.type
-            new TranslationSeedItem("entity.announcement.type", "zh-CN", "公告类型", "公告类型（1=公告，2=通知，3=新闻，4=紧急通知）"),
+            new TranslationSeedItem("entity.announcement.type", "zh-CN", "公告类型", "公告类型（字典 sys_announcement_category）"),
             // entity.announcement.type
-            new TranslationSeedItem("entity.announcement.type", "zh-HK", "公告类型", "公告类型（1=公告，2=通知，3=新闻，4=紧急通知）"),
+            new TranslationSeedItem("entity.announcement.type", "zh-HK", "公告类型_hk", "公告类型（字典 sys_announcement_category）"),
 
             // entity.announcement.content
-            new TranslationSeedItem("entity.announcement.content", "en-US", "公告内容", "公告内容（富文本 HTML）"),
+            new TranslationSeedItem("entity.announcement.content", "en-US", "公告内容_us", "公告内容（富文本 HTML）"),
             // entity.announcement.content
-            new TranslationSeedItem("entity.announcement.content", "ja-JP", "公告内容", "公告内容（富文本 HTML）"),
+            new TranslationSeedItem("entity.announcement.content", "ja-JP", "公告内容_jp", "公告内容（富文本 HTML）"),
             // entity.announcement.content
             new TranslationSeedItem("entity.announcement.content", "zh-CN", "公告内容", "公告内容（富文本 HTML）"),
             // entity.announcement.content
-            new TranslationSeedItem("entity.announcement.content", "zh-HK", "公告内容", "公告内容（富文本 HTML）"),
+            new TranslationSeedItem("entity.announcement.content", "zh-HK", "公告内容_hk", "公告内容（富文本 HTML）"),
 
             // entity.announcement.summary
-            new TranslationSeedItem("entity.announcement.summary", "en-US", "公告摘要", "公告摘要（用于列表展示）"),
+            new TranslationSeedItem("entity.announcement.summary", "en-US", "公告摘要_us", "公告摘要（用于列表展示）"),
             // entity.announcement.summary
-            new TranslationSeedItem("entity.announcement.summary", "ja-JP", "公告摘要", "公告摘要（用于列表展示）"),
+            new TranslationSeedItem("entity.announcement.summary", "ja-JP", "公告摘要_jp", "公告摘要（用于列表展示）"),
             // entity.announcement.summary
             new TranslationSeedItem("entity.announcement.summary", "zh-CN", "公告摘要", "公告摘要（用于列表展示）"),
             // entity.announcement.summary
-            new TranslationSeedItem("entity.announcement.summary", "zh-HK", "公告摘要", "公告摘要（用于列表展示）"),
+            new TranslationSeedItem("entity.announcement.summary", "zh-HK", "公告摘要_hk", "公告摘要（用于列表展示）"),
 
             // entity.announcement.tags
-            new TranslationSeedItem("entity.announcement.tags", "en-US", "标签", "标签（逗号分隔或 JSON 数组存储）"),
+            new TranslationSeedItem("entity.announcement.tags", "en-US", "标签_us", "标签（逗号分隔或 JSON 数组存储）"),
             // entity.announcement.tags
-            new TranslationSeedItem("entity.announcement.tags", "ja-JP", "标签", "标签（逗号分隔或 JSON 数组存储）"),
+            new TranslationSeedItem("entity.announcement.tags", "ja-JP", "标签_jp", "标签（逗号分隔或 JSON 数组存储）"),
             // entity.announcement.tags
             new TranslationSeedItem("entity.announcement.tags", "zh-CN", "标签", "标签（逗号分隔或 JSON 数组存储）"),
             // entity.announcement.tags
-            new TranslationSeedItem("entity.announcement.tags", "zh-HK", "标签", "标签（逗号分隔或 JSON 数组存储）"),
+            new TranslationSeedItem("entity.announcement.tags", "zh-HK", "标签_hk", "标签（逗号分隔或 JSON 数组存储）"),
 
             // entity.announcement.attachments
-            new TranslationSeedItem("entity.announcement.attachments", "en-US", "附件路径", "附件路径（多个附件用逗号分隔）"),
+            new TranslationSeedItem("entity.announcement.attachments", "en-US", "附件路径_us", "附件路径（多个附件用逗号分隔）"),
             // entity.announcement.attachments
-            new TranslationSeedItem("entity.announcement.attachments", "ja-JP", "附件路径", "附件路径（多个附件用逗号分隔）"),
+            new TranslationSeedItem("entity.announcement.attachments", "ja-JP", "附件路径_jp", "附件路径（多个附件用逗号分隔）"),
             // entity.announcement.attachments
             new TranslationSeedItem("entity.announcement.attachments", "zh-CN", "附件路径", "附件路径（多个附件用逗号分隔）"),
             // entity.announcement.attachments
-            new TranslationSeedItem("entity.announcement.attachments", "zh-HK", "附件路径", "附件路径（多个附件用逗号分隔）"),
+            new TranslationSeedItem("entity.announcement.attachments", "zh-HK", "附件路径_hk", "附件路径（多个附件用逗号分隔）"),
 
             // entity.announcement.publishtime
-            new TranslationSeedItem("entity.announcement.publishtime", "en-US", "发布时间", "发布时间（定时发布时使用）"),
+            new TranslationSeedItem("entity.announcement.publishtime", "en-US", "发布时间_us", "发布时间（定时发布时使用）"),
             // entity.announcement.publishtime
-            new TranslationSeedItem("entity.announcement.publishtime", "ja-JP", "发布时间", "发布时间（定时发布时使用）"),
+            new TranslationSeedItem("entity.announcement.publishtime", "ja-JP", "发布时间_jp", "发布时间（定时发布时使用）"),
             // entity.announcement.publishtime
             new TranslationSeedItem("entity.announcement.publishtime", "zh-CN", "发布时间", "发布时间（定时发布时使用）"),
             // entity.announcement.publishtime
-            new TranslationSeedItem("entity.announcement.publishtime", "zh-HK", "发布时间", "发布时间（定时发布时使用）"),
+            new TranslationSeedItem("entity.announcement.publishtime", "zh-HK", "发布时间_hk", "发布时间（定时发布时使用）"),
 
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "en-US", "是否定时发布", "是否定时发布（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "en-US", "是否定时发布_us", "是否定时发布（1=是，0=否）"),
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "ja-JP", "是否定时发布", "是否定时发布（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "ja-JP", "是否定时发布_jp", "是否定时发布（1=是，0=否）"),
             // entity.announcement.isscheduled
             new TranslationSeedItem("entity.announcement.isscheduled", "zh-CN", "是否定时发布", "是否定时发布（1=是，0=否）"),
             // entity.announcement.isscheduled
-            new TranslationSeedItem("entity.announcement.isscheduled", "zh-HK", "是否定时发布", "是否定时发布（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.isscheduled", "zh-HK", "是否定时发布_hk", "是否定时发布（1=是，0=否）"),
 
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "en-US", "是否置顶", "是否置顶（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "en-US", "是否置顶_us", "是否置顶（1=是，0=否）"),
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "ja-JP", "是否置顶", "是否置顶（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "ja-JP", "是否置顶_jp", "是否置顶（1=是，0=否）"),
             // entity.announcement.istop
             new TranslationSeedItem("entity.announcement.istop", "zh-CN", "是否置顶", "是否置顶（1=是，0=否）"),
             // entity.announcement.istop
-            new TranslationSeedItem("entity.announcement.istop", "zh-HK", "是否置顶", "是否置顶（1=是，0=否）"),
+            new TranslationSeedItem("entity.announcement.istop", "zh-HK", "是否置顶_hk", "是否置顶（1=是，0=否）"),
 
             // entity.announcement.toppriority
-            new TranslationSeedItem("entity.announcement.toppriority", "en-US", "置顶优先级", "置顶优先级（数字越大越靠前）"),
+            new TranslationSeedItem("entity.announcement.toppriority", "en-US", "置顶优先级_us", "置顶优先级（数字越大越靠前）"),
             // entity.announcement.toppriority
-            new TranslationSeedItem("entity.announcement.toppriority", "ja-JP", "置顶优先级", "置顶优先级（数字越大越靠前）"),
+            new TranslationSeedItem("entity.announcement.toppriority", "ja-JP", "置顶优先级_jp", "置顶优先级（数字越大越靠前）"),
             // entity.announcement.toppriority
             new TranslationSeedItem("entity.announcement.toppriority", "zh-CN", "置顶优先级", "置顶优先级（数字越大越靠前）"),
             // entity.announcement.toppriority
-            new TranslationSeedItem("entity.announcement.toppriority", "zh-HK", "置顶优先级", "置顶优先级（数字越大越靠前）"),
+            new TranslationSeedItem("entity.announcement.toppriority", "zh-HK", "置顶优先级_hk", "置顶优先级（数字越大越靠前）"),
 
             // entity.announcement.expiretime
-            new TranslationSeedItem("entity.announcement.expiretime", "en-US", "过期时间", "过期时间（过期后自动隐藏）"),
+            new TranslationSeedItem("entity.announcement.expiretime", "en-US", "过期时间_us", "过期时间（过期后自动隐藏）"),
             // entity.announcement.expiretime
-            new TranslationSeedItem("entity.announcement.expiretime", "ja-JP", "过期时间", "过期时间（过期后自动隐藏）"),
+            new TranslationSeedItem("entity.announcement.expiretime", "ja-JP", "过期时间_jp", "过期时间（过期后自动隐藏）"),
             // entity.announcement.expiretime
             new TranslationSeedItem("entity.announcement.expiretime", "zh-CN", "过期时间", "过期时间（过期后自动隐藏）"),
             // entity.announcement.expiretime
-            new TranslationSeedItem("entity.announcement.expiretime", "zh-HK", "过期时间", "过期时间（过期后自动隐藏）"),
+            new TranslationSeedItem("entity.announcement.expiretime", "zh-HK", "过期时间_hk", "过期时间（过期后自动隐藏）"),
 
             // entity.announcement.viewcount
-            new TranslationSeedItem("entity.announcement.viewcount", "en-US", "查看次数", "查看次数"),
+            new TranslationSeedItem("entity.announcement.viewcount", "en-US", "查看次数_us", "查看次数"),
             // entity.announcement.viewcount
-            new TranslationSeedItem("entity.announcement.viewcount", "ja-JP", "查看次数", "查看次数"),
+            new TranslationSeedItem("entity.announcement.viewcount", "ja-JP", "查看次数_jp", "查看次数"),
             // entity.announcement.viewcount
             new TranslationSeedItem("entity.announcement.viewcount", "zh-CN", "查看次数", "查看次数"),
             // entity.announcement.viewcount
-            new TranslationSeedItem("entity.announcement.viewcount", "zh-HK", "查看次数", "查看次数"),
+            new TranslationSeedItem("entity.announcement.viewcount", "zh-HK", "查看次数_hk", "查看次数"),
 
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "en-US", "目标范围", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "en-US", "目标范围_us", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "ja-JP", "目标范围", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "ja-JP", "目标范围_jp", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
             // entity.announcement.targetscope
             new TranslationSeedItem("entity.announcement.targetscope", "zh-CN", "目标范围", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
             // entity.announcement.targetscope
-            new TranslationSeedItem("entity.announcement.targetscope", "zh-HK", "目标范围", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
+            new TranslationSeedItem("entity.announcement.targetscope", "zh-HK", "目标范围_hk", "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）"),
 
             // entity.announcement.targetdepartments
-            new TranslationSeedItem("entity.announcement.targetdepartments", "en-US", "目标部门编码", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetdepartments", "en-US", "目标部门编码_us", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
             // entity.announcement.targetdepartments
-            new TranslationSeedItem("entity.announcement.targetdepartments", "ja-JP", "目标部门编码", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetdepartments", "ja-JP", "目标部门编码_jp", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
             // entity.announcement.targetdepartments
             new TranslationSeedItem("entity.announcement.targetdepartments", "zh-CN", "目标部门编码", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
             // entity.announcement.targetdepartments
-            new TranslationSeedItem("entity.announcement.targetdepartments", "zh-HK", "目标部门编码", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetdepartments", "zh-HK", "目标部门编码_hk", "目标部门编码（多个用逗号分隔，当 target_scope=department 时使用）"),
 
             // entity.announcement.targetusers
-            new TranslationSeedItem("entity.announcement.targetusers", "en-US", "目标用户ID", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetusers", "en-US", "目标用户ID_us", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
             // entity.announcement.targetusers
-            new TranslationSeedItem("entity.announcement.targetusers", "ja-JP", "目标用户ID", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetusers", "ja-JP", "目标用户ID_jp", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
             // entity.announcement.targetusers
             new TranslationSeedItem("entity.announcement.targetusers", "zh-CN", "目标用户ID", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
             // entity.announcement.targetusers
-            new TranslationSeedItem("entity.announcement.targetusers", "zh-HK", "目标用户ID", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
+            new TranslationSeedItem("entity.announcement.targetusers", "zh-HK", "目标用户ID_hk", "目标用户 ID（多个用逗号分隔，当 target_scope=custom 时使用）"),
 
             // entity.announcement.status
-            new TranslationSeedItem("entity.announcement.status", "en-US", "状态", "状态（0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.announcement.status", "en-US", "状态_us", "状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
             // entity.announcement.status
-            new TranslationSeedItem("entity.announcement.status", "ja-JP", "状态", "状态（0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.announcement.status", "ja-JP", "状态_jp", "状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
             // entity.announcement.status
-            new TranslationSeedItem("entity.announcement.status", "zh-CN", "状态", "状态（0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.announcement.status", "zh-CN", "状态", "状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
             // entity.announcement.status
-            new TranslationSeedItem("entity.announcement.status", "zh-HK", "状态", "状态（0=草稿，1=已发布，2=已撤回，3=已过期）"),
+            new TranslationSeedItem("entity.announcement.status", "zh-HK", "状态_hk", "状态（字典 sys_publish_status；0=草稿，1=已发布，2=已撤回，3=已过期）"),
         };
     }
 
@@ -250,10 +250,10 @@ public class TaktAnnouncementI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 2;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Announcement";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

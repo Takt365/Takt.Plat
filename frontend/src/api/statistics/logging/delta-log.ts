@@ -40,9 +40,7 @@ export function getDeltaLogList(queryDto: any): Promise<TaktPagedResult<DeltaLog
   return request<TaktPagedResult<DeltaLog>>({
     url: `${DELTA_LOG_API_BASE}/list`,
     method: 'get',
-    params: {
-      queryDto
-    },
+    params: queryDto,
   });
 }
 
@@ -145,7 +143,7 @@ export function exportDeltaLog(
     url: `${DELTA_LOG_API_BASE}/export`,
     method: 'get',
     params: {
-      query,
+      ...query,
       sheetName,
       exportName
     },

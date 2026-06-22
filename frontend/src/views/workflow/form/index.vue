@@ -14,7 +14,7 @@
   <div class="workflow-form">
     <TaktQueryBar
       v-model="queryKeyword"
-      :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.flowForm.formcode'), t('entity.flowForm.formname')].join(t('common.tip.or')) })"
+      :placeholder="searchPlaceholder"
       :loading="loading"
       @search="handleSearch"
       @reset="handleReset"
@@ -83,7 +83,7 @@
         <template v-else-if="column.key === 'isDatasource'">
           <TaktDictTag
             :value="record.isDatasource"
-            dict-type="sys_yes_no"
+            dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'formStatus'">
@@ -124,18 +124,18 @@
       @submit="handleAdvancedQuerySubmit"
       @reset="handleAdvancedQueryReset"
     >
-      <a-form-item :label="t('entity.flowForm.formcode')">
+      <a-form-item :label="t('entity.flowform.formcode')">
         <a-input v-model:value="advancedQueryForm.formCode" />
       </a-form-item>
-      <a-form-item :label="t('entity.flowForm.formname')">
+      <a-form-item :label="t('entity.flowform.formname')">
         <a-input v-model:value="advancedQueryForm.formName" />
       </a-form-item>
-      <a-form-item :label="t('entity.flowForm.formstatus')">
+      <a-form-item :label="t('entity.flowform.formstatus')">
         <TaktSelect
           v-model="advancedQueryForm.formStatus"
           dict-type="sys_scheme_status"
           style="width: 100%"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowForm.formstatus') })"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.flowform.formstatus') })"
           allow-clear
         />
       </a-form-item>
@@ -143,14 +143,14 @@
 
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.flowForm._self') })"
+      :title="t('common.dialog.title.import', { entity: t('entity.flowform._self') })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.flowForm._self"
+        entity-i18n-key="entity.flowform._self"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -184,6 +184,7 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import TaktQueryBar from '@/components/business/takt-query-bar/index.vue'
 import FormForm from './components/form-form.vue'
@@ -212,13 +213,17 @@ import { useUserStore } from '@/stores/identity/user'
 import { RiEditLine, RiDeleteBinLine, RiBrushLine, RiPlayLine, RiStopLine } from '@remixicon/vue'
 
 const { t } = useI18n()
+/** 列表快捷查询占位文案 */
+const searchPlaceholder = computed(
+  () => t('common.page.form.placeholder.search', { keyword: t('entity.flowform._self') })
+)
 const tenantStore = useTenantStore()
 const userStore = useUserStore()
 const loading = ref(false)
 const queryKeyword = ref('')
 const dataSource = ref<FlowForm[]>([])
-const currentPage = ref(1)
-const pageSize = ref(20)
+const currentPage = ref(getTaktDefaultPageIndex())
+const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const selectedRow = ref<FlowForm | null>(null)
 const selectedRows = ref<FlowForm[]>([])
@@ -238,7 +243,7 @@ const visibleColumnKeys = ref<string[]>([])
 /** 导入弹窗可见 */
 const importVisible = ref(false)
 /** Excel 导入导出文件名 */
-const excelNames = taktExcelEntityNames('flowForm', t('entity.flowForm._self'))
+const excelNames = taktExcelEntityNames('TaktFlowForm')
 
 type FlowFormColumn = {
   key?: string | number
@@ -320,7 +325,7 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left'
   },
   {
-    title: t('entity.flowForm.formcode'),
+    title: t('entity.flowform.formcode'),
     dataIndex: 'formCode',
     key: 'formCode',
     width: 140,
@@ -328,7 +333,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowForm.formname'),
+    title: t('entity.flowform.formname'),
     dataIndex: 'formName',
     key: 'formName',
     width: 160,
@@ -336,37 +341,37 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.flowForm.formcategory'),
+    title: t('entity.flowform.formcategory'),
     dataIndex: 'formCategory',
     key: 'formCategory',
     width: 100
   },
   {
-    title: t('entity.flowForm.formtype'),
+    title: t('entity.flowform.formtype'),
     dataIndex: 'formType',
     key: 'formType',
     width: 120
   },
   {
-    title: t('entity.flowForm.formversion'),
+    title: t('entity.flowform.formversion'),
     dataIndex: 'formVersion',
     key: 'formVersion',
     width: 90
   },
   {
-    title: t('entity.flowForm.isdatasource'),
+    title: t('entity.flowform.isdatasource'),
     dataIndex: 'isDatasource',
     key: 'isDatasource',
     width: 80
   },
   {
-    title: t('entity.flowForm.sortorder'),
+    title: t('entity.flowform.sortorder'),
     dataIndex: 'sortOrder',
     key: 'sortOrder',
     width: 80
   },
   {
-    title: t('entity.flowForm.formstatus'),
+    title: t('entity.flowform.formstatus'),
     dataIndex: 'formStatus',
     key: 'formStatus',
     width: 90
@@ -614,7 +619,7 @@ async function handleFormStatusChange(record: FlowForm, formStatus: number) {
   try {
     loading.value = true
     await updateFlowFormStatus({ flowFormId: record.flowFormId, formStatus })
-    message.success(formStatus === 1 ? t('workflow.form.page.publishSuccess') : t('workflow.form.page.disableSuccess'))
+    message.success(formStatus === 1 ? t('workflow.form.page.publish.success') : t('workflow.form.page.disable.success'))
     loadData()
   } catch (error: unknown) {
     message.error(getErrorMessage(error, t('common.feedback.failed')))
@@ -650,7 +655,7 @@ function resetForm() {
 
 /** 新增：仅此时重置表单数据；打开弹窗后 nextTick 再重置子组件步骤与内部状态。 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.flowForm._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: t('entity.flowform._self') })
   resetForm()
   formVisible.value = true
   nextTick(() => formFormRef.value?.resetSteps?.())
@@ -658,7 +663,7 @@ function handleCreate() {
 
 /** 编辑：拉取详情回填 form，再打开弹窗，nextTick 后重置子组件步骤与内部状态（子组件会按 form 重新拉取数据源/表/列）。 */
 async function handleEdit(record: FlowForm) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.flowForm._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.flowform._self') })
   formLoading.value = true
   try {
     const detail = await getFlowFormById(String(record.flowFormId))
@@ -682,7 +687,7 @@ async function handleEdit(record: FlowForm) {
     formVisible.value = true
     nextTick(() => formFormRef.value?.resetSteps?.())
   } catch {
-    message.error(t('workflow.form.page.loadDetailFailed'))
+    message.error(t('workflow.form.page.load.detail.failed'))
   } finally {
     formLoading.value = false
   }
@@ -696,7 +701,7 @@ function handleDesign(record: FlowForm) {
 /** 更新：若有选中行则编辑该行，否则提示请选择 */
 function handleUpdate() {
   if (selectedRow.value) handleEdit(selectedRow.value)
-  else message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.flowForm._self') }))
+  else message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.flowform._self') }))
 }
 
 /** 单条删除：二次确认后调用 deleteById 并刷新列表 */
@@ -705,7 +710,7 @@ function handleDeleteOne(record: FlowForm) {
   Modal.confirm({
     centered: true,
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.flowForm._self'), name }),
+    content: t('common.tip.confirm.delete.entity', { entity: t('entity.flowform._self'), name }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
@@ -726,13 +731,13 @@ function handleDeleteOne(record: FlowForm) {
 /** 批量删除：无选中则提示；有选中则二次确认后 deleteBatch 并刷新 */
 function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.flowForm._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.flowform._self') }))
     return
   }
   Modal.confirm({
     centered: true,
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { count: selectedRows.value.length, entity: t('entity.flowForm._self') }),
+    content: t('common.tip.confirm.delete.count', { count: selectedRows.value.length, entity: t('entity.flowform._self') }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
@@ -762,7 +767,7 @@ function handleFormCancel() {
 async function handleFormSubmit() {
   const valid = await formFormRef.value?.validateAllSteps?.()
   if (valid === false) {
-    message.warning(t('workflow.form.page.step.completeRequired'))
+    message.warning(t('workflow.form.page.step.complete.required'))
     return
   }
   try {

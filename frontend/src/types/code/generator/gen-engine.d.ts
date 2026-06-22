@@ -141,15 +141,27 @@ export interface InitializeTableFromEntityRequest {
 }
 
 /**
+ * 代码生成交付结果（GenMethod=1/2 落盘；GenMethod=0 为 zip 二进制，不经此类型）
+ * @description 对应后端 TaktCodeGenGenerateResultDto（JSON 部分）
+ */
+export interface CodeGenGenerateResult {
+  genMethod: number;
+  basePath?: string;
+  writtenFilePaths?: string[];
+  fileCount: number;
+  zipFileName?: string;
+}
+
+/**
  * 代码生成请求
- * 对应前端 GenerateCodeRequest
  * @description 对应后端 TaktGenerateCodeRequestDto
  */
 export interface GenerateCodeRequest {
-  /**
-   * 模板字典：模板键 → Scriban 模板内容（可空对象，由后端从 wwwroot/Generator 加载）
-   */
   templates?: Record<string, string>;
+  /** 0=zip，1=自定义路径，2=当前项目；可空则取表配置 */
+  genMethod?: number;
+  /** GenMethod=1 时的目标根路径 */
+  genPath?: string;
 }
 
 /**

@@ -74,13 +74,13 @@
         <template v-if="column.key === 'holidayType'">
           <TaktDictTag
             :value="getHolidayField(record, 'holidayType')"
-            dict-type="hr_holiday_type"
+            dict-type="hr_holiday_category"
           />
         </template>
         <template v-else-if="column.key === 'isWorkingDay'">
           <TaktDictTag
             :value="getHolidayField(record, 'isWorkingDay')"
-            dict-type="hr_holiday_is_working_day"
+            dict-type="hr_holiday_working_day_type"
           />
         </template>
       </template>
@@ -136,7 +136,7 @@
       <a-form-item :label="t('entity.holiday.type')">
         <TaktSelect
           v-model:value="advancedQueryForm.holidayType"
-          dict-type="hr_holiday_type"
+          dict-type="hr_holiday_category"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.holiday.type') })"
           allow-clear
         />
@@ -186,7 +186,7 @@
       <a-form-item :label="t('entity.holiday.isworkingday')">
         <TaktSelect
           v-model:value="advancedQueryForm.isWorkingDay"
-          dict-type="hr_holiday_is_working_day"
+          dict-type="hr_holiday_working_day_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.holiday.isworkingday') })"
           allow-clear
         />
@@ -243,11 +243,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('extFieldJson')">
-      <a-form-item :label="t('common.page.entity.extfieldjson')">
+      <div v-show="isFieldVisible('ExtField')">
+      <a-form-item :label="t('common.page.entity.ExtField')">
         <a-input
-          v-model:value="advancedQueryForm.extFieldJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.extfieldjson') })"
+          v-model:value="advancedQueryForm.ExtField"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.ExtField') })"
           allow-clear
         />
       </a-form-item>
@@ -302,6 +302,7 @@
 </template>
 
 <script setup lang="ts">
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 /**
  * 假日实体 假日条目管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/attendance/holiday
@@ -334,9 +335,9 @@ const loading = ref(false)
 /** 分页列表数据 */
 const dataSource = ref<Holiday[]>([])
 /** 当前页码 */
-const currentPage = ref(1)
+const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
-const pageSize = ref(20)
+const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
@@ -371,7 +372,7 @@ const advancedQueryForm = ref({
   holidayTheme: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
@@ -388,7 +389,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'holidayTheme', label: t('entity.holiday.theme') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extFieldJson', label: t('common.page.entity.extfieldjson') },
+  { key: 'ExtField', label: t('common.page.entity.ExtField') },
   { key: 'remark', label: t('common.page.entity.remark') },
 ])
 /** 高级查询当前可见字段 key */
@@ -619,7 +620,7 @@ function handleReset() {
   holidayTheme: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
   currentPage.value = 1
@@ -803,7 +804,7 @@ function handleAdvancedQueryReset() {
   holidayTheme: '',
   createdAtStart: '',
   createdAtEnd: '',
-  extFieldJson: '',
+  ExtField: '',
   remark: '',
   }
 }

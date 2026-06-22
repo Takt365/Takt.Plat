@@ -38,18 +38,18 @@
           <a-descriptions-item :label="t('foundation.cache.page.field.provider')">
             {{ cacheInfo?.provider ?? '-' }}
           </a-descriptions-item>
-          <a-descriptions-item :label="t('foundation.cache.page.field.defaultExpirationMinutes')">
+          <a-descriptions-item :label="t('foundation.cache.page.field.default.expiration.minutes')">
             {{ cacheInfo?.defaultExpirationMinutes ?? '-' }}
           </a-descriptions-item>
-          <a-descriptions-item :label="t('foundation.cache.page.field.enableSlidingExpiration')">
+          <a-descriptions-item :label="t('foundation.cache.page.field.enable.sliding.expiration')">
             {{ formatYesNo(cacheInfo?.enableSlidingExpiration) }}
           </a-descriptions-item>
-          <a-descriptions-item :label="t('foundation.cache.page.field.enableMultiLevelCache')">
+          <a-descriptions-item :label="t('foundation.cache.page.field.enable.multi.level.cache')">
             {{ formatYesNo(cacheInfo?.enableMultiLevelCache) }}
           </a-descriptions-item>
           <a-descriptions-item
             v-if="cacheInfo?.provider === 'Redis'"
-            :label="t('foundation.cache.page.field.redisInstanceName')"
+            :label="t('foundation.cache.page.field.redis.instance.name')"
           >
             {{ cacheInfo?.redisInstanceName || '-' }}
           </a-descriptions-item>
@@ -61,23 +61,23 @@
         <a-descriptions bordered :column="1" size="small">
           <template v-if="!statistics?.supported || statistics?.message">
             <a-descriptions-item :label="t('foundation.cache.page.field.note')">
-              {{ statistics?.message ?? t('foundation.cache.page.message.loadingHint') }}
+              {{ statistics?.message ?? t('foundation.cache.page.message.loading.hint') }}
             </a-descriptions-item>
           </template>
           <template v-else>
-            <a-descriptions-item :label="t('foundation.cache.page.field.currentEntryCount')">
+            <a-descriptions-item :label="t('foundation.cache.page.field.current.entry.count')">
               {{ statistics?.currentEntryCount ?? '-' }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('foundation.cache.page.field.totalHits')">
+            <a-descriptions-item :label="t('foundation.cache.page.field.total.hits')">
               {{ statistics?.totalHits ?? '-' }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('foundation.cache.page.field.totalMisses')">
+            <a-descriptions-item :label="t('foundation.cache.page.field.total.misses')">
               {{ statistics?.totalMisses ?? '-' }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('foundation.cache.page.field.hitRate')">
+            <a-descriptions-item :label="t('foundation.cache.page.field.hit.rate')">
               {{ formatHitRate(statistics?.hitRate) }}
             </a-descriptions-item>
-            <a-descriptions-item :label="t('foundation.cache.page.field.estimatedSizeBytes')">
+            <a-descriptions-item :label="t('foundation.cache.page.field.estimated.size.bytes')">
               {{ formatEstimatedBytes(statistics?.currentEstimatedSizeBytes) }}
             </a-descriptions-item>
           </template>
@@ -85,17 +85,17 @@
       </a-card>
 
       <!-- 按键操作 -->
-      <a-card :title="t('foundation.cache.page.section.keyOps')" :bordered="false" class="bg-container mt-4">
+      <a-card :title="t('foundation.cache.page.section.key.ops')" :bordered="false" class="bg-container mt-4">
         <a-form layout="inline" :model="keyForm" @finish="handleCheckExists">
           <a-form-item
-            :label="t('foundation.cache.page.field.cacheKey')"
+            :label="t('foundation.cache.page.field.cache.key')"
             name="key"
             :rules="keyFormRules"
           >
             <a-input
               v-model:value="keyForm.key"
               class="w-72"
-              :placeholder="t('foundation.cache.page.placeholder.cacheKey')"
+              :placeholder="t('foundation.cache.page.placeholder.cache.key')"
               allow-clear
             />
           </a-form-item>
@@ -107,7 +107,7 @@
                 html-type="submit"
                 :loading="existsLoading"
               >
-                {{ t('foundation.cache.page.button.checkExists') }}
+                {{ t('foundation.cache.page.button.check.exists') }}
               </a-button>
               <a-button
                 v-permission="PERMISSION_LIST"
@@ -125,7 +125,7 @@
           v-if="existsResult !== null"
           class="mt-3"
           :type="existsResult ? 'success' : 'warning'"
-          :message="existsResult ? t('foundation.cache.page.alert.keyExists') : t('foundation.cache.page.alert.keyNotExists')"
+          :message="existsResult ? t('foundation.cache.page.alert.key.exists') : t('foundation.cache.page.alert.key.not.exists')"
           show-icon
         />
       </a-card>
@@ -174,7 +174,7 @@ const existsResult = ref<boolean | null>(null)
 
 /** 缓存键表单校验 */
 const keyFormRules = computed<Rule[]>(() => [
-  { required: true, message: t('foundation.cache.page.rule.cacheKeyRequired') },
+  { required: true, message: t('foundation.cache.page.rule.cache.key.required') },
 ])
 
 /**
@@ -229,7 +229,7 @@ async function loadCacheInfo() {
   } catch {
     cacheInfo.value = null
     statistics.value = null
-    message.error(t('foundation.cache.page.message.loadFail'))
+    message.error(t('foundation.cache.page.message.load.fail'))
   } finally {
     loading.value = false
   }
@@ -255,7 +255,7 @@ async function handleCheckExists() {
     const result = await existsCacheKey(key)
     existsResult.value = result.exists
   } catch {
-    message.error(t('foundation.cache.page.message.checkFail'))
+    message.error(t('foundation.cache.page.message.check.fail'))
   } finally {
     existsLoading.value = false
   }
@@ -281,11 +281,11 @@ function handleRemove() {
       existsResult.value = null
       try {
         await removeCacheKey(key)
-        message.success(t('foundation.cache.page.message.removeSuccess'))
+        message.success(t('foundation.cache.page.message.remove.success'))
         existsResult.value = false
         await loadCacheInfo()
       } catch {
-        message.error(t('foundation.cache.page.message.removeFail'))
+        message.error(t('foundation.cache.page.message.remove.fail'))
       } finally {
         removeLoading.value = false
       }

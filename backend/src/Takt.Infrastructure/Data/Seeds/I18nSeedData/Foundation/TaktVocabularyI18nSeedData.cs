@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktVocabularyI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVocabulary 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,65 +75,65 @@ public class TaktVocabularyI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktVocabulary 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.vocabulary._self / entity.vocabulary.{{field}}；ResourceGroup=8；ResourceType=0
+    /// I18nKey：entity.vocabulary._self / entity.vocabulary.{{field}}；ResourceGroup=Foundation；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetVocabularyTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.vocabulary._self
-            new TranslationSeedItem("entity.vocabulary._self", "en-US", "Vocabulary Information", "实体名称"),
+            new TranslationSeedItem("entity.vocabulary._self", "en-US", "Vocabulary Information_us", "实体名称"),
             // entity.vocabulary._self
-            new TranslationSeedItem("entity.vocabulary._self", "ja-JP", "敏感词信息", "实体名称"),
+            new TranslationSeedItem("entity.vocabulary._self", "ja-JP", "敏感词信息_jp", "实体名称"),
             // entity.vocabulary._self
             new TranslationSeedItem("entity.vocabulary._self", "zh-CN", "敏感词信息", "实体名称"),
             // entity.vocabulary._self
-            new TranslationSeedItem("entity.vocabulary._self", "zh-HK", "敏感词信息", "实体名称"),
+            new TranslationSeedItem("entity.vocabulary._self", "zh-HK", "敏感词信息_hk", "实体名称"),
 
             // entity.vocabulary.wordtext
-            new TranslationSeedItem("entity.vocabulary.wordtext", "en-US", "敏感词文本", "敏感词文本（租户内唯一）"),
+            new TranslationSeedItem("entity.vocabulary.wordtext", "en-US", "敏感词文本_us", "敏感词文本（租户内唯一）"),
             // entity.vocabulary.wordtext
-            new TranslationSeedItem("entity.vocabulary.wordtext", "ja-JP", "敏感词文本", "敏感词文本（租户内唯一）"),
+            new TranslationSeedItem("entity.vocabulary.wordtext", "ja-JP", "敏感词文本_jp", "敏感词文本（租户内唯一）"),
             // entity.vocabulary.wordtext
             new TranslationSeedItem("entity.vocabulary.wordtext", "zh-CN", "敏感词文本", "敏感词文本（租户内唯一）"),
             // entity.vocabulary.wordtext
-            new TranslationSeedItem("entity.vocabulary.wordtext", "zh-HK", "敏感词文本", "敏感词文本（租户内唯一）"),
+            new TranslationSeedItem("entity.vocabulary.wordtext", "zh-HK", "敏感词文本_hk", "敏感词文本（租户内唯一）"),
 
             // entity.vocabulary.wordcategory
-            new TranslationSeedItem("entity.vocabulary.wordcategory", "en-US", "词性类别", "词性类别（字典 sys_word_category：1=政治敏感，2=暴力恐怖，3=色情低俗，4=广告营销，5=辱骂歧视）"),
+            new TranslationSeedItem("entity.vocabulary.wordcategory", "en-US", "词性类别_us", "词性类别（字典 sys_word_category：1=政治敏感，2=暴力恐怖，3=色情低俗，4=广告营销，5=辱骂歧视）"),
             // entity.vocabulary.wordcategory
-            new TranslationSeedItem("entity.vocabulary.wordcategory", "ja-JP", "词性类别", "词性类别（字典 sys_word_category：1=政治敏感，2=暴力恐怖，3=色情低俗，4=广告营销，5=辱骂歧视）"),
+            new TranslationSeedItem("entity.vocabulary.wordcategory", "ja-JP", "词性类别_jp", "词性类别（字典 sys_word_category：1=政治敏感，2=暴力恐怖，3=色情低俗，4=广告营销，5=辱骂歧视）"),
             // entity.vocabulary.wordcategory
             new TranslationSeedItem("entity.vocabulary.wordcategory", "zh-CN", "词性类别", "词性类别（字典 sys_word_category：1=政治敏感，2=暴力恐怖，3=色情低俗，4=广告营销，5=辱骂歧视）"),
             // entity.vocabulary.wordcategory
-            new TranslationSeedItem("entity.vocabulary.wordcategory", "zh-HK", "词性类别", "词性类别（字典 sys_word_category：1=政治敏感，2=暴力恐怖，3=色情低俗，4=广告营销，5=辱骂歧视）"),
+            new TranslationSeedItem("entity.vocabulary.wordcategory", "zh-HK", "词性类别_hk", "词性类别（字典 sys_word_category：1=政治敏感，2=暴力恐怖，3=色情低俗，4=广告营销，5=辱骂歧视）"),
 
             // entity.vocabulary.filterlevel
-            new TranslationSeedItem("entity.vocabulary.filterlevel", "en-US", "过滤等级", "过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）"),
+            new TranslationSeedItem("entity.vocabulary.filterlevel", "en-US", "过滤等级_us", "过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）"),
             // entity.vocabulary.filterlevel
-            new TranslationSeedItem("entity.vocabulary.filterlevel", "ja-JP", "过滤等级", "过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）"),
+            new TranslationSeedItem("entity.vocabulary.filterlevel", "ja-JP", "过滤等级_jp", "过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）"),
             // entity.vocabulary.filterlevel
-            new TranslationSeedItem("entity.vocabulary.filterlevel", "zh-CN", "过滤等级", "过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）"),
+            new TranslationSeedItem("entity.vocabulary.filterlevel", "zh-CN", "过滤等级", "过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）"),
             // entity.vocabulary.filterlevel
-            new TranslationSeedItem("entity.vocabulary.filterlevel", "zh-HK", "过滤等级", "过滤等级（字典 sys_word_filter_level：1=低，2=中，3=高）"),
+            new TranslationSeedItem("entity.vocabulary.filterlevel", "zh-HK", "过滤等级_hk", "过滤等级（字典 sys_word_filter_level_category：1=低，2=中，3=高）"),
 
             // entity.vocabulary.replacetext
-            new TranslationSeedItem("entity.vocabulary.replacetext", "en-US", "替换文本", "替换文本（为空时使用 * 替换）"),
+            new TranslationSeedItem("entity.vocabulary.replacetext", "en-US", "替换文本_us", "替换文本（为空时使用 * 替换）"),
             // entity.vocabulary.replacetext
-            new TranslationSeedItem("entity.vocabulary.replacetext", "ja-JP", "替换文本", "替换文本（为空时使用 * 替换）"),
+            new TranslationSeedItem("entity.vocabulary.replacetext", "ja-JP", "替换文本_jp", "替换文本（为空时使用 * 替换）"),
             // entity.vocabulary.replacetext
             new TranslationSeedItem("entity.vocabulary.replacetext", "zh-CN", "替换文本", "替换文本（为空时使用 * 替换）"),
             // entity.vocabulary.replacetext
-            new TranslationSeedItem("entity.vocabulary.replacetext", "zh-HK", "替换文本", "替换文本（为空时使用 * 替换）"),
+            new TranslationSeedItem("entity.vocabulary.replacetext", "zh-HK", "替换文本_hk", "替换文本（为空时使用 * 替换）"),
 
             // entity.vocabulary.status
-            new TranslationSeedItem("entity.vocabulary.status", "en-US", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.vocabulary.status", "en-US", "状态_us", "状态（1=启用，0=禁用）"),
             // entity.vocabulary.status
-            new TranslationSeedItem("entity.vocabulary.status", "ja-JP", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.vocabulary.status", "ja-JP", "状态_jp", "状态（1=启用，0=禁用）"),
             // entity.vocabulary.status
             new TranslationSeedItem("entity.vocabulary.status", "zh-CN", "状态", "状态（1=启用，0=禁用）"),
             // entity.vocabulary.status
-            new TranslationSeedItem("entity.vocabulary.status", "zh-HK", "状态", "状态（1=启用，0=禁用）"),
+            new TranslationSeedItem("entity.vocabulary.status", "zh-HK", "状态_hk", "状态（1=启用，0=禁用）"),
         };
     }
 
@@ -151,10 +151,10 @@ public class TaktVocabularyI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 8;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "Foundation";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;

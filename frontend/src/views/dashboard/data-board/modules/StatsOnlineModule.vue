@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { getRealtimeOnlineStats } from '@/api/routine/tasks/signal-r/connect-engine/connect'
+import { getOnlineStatistics } from '@/api/foundation/online'
 
 const { t } = useI18n()
 
@@ -43,14 +43,14 @@ async function fetchOnlineStats() {
   loading.value = true
   try {
     // 使用专门的统计API，性能更好
-    const stats = await getRealtimeOnlineStats()
+    const stats = await getOnlineStatistics()
     onlineStats.value = {
       users: stats?.onlineCount ?? 0,
-      todayVisits: stats?.activeConnections ?? 0,
-      sessions: stats?.peakCount ?? 0
+      todayVisits: stats?.todayDurationSeconds ?? 0,
+      sessions: stats?.currentDurationSeconds ?? 0,
     }
   } catch (error) {
-    logger.error('[StatsOnlineModule] 获取在线用户统计失败:', error)
+    logger.error('[StatsOnlineModule] 获取在线用户统计失败', undefined, error)
     onlineStats.value = { users: 0, todayVisits: 0, sessions: 0 }
   } finally {
     loading.value = false

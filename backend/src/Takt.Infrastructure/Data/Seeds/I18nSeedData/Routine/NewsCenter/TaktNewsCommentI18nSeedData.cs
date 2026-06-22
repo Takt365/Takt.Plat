@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsCommentI18nSeedData.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-06-22
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsComment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -75,164 +75,155 @@ public class TaktNewsCommentI18nSeedData : ITaktSeedDataCoordinator
 
     /// <summary>
     /// TaktNewsComment 实体翻译列表（en-US / ja-JP / zh-CN / zh-HK）
-    /// I18nKey：entity.newscomment._self / entity.newscomment.{{field}}；ResourceGroup=2；ResourceType=0
+    /// I18nKey：entity.newscomment._self / entity.newscomment.{{field}}；ResourceGroup=NewsCenter；ResourceType=frontend
     /// </summary>
     private static List<TranslationSeedItem> GetNewsCommentTranslations()
     {
         return new List<TranslationSeedItem>
         {
             // entity.newscomment._self
-            new TranslationSeedItem("entity.newscomment._self", "en-US", "News Comment Information", "实体名称"),
+            new TranslationSeedItem("entity.newscomment._self", "en-US", "News Comment Information_us", "实体名称"),
             // entity.newscomment._self
-            new TranslationSeedItem("entity.newscomment._self", "ja-JP", "新闻中心评论信息", "实体名称"),
+            new TranslationSeedItem("entity.newscomment._self", "ja-JP", "新闻中心评论信息_jp", "实体名称"),
             // entity.newscomment._self
             new TranslationSeedItem("entity.newscomment._self", "zh-CN", "新闻中心评论信息", "实体名称"),
             // entity.newscomment._self
-            new TranslationSeedItem("entity.newscomment._self", "zh-HK", "新闻中心评论信息", "实体名称"),
+            new TranslationSeedItem("entity.newscomment._self", "zh-HK", "新闻中心评论信息_hk", "实体名称"),
 
             // entity.newscomment.newsid
-            new TranslationSeedItem("entity.newscomment.newsid", "en-US", "新闻ID", "新闻 ID"),
+            new TranslationSeedItem("entity.newscomment.newsid", "en-US", "新闻ID_us", "新闻 ID"),
             // entity.newscomment.newsid
-            new TranslationSeedItem("entity.newscomment.newsid", "ja-JP", "新闻ID", "新闻 ID"),
+            new TranslationSeedItem("entity.newscomment.newsid", "ja-JP", "新闻ID_jp", "新闻 ID"),
             // entity.newscomment.newsid
             new TranslationSeedItem("entity.newscomment.newsid", "zh-CN", "新闻ID", "新闻 ID"),
             // entity.newscomment.newsid
-            new TranslationSeedItem("entity.newscomment.newsid", "zh-HK", "新闻ID", "新闻 ID"),
+            new TranslationSeedItem("entity.newscomment.newsid", "zh-HK", "新闻ID_hk", "新闻 ID"),
 
             // entity.newscomment.parentid
-            new TranslationSeedItem("entity.newscomment.parentid", "en-US", "父评论ID", "父评论 ID（0 表示顶级评论）"),
+            new TranslationSeedItem("entity.newscomment.parentid", "en-US", "父评论ID_us", "父评论 ID（0 表示顶级评论）"),
             // entity.newscomment.parentid
-            new TranslationSeedItem("entity.newscomment.parentid", "ja-JP", "父评论ID", "父评论 ID（0 表示顶级评论）"),
+            new TranslationSeedItem("entity.newscomment.parentid", "ja-JP", "父评论ID_jp", "父评论 ID（0 表示顶级评论）"),
             // entity.newscomment.parentid
             new TranslationSeedItem("entity.newscomment.parentid", "zh-CN", "父评论ID", "父评论 ID（0 表示顶级评论）"),
             // entity.newscomment.parentid
-            new TranslationSeedItem("entity.newscomment.parentid", "zh-HK", "父评论ID", "父评论 ID（0 表示顶级评论）"),
+            new TranslationSeedItem("entity.newscomment.parentid", "zh-HK", "父评论ID_hk", "父评论 ID（0 表示顶级评论）"),
 
             // entity.newscomment.userid
-            new TranslationSeedItem("entity.newscomment.userid", "en-US", "评论人ID", "评论人 ID"),
+            new TranslationSeedItem("entity.newscomment.userid", "en-US", "评论人ID_us", "评论人 ID"),
             // entity.newscomment.userid
-            new TranslationSeedItem("entity.newscomment.userid", "ja-JP", "评论人ID", "评论人 ID"),
+            new TranslationSeedItem("entity.newscomment.userid", "ja-JP", "评论人ID_jp", "评论人 ID"),
             // entity.newscomment.userid
             new TranslationSeedItem("entity.newscomment.userid", "zh-CN", "评论人ID", "评论人 ID"),
             // entity.newscomment.userid
-            new TranslationSeedItem("entity.newscomment.userid", "zh-HK", "评论人ID", "评论人 ID"),
+            new TranslationSeedItem("entity.newscomment.userid", "zh-HK", "评论人ID_hk", "评论人 ID"),
 
             // entity.newscomment.username
-            new TranslationSeedItem("entity.newscomment.username", "en-US", "评论人姓名", "评论人姓名"),
+            new TranslationSeedItem("entity.newscomment.username", "en-US", "评论人姓名_us", "评论人姓名"),
             // entity.newscomment.username
-            new TranslationSeedItem("entity.newscomment.username", "ja-JP", "评论人姓名", "评论人姓名"),
+            new TranslationSeedItem("entity.newscomment.username", "ja-JP", "评论人姓名_jp", "评论人姓名"),
             // entity.newscomment.username
             new TranslationSeedItem("entity.newscomment.username", "zh-CN", "评论人姓名", "评论人姓名"),
             // entity.newscomment.username
-            new TranslationSeedItem("entity.newscomment.username", "zh-HK", "评论人姓名", "评论人姓名"),
+            new TranslationSeedItem("entity.newscomment.username", "zh-HK", "评论人姓名_hk", "评论人姓名"),
 
             // entity.newscomment.useravatar
-            new TranslationSeedItem("entity.newscomment.useravatar", "en-US", "评论人头像URL", "评论人头像 URL"),
+            new TranslationSeedItem("entity.newscomment.useravatar", "en-US", "评论人头像URL_us", "评论人头像 URL"),
             // entity.newscomment.useravatar
-            new TranslationSeedItem("entity.newscomment.useravatar", "ja-JP", "评论人头像URL", "评论人头像 URL"),
+            new TranslationSeedItem("entity.newscomment.useravatar", "ja-JP", "评论人头像URL_jp", "评论人头像 URL"),
             // entity.newscomment.useravatar
             new TranslationSeedItem("entity.newscomment.useravatar", "zh-CN", "评论人头像URL", "评论人头像 URL"),
             // entity.newscomment.useravatar
-            new TranslationSeedItem("entity.newscomment.useravatar", "zh-HK", "评论人头像URL", "评论人头像 URL"),
+            new TranslationSeedItem("entity.newscomment.useravatar", "zh-HK", "评论人头像URL_hk", "评论人头像 URL"),
 
             // entity.newscomment.replytouserid
-            new TranslationSeedItem("entity.newscomment.replytouserid", "en-US", "被回复人ID", "被回复人 ID"),
+            new TranslationSeedItem("entity.newscomment.replytouserid", "en-US", "被回复人ID_us", "被回复人 ID"),
             // entity.newscomment.replytouserid
-            new TranslationSeedItem("entity.newscomment.replytouserid", "ja-JP", "被回复人ID", "被回复人 ID"),
+            new TranslationSeedItem("entity.newscomment.replytouserid", "ja-JP", "被回复人ID_jp", "被回复人 ID"),
             // entity.newscomment.replytouserid
             new TranslationSeedItem("entity.newscomment.replytouserid", "zh-CN", "被回复人ID", "被回复人 ID"),
             // entity.newscomment.replytouserid
-            new TranslationSeedItem("entity.newscomment.replytouserid", "zh-HK", "被回复人ID", "被回复人 ID"),
+            new TranslationSeedItem("entity.newscomment.replytouserid", "zh-HK", "被回复人ID_hk", "被回复人 ID"),
 
             // entity.newscomment.replytousername
-            new TranslationSeedItem("entity.newscomment.replytousername", "en-US", "被回复人姓名", "被回复人姓名"),
+            new TranslationSeedItem("entity.newscomment.replytousername", "en-US", "被回复人姓名_us", "被回复人姓名"),
             // entity.newscomment.replytousername
-            new TranslationSeedItem("entity.newscomment.replytousername", "ja-JP", "被回复人姓名", "被回复人姓名"),
+            new TranslationSeedItem("entity.newscomment.replytousername", "ja-JP", "被回复人姓名_jp", "被回复人姓名"),
             // entity.newscomment.replytousername
             new TranslationSeedItem("entity.newscomment.replytousername", "zh-CN", "被回复人姓名", "被回复人姓名"),
             // entity.newscomment.replytousername
-            new TranslationSeedItem("entity.newscomment.replytousername", "zh-HK", "被回复人姓名", "被回复人姓名"),
+            new TranslationSeedItem("entity.newscomment.replytousername", "zh-HK", "被回复人姓名_hk", "被回复人姓名"),
 
             // entity.newscomment.commentcontent
-            new TranslationSeedItem("entity.newscomment.commentcontent", "en-US", "评论内容", "评论内容"),
+            new TranslationSeedItem("entity.newscomment.commentcontent", "en-US", "评论内容_us", "评论内容"),
             // entity.newscomment.commentcontent
-            new TranslationSeedItem("entity.newscomment.commentcontent", "ja-JP", "评论内容", "评论内容"),
+            new TranslationSeedItem("entity.newscomment.commentcontent", "ja-JP", "评论内容_jp", "评论内容"),
             // entity.newscomment.commentcontent
             new TranslationSeedItem("entity.newscomment.commentcontent", "zh-CN", "评论内容", "评论内容"),
             // entity.newscomment.commentcontent
-            new TranslationSeedItem("entity.newscomment.commentcontent", "zh-HK", "评论内容", "评论内容"),
+            new TranslationSeedItem("entity.newscomment.commentcontent", "zh-HK", "评论内容_hk", "评论内容"),
 
             // entity.newscomment.commenttime
-            new TranslationSeedItem("entity.newscomment.commenttime", "en-US", "评论时间", "评论时间"),
+            new TranslationSeedItem("entity.newscomment.commenttime", "en-US", "评论时间_us", "评论时间"),
             // entity.newscomment.commenttime
-            new TranslationSeedItem("entity.newscomment.commenttime", "ja-JP", "评论时间", "评论时间"),
+            new TranslationSeedItem("entity.newscomment.commenttime", "ja-JP", "评论时间_jp", "评论时间"),
             // entity.newscomment.commenttime
             new TranslationSeedItem("entity.newscomment.commenttime", "zh-CN", "评论时间", "评论时间"),
             // entity.newscomment.commenttime
-            new TranslationSeedItem("entity.newscomment.commenttime", "zh-HK", "评论时间", "评论时间"),
+            new TranslationSeedItem("entity.newscomment.commenttime", "zh-HK", "评论时间_hk", "评论时间"),
 
             // entity.newscomment.likecount
-            new TranslationSeedItem("entity.newscomment.likecount", "en-US", "点赞次数", "点赞次数"),
+            new TranslationSeedItem("entity.newscomment.likecount", "en-US", "点赞次数_us", "点赞次数"),
             // entity.newscomment.likecount
-            new TranslationSeedItem("entity.newscomment.likecount", "ja-JP", "点赞次数", "点赞次数"),
+            new TranslationSeedItem("entity.newscomment.likecount", "ja-JP", "点赞次数_jp", "点赞次数"),
             // entity.newscomment.likecount
             new TranslationSeedItem("entity.newscomment.likecount", "zh-CN", "点赞次数", "点赞次数"),
             // entity.newscomment.likecount
-            new TranslationSeedItem("entity.newscomment.likecount", "zh-HK", "点赞次数", "点赞次数"),
+            new TranslationSeedItem("entity.newscomment.likecount", "zh-HK", "点赞次数_hk", "点赞次数"),
 
             // entity.newscomment.replycount
-            new TranslationSeedItem("entity.newscomment.replycount", "en-US", "回复次数", "回复次数（子评论数量）"),
+            new TranslationSeedItem("entity.newscomment.replycount", "en-US", "回复次数_us", "回复次数（子评论数量）"),
             // entity.newscomment.replycount
-            new TranslationSeedItem("entity.newscomment.replycount", "ja-JP", "回复次数", "回复次数（子评论数量）"),
+            new TranslationSeedItem("entity.newscomment.replycount", "ja-JP", "回复次数_jp", "回复次数（子评论数量）"),
             // entity.newscomment.replycount
             new TranslationSeedItem("entity.newscomment.replycount", "zh-CN", "回复次数", "回复次数（子评论数量）"),
             // entity.newscomment.replycount
-            new TranslationSeedItem("entity.newscomment.replycount", "zh-HK", "回复次数", "回复次数（子评论数量）"),
+            new TranslationSeedItem("entity.newscomment.replycount", "zh-HK", "回复次数_hk", "回复次数（子评论数量）"),
 
             // entity.newscomment.commentlevel
-            new TranslationSeedItem("entity.newscomment.commentlevel", "en-US", "评论层级", "评论层级（0=顶级，最多 3 级）"),
+            new TranslationSeedItem("entity.newscomment.commentlevel", "en-US", "评论层级_us", "评论层级（0=顶级，最多 3 级）"),
             // entity.newscomment.commentlevel
-            new TranslationSeedItem("entity.newscomment.commentlevel", "ja-JP", "评论层级", "评论层级（0=顶级，最多 3 级）"),
+            new TranslationSeedItem("entity.newscomment.commentlevel", "ja-JP", "评论层级_jp", "评论层级（0=顶级，最多 3 级）"),
             // entity.newscomment.commentlevel
             new TranslationSeedItem("entity.newscomment.commentlevel", "zh-CN", "评论层级", "评论层级（0=顶级，最多 3 级）"),
             // entity.newscomment.commentlevel
-            new TranslationSeedItem("entity.newscomment.commentlevel", "zh-HK", "评论层级", "评论层级（0=顶级，最多 3 级）"),
-
-            // entity.newscomment.flowinstanceid
-            new TranslationSeedItem("entity.newscomment.flowinstanceid", "en-US", "流程实例ID", "流程实例 ID（评论审核工作流）"),
-            // entity.newscomment.flowinstanceid
-            new TranslationSeedItem("entity.newscomment.flowinstanceid", "ja-JP", "流程实例ID", "流程实例 ID（评论审核工作流）"),
-            // entity.newscomment.flowinstanceid
-            new TranslationSeedItem("entity.newscomment.flowinstanceid", "zh-CN", "流程实例ID", "流程实例 ID（评论审核工作流）"),
-            // entity.newscomment.flowinstanceid
-            new TranslationSeedItem("entity.newscomment.flowinstanceid", "zh-HK", "流程实例ID", "流程实例 ID（评论审核工作流）"),
+            new TranslationSeedItem("entity.newscomment.commentlevel", "zh-HK", "评论层级_hk", "评论层级（0=顶级，最多 3 级）"),
 
             // entity.newscomment.commentstatus
-            new TranslationSeedItem("entity.newscomment.commentstatus", "en-US", "评论状态", "评论状态"),
+            new TranslationSeedItem("entity.newscomment.commentstatus", "en-US", "评论状态_us", "评论状态"),
             // entity.newscomment.commentstatus
-            new TranslationSeedItem("entity.newscomment.commentstatus", "ja-JP", "评论状态", "评论状态"),
+            new TranslationSeedItem("entity.newscomment.commentstatus", "ja-JP", "评论状态_jp", "评论状态"),
             // entity.newscomment.commentstatus
             new TranslationSeedItem("entity.newscomment.commentstatus", "zh-CN", "评论状态", "评论状态"),
             // entity.newscomment.commentstatus
-            new TranslationSeedItem("entity.newscomment.commentstatus", "zh-HK", "评论状态", "评论状态"),
+            new TranslationSeedItem("entity.newscomment.commentstatus", "zh-HK", "评论状态_hk", "评论状态"),
 
             // entity.newscomment.news
-            new TranslationSeedItem("entity.newscomment.news", "en-US", "新闻", "新闻（主表）"),
+            new TranslationSeedItem("entity.newscomment.news", "en-US", "新闻_us", "新闻（主表）"),
             // entity.newscomment.news
-            new TranslationSeedItem("entity.newscomment.news", "ja-JP", "新闻", "新闻（主表）"),
+            new TranslationSeedItem("entity.newscomment.news", "ja-JP", "新闻_jp", "新闻（主表）"),
             // entity.newscomment.news
             new TranslationSeedItem("entity.newscomment.news", "zh-CN", "新闻", "新闻（主表）"),
             // entity.newscomment.news
-            new TranslationSeedItem("entity.newscomment.news", "zh-HK", "新闻", "新闻（主表）"),
+            new TranslationSeedItem("entity.newscomment.news", "zh-HK", "新闻_hk", "新闻（主表）"),
 
             // entity.newscomment.likes
-            new TranslationSeedItem("entity.newscomment.likes", "en-US", "评论点赞记录列表", "评论点赞记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.newscomment.likes", "en-US", "评论点赞记录列表_us", "评论点赞记录列表（主子表关系）"),
             // entity.newscomment.likes
-            new TranslationSeedItem("entity.newscomment.likes", "ja-JP", "评论点赞记录列表", "评论点赞记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.newscomment.likes", "ja-JP", "评论点赞记录列表_jp", "评论点赞记录列表（主子表关系）"),
             // entity.newscomment.likes
             new TranslationSeedItem("entity.newscomment.likes", "zh-CN", "评论点赞记录列表", "评论点赞记录列表（主子表关系）"),
             // entity.newscomment.likes
-            new TranslationSeedItem("entity.newscomment.likes", "zh-HK", "评论点赞记录列表", "评论点赞记录列表（主子表关系）"),
+            new TranslationSeedItem("entity.newscomment.likes", "zh-HK", "评论点赞记录列表_hk", "评论点赞记录列表（主子表关系）"),
         };
     }
 
@@ -250,10 +241,10 @@ public class TaktNewsCommentI18nSeedData : ITaktSeedDataCoordinator
         translation.CultureCode = item.CultureCode;
         translation.I18nKey = item.I18nKey;
         translation.TranslationText = item.TranslationText;
-        translation.ResourceGroup = 2;
-        translation.ResourceType = 0;
+        translation.ResourceGroup = "NewsCenter";
+        translation.ResourceType = "frontend";
         translation.ContextNote = item.ContextNote;
-        translation.ExtFieldJson = null;
+        translation.ExtField = null;
         translation.Remark = null;
         translation.IsDeleted = 0;
         translation.DeletedBy = null;
